@@ -3,7 +3,7 @@
 #include "GameInstance.h"
 #include "Level_Loading.h"
 
-
+/* 테스트 브랜치용 주석 */
 Client::CMainApp::CMainApp()	
 	: m_pGameInstance { CGameInstance::GetInstance() }
 {
