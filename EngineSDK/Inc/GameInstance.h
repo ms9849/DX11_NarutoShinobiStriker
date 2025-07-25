@@ -54,10 +54,20 @@ public:
 	HRESULT Add_RenderGroup(RENDER eRenderGroup, class CGameObject* pRenderObject);
 #pragma endregion
 
+#pragma region SOUND_MANAGER
+	void PlaySoundOnce(const _wstring& pSoundKey, CHANNELID eID, float fVolume);
+	void PlaySoundLoop(const _wstring& pSoundKey, CHANNELID eID, float fVolume);
+	void PlayBGM(const _wstring& pSoundKey, float fVolume);
+	void StopSound(CHANNELID eID);
+	void StopAll();
+	void SetChannelVolume(CHANNELID eID, float fVolume);
+#pragma endregion
 
-
-
-
+#pragma region KEY_MANAGER
+	_bool		Key_Pressing(_uint _iKey);
+	_bool		Key_Up(_uint _iKey);
+	_bool		Key_Down(_uint _iKey);
+#pragma endregion
 private:
 	class CGraphic_Device*			m_pGraphic_Device = { nullptr };
 	class CTimer_Manager*			m_pTimer_Manager = { nullptr };
@@ -66,7 +76,8 @@ private:
 	class CObject_Manager*			m_pObject_Manager = { nullptr };
 	class CRenderer*				m_pRenderer = { nullptr };
 	class CPicking*					m_pPicking = { nullptr };
-
+	class CSound_Manager*			m_pSound_Manager = { nullptr };
+	class CKey_Manager*				m_pKey_Manager = { nullptr };
 public:
 	void Release_Engine();
 	virtual void Free() override;

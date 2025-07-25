@@ -5,6 +5,8 @@
 #include "Graphic_Device.h"
 #include "Level_Manager.h"
 #include "Timer_Manager.h"
+#include "Sound_Manager.h"
+#include "Key_Manager.h"
 #include "Renderer.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
@@ -39,16 +41,24 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	if (nullptr == m_pRenderer)
 		return E_FAIL;
 
+	m_pSound_Manager = CSound_Manager::Create();
+	if (nullptr == m_pSound_Manager)
+		return E_FAIL;
+
+	m_pKey_Manager = CKey_Manager::Create();
+	if (nullptr == m_pKey_Manager)
+		return E_FAIL;
+
 	return S_OK;
 }
 
 void CGameInstance::Update_Engine(_float fTimeDelta)
 {
-	
+	/* 키 매니저 입력 받기 */
+	m_pKey_Manager->Key_Input();
 
+	/* 객체 업데이트 계층 */
 	m_pObject_Manager->Priority_Update(fTimeDelta);
-
-	
 
 	m_pObject_Manager->Update(fTimeDelta);
 
@@ -56,7 +66,11 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 
 	m_pObject_Manager->Clear_DeadObj();
 
+	/* 레벨 업데이트 */
 	m_pLevel_Manager->Update(fTimeDelta);
+
+	/* 키 매니저 초기화 */
+	m_pKey_Manager->Update();
 }
 
 HRESULT CGameInstance::Draw()
@@ -96,7 +110,6 @@ void CGameInstance::Render_End()
 {
 	m_pGraphic_Device->Present();
 }
-
 
 #pragma endregion
 
@@ -165,11 +178,62 @@ HRESULT CGameInstance::Add_RenderGroup(RENDER eRenderGroup, CGameObject* pRender
 
 #pragma endregion
 
+#pragma region SOUND_MANAGER
+
+void CGameInstance::PlaySoundOnce(const _wstring& pSoundKey, CHANNELID eID, float fVolume)
+{
+	m_pSound_Manager->PlaySoundOnce(pSoundKey, eID, fVolume);
+}
+
+void CGameInstance::PlaySoundLoop(const _wstring& pSoundKey, CHANNELID eID, float fVolume)
+{
+	m_pSound_Manager->PlaySoundLoop(pSoundKey, eID, fVolume);
+}
+
+void CGameInstance::PlayBGM(const _wstring& pSoundKey, float fVolume)
+{
+	m_pSound_Manager->PlayBGM(pSoundKey, fVolume);
+}
+
+void CGameInstance::StopSound(CHANNELID eID)
+{
+	m_pSound_Manager->StopSound(eID);
+}
+
+void CGameInstance::StopAll()
+{
+	m_pSound_Manager->StopAll();
+}
+
+void CGameInstance::SetChannelVolume(CHANNELID eID, float fVolume)
+{
+	m_pSound_Manager->SetChannelVolume(eID, fVolume);
+}
+
+#pragma endregion
+
+#pragma region KEY_MANAGER
+
+_bool CGameInstance::Key_Pressing(_uint _iKey)
+{
+	return m_pKey_Manager->Key_Pressing(_iKey);
+}
+
+_bool CGameInstance::Key_Up(_uint _iKey)
+{
+	return m_pKey_Manager->Key_Up(_iKey);
+}
+
+_bool CGameInstance::Key_Down(_uint _iKey)
+{
+	return m_pKey_Manager->Key_Down(_iKey);
+}
+
+#pragma endregion
 
 void CGameInstance::Release_Engine()
 {
 	DestroyInstance();
-
 
 	Safe_Release(m_pTimer_Manager);
 	Safe_Release(m_pRenderer);
@@ -177,6 +241,8 @@ void CGameInstance::Release_Engine()
 	Safe_Release(m_pObject_Manager);
 	Safe_Release(m_pLevel_Manager);
 	Safe_Release(m_pGraphic_Device);
+	Safe_Release(m_pSound_Manager);
+	Safe_Release(m_pKey_Manager);
 }
 
 void CGameInstance::Free()

@@ -13,14 +13,20 @@ using namespace DirectX;
 #include <string>
 #include <unordered_map>
 #include <ctime>
+#include <iostream>
+#include <conio.h>
+#include <io.h>
+
 using namespace std;
 
+#include "fmod.hpp"
 #include "Engine_Enum.h"
 #include "Engine_Macro.h"
 #include "Engine_Struct.h"
 #include "Engine_Typedef.h"
 #include "Engine_Function.h"
 
+#define VK_MAX		0xff 
 #define DIRECTINPUT_VERSION	0x0800
 #include <dinput.h>
 

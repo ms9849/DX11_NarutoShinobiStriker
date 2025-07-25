@@ -33,6 +33,8 @@ protected:
 	class CGameInstance*		m_pGameInstance = { nullptr };
 	_bool						m_isDead = { false };
 
+	/* Transform은 GameObject에서 들고 있게끔 한다. */
+	class CTransform* m_pTransformCom = { nullptr };
 	map<const _wstring, class CComponent*>		m_Components;
 
 protected:

@@ -28,8 +28,12 @@ namespace Engine
 	typedef		XMFLOAT3					_float3;
 	typedef		XMFLOAT4					_float4;
 
+	/* 
+	같이 쓰면 안되나요? 
+	-> ㅇㅇ, 하난 연산용, 하난 저장용임.
+	*/
 	typedef		XMFLOAT4X4					_float4x4;
-
+	typedef		XMMATRIX					_matrix;
 
 }
 

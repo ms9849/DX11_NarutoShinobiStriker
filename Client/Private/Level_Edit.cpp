@@ -25,7 +25,7 @@ void CLevel_Edit::Update(_float fTimeDelta)
 {
     m_pIMGUI_Manager->Update_Imgui();
 
-    if (GetKeyState(VK_F7) & 0x8000)
+    if (m_pGameInstance->Key_Down(VK_F7))
     {
         if (FAILED(m_pGameInstance->Change_Level(CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL::LOADING, LEVEL::GAMEPLAY))))
             return;
@@ -36,7 +36,7 @@ HRESULT CLevel_Edit::Render()
 {
     m_pIMGUI_Manager->Render_Imgui();
 
-    SetWindowText(g_hWnd, TEXT("EDITOR LEVEL"));
+    SetWindowText(g_hWnd, TEXT("EDIT LEVEL"));
 
     return S_OK;
 }
