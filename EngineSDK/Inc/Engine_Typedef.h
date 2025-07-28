@@ -32,8 +32,37 @@ namespace Engine
 	같이 쓰면 안되나요? 
 	-> ㅇㅇ, 하난 연산용, 하난 저장용임.
 	*/
+
+	/*
+	FGHC? -> 각각 함수의 인자로 받기 위한 
+
+	1~3번째 벡터,
+	4~5번째 벡터,
+	6번째 벡터
+	7번째 벡터
+	
+	를 의미한다.	
+	*/
+
+	/*XMVECTOR*/
+	typedef		XMVECTOR					_vector;
+
+	typedef		FXMVECTOR					_fvector;
+	typedef		GXMVECTOR					_gvector;
+	typedef		HXMVECTOR					_hvector;
+	typedef		CXMVECTOR					_cvector;
+
+	/*XMFLOAT4X4*/
 	typedef		XMFLOAT4X4					_float4x4;
+
+	/*XMMATRIX*/
 	typedef		XMMATRIX					_matrix;
+
+	/*FXMMATRIX*/
+	typedef		FXMMATRIX					_fmatrix;
+
+	/*CXMMATRIX*/
+	typedef		CXMMATRIX					_cmatrix;
 
 }
 
