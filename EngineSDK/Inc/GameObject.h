@@ -1,11 +1,16 @@
 #pragma once
 
 #include "Base.h"
+#include "Transform.h"
 
 NS_BEGIN(Engine)
 
 class ENGINE_DLL CGameObject abstract : public CBase
 {
+public:
+	typedef struct tagGameObjectDesc : public CTransform::TRANSFORM_DESC {
+
+	} GAMEOBJECT_DESC;
 protected:
 	CGameObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CGameObject(const CGameObject& Prototype);

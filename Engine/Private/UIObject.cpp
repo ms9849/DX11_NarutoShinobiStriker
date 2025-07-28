@@ -20,8 +20,16 @@ HRESULT CUIObject::Initialize_Prototype()
 
 HRESULT CUIObject::Initialize(void* pArg)
 {
+    if (FAILED(__super::Initialize(pArg)))
+        return E_FAIL;
+
     UIOBJECT_DESC* pDesc = static_cast<UIOBJECT_DESC*>(pArg);
     //fx, fy, fsizeX, fsizeY 다 있으니까 세팅 해주던가 하고..
+
+    /*
+    m_pTransformCom->Set_Scale();
+    m_pTransformCom->Set_State();
+    */
 
     if (FAILED(m_pOrthogonalCom->Initialize()))
         return E_FAIL;

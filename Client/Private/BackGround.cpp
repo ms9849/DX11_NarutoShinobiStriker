@@ -48,7 +48,7 @@ void CBackGround::Late_Update(_float fTimeDelta)
 HRESULT CBackGround::Render()
 {
 	
-
+	m_pTransformCom;
 	return S_OK;
 }
 

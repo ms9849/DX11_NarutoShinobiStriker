@@ -30,6 +30,15 @@ HRESULT CGameObject::Initialize_Prototype()
 
 HRESULT CGameObject::Initialize(void* pArg)
 {
+	m_pTransformCom = CTransform::Create(m_pDevice, m_pContext);
+	m_pTransformCom->Initialize(pArg);
+	
+	if (pArg != nullptr)
+	{
+		GAMEOBJECT_DESC* pDesc = reinterpret_cast<GAMEOBJECT_DESC*>(pArg);
+		//초기화 할 일 있으면 저기서 써주면 된다.
+	}
+
 	return S_OK;
 }
 
