@@ -2,6 +2,7 @@
 #include "Loader.h"
 
 #include "BackGround.h"
+#include "Dummy.h"
 //#include "Effect.h"
 //#include "Terrain.h"
 //#include "Player.h"
@@ -92,6 +93,10 @@ HRESULT CLoader::Loading_For_Logo()
 	m_strMessage = TEXT("셰이더를(을) 로딩 중 입니다.");
 	
 	m_strMessage = TEXT("객체원형를(을) 로딩 중 입니다.");
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_Dummy"),
+		CDummy::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_BackGround"),
 		CBackGround::Create(m_pDevice, m_pContext))))
 		return E_FAIL;

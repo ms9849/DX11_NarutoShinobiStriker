@@ -1,8 +1,8 @@
 #include "ClientPch.h"
 #include "Level_Logo.h"
 
+#include "GameObject.h"
 #include "GameInstance.h"
-
 #include "Level_Loading.h"
 
 
@@ -19,6 +19,9 @@ HRESULT CLevel_Logo::Initialize()
 	//	return E_FAIL;	
 
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
+		return E_FAIL;
+
+	if (FAILED(Ready_Layer_Dummy(TEXT("Layer_Dummy"))))
 		return E_FAIL;
 
 	return S_OK;
@@ -57,6 +60,20 @@ HRESULT CLevel_Logo::Ready_Layer_Camera(const _wstring& strLayerTag)
 		ENUM_CLASS(LEVEL::LOGO), strLayerTag, &CameraDesc)))
 		return E_FAIL;*/
 
+	return S_OK;
+}
+
+HRESULT CLevel_Logo::Ready_Layer_Dummy(const _wstring& strLayerTag)
+{
+	for (_int i = 0; i < 100; ++i)
+	{
+		m_pGameInstance->Add_GameObject_ToPool(static_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LOGO),
+			TEXT("Prototype_GameObject_Dummy"), nullptr)));
+	}
+
+	for(_int i=0; i < 50; ++i)
+		m_pGameInstance->Add_PoolingObject_ToLayer(TEXT("Object_Dummy"), ENUM_CLASS(LEVEL::LOGO), TEXT("Layer_Dummy"));
+	
 	return S_OK;
 }
 

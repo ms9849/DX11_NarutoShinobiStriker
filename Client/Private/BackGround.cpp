@@ -36,18 +36,15 @@ void CBackGround::Priority_Update(_float fTimeDelta)
 
 void CBackGround::Update(_float fTimeDelta)
 {
-	
 }
 
 void CBackGround::Late_Update(_float fTimeDelta)
 {
-
 	m_pGameInstance->Add_RenderGroup(RENDER::PRIORITY, this);
 }
 
 HRESULT CBackGround::Render()
-{
-	
+{	
 	m_pTransformCom;
 	return S_OK;
 }
@@ -74,7 +71,7 @@ CBackGround* CBackGround::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pCo
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : pGraphic_Device");
+		MSG_BOX("Failed to Created : CBackGround");
 		Safe_Release(pInstance);
 	}
 

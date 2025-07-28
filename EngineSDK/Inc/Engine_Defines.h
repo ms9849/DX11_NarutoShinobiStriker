@@ -26,6 +26,12 @@ using namespace std;
 #include "Engine_Typedef.h"
 #include "Engine_Function.h"
 
+namespace Engine
+{
+	const static wstring g_strTransformTag = { TEXT("Com_Transform") };
+	const static wstring g_strPoolingTag = { TEXT("Com_Pooling")};
+}
+
 #define VK_MAX		0xff 
 #define DIRECTINPUT_VERSION	0x0800
 #include <dinput.h>

@@ -1,5 +1,6 @@
 #include "GameInstance.h"
 
+#include "Pooling_Manager.h"
 #include "Prototype_Manager.h"
 #include "Object_Manager.h"
 #include "Graphic_Device.h"
@@ -47,6 +48,10 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 
 	m_pKey_Manager = CKey_Manager::Create();
 	if (nullptr == m_pKey_Manager)
+		return E_FAIL;
+
+	m_pPooling_Manager = CPooling_Manager::Create();
+	if (nullptr == m_pPooling_Manager)
 		return E_FAIL;
 
 	return S_OK;
@@ -167,6 +172,22 @@ HRESULT CGameInstance::Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const 
 	return m_pObject_Manager->Add_GameObject_ToLayer(iPrototypeLevelIndex, strPrototypeTag, iLayerLevelIndex, strLayerTag, pArg);
 }
 
+HRESULT CGameInstance::Add_Clone_ToLayer(CGameObject* pClone, _uint iLayerLevelIndex, const _wstring& strLayerTag)
+{
+	return m_pObject_Manager->Add_Clone_ToLayer(pClone, iLayerLevelIndex, strLayerTag);
+}
+
+#pragma endregion
+
+#pragma region POOLING_MANAGER
+void CGameInstance::Add_GameObject_ToPool(CGameObject* pGameObject)
+{
+	m_pPooling_Manager->Add_GameObject_ToPool(pGameObject);
+}
+HRESULT CGameInstance::Add_PoolingObject_ToLayer(const _wstring& strPoolingTag, _uint iLayerLevelIndex, const _wstring& strLayerTag)
+{
+	return m_pPooling_Manager->Add_PoolingObject_ToLayer(strPoolingTag, iLayerLevelIndex, strLayerTag);
+}
 #pragma endregion
 
 #pragma region RENDERER
@@ -243,11 +264,10 @@ void CGameInstance::Release_Engine()
 	Safe_Release(m_pGraphic_Device);
 	Safe_Release(m_pSound_Manager);
 	Safe_Release(m_pKey_Manager);
+	Safe_Release(m_pPooling_Manager);
 }
 
 void CGameInstance::Free()
 {
 	__super::Free();
-
-	
 }
