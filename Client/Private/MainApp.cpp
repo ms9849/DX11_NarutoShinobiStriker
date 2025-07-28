@@ -2,7 +2,8 @@
 #include "MainApp.h"
 #include "GameInstance.h"
 #include "Level_Loading.h"
-
+#include "Pooling.h"
+#include "Dummy.h"
 /* 테스트 브랜치용 주석 */
 Client::CMainApp::CMainApp()	
 	: m_pGameInstance { CGameInstance::GetInstance() }
@@ -74,6 +75,16 @@ HRESULT CMainApp::Start_Level(LEVEL eLevelID)
 
 HRESULT CMainApp::Ready_Prototypes()
 {
+	/* For.Prototype_GameObject_Dummy */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Dummy"),
+		CDummy::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Pooling*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Pooling"),
+		CPooling::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	///* For.Prototype_Component_Transform*/
 	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Transform"),
 	//	CTransform::Create(m_pGraphic_Device))))

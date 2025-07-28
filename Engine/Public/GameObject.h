@@ -29,6 +29,10 @@ public:
 		return m_isDead;
 	}
 
+	void Set_Dead(_bool bFlag) {
+		m_isDead = bFlag;
+	}
+
 	class CComponent* Find_Component(const _wstring& strComponentTag);
 
 protected:
@@ -46,6 +50,10 @@ protected:
 
 	HRESULT Add_Component(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, 
 		const _wstring& strComponentTag, CComponent** ppOut, void* pArg = nullptr);
+
+	/* 컴포넌트 이름을 따로 입력받지 않는, 엔진 단에서 제공해주는 컴포넌트 */
+	HRESULT Add_Component(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag,
+		CComponent** ppOut, void* pArg = nullptr);
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;

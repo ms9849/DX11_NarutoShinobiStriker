@@ -97,6 +97,12 @@
     <ClInclude Include="..\Public\Transform.h">
       <Filter>01.Utility\03.Components\Transform</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Pooling.h">
+      <Filter>01.Utility\03.Components\Pooling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Pooling_Manager.h">
+      <Filter>01.Utility\03.Components\Pooling\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -152,6 +158,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Transform.cpp">
       <Filter>01.Utility\03.Components\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Pooling.cpp">
+      <Filter>01.Utility\03.Components\Pooling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Pooling_Manager.cpp">
+      <Filter>01.Utility\03.Components\Pooling\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -238,6 +250,12 @@
     </Filter>
     <Filter Include="01.Utility\07. Key\Manager">
       <UniqueIdentifier>{766cff0c-db7f-42f7-a1cd-e28bbc172d41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Pooling">
+      <UniqueIdentifier>{8797c831-a874-44ed-8ded-a235cb30f8df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Pooling\Manager">
+      <UniqueIdentifier>{43a4a443-5f5c-45a6-bfb6-bb9c6135afdc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
