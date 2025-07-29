@@ -1,6 +1,7 @@
 #include "Prototype_Manager.h"
 #include "GameObject.h"
 #include "Component.h"
+#include "IMGUI_Manager.h"
 
 CPrototype_Manager::CPrototype_Manager()
 {

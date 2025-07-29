@@ -20,9 +20,8 @@ public:
 	/* 이 레벨에서 쓰기위한 객체들을 생성한다. */
 	HRESULT Ready_Layer_Camera(const _wstring& strLayerTag);
 	HRESULT Ready_IMGUI_Manager();
-
+	
 private:
-	class CIMGUI_Manager* m_pIMGUI_Manager = { nullptr };
 
 public:
 	static CLevel_Edit* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID);

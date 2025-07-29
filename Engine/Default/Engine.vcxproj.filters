@@ -58,30 +58,6 @@
     <ClInclude Include="..\Public\Prototype_Manager.h">
       <Filter>01.Utility\04.Prototypes\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="..\FMOD\fmod.h">
-      <Filter>01.Utility\06. Sound\FMOD</Filter>
-    </ClInclude>
-    <ClInclude Include="..\FMOD\fmod.hpp">
-      <Filter>01.Utility\06. Sound\FMOD</Filter>
-    </ClInclude>
-    <ClInclude Include="..\FMOD\fmod_codec.h">
-      <Filter>01.Utility\06. Sound\FMOD</Filter>
-    </ClInclude>
-    <ClInclude Include="..\FMOD\fmod_common.h">
-      <Filter>01.Utility\06. Sound\FMOD</Filter>
-    </ClInclude>
-    <ClInclude Include="..\FMOD\fmod_dsp.h">
-      <Filter>01.Utility\06. Sound\FMOD</Filter>
-    </ClInclude>
-    <ClInclude Include="..\FMOD\fmod_dsp_effects.h">
-      <Filter>01.Utility\06. Sound\FMOD</Filter>
-    </ClInclude>
-    <ClInclude Include="..\FMOD\fmod_errors.h">
-      <Filter>01.Utility\06. Sound\FMOD</Filter>
-    </ClInclude>
-    <ClInclude Include="..\FMOD\fmod_output.h">
-      <Filter>01.Utility\06. Sound\FMOD</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Sound_Manager.h">
       <Filter>01.Utility\06. Sound\Manager</Filter>
     </ClInclude>
@@ -102,6 +78,66 @@
     </ClInclude>
     <ClInclude Include="..\Public\Pooling_Manager.h">
       <Filter>01.Utility\03.Components\Pooling\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Texture.h">
+      <Filter>01.Utility\03.Components\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\FMOD\fmod.h">
+      <Filter>01.Utility\06. Sound\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\FMOD\fmod.hpp">
+      <Filter>01.Utility\06. Sound\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\FMOD\fmod_codec.h">
+      <Filter>01.Utility\06. Sound\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\FMOD\fmod_common.h">
+      <Filter>01.Utility\06. Sound\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\FMOD\fmod_dsp.h">
+      <Filter>01.Utility\06. Sound\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\FMOD\fmod_dsp_effects.h">
+      <Filter>01.Utility\06. Sound\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\FMOD\fmod_errors.h">
+      <Filter>01.Utility\06. Sound\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\FMOD\fmod_output.h">
+      <Filter>01.Utility\06. Sound\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\VIBuffer.h">
+      <Filter>01.Utility\03.Components\VIBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\VIBuffer_Rect.h">
+      <Filter>01.Utility\03.Components\VIBuffer\VIBuffer_Rect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\IMGUI_Manager.h">
+      <Filter>01.Utility\08. IMGUI\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\IMGUI\imconfig.h">
+      <Filter>01.Utility\08. IMGUI\files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\IMGUI\imgui.h">
+      <Filter>01.Utility\08. IMGUI\files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\IMGUI\imgui_impl_dx11.h">
+      <Filter>01.Utility\08. IMGUI\files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\IMGUI\imgui_impl_win32.h">
+      <Filter>01.Utility\08. IMGUI\files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\IMGUI\imgui_internal.h">
+      <Filter>01.Utility\08. IMGUI\files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\IMGUI\imstb_rectpack.h">
+      <Filter>01.Utility\08. IMGUI\files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\IMGUI\imstb_textedit.h">
+      <Filter>01.Utility\08. IMGUI\files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\IMGUI\imstb_truetype.h">
+      <Filter>01.Utility\08. IMGUI\files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -164,6 +200,39 @@
     </ClCompile>
     <ClCompile Include="..\Private\Pooling_Manager.cpp">
       <Filter>01.Utility\03.Components\Pooling\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Texture.cpp">
+      <Filter>01.Utility\03.Components\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\VIBuffer.cpp">
+      <Filter>01.Utility\03.Components\VIBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\VIBuffer_Rect.cpp">
+      <Filter>01.Utility\03.Components\VIBuffer\VIBuffer_Rect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\IMGUI_Manager.cpp">
+      <Filter>01.Utility\08. IMGUI\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Public\IMGUI\imgui.cpp">
+      <Filter>01.Utility\08. IMGUI\files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Public\IMGUI\imgui_demo.cpp">
+      <Filter>01.Utility\08. IMGUI\files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Public\IMGUI\imgui_draw.cpp">
+      <Filter>01.Utility\08. IMGUI\files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Public\IMGUI\imgui_impl_dx11.cpp">
+      <Filter>01.Utility\08. IMGUI\files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Public\IMGUI\imgui_impl_win32.cpp">
+      <Filter>01.Utility\08. IMGUI\files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Public\IMGUI\imgui_tables.cpp">
+      <Filter>01.Utility\08. IMGUI\files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Public\IMGUI\imgui_widgets.cpp">
+      <Filter>01.Utility\08. IMGUI\files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -242,9 +311,6 @@
     <Filter Include="01.Utility\02.GameObjects\UIObject">
       <UniqueIdentifier>{34ea1939-a21a-4fd2-b6a2-9b7140b208e0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\03.Components\BillBoard">
-      <UniqueIdentifier>{0a697e54-48c3-43b9-8f5d-e4ee85c7924d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\07. Key">
       <UniqueIdentifier>{f30a041c-6b74-4939-a07a-6912eba02b53}</UniqueIdentifier>
     </Filter>
@@ -257,23 +323,41 @@
     <Filter Include="01.Utility\03.Components\Pooling\Manager">
       <UniqueIdentifier>{43a4a443-5f5c-45a6-bfb6-bb9c6135afdc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.Components\Texture">
+      <UniqueIdentifier>{c4de5a38-0f22-4ba8-aa4f-2e33b6ae2c34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\VIBuffer">
+      <UniqueIdentifier>{9434176d-fed5-4179-9cdb-c6212722cfdf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\VIBuffer\VIBuffer_Rect">
+      <UniqueIdentifier>{0323a8ee-49c5-49fa-b804-7c18ba9c7399}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\08. IMGUI">
+      <UniqueIdentifier>{4fdcf624-1e37-4f36-95b6-6013356287d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\08. IMGUI\Manager">
+      <UniqueIdentifier>{e03c3b21-30c1-4470-93ab-85172fa07891}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\08. IMGUI\files">
+      <UniqueIdentifier>{b5ddabf2-923f-4693-b44c-134594761710}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\FMOD\fmod.cs">
+    <None Include="..\Public\FMOD\fmod.cs">
       <Filter>01.Utility\06. Sound\FMOD</Filter>
     </None>
-    <None Include="..\FMOD\fmod_dsp.cs">
+    <None Include="..\Public\FMOD\fmod_dsp.cs">
       <Filter>01.Utility\06. Sound\FMOD</Filter>
     </None>
-    <None Include="..\FMOD\fmod_errors.cs">
+    <None Include="..\Public\FMOD\fmod_errors.cs">
       <Filter>01.Utility\06. Sound\FMOD</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\FMOD\fmod_vc.lib">
+    <Library Include="..\ThirdPartyLib\fmod_vc.lib">
       <Filter>01.Utility\06. Sound\FMOD</Filter>
     </Library>
-    <Library Include="..\FMOD\fmodL_vc.lib">
+    <Library Include="..\ThirdPartyLib\fmodL_vc.lib">
       <Filter>01.Utility\06. Sound\FMOD</Filter>
     </Library>
   </ItemGroup>

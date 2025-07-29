@@ -31,15 +31,6 @@
     <Filter Include="02.GameObjects\BackGround">
       <UniqueIdentifier>{045c1a1c-a8ed-4e5b-bc33-e5328ed48bf1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="99.Defines\pch">
-      <UniqueIdentifier>{9aa1dce7-2955-4b9a-b63b-1443ce5040ef}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="97. Imgui">
-      <UniqueIdentifier>{7828a723-0171-4b34-89f1-32e6455e6ddb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="97. Imgui\Manager">
-      <UniqueIdentifier>{240cd2b4-de9c-4a04-abba-e7aa7a7c0644}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Levels\Edit">
       <UniqueIdentifier>{556a7229-e790-4a04-8346-9534c9b037b2}</UniqueIdentifier>
     </Filter>
@@ -80,36 +71,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\BackGround.h">
       <Filter>02.GameObjects\BackGround</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\ClientPch.h">
-      <Filter>99.Defines\pch</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Imgui\imconfig.h">
-      <Filter>97. Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Imgui\imgui.h">
-      <Filter>97. Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Imgui\imgui_impl_dx11.h">
-      <Filter>97. Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Imgui\imgui_impl_win32.h">
-      <Filter>97. Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Imgui\imgui_internal.h">
-      <Filter>97. Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Imgui\imstb_rectpack.h">
-      <Filter>97. Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Imgui\imstb_textedit.h">
-      <Filter>97. Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Imgui\imstb_truetype.h">
-      <Filter>97. Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\IMGUI_Manager.h">
-      <Filter>97. Imgui\Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_Edit.h">
       <Filter>01.Levels\Edit</Filter>
@@ -152,33 +113,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\BackGround.cpp">
       <Filter>02.GameObjects\BackGround</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\ClientPch.cpp">
-      <Filter>99.Defines\pch</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Imgui\imgui.cpp">
-      <Filter>97. Imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Imgui\imgui_demo.cpp">
-      <Filter>97. Imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Imgui\imgui_draw.cpp">
-      <Filter>97. Imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Imgui\imgui_impl_dx11.cpp">
-      <Filter>97. Imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Imgui\imgui_impl_win32.cpp">
-      <Filter>97. Imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Imgui\imgui_tables.cpp">
-      <Filter>97. Imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Imgui\imgui_widgets.cpp">
-      <Filter>97. Imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\IMGUI_Manager.cpp">
-      <Filter>97. Imgui\Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_Edit.cpp">
       <Filter>01.Levels\Edit</Filter>

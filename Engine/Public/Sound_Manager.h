@@ -16,6 +16,7 @@ public:
 	void PlaySoundOnce(const _wstring& pSoundKey, CHANNELID eID, float fVolume);
 	void PlaySoundLoop(const _wstring& pSoundKey, CHANNELID eID, float fVolume);
 	void PlayBGM(const _wstring& pSoundKey, float fVolume);
+	void PauseBGM(_bool bFlag);
 	void StopSound(CHANNELID eID);
 	void StopAll();
 	void SetChannelVolume(CHANNELID eID, float fVolume);

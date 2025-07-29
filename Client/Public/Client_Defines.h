@@ -1,5 +1,8 @@
 #pragma once
 
+#include "../Default/framework.h"
+#include <process.h>
+
 namespace Client
 {
 	const unsigned int			g_iWinSizeX = 1280;

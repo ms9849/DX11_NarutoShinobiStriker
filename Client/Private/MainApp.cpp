@@ -1,4 +1,3 @@
-#include "ClientPch.h"
 #include "MainApp.h"
 #include "GameInstance.h"
 #include "Level_Loading.h"
@@ -29,16 +28,12 @@ HRESULT Client::CMainApp::Initialize()
 
 	if (FAILED(Ready_Prototypes()))
 		return E_FAIL;
-	
-	/* 
-	일단은 MainApp 단에서 달아주도록 한다. 
-	추후 에디터 레벨에서 세팅할 수 있도록 
-	해주면 좋긴 할듯?
-	*/
+
 	if (FAILED(Start_Level(LEVEL::LOGO)))
 		return E_FAIL;
 
 	m_pGameInstance->PlayBGM(TEXT("test2.mp3"), 1.f);
+
 	return S_OK;
 }
 

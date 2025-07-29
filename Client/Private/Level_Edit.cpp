@@ -1,8 +1,6 @@
-#include "ClientPch.h"
 #include "Level_Edit.h"
 #include "GameInstance.h"
 #include "Level_Loading.h"
-#include "IMGUI_Manager.h"
 
 /* 부모의 멤버 변수 세팅은 부모에서 처리해야 한다.. */
 CLevel_Edit::CLevel_Edit(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID) :
@@ -18,12 +16,14 @@ HRESULT CLevel_Edit::Initialize()
     if (FAILED(Ready_IMGUI_Manager()))
         return E_FAIL;
 
+    m_pGameInstance->Update_IMGUI();
+
     return S_OK;
 }
 
 void CLevel_Edit::Update(_float fTimeDelta)
 {
-    m_pIMGUI_Manager->Update_Imgui();
+    m_pGameInstance->Update_IMGUI();
 
     if (m_pGameInstance->Key_Down(VK_F7))
     {
@@ -34,7 +34,7 @@ void CLevel_Edit::Update(_float fTimeDelta)
 
 HRESULT CLevel_Edit::Render()
 {
-    m_pIMGUI_Manager->Render_Imgui();
+    m_pGameInstance->Render_IMGUI();
 
     SetWindowText(g_hWnd, TEXT("EDIT LEVEL"));
 
@@ -48,8 +48,8 @@ HRESULT CLevel_Edit::Ready_Layer_Camera(const _wstring& strLayerTag)
 
 HRESULT CLevel_Edit::Ready_IMGUI_Manager()
 {
-    m_pIMGUI_Manager = CIMGUI_Manager::Create(m_pDevice, m_pContext);
-    m_pIMGUI_Manager->Update_Imgui();
+    //m_pIMGUI_Manager = CIMGUI_Manager::Create(m_pDevice, m_pContext);
+    //m_pIMGUI_Manager->Update_Imgui();
     return S_OK;
 }
 
@@ -69,6 +69,4 @@ CLevel_Edit* CLevel_Edit::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pCo
 void CLevel_Edit::Free()
 {
     __super::Free();
-
-    Safe_Release(m_pIMGUI_Manager);
 }

@@ -3,6 +3,9 @@
 
 #include <d3d11.h>
 #include <DirectXMath.h>
+#include <DirectXCollision.h>
+#include "DirectXTK/DDSTextureLoader.h"
+#include "DirectXTK/WICTextureLoader.h"
 using namespace DirectX;
 
 #include <vector>
@@ -19,7 +22,12 @@ using namespace DirectX;
 
 using namespace std;
 
-#include "fmod.hpp"
+#include "FMOD/fmod.hpp"
+
+#include "IMGUI/imgui.h"
+#include "IMGUI/imgui_impl_dx11.h"
+#include "IMGUI/imgui_impl_win32.h"
+
 #include "Engine_Enum.h"
 #include "Engine_Macro.h"
 #include "Engine_Struct.h"

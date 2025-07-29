@@ -62,6 +62,7 @@ public:
 #pragma region SOUND_MANAGER
 	void PlaySoundOnce(const _wstring& pSoundKey, CHANNELID eID, float fVolume);
 	void PlaySoundLoop(const _wstring& pSoundKey, CHANNELID eID, float fVolume);
+	void PauseBGM(_bool bFlag);
 	void PlayBGM(const _wstring& pSoundKey, float fVolume);
 	void StopSound(CHANNELID eID);
 	void StopAll();
@@ -72,6 +73,11 @@ public:
 	_bool		Key_Pressing(_uint _iKey);
 	_bool		Key_Up(_uint _iKey);
 	_bool		Key_Down(_uint _iKey);
+#pragma endregion
+
+#pragma region IMGUI_MANAGER
+	void	Update_IMGUI();
+	void	Render_IMGUI();
 #pragma endregion
 private:
 	class CGraphic_Device*			m_pGraphic_Device = { nullptr };
@@ -84,6 +90,7 @@ private:
 	class CSound_Manager*			m_pSound_Manager = { nullptr };
 	class CKey_Manager*				m_pKey_Manager = { nullptr };
 	class CPooling_Manager*			m_pPooling_Manager = { nullptr };
+	class CIMGUI_Manager*			m_pIMGUI_Manager = { nullptr };
 
 public:
 	void Release_Engine();
