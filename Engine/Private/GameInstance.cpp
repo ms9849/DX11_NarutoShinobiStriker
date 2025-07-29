@@ -9,6 +9,7 @@
 #include "Sound_Manager.h"
 #include "Key_Manager.h"
 #include "Renderer.h"
+#include "IMGUI_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -52,6 +53,10 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 
 	m_pPooling_Manager = CPooling_Manager::Create();
 	if (nullptr == m_pPooling_Manager)
+		return E_FAIL;
+
+	m_pIMGUI_Manager = CIMGUI_Manager::Create(*ppDevice, *ppContext, EngineDesc.hWnd, m_pPrototype_Manager, m_pObject_Manager);
+	if (nullptr == m_pIMGUI_Manager)
 		return E_FAIL;
 
 	return S_OK;
@@ -211,6 +216,11 @@ void CGameInstance::PlaySoundLoop(const _wstring& pSoundKey, CHANNELID eID, floa
 	m_pSound_Manager->PlaySoundLoop(pSoundKey, eID, fVolume);
 }
 
+void CGameInstance::PauseBGM(_bool bFlag)
+{
+	m_pSound_Manager->PauseBGM(bFlag);
+}
+
 void CGameInstance::PlayBGM(const _wstring& pSoundKey, float fVolume)
 {
 	m_pSound_Manager->PlayBGM(pSoundKey, fVolume);
@@ -252,6 +262,20 @@ _bool CGameInstance::Key_Down(_uint _iKey)
 
 #pragma endregion
 
+#pragma region IMGUI_MANAGER
+
+void CGameInstance::Update_IMGUI()
+{
+	m_pIMGUI_Manager->Update_IMGUI();
+}
+
+void CGameInstance::Render_IMGUI()
+{
+	m_pIMGUI_Manager->Render_IMGUI();
+}
+
+#pragma endregion
+
 void CGameInstance::Release_Engine()
 {
 	DestroyInstance();
@@ -265,6 +289,7 @@ void CGameInstance::Release_Engine()
 	Safe_Release(m_pSound_Manager);
 	Safe_Release(m_pKey_Manager);
 	Safe_Release(m_pPooling_Manager);
+	Safe_Release(m_pIMGUI_Manager);
 }
 
 void CGameInstance::Free()

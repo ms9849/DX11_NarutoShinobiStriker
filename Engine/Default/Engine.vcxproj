@@ -112,14 +112,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;ENGINE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../public/;../FMOD/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../public/</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>d3d11.lib;fmod_vc.lib;fmodL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../FMOD/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;fmod_vc.lib;fmodL_vc.lib;DirectXTKdbg.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../ThirdPartyLib/</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -138,18 +138,11 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>d3d11.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;DirectXTK.lib;fmod_vc.lib;fmodL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../ThirdPartyLib/</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\FMOD\fmod.h" />
-    <ClInclude Include="..\FMOD\fmod.hpp" />
-    <ClInclude Include="..\FMOD\fmod_codec.h" />
-    <ClInclude Include="..\FMOD\fmod_common.h" />
-    <ClInclude Include="..\FMOD\fmod_dsp.h" />
-    <ClInclude Include="..\FMOD\fmod_dsp_effects.h" />
-    <ClInclude Include="..\FMOD\fmod_errors.h" />
-    <ClInclude Include="..\FMOD\fmod_output.h" />
     <ClInclude Include="..\Public\Base.h" />
     <ClInclude Include="..\Public\Component.h" />
     <ClInclude Include="..\Public\Engine_Defines.h" />
@@ -158,9 +151,26 @@
     <ClInclude Include="..\Public\Engine_Macro.h" />
     <ClInclude Include="..\Public\Engine_Struct.h" />
     <ClInclude Include="..\Public\Engine_Typedef.h" />
+    <ClInclude Include="..\Public\FMOD\fmod.h" />
+    <ClInclude Include="..\Public\FMOD\fmod.hpp" />
+    <ClInclude Include="..\Public\FMOD\fmod_codec.h" />
+    <ClInclude Include="..\Public\FMOD\fmod_common.h" />
+    <ClInclude Include="..\Public\FMOD\fmod_dsp.h" />
+    <ClInclude Include="..\Public\FMOD\fmod_dsp_effects.h" />
+    <ClInclude Include="..\Public\FMOD\fmod_errors.h" />
+    <ClInclude Include="..\Public\FMOD\fmod_output.h" />
     <ClInclude Include="..\Public\GameInstance.h" />
     <ClInclude Include="..\Public\GameObject.h" />
     <ClInclude Include="..\Public\Graphic_Device.h" />
+    <ClInclude Include="..\Public\IMGUI\imconfig.h" />
+    <ClInclude Include="..\Public\IMGUI\imgui.h" />
+    <ClInclude Include="..\Public\IMGUI\imgui_impl_dx11.h" />
+    <ClInclude Include="..\Public\IMGUI\imgui_impl_win32.h" />
+    <ClInclude Include="..\Public\IMGUI\imgui_internal.h" />
+    <ClInclude Include="..\Public\IMGUI\imstb_rectpack.h" />
+    <ClInclude Include="..\Public\IMGUI\imstb_textedit.h" />
+    <ClInclude Include="..\Public\IMGUI\imstb_truetype.h" />
+    <ClInclude Include="..\Public\IMGUI_Manager.h" />
     <ClInclude Include="..\Public\Key_Manager.h" />
     <ClInclude Include="..\Public\Layer.h" />
     <ClInclude Include="..\Public\Level.h" />
@@ -172,10 +182,13 @@
     <ClInclude Include="..\Public\Prototype_Manager.h" />
     <ClInclude Include="..\Public\Renderer.h" />
     <ClInclude Include="..\Public\Sound_Manager.h" />
+    <ClInclude Include="..\Public\Texture.h" />
     <ClInclude Include="..\Public\Timer.h" />
     <ClInclude Include="..\Public\Timer_Manager.h" />
     <ClInclude Include="..\Public\Transform.h" />
     <ClInclude Include="..\Public\UIObject.h" />
+    <ClInclude Include="..\Public\VIBuffer.h" />
+    <ClInclude Include="..\Public\VIBuffer_Rect.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp" />
@@ -183,6 +196,7 @@
     <ClCompile Include="..\Private\GameInstance.cpp" />
     <ClCompile Include="..\Private\GameObject.cpp" />
     <ClCompile Include="..\Private\Graphic_Device.cpp" />
+    <ClCompile Include="..\Private\IMGUI_Manager.cpp" />
     <ClCompile Include="..\Private\Key_Manager.cpp" />
     <ClCompile Include="..\Private\Layer.cpp" />
     <ClCompile Include="..\Private\Level.cpp" />
@@ -194,19 +208,29 @@
     <ClCompile Include="..\Private\Prototype_Manager.cpp" />
     <ClCompile Include="..\Private\Renderer.cpp" />
     <ClCompile Include="..\Private\Sound_Manager.cpp" />
+    <ClCompile Include="..\Private\Texture.cpp" />
     <ClCompile Include="..\Private\Timer.cpp" />
     <ClCompile Include="..\Private\Timer_Manager.cpp" />
     <ClCompile Include="..\Private\Transform.cpp" />
     <ClCompile Include="..\Private\UIObject.cpp" />
+    <ClCompile Include="..\Private\VIBuffer.cpp" />
+    <ClCompile Include="..\Private\VIBuffer_Rect.cpp" />
+    <ClCompile Include="..\Public\IMGUI\imgui.cpp" />
+    <ClCompile Include="..\Public\IMGUI\imgui_demo.cpp" />
+    <ClCompile Include="..\Public\IMGUI\imgui_draw.cpp" />
+    <ClCompile Include="..\Public\IMGUI\imgui_impl_dx11.cpp" />
+    <ClCompile Include="..\Public\IMGUI\imgui_impl_win32.cpp" />
+    <ClCompile Include="..\Public\IMGUI\imgui_tables.cpp" />
+    <ClCompile Include="..\Public\IMGUI\imgui_widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\FMOD\fmod.cs" />
-    <None Include="..\FMOD\fmod_dsp.cs" />
-    <None Include="..\FMOD\fmod_errors.cs" />
+    <None Include="..\Public\FMOD\fmod.cs" />
+    <None Include="..\Public\FMOD\fmod_dsp.cs" />
+    <None Include="..\Public\FMOD\fmod_errors.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\FMOD\fmodL_vc.lib" />
-    <Library Include="..\FMOD\fmod_vc.lib" />
+    <Library Include="..\ThirdPartyLib\fmodL_vc.lib" />
+    <Library Include="..\ThirdPartyLib\fmod_vc.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

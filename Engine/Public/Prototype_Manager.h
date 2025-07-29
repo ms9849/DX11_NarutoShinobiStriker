@@ -1,7 +1,7 @@
 #pragma once
 
-//#include "Texture.h"
-//#include "Transform.h"
+#include "Texture.h"
+#include "Transform.h"
 //#include "VIBuffer_Cube.h"
 //#include "VIBuffer_Rect.h"
 //#include "VIBuffer_Terrain.h"
@@ -14,6 +14,8 @@ NS_BEGIN(Engine)
 
 class CPrototype_Manager final : public CBase
 {
+	friend class CIMGUI_Manager;
+
 private:
 	CPrototype_Manager();
 	virtual ~CPrototype_Manager() = default;

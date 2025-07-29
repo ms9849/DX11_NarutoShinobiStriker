@@ -1,15 +1,14 @@
-#include "ClientPch.h"
 #include "BackGround.h"
 
 #include "GameInstance.h"
 
 CBackGround::CBackGround(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CGameObject { pDevice, pContext }
+	: CUIObject { pDevice, pContext }
 {
 }
 
 CBackGround::CBackGround(const CBackGround& Prototype) 
-	: CGameObject { Prototype }
+	: CUIObject{ Prototype }
 {
 }
 
@@ -20,12 +19,21 @@ HRESULT CBackGround::Initialize_Prototype()
 
 HRESULT CBackGround::Initialize(void* pArg)
 {
+	CUIObject::UIOBJECT_DESC Desc;
+	//텍스쳐의 중심 x,y 위치 세팅
+	Desc.fX = g_iWinSizeX / 2.f;
+	Desc.fY = g_iWinSizeY / 2.f;
+	//텍스쳐의 크기 세팅
+	Desc.fSizeX = g_iWinSizeX;
+	Desc.fSizeY = g_iWinSizeY;
+
+	if (FAILED(__super::Initialize(&Desc)))
+		return E_FAIL;
+
+
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 	
-	if (FAILED(__super::Initialize(pArg)))
-		return E_FAIL;
-
 	return S_OK;
 }
 
@@ -45,7 +53,7 @@ void CBackGround::Late_Update(_float fTimeDelta)
 
 HRESULT CBackGround::Render()
 {	
-	m_pTransformCom;
+
 	return S_OK;
 }
 

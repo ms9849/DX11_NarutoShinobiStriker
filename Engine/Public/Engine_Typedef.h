@@ -44,7 +44,7 @@ namespace Engine
 	를 의미한다.	
 	*/
 
-	/*XMVECTOR*/
+	/*XMVECTOR, 연산용*/
 	typedef		XMVECTOR					_vector;
 
 	typedef		FXMVECTOR					_fvector;
@@ -52,10 +52,10 @@ namespace Engine
 	typedef		HXMVECTOR					_hvector;
 	typedef		CXMVECTOR					_cvector;
 
-	/*XMFLOAT4X4*/
+	/*XMFLOAT4X4, 연산용*/
 	typedef		XMFLOAT4X4					_float4x4;
 
-	/*XMMATRIX*/
+	/*XMMATRIX, 연산용*/
 	typedef		XMMATRIX					_matrix;
 
 	/*FXMMATRIX*/

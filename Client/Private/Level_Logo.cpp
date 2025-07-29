@@ -1,4 +1,3 @@
-#include "ClientPch.h"
 #include "Level_Logo.h"
 
 #include "GameObject.h"

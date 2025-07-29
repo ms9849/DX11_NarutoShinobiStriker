@@ -22,17 +22,25 @@ HRESULT CUIObject::Initialize(void* pArg)
 {
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
-
-    UIOBJECT_DESC* pDesc = static_cast<UIOBJECT_DESC*>(pArg);
-    //fx, fy, fsizeX, fsizeY 다 있으니까 세팅 해주던가 하고..
-
-    /*
-    m_pTransformCom->Set_Scale();
-    m_pTransformCom->Set_State();
-    */
+    
+    m_pOrthogonalCom = COrthogonal::Create(m_pDevice, m_pContext);
+    if (m_pOrthogonalCom == nullptr)
+        return E_FAIL;
 
     if (FAILED(m_pOrthogonalCom->Initialize()))
         return E_FAIL;
+
+
+    D3D11_VIEWPORT ViewPortDesc{};
+    //앞으로는 뷰포트가 여러개가 될거고, 갯수를 입력받는게 당연해질 것이라고 하심.
+    _uint          iNumViewPorts = { 1 };
+
+    m_pContext->RSGetViewports(&iNumViewPorts, &ViewPortDesc);
+
+    UIOBJECT_DESC* pDesc = static_cast<UIOBJECT_DESC*>(pArg);
+
+    m_pTransformCom->Set_Scale(pDesc->fSizeX, pDesc->fSizeY, 1.f);
+    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(pDesc->fX - ViewPortDesc.Width/2.f, -1.f  * pDesc->fY + ViewPortDesc.Height/2.f, 1.f, 0.f));
 
     return S_OK;
 }
@@ -58,4 +66,5 @@ void CUIObject::Free()
 {
     __super::Free();
 
+    Safe_Release(m_pOrthogonalCom);
 }

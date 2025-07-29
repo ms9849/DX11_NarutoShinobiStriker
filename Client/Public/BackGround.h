@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "GameObject.h"
+#include "UIObject.h"
 
 NS_BEGIN(Engine)
 
@@ -9,7 +9,7 @@ NS_END
 
 NS_BEGIN(Client)
 
-class CBackGround final : public CGameObject
+class CBackGround final : public CUIObject
 {
 private:
 	CBackGround(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

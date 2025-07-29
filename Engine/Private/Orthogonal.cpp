@@ -17,12 +17,13 @@ HRESULT COrthogonal::Initialize_Prototype()
 
 HRESULT COrthogonal::Initialize(void* pArg)
 {
-    //_uint iViewPortNum = { 1 };
-    //D3D11_VIEWPORT		ViewportDesc{};
-    //m_pContext->RSGetViewports(&iViewPortNum, &ViewportDesc);
+    D3D11_VIEWPORT       ViewportDesc{};
+    _uint                iNumViewports = { 1 };
 
-    //m_matView = XMMatrixIdentity();
-    //D3DXMatrixOrthoLH(&m_ProjMatrix, ViewportDesc.Width, ViewportDesc.Height, 0.0f, 1.f);
+    m_pContext->RSGetViewports(&iNumViewports, &ViewportDesc);
+
+    XMStoreFloat4x4(&m_matView, XMMatrixIdentity());
+    XMStoreFloat4x4(&m_matProj, XMMatrixOrthographicLH(ViewportDesc.Width, ViewportDesc.Height, 0.f, 1.f));
 
     return S_OK;
 }

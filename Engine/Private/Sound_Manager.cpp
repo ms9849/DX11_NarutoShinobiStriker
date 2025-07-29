@@ -10,6 +10,10 @@ HRESULT CSound_Manager::Initialize()
 	FMOD_RESULT result = FMOD::System_Create(&m_pSystem);
 	 
 	// 1. 시스템 포인터, 2. 사용할 가상채널 수 , 초기화 방식) 
+
+	// 최대 64개의 사운드 동시 재생 가능. 기존에 재생 중이던 사운드가 있다면
+	// 해당 사운드는 자동으로 다른 채널로 들어가서 재생되게 된다.
+	// 볼륨 세팅 걱정 안해도 될 듯?
 	m_pSystem->init(64, FMOD_INIT_NORMAL, NULL);
 
 	LoadSoundFile();
@@ -92,6 +96,12 @@ void CSound_Manager::PlayBGM(const _wstring& pSoundKey, float fVolume)
 	m_pSystem->playSound(iter->second, nullptr, FALSE, &m_pChannelArr[ENUM_CLASS(CHANNELID::SOUND_BGM)]);
 	m_pChannelArr[ENUM_CLASS(CHANNELID::SOUND_BGM)]->setMode(FMOD_LOOP_NORMAL);
 	m_pChannelArr[ENUM_CLASS(CHANNELID::SOUND_BGM)]->setVolume(fVolume);
+	m_pSystem->update();
+}
+
+void CSound_Manager::PauseBGM(_bool bFlag)
+{
+	m_pChannelArr[ENUM_CLASS(CHANNELID::SOUND_BGM)]->setPaused(bFlag);
 	m_pSystem->update();
 }
 

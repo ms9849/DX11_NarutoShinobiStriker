@@ -21,6 +21,13 @@ _float3 CTransform::Get_Scale() const
 	);
 }
 
+void CTransform::Set_Scale(_float fX, _float fY, _float fZ)
+{
+	Set_State(STATE::RIGHT, XMVector3Normalize(Get_State(STATE::RIGHT)) * fX);
+	Set_State(STATE::UP, XMVector3Normalize(Get_State(STATE::UP))* fY);
+	Set_State(STATE::LOOK, XMVector3Normalize(Get_State(STATE::LOOK))* fZ);
+}
+
 HRESULT CTransform::Initialize_Prototype()
 {
 
@@ -51,6 +58,7 @@ void CTransform::Go_Straight(_float fTimeDelta)
 	_vector		vPosition = Get_State(STATE::POSITION);
 	_vector		vLook = Get_State(STATE::LOOK);	
 
+	/* DX9 때와는 다르게 기존 벡터 원형을 수정하지 않는다. SIMD라고 해도 값으로 넘기는건데 빠른가..? */
 	vPosition += XMVector3Normalize(vLook) * m_fSpeedPerSec * fTimeDelta;
 
 	Set_State(STATE::POSITION, vPosition);
@@ -82,6 +90,16 @@ void CTransform::Go_Right(_float fTimeDelta)
 	_vector		vRight = Get_State(STATE::RIGHT);
 
 	vPosition += XMVector3Normalize(vRight) * m_fSpeedPerSec * fTimeDelta;
+
+	Set_State(STATE::POSITION, vPosition);
+}
+
+void CTransform::Go_Direction(_fvector vDir, _float fTimeDelta)
+{
+	_vector vPosition = Get_State(STATE::POSITION);
+	
+	/* 방향은 정규화해야지 */
+	vPosition += XMVector3Normalize(vDir) * m_fSpeedPerSec * fTimeDelta;
 
 	Set_State(STATE::POSITION, vPosition);
 }

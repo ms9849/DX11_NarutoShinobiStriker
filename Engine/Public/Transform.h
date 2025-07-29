@@ -24,6 +24,7 @@ public:
 	}
 
 	_float3 Get_Scale() const ;
+	void Set_Scale(_float fX, _float fY, _float fZ);
 
 	void Set_State(STATE eState, _fvector vState) {
 		XMStoreFloat4(reinterpret_cast<_float4*>(&m_WorldMatrix.m[ENUM_CLASS(eState)]), vState);
@@ -38,7 +39,7 @@ public:
 	void Go_Backward(_float fTimeDelta);
 	void Go_Left(_float fTimeDelta);
 	void Go_Right(_float fTimeDelta);
-
+	void Go_Direction(_fvector vDir, _float fTimeDelta);
 	/* 실시간 회전 */
 	void Turn(_fvector vAxis, _float fTimeDelta);
 
