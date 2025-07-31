@@ -23,6 +23,10 @@ HRESULT CIMGUI_Manager::Initialize(HWND hWnd, class CPrototype_Manager* pPrototy
 {
     memset(m_bVisibleFlag, 0, ENUM_CLASS(IMGUI_VISIBLE::END));
 
+    m_iFrameArraySize = 100;
+    m_fFrames = new _float[m_iFrameArraySize];
+    memset(m_fFrames, 0, m_iFrameArraySize);
+
     if (FAILED(Ready_IMGUI(hWnd)))
         return E_FAIL;
 
@@ -42,6 +46,7 @@ HRESULT CIMGUI_Manager::Ready_IMGUI(HWND hWnd)
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
+    ImPlot::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.Fonts->AddFontFromFileTTF("../Bin/Resources/Fonts/OpenSans-SemiBold.ttf", 20.0f, NULL, io.Fonts->GetGlyphRangesKorean());
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
@@ -92,7 +97,7 @@ void CIMGUI_Manager::Set_Visible_IMGUI(_bool bFlag, _uint iIMGUIID)
 
 void CIMGUI_Manager::Set_Visible_All_IMGUI(_bool bFlag)
 {
-    memset(m_bVisibleFlag, bFlag, ENUM_CLASS(IMGUI_VISIBLE::END));
+    memset(m_bVisibleFlag, bFlag, sizeof(_bool) * ENUM_CLASS(IMGUI_VISIBLE::END));
 }
 
 void CIMGUI_Manager::Release_IMGUI()
@@ -101,6 +106,7 @@ void CIMGUI_Manager::Release_IMGUI()
     ImGui_ImplDX11_Shutdown();
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
+    ImPlot::DestroyContext();
 }
 
 void CIMGUI_Manager::Show_Managers()
@@ -140,12 +146,10 @@ void CIMGUI_Manager::Show_PoolManager(_uint iLevelID)
                 _uint iPoolCounts = m_pPooling_Manager->m_PoolCounts[iLevelID].find(iter.first)->second;
                 size_t iMaxPoolCounts = iter.second.size();
 
-                _char pBuffer[256] = {};
-                strcat_s(pBuffer, 256, to_string(iPoolCounts).c_str());
-                strcat_s(pBuffer, 256, " / ");
-                strcat_s(pBuffer, 256, to_string(iMaxPoolCounts).c_str());
+                string strBuffer;
+                strBuffer = to_string(iPoolCounts) + " / " + to_string(iMaxPoolCounts);
 
-                ImGui::ProgressBar(iPoolCounts / (_float)iMaxPoolCounts, ImVec2(0, 0), pBuffer);
+                ImGui::ProgressBar(iPoolCounts / (_float)iMaxPoolCounts, ImVec2(0, 0), strBuffer.c_str());
 
                 ImGui::TreePop();
             }
@@ -265,16 +269,37 @@ void CIMGUI_Manager::Show_ObjectManager(_uint iLevelID)
 
 void CIMGUI_Manager::Show_GameInfo(_float fTimeDelta)
 {
+    memmove(m_fFrames + 1, m_fFrames, sizeof(_float) * (m_iFrameArraySize - 1));
+    m_fFrames[0] = 1 / fTimeDelta;
+ 
     if (!m_bVisibleFlag[ENUM_CLASS(IMGUI_VISIBLE::GAMEINFO)])
         return;
 
     ImGui::Begin("Game Info", nullptr, ImGuiWindowFlags_NoCollapse);
 
+    ImGui::Text("Current LevelID : %d", m_pGameInstance->Get_LevelID());
+    ImGui::Separator();
+
     ImGui::Text("Frame: %f", 1 / fTimeDelta);
     ImGui::Separator();
+
     ImGui::Text("Frame Per Sec (TimeDelta): %f", fTimeDelta);
     ImGui::Separator();
-    ImGui::Text("Current LevelID : %d", m_pGameInstance->Get_LevelID());
+
+    if (ImGui::CollapsingHeader("Frame Visualization"))
+    {
+        if (ImPlot::BeginPlot("##spark", ImVec2(-1, -1), ImPlotFlags_CanvasOnly)) {
+            //ImPlot::SetupAxisFormat(ImAxis_Y1, "%.6f");
+            ImPlot::SetupAxes(nullptr, nullptr, ImPlotAxisFlags_NoDecorations,  ImPlotAxisFlags_NoGridLines | ImPlotAxisFlags_NoTickMarks);
+            ImPlot::SetupAxesLimits(0, 99, m_fFrameRange[0], m_fFrameRange[1], ImGuiCond_Always);
+            ImPlot::SetupAxisTicks(ImAxis_Y1, m_fFrameRange, 2);
+
+            ImPlot::SetNextLineStyle(ImVec4(0.f, 0.f, 0.f, 1.f));
+            ImPlot::PlotLine("##spark", m_fFrames, 100, 3.f);
+
+            ImPlot::EndPlot();
+        }
+    }
 
     ImGui::End();
 }
@@ -304,6 +329,8 @@ void CIMGUI_Manager::Free()
     Safe_Release(m_pObject_Manager);
     Safe_Release(m_pPooling_Manager);
     Safe_Release(m_pGameInstance);
+
+    Safe_Delete_Array(m_fFrames);
 
     Release_IMGUI();
 }

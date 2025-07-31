@@ -116,31 +116,37 @@
       <Filter>01.Utility\08. IMGUI\Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\IMGUI\imconfig.h">
-      <Filter>01.Utility\08. IMGUI\files</Filter>
+      <Filter>01.Utility\08. IMGUI\imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\IMGUI\imgui.h">
-      <Filter>01.Utility\08. IMGUI\files</Filter>
+      <Filter>01.Utility\08. IMGUI\imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\IMGUI\imgui_impl_dx11.h">
-      <Filter>01.Utility\08. IMGUI\files</Filter>
+      <Filter>01.Utility\08. IMGUI\imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\IMGUI\imgui_impl_win32.h">
-      <Filter>01.Utility\08. IMGUI\files</Filter>
+      <Filter>01.Utility\08. IMGUI\imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\IMGUI\imgui_internal.h">
-      <Filter>01.Utility\08. IMGUI\files</Filter>
+      <Filter>01.Utility\08. IMGUI\imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\IMGUI\imstb_rectpack.h">
-      <Filter>01.Utility\08. IMGUI\files</Filter>
+      <Filter>01.Utility\08. IMGUI\imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\IMGUI\imstb_textedit.h">
-      <Filter>01.Utility\08. IMGUI\files</Filter>
+      <Filter>01.Utility\08. IMGUI\imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\IMGUI\imstb_truetype.h">
-      <Filter>01.Utility\08. IMGUI\files</Filter>
+      <Filter>01.Utility\08. IMGUI\imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Shader.h">
       <Filter>01.Utility\03.Components\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\IMPLOT\implot.h">
+      <Filter>01.Utility\08. IMGUI\implot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\IMPLOT\implot_internal.h">
+      <Filter>01.Utility\08. IMGUI\implot</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -216,29 +222,35 @@
     <ClCompile Include="..\Private\IMGUI_Manager.cpp">
       <Filter>01.Utility\08. IMGUI\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="..\Public\IMGUI\imgui.cpp">
-      <Filter>01.Utility\08. IMGUI\files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Public\IMGUI\imgui_demo.cpp">
-      <Filter>01.Utility\08. IMGUI\files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Public\IMGUI\imgui_draw.cpp">
-      <Filter>01.Utility\08. IMGUI\files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Public\IMGUI\imgui_impl_dx11.cpp">
-      <Filter>01.Utility\08. IMGUI\files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Public\IMGUI\imgui_impl_win32.cpp">
-      <Filter>01.Utility\08. IMGUI\files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Public\IMGUI\imgui_tables.cpp">
-      <Filter>01.Utility\08. IMGUI\files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Public\IMGUI\imgui_widgets.cpp">
-      <Filter>01.Utility\08. IMGUI\files</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Shader.cpp">
       <Filter>01.Utility\03.Components\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\IMGUI\imgui.cpp">
+      <Filter>01.Utility\08. IMGUI\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\IMGUI\imgui_demo.cpp">
+      <Filter>01.Utility\08. IMGUI\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\IMGUI\imgui_draw.cpp">
+      <Filter>01.Utility\08. IMGUI\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\IMGUI\imgui_impl_dx11.cpp">
+      <Filter>01.Utility\08. IMGUI\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\IMGUI\imgui_impl_win32.cpp">
+      <Filter>01.Utility\08. IMGUI\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\IMGUI\imgui_tables.cpp">
+      <Filter>01.Utility\08. IMGUI\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\IMGUI\imgui_widgets.cpp">
+      <Filter>01.Utility\08. IMGUI\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\IMPLOT\implot.cpp">
+      <Filter>01.Utility\08. IMGUI\implot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\IMPLOT\implot_items.cpp">
+      <Filter>01.Utility\08. IMGUI\implot</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -344,11 +356,14 @@
     <Filter Include="01.Utility\08. IMGUI\Manager">
       <UniqueIdentifier>{e03c3b21-30c1-4470-93ab-85172fa07891}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\08. IMGUI\files">
-      <UniqueIdentifier>{b5ddabf2-923f-4693-b44c-134594761710}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\03.Components\Shader">
       <UniqueIdentifier>{41a9f3c8-e825-4195-a136-b33c5e6a4bfa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\08. IMGUI\imgui">
+      <UniqueIdentifier>{b5ddabf2-923f-4693-b44c-134594761710}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\08. IMGUI\implot">
+      <UniqueIdentifier>{764800d2-bcd4-49fb-b0a2-d50625ebe381}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

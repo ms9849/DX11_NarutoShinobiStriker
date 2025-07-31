@@ -7,9 +7,10 @@ NS_BEGIN(Engine)
 /*
 
 구현할 기능
-1. 프로토타입 매니저 멤버 순회
-2. 오브젝트 매니저 멤버 순회
-3. 풀링 매니저 멤버 순회 
+1. 프로토타입 매니저 멤버 순회->
+2. 오브젝트 매니저 멤버 순회->
+3. 풀링 매니저 멤버 순회 ->
+====================================================
 4. 애니메이션, 본 정보 뽑아서 순회 가능하게끔 하기
 */
 
@@ -45,6 +46,9 @@ private:
 	_bool m_bVisibleFlag[ENUM_CLASS(IMGUI_VISIBLE::END)];
 	_string strSelectedLayer = {};
 	_string strSelectedPrototype = {};
+	_uint	m_iFrameArraySize = {};
+	_float* m_fFrames = {};
+	_double m_fFrameRange[2] = { 50.f, 65.f };
 
 	class CPrototype_Manager* m_pPrototype_Manager = { nullptr };
 	class CObject_Manager* m_pObject_Manager = { nullptr };
