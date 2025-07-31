@@ -4,7 +4,7 @@
 
 NS_BEGIN(Engine)
 
-class ENGINE_DLL CPooling : public CComponent
+class ENGINE_DLL CPooling final : public CComponent
 {
 public:
 	typedef struct tagPoolingDesc {

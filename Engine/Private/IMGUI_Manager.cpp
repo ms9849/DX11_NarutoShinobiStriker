@@ -22,7 +22,6 @@ CIMGUI_Manager::CIMGUI_Manager(ID3D11Device* pDevice, ID3D11DeviceContext* pCont
 HRESULT CIMGUI_Manager::Initialize(HWND hWnd, class CPrototype_Manager* pPrototype_Manager, class CObject_Manager* pObject_Manager, class CPooling_Manager* pPooling_Manager)
 {
     memset(m_bVisibleFlag, 0, ENUM_CLASS(IMGUI_VISIBLE::END));
-    strSelectedLayer = { "Select Layer" };
 
     if (FAILED(Ready_IMGUI(hWnd)))
         return E_FAIL;
@@ -171,6 +170,10 @@ void CIMGUI_Manager::Show_PrototypeManager(_uint iLevelID)
             if (ImGui::Button(strBuffer.c_str()))
             {
                 strSelectedPrototype = strBuffer;
+
+                auto& iter = m_pObject_Manager->m_pLayers[iLevelID];
+                strSelectedLayer = m_pGameInstance->ToString(iter.begin()->first);
+
                 ImGui::OpenPopup("Clone Prototype");
             }
         }

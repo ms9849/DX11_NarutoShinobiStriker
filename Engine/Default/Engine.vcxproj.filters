@@ -139,6 +139,9 @@
     <ClInclude Include="..\Public\IMGUI\imstb_truetype.h">
       <Filter>01.Utility\08. IMGUI\files</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Shader.h">
+      <Filter>01.Utility\03.Components\Shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -233,6 +236,9 @@
     </ClCompile>
     <ClCompile Include="..\Public\IMGUI\imgui_widgets.cpp">
       <Filter>01.Utility\08. IMGUI\files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Shader.cpp">
+      <Filter>01.Utility\03.Components\Shader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -340,6 +346,9 @@
     </Filter>
     <Filter Include="01.Utility\08. IMGUI\files">
       <UniqueIdentifier>{b5ddabf2-923f-4693-b44c-134594761710}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Shader">
+      <UniqueIdentifier>{41a9f3c8-e825-4195-a136-b33c5e6a4bfa}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -15,9 +15,25 @@ public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 
+public:
+	virtual HRESULT	Bind_Resources();
+	virtual HRESULT Render();
+
 protected:
-	ID3D11Buffer* m_pVB = { nullptr };
-	ID3D11Buffer* m_pIB = { nullptr };
+	ID3D11Buffer*	m_pVB = { nullptr };
+	ID3D11Buffer*	m_pIB = { nullptr };
+
+	_uint			m_iNumVertexBuffers = {};
+	_float3*		m_pVertexPositions = {};
+
+	_uint			m_iNumVertices = {};
+	_uint			m_iVertexStride = {};
+
+	_uint			m_iNumIndices = {};
+	_uint			m_iIndexStride = {};
+	DXGI_FORMAT		m_eIndexFormat = {};
+	/* Topology -> 위상이란 뜻 */
+	D3D11_PRIMITIVE_TOPOLOGY m_ePrimitive = {};
 
 public:
 	virtual CComponent* Clone(void* pArg) = 0;

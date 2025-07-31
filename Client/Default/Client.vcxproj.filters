@@ -37,6 +37,9 @@
     <Filter Include="02.GameObjects\Dummy">
       <UniqueIdentifier>{5543306a-a425-4cee-8998-381822428b8b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="97. ShaderFiles">
+      <UniqueIdentifier>{0f420791-b552-4eaa-bcc7-610874980509}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -120,5 +123,10 @@
     <ClCompile Include="..\Private\Dummy.cpp">
       <Filter>02.GameObjects\Dummy</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPosTex.hlsl">
+      <Filter>97. ShaderFiles</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
