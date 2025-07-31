@@ -12,6 +12,11 @@ namespace Engine
 		WINMODE				eWindowMode;
 	}ENGINE_DESC;
 
+	typedef struct tagVertexPositionTexcoord
+	{
+		XMFLOAT3				vPosition;
+		XMFLOAT2				vTexCoord;
+	} VTXPOSTEX;
 }
 
 #endif // Engine_Struct_h__
