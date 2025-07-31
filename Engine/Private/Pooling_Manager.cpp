@@ -36,7 +36,7 @@ void CPooling_Manager::Update()
             for (auto& iter : pPoolObjects.second)
             {
                 pPoolingCom = static_cast<CPooling*>(iter->Find_Component(g_strPoolingTag));
-                /* 사용중이고, m_isDead가 True라면.. 이건 역할을 다하고 오브젝트 매니저에서 나온 녀석일 것. */
+                /* 사용중이고, m_isDead가 True라면, 역할을 다하고 오브젝트 매니저에서 나온 녀석일 것. */
                 if (pPoolingCom->IsUsing() == true && iter->isDead() == true)
                 {
                     pPoolingCom->Set_Using(false);

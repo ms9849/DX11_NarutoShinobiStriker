@@ -28,6 +28,8 @@ using namespace std;
 #include "IMGUI/imgui.h"
 #include "IMGUI/imgui_impl_dx11.h"
 #include "IMGUI/imgui_impl_win32.h"
+#include "IMPLOT/implot.h"
+#include "IMPLOT/implot_internal.h"
 
 #include "Engine_Enum.h"
 #include "Engine_Macro.h"

@@ -171,6 +171,8 @@
     <ClInclude Include="..\Public\IMGUI\imstb_textedit.h" />
     <ClInclude Include="..\Public\IMGUI\imstb_truetype.h" />
     <ClInclude Include="..\Public\IMGUI_Manager.h" />
+    <ClInclude Include="..\Public\IMPLOT\implot.h" />
+    <ClInclude Include="..\Public\IMPLOT\implot_internal.h" />
     <ClInclude Include="..\Public\Key_Manager.h" />
     <ClInclude Include="..\Public\Layer.h" />
     <ClInclude Include="..\Public\Level.h" />
@@ -197,7 +199,16 @@
     <ClCompile Include="..\Private\GameInstance.cpp" />
     <ClCompile Include="..\Private\GameObject.cpp" />
     <ClCompile Include="..\Private\Graphic_Device.cpp" />
+    <ClCompile Include="..\Private\IMGUI\imgui.cpp" />
+    <ClCompile Include="..\Private\IMGUI\imgui_demo.cpp" />
+    <ClCompile Include="..\Private\IMGUI\imgui_draw.cpp" />
+    <ClCompile Include="..\Private\IMGUI\imgui_impl_dx11.cpp" />
+    <ClCompile Include="..\Private\IMGUI\imgui_impl_win32.cpp" />
+    <ClCompile Include="..\Private\IMGUI\imgui_tables.cpp" />
+    <ClCompile Include="..\Private\IMGUI\imgui_widgets.cpp" />
     <ClCompile Include="..\Private\IMGUI_Manager.cpp" />
+    <ClCompile Include="..\Private\IMPLOT\implot.cpp" />
+    <ClCompile Include="..\Private\IMPLOT\implot_items.cpp" />
     <ClCompile Include="..\Private\Key_Manager.cpp" />
     <ClCompile Include="..\Private\Layer.cpp" />
     <ClCompile Include="..\Private\Level.cpp" />
@@ -217,13 +228,6 @@
     <ClCompile Include="..\Private\UIObject.cpp" />
     <ClCompile Include="..\Private\VIBuffer.cpp" />
     <ClCompile Include="..\Private\VIBuffer_Rect.cpp" />
-    <ClCompile Include="..\Public\IMGUI\imgui.cpp" />
-    <ClCompile Include="..\Public\IMGUI\imgui_demo.cpp" />
-    <ClCompile Include="..\Public\IMGUI\imgui_draw.cpp" />
-    <ClCompile Include="..\Public\IMGUI\imgui_impl_dx11.cpp" />
-    <ClCompile Include="..\Public\IMGUI\imgui_impl_win32.cpp" />
-    <ClCompile Include="..\Public\IMGUI\imgui_tables.cpp" />
-    <ClCompile Include="..\Public\IMGUI\imgui_widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Public\FMOD\fmod.cs" />
