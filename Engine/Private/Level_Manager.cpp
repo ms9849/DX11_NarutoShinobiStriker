@@ -9,6 +9,11 @@ CLevel_Manager::CLevel_Manager()
 	Safe_AddRef(m_pGameInstance);	
 }
 
+_uint CLevel_Manager::Get_LevelID() const
+{
+	return m_pCurrentLevel->Get_LevelID();
+}
+
 HRESULT CLevel_Manager::Change_Level(CLevel* pNewLevel)
 {
 	if (nullptr != m_pCurrentLevel)

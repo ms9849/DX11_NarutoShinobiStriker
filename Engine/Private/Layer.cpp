@@ -1,6 +1,8 @@
 #include "Layer.h"
 #include "GameObject.h"
 
+#include "IMGUI_Manager.h"
+
 CLayer::CLayer()
 {
 }

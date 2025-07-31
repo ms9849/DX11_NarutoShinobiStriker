@@ -9,6 +9,7 @@ namespace Client
 	const unsigned int			g_iWinSizeY = 720;
 
 	enum class LEVEL { STATIC, LOADING, LOGO, GAMEPLAY, EDIT, END };
+	enum class OBJECTID { BACKGROUND, DUMMY, END };
 }
 
 using namespace Client;

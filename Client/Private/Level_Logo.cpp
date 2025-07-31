@@ -28,6 +28,8 @@ HRESULT CLevel_Logo::Initialize()
 
 void CLevel_Logo::Update(_float fTimeDelta)
 {
+	Pooling_Test(fTimeDelta);
+
 	if (m_pGameInstance->Key_Down(VK_SPACE))
 	{
 		if (FAILED(m_pGameInstance->Change_Level(CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL::LOADING, LEVEL::GAMEPLAY))))
@@ -41,8 +43,6 @@ HRESULT CLevel_Logo::Render()
 
 	return S_OK;
 }
-
-
 
 HRESULT CLevel_Logo::Ready_Layer_Camera(const _wstring& strLayerTag)
 {
@@ -66,12 +66,12 @@ HRESULT CLevel_Logo::Ready_Layer_Dummy(const _wstring& strLayerTag)
 {
 	for (_int i = 0; i < 100; ++i)
 	{
-		m_pGameInstance->Add_GameObject_ToPool(static_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LOGO),
+		m_pGameInstance->Add_GameObject_ToPool(ENUM_CLASS(LEVEL::LOGO), static_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LOGO),
 			TEXT("Prototype_GameObject_Dummy"), nullptr)));
 	}
 
 	for(_int i=0; i < 50; ++i)
-		m_pGameInstance->Add_PoolingObject_ToLayer(TEXT("Object_Dummy"), ENUM_CLASS(LEVEL::LOGO), TEXT("Layer_Dummy"));
+		m_pGameInstance->Add_PoolingObject_ToLayer(TEXT("Object_Dummy"), ENUM_CLASS(LEVEL::LOGO), ENUM_CLASS(LEVEL::LOGO), TEXT("Layer_Dummy"));
 	
 	return S_OK;
 }
@@ -83,6 +83,23 @@ HRESULT CLevel_Logo::Ready_Layer_BackGround(const _wstring& strLayerTag)
 		return E_FAIL;
 
 	return S_OK;
+}
+
+void CLevel_Logo::Pooling_Test(_float fTimeDelta)
+{
+	m_fTimeAcc += fTimeDelta;
+
+	if (m_fTimeAcc >= 0.233f)
+	{
+		m_pGameInstance->Add_PoolingObject_ToLayer(
+			TEXT("Object_Dummy"), 
+			ENUM_CLASS(LEVEL::LOGO),
+			ENUM_CLASS(LEVEL::LOGO), 
+			TEXT("Layer_Dummy")
+		);
+
+		m_fTimeAcc = 0.f;
+	}
 }
 
 CLevel_Logo* CLevel_Logo::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID)

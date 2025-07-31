@@ -22,6 +22,10 @@ public:
 	HRESULT Ready_Layer_Dummy(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_BackGround(const _wstring& strLayerTag);
 	
+private:
+	void Pooling_Test(_float fTimeDelta);
+	_float m_fTimeAcc = {};
+
 public:
 	static CLevel_Logo* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID);
 	virtual void Free() override;

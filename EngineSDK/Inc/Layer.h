@@ -6,6 +6,7 @@ NS_BEGIN(Engine)
 
 class CLayer final : public CBase
 {
+	friend class CIMGUI_Manager;
 private:
 	CLayer();
 	virtual ~CLayer() = default;

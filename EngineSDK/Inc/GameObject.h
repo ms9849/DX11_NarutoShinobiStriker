@@ -12,7 +12,7 @@ public:
 
 	} GAMEOBJECT_DESC;
 protected:
-	CGameObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CGameObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iObjectID);
 	CGameObject(const CGameObject& Prototype);
 	virtual ~CGameObject() = default;
 
@@ -29,6 +29,10 @@ public:
 		return m_isDead;
 	}
 
+	_uint Get_ObjectID() const {
+		return m_iObjectID;
+	}
+
 	void Set_Dead(_bool bFlag) {
 		m_isDead = bFlag;
 	}
@@ -36,7 +40,7 @@ public:
 	class CComponent* Find_Component(const _wstring& strComponentTag);
 
 protected:
-	int							m_iData;
+	_uint m_iObjectID = {};
 	ID3D11Device* m_pDevice = { nullptr };
 	ID3D11DeviceContext* m_pContext = { nullptr };
 	class CGameInstance*		m_pGameInstance = { nullptr };

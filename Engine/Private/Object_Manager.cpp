@@ -3,6 +3,7 @@
 
 #include "Layer.h"
 #include "GameObject.h"
+#include "IMGUI_Manager.h"
 
 CObject_Manager::CObject_Manager()
 	: m_pGameInstance { CGameInstance::GetInstance() }

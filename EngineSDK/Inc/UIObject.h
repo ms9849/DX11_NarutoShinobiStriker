@@ -12,7 +12,7 @@ public:
 		_float		fX, fY, fSizeX, fSizeY;
 	}UIOBJECT_DESC;
 protected:
-	CUIObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CUIObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iObjectID);
 	CUIObject(const CUIObject& Prototype);
 	virtual ~CUIObject() = default;
 

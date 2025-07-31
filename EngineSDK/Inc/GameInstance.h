@@ -18,8 +18,14 @@ public:
 	HRESULT Draw();
 	void Clear_Resources(_uint iLevelIndex);
 
+#pragma region TOOLS
 	_float Random_Normal();
 	_float Random(_float fMin, _float fMax);
+
+	_string ToString(_wstring wStr);
+	_wstring ToWstring(_string Str);
+
+#pragma endregion
 
 #pragma region GRAPHIC_DEVICE
 public:
@@ -37,6 +43,7 @@ public:
 #pragma region LEVEL_MANAGER
 public:
 	HRESULT Change_Level(class CLevel* pNewLevel);
+	_uint	Get_LevelID();
 #pragma endregion
 
 #pragma region PROTOTYPE_MANAGER
@@ -51,8 +58,8 @@ public:
 #pragma endregion
 
 #pragma region POOLING_MANAGER
-	void	Add_GameObject_ToPool(class CGameObject* pGameObject);
-	HRESULT	Add_PoolingObject_ToLayer(const _wstring& strPoolingTag, _uint iLayerLevelIndex, const _wstring& strLayerTag);
+	void	Add_GameObject_ToPool(_uint iLevelIndex, class CGameObject* pGameObject);
+	HRESULT	Add_PoolingObject_ToLayer(const _wstring& strPoolingTag, _uint iPoolingOjbectLevelIndex, _uint iLayerLevelIndex, const _wstring& strLayerTag);
 #pragma endregion
 
 #pragma region RENDERER
@@ -70,15 +77,17 @@ public:
 #pragma endregion
 
 #pragma region KEY_MANAGER
+	void		Key_Input();
 	_bool		Key_Pressing(_uint _iKey);
 	_bool		Key_Up(_uint _iKey);
 	_bool		Key_Down(_uint _iKey);
 #pragma endregion
 
 #pragma region IMGUI_MANAGER
-	void	Update_IMGUI();
-	void	Render_IMGUI();
+	void	Set_Visible_IMGUI(_bool bFlag, _uint iIMGUIID);
+	void	Set_Visible_All_IMGUI(_bool bFlag);
 #pragma endregion
+
 private:
 	class CGraphic_Device*			m_pGraphic_Device = { nullptr };
 	class CTimer_Manager*			m_pTimer_Manager = { nullptr };

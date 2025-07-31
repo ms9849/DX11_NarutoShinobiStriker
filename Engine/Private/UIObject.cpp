@@ -3,8 +3,8 @@
 #include "GameInstance.h"
 #include "Orthogonal.h"
 
-CUIObject::CUIObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-    : CGameObject{ pDevice, pContext }
+CUIObject::CUIObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iObjectID)
+    : CGameObject{ pDevice, pContext, iObjectID }
 {
 }
 

@@ -51,11 +51,11 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	if (nullptr == m_pKey_Manager)
 		return E_FAIL;
 
-	m_pPooling_Manager = CPooling_Manager::Create();
+	m_pPooling_Manager = CPooling_Manager::Create(EngineDesc.iNumLevels);
 	if (nullptr == m_pPooling_Manager)
 		return E_FAIL;
 
-	m_pIMGUI_Manager = CIMGUI_Manager::Create(*ppDevice, *ppContext, EngineDesc.hWnd, m_pPrototype_Manager, m_pObject_Manager);
+	m_pIMGUI_Manager = CIMGUI_Manager::Create(*ppDevice, *ppContext, EngineDesc.hWnd, m_pPrototype_Manager, m_pObject_Manager, m_pPooling_Manager);
 	if (nullptr == m_pIMGUI_Manager)
 		return E_FAIL;
 
@@ -64,9 +64,6 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 
 void CGameInstance::Update_Engine(_float fTimeDelta)
 {
-	/* 키 매니저 입력 받기 */
-	m_pKey_Manager->Key_Input();
-
 	/* 객체 업데이트 계층 */
 	m_pObject_Manager->Priority_Update(fTimeDelta);
 
@@ -76,8 +73,14 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 
 	m_pObject_Manager->Clear_DeadObj();
 
+	/* 풀링 매니저 업데이트 */
+	m_pPooling_Manager->Update();
+
 	/* 레벨 업데이트 */
 	m_pLevel_Manager->Update(fTimeDelta);
+	
+	/* IMGUI 업데이트 */
+	m_pIMGUI_Manager->Update(fTimeDelta);
 
 	/* 키 매니저 초기화 */
 	m_pKey_Manager->Update();
@@ -89,6 +92,9 @@ HRESULT CGameInstance::Draw()
 
 	m_pLevel_Manager->Render();
 
+	/* IMGUI 렌더 */
+	m_pIMGUI_Manager->Render();
+
 	return S_OK;
 }
 
@@ -96,8 +102,10 @@ void CGameInstance::Clear_Resources(_uint iLevelIndex)
 {
 	m_pPrototype_Manager->Clear(iLevelIndex);
 	m_pObject_Manager->Clear(iLevelIndex);
+	m_pPooling_Manager->Clear(iLevelIndex);
 }
 
+#pragma region TOOLS
 _float CGameInstance::Random_Normal()
 {
 	return static_cast<_float>(rand()) / RAND_MAX;	
@@ -107,6 +115,28 @@ _float CGameInstance::Random(_float fMin, _float fMax)
 {
 	return fMin + Random_Normal() * (fMax - fMin);	
 }
+
+_string CGameInstance::ToString(_wstring wStr)
+{
+	_uint iSize = WideCharToMultiByte(CP_UTF8, 0, wStr.c_str(),(_uint)wStr.size(), nullptr, 0, nullptr, nullptr);
+
+	_string strTo(iSize, 0);
+	WideCharToMultiByte(CP_UTF8, 0, wStr.c_str(),(_uint)wStr.size(), &strTo[0], iSize, nullptr, nullptr);
+
+	return strTo;
+}
+
+_wstring CGameInstance::ToWstring(_string Str)
+{
+	_uint iSize = MultiByteToWideChar(CP_UTF8, 0, Str.c_str(), (_uint)Str.size(), nullptr, 0);
+
+	_wstring Result(iSize, 0);
+	MultiByteToWideChar(CP_UTF8, 0, Str.c_str(),(_int)Str.size(), &Result[0], iSize);
+
+	return Result;
+}
+
+#pragma endregion
 
 #pragma region GRAPHIC_DEVICE
 
@@ -149,6 +179,11 @@ HRESULT CGameInstance::Change_Level(CLevel* pNewLevel)
 	return m_pLevel_Manager->Change_Level(pNewLevel);
 }
 
+_uint CGameInstance::Get_LevelID()
+{
+	return m_pLevel_Manager->Get_LevelID();
+}
+
 #pragma endregion
 
 #pragma region PROTOTYPE_MANAGER
@@ -185,13 +220,13 @@ HRESULT CGameInstance::Add_Clone_ToLayer(CGameObject* pClone, _uint iLayerLevelI
 #pragma endregion
 
 #pragma region POOLING_MANAGER
-void CGameInstance::Add_GameObject_ToPool(CGameObject* pGameObject)
+void CGameInstance::Add_GameObject_ToPool(_uint iLevelIndex, CGameObject* pGameObject)
 {
-	m_pPooling_Manager->Add_GameObject_ToPool(pGameObject);
+	m_pPooling_Manager->Add_GameObject_ToPool(iLevelIndex, pGameObject);
 }
-HRESULT CGameInstance::Add_PoolingObject_ToLayer(const _wstring& strPoolingTag, _uint iLayerLevelIndex, const _wstring& strLayerTag)
+HRESULT CGameInstance::Add_PoolingObject_ToLayer(const _wstring& strPoolingTag, _uint iPoolingOjbectLevelIndex, _uint iLayerLevelIndex, const _wstring& strLayerTag)
 {
-	return m_pPooling_Manager->Add_PoolingObject_ToLayer(strPoolingTag, iLayerLevelIndex, strLayerTag);
+	return m_pPooling_Manager->Add_PoolingObject_ToLayer(strPoolingTag, iPoolingOjbectLevelIndex, iLayerLevelIndex, strLayerTag);
 }
 #pragma endregion
 
@@ -245,6 +280,11 @@ void CGameInstance::SetChannelVolume(CHANNELID eID, float fVolume)
 
 #pragma region KEY_MANAGER
 
+void CGameInstance::Key_Input()
+{
+	m_pKey_Manager->Key_Input();
+}
+
 _bool CGameInstance::Key_Pressing(_uint _iKey)
 {
 	return m_pKey_Manager->Key_Pressing(_iKey);
@@ -264,14 +304,14 @@ _bool CGameInstance::Key_Down(_uint _iKey)
 
 #pragma region IMGUI_MANAGER
 
-void CGameInstance::Update_IMGUI()
+void CGameInstance::Set_Visible_IMGUI(_bool bFlag, _uint iIMGUIID)
 {
-	m_pIMGUI_Manager->Update_IMGUI();
+	m_pIMGUI_Manager->Set_Visible_IMGUI(bFlag, iIMGUIID);
 }
 
-void CGameInstance::Render_IMGUI()
+void CGameInstance::Set_Visible_All_IMGUI(_bool bFlag)
 {
-	m_pIMGUI_Manager->Render_IMGUI();
+	m_pIMGUI_Manager->Set_Visible_All_IMGUI(bFlag);
 }
 
 #pragma endregion
