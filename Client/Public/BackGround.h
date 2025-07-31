@@ -12,7 +12,7 @@ NS_BEGIN(Client)
 class CBackGround final : public CUIObject
 {
 private:
-	CBackGround(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CBackGround(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	CBackGround(const CBackGround& Prototype);
 	virtual ~CBackGround() = default;
 
@@ -30,7 +30,7 @@ private:
 	HRESULT Ready_Components();
 
 public:
-	static CBackGround* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CBackGround* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 };

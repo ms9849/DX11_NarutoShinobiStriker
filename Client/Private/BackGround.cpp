@@ -2,8 +2,8 @@
 
 #include "GameInstance.h"
 
-CBackGround::CBackGround(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CUIObject { pDevice, pContext }
+CBackGround::CBackGround(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
+	: CUIObject { pDevice, pContext, ENUM_CLASS(eObjectID) }
 {
 }
 
@@ -73,9 +73,9 @@ HRESULT CBackGround::Ready_Components()
 	return S_OK;
 }
 
-CBackGround* CBackGround::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CBackGround* CBackGround::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 {
-	CBackGround* pInstance = new CBackGround(pDevice, pContext);
+	CBackGround* pInstance = new CBackGround(pDevice, pContext, eObjectID);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{

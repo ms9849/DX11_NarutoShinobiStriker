@@ -32,13 +32,21 @@ HRESULT Client::CMainApp::Initialize()
 	if (FAILED(Start_Level(LEVEL::LOGO)))
 		return E_FAIL;
 
-	m_pGameInstance->PlayBGM(TEXT("test2.mp3"), 1.f);
+	m_pGameInstance->PlayBGM(TEXT("test2.mp3"), 0.5f);
 
 	return S_OK;
 }
 
 void Client::CMainApp::Update(_float fTimeDelta)
 {
+	m_pGameInstance->Key_Input();
+
+	if (m_pGameInstance->Key_Down(VK_F3))
+		m_pGameInstance->Set_Visible_All_IMGUI(true);
+
+	if (m_pGameInstance->Key_Down(VK_F4))
+		m_pGameInstance->Set_Visible_All_IMGUI(false);
+
 	m_pGameInstance->Update_Engine(fTimeDelta);
 }
 
@@ -72,7 +80,7 @@ HRESULT CMainApp::Ready_Prototypes()
 {
 	/* For.Prototype_GameObject_Dummy */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Dummy"),
-		CDummy::Create(m_pDevice, m_pContext))))
+		CDummy::Create(m_pDevice, m_pContext, OBJECTID::DUMMY))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Pooling*/

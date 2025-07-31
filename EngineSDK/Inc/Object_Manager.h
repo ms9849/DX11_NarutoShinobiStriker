@@ -8,6 +8,7 @@ NS_BEGIN(Engine)
 
 class CObject_Manager final : public CBase
 {
+	friend class CIMGUI_Manager;
 private:
 	CObject_Manager();
 	virtual ~CObject_Manager() = default;
@@ -31,9 +32,8 @@ public:
 	void Clear_DeadObj();
 	
 private:
-
-	_uint								m_iNumLevels = {};
 	map<const _wstring, class CLayer*>* m_pLayers = { nullptr };
+	_uint								m_iNumLevels = {};
 	class CGameInstance*				m_pGameInstance = { nullptr };
 
 private:

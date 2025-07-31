@@ -2,9 +2,10 @@
 #include "GameInstance.h"
 #include "Pooling.h"
 
-CGameObject::CGameObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CGameObject::CGameObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iObjectID)
 	: m_pDevice { pDevice }
 	, m_pContext { pContext }
+	, m_iObjectID{ iObjectID }
 	, m_pGameInstance { CGameInstance::GetInstance() }
 {
 	Safe_AddRef(m_pGameInstance);
@@ -17,6 +18,7 @@ CGameObject::CGameObject(const CGameObject& Prototype)
 	, m_pContext{ Prototype.m_pContext }
 	, m_pGameInstance{ Prototype.m_pGameInstance }
 	, m_isDead { Prototype.m_isDead }
+	, m_iObjectID { Prototype.m_iObjectID }
 {
 	Safe_AddRef(m_pGameInstance);
 	Safe_AddRef(m_pDevice);

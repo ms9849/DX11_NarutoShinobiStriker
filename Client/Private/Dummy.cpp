@@ -2,8 +2,8 @@
 
 #include "Pooling.h"
 
-CDummy::CDummy(ID3D11Device* pDevice, ID3D11DeviceContext* pContext) :
-	CGameObject { pDevice, pContext }
+CDummy::CDummy(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID) :
+	CGameObject { pDevice, pContext, ENUM_CLASS(eObjectID) }
 {
 }
 
@@ -41,7 +41,6 @@ void CDummy::Update(_float fTimeDelta)
 void CDummy::Late_Update(_float fTimeDelta)
 {
 	/* 테스트용. */
-	m_pGameInstance;
 	m_fLife += fTimeDelta;
 
 	if (m_fLife >= 15.f)
@@ -69,9 +68,9 @@ HRESULT CDummy::Ready_Components()
     return S_OK;
 }
 
-CDummy* CDummy::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CDummy* CDummy::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 {
-	CDummy* pInstance = new CDummy(pDevice, pContext);
+	CDummy* pInstance = new CDummy(pDevice, pContext, eObjectID);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{

@@ -25,7 +25,7 @@ NS_BEGIN(Client)
 class CDummy final : public CGameObject 
 {
 private:
-	CDummy(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CDummy(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	CDummy(const CDummy& Prototype);
 	virtual ~CDummy() = default;
 
@@ -45,7 +45,7 @@ private:
 	HRESULT Ready_Components();
 
 public:
-	static CDummy* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CDummy* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 };

@@ -10,21 +10,17 @@ CLevel_Edit::CLevel_Edit(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, L
 
 HRESULT CLevel_Edit::Initialize()
 {
+    /* IMGUI의 모든 GUI를 활성화 해주도록 한다. */
+    m_pGameInstance->Set_Visible_All_IMGUI(true);
+
     if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
         return E_FAIL;
-
-    if (FAILED(Ready_IMGUI_Manager()))
-        return E_FAIL;
-
-    m_pGameInstance->Update_IMGUI();
 
     return S_OK;
 }
 
 void CLevel_Edit::Update(_float fTimeDelta)
 {
-    m_pGameInstance->Update_IMGUI();
-
     if (m_pGameInstance->Key_Down(VK_F7))
     {
         if (FAILED(m_pGameInstance->Change_Level(CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL::LOADING, LEVEL::GAMEPLAY))))
@@ -34,8 +30,6 @@ void CLevel_Edit::Update(_float fTimeDelta)
 
 HRESULT CLevel_Edit::Render()
 {
-    m_pGameInstance->Render_IMGUI();
-
     SetWindowText(g_hWnd, TEXT("EDIT LEVEL"));
 
     return S_OK;
@@ -43,13 +37,6 @@ HRESULT CLevel_Edit::Render()
 
 HRESULT CLevel_Edit::Ready_Layer_Camera(const _wstring& strLayerTag)
 {
-    return S_OK;
-}
-
-HRESULT CLevel_Edit::Ready_IMGUI_Manager()
-{
-    //m_pIMGUI_Manager = CIMGUI_Manager::Create(m_pDevice, m_pContext);
-    //m_pIMGUI_Manager->Update_Imgui();
     return S_OK;
 }
 
@@ -69,4 +56,6 @@ CLevel_Edit* CLevel_Edit::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pCo
 void CLevel_Edit::Free()
 {
     __super::Free();
+
+    m_pGameInstance->Set_Visible_All_IMGUI(false);
 }

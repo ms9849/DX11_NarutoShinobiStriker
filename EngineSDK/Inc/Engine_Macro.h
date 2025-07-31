@@ -50,5 +50,4 @@
 			return iRefCnt;										\
 		}
 
-
 #endif // Engine_Macro_h__
