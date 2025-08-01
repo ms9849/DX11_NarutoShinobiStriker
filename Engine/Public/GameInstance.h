@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Prototype_Manager.h"
+#include "GameObject.h"
 
 NS_BEGIN(Engine)
 
@@ -59,7 +60,7 @@ public:
 
 #pragma region POOLING_MANAGER
 	void	Add_GameObject_ToPool(_uint iLevelIndex, class CGameObject* pGameObject);
-	HRESULT	Add_PoolingObject_ToLayer(const _wstring& strPoolingTag, _uint iPoolingOjbectLevelIndex, _uint iLayerLevelIndex, const _wstring& strLayerTag);
+	HRESULT	Add_PoolingObject_ToLayer(const _wstring& strPoolingTag, _uint iPoolingOjbectLevelIndex, CGameObject::GAMEOBJECT_DESC* pDesc,_uint iLayerLevelIndex, const _wstring& strLayerTag);
 #pragma endregion
 
 #pragma region RENDERER

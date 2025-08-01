@@ -71,7 +71,7 @@ HRESULT CLevel_Logo::Ready_Layer_Dummy(const _wstring& strLayerTag)
 	}
 
 	for(_int i=0; i < 50; ++i)
-		m_pGameInstance->Add_PoolingObject_ToLayer(TEXT("Object_Dummy"), ENUM_CLASS(LEVEL::LOGO), ENUM_CLASS(LEVEL::LOGO), TEXT("Layer_Dummy"));
+		m_pGameInstance->Add_PoolingObject_ToLayer(TEXT("Object_Dummy"), ENUM_CLASS(LEVEL::LOGO), nullptr ,ENUM_CLASS(LEVEL::LOGO), TEXT("Layer_Dummy"));
 	
 	return S_OK;
 }
@@ -94,6 +94,7 @@ void CLevel_Logo::Pooling_Test(_float fTimeDelta)
 		m_pGameInstance->Add_PoolingObject_ToLayer(
 			TEXT("Object_Dummy"), 
 			ENUM_CLASS(LEVEL::LOGO),
+			nullptr, /* OBJECT_DESC 넘기는 부분. */
 			ENUM_CLASS(LEVEL::LOGO), 
 			TEXT("Layer_Dummy")
 		);

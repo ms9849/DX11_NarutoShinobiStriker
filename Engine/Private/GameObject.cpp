@@ -69,6 +69,10 @@ HRESULT CGameObject::Render()
 	return S_OK;
 }
 
+void CGameObject::Set_Desc(GAMEOBJECT_DESC* pDesc)
+{
+}
+
 
 CComponent* CGameObject::Find_Component(const _wstring& strComponentTag)
 {
