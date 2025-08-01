@@ -1,8 +1,6 @@
 #include "Pooling_Manager.h"
 
 #include "GameInstance.h"
-
-#include "GameObject.h"
 #include "Pooling.h"
 #include "IMGUI_Manager.h"
 
@@ -83,7 +81,7 @@ HRESULT CPooling_Manager::Add_GameObject_ToPool(_uint iLevelIndex, CGameObject* 
     return S_OK;
 }
 
-HRESULT CPooling_Manager::Add_PoolingObject_ToLayer(const _wstring& strPoolingTag, _uint iPoolingOjbectLevelIndex, _uint iLayerLevelIndex, const _wstring& strLayerTag)
+HRESULT CPooling_Manager::Add_PoolingObject_ToLayer(const _wstring& strPoolingTag, _uint iPoolingOjbectLevelIndex, CGameObject::GAMEOBJECT_DESC* pDesc, _uint iLayerLevelIndex, const _wstring& strLayerTag)
 {
     CPooling* pPoolingCom;
 
@@ -102,10 +100,12 @@ HRESULT CPooling_Manager::Add_PoolingObject_ToLayer(const _wstring& strPoolingTa
         /* isDead가 false고, 오브젝트 매니저에서 사용중이 아니라면 오브젝트 매니저에 추가 */
         if (pPoolingCom->IsUsing() == false && pPoolObject->isDead() == false)
         {
-            Safe_AddRef(pPoolObject);
+            pPoolObject->Set_Desc(pDesc);
             pPoolingCom->Set_Using(true);
 
             m_pGameInstance->Add_Clone_ToLayer(pPoolObject, iLayerLevelIndex, strLayerTag);
+            Safe_AddRef(pPoolObject);
+
             m_PoolCounts[iPoolingOjbectLevelIndex].find(strPoolingTag)->second++;
             break;
         }

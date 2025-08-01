@@ -1,14 +1,13 @@
 #pragma once
 
 #include "Base.h"
-#include "Transform.h"
 
 NS_BEGIN(Engine)
 
 class ENGINE_DLL CGameObject abstract : public CBase
 {
 public:
-	typedef struct tagGameObjectDesc : public CTransform::TRANSFORM_DESC {
+	typedef struct tagGameObjectDesc {
 
 	} GAMEOBJECT_DESC;
 protected:
@@ -23,6 +22,8 @@ public:
 	virtual void Update(_float fTimeDelta);
 	virtual void Late_Update(_float fTimeDelta);
 	virtual HRESULT Render();
+
+	virtual void Set_Desc(GAMEOBJECT_DESC* pDesc);
 
 public:
 	_bool isDead() const {

@@ -55,6 +55,14 @@ HRESULT CDummy::Render()
     return S_OK;
 }
 
+void CDummy::Set_Desc(GAMEOBJECT_DESC* pDesc)
+{
+	DUMMY_DESC* pDummyDesc = static_cast<DUMMY_DESC*>(pDesc);
+	/*
+	여기서 세팅 어쩌구.. 풀링할때 요긴하게 쓸듯
+	*/
+}
+
 HRESULT CDummy::Ready_Components()
 {
 	/* Com_Pooling */

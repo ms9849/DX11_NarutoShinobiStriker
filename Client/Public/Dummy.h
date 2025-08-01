@@ -24,6 +24,11 @@ NS_BEGIN(Client)
 
 class CDummy final : public CGameObject 
 {
+public:
+	typedef struct tagDummyDesc : public GAMEOBJECT_DESC {
+
+	} DUMMY_DESC ;
+
 private:
 	CDummy(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	CDummy(const CDummy& Prototype);
@@ -37,6 +42,7 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+	virtual void Set_Desc(GAMEOBJECT_DESC* pDesc) override;
 private:
 	CPooling* m_pPoolingCom = {};
 	_float	  m_fLife = { 0.f };
