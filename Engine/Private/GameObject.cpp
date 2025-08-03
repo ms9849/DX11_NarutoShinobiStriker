@@ -107,6 +107,7 @@ HRESULT CGameObject::Add_Component(_uint iPrototypeLevelIndex, const _wstring& s
 	if (nullptr == pComponent)
 		return E_FAIL;
 
+	/* if else 떡칠이 맞는지 모르겠음.. */
 	if (dynamic_cast<CPooling*>(pComponent) != nullptr)
 		m_Components.emplace(TEXT("Com_Pooling"), pComponent);
 

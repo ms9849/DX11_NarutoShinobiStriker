@@ -35,7 +35,7 @@ void CPooling_Manager::Update()
             {
                 pPoolingCom = static_cast<CPooling*>(iter->Find_Component(g_strPoolingTag));
                 /* 사용중이고, m_isDead가 True라면, 역할을 다하고 오브젝트 매니저에서 나온 녀석일 것. */
-                if (pPoolingCom->IsUsing() == true && iter->isDead() == true)
+                if (pPoolingCom->IsUsing() == true && iter->IsDead() == true)
                 {
                     pPoolingCom->Set_Using(false);
                     iter->Set_Dead(false);
@@ -98,7 +98,7 @@ HRESULT CPooling_Manager::Add_PoolingObject_ToLayer(const _wstring& strPoolingTa
             return E_FAIL;
 
         /* isDead가 false고, 오브젝트 매니저에서 사용중이 아니라면 오브젝트 매니저에 추가 */
-        if (pPoolingCom->IsUsing() == false && pPoolObject->isDead() == false)
+        if (pPoolingCom->IsUsing() == false && pPoolObject->IsDead() == false)
         {
             pPoolObject->Set_Desc(pDesc);
             pPoolingCom->Set_Using(true);

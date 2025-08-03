@@ -150,6 +150,10 @@ HRESULT CLoader::Loading_For_GamePlay()
 	//	CVIBuffer_Cube::Create(m_pDevice, m_pContext))))
 	//	return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_BackGround"),
+		CBackGround::Create(m_pDevice, m_pContext, OBJECTID::BACKGROUND))))
+		return E_FAIL;
+
 	m_strMessage = TEXT("셰이더를(을) 로딩 중 입니다.");
 
 	m_strMessage = TEXT("객체원형를(을) 로딩 중 입니다.");

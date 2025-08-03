@@ -103,6 +103,7 @@ void CGameInstance::Clear_Resources(_uint iLevelIndex)
 	m_pPrototype_Manager->Clear(iLevelIndex);
 	m_pObject_Manager->Clear(iLevelIndex);
 	m_pPooling_Manager->Clear(iLevelIndex);
+	m_pIMGUI_Manager->Clear();
 }
 
 #pragma region TOOLS

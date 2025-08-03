@@ -69,7 +69,7 @@ void CLayer::Clear_DeadObj()
 
 	for (auto iter = m_GameObjects.begin(); iter != iter_end;)
 	{
-		if (true == (*iter)->isDead())
+		if (true == (*iter)->IsDead())
 		{
 			Safe_Release(*iter);
 			iter = m_GameObjects.erase(iter);

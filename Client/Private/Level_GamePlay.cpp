@@ -43,7 +43,7 @@ void CLevel_GamePlay::Update(_float fTimeDelta)
 
 HRESULT CLevel_GamePlay::Render()
 {
-	SetWindowText(g_hWnd, TEXT("게임플레이레벨이빈다"));
+	SetWindowText(g_hWnd, TEXT("게임 플레이 레벨"));
 	return S_OK;
 }
 
@@ -56,13 +56,9 @@ HRESULT CLevel_GamePlay::Ready_Lights()
 
 HRESULT CLevel_GamePlay::Ready_Layer_BackGround(const _wstring& strLayerTag)
 {
-	//if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Terrain"),
-	//	ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag)))
-	//	return E_FAIL;
-
-	//if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Sky"),
-	//	ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag)))
-	//	return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_BackGround"),
+		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag)))
+		return E_FAIL;
 
 	return S_OK;
 

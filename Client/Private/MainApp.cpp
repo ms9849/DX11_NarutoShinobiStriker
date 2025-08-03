@@ -32,7 +32,7 @@ HRESULT Client::CMainApp::Initialize()
 	if (FAILED(Start_Level(LEVEL::LOGO)))
 		return E_FAIL;
 
-	m_pGameInstance->PlayBGM(TEXT("test2.mp3"), 0.5f);
+	//m_pGameInstance->PlayBGM(TEXT("test2.mp3"), 0.5f);
 
 	return S_OK;
 }

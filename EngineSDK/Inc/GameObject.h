@@ -26,7 +26,7 @@ public:
 	virtual void Set_Desc(GAMEOBJECT_DESC* pDesc);
 
 public:
-	_bool isDead() const {
+	_bool IsDead() const {
 		return m_isDead;
 	}
 
@@ -56,7 +56,7 @@ protected:
 	HRESULT Add_Component(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, 
 		const _wstring& strComponentTag, CComponent** ppOut, void* pArg = nullptr);
 
-	/* 컴포넌트 이름을 따로 입력받지 않는, 엔진 단에서 제공해주는 컴포넌트 */
+	/* 컴포넌트 이름을 따로 입력받지 않는, 엔진 단에서 키값을 제공해주는 컴포넌트 */
 	HRESULT Add_Component(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag,
 		CComponent** ppOut, void* pArg = nullptr);
 
