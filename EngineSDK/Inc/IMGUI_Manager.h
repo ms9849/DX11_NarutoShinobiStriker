@@ -30,30 +30,59 @@ public:
 	void	Set_Visible_IMGUI(_bool bFlag, _uint iIMGUIID);
 	void	Set_Visible_All_IMGUI(_bool bFlag);
 
+public:
+	void Clear();
 private:
 	HRESULT Ready_IMGUI(HWND hWnd);
 	void	Release_IMGUI();
 
 private:
 	//여기서 IMGUI와 관련된 기능들을 추가해줄 것.
+#pragma region MANAGERS
 	void Show_Managers();
 	void Show_PoolManager(_uint iLevelID);
 	void Show_PrototypeManager(_uint iLevelID);
 	void Show_ObjectManager(_uint iLevelID);
+#pragma endregion 
 
+#pragma region GAMEINFO
+	//FPS, 현재 레벨 표시해주는 메서드
 	void Show_GameInfo(_float fTimeDelta);
+#pragma endregion
+
+#pragma region INSPECTOR
+	//Transform 등의 컴포넌트를 보여주는 메서드
+	void Show_ObjectInspector();
+#pragma endregion
 private:
 	_bool m_bVisibleFlag[ENUM_CLASS(IMGUI_VISIBLE::END)];
+
+#pragma region MANAGERS
 	_string strSelectedLayer = {};
 	_string strSelectedPrototype = {};
-	_uint	m_iFrameArraySize = {};
-	_float* m_fFrames = {};
-	_double m_fFrameRange[2] = { 50.f, 65.f };
+#pragma endregion 
 
+#pragma region GAMEINFO
+	_uint	m_iFrameArraySize = {};
+	_float* m_fFrames = { nullptr };
+	_double m_fFrameRange[2] = { 50.f, 65.f };
 	class CPrototype_Manager* m_pPrototype_Manager = { nullptr };
 	class CObject_Manager* m_pObject_Manager = { nullptr };
 	class CPooling_Manager* m_pPooling_Manager = { nullptr };
 	class CGameInstance* m_pGameInstance = { nullptr };
+#pragma endregion
+
+
+#pragma region INSPECTOR
+	class CGameObject* m_pSelectedGameObject = { nullptr };
+	_string m_strSelectedLayer = {};
+	_uint m_iSelectedObjectID = {};
+	_uint m_iSelectedObjectIndex = {};
+
+	_float3 m_vObjectPos = {};
+	_float3 m_vObjectScale = {};
+	_float m_fAngleRight = { 0.f }, m_fAngleUp = { 0.f }, m_fAngleLook = { 0.f };
+#pragma endregion
 
 	ID3D11Device* m_pDevice = { nullptr };
 	ID3D11DeviceContext* m_pContext = { nullptr };

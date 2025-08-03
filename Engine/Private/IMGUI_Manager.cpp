@@ -27,6 +27,8 @@ HRESULT CIMGUI_Manager::Initialize(HWND hWnd, class CPrototype_Manager* pPrototy
     m_fFrames = new _float[m_iFrameArraySize];
     memset(m_fFrames, 0, m_iFrameArraySize);
 
+    m_vObjectScale = _float3{ 1.f, 1.f, 1.f };
+
     if (FAILED(Ready_IMGUI(hWnd)))
         return E_FAIL;
 
@@ -42,13 +44,27 @@ HRESULT CIMGUI_Manager::Initialize(HWND hWnd, class CPrototype_Manager* pPrototy
     return S_OK;
 }
 
+void CIMGUI_Manager::Clear()
+{
+    if (nullptr != m_pSelectedGameObject)
+        Safe_Release(m_pSelectedGameObject);
+
+    m_strSelectedLayer = {};
+    m_iSelectedObjectID = {};
+    m_iSelectedObjectIndex = {};
+
+    m_vObjectScale = _float3{ 1.f, 1.f, 1.f };
+    m_vObjectPos = {};
+    m_fAngleRight = { 0.f }, m_fAngleUp = { 0.f }, m_fAngleLook = { 0.f };
+}
+
 HRESULT CIMGUI_Manager::Ready_IMGUI(HWND hWnd)
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImPlot::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
-    io.Fonts->AddFontFromFileTTF("../Bin/Resources/Fonts/OpenSans-SemiBold.ttf", 20.0f, NULL, io.Fonts->GetGlyphRangesKorean());
+    io.Fonts->AddFontFromFileTTF("../Bin/Resources/Fonts/OpenSans-SemiBold.ttf", 19.0f, NULL, io.Fonts->GetGlyphRangesKorean());
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 
@@ -66,7 +82,7 @@ HRESULT CIMGUI_Manager::Ready_IMGUI(HWND hWnd)
     style.Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.3f, 0.6f, 0.3f, 1.0f);
     style.Colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
     style.Colors[ImGuiCol_Button] = ImVec4(0, 0, 0, 0);
-    style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.3f, 0.6f, 0.3f, 1.0f);
+    style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.4f, 0.8f, 0.4f, 1.0f);
     style.Colors[ImGuiCol_ButtonActive] = ImVec4(0, 0, 0, 0);
 
     return S_OK;
@@ -81,6 +97,7 @@ void CIMGUI_Manager::Update(_float fTimeDelta)
 
     Show_Managers();
     Show_GameInfo(fTimeDelta);
+    Show_ObjectInspector();
 }
 
 void CIMGUI_Manager::Render()
@@ -248,11 +265,18 @@ void CIMGUI_Manager::Show_ObjectManager(_uint iLevelID)
                 ImGui::NewLine();
 
                 _uint iIdx = 0;
-                for (auto& pGameObjects : Layer.second->m_GameObjects)
+                for (auto& pGameObject : Layer.second->m_GameObjects)
                 {
-                    if (ImGui::Button(("[" + to_string(iIdx) + ']' + " Object ID: " + to_string(pGameObjects->Get_ObjectID())).c_str()))
+                    if (ImGui::Button(("[" + to_string(iIdx) + ']' + " Object ID: " + to_string(pGameObject->Get_ObjectID())).c_str()))
                     {
+                        if (nullptr != m_pSelectedGameObject)
+                            Safe_Release(m_pSelectedGameObject);
 
+                        m_pSelectedGameObject = pGameObject;
+                        Safe_AddRef(m_pSelectedGameObject);
+                        m_strSelectedLayer = strBuffer;
+                        m_iSelectedObjectID = pGameObject->Get_ObjectID();
+                        m_iSelectedObjectIndex = iIdx;
                     }
                     iIdx++;
                 }
@@ -304,6 +328,212 @@ void CIMGUI_Manager::Show_GameInfo(_float fTimeDelta)
     ImGui::End();
 }
 
+void CIMGUI_Manager::Show_ObjectInspector()
+{
+    if (!m_bVisibleFlag[ENUM_CLASS(IMGUI_VISIBLE::OBJECT_INSPECTOR)])
+        return;
+
+    if (m_pSelectedGameObject == nullptr)
+        return;
+
+    CTransform* pTransform = { nullptr };
+    _float4 vSource;
+    _string strBuffer;
+    
+    pTransform = static_cast<CTransform*>(m_pSelectedGameObject->Find_Component(g_strTransformTag));
+
+    ImGui::Begin("Object Inspector");
+
+        ImGui::BeginTabBar("Info"); 
+            if (ImGui::BeginTabItem("Info"))
+            {
+                if (m_pSelectedGameObject != nullptr)
+                {
+                    strBuffer = "Layer: " + m_strSelectedLayer;
+                    ImGui::Text(strBuffer.c_str());
+
+                    strBuffer = "Object ID: " + to_string(m_iSelectedObjectID);
+                    ImGui::Text(strBuffer.c_str());
+
+                    strBuffer = "Object Index: " + to_string(m_iSelectedObjectIndex);
+                    ImGui::Text(strBuffer.c_str());
+                }
+                ImGui::EndTabItem();
+            }
+        ImGui::EndTabBar();
+
+        ImGui::BeginTabBar("Components");
+            if (ImGui::BeginTabItem("Transform"))
+            {
+                if (m_pSelectedGameObject != nullptr)
+                {
+                    ImGui::PushItemWidth(70);
+
+                    ImGui::Text("RIGHT ");
+                    ImGui::SameLine();
+                    XMStoreFloat4(&vSource, pTransform->Get_State(STATE::RIGHT));
+                    ImGui::InputFloat("##1,1", &vSource.x, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+                    ImGui::SameLine();
+                    ImGui::InputFloat("##1,2", &vSource.y, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+                    ImGui::SameLine();
+                    ImGui::InputFloat("##1,3", &vSource.z, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+                    ImGui::SameLine();
+                    ImGui::InputFloat("##1,4", &vSource.w, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+
+                    ImGui::Text("UP \t  ");
+                    ImGui::SameLine();
+                    XMStoreFloat4(&vSource, pTransform->Get_State(STATE::UP));
+                    ImGui::InputFloat("##2,1", &vSource.x, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+                    ImGui::SameLine();
+                    ImGui::InputFloat("##2,2", &vSource.y, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+                    ImGui::SameLine();
+                    ImGui::InputFloat("##2,3", &vSource.z, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+                    ImGui::SameLine();
+                    ImGui::InputFloat("##2,4", &vSource.w, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+
+                    ImGui::Text("LOOK  ");
+                    ImGui::SameLine();
+                    XMStoreFloat4(&vSource, pTransform->Get_State(STATE::LOOK));
+                    ImGui::InputFloat("##3,1", &vSource.x, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+                    ImGui::SameLine();
+                    ImGui::InputFloat("##3,2", &vSource.y, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+                    ImGui::SameLine();
+                    ImGui::InputFloat("##3,3", &vSource.z, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+                    ImGui::SameLine();
+                    ImGui::InputFloat("##3,4", &vSource.w, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+
+                    ImGui::Text("POS \t");
+                    ImGui::SameLine();
+                    XMStoreFloat4(&vSource, pTransform->Get_State(STATE::POSITION));
+                    ImGui::InputFloat("##4,1", &vSource.x, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+                    ImGui::SameLine();
+                    ImGui::InputFloat("##4,2", &vSource.y, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+                    ImGui::SameLine();
+                    ImGui::InputFloat("##4,3", &vSource.z, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+                    ImGui::SameLine();
+                    ImGui::InputFloat("##4,4", &vSource.w, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+
+                    ImGui::PopItemWidth();
+
+                    ImGui::BeginTabBar("Transform Inspector");
+                    if (ImGui::BeginTabItem("Scale"))
+                    {
+                        ImGui::PushItemWidth(70);
+
+                        ImGui::Text("Input Scale");
+                        ImGui::InputFloat("##ScaleX", &m_vObjectScale.x, 0.0f, 0.0f, "%.3f");
+                        ImGui::SameLine();
+                        ImGui::InputFloat("##ScaleY", &m_vObjectScale.y, 0.0f, 0.0f, "%.3f");
+                        ImGui::SameLine();
+                        ImGui::InputFloat("##ScaleZ", &m_vObjectScale.z, 0.0f, 0.0f, "%.3f");
+                        ImGui::SameLine();
+
+                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.3f, 0.6f, 0.3f, 1.0f));
+                        if (ImGui::Button("Apply"))
+                        {
+                            pTransform->Set_Scale(m_vObjectScale.x, m_vObjectScale.y, m_vObjectScale.z);
+                            m_vObjectScale = _float3{ 1.f, 1.f, 1.f };
+                        }
+                        ImGui::PopStyleColor();
+
+                        ImGui::PopItemWidth();
+                        ImGui::EndTabItem();
+                    }
+
+                    if (ImGui::BeginTabItem("Rotation"))
+                    {
+                        ImGui::PushItemWidth(70);
+
+                        ImGui::Text("Rotation By Axis Right ");
+                        ImGui::SameLine();
+                        ImGui::InputFloat("##AngleRight", &m_fAngleRight, 0.0f, 0.0f, "%.3f");
+                        ImGui::SameLine();
+                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.3f, 0.6f, 0.3f, 1.0f));
+
+                        ImGui::PushID("Apply Right");
+                        if (ImGui::Button("Apply"))
+                        {
+                            pTransform->Rotation(pTransform->Get_State(STATE::RIGHT), m_fAngleRight);
+                            m_fAngleRight = 0.f;
+                        }
+                        ImGui::PopID();
+                        ImGui::PopStyleColor();
+
+                        ImGui::Separator();
+
+                        ImGui::Text("Rotation By Axis Up\t ");
+                        ImGui::SameLine();
+                        ImGui::InputFloat("##AngleUp", &m_fAngleUp, 0.0f, 0.0f, "%.3f");
+                        ImGui::SameLine();
+                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.3f, 0.6f, 0.3f, 1.0f));
+
+                        ImGui::PushID("Apply Up");
+                        if (ImGui::Button("Apply"))
+                        {
+                            pTransform->Rotation(pTransform->Get_State(STATE::UP), m_fAngleUp);
+                            m_fAngleUp = 0.f;
+                        }
+                        ImGui::PopID();
+                        ImGui::PopStyleColor();
+
+                        ImGui::Separator();
+
+                        ImGui::Text("Rotation By Axis Look ");
+                        ImGui::SameLine();
+                        ImGui::InputFloat("##AngleLook", &m_fAngleLook, 0.0f, 0.0f, "%.3f");
+                        ImGui::SameLine();
+                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.3f, 0.6f, 0.3f, 1.0f));
+
+                        ImGui::PushID("Apply Look");
+                        if (ImGui::Button("Apply"))
+                        {
+                            pTransform->Rotation(pTransform->Get_State(STATE::LOOK), m_fAngleLook);
+                            m_fAngleLook = 0.f;
+                        }
+                        ImGui::PopID();
+                        ImGui::PopStyleColor();
+
+                        ImGui::PopItemWidth();
+                        ImGui::EndTabItem();
+                    }
+
+                    if (ImGui::BeginTabItem("Position"))
+                    {
+                        ImGui::PushItemWidth(70);
+                        ImGui::Text("Input Position");
+                        ImGui::InputFloat("##PosX", &m_vObjectPos.x, 0.0f, 0.0f, "%.3f");
+                        ImGui::SameLine();
+                        ImGui::InputFloat("##PosY", &m_vObjectPos.y, 0.0f, 0.0f, "%.3f");
+                        ImGui::SameLine();
+                        ImGui::InputFloat("##PosZ", &m_vObjectPos.z, 0.0f, 0.0f, "%.3f");
+                        ImGui::SameLine();
+
+                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.3f, 0.6f, 0.3f, 1.0f));
+                        if (ImGui::Button("Apply"))
+                        {
+                            pTransform->Set_State(STATE::POSITION, XMVectorSet(m_vObjectPos.x, m_vObjectPos.y, m_vObjectPos.z, 1.f));
+                            m_vObjectPos = { 0.f, 0.f, 0.f };
+                        }
+                        ImGui::PopStyleColor();
+
+                        ImGui::PopItemWidth();
+                        ImGui::EndTabItem();
+                    }
+                    ImGui::EndTabBar();
+                }
+                ImGui::EndTabItem();
+            }
+
+            if (ImGui::BeginTabItem("Test Tab Bar"))
+            {
+                ImGui::Text("Test For Tab Bar");
+                ImGui::EndTabItem();
+            }
+
+        ImGui::EndTabBar();
+    ImGui::End();
+}
+
 CIMGUI_Manager* CIMGUI_Manager::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HWND hWnd,
     CPrototype_Manager* pPrototype_Manager, CObject_Manager* pObject_Manager, CPooling_Manager* pPooling_Manager)
 {
@@ -330,6 +560,7 @@ void CIMGUI_Manager::Free()
     Safe_Release(m_pPooling_Manager);
     Safe_Release(m_pGameInstance);
 
+    Safe_Release(m_pSelectedGameObject);
     Safe_Delete_Array(m_fFrames);
 
     Release_IMGUI();
