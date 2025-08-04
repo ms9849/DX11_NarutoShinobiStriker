@@ -7,10 +7,12 @@ NS_BEGIN(Engine)
 class ENGINE_DLL CUIObject abstract : public CGameObject
 {
 public:
-	typedef struct tagUIObjectDesc
+	typedef struct tagUIObjectDesc : public GAMEOBJECT_DESC
 	{
-		_float		fX, fY, fSizeX, fSizeY;
-	}UIOBJECT_DESC;
+		_float  fX, fY, fZ = { 0.f };
+		_float  fSizeX, fSizeY;
+	} UIOBJECT_DESC;
+
 protected:
 	CUIObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iObjectID);
 	CUIObject(const CUIObject& Prototype);
@@ -28,7 +30,7 @@ protected:
 	class COrthogonal* m_pOrthogonalCom = { nullptr };
 	// 빌보드 패턴은 안쓸수도 있잖아.
 	// class CBillBoard* m_pBillBoard = { nullptr };
-
+	_float m_fX{}, m_fY{}, m_fZ{};
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;
 	virtual void Free() override;

@@ -19,6 +19,8 @@ CGameInstance::CGameInstance()
 
 HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11Device** ppDevice, ID3D11DeviceContext** ppContext)
 {
+	m_hWnd = EngineDesc.hWnd;
+
 	m_pGraphic_Device = CGraphic_Device::Create(EngineDesc.hWnd, EngineDesc.eWindowMode, EngineDesc.iWinSizeX, EngineDesc.iWinSizeY, ppDevice, ppContext);
 	if (nullptr == m_pGraphic_Device)
 		return E_FAIL;
@@ -64,7 +66,9 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 
 void CGameInstance::Update_Engine(_float fTimeDelta)
 {
+	Calc_MousePos();
 	/* °´Ã¼ ¾÷µ¥ÀÌÆ® °èÃþ */
+
 	m_pObject_Manager->Priority_Update(fTimeDelta);
 
 	m_pObject_Manager->Update(fTimeDelta);
@@ -135,6 +139,28 @@ _wstring CGameInstance::ToWstring(_string Str)
 	MultiByteToWideChar(CP_UTF8, 0, Str.c_str(),(_int)Str.size(), &Result[0], iSize);
 
 	return Result;
+}
+
+POINT CGameInstance::Get_MousePos()
+{
+	return m_ptMousePos;
+}
+
+POINT CGameInstance::Get_MouseDiff()
+{
+	POINT ptDiff{};
+	ptDiff.x = m_ptMousePos.x - m_ptPreMousePos.x;
+	ptDiff.y = m_ptMousePos.y - m_ptPreMousePos.y;
+
+	return ptDiff;
+}
+
+void CGameInstance::Calc_MousePos()
+{
+	GetCursorPos(&m_ptMousePos);
+	ScreenToClient(m_hWnd, &m_ptMousePos);
+
+	m_ptPreMousePos = m_ptMousePos;
 }
 
 #pragma endregion

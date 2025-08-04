@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Base.h"
+#include "Transform.h"
 
 NS_BEGIN(Engine)
 
 class ENGINE_DLL CGameObject abstract : public CBase
 {
 public:
-	typedef struct tagGameObjectDesc {
+	typedef struct tagGameObjectDesc : public CTransform::TRANSFORM_DESC {
 
 	} GAMEOBJECT_DESC;
 protected:

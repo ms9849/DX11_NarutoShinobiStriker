@@ -39,8 +39,13 @@ HRESULT CUIObject::Initialize(void* pArg)
 
     UIOBJECT_DESC* pDesc = static_cast<UIOBJECT_DESC*>(pArg);
 
+    m_fX = pDesc->fX;
+    m_fY = pDesc->fY;
+    m_fZ = pDesc->fZ;
+
     m_pTransformCom->Set_Scale(pDesc->fSizeX, pDesc->fSizeY, 1.f);
-    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(pDesc->fX - ViewPortDesc.Width/2.f, -1.f  * pDesc->fY + ViewPortDesc.Height/2.f, 1.f, 0.f));
+
+    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(m_fX - ViewPortDesc.Width / 2.f, -1.f * m_fY + ViewPortDesc.Height / 2.f, m_fZ, 1.f));
 
     return S_OK;
 }

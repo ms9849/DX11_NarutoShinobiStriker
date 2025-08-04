@@ -20,12 +20,17 @@ public:
 	void Clear_Resources(_uint iLevelIndex);
 
 #pragma region TOOLS
-	_float Random_Normal();
-	_float Random(_float fMin, _float fMax);
+	_float	Random_Normal();
+	_float	Random(_float fMin, _float fMax);
 
-	_string ToString(_wstring wStr);
+	_string	ToString(_wstring wStr);
 	_wstring ToWstring(_string Str);
 
+	/* 현재 마우스의 위치를 반환 */
+	POINT	Get_MousePos();
+	/* 이전 프레임과 현재 프레임 간의 마우스 좌표 차이를 반환*/
+	POINT	Get_MouseDiff();
+	void	Calc_MousePos();
 #pragma endregion
 
 #pragma region GRAPHIC_DEVICE
@@ -102,6 +107,9 @@ private:
 	class CPooling_Manager*			m_pPooling_Manager = { nullptr };
 	class CIMGUI_Manager*			m_pIMGUI_Manager = { nullptr };
 
+	/*클라이언트의 윈도우 핸들*/
+	HWND							m_hWnd;
+	POINT							m_ptMousePos{}, m_ptPreMousePos{};
 public:
 	void Release_Engine();
 	virtual void Free() override;

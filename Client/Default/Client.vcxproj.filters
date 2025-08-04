@@ -40,6 +40,24 @@
     <Filter Include="97. ShaderFiles">
       <UniqueIdentifier>{0f420791-b552-4eaa-bcc7-610874980509}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\UI">
+      <UniqueIdentifier>{a5245a04-44ff-4dac-a1cc-fc79ffa02537}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Panel">
+      <UniqueIdentifier>{7220dfb5-85dd-4625-9d28-4b3e341206dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Button">
+      <UniqueIdentifier>{ed40d40b-50c0-454e-bf89-d2f71e12461a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Text">
+      <UniqueIdentifier>{c83ffc33-2d2e-4fc5-8744-bc5511817d7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Button\TestButton">
+      <UniqueIdentifier>{92abfbf0-ae57-4c8a-b809-38cb15a9f35c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Panel\TestPanel">
+      <UniqueIdentifier>{b738a00a-9ca2-4cdd-b6ea-3f55ac294b8a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -80,6 +98,18 @@
     </ClInclude>
     <ClInclude Include="..\Public\Dummy.h">
       <Filter>02.GameObjects\Dummy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Panel.h">
+      <Filter>02.GameObjects\UI\Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Button.h">
+      <Filter>02.GameObjects\UI\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\TestButton.h">
+      <Filter>02.GameObjects\UI\Button\TestButton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\TestPanel.h">
+      <Filter>02.GameObjects\UI\Panel\TestPanel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -122,6 +152,18 @@
     </ClCompile>
     <ClCompile Include="..\Private\Dummy.cpp">
       <Filter>02.GameObjects\Dummy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Panel.cpp">
+      <Filter>02.GameObjects\UI\Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Button.cpp">
+      <Filter>02.GameObjects\UI\Button</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TestButton.cpp">
+      <Filter>02.GameObjects\UI\Button\TestButton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TestPanel.cpp">
+      <Filter>02.GameObjects\UI\Panel\TestPanel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

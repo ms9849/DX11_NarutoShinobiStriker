@@ -15,6 +15,9 @@ public:
 	HRESULT Initialize_Prototype(const _tchar* pTextureFilePath, _uint iNumTextures);
 	virtual HRESULT Initialize(void* pArg) override;
 
+public:
+	HRESULT Bind_ShaderResource(class CShader* pShader, const _char* pConstantName,_uint iTextureIndex);
+
 private:
 	_uint	m_iNumSRVs = {};
 	vector<ID3D11ShaderResourceView*> m_SRVs; 

@@ -2,6 +2,8 @@
 
 #include "BackGround.h"
 #include "Dummy.h"
+#include "TestPanel.h"
+#include "TestButton.h"
 //#include "Effect.h"
 //#include "Terrain.h"
 //#include "Player.h"
@@ -84,9 +86,15 @@ void CLoader::Output()
 HRESULT CLoader::Loading_For_Logo()
 {
 	m_strMessage = TEXT("텍스쳐를(을) 로딩 중 입니다.");
-	///* For.Prototype_Component_Texture_BackGround */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_BackGround"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Default%d.jpg"), 2))))
+
+	/* For.Prototype_Component_Texture_Panel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_Panel"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Panel/Panel%d.png"), 1))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_Button */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Button"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Button/Button%d.png"), 1))))
 		return E_FAIL;
 
 	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
@@ -100,6 +108,14 @@ HRESULT CLoader::Loading_For_Logo()
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_BackGround"),
 		CBackGround::Create(m_pDevice, m_pContext, OBJECTID::BACKGROUND))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_UI_TestButton"),
+		CTestButton::Create(m_pDevice, m_pContext, OBJECTID::UI_TESTBUTTON))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_UI_TestPanel"),
+		CTestPanel::Create(m_pDevice, m_pContext, OBJECTID::UI_PANEL))))
 		return E_FAIL;
 
 	m_strMessage = TEXT("로딩이 완료되었습니다..");
@@ -150,9 +166,9 @@ HRESULT CLoader::Loading_For_GamePlay()
 	//	CVIBuffer_Cube::Create(m_pDevice, m_pContext))))
 	//	return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_BackGround"),
-		CBackGround::Create(m_pDevice, m_pContext, OBJECTID::BACKGROUND))))
-		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_BackGround"),
+	//	CBackGround::Create(m_pDevice, m_pContext, OBJECTID::BACKGROUND))))
+	//	return E_FAIL;
 
 	m_strMessage = TEXT("셰이더를(을) 로딩 중 입니다.");
 

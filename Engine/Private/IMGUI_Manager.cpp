@@ -47,7 +47,10 @@ HRESULT CIMGUI_Manager::Initialize(HWND hWnd, class CPrototype_Manager* pPrototy
 void CIMGUI_Manager::Clear()
 {
     if (nullptr != m_pSelectedGameObject)
+    {
         Safe_Release(m_pSelectedGameObject);
+        m_pSelectedGameObject = nullptr;
+    }
 
     m_strSelectedLayer = {};
     m_iSelectedObjectID = {};

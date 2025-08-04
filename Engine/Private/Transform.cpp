@@ -1,4 +1,5 @@
 #include "Transform.h"
+#include "Shader.h"
 
 CTransform::CTransform(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CComponent { pDevice, pContext }
@@ -48,6 +49,11 @@ HRESULT CTransform::Initialize(void* pArg)
 	m_fRotationPerSec = pDesc->fRotationPerSec;
 
 	return S_OK;
+}
+
+HRESULT CTransform::Bind_ShaderResource(CShader* pShader, const _char* pConstantName)
+{
+	return pShader->Bind_Matrix(pConstantName, &m_WorldMatrix);
 }
 
 // 결과벡터의 주소 D3DXVec3Normalize(&결과, &누구를);

@@ -35,7 +35,7 @@ HRESULT CVIBuffer_Rect::Initialize_Prototype()
     ZeroMemory(pVertices, sizeof(VTXPOSTEX) * m_iNumVertices);
 
     m_pVertexPositions = new _float3[m_iNumVertices];
-    ZeroMemory(pVertices, sizeof(_float3) * m_iNumVertices);
+    ZeroMemory(m_pVertexPositions, sizeof(_float3) * m_iNumVertices);
 
     pVertices[0].vPosition = m_pVertexPositions[0] = _float3{ -0.5f, 0.5f, 0.f };
     pVertices[0].vTexCoord = _float2{ 0.f, 0.f };
@@ -79,7 +79,7 @@ HRESULT CVIBuffer_Rect::Initialize_Prototype()
     pIndices[5] = 3;
 
     D3D11_SUBRESOURCE_DATA InitialIBData{};
-    InitialVBData.pSysMem = pIndices;
+    InitialIBData.pSysMem = pIndices;
 
     if (FAILED(m_pDevice->CreateBuffer(&IBDesc, &InitialIBData, &m_pIB)))
         return E_FAIL;
