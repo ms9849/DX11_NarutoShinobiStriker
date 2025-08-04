@@ -4,7 +4,9 @@
 #include "UIObject.h"
 
 NS_BEGIN(Engine)
-
+class CTexture;
+class CVIBuffer;
+class CShader;
 NS_END
 
 NS_BEGIN(Client)
@@ -25,10 +27,14 @@ public:
 	virtual HRESULT Render() override;
 
 
-	
+private:
+	CTexture*		m_pTextureCom = { nullptr };
+	CVIBuffer*		m_pVIBufferCom = { nullptr };
+	CShader*		m_pShaderCom = { nullptr };
+
 private:
 	HRESULT Ready_Components();
-
+	HRESULT Bind_ShaderResources();
 public:
 	static CBackGround* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	virtual CGameObject* Clone(void* pArg) override;

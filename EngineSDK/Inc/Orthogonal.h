@@ -20,13 +20,11 @@ public:
 	virtual HRESULT Initialize(void* pArg = nullptr);
 
 public:
-	void Orthogonal_Begin();
-	void Orthogonal_End();
-
+	HRESULT Bind_ViewMatrix(class CShader* pShader, const _char* pConstantName);
+	HRESULT Bind_ProjMatrix(class CShader* pShader, const _char* pConstantName);
 private:
 	/* 직교 투영만을 위한 세팅 */
 	_float4x4				m_matView{}, m_matProj = {};
-	_float4x4				m_OldViewMatrix{}, m_OldProjMatrix{};
 
 public:
 	static COrthogonal* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

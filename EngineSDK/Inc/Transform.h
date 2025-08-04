@@ -35,6 +35,9 @@ public:
 	virtual HRESULT Initialize(void* pArg);
 
 public:
+	HRESULT Bind_ShaderResource(class CShader* pShader, const _char* pConstantName);
+
+public:
 	void Go_Straight(_float fTimeDelta);
 	void Go_Backward(_float fTimeDelta);
 	void Go_Left(_float fTimeDelta);

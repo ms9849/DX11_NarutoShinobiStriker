@@ -3,6 +3,11 @@ matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 
 texture2D g_Texture;
 
+sampler DefaultSampler = sampler_state
+{
+    Filter = MIN_MAG_MIP_LINEAR;
+};
+
 struct VS_IN
 {
     float3 vPosition : POSITION;
@@ -48,14 +53,14 @@ PS_OUT PS_MAIN(PS_IN In)
 {
     PS_OUT Out;
     
-    Out.vColor = vector(1.f, 1.f, 1.f, 1.f);
+    Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
     
     return Out;
 }
 
 technique11 DefaultTechnique
 {
-    pass DefaultPass
+    pass UI
     {
         VertexShader = compile vs_5_0 VS_MAIN();
         PixelShader = compile ps_5_0 PS_MAIN();

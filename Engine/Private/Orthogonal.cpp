@@ -1,4 +1,5 @@
 #include "Orthogonal.h"
+#include "Shader.h"
 
 COrthogonal::COrthogonal(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CComponent { pDevice, pContext }
@@ -28,23 +29,14 @@ HRESULT COrthogonal::Initialize(void* pArg)
     return S_OK;
 }
 
-void COrthogonal::Orthogonal_Begin()
+HRESULT COrthogonal::Bind_ViewMatrix(CShader* pShader, const _char* pConstantName)
 {
-    //m_pGraphic_Device->SetRenderState(D3DRS_ZENABLE, FALSE);
-
-    //m_pGraphic_Device->GetTransform(D3DTS_VIEW, &m_OldViewMatrix);
-    //m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &m_OldProjMatrix);
-
-    //m_pGraphic_Device->SetTransform(D3DTS_VIEW, &m_ViewMatrix);
-    //m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);
+    return pShader->Bind_Matrix(pConstantName, &m_matView);
 }
 
-void COrthogonal::Orthogonal_End()
+HRESULT COrthogonal::Bind_ProjMatrix(CShader* pShader, const _char* pConstantName)
 {
-    //m_pGraphic_Device->SetRenderState(D3DRS_ZENABLE, TRUE);
-
-    //m_pGraphic_Device->SetTransform(D3DTS_VIEW, &m_OldViewMatrix);
-    //m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_OldProjMatrix);
+    return pShader->Bind_Matrix(pConstantName, &m_matProj);
 }
 
 COrthogonal* COrthogonal::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

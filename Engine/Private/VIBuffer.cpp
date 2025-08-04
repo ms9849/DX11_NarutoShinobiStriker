@@ -14,6 +14,7 @@ CVIBuffer::CVIBuffer(const CVIBuffer& rhs)
 	, m_iVertexStride { rhs.m_iVertexStride }
 	, m_iNumIndices { rhs.m_iNumIndices }
 	, m_iIndexStride { rhs.m_iIndexStride }
+	, m_iNumVertexBuffers{ rhs.m_iNumVertexBuffers }
 	, m_ePrimitive { rhs.m_ePrimitive }
 	, m_eIndexFormat { rhs.m_eIndexFormat }
 
@@ -49,22 +50,6 @@ HRESULT CVIBuffer::Bind_Resources()
 	m_pContext->IASetVertexBuffers(0, m_iNumVertexBuffers, pVertexBuffers, VertexStrides, Offsets);
 	m_pContext->IASetIndexBuffer(m_pIB, m_eIndexFormat, 0);
 	m_pContext->IASetPrimitiveTopology(m_ePrimitive);
-
-	/*
-	INPUT_ELEMENT_DESC를 생성하고, Layout 객체를 생성하는 과정.
-	*/
-	D3D11_INPUT_ELEMENT_DESC Elements[] = {
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}
-	};
-
-	ID3D11InputLayout* pInputLayout = { nullptr };
-	//m_pDevice->CreateInputLayout(
-	//	Elements/*내가 그릴려고하는 정점의 멤버구성정보*/,
-	//	2/*내가 그릴려고하는 정점의 멤버변수갯수*/,
-	//	쉐이더에서 받아줄수 있는 정점의 정보, 
-	//	쉐이더에서 받아줄수 있는 정점의 멤버변수갯수, 
-	//	);
 
 	return S_OK;
 }
