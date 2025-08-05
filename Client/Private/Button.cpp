@@ -24,9 +24,6 @@ HRESULT CButton::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
-	if (FAILED(Ready_Components()))
-		return E_FAIL;
-
 	/* 움직이는 UI는 없을 듯 함.. */
 	m_rcButton.left = (LONG)m_fX - (LONG)(m_pTransformCom->Get_Scale().x / 2.f);
 	m_rcButton.top = (LONG)m_fY - (LONG)(m_pTransformCom->Get_Scale().y / 2.f);
@@ -50,49 +47,17 @@ void CButton::Late_Update(_float fTimeDelta)
 
 HRESULT CButton::Render()
 {
-	if (FAILED(Bind_ShaderResources()))
-		return E_FAIL;
-
-	if (FAILED(m_pShaderCom->Begin(0)))
-		return E_FAIL;
-
-	if (FAILED(m_pVIBufferCom->Bind_Resources()))
-		return E_FAIL;
-
-	if (FAILED(m_pVIBufferCom->Render()))
-		return E_FAIL;
-
 	return S_OK;
 }
 
-HRESULT CButton::Ready_Components()
+_bool CButton::IsClicked()
 {
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_VIBuffer_Rect"), 
-		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
-		return E_FAIL;
-
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxPosTex"),
-		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
-		return E_FAIL;
-
-	return S_OK;
+	return IsHovered() && m_pGameInstance->Key_Down(VK_LBUTTON);
 }
 
-HRESULT CButton::Bind_ShaderResources()
+_bool CButton::IsHovered()
 {
-	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
-		return E_FAIL;
-
-	if (FAILED(m_pOrthogonalCom->Bind_ViewMatrix(m_pShaderCom, "g_ViewMatrix")))
-		return E_FAIL;
-
-	if (FAILED(m_pOrthogonalCom->Bind_ProjMatrix(m_pShaderCom, "g_ProjMatrix")))
-		return E_FAIL;
-
-	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
-		return E_FAIL;
-
-	return S_OK;
+	return PtInRect(&m_rcButton, m_pGameInstance->Get_MousePos());
 }
 
 void CButton::Free()

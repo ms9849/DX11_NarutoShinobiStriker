@@ -9,6 +9,7 @@
 #include "Sound_Manager.h"
 #include "Key_Manager.h"
 #include "Renderer.h"
+#include "PipeLine.h"
 #include "IMGUI_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
@@ -59,6 +60,10 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 
 	m_pIMGUI_Manager = CIMGUI_Manager::Create(*ppDevice, *ppContext, EngineDesc.hWnd, m_pPrototype_Manager, m_pObject_Manager, m_pPooling_Manager);
 	if (nullptr == m_pIMGUI_Manager)
+		return E_FAIL;
+
+	m_pPipeLine = CPipeLine::Create(*ppDevice, *ppContext);
+	if (nullptr == m_pPipeLine)
 		return E_FAIL;
 
 	return S_OK;
@@ -266,6 +271,35 @@ HRESULT CGameInstance::Add_RenderGroup(RENDER eRenderGroup, CGameObject* pRender
 
 #pragma endregion
 
+#pragma region PIPELINE
+
+const _float4x4& CGameInstance::Get_ViewMatrix()
+{
+	return m_pPipeLine->Get_ViewMatrix();
+}
+
+const _float4x4& CGameInstance::Get_CameraWorldMatrix()
+{
+	return m_pPipeLine->Get_CameraWorldMatrix();
+}
+
+const _float4x4& CGameInstance::Get_ProjMatrix()
+{
+	return m_pPipeLine->Get_ProjMatrix();
+}
+
+void CGameInstance::Set_ViewMatrix(const _float4x4& CameraWorldMatrix)
+{
+	m_pPipeLine->Set_ViewMatrix(CameraWorldMatrix);
+}
+
+void CGameInstance::Set_ProjMatrix(const _float4x4& ProjMatrix)
+{
+	m_pPipeLine->Set_ProjMatrix(ProjMatrix);
+}
+
+#pragma endregion
+
 #pragma region SOUND_MANAGER
 
 void CGameInstance::PlaySoundOnce(const _wstring& pSoundKey, CHANNELID eID, float fVolume)
@@ -357,6 +391,7 @@ void CGameInstance::Release_Engine()
 	Safe_Release(m_pKey_Manager);
 	Safe_Release(m_pPooling_Manager);
 	Safe_Release(m_pIMGUI_Manager);
+	Safe_Release(m_pPipeLine);
 }
 
 void CGameInstance::Free()

@@ -59,7 +59,7 @@
       <Filter>01.Utility\04.Prototypes\Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Sound_Manager.h">
-      <Filter>01.Utility\06. Sound\Manager</Filter>
+      <Filter>01.Utility\96. Sound\Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Orthogonal.h">
       <Filter>01.Utility\03.Components\Orthogonal</Filter>
@@ -68,7 +68,7 @@
       <Filter>01.Utility\02.GameObjects\UIObject</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Key_Manager.h">
-      <Filter>01.Utility\07. Key\Manager</Filter>
+      <Filter>01.Utility\97. Key\Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Transform.h">
       <Filter>01.Utility\03.Components\Transform</Filter>
@@ -83,28 +83,28 @@
       <Filter>01.Utility\03.Components\Texture</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\FMOD\fmod.h">
-      <Filter>01.Utility\06. Sound\FMOD</Filter>
+      <Filter>01.Utility\96. Sound\FMOD</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\FMOD\fmod.hpp">
-      <Filter>01.Utility\06. Sound\FMOD</Filter>
+      <Filter>01.Utility\96. Sound\FMOD</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\FMOD\fmod_codec.h">
-      <Filter>01.Utility\06. Sound\FMOD</Filter>
+      <Filter>01.Utility\96. Sound\FMOD</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\FMOD\fmod_common.h">
-      <Filter>01.Utility\06. Sound\FMOD</Filter>
+      <Filter>01.Utility\96. Sound\FMOD</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\FMOD\fmod_dsp.h">
-      <Filter>01.Utility\06. Sound\FMOD</Filter>
+      <Filter>01.Utility\96. Sound\FMOD</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\FMOD\fmod_dsp_effects.h">
-      <Filter>01.Utility\06. Sound\FMOD</Filter>
+      <Filter>01.Utility\96. Sound\FMOD</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\FMOD\fmod_errors.h">
-      <Filter>01.Utility\06. Sound\FMOD</Filter>
+      <Filter>01.Utility\96. Sound\FMOD</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\FMOD\fmod_output.h">
-      <Filter>01.Utility\06. Sound\FMOD</Filter>
+      <Filter>01.Utility\96. Sound\FMOD</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\VIBuffer.h">
       <Filter>01.Utility\03.Components\VIBuffer</Filter>
@@ -113,40 +113,49 @@
       <Filter>01.Utility\03.Components\VIBuffer\VIBuffer_Rect</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\IMGUI_Manager.h">
-      <Filter>01.Utility\08. IMGUI\Manager</Filter>
+      <Filter>01.Utility\98. IMGUI\Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\IMGUI\imconfig.h">
-      <Filter>01.Utility\08. IMGUI\imgui</Filter>
+      <Filter>01.Utility\98. IMGUI\imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\IMGUI\imgui.h">
-      <Filter>01.Utility\08. IMGUI\imgui</Filter>
+      <Filter>01.Utility\98. IMGUI\imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\IMGUI\imgui_impl_dx11.h">
-      <Filter>01.Utility\08. IMGUI\imgui</Filter>
+      <Filter>01.Utility\98. IMGUI\imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\IMGUI\imgui_impl_win32.h">
-      <Filter>01.Utility\08. IMGUI\imgui</Filter>
+      <Filter>01.Utility\98. IMGUI\imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\IMGUI\imgui_internal.h">
-      <Filter>01.Utility\08. IMGUI\imgui</Filter>
+      <Filter>01.Utility\98. IMGUI\imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\IMGUI\imstb_rectpack.h">
-      <Filter>01.Utility\08. IMGUI\imgui</Filter>
+      <Filter>01.Utility\98. IMGUI\imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\IMGUI\imstb_textedit.h">
-      <Filter>01.Utility\08. IMGUI\imgui</Filter>
+      <Filter>01.Utility\98. IMGUI\imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\IMGUI\imstb_truetype.h">
-      <Filter>01.Utility\08. IMGUI\imgui</Filter>
+      <Filter>01.Utility\98. IMGUI\imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Shader.h">
       <Filter>01.Utility\03.Components\Shader</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\IMPLOT\implot.h">
-      <Filter>01.Utility\08. IMGUI\implot</Filter>
+      <Filter>01.Utility\98. IMGUI\implot</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\IMPLOT\implot_internal.h">
-      <Filter>01.Utility\08. IMGUI\implot</Filter>
+      <Filter>01.Utility\98. IMGUI\implot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\VIBuffer_Terrain.h">
+      <Filter>01.Utility\03.Components\VIBuffer\VIBuffer_Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\PipeLine.h">
+      <Filter>06. PipeLine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Camera.h">
+      <Filter>01.Utility\02.GameObjects\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -187,7 +196,7 @@
       <Filter>01.Utility\04.Prototypes\Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Sound_Manager.cpp">
-      <Filter>01.Utility\06. Sound\Manager</Filter>
+      <Filter>01.Utility\96. Sound\Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Orthogonal.cpp">
       <Filter>01.Utility\03.Components\Orthogonal</Filter>
@@ -196,7 +205,7 @@
       <Filter>01.Utility\02.GameObjects\UIObject</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Key_Manager.cpp">
-      <Filter>01.Utility\07. Key\Manager</Filter>
+      <Filter>01.Utility\97. Key\Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Component.cpp">
       <Filter>01.Utility\03.Components</Filter>
@@ -220,37 +229,46 @@
       <Filter>01.Utility\03.Components\VIBuffer\VIBuffer_Rect</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\IMGUI_Manager.cpp">
-      <Filter>01.Utility\08. IMGUI\Manager</Filter>
+      <Filter>01.Utility\98. IMGUI\Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Shader.cpp">
       <Filter>01.Utility\03.Components\Shader</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\IMGUI\imgui.cpp">
-      <Filter>01.Utility\08. IMGUI\imgui</Filter>
+      <Filter>01.Utility\98. IMGUI\imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\IMGUI\imgui_demo.cpp">
-      <Filter>01.Utility\08. IMGUI\imgui</Filter>
+      <Filter>01.Utility\98. IMGUI\imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\IMGUI\imgui_draw.cpp">
-      <Filter>01.Utility\08. IMGUI\imgui</Filter>
+      <Filter>01.Utility\98. IMGUI\imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\IMGUI\imgui_impl_dx11.cpp">
-      <Filter>01.Utility\08. IMGUI\imgui</Filter>
+      <Filter>01.Utility\98. IMGUI\imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\IMGUI\imgui_impl_win32.cpp">
-      <Filter>01.Utility\08. IMGUI\imgui</Filter>
+      <Filter>01.Utility\98. IMGUI\imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\IMGUI\imgui_tables.cpp">
-      <Filter>01.Utility\08. IMGUI\imgui</Filter>
+      <Filter>01.Utility\98. IMGUI\imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\IMGUI\imgui_widgets.cpp">
-      <Filter>01.Utility\08. IMGUI\imgui</Filter>
+      <Filter>01.Utility\98. IMGUI\imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\IMPLOT\implot.cpp">
-      <Filter>01.Utility\08. IMGUI\implot</Filter>
+      <Filter>01.Utility\98. IMGUI\implot</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\IMPLOT\implot_items.cpp">
-      <Filter>01.Utility\08. IMGUI\implot</Filter>
+      <Filter>01.Utility\98. IMGUI\implot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\VIBuffer_Terrain.cpp">
+      <Filter>01.Utility\03.Components\VIBuffer\VIBuffer_Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\PipeLine.cpp">
+      <Filter>06. PipeLine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Camera.cpp">
+      <Filter>01.Utility\02.GameObjects\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -311,15 +329,6 @@
     <Filter Include="01.Utility\01.Levels\Manager">
       <UniqueIdentifier>{5551b45b-b6f2-4aae-b287-d99e83f12793}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\06. Sound">
-      <UniqueIdentifier>{de6ecbaf-6771-4e72-a5c8-6b6f190ef860}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Utility\06. Sound\FMOD">
-      <UniqueIdentifier>{641906b2-3117-48ae-9c79-5db9591f0d0b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Utility\06. Sound\Manager">
-      <UniqueIdentifier>{561e0a0c-1beb-4e68-a91c-47712795089f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\03.Components\Transform">
       <UniqueIdentifier>{dea4ff98-a18f-49f3-b0f7-16ea6bef5fd7}</UniqueIdentifier>
     </Filter>
@@ -328,12 +337,6 @@
     </Filter>
     <Filter Include="01.Utility\02.GameObjects\UIObject">
       <UniqueIdentifier>{34ea1939-a21a-4fd2-b6a2-9b7140b208e0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Utility\07. Key">
-      <UniqueIdentifier>{f30a041c-6b74-4939-a07a-6912eba02b53}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Utility\07. Key\Manager">
-      <UniqueIdentifier>{766cff0c-db7f-42f7-a1cd-e28bbc172d41}</UniqueIdentifier>
     </Filter>
     <Filter Include="01.Utility\03.Components\Pooling">
       <UniqueIdentifier>{8797c831-a874-44ed-8ded-a235cb30f8df}</UniqueIdentifier>
@@ -350,39 +353,63 @@
     <Filter Include="01.Utility\03.Components\VIBuffer\VIBuffer_Rect">
       <UniqueIdentifier>{0323a8ee-49c5-49fa-b804-7c18ba9c7399}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\08. IMGUI">
-      <UniqueIdentifier>{4fdcf624-1e37-4f36-95b6-6013356287d4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Utility\08. IMGUI\Manager">
-      <UniqueIdentifier>{e03c3b21-30c1-4470-93ab-85172fa07891}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\03.Components\Shader">
       <UniqueIdentifier>{41a9f3c8-e825-4195-a136-b33c5e6a4bfa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\08. IMGUI\imgui">
+    <Filter Include="01.Utility\03.Components\VIBuffer\VIBuffer_Terrain">
+      <UniqueIdentifier>{c07508f3-380b-48fb-84e5-1d7de8f19f51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\98. IMGUI">
+      <UniqueIdentifier>{4fdcf624-1e37-4f36-95b6-6013356287d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\98. IMGUI\Manager">
+      <UniqueIdentifier>{e03c3b21-30c1-4470-93ab-85172fa07891}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\98. IMGUI\imgui">
       <UniqueIdentifier>{b5ddabf2-923f-4693-b44c-134594761710}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\08. IMGUI\implot">
+    <Filter Include="01.Utility\98. IMGUI\implot">
       <UniqueIdentifier>{764800d2-bcd4-49fb-b0a2-d50625ebe381}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\97. Key">
+      <UniqueIdentifier>{f30a041c-6b74-4939-a07a-6912eba02b53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\97. Key\Manager">
+      <UniqueIdentifier>{766cff0c-db7f-42f7-a1cd-e28bbc172d41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\96. Sound">
+      <UniqueIdentifier>{de6ecbaf-6771-4e72-a5c8-6b6f190ef860}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\96. Sound\FMOD">
+      <UniqueIdentifier>{641906b2-3117-48ae-9c79-5db9591f0d0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\96. Sound\Manager">
+      <UniqueIdentifier>{561e0a0c-1beb-4e68-a91c-47712795089f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. PipeLine">
+      <UniqueIdentifier>{2dc804e8-5b70-4d3b-bb34-f57d9557ac26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\02.GameObjects\Camera">
+      <UniqueIdentifier>{d664a147-6c0e-45af-9ce9-c1fc31a05caf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Public\FMOD\fmod.cs">
-      <Filter>01.Utility\06. Sound\FMOD</Filter>
+      <Filter>01.Utility\96. Sound\FMOD</Filter>
     </None>
     <None Include="..\Public\FMOD\fmod_dsp.cs">
-      <Filter>01.Utility\06. Sound\FMOD</Filter>
+      <Filter>01.Utility\96. Sound\FMOD</Filter>
     </None>
     <None Include="..\Public\FMOD\fmod_errors.cs">
-      <Filter>01.Utility\06. Sound\FMOD</Filter>
+      <Filter>01.Utility\96. Sound\FMOD</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\ThirdPartyLib\fmod_vc.lib">
-      <Filter>01.Utility\06. Sound\FMOD</Filter>
+      <Filter>01.Utility\96. Sound\FMOD</Filter>
     </Library>
     <Library Include="..\ThirdPartyLib\fmodL_vc.lib">
-      <Filter>01.Utility\06. Sound\FMOD</Filter>
+      <Filter>01.Utility\96. Sound\FMOD</Filter>
     </Library>
   </ItemGroup>
 </Project>

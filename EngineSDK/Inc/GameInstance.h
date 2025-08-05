@@ -72,6 +72,14 @@ public:
 	HRESULT Add_RenderGroup(RENDER eRenderGroup, class CGameObject* pRenderObject);
 #pragma endregion
 
+#pragma region PIPELINE
+	const _float4x4& Get_ViewMatrix();
+	const _float4x4& Get_CameraWorldMatrix();
+	const _float4x4& Get_ProjMatrix();
+	void Set_ViewMatrix(const _float4x4& CameraWorldMatrix);
+	void Set_ProjMatrix(const _float4x4& ProjMatrix);
+#pragma endregion
+
 #pragma region SOUND_MANAGER
 	void PlaySoundOnce(const _wstring& pSoundKey, CHANNELID eID, float fVolume);
 	void PlaySoundLoop(const _wstring& pSoundKey, CHANNELID eID, float fVolume);
@@ -102,6 +110,7 @@ private:
 	class CObject_Manager*			m_pObject_Manager = { nullptr };
 	class CRenderer*				m_pRenderer = { nullptr };
 	class CPicking*					m_pPicking = { nullptr };
+	class CPipeLine*				m_pPipeLine = { nullptr };
 	class CSound_Manager*			m_pSound_Manager = { nullptr };
 	class CKey_Manager*				m_pKey_Manager = { nullptr };
 	class CPooling_Manager*			m_pPooling_Manager = { nullptr };

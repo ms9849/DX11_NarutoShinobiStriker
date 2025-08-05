@@ -1,54 +1,50 @@
-#include "TestButton.h"
+#include "DecimalUI.h"
 
 #include "GameInstance.h"
 
-CTestButton::CTestButton(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
-	: CButton { pDevice, pContext, eObjectID }
+CDecimalUI::CDecimalUI(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
+	: CUIObject { pDevice, pContext, ENUM_CLASS(eObjectID) }
 {
 }
 
-CTestButton::CTestButton(const CTestButton& rhs)
-	: CButton { rhs }
+CDecimalUI::CDecimalUI(const CDecimalUI& rhs)
+	: CUIObject { rhs }
 {
 }
 
-HRESULT CTestButton::Initialize_Prototype()
+HRESULT CDecimalUI::Initialize_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CTestButton::Initialize(void* pArg)
+HRESULT CDecimalUI::Initialize(void* pArg)
 {
-	/* 부모로 받아온 녀석의 상대적인 위치로 세팅해줘야 할 것.. */
-
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+	m_iCurrentIndex = 0;
+
 	return S_OK;
 }
 
-void CTestButton::Priority_Update(_float fTimeDelta)
+void CDecimalUI::Priority_Update(_float fTimeDelta)
+{
+	int a = 10; // test
+}
+
+void CDecimalUI::Update(_float fTimeDelta)
 {
 }
 
-void CTestButton::Update(_float fTimeDelta)
-{
-	if (true == __super::IsClicked())
-		int a = 10;
-	
-	if (true == __super::IsHovered())
-		int a = 10;
-}
-
-void CTestButton::Late_Update(_float fTimeDelta)
+void CDecimalUI::Late_Update(_float fTimeDelta)
 {
 	m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
 }
 
-HRESULT CTestButton::Render()
+HRESULT CDecimalUI::Render()
 {
 	if (FAILED(Bind_ShaderResources()))
 		return E_FAIL;
@@ -65,7 +61,7 @@ HRESULT CTestButton::Render()
 	return S_OK;
 }
 
-HRESULT CTestButton::Ready_Components()
+HRESULT CDecimalUI::Ready_Components()
 {
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
 		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
@@ -75,14 +71,14 @@ HRESULT CTestButton::Ready_Components()
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_UI_Button"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_UI_Decimal"),
 		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 		return E_FAIL;
 
 	return S_OK;
 }
 
-HRESULT CTestButton::Bind_ShaderResources()
+HRESULT CDecimalUI::Bind_ShaderResources()
 {
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
@@ -93,39 +89,39 @@ HRESULT CTestButton::Bind_ShaderResources()
 	if (FAILED(m_pOrthogonalCom->Bind_ProjMatrix(m_pShaderCom, "g_ProjMatrix")))
 		return E_FAIL;
 
-	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
+	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", m_iCurrentIndex)))
 		return E_FAIL;
 
 	return S_OK;
 }
 
-CTestButton* CTestButton::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
+CDecimalUI* CDecimalUI::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 {
-	CTestButton* pInstance = new CTestButton(pDevice, pContext, eObjectID);
+	CDecimalUI* pInstance = new CDecimalUI(pDevice, pContext, eObjectID);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Create Failed : TestButton");
+		MSG_BOX("Create Failed : Decimal UI");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CTestButton::Clone(void* pArg)
+CGameObject* CDecimalUI::Clone(void* pArg)
 {
-	CTestButton* pInstance = new CTestButton(*this);
+	CDecimalUI* pInstance = new CDecimalUI(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Clone Failed : TestButton");
+		MSG_BOX("Clone Failed : Decimal UI");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CTestButton::Free()
+void CDecimalUI::Free()
 {
 	__super::Free();
 

@@ -30,6 +30,10 @@ public:
 		XMStoreFloat4(reinterpret_cast<_float4*>(&m_WorldMatrix.m[ENUM_CLASS(eState)]), vState);
 	}
 
+	const _float4x4* Get_WorldMatrixPtr() const {
+		return &m_WorldMatrix;
+	}
+
 public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg);
@@ -52,8 +56,10 @@ public:
 	/* 항등 기준으로 x,y,z 라디안 값만큼 회전 */
 	void Rotation(_float fRadianX, _float fRadianY, _float fRadianZ);
 
+	/* 항등 기준으로 임의의 축으로 공전.*/
+	void Orbit(_fvector vAxisPos, _fvector vAxis, _float fRadian);
+
 	void LookAt(_fvector vAt);
-	
 
 private:
 	_float				m_fSpeedPerSec = {};

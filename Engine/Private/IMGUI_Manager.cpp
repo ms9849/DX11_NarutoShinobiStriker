@@ -456,7 +456,7 @@ void CIMGUI_Manager::Show_ObjectInspector()
                         ImGui::PushID("Apply Right");
                         if (ImGui::Button("Apply"))
                         {
-                            pTransform->Rotation(pTransform->Get_State(STATE::RIGHT), m_fAngleRight);
+                            pTransform->Rotation(pTransform->Get_State(STATE::RIGHT), XMConvertToRadians(m_fAngleRight));
                             m_fAngleRight = 0.f;
                         }
                         ImGui::PopID();
@@ -473,7 +473,7 @@ void CIMGUI_Manager::Show_ObjectInspector()
                         ImGui::PushID("Apply Up");
                         if (ImGui::Button("Apply"))
                         {
-                            pTransform->Rotation(pTransform->Get_State(STATE::UP), m_fAngleUp);
+                            pTransform->Rotation(pTransform->Get_State(STATE::UP), XMConvertToRadians(m_fAngleUp));
                             m_fAngleUp = 0.f;
                         }
                         ImGui::PopID();
@@ -490,7 +490,7 @@ void CIMGUI_Manager::Show_ObjectInspector()
                         ImGui::PushID("Apply Look");
                         if (ImGui::Button("Apply"))
                         {
-                            pTransform->Rotation(pTransform->Get_State(STATE::LOOK), m_fAngleLook);
+                            pTransform->Rotation(pTransform->Get_State(STATE::LOOK), XMConvertToRadians(m_fAngleLook));
                             m_fAngleLook = 0.f;
                         }
                         ImGui::PopID();

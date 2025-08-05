@@ -11,6 +11,7 @@ public:
 	{
 		_float  fX, fY, fZ = { 0.f };
 		_float  fSizeX, fSizeY;
+		_float  fAngle = { 0.f };
 	} UIOBJECT_DESC;
 
 protected:
@@ -31,6 +32,8 @@ protected:
 	// 빌보드 패턴은 안쓸수도 있잖아.
 	// class CBillBoard* m_pBillBoard = { nullptr };
 	_float m_fX{}, m_fY{}, m_fZ{};
+	_float m_fAngle{};
+
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;
 	virtual void Free() override;

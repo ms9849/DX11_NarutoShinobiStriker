@@ -14,7 +14,13 @@ namespace Client
 	OBJECT ID? -> Abstract 계층이 아닌, 실제 구현되는 객체들만 가지게 될 ID.
 	모든 객체는 고유한 ID를 가지게 된다.
 	*/
-	enum class OBJECTID { BACKGROUND, DUMMY, UI_PANEL, UI_TESTBUTTON, END };
+	enum class OBJECTID { 
+		BACKGROUND, DUMMY, TERRAIN,
+		UI_TESTPANEL, UI_TESTBUTTON, UI_DECIMAL, UI_TIMER,
+		TEST_CAMERA,
+
+		END 
+	};
 }
 
 using namespace Client;
