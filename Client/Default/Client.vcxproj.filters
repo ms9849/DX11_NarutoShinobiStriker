@@ -58,6 +58,21 @@
     <Filter Include="02.GameObjects\UI\Panel\TestPanel">
       <UniqueIdentifier>{b738a00a-9ca2-4cdd-b6ea-3f55ac294b8a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\UI\Panel\Timer">
+      <UniqueIdentifier>{2c798d31-be7c-4382-83f9-7a0532ff9c8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Panel\Timer\Decimal">
+      <UniqueIdentifier>{51689b29-f10e-4582-bdb2-01195431b36a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Terrain">
+      <UniqueIdentifier>{8bb7da64-ac69-4148-8045-6085d8d01192}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Camera">
+      <UniqueIdentifier>{93509e39-d89a-4305-89c2-4b7e6016d2e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Camera\Manager">
+      <UniqueIdentifier>{3565544c-12c1-4abd-9e97-8469bc08ec6d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -110,6 +125,21 @@
     </ClInclude>
     <ClInclude Include="..\Public\TestPanel.h">
       <Filter>02.GameObjects\UI\Panel\TestPanel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\TimerUI.h">
+      <Filter>02.GameObjects\UI\Panel\Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\DecimalUI.h">
+      <Filter>02.GameObjects\UI\Panel\Timer\Decimal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Terrain.h">
+      <Filter>02.GameObjects\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\TestCamera.h">
+      <Filter>02.GameObjects\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Camera_Manager.h">
+      <Filter>02.GameObjects\Camera\Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -165,10 +195,30 @@
     <ClCompile Include="..\Private\TestPanel.cpp">
       <Filter>02.GameObjects\UI\Panel\TestPanel</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\TimerUI.cpp">
+      <Filter>02.GameObjects\UI\Panel\Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\DecimalUI.cpp">
+      <Filter>02.GameObjects\UI\Panel\Timer\Decimal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Terrain.cpp">
+      <Filter>02.GameObjects\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TestCamera.cpp">
+      <Filter>02.GameObjects\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Camera_Manager.cpp">
+      <Filter>02.GameObjects\Camera\Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPosTex.hlsl">
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shader_VtxNorTex.hlsl">
+      <Filter>97. ShaderFiles</Filter>
+    </None>
   </ItemGroup>
 </Project>

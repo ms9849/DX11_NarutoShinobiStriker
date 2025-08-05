@@ -42,11 +42,14 @@ HRESULT CUIObject::Initialize(void* pArg)
     m_fX = pDesc->fX;
     m_fY = pDesc->fY;
     m_fZ = pDesc->fZ;
+    m_fAngle = pDesc->fAngle;
 
     m_pTransformCom->Set_Scale(pDesc->fSizeX, pDesc->fSizeY, 1.f);
 
-    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(m_fX - ViewPortDesc.Width / 2.f, -1.f * m_fY + ViewPortDesc.Height / 2.f, m_fZ, 1.f));
+    m_pTransformCom->Rotation(m_pTransformCom->Get_State(STATE::LOOK), XMConvertToRadians(m_fAngle));
 
+    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(m_fX - ViewPortDesc.Width / 2.f, -1.f * m_fY + ViewPortDesc.Height / 2.f, m_fZ, 1.f));
+ 
     return S_OK;
 }
 

@@ -97,10 +97,23 @@ HRESULT CLevel_Logo::Ready_Layer_UI(const _wstring& strLayerTag)
 	Desc.fZ = 0.5f;
 	Desc.fSizeX = 500;
 	Desc.fSizeY = 500;
+	Desc.fAngle = -30.f;
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_UI_TestPanel"),
 		ENUM_CLASS(LEVEL::LOGO), strLayerTag, &Desc)))
 		return E_FAIL;
+
+	Desc.fX = g_iWinSizeX - 100.f;
+	Desc.fY = 65.f;
+	Desc.fZ = 0.5f;
+	Desc.fSizeX = 120;
+	Desc.fSizeY = 120;
+	Desc.fAngle = 0.f;
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_UI_Timer"),
+		ENUM_CLASS(LEVEL::LOGO), strLayerTag, &Desc)))
+		return E_FAIL;
+
 
 	return S_OK;
 }

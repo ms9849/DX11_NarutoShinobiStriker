@@ -21,10 +21,8 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	virtual HRESULT Ready_Components() override;
-
-public:
-	virtual _bool IsClicked() override;
+	HRESULT Ready_Components();
+	HRESULT Bind_ShaderResources();
 
 public:
 	static CTestButton* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);

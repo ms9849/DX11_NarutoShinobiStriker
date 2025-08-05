@@ -55,6 +55,10 @@ PS_OUT PS_MAIN(PS_IN In)
     
     Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
     
+    /* 알파 테스팅. 블렌딩은 서치가 더 필요하다. */ 
+    if (Out.vColor.a < 0.3)
+       discard;
+    
     return Out;
 }
 

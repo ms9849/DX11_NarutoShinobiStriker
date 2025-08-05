@@ -47,18 +47,53 @@ void CTestPanel::Late_Update(_float fTimeDelta)
 
 HRESULT CTestPanel::Render()
 {
-    __super::Render();
+    if (FAILED(Bind_ShaderResources()))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Begin(0)))
+        return E_FAIL;
+
+    if (FAILED(m_pVIBufferCom->Bind_Resources()))
+        return E_FAIL;
+
+    if (FAILED(m_pVIBufferCom->Render()))
+        return E_FAIL;
 
     return S_OK;
 }
 
 HRESULT CTestPanel::Ready_Components()
 {
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Panel"),
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
+        TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
+        return E_FAIL;
+
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxPosTex"),
+        TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
+        return E_FAIL;
+
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_UI_Panel"),
         TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
         return E_FAIL;
 
 	return S_OK;
+}
+
+HRESULT CTestPanel::Bind_ShaderResources()
+{
+    if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+        return E_FAIL;
+
+    if (FAILED(m_pOrthogonalCom->Bind_ViewMatrix(m_pShaderCom, "g_ViewMatrix")))
+        return E_FAIL;
+
+    if (FAILED(m_pOrthogonalCom->Bind_ProjMatrix(m_pShaderCom, "g_ProjMatrix")))
+        return E_FAIL;
+
+    if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
+        return E_FAIL;
+
+    return S_OK;
 }
 
 HRESULT CTestPanel::Ready_Button()
@@ -66,9 +101,10 @@ HRESULT CTestPanel::Ready_Button()
     CUIObject::UIOBJECT_DESC Desc;
     Desc.fSizeX = 200;
     Desc.fSizeY = 100;
-    Desc.fX = m_fX + 50;
-    Desc.fY = m_fY;
+    Desc.fX = m_fX;
+    Desc.fY = m_fY + 100;
     Desc.fZ = m_fZ - 0.05f;
+    Desc.fAngle = m_fAngle;
 
     CButton* pButton = static_cast<CTestButton*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_UI_TestButton"), &Desc));
     if (nullptr == pButton)

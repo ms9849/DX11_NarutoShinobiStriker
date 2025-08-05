@@ -172,6 +172,20 @@ void CTransform::Rotation(_float fRadianX, _float fRadianY, _float fRadianZ)
 	Set_State(STATE::LOOK, vLook);
 }
 
+void CTransform::Orbit(_fvector vAxisPos, _fvector vAxis, _float fRadian)
+{
+	_matrix		RotationMatrix = XMMatrixRotationAxis(vAxis, fRadian);
+	_float4x4	matDest = {};
+	XMStoreFloat4x4(&matDest, RotationMatrix);
+
+	/* Rotation에 Pos 적용 */
+	XMStoreFloat4(reinterpret_cast<_float4*>(&matDest.m[3]), vAxisPos);
+	RotationMatrix = XMLoadFloat4x4(&matDest);
+
+	/* 행렬끼리 곱한 뒤 세팅.*/
+	XMStoreFloat4x4(&m_WorldMatrix, XMMatrixMultiply(XMLoadFloat4x4(&m_WorldMatrix), RotationMatrix));
+}
+
 void CTransform::LookAt(_fvector vAt)
 {
 	_float3		vScale = Get_Scale();
@@ -184,8 +198,6 @@ void CTransform::LookAt(_fvector vAt)
 	Set_State(STATE::UP, XMVector3Normalize(vUp) * vScale.y);
 	Set_State(STATE::LOOK, XMVector3Normalize(vLook) * vScale.z);
 }
-
-
 
 CTransform* CTransform::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
