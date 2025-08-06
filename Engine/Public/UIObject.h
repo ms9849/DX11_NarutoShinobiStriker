@@ -9,11 +9,24 @@ class ENGINE_DLL CUIObject abstract : public CGameObject
 public:
 	typedef struct tagUIObjectDesc : public GAMEOBJECT_DESC
 	{
-		_float  fX, fY, fZ = { 0.f };
+		_float  fX, fY, fZ;
 		_float  fSizeX, fSizeY;
 		_float  fAngle = { 0.f };
 	} UIOBJECT_DESC;
 
+	static const tagUIObjectDesc& CreateDesc(_float fX, _float fY, _float fZ, _float fSizeX, _float fSizeY, _float fAngle = 0.f)
+	{
+		tagUIObjectDesc Desc;
+
+		Desc.fX = fX;
+		Desc.fY = fY;
+		Desc.fZ = fZ;
+		Desc.fSizeX = fSizeX;
+		Desc.fSizeY = fSizeY;
+		Desc.fAngle = fAngle;
+
+		return Desc;
+	}
 protected:
 	CUIObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iObjectID);
 	CUIObject(const CUIObject& Prototype);
@@ -37,7 +50,6 @@ protected:
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;
 	virtual void Free() override;
-
 };
 
 NS_END

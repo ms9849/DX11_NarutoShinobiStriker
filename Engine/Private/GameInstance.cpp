@@ -216,6 +216,16 @@ _uint CGameInstance::Get_LevelID()
 	return m_pLevel_Manager->Get_LevelID();
 }
 
+_bool CGameInstance::IsLevelChangeRequested()
+{
+	return m_pLevel_Manager->IsLevelChangeRequested();
+}
+
+void CGameInstance::Request_LevelChange()
+{
+	m_pLevel_Manager->Request_LevelChange();
+}
+
 #pragma endregion
 
 #pragma region PROTOTYPE_MANAGER
@@ -288,9 +298,9 @@ const _float4x4& CGameInstance::Get_ProjMatrix()
 	return m_pPipeLine->Get_ProjMatrix();
 }
 
-void CGameInstance::Set_ViewMatrix(const _float4x4& CameraWorldMatrix)
+void CGameInstance::Set_CameraWorldMatrix(const _float4x4& CameraWorldMatrix)
 {
-	m_pPipeLine->Set_ViewMatrix(CameraWorldMatrix);
+	m_pPipeLine->Set_CameraWorldMatrix(CameraWorldMatrix);
 }
 
 void CGameInstance::Set_ProjMatrix(const _float4x4& ProjMatrix)

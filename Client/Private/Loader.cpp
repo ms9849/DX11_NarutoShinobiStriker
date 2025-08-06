@@ -1,18 +1,18 @@
 #include "Loader.h"
 
-#include "BackGround.h"
 #include "Dummy.h"
-#include "TestPanel.h"
-#include "TestButton.h"
-#include "DecimalUI.h"
-#include "TimerUI.h"
 #include "Terrain.h"
 #include "TestCamera.h"
 
-//#include "Effect.h"
-//#include "Player.h"
-//#include "Monster.h"
-//#include "Sky.h"
+#include "TestPanel.h"
+#include "TestButton.h"
+
+#include "TimerPanel.h"
+#include "DecimalUI.h"
+
+#include "LogoPanel.h"
+#include "TitleUI.h"
+#include "PressAnyButtonUI.h"
 
 #include "GameInstance.h"
 
@@ -39,7 +39,7 @@ unsigned int APIENTRY LoadingMain(void* pArg)
 HRESULT CLoader::Initialize(LEVEL eNextLevelID)
 {	
 	m_eNextLevelID = eNextLevelID;
-
+	m_fLoadingProgress = 0.f;
 	/* 세마포어, 뮤텍스, 크리티컬섹션 */
 
 	/* 임계영역(힙, 데이터, 코드)에 접근하기위한 키를 생성한다. */
@@ -89,63 +89,93 @@ void CLoader::Output()
 
 HRESULT CLoader::Loading_For_Logo()
 {
+	m_fLoadingProgress += 0.4f;
 	m_strMessage = TEXT("텍스쳐를(을) 로딩 중 입니다.");
 
-	/* For.Prototype_Component_Texture_UI)Panel */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_UI_Panel"),
+	/* For.Prototype_Component_Texture_Panel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_Panel"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Panel/Panel%d.png"), 1))))
 		return E_FAIL;
 
-	/* For.Prototype_Component_Texture_UI_Button */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_UI_Button"),
+	/* For.Prototype_Component_Texture_Button */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_Button"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Button/Button%d.png"), 1))))
 		return E_FAIL;
 
-	/* For.Prototype_Component_Texture_UI_Timer */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_UI_Timer"),
+	/* For.Prototype_Component_Texture_TimerPanel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_TimerUI"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Timer/Timer%d.png"), 1))))
 		return E_FAIL;
 
-	/* For.Prototype_Component_Texture_UI_Decimal */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_UI_Decimal"),
+	/* For.Prototype_Component_Texture_DecimalUI */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_DecimalUI"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Decimal/Decimal%d.png"), 10))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Texture_LogoPanel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_LogoPanel"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Logo/LogoPanel.jpg"), 1))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_TitleUI*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_TitleUI"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Logo/Title.png"), 1))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_PressAnyButtonUI*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_PressAnyButtonUI"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Logo/PressAnyButton%d.png"), 3))))
+		return E_FAIL;
+	m_fLoadingProgress += 0.2f;
+
 	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
+	m_fLoadingProgress += 0.2f;
 
 	m_strMessage = TEXT("셰이더를(을) 로딩 중 입니다.");
-	
+	m_fLoadingProgress += 0.2f;
+
 	m_strMessage = TEXT("객체원형를(을) 로딩 중 입니다.");
 	/* For.Prototype_GameObject_Dummy */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_Dummy"),
 		CDummy::Create(m_pDevice, m_pContext, OBJECTID::DUMMY))))
 		return E_FAIL;
 
-	/* For.Prototype_GameObject_BackGround */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_BackGround"),
-		CBackGround::Create(m_pDevice, m_pContext, OBJECTID::BACKGROUND))))
+	/* For.Prototype_GameObject_TestButton */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_TestButton"),
+		CTestButton::Create(m_pDevice, m_pContext, OBJECTID::TESTBUTTON))))
 		return E_FAIL;
 
-	/* For.Prototype_GameObject_UI_TestButton */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_UI_TestButton"),
-		CTestButton::Create(m_pDevice, m_pContext, OBJECTID::UI_TESTBUTTON))))
+	/* For.Prototype_GameObject_TestPanel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_TestPanel"),
+		CTestPanel::Create(m_pDevice, m_pContext, OBJECTID::TESTPANEL))))
 		return E_FAIL;
 
-	/* For.Prototype_GameObject_UI_TestPanel */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_UI_TestPanel"),
-		CTestPanel::Create(m_pDevice, m_pContext, OBJECTID::UI_TESTPANEL))))
+	/* For.Prototype_GameObject_DecimalUI */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_DecimalUI"),
+		CDecimalUI::Create(m_pDevice, m_pContext, OBJECTID::DECIMAL_UI))))
 		return E_FAIL;
 
-	/* For.Prototype_GameObject_UI_Decimal */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_UI_Decimal"),
-		CDecimalUI::Create(m_pDevice, m_pContext, OBJECTID::UI_DECIMAL))))
+	/* For.Prototype_GameObject_TimerPanel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_TimerPanel"),
+		CTimerPanel::Create(m_pDevice, m_pContext, OBJECTID::TIMER_UI))))
 		return E_FAIL;
 
-	/* For.Prototype_GameObject_UI_Timer */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_UI_Timer"),
-		CTimerUI::Create(m_pDevice, m_pContext, OBJECTID::UI_TIMER))))
+	/* For.Prototype_GameObject_LogoPanel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_LogoPanel"),
+		CLogoPanel::Create(m_pDevice, m_pContext, OBJECTID::LOGO_PANEL))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_TitleUI */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_TitleUI"),
+		CTitleUI::Create(m_pDevice, m_pContext, OBJECTID::TITLE_UI))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_PressAnyButtonUI */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_PressAnyButtonUI"),
+		CPressAnyButtonUI::Create(m_pDevice, m_pContext, OBJECTID::PRESSANYBUTTON_UI))))
+		return E_FAIL;
+
+	m_fLoadingProgress += 0.2f;
 	m_strMessage = TEXT("로딩이 완료되었습니다..");
 
 	m_isFinished = true;
@@ -155,6 +185,7 @@ HRESULT CLoader::Loading_For_Logo()
 
 HRESULT CLoader::Loading_For_GamePlay()
 {
+	m_fLoadingProgress += 0.4f;
 	m_strMessage = TEXT("텍스쳐를(을) 로딩 중 입니다.");
 	/* For.Prototype_Component_Texture_Terrain */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Terrain"),
@@ -182,7 +213,7 @@ HRESULT CLoader::Loading_For_GamePlay()
 	//	return E_FAIL;
 
 	
-
+	m_fLoadingProgress += 0.3f;
 	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
 	/* For.Prototype_Component_VIBuffer_Terrain */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Terrain"),
@@ -193,11 +224,7 @@ HRESULT CLoader::Loading_For_GamePlay()
 	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Cube"),
 	//	CVIBuffer_Cube::Create(m_pDevice, m_pContext))))
 	//	return E_FAIL;
-
-	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_BackGround"),
-	//	CBackGround::Create(m_pDevice, m_pContext, OBJECTID::BACKGROUND))))
-	//	return E_FAIL;
-
+	m_fLoadingProgress += 0.3f;
 	m_strMessage = TEXT("셰이더를(을) 로딩 중 입니다.");
 
 	m_strMessage = TEXT("객체원형를(을) 로딩 중 입니다.");
@@ -230,9 +257,8 @@ HRESULT CLoader::Loading_For_GamePlay()
 	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Effect"),
 	//	CEffect::Create(m_pDevice, m_pContext))))
 	//	return E_FAIL;
-
 	m_strMessage = TEXT("로딩이 완료되었습니다..");
-
+	Sleep(500);
 	m_isFinished = true;
 
 	return S_OK;

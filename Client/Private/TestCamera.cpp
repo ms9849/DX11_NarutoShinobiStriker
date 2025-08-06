@@ -27,7 +27,7 @@ HRESULT CTestCamera::Initialize(void* pArg)
 
 void CTestCamera::Priority_Update(_float fTimeDelta)
 {
-	m_pGameInstance->Set_ViewMatrix(*m_pTransformCom->Get_WorldMatrixPtr());
+	m_pGameInstance->Set_CameraWorldMatrix(*m_pTransformCom->Get_WorldMatrixPtr());
 }
 
 void CTestCamera::Update(_float fTimeDelta)

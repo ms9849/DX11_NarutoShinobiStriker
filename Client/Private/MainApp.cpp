@@ -3,7 +3,13 @@
 #include "Level_Loading.h"
 #include "Pooling.h"
 #include "Dummy.h"
-#include "BackGround.h"
+
+#include "LoadingPanel.h"
+#include "RotationIconUI.h"
+
+#include "LoadingBarPanel.h"
+#include "ProgressBarUI.h"
+
 /* 테스트 브랜치용 주석 */
 Client::CMainApp::CMainApp()	
 	: m_pGameInstance { CGameInstance::GetInstance() }
@@ -104,15 +110,45 @@ HRESULT CMainApp::Ready_Prototypes()
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxNorTex.hlsl"), VTXNORTEX::Elements, VTXNORTEX::iNumElements))))
 		return E_FAIL;
 
-	/* For.Prototype_Component_Texture_BackGround */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_BackGround"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Default%d.jpg"), 2))))
+	/* For.Prototype_Component_Texture_LoadingPanel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_LoadingPanel"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Loading/LoadingPanel.png"), 1))))
 		return E_FAIL;
 
-	///* For.Prototype_GameObject_Camera */
-	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Camera"),
-	//	CCamera::Create(m_pGraphic_Device))))
-	//	return E_FAIL;
+	/* For.Prototype_GameObject_LoadingPanel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_LoadingPanel"),
+		CLoadingPanel::Create(m_pDevice, m_pContext, OBJECTID::LOADING_PANEL))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_RotationIconUI */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_RotationIconUI"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Loading/RotationIcon.png"), 1))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_RotationIcon */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_RotationIconUI"),
+		CRotationIconUI::Create(m_pDevice, m_pContext, OBJECTID::ROTATIONICON_UI))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_LoadingBarPanel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_LoadingBarPanel"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Loading/ProgressBar%d.png"), 3))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_LoadingBarPanel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_LoadingBarPanel"),
+		CLoadingBarPanel::Create(m_pDevice, m_pContext, OBJECTID::LOADINGBAR_PANEL))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_ProgressBarUI */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_ProgressBarUI"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Loading/ProgressBar2.png"), 1))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_ProgressBarUI */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ProgressBarUI"),
+		CProgressBarUI::Create(m_pDevice, m_pContext, OBJECTID::PROGRESSBAR_UI))))
+		return E_FAIL;
 
 	return S_OK;
 }

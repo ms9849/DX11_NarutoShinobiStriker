@@ -50,6 +50,8 @@ public:
 public:
 	HRESULT Change_Level(class CLevel* pNewLevel);
 	_uint	Get_LevelID();
+	_bool	IsLevelChangeRequested();
+	void	Request_LevelChange();
 #pragma endregion
 
 #pragma region PROTOTYPE_MANAGER
@@ -76,7 +78,7 @@ public:
 	const _float4x4& Get_ViewMatrix();
 	const _float4x4& Get_CameraWorldMatrix();
 	const _float4x4& Get_ProjMatrix();
-	void Set_ViewMatrix(const _float4x4& CameraWorldMatrix);
+	void Set_CameraWorldMatrix(const _float4x4& CameraWorldMatrix);
 	void Set_ProjMatrix(const _float4x4& ProjMatrix);
 #pragma endregion
 

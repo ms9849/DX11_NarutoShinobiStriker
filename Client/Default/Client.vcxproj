@@ -153,7 +153,6 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\Public\BackGround.h" />
     <ClInclude Include="..\Public\Button.h" />
     <ClInclude Include="..\Public\Camera_Manager.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
@@ -164,20 +163,26 @@
     <ClInclude Include="..\Public\Level_Loading.h" />
     <ClInclude Include="..\Public\Level_Logo.h" />
     <ClInclude Include="..\Public\Loader.h" />
+    <ClInclude Include="..\Public\LoadingBarPanel.h" />
+    <ClInclude Include="..\Public\LoadingPanel.h" />
+    <ClInclude Include="..\Public\LogoPanel.h" />
     <ClInclude Include="..\Public\MainApp.h" />
     <ClInclude Include="..\Public\Panel.h" />
+    <ClInclude Include="..\Public\PressAnyButtonUI.h" />
+    <ClInclude Include="..\Public\ProgressBarUI.h" />
+    <ClInclude Include="..\Public\RotationIconUI.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\TestButton.h" />
     <ClInclude Include="..\Public\TestCamera.h" />
     <ClInclude Include="..\Public\TestPanel.h" />
-    <ClInclude Include="..\Public\TimerUI.h" />
+    <ClInclude Include="..\Public\TitleUI.h" />
+    <ClInclude Include="..\Public\TimerPanel.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Private\BackGround.cpp" />
     <ClCompile Include="..\Private\Button.cpp" />
     <ClCompile Include="..\Private\Camera_Manager.cpp" />
     <ClCompile Include="..\Private\DecimalUI.cpp" />
@@ -187,13 +192,20 @@
     <ClCompile Include="..\Private\Level_Loading.cpp" />
     <ClCompile Include="..\Private\Level_Logo.cpp" />
     <ClCompile Include="..\Private\Loader.cpp" />
+    <ClCompile Include="..\Private\LoadingBarPanel.cpp" />
+    <ClCompile Include="..\Private\LoadingPanel.cpp" />
+    <ClCompile Include="..\Private\LogoPanel.cpp" />
     <ClCompile Include="..\Private\MainApp.cpp" />
     <ClCompile Include="..\Private\Panel.cpp" />
+    <ClCompile Include="..\Private\PressAnyButtonUI.cpp" />
+    <ClCompile Include="..\Private\RotationIconUI.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\TestButton.cpp" />
     <ClCompile Include="..\Private\TestCamera.cpp" />
     <ClCompile Include="..\Private\TestPanel.cpp" />
-    <ClCompile Include="..\Private\TimerUI.cpp" />
+    <ClCompile Include="..\Private\TitleUI.cpp" />
+    <ClCompile Include="..\Private\TimerPanel.cpp" />
+    <ClCompile Include="..\Public\ProgressBarUI.cpp" />
     <ClCompile Include="Client.cpp" />
   </ItemGroup>
   <ItemGroup>

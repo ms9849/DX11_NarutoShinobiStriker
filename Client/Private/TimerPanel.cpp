@@ -1,24 +1,24 @@
-#include "TimerUI.h"
+#include "TimerPanel.h"
 
 #include "GameInstance.h"
 #include "DecimalUI.h"
 
-CTimerUI::CTimerUI(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
+CTimerPanel::CTimerPanel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 	: CPanel { pDevice, pContext, eObjectID }
 {
 }
 
-CTimerUI::CTimerUI(const CTimerUI& rhs)
+CTimerPanel::CTimerPanel(const CTimerPanel& rhs)
 	: CPanel { rhs }
 {
 }
 
-HRESULT CTimerUI::Initialize_Prototype()
+HRESULT CTimerPanel::Initialize_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CTimerUI::Initialize(void* pArg)
+HRESULT CTimerPanel::Initialize(void* pArg)
 {
 	m_iLeftTime = 599;
 
@@ -34,11 +34,11 @@ HRESULT CTimerUI::Initialize(void* pArg)
 	return S_OK;
 }
 
-void CTimerUI::Priority_Update(_float fTimeDelta)
+void CTimerPanel::Priority_Update(_float fTimeDelta)
 {
 }
 
-void CTimerUI::Update(_float fTimeDelta)
+void CTimerPanel::Update(_float fTimeDelta)
 {
 	m_fTimeAcc += fTimeDelta;
 
@@ -51,12 +51,12 @@ void CTimerUI::Update(_float fTimeDelta)
 	}
 }
 
-void CTimerUI::Late_Update(_float fTimeDelta)
+void CTimerPanel::Late_Update(_float fTimeDelta)
 {
 	m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
 }
 
-HRESULT CTimerUI::Render()
+HRESULT CTimerPanel::Render()
 {
 	if (FAILED(Bind_ShaderResources()))
 		return E_FAIL;
@@ -73,35 +73,31 @@ HRESULT CTimerUI::Render()
 	return S_OK;
 }
 
-HRESULT CTimerUI::Ready_Decimals()
+HRESULT CTimerPanel::Ready_Decimals()
 {
 	for (_int i = 0; i < 3; ++i)
 	{
 		CUIObject::UIOBJECT_DESC Desc;
-		Desc.fSizeX = 90;
-		Desc.fSizeY = 45;
-		Desc.fY = m_fY + 7;
-		Desc.fZ = m_fZ - 0.05f;
 
 		switch (i)
 		{
 		case 0:
-			Desc.fX = m_fX - 40;
+			Desc = CUIObject::CreateDesc(m_fX -40, m_fY+7, m_fZ-0.05f, 90.f, 45.f, 0.f);
 			break;
 
 		case 1:
-			Desc.fX = m_fX + 7;
+			Desc = CUIObject::CreateDesc(m_fX + 7, m_fY + 7, m_fZ - 0.05f, 90.f, 45.f, 0.f);
 			break;
 
 		case 2:
-			Desc.fX = m_fX + 37;
+			Desc = CUIObject::CreateDesc(m_fX + 37, m_fY + 7, m_fZ - 0.05f, 90.f, 45.f, 0.f);
 			break;
 
 		default:
 			break;
 		}
 
-		CDecimalUI* pDecimal = static_cast<CDecimalUI*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_UI_Decimal"), &Desc));
+		CDecimalUI* pDecimal = static_cast<CDecimalUI*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_DecimalUI"), &Desc));
 		if (nullptr == pDecimal)
 			return E_FAIL;
 
@@ -115,14 +111,14 @@ HRESULT CTimerUI::Ready_Decimals()
 	return S_OK;
 }
 
-void CTimerUI::Calc_Timer()
+void CTimerPanel::Calc_Timer()
 {
 	static_cast<CDecimalUI*>(m_Childs[0])->Set_CurrentIdx(m_iLeftTime / 60);
 	static_cast<CDecimalUI*>(m_Childs[1])->Set_CurrentIdx(m_iLeftTime % 60 / 10);
 	static_cast<CDecimalUI*>(m_Childs[2])->Set_CurrentIdx(m_iLeftTime % 60 % 10);
 }
 
-HRESULT CTimerUI::Ready_Components()
+HRESULT CTimerPanel::Ready_Components()
 {
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
 		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
@@ -132,14 +128,14 @@ HRESULT CTimerUI::Ready_Components()
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_UI_Timer"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_TimerUI"),
 		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 		return E_FAIL;
 
 	return S_OK;
 }
 
-HRESULT CTimerUI::Bind_ShaderResources()
+HRESULT CTimerPanel::Bind_ShaderResources()
 {
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
@@ -156,9 +152,9 @@ HRESULT CTimerUI::Bind_ShaderResources()
 	return S_OK;
 }
 
-CTimerUI* CTimerUI::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
+CTimerPanel* CTimerPanel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 {
-	CTimerUI* pInstance = new CTimerUI(pDevice, pContext, eObjectID);
+	CTimerPanel* pInstance = new CTimerPanel(pDevice, pContext, eObjectID);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
@@ -169,9 +165,9 @@ CTimerUI* CTimerUI::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext,
 	return pInstance;
 }
 
-CGameObject* CTimerUI::Clone(void* pArg)
+CGameObject* CTimerPanel::Clone(void* pArg)
 {
-	CTimerUI* pInstance = new CTimerUI(*this);
+	CTimerPanel* pInstance = new CTimerPanel(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
@@ -182,7 +178,7 @@ CGameObject* CTimerUI::Clone(void* pArg)
 	return pInstance;
 }
 
-void CTimerUI::Free()
+void CTimerPanel::Free()
 {
 	__super::Free();
 }

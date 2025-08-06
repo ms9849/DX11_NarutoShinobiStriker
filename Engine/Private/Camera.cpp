@@ -44,7 +44,7 @@ HRESULT CCamera::Initialize(void* pArg)
 
 	_float4x4 ViewMatrix;
 	XMStoreFloat4x4(&ViewMatrix, XMMatrixLookAtLH(XMLoadFloat4(&pDesc->vEye), XMLoadFloat4(&pDesc->vAt), XMVectorSet(0.f, 1.f, 0.f, 1.f)));
-	m_pGameInstance->Set_ViewMatrix(*m_pTransformCom->Get_WorldMatrixPtr());
+	m_pGameInstance->Set_CameraWorldMatrix(*m_pTransformCom->Get_WorldMatrixPtr());
 
 	_float4x4 ProjMatrix;
 	XMStoreFloat4x4(&ProjMatrix, XMMatrixPerspectiveFovLH(m_fFovy, m_fAspect, m_fNear, m_fFar));

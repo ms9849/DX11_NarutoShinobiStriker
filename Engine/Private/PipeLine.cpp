@@ -36,7 +36,7 @@ const _float4x4& CPipeLine::Get_ProjMatrix()
     return m_ProjMatrix;
 }
 
-void CPipeLine::Set_ViewMatrix(const _float4x4& CameraWorldMatrix)
+void CPipeLine::Set_CameraWorldMatrix(const _float4x4& CameraWorldMatrix)
 {
     m_CameraWorldMatrix = CameraWorldMatrix;
 

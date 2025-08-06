@@ -19,7 +19,7 @@ HRESULT CCamera_Manager::Initialize_CameraManager()
 void CCamera_Manager::Update(_float fTimeDelta)
 {
     //카메라 가져와서 싸악 세팅.. 일단 이 부분은 수업 듣고 할 것.
-    //m_pGameInstance->Set_ViewMatrix();
+    //m_pGameInstance->Set_CameraWorldMatrix();
 }
 
 HRESULT CCamera_Manager::Add_Camera(const _wstring& strCameraTag, CCamera* pCamera)

@@ -28,9 +28,6 @@
     <Filter Include="02.GameObjects">
       <UniqueIdentifier>{6822825a-d704-42c1-aab4-274a2e135da0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\BackGround">
-      <UniqueIdentifier>{045c1a1c-a8ed-4e5b-bc33-e5328ed48bf1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Levels\Edit">
       <UniqueIdentifier>{556a7229-e790-4a04-8346-9534c9b037b2}</UniqueIdentifier>
     </Filter>
@@ -73,6 +70,33 @@
     <Filter Include="02.GameObjects\Camera\Manager">
       <UniqueIdentifier>{3565544c-12c1-4abd-9e97-8469bc08ec6d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\UI\Panel\LOADING">
+      <UniqueIdentifier>{b03aa11f-bc35-443c-8df4-047d761a464d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Panel\LOADING\LoadingBarPanel">
+      <UniqueIdentifier>{8703400d-4149-46a2-b9b9-867de11189e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Panel\LOADING\LoadingPanel">
+      <UniqueIdentifier>{67a42273-04d5-4cb2-a414-a16a48b0ebc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Panel\LOADING\LoadingPanel\RotationIcon">
+      <UniqueIdentifier>{f37c3ae7-62b2-4e5c-970b-076eaac98797}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Panel\LOGO">
+      <UniqueIdentifier>{bf073919-8eac-406a-b9ef-aab9cd06f531}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Panel\LOGO\LogoPanel">
+      <UniqueIdentifier>{70765e00-dd00-452d-a5e5-28289662349c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Panel\LOGO\LogoPanel\PressAnyButton">
+      <UniqueIdentifier>{206f0f53-24f0-4c54-822f-ec1f3e1d40f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Panel\LOGO\LogoPanel\Title">
+      <UniqueIdentifier>{71ec2d16-f97f-4f7f-bc7b-fd35d4ab518d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\ProgressBar">
+      <UniqueIdentifier>{fa5b1260-e0e3-4753-ae0b-a2b06e181e9b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -105,9 +129,6 @@
     <ClInclude Include="..\Public\Client_Defines.h">
       <Filter>99.Defines</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\BackGround.h">
-      <Filter>02.GameObjects\BackGround</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Level_Edit.h">
       <Filter>01.Levels\Edit</Filter>
     </ClInclude>
@@ -126,7 +147,7 @@
     <ClInclude Include="..\Public\TestPanel.h">
       <Filter>02.GameObjects\UI\Panel\TestPanel</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\TimerUI.h">
+    <ClInclude Include="..\Public\TimerPanel.h">
       <Filter>02.GameObjects\UI\Panel\Timer</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\DecimalUI.h">
@@ -140,6 +161,27 @@
     </ClInclude>
     <ClInclude Include="..\Public\Camera_Manager.h">
       <Filter>02.GameObjects\Camera\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\LogoPanel.h">
+      <Filter>02.GameObjects\UI\Panel\LOGO\LogoPanel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\TitleUI.h">
+      <Filter>02.GameObjects\UI\Panel\LOGO\LogoPanel\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\PressAnyButtonUI.h">
+      <Filter>02.GameObjects\UI\Panel\LOGO\LogoPanel\PressAnyButton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\LoadingPanel.h">
+      <Filter>02.GameObjects\UI\Panel\LOADING\LoadingPanel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ProgressBarUI.h">
+      <Filter>02.GameObjects\UI\ProgressBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\RotationIconUI.h">
+      <Filter>02.GameObjects\UI\Panel\LOADING\LoadingPanel\RotationIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\LoadingBarPanel.h">
+      <Filter>02.GameObjects\UI\Panel\LOADING\LoadingBarPanel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -174,9 +216,6 @@
     <ClCompile Include="..\Private\Loader.cpp">
       <Filter>01.Levels\Loading\Loader</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\BackGround.cpp">
-      <Filter>02.GameObjects\BackGround</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Level_Edit.cpp">
       <Filter>01.Levels\Edit</Filter>
     </ClCompile>
@@ -195,7 +234,7 @@
     <ClCompile Include="..\Private\TestPanel.cpp">
       <Filter>02.GameObjects\UI\Panel\TestPanel</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\TimerUI.cpp">
+    <ClCompile Include="..\Private\TimerPanel.cpp">
       <Filter>02.GameObjects\UI\Panel\Timer</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\DecimalUI.cpp">
@@ -209,6 +248,27 @@
     </ClCompile>
     <ClCompile Include="..\Private\Camera_Manager.cpp">
       <Filter>02.GameObjects\Camera\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TitleUI.cpp">
+      <Filter>02.GameObjects\UI\Panel\LOGO\LogoPanel\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\LogoPanel.cpp">
+      <Filter>02.GameObjects\UI\Panel\LOGO\LogoPanel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\PressAnyButtonUI.cpp">
+      <Filter>02.GameObjects\UI\Panel\LOGO\LogoPanel\PressAnyButton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\LoadingPanel.cpp">
+      <Filter>02.GameObjects\UI\Panel\LOADING\LoadingPanel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Public\ProgressBarUI.cpp">
+      <Filter>02.GameObjects\UI\ProgressBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\RotationIconUI.cpp">
+      <Filter>02.GameObjects\UI\Panel\LOADING\LoadingPanel\RotationIcon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\LoadingBarPanel.cpp">
+      <Filter>02.GameObjects\UI\Panel\LOADING\LoadingBarPanel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

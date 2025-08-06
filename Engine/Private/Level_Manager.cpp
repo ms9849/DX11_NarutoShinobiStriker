@@ -24,6 +24,7 @@ HRESULT CLevel_Manager::Change_Level(CLevel* pNewLevel)
 	}	
 
 	m_pCurrentLevel = pNewLevel;
+	m_IsChangeRequested = false;
 
 	return S_OK;
 }

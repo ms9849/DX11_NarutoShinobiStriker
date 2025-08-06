@@ -18,7 +18,7 @@ public:
 	const _float4x4& Get_ViewMatrix();
 	const _float4x4& Get_CameraWorldMatrix();
 	const _float4x4& Get_ProjMatrix();
-	void Set_ViewMatrix(const _float4x4& CameraWorldMatrix);
+	void Set_CameraWorldMatrix(const _float4x4& CameraWorldMatrix);
 	void Set_ProjMatrix(const _float4x4& ProjMatrix);
 private:
 	ID3D11Device* m_pDevice = { nullptr };

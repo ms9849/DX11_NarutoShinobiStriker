@@ -27,6 +27,13 @@ public:
 		return m_isFinished;
 	}
 
+	_float Get_LoadingProgress() {
+		return m_fLoadingProgress;
+	}
+
+	_float Get_MaxLoadingProgress() {
+		return m_fMaxLoadingProgress;
+	}
 private:
 	ID3D11Device* m_pDevice = { nullptr };
 	ID3D11DeviceContext* m_pContext = { nullptr };
@@ -40,6 +47,8 @@ private:
 	CRITICAL_SECTION	m_CriticalSection = {};
 
 	CGameInstance*		m_pGameInstance = { nullptr };
+	_float				m_fLoadingProgress = { 0.f };
+	_float				m_fMaxLoadingProgress = { 1.f };
 
 private:
 	HRESULT Loading_For_Logo();

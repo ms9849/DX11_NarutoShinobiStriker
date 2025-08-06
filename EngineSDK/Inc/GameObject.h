@@ -53,12 +53,13 @@ protected:
 
 protected:
 
-	HRESULT Add_Component(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, 
-		const _wstring& strComponentTag, CComponent** ppOut, void* pArg = nullptr);
-
 	/* 컴포넌트 이름을 따로 입력받지 않는, 엔진 단에서 키값을 제공해주는 컴포넌트 */
 	HRESULT Add_Component(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag,
 		CComponent** ppOut, void* pArg = nullptr);
+
+	/* 컴포넌트 이름을 입력받는 함수. 키값을 따로 지정해주어야 한다. */
+	HRESULT Add_Component(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, 
+		const _wstring& strComponentTag, CComponent** ppOut, void* pArg = nullptr);
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;

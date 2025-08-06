@@ -20,7 +20,6 @@ public:
 	/* 이 레벨에서 쓰기위한 객체들을 생성한다. */
 	HRESULT Ready_Layer_Camera(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_Dummy(const _wstring& strLayerTag);
-	HRESULT Ready_Layer_BackGround(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_UI(const _wstring& strLayerTag);
 
 private:
