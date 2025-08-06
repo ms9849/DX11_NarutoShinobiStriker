@@ -3,14 +3,18 @@
 #include "Client_Defines.h"
 #include "Panel.h"
 
+/*
+프로그레스 바, 
+회전 애니메이션 들어간 ui 하나 필요.
+*/
 NS_BEGIN(Client)
 
-class CTimerUI final : public CPanel
+class CLoadingPanel final : public CPanel
 {
 private:
-	CTimerUI(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
-	CTimerUI(const CTimerUI& rhs);
-	virtual ~CTimerUI() = default;
+	CLoadingPanel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
+	CLoadingPanel(const CLoadingPanel& rhs);
+	virtual ~CLoadingPanel() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -20,24 +24,13 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
-public:
-	HRESULT Ready_Decimals();
-	void Calc_Timer();
-
-	void Add_LeftTime(_uint iSec) {
-		m_iLeftTime += iSec;
-	}
-
-private:
-	_float m_fTimeAcc = {};
-	_uint m_iLeftTime = {};
-
 private:
 	HRESULT Ready_Components();
 	HRESULT Bind_ShaderResources();
+	HRESULT Ready_LoadingUIs();
 
 public:
-	static CTimerUI* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
+	static CLoadingPanel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 };

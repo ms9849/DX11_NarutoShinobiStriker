@@ -4,19 +4,19 @@
 #include "UIObject.h"
 
 NS_BEGIN(Engine)
-class CTexture;
 class CVIBuffer;
+class CTexture;
 class CShader;
-NS_END
+NS_END 
 
 NS_BEGIN(Client)
 
-class CBackGround final : public CUIObject
+class CTitleUI final : public CUIObject
 {
 private:
-	CBackGround(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
-	CBackGround(const CBackGround& Prototype);
-	virtual ~CBackGround() = default;
+	CTitleUI(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
+	CTitleUI(const CTitleUI& rhs);
+	virtual ~CTitleUI() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -26,18 +26,18 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
-
 private:
-	CTexture*		m_pTextureCom = { nullptr };
-	CVIBuffer*		m_pVIBufferCom = { nullptr };
-	CShader*		m_pShaderCom = { nullptr };
+	CTexture* m_pTextureCom = { nullptr };
+	CVIBuffer* m_pVIBufferCom = { nullptr };
+	CShader* m_pShaderCom = { nullptr };
 
 private:
 	HRESULT Ready_Components();
 	HRESULT Bind_ShaderResources();
+
 public:
-	static CBackGround* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
-	virtual CGameObject* Clone(void* pArg) override;
+	static CTitleUI* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
+	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 };
 

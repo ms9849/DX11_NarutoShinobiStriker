@@ -7,7 +7,6 @@
 
 CLevel_Logo::CLevel_Logo(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID)
 	: CLevel { pDevice, pContext, ENUM_CLASS(eLevelID)}
-	
 {
 
 }
@@ -16,9 +15,6 @@ HRESULT CLevel_Logo::Initialize()
 {
 	//if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
 	//	return E_FAIL;	
-
-	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
-		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Dummy(TEXT("Layer_Dummy"))))
 		return E_FAIL;
@@ -33,7 +29,7 @@ void CLevel_Logo::Update(_float fTimeDelta)
 {
 	Pooling_Test(fTimeDelta);
 
-	if (m_pGameInstance->Key_Down(VK_SPACE))
+	if (m_pGameInstance->IsLevelChangeRequested())
 	{
 		if (FAILED(m_pGameInstance->Change_Level(CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL::LOADING, LEVEL::GAMEPLAY))))
 			return;
@@ -79,41 +75,32 @@ HRESULT CLevel_Logo::Ready_Layer_Dummy(const _wstring& strLayerTag)
 	return S_OK;
 }
 
-HRESULT CLevel_Logo::Ready_Layer_BackGround(const _wstring& strLayerTag)
-{
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_BackGround"),
-		ENUM_CLASS(LEVEL::LOGO), strLayerTag)))
-		return E_FAIL;
-
-	return S_OK;
-}
-
 HRESULT CLevel_Logo::Ready_Layer_UI(const _wstring& strLayerTag)
 {
-	CUIObject::UIOBJECT_DESC Desc;
+	//CUIObject::UIOBJECT_DESC Desc;
 
-	Desc.fX = g_iWinSizeX / 2.f;
-	Desc.fY = g_iWinSizeY / 2.f;
-	Desc.fZ = 0.5f;
-	Desc.fSizeX = 500;
-	Desc.fSizeY = 500;
-	Desc.fAngle = -30.f;
+	//Desc.fX = g_iWinSizeX / 2.f;
+	//Desc.fY = g_iWinSizeY / 2.f;
+	//Desc.fZ = 0.5f;
+	//Desc.fSizeX = 500;
+	//Desc.fSizeY = 500;
+	//Desc.fAngle = -30.f;
 
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_UI_TestPanel"),
+	//if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_TestPanel"),
+	//	ENUM_CLASS(LEVEL::LOGO), strLayerTag, &Desc)))
+	//	return E_FAIL;
+
+	CUIObject::UIOBJECT_DESC Desc = CUIObject::CreateDesc(g_iWinSizeX - 100.f, 65.f, 0.5f, 120, 120, 0.f);
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_TimerPanel"),
 		ENUM_CLASS(LEVEL::LOGO), strLayerTag, &Desc)))
 		return E_FAIL;
 
-	Desc.fX = g_iWinSizeX - 100.f;
-	Desc.fY = 65.f;
-	Desc.fZ = 0.5f;
-	Desc.fSizeX = 120;
-	Desc.fSizeY = 120;
-	Desc.fAngle = 0.f;
+	Desc = CUIObject::CreateDesc(g_iWinSizeX / 2.f, g_iWinSizeY / 2.f, 0.5f, g_iWinSizeX, g_iWinSizeY, 0.f);
 
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_UI_Timer"),
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_LogoPanel"),
 		ENUM_CLASS(LEVEL::LOGO), strLayerTag, &Desc)))
 		return E_FAIL;
-
 
 	return S_OK;
 }

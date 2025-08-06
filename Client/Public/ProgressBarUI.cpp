@@ -1,0 +1,163 @@
+#include "ProgressBarUI.h"
+
+#include "GameInstance.h"
+
+CProgressBarUI::CProgressBarUI(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
+	: CUIObject { pDevice, pContext, ENUM_CLASS(eObjectID) }
+{
+}
+
+CProgressBarUI::CProgressBarUI(const CProgressBarUI& rhs)
+	: CUIObject { rhs }
+{
+}
+
+HRESULT CProgressBarUI::Initialize_Prototype()
+{
+	return S_OK;
+}
+
+HRESULT CProgressBarUI::Initialize(void* pArg)
+{
+	if (FAILED(__super::Initialize(pArg)))
+		return E_FAIL;
+
+	if (FAILED(Ready_Components()))
+		return E_FAIL;
+
+	m_fMaxSize = static_cast<CUIObject::UIOBJECT_DESC*>(pArg)->fSizeX;
+	XMStoreFloat3(&m_vOriginPos, m_pTransformCom->Get_State(STATE::POSITION));
+
+	return S_OK;
+}
+
+void CProgressBarUI::Priority_Update(_float fTimeDelta)
+{
+}
+
+void CProgressBarUI::Update(_float fTimeDelta)
+{
+	if(m_fProgress != 0.f)
+		Play_Animation(fTimeDelta);
+}
+
+void CProgressBarUI::Late_Update(_float fTimeDelta)
+{
+	m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
+}
+
+HRESULT CProgressBarUI::Render()
+{
+	if (FAILED(Bind_ShaderResources()))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Begin(0)))
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Bind_Resources()))
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Render()))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+void CProgressBarUI::Set_Progress(_float fProgress)
+{
+	if (fProgress > m_fMaxProgress)
+		m_fProgress = m_fMaxProgress;
+
+	m_fPreProgress = m_fProgress;
+	m_fProgress = fProgress;
+}
+
+void CProgressBarUI::Set_MaxProgress(_float fMaxProgress)
+{
+	m_fMaxProgress = fMaxProgress;
+}
+
+void CProgressBarUI::Play_Animation(_float fTimeDelta)
+{
+	_float3 vScale = m_pTransformCom->Get_Scale();
+
+	m_pTransformCom->Set_Scale(m_fMaxSize * m_fProgress, vScale.y, vScale.z);
+
+	if (m_fPreProgress != m_fProgress)
+	{
+		_float4 vPosition;
+		XMStoreFloat4(&vPosition, m_pTransformCom->Get_State(STATE::POSITION));
+		vPosition.x = m_vOriginPos.x - (m_fMaxSize / 2.f * (m_fMaxProgress - m_fProgress));
+
+		m_pTransformCom->Set_State(STATE::POSITION, XMLoadFloat4(&vPosition));
+	}
+}
+
+HRESULT CProgressBarUI::Ready_Components()
+{
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
+		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxPosTex"),
+		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_ProgressBarUI"),
+		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CProgressBarUI::Bind_ShaderResources()
+{
+	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+		return E_FAIL;
+
+	if (FAILED(m_pOrthogonalCom->Bind_ViewMatrix(m_pShaderCom, "g_ViewMatrix")))
+		return E_FAIL;
+
+	if (FAILED(m_pOrthogonalCom->Bind_ProjMatrix(m_pShaderCom, "g_ProjMatrix")))
+		return E_FAIL;
+
+	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+CProgressBarUI* CProgressBarUI::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
+{
+	CProgressBarUI* pInstance = new CProgressBarUI(pDevice, pContext, eObjectID);
+
+	if (FAILED(pInstance->Initialize_Prototype()))
+	{
+		MSG_BOX("Create Failed : CProgressBarUI");
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
+}
+
+CGameObject* CProgressBarUI::Clone(void* pArg)
+{
+	CProgressBarUI* pInstance = new CProgressBarUI(*this);
+
+	if (FAILED(pInstance->Initialize(pArg)))
+	{
+		MSG_BOX("Clone Failed : CProgressBarUI");
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
+}
+
+void CProgressBarUI::Free()
+{
+	__super::Free();
+
+	Safe_Release(m_pShaderCom);
+	Safe_Release(m_pTextureCom);
+	Safe_Release(m_pVIBufferCom);
+}

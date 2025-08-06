@@ -22,11 +22,10 @@ public:
 private:
 	LEVEL				m_eNextLevelID = { LEVEL::END };
 	class CLoader*		m_pLoader = { nullptr };
+	class CLoadingBarPanel* m_pLoadingBarPanel = { nullptr };
 
 private:
-	HRESULT Ready_Layer_BackGround();
-
-
+	HRESULT Ready_Layer_UI(const _wstring& strLayerTag);
 
 public:
 	static CLevel_Loading* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID, LEVEL eNextLevelID);

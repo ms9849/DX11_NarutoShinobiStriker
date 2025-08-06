@@ -15,6 +15,14 @@ private:
 public:
 	_uint Get_LevelID() const;
 
+	_bool IsLevelChangeRequested() const {
+		return m_IsChangeRequested;
+	}
+
+	void Request_LevelChange() {
+		m_IsChangeRequested = true;
+	}
+
 public:
 	HRESULT Change_Level(class CLevel* pNewLevel);
 	void Update(_float fTimeDelta);
@@ -23,7 +31,7 @@ public:
 private:
 	class CLevel*			m_pCurrentLevel = { nullptr };
 	class CGameInstance*	m_pGameInstance = { nullptr };
-
+	_bool					m_IsChangeRequested = { false };
 public:
 	static CLevel_Manager* Create();
 	virtual void Free() override;
