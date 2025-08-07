@@ -25,6 +25,8 @@ public:
 
 	_string	ToString(_wstring wStr);
 	_wstring ToWstring(_string Str);
+	_float Lerp(_float fSource, _float fDest, _float fLerpRate);
+	_vector LerpVector(_fvector vSource, _fvector vDest, _float fLerpRate);
 #pragma endregion
 
 #pragma region GRAPHIC_DEVICE

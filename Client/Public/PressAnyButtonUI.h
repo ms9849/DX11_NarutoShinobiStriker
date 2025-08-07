@@ -31,7 +31,6 @@ public:
 
 private:
 	/* 애니메이션 재생 및 플레이 끝남을 확인하기 위함 .*/
-	_uint m_iTextureIdx = { 0 };
 	_bool m_bTriggered = { false };
 	_float m_fTimeAcc = { 0 };
 

@@ -47,17 +47,7 @@ void CTestPanel::Late_Update(_float fTimeDelta)
 
 HRESULT CTestPanel::Render()
 {
-    if (FAILED(Bind_ShaderResources()))
-        return E_FAIL;
-
-    if (FAILED(m_pShaderCom->Begin(0)))
-        return E_FAIL;
-
-    if (FAILED(m_pVIBufferCom->Bind_Resources()))
-        return E_FAIL;
-
-    if (FAILED(m_pVIBufferCom->Render()))
-        return E_FAIL;
+    __super::Render();
 
     return S_OK;
 }
@@ -82,6 +72,9 @@ HRESULT CTestPanel::Ready_Components()
 HRESULT CTestPanel::Bind_ShaderResources()
 {
     if (FAILED(__super::Bind_ShaderResources()))
+        return E_FAIL;
+
+    if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
         return E_FAIL;
 
     return S_OK;

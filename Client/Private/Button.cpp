@@ -47,6 +47,8 @@ void CButton::Late_Update(_float fTimeDelta)
 
 HRESULT CButton::Render()
 {
+	__super::Render();
+
 	return S_OK;
 }
 

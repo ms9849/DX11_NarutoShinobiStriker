@@ -104,9 +104,9 @@ void CIMGUI_Manager::Update(_float fTimeDelta)
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
 
-    Show_Managers();
+    Show_Managers(fTimeDelta);
     Show_GameInfo(fTimeDelta);
-    Show_ObjectInspector();
+    Show_ObjectInspector(fTimeDelta);
 }
 
 void CIMGUI_Manager::Render()
@@ -135,7 +135,7 @@ void CIMGUI_Manager::Release_IMGUI()
     ImPlot::DestroyContext();
 }
 
-void CIMGUI_Manager::Show_Managers()
+void CIMGUI_Manager::Show_Managers(_float fTimeDelta)
 {
     if (!m_bVisibleFlag[ENUM_CLASS(IMGUI_VISIBLE::MANAGER)])
         return;
@@ -144,19 +144,19 @@ void CIMGUI_Manager::Show_Managers()
 
     ImGui::Begin("Managers");
 
-    Show_PoolManager(iLevelID);
+    Show_PoolManager(fTimeDelta, iLevelID);
     ImGui::Separator();
 
-    Show_PrototypeManager(iLevelID);
+    Show_PrototypeManager(fTimeDelta, iLevelID);
     ImGui::Separator();
 
 
-    Show_ObjectManager(iLevelID);
+    Show_ObjectManager(fTimeDelta, iLevelID);
 
     ImGui::End();
 }
 
-void CIMGUI_Manager::Show_PoolManager(_uint iLevelID)
+void CIMGUI_Manager::Show_PoolManager(_float fTimeDelta, _uint iLevelID)
 {
     if (ImGui::CollapsingHeader("Pool Manager Status"))
     {
@@ -185,7 +185,7 @@ void CIMGUI_Manager::Show_PoolManager(_uint iLevelID)
     }
 }
 
-void CIMGUI_Manager::Show_PrototypeManager(_uint iLevelID)
+void CIMGUI_Manager::Show_PrototypeManager(_float fTimeDelta, _uint iLevelID)
 {
     if (ImGui::CollapsingHeader("Prototype Manager Status"))
     {
@@ -258,7 +258,7 @@ void CIMGUI_Manager::Show_PrototypeManager(_uint iLevelID)
     }
 }
 
-void CIMGUI_Manager::Show_ObjectManager(_uint iLevelID)
+void CIMGUI_Manager::Show_ObjectManager(_float fTimeDelta, _uint iLevelID)
 {
     if (ImGui::CollapsingHeader("Object Manager Status"))
     {
@@ -337,7 +337,7 @@ void CIMGUI_Manager::Show_GameInfo(_float fTimeDelta)
     ImGui::End();
 }
 
-void CIMGUI_Manager::Show_ObjectInspector()
+void CIMGUI_Manager::Show_ObjectInspector(_float fTimeDelta)
 {
     if (!m_bVisibleFlag[ENUM_CLASS(IMGUI_VISIBLE::OBJECT_INSPECTOR)])
         return;

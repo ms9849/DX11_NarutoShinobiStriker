@@ -7,7 +7,7 @@ CPipeLine::CPipeLine()
 void CPipeLine::Update()
 {
 	for (_int i = 0; i < ENUM_CLASS(D3DTS::END); ++i)
-		XMStoreFloat4x4(&m_PipeLine_InverseMatrices[i], XMLoadFloat4x4(&m_PipeLine_Matrices[i]));
+		XMStoreFloat4x4(&m_PipeLine_InverseMatrices[i], XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_PipeLine_Matrices[i])));
 
 	for (_int i = 0; i < ENUM_CLASS(STATE::END); ++i)
 		memcpy(&m_vCamStates[i], m_PipeLine_InverseMatrices[ENUM_CLASS(D3DTS::VIEW)].m[i], sizeof(_float4));

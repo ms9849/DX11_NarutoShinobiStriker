@@ -14,7 +14,7 @@ public:
 		_float  fAngle = { 0.f };
 	} UIOBJECT_DESC;
 
-	static const tagUIObjectDesc& CreateDesc(_float fX, _float fY, _float fZ, _float fSizeX, _float fSizeY, _float fAngle = 0.f)
+	static const tagUIObjectDesc CreateDesc(_float fX, _float fY, _float fZ, _float fSizeX, _float fSizeY, _float fAngle = 0.f)
 	{
 		tagUIObjectDesc Desc;
 
@@ -50,6 +50,8 @@ protected:
 	// class CBillBoard* m_pBillBoard = { nullptr };
 	_float m_fX{}, m_fY{}, m_fZ{};
 	_float m_fAngle{};
+	_uint  m_iShaderPassIdx = {0};
+	_uint  m_iTextureIdx = { 0 };
 
 protected:
 	virtual HRESULT Bind_ShaderResources();

@@ -27,12 +27,11 @@ public:
 	virtual HRESULT Render() override;
 
 	void Set_CurrentIdx(_uint iIdx) {
-		m_iCurrentIndex = iIdx;
+		m_iTextureIdx = iIdx;
 	}
 
 private:
 	/* 로직에 따라 바뀔 값. 0~9 사이만을 가짐. */
-	_uint m_iCurrentIndex = {};
 
 private:
 	HRESULT Ready_Components();
