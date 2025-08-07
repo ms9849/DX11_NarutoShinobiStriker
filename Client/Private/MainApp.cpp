@@ -46,14 +46,6 @@ HRESULT Client::CMainApp::Initialize()
 
 void Client::CMainApp::Update(_float fTimeDelta)
 {
-	m_pGameInstance->Key_Input();
-
-	if (m_pGameInstance->Key_Down(VK_F3))
-		m_pGameInstance->Set_Visible_All_IMGUI(true);
-
-	if (m_pGameInstance->Key_Down(VK_F4))
-		m_pGameInstance->Set_Visible_All_IMGUI(false);
-
 	m_pGameInstance->Update_Engine(fTimeDelta);
 }
 

@@ -7,31 +7,32 @@ NS_BEGIN(Engine)
 class CPipeLine final : public CBase
 {
 private:
-	CPipeLine(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CPipeLine();
 	virtual ~CPipeLine() = default;
 
 public:
-	HRESULT Initialize();
+	/* 역행렬들도 전부 Update 단에서 세팅해둘 것 */
+	/* 뷰행렬 Inverse해서 벡터 4개 뽑아두고 넣어둘 것. Right up look도 필요할 예정.*/
+	/* 연산용, 저장용 두 가지 타입 다 반환해주게 함. */
 	void Update();
 
 public:
-	const _float4x4& Get_ViewMatrix();
-	const _float4x4& Get_CameraWorldMatrix();
-	const _float4x4& Get_ProjMatrix();
-	void Set_CameraWorldMatrix(const _float4x4& CameraWorldMatrix);
-	void Set_ProjMatrix(const _float4x4& ProjMatrix);
+	void Set_Pipeline_Matrix(D3DTS eState, _fmatrix PipeLineMatrix);
+
+	const _float4x4* Get_PipeLine_Float4x4(D3DTS eState);
+	_matrix Get_PipeLine_Matrix(D3DTS eState);
+
+	const _float4x4* Get_PipeLine_InverseFloat4x4(D3DTS eState);
+	_matrix Get_PipeLine_InverseMatrix(D3DTS eState);
+
+	const _float4* Get_CamState(STATE eState);
 private:
-	ID3D11Device* m_pDevice = { nullptr };
-	ID3D11DeviceContext* m_pContext = { nullptr };
-	class CGameInstance* m_pGameInstance = { nullptr };
+	_float4x4	m_PipeLine_Matrices[ENUM_CLASS(D3DTS::END)];
+	_float4x4	m_PipeLine_InverseMatrices[ENUM_CLASS(D3DTS::END)];
+	_float4		m_vCamStates[ENUM_CLASS(STATE::END)];
 
-	_float4x4 m_ViewMatrix = {};
-	_float4x4 m_ProjMatrix = {};
-
-	/* 뷰 행렬의 역행렬. 하는김에 들고 있기 */
-	_float4x4 m_CameraWorldMatrix = {};
 public:
-	static CPipeLine* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CPipeLine* Create();
 	virtual void Free() override;
 };
 

@@ -7,6 +7,11 @@ NS_BEGIN(Client)
 
 class CTestCamera final : public CCamera
 {
+public:
+	typedef struct tagTestCameraDesc : public CAMERA_DESC {
+		_float fMouseSensitiy;
+	} TEST_CAMERA_DESC;
+
 private:
 	CTestCamera(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	CTestCamera(const CTestCamera& rhs);
@@ -21,6 +26,7 @@ public:
 	virtual HRESULT Render() override;
 
 private:
+	_float m_fMouseSensivity = { 0.f };
 
 public:
 	static CTestCamera* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);

@@ -27,13 +27,8 @@ public:
 	virtual HRESULT Render() override;
 
 private:
-	CTexture* m_pTextureCom = { nullptr };
-	CVIBuffer* m_pVIBufferCom = { nullptr };
-	CShader* m_pShaderCom = { nullptr };
-
-private:
 	HRESULT Ready_Components();
-	HRESULT Bind_ShaderResources();
+	virtual HRESULT Bind_ShaderResources() override;
 
 public:
 	static CTitleUI* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);

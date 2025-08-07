@@ -31,10 +31,6 @@ public:
 	void Set_MaxProgress(_float fMaxProgress);
 
 private:
-	CTexture* m_pTextureCom = { nullptr };
-	CVIBuffer* m_pVIBufferCom = { nullptr };
-	CShader* m_pShaderCom = { nullptr };
-
 	/* 프로그레스 어떻게 받아오지?.. */
 	_float m_fProgress = { 0.f };
 	_float m_fPreProgress = { 0.f };
@@ -42,9 +38,10 @@ private:
 
 	_float3 m_vOriginPos = {};
 	_float m_fMaxSize = {};
+
 private:
 	HRESULT Ready_Components();
-	HRESULT Bind_ShaderResources();
+	virtual HRESULT Bind_ShaderResources() override;
 
 private:
 	void Play_Animation(_float fTimeDelta);

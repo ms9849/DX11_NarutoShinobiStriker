@@ -50,6 +50,14 @@ HRESULT CButton::Render()
 	return S_OK;
 }
 
+HRESULT CButton::Bind_ShaderResources()
+{
+	if (FAILED(__super::Bind_ShaderResources()))
+		return E_FAIL;
+
+	return S_OK;
+}
+
 _bool CButton::IsClicked()
 {
 	return IsHovered() && m_pGameInstance->Key_Down(VK_LBUTTON);
@@ -57,7 +65,8 @@ _bool CButton::IsClicked()
 
 _bool CButton::IsHovered()
 {
-	return PtInRect(&m_rcButton, m_pGameInstance->Get_MousePos());
+	return true;
+	//return PtInRect(&m_rcButton, m_pGameInstance->Get_MousePos());
 }
 
 void CButton::Free()

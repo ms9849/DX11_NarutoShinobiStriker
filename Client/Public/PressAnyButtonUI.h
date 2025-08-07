@@ -30,9 +30,6 @@ public:
 	void Play_Animation(_float fTimeDelta);
 
 private:
-	CTexture* m_pTextureCom = { nullptr };
-	CVIBuffer* m_pVIBufferCom = { nullptr };
-	CShader* m_pShaderCom = { nullptr };
 	/* 애니메이션 재생 및 플레이 끝남을 확인하기 위함 .*/
 	_uint m_iTextureIdx = { 0 };
 	_bool m_bTriggered = { false };
@@ -40,7 +37,8 @@ private:
 
 private:
 	HRESULT Ready_Components();
-	HRESULT Bind_ShaderResources();
+	virtual HRESULT Bind_ShaderResources() override;
+
 public:
 	static CPressAnyButtonUI* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	virtual CGameObject* Clone(void* pArg);
