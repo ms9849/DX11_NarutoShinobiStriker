@@ -7,6 +7,7 @@ NS_BEGIN(Engine)
 class ENGINE_DLL CCamera abstract : public CGameObject
 {
 public:
+	/* 포지션 세팅할땐 Float4로 받아와서 w값 1로 살려줘야함*/
 	typedef struct tagCameraDesc : public GAMEOBJECT_DESC {
 		_float4 vEye{}, vAt{};
 		_float fFovy{}, fNear{}, fFar{};
@@ -30,6 +31,9 @@ protected:
 	_float							m_fAspect = {};
 	_float							m_fNear = {};
 	_float							m_fFar = {};
+
+protected:
+	HRESULT Bind_Matrices();
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;

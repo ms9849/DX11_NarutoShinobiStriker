@@ -27,10 +27,10 @@ public:
 	virtual HRESULT Render() override;
 
 protected:
-	CTexture* m_pTextureCom = { nullptr };
-	CVIBuffer* m_pVIBufferCom = { nullptr };
-	CShader* m_pShaderCom = { nullptr };
 	RECT m_rcButton = {};
+
+protected:
+	virtual HRESULT Bind_ShaderResources() override;
 
 public:
 	_bool IsClicked();

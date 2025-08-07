@@ -34,7 +34,7 @@ private:
 
 private:
 	HRESULT Ready_Components();
-	HRESULT Bind_ShaderResources();
+	virtual HRESULT Bind_ShaderResources() override;
 
 public:
 	static CTimerPanel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);

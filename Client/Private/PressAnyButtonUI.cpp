@@ -34,7 +34,7 @@ void CPressAnyButtonUI::Priority_Update(_float fTimeDelta)
 
 void CPressAnyButtonUI::Update(_float fTimeDelta)
 {
-    if (m_pGameInstance->Key_Down(VK_SPACE))
+    if (m_pGameInstance->Key_Down(DIK_SPACE))
         m_bTriggered = true;
 
     if (m_bTriggered)
@@ -96,16 +96,7 @@ HRESULT CPressAnyButtonUI::Ready_Components()
 
 HRESULT CPressAnyButtonUI::Bind_ShaderResources()
 {
-    if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
-        return E_FAIL;
-
-    if (FAILED(m_pOrthogonalCom->Bind_ViewMatrix(m_pShaderCom, "g_ViewMatrix")))
-        return E_FAIL;
-
-    if (FAILED(m_pOrthogonalCom->Bind_ProjMatrix(m_pShaderCom, "g_ProjMatrix")))
-        return E_FAIL;
-
-    if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", m_iTextureIdx)))
+    if (FAILED(__super::Bind_ShaderResources()))
         return E_FAIL;
 
     return S_OK;

@@ -75,11 +75,10 @@ public:
 	virtual HRESULT Render() override;
 
 protected:
-	CTexture* m_pTextureCom = { nullptr };
-	CVIBuffer* m_pVIBufferCom = { nullptr };
-	CShader* m_pShaderCom = { nullptr };
-
 	vector<CUIObject*> m_Childs = {};
+
+protected:
+	virtual HRESULT Bind_ShaderResources() override;
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;

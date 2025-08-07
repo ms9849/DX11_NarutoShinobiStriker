@@ -41,11 +41,18 @@ public:
 	virtual HRESULT Render();
 
 protected:
-	class COrthogonal* m_pOrthogonalCom = { nullptr };
-	// 빌보드 패턴은 안쓸수도 있잖아.
+	class COrthogonal*	m_pOrthogonalCom = { nullptr };
+	class CTexture*		m_pTextureCom = { nullptr };
+	class CVIBuffer*	m_pVIBufferCom = { nullptr };
+	class CShader*		m_pShaderCom = { nullptr };
+
+	// 빌보드 패턴은 안쓸수도 있고, 로직이 긴 편은 아니라서 생략.
 	// class CBillBoard* m_pBillBoard = { nullptr };
 	_float m_fX{}, m_fY{}, m_fZ{};
 	_float m_fAngle{};
+
+protected:
+	virtual HRESULT Bind_ShaderResources();
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;

@@ -22,7 +22,7 @@ public:
 
 private:
 	HRESULT Ready_Components() ;
-	HRESULT Bind_ShaderResources();
+	virtual HRESULT Bind_ShaderResources() override;
 
 private:
 	HRESULT Ready_Button();

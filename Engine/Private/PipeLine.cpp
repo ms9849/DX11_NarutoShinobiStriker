@@ -1,72 +1,54 @@
 #include "PipeLine.h"
 
-#include "GameInstance.h"
-
-CPipeLine::CPipeLine(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-    : m_pDevice  { pDevice }
-    , m_pContext { pContext }
-    , m_pGameInstance { CGameInstance::GetInstance() }
+CPipeLine::CPipeLine()
 {
-    Safe_AddRef(m_pGameInstance);
-    Safe_AddRef(m_pDevice);
-    Safe_AddRef(m_pContext);
-}
-
-HRESULT CPipeLine::Initialize()
-{
-    return S_OK;
 }
 
 void CPipeLine::Update()
 {
+	for (_int i = 0; i < ENUM_CLASS(D3DTS::END); ++i)
+		XMStoreFloat4x4(&m_PipeLine_InverseMatrices[i], XMLoadFloat4x4(&m_PipeLine_Matrices[i]));
+
+	for (_int i = 0; i < ENUM_CLASS(STATE::END); ++i)
+		memcpy(&m_vCamStates[i], m_PipeLine_InverseMatrices[ENUM_CLASS(D3DTS::VIEW)].m[i], sizeof(_float4));
 }
 
-const _float4x4& CPipeLine::Get_ViewMatrix()
+void CPipeLine::Set_Pipeline_Matrix(D3DTS eState, _fmatrix PipeLineMatrix)
 {
-    return m_ViewMatrix;
+	XMStoreFloat4x4(&m_PipeLine_Matrices[ENUM_CLASS(eState)], PipeLineMatrix);
 }
 
-const _float4x4& CPipeLine::Get_CameraWorldMatrix()
+const _float4* CPipeLine::Get_CamState(STATE eState)
 {
-    return m_CameraWorldMatrix;
+	return &m_vCamStates[ENUM_CLASS(eState)];
 }
 
-const _float4x4& CPipeLine::Get_ProjMatrix()
+const _float4x4* CPipeLine::Get_PipeLine_Float4x4(D3DTS eState)
 {
-    return m_ProjMatrix;
+	return &m_PipeLine_Matrices[ENUM_CLASS(eState)];
 }
 
-void CPipeLine::Set_CameraWorldMatrix(const _float4x4& CameraWorldMatrix)
+_matrix CPipeLine::Get_PipeLine_Matrix(D3DTS eState)
 {
-    m_CameraWorldMatrix = CameraWorldMatrix;
-
-    _matrix InvMatrix = XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_CameraWorldMatrix));
-    XMStoreFloat4x4(&m_ViewMatrix, InvMatrix);
+	return XMLoadFloat4x4(&m_PipeLine_Matrices[ENUM_CLASS(eState)]);
 }
 
-void CPipeLine::Set_ProjMatrix(const _float4x4& ProjMatrix)
+const _float4x4* CPipeLine::Get_PipeLine_InverseFloat4x4(D3DTS eState)
 {
-    m_ProjMatrix = ProjMatrix;
+	return &m_PipeLine_InverseMatrices[ENUM_CLASS(eState)];
 }
 
-CPipeLine* CPipeLine::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+_matrix CPipeLine::Get_PipeLine_InverseMatrix(D3DTS eState)
 {
-    CPipeLine* pInstance = new CPipeLine(pDevice, pContext);
+	return XMLoadFloat4x4(&m_PipeLine_InverseMatrices[ENUM_CLASS(eState)]);
+}
 
-    if (FAILED(pInstance->Initialize()))
-    {
-        MSG_BOX("Create Failed : PipeLine");
-        Safe_Release(pInstance);
-    }
-
-    return pInstance;
+CPipeLine* CPipeLine::Create()
+{
+	return new CPipeLine();
 }
 
 void CPipeLine::Free()
 {
-    __super::Free();
-
-    Safe_Release(m_pContext);
-    Safe_Release(m_pDevice);
-    Safe_Release(m_pGameInstance);
+	__super::Free();
 }

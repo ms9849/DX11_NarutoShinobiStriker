@@ -26,7 +26,7 @@ public:
 
 private:
 	HRESULT Ready_Components();
-	HRESULT Bind_ShaderResources();
+	virtual HRESULT Bind_ShaderResources() override;
 	HRESULT Ready_ProgressBar();
 
 public:

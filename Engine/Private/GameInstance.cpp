@@ -8,6 +8,7 @@
 #include "Timer_Manager.h"
 #include "Sound_Manager.h"
 #include "Key_Manager.h"
+#include "Mouse_Manager.h"
 #include "Renderer.h"
 #include "PipeLine.h"
 #include "IMGUI_Manager.h"
@@ -20,10 +21,12 @@ CGameInstance::CGameInstance()
 
 HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11Device** ppDevice, ID3D11DeviceContext** ppContext)
 {
-	m_hWnd = EngineDesc.hWnd;
-
 	m_pGraphic_Device = CGraphic_Device::Create(EngineDesc.hWnd, EngineDesc.eWindowMode, EngineDesc.iWinSizeX, EngineDesc.iWinSizeY, ppDevice, ppContext);
 	if (nullptr == m_pGraphic_Device)
+		return E_FAIL;
+
+	m_pPipeLine = CPipeLine::Create();
+	if (nullptr == m_pPipeLine)
 		return E_FAIL;
 
 	m_pTimer_Manager = CTimer_Manager::Create();
@@ -50,8 +53,12 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	if (nullptr == m_pSound_Manager)
 		return E_FAIL;
 
-	m_pKey_Manager = CKey_Manager::Create();
+	m_pKey_Manager = CKey_Manager::Create(EngineDesc.hInstance, EngineDesc.hWnd);
 	if (nullptr == m_pKey_Manager)
+		return E_FAIL;
+
+	m_pMouse_Manager = CMouse_Manager::Create(EngineDesc.hInstance, EngineDesc.hWnd);
+	if (nullptr == m_pMouse_Manager)
 		return E_FAIL;
 
 	m_pPooling_Manager = CPooling_Manager::Create(EngineDesc.iNumLevels);
@@ -62,18 +69,16 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	if (nullptr == m_pIMGUI_Manager)
 		return E_FAIL;
 
-	m_pPipeLine = CPipeLine::Create(*ppDevice, *ppContext);
-	if (nullptr == m_pPipeLine)
-		return E_FAIL;
-
 	return S_OK;
 }
 
 void CGameInstance::Update_Engine(_float fTimeDelta)
 {
-	Calc_MousePos();
-	/* 객체 업데이트 계층 */
+	/* 키 매니저, 마우스 매니저 업데이트 */
+	m_pKey_Manager->Update();
+	m_pMouse_Manager->Update();
 
+	/* 객체 업데이트 계층 */
 	m_pObject_Manager->Priority_Update(fTimeDelta);
 
 	m_pObject_Manager->Update(fTimeDelta);
@@ -90,9 +95,6 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 	
 	/* IMGUI 업데이트 */
 	m_pIMGUI_Manager->Update(fTimeDelta);
-
-	/* 키 매니저 초기화 */
-	m_pKey_Manager->Update();
 }
 
 HRESULT CGameInstance::Draw()
@@ -144,28 +146,6 @@ _wstring CGameInstance::ToWstring(_string Str)
 	MultiByteToWideChar(CP_UTF8, 0, Str.c_str(),(_int)Str.size(), &Result[0], iSize);
 
 	return Result;
-}
-
-POINT CGameInstance::Get_MousePos()
-{
-	return m_ptMousePos;
-}
-
-POINT CGameInstance::Get_MouseDiff()
-{
-	POINT ptDiff{};
-	ptDiff.x = m_ptMousePos.x - m_ptPreMousePos.x;
-	ptDiff.y = m_ptMousePos.y - m_ptPreMousePos.y;
-
-	return ptDiff;
-}
-
-void CGameInstance::Calc_MousePos()
-{
-	GetCursorPos(&m_ptMousePos);
-	ScreenToClient(m_hWnd, &m_ptMousePos);
-
-	m_ptPreMousePos = m_ptMousePos;
 }
 
 #pragma endregion
@@ -283,29 +263,34 @@ HRESULT CGameInstance::Add_RenderGroup(RENDER eRenderGroup, CGameObject* pRender
 
 #pragma region PIPELINE
 
-const _float4x4& CGameInstance::Get_ViewMatrix()
+void CGameInstance::Set_Pipeline_Matrix(D3DTS eState, _fmatrix PipeLineMatrix)
 {
-	return m_pPipeLine->Get_ViewMatrix();
+	m_pPipeLine->Set_Pipeline_Matrix(eState, PipeLineMatrix);
 }
 
-const _float4x4& CGameInstance::Get_CameraWorldMatrix()
+const _float4x4* CGameInstance::Get_PipeLine_Float4x4(D3DTS eState)
 {
-	return m_pPipeLine->Get_CameraWorldMatrix();
+	return m_pPipeLine->Get_PipeLine_Float4x4(eState);
 }
 
-const _float4x4& CGameInstance::Get_ProjMatrix()
+_matrix CGameInstance::Get_PipeLine_Matrix(D3DTS eState)
 {
-	return m_pPipeLine->Get_ProjMatrix();
+	return m_pPipeLine->Get_PipeLine_Matrix(eState);
 }
 
-void CGameInstance::Set_CameraWorldMatrix(const _float4x4& CameraWorldMatrix)
+const _float4x4* CGameInstance::Get_PipeLine_InverseFloat4x4(D3DTS eState)
 {
-	m_pPipeLine->Set_CameraWorldMatrix(CameraWorldMatrix);
+	return m_pPipeLine->Get_PipeLine_InverseFloat4x4(eState);
 }
 
-void CGameInstance::Set_ProjMatrix(const _float4x4& ProjMatrix)
+_matrix CGameInstance::Get_PipeLine_InverseMatrix(D3DTS eState)
 {
-	m_pPipeLine->Set_ProjMatrix(ProjMatrix);
+	return m_pPipeLine->Get_PipeLine_InverseMatrix(eState);
+}
+
+const _float4* CGameInstance::Get_CamState(STATE eState)
+{
+	return m_pPipeLine->Get_CamState(eState);
 }
 
 #pragma endregion
@@ -351,24 +336,38 @@ void CGameInstance::SetChannelVolume(CHANNELID eID, float fVolume)
 
 #pragma region KEY_MANAGER
 
-void CGameInstance::Key_Input()
+_bool CGameInstance::Key_Pressing(_ubyte byKey)
 {
-	m_pKey_Manager->Key_Input();
+	return m_pKey_Manager->Key_Pressing(byKey);
 }
 
-_bool CGameInstance::Key_Pressing(_uint _iKey)
+_bool CGameInstance::Key_Up(_ubyte byKey)
 {
-	return m_pKey_Manager->Key_Pressing(_iKey);
+	return m_pKey_Manager->Key_Up(byKey);
 }
 
-_bool CGameInstance::Key_Up(_uint _iKey)
+_bool CGameInstance::Key_Down(_ubyte byKey)
 {
-	return m_pKey_Manager->Key_Up(_iKey);
+	return m_pKey_Manager->Key_Down(byKey);
 }
 
-_bool CGameInstance::Key_Down(_uint _iKey)
+#pragma endregion
+
+#pragma region MOUSE_MANAGER
+
+_bool CGameInstance::Mouse_Down(MOUSEKEYSTATE eMouse)
 {
-	return m_pKey_Manager->Key_Down(_iKey);
+	return m_pMouse_Manager->Mouse_Down(eMouse);
+}
+
+_bool CGameInstance::Mouse_Up(MOUSEKEYSTATE eMouse)
+{
+	return m_pMouse_Manager->Mouse_Up(eMouse);
+}
+
+_long CGameInstance::Get_MouseMove(MOUSEMOVESTATE eMouseState)
+{
+	return m_pMouse_Manager->Get_MouseMove(eMouseState);
 }
 
 #pragma endregion
@@ -399,6 +398,7 @@ void CGameInstance::Release_Engine()
 	Safe_Release(m_pGraphic_Device);
 	Safe_Release(m_pSound_Manager);
 	Safe_Release(m_pKey_Manager);
+	Safe_Release(m_pMouse_Manager);
 	Safe_Release(m_pPooling_Manager);
 	Safe_Release(m_pIMGUI_Manager);
 	Safe_Release(m_pPipeLine);

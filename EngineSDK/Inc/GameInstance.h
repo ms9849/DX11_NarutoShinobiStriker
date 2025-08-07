@@ -25,12 +25,6 @@ public:
 
 	_string	ToString(_wstring wStr);
 	_wstring ToWstring(_string Str);
-
-	/* 현재 마우스의 위치를 반환 */
-	POINT	Get_MousePos();
-	/* 이전 프레임과 현재 프레임 간의 마우스 좌표 차이를 반환*/
-	POINT	Get_MouseDiff();
-	void	Calc_MousePos();
 #pragma endregion
 
 #pragma region GRAPHIC_DEVICE
@@ -75,11 +69,15 @@ public:
 #pragma endregion
 
 #pragma region PIPELINE
-	const _float4x4& Get_ViewMatrix();
-	const _float4x4& Get_CameraWorldMatrix();
-	const _float4x4& Get_ProjMatrix();
-	void Set_CameraWorldMatrix(const _float4x4& CameraWorldMatrix);
-	void Set_ProjMatrix(const _float4x4& ProjMatrix);
+	void Set_Pipeline_Matrix(D3DTS eState, _fmatrix PipeLineMatrix);
+
+	const _float4x4* Get_PipeLine_Float4x4(D3DTS eState);
+	_matrix Get_PipeLine_Matrix(D3DTS eState);
+
+	const _float4x4* Get_PipeLine_InverseFloat4x4(D3DTS eState);
+	_matrix Get_PipeLine_InverseMatrix(D3DTS eState);
+
+	const _float4* Get_CamState(STATE eState);
 #pragma endregion
 
 #pragma region SOUND_MANAGER
@@ -93,10 +91,15 @@ public:
 #pragma endregion
 
 #pragma region KEY_MANAGER
-	void		Key_Input();
-	_bool		Key_Pressing(_uint _iKey);
-	_bool		Key_Up(_uint _iKey);
-	_bool		Key_Down(_uint _iKey);
+	_bool		Key_Pressing(_ubyte byKey);
+	_bool		Key_Up(_ubyte byKey);
+	_bool		Key_Down(_ubyte byKey);
+#pragma endregion
+
+#pragma region MOUSE_MANAGER
+	_bool	Mouse_Down(MOUSEKEYSTATE eMouse);
+	_bool	Mouse_Up(MOUSEKEYSTATE eMouse);
+	_long	Get_MouseMove(MOUSEMOVESTATE eMouseState);
 #pragma endregion
 
 #pragma region IMGUI_MANAGER
@@ -115,12 +118,10 @@ private:
 	class CPipeLine*				m_pPipeLine = { nullptr };
 	class CSound_Manager*			m_pSound_Manager = { nullptr };
 	class CKey_Manager*				m_pKey_Manager = { nullptr };
+	class CMouse_Manager*			m_pMouse_Manager = { nullptr };
 	class CPooling_Manager*			m_pPooling_Manager = { nullptr };
 	class CIMGUI_Manager*			m_pIMGUI_Manager = { nullptr };
 
-	/*클라이언트의 윈도우 핸들*/
-	HWND							m_hWnd;
-	POINT							m_ptMousePos{}, m_ptPreMousePos{};
 public:
 	void Release_Engine();
 	virtual void Free() override;

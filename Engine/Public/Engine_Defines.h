@@ -10,6 +10,10 @@
 #include "FX11/d3dx11effect.h"
 using namespace DirectX;
 
+#define KEY_MAX		256 
+#define DIRECTINPUT_VERSION	0x0800
+#include <dinput.h>
+
 #include <vector>
 #include <list>
 #include <map>
@@ -43,10 +47,6 @@ namespace Engine
 	const static wstring g_strTransformTag = { TEXT("Com_Transform") };
 	const static wstring g_strPoolingTag = { TEXT("Com_Pooling")};
 }
-
-#define VK_MAX		0xff 
-#define DIRECTINPUT_VERSION	0x0800
-#include <dinput.h>
 
 #pragma warning(disable : 4251)
 

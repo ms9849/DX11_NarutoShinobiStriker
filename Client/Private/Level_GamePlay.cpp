@@ -2,7 +2,7 @@
 #include "Level_GamePlay.h"
 #include "Level_Loading.h"
 
-#include "Camera.h"
+#include "TestCamera.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID)
 	: CLevel { pDevice, pContext, ENUM_CLASS(eLevelID)}
@@ -67,17 +67,19 @@ HRESULT CLevel_GamePlay::Ready_Layer_BackGround(const _wstring& strLayerTag)
 
 HRESULT CLevel_GamePlay::Ready_Layer_Camera(const _wstring& strLayerTag)
 {
-	CCamera::CAMERA_DESC			CameraDesc{};
+	CTestCamera::TEST_CAMERA_DESC			TestCameraDesc{};
 
-	CameraDesc.fFovy = XMConvertToRadians(60.0f);
-	CameraDesc.fNear = 0.1f;
-	CameraDesc.fFar = 1000.f;
-	CameraDesc.vEye = _float4(0.f, 30.f, -30.f, 1.f);
-	CameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
-	CameraDesc.fSpeedPerSec = 20.f;
+	TestCameraDesc.fFovy = XMConvertToRadians(60.0f);
+	TestCameraDesc.fNear = 0.1f;
+	TestCameraDesc.fFar = 1000.f;
+	TestCameraDesc.vEye = _float4(0.f, 30.f, -30.f, 1.f);
+	TestCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
+	TestCameraDesc.fSpeedPerSec = 20.f;
+	TestCameraDesc.fRotationPerSec = XMConvertToRadians(90.0f);
+	TestCameraDesc.fMouseSensitiy = 0.2f;
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_TestCamera"),
-		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag, &CameraDesc)))
+		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag, &TestCameraDesc)))
 		return E_FAIL;
 
 	return S_OK;

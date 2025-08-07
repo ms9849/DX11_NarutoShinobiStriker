@@ -20,9 +20,9 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
-public:
+private:
 	HRESULT Ready_Components();
-	HRESULT Bind_ShaderResources();
+	virtual HRESULT Bind_ShaderResources() override;
 
 public:
 	static CTestButton* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);

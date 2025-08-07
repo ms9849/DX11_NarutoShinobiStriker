@@ -67,9 +67,6 @@
     <ClInclude Include="..\Public\UIObject.h">
       <Filter>01.Utility\02.GameObjects\UIObject</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Key_Manager.h">
-      <Filter>01.Utility\97. Key\Manager</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Transform.h">
       <Filter>01.Utility\03.Components\Transform</Filter>
     </ClInclude>
@@ -152,10 +149,16 @@
       <Filter>01.Utility\03.Components\VIBuffer\VIBuffer_Terrain</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\PipeLine.h">
-      <Filter>06. PipeLine</Filter>
+      <Filter>01.Utility\06. PipeLine</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Camera.h">
       <Filter>01.Utility\02.GameObjects\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Key_Manager.h">
+      <Filter>01.Utility\97. Input\Key</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Mouse_Manager.h">
+      <Filter>01.Utility\97. Input\Mouse</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -203,9 +206,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\UIObject.cpp">
       <Filter>01.Utility\02.GameObjects\UIObject</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Key_Manager.cpp">
-      <Filter>01.Utility\97. Key\Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Component.cpp">
       <Filter>01.Utility\03.Components</Filter>
@@ -265,10 +265,16 @@
       <Filter>01.Utility\03.Components\VIBuffer\VIBuffer_Terrain</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\PipeLine.cpp">
-      <Filter>06. PipeLine</Filter>
+      <Filter>01.Utility\06. PipeLine</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Camera.cpp">
       <Filter>01.Utility\02.GameObjects\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Mouse_Manager.cpp">
+      <Filter>01.Utility\97. Input\Mouse</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Key_Manager.cpp">
+      <Filter>01.Utility\97. Input\Key</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -371,12 +377,6 @@
     <Filter Include="01.Utility\98. IMGUI\implot">
       <UniqueIdentifier>{764800d2-bcd4-49fb-b0a2-d50625ebe381}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\97. Key">
-      <UniqueIdentifier>{f30a041c-6b74-4939-a07a-6912eba02b53}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Utility\97. Key\Manager">
-      <UniqueIdentifier>{766cff0c-db7f-42f7-a1cd-e28bbc172d41}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\96. Sound">
       <UniqueIdentifier>{de6ecbaf-6771-4e72-a5c8-6b6f190ef860}</UniqueIdentifier>
     </Filter>
@@ -386,11 +386,20 @@
     <Filter Include="01.Utility\96. Sound\Manager">
       <UniqueIdentifier>{561e0a0c-1beb-4e68-a91c-47712795089f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="06. PipeLine">
-      <UniqueIdentifier>{2dc804e8-5b70-4d3b-bb34-f57d9557ac26}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\02.GameObjects\Camera">
       <UniqueIdentifier>{d664a147-6c0e-45af-9ce9-c1fc31a05caf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\06. PipeLine">
+      <UniqueIdentifier>{2dc804e8-5b70-4d3b-bb34-f57d9557ac26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\97. Input">
+      <UniqueIdentifier>{f30a041c-6b74-4939-a07a-6912eba02b53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\97. Input\Key">
+      <UniqueIdentifier>{e9569967-ad3f-4805-8a3d-1562d4830f60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\97. Input\Mouse">
+      <UniqueIdentifier>{e6ae7b75-12fe-4f77-96c1-df43a8c5c171}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

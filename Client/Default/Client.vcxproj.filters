@@ -275,10 +275,8 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPosTex.hlsl">
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Shader_VtxNorTex.hlsl">
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxNorTex.hlsl">
       <Filter>97. ShaderFiles</Filter>
-    </None>
+    </FxCompile>
   </ItemGroup>
 </Project>

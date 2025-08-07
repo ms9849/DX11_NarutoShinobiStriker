@@ -93,6 +93,12 @@ HRESULT CIMGUI_Manager::Ready_IMGUI(HWND hWnd)
 
 void CIMGUI_Manager::Update(_float fTimeDelta)
 {
+    if (m_pGameInstance->Key_Down(DIK_F3))
+        m_pGameInstance->Set_Visible_All_IMGUI(true);
+
+    if (m_pGameInstance->Key_Down(DIK_F4))
+        m_pGameInstance->Set_Visible_All_IMGUI(false);
+
     /* 여기서 Imgui 함수, 메서드, 뭐든 떄려박을 것.*/
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();

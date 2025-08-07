@@ -44,6 +44,14 @@ HRESULT CPanel::Render()
     return S_OK;
 }
 
+HRESULT CPanel::Bind_ShaderResources()
+{
+    if (FAILED(__super::Bind_ShaderResources()))
+        return E_FAIL;
+
+    return S_OK;
+}
+
 void CPanel::Free()
 {
     __super::Free();
