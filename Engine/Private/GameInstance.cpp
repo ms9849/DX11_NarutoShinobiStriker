@@ -81,6 +81,8 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 	/* °´Ã¼ ¾÷µ¥ÀÌÆ® °èÃþ */
 	m_pObject_Manager->Priority_Update(fTimeDelta);
 
+	m_pPipeLine->Update();
+
 	m_pObject_Manager->Update(fTimeDelta);
 
 	m_pObject_Manager->Late_Update(fTimeDelta);
@@ -146,6 +148,16 @@ _wstring CGameInstance::ToWstring(_string Str)
 	MultiByteToWideChar(CP_UTF8, 0, Str.c_str(),(_int)Str.size(), &Result[0], iSize);
 
 	return Result;
+}
+
+_float CGameInstance::Lerp(_float fSource, _float fDest, _float fLerpRate)
+{
+	return fSource + (fDest - fSource) * fLerpRate;
+}
+
+_vector CGameInstance::LerpVector(_fvector vSource, _fvector vDest, _float fLerpRate)
+{
+	return vSource + (vDest - vSource) * fLerpRate;
 }
 
 #pragma endregion

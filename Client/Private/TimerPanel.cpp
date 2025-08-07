@@ -58,17 +58,7 @@ void CTimerPanel::Late_Update(_float fTimeDelta)
 
 HRESULT CTimerPanel::Render()
 {
-	if (FAILED(Bind_ShaderResources()))
-		return E_FAIL;
-
-	if (FAILED(m_pShaderCom->Begin(0)))
-		return E_FAIL;
-
-	if (FAILED(m_pVIBufferCom->Bind_Resources()))
-		return E_FAIL;
-
-	if (FAILED(m_pVIBufferCom->Render()))
-		return E_FAIL;
+	__super::Render();
 
 	return S_OK;
 }

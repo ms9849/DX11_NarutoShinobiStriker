@@ -39,10 +39,10 @@ private:
 private:
 	//여기서 IMGUI와 관련된 기능들을 추가해줄 것.
 #pragma region MANAGERS
-	void Show_Managers();
-	void Show_PoolManager(_uint iLevelID);
-	void Show_PrototypeManager(_uint iLevelID);
-	void Show_ObjectManager(_uint iLevelID);
+	void Show_Managers(_float fTimeDelta);
+	void Show_PoolManager(_float fTimeDelta, _uint iLevelID);
+	void Show_PrototypeManager(_float fTimeDelta, _uint iLevelID);
+	void Show_ObjectManager(_float fTimeDelta, _uint iLevelID);
 #pragma endregion 
 
 #pragma region GAMEINFO
@@ -52,7 +52,7 @@ private:
 
 #pragma region INSPECTOR
 	//Transform 등의 컴포넌트를 보여주는 메서드
-	void Show_ObjectInspector();
+	void Show_ObjectInspector(_float fTimeDelta);
 #pragma endregion
 private:
 	_bool m_bVisibleFlag[ENUM_CLASS(IMGUI_VISIBLE::END)];
@@ -82,6 +82,9 @@ private:
 	_float3 m_vObjectPos = {};
 	_float3 m_vObjectScale = {};
 	_float m_fAngleRight = { 0.f }, m_fAngleUp = { 0.f }, m_fAngleLook = { 0.f };
+
+	_float3 m_vTargetPos = {};
+	_float	m_fLimitDistance = {};
 #pragma endregion
 
 	ID3D11Device* m_pDevice = { nullptr };

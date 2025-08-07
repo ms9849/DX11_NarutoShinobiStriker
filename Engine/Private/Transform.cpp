@@ -1,6 +1,7 @@
 #include "Transform.h"
 #include "Shader.h"
 
+#include "GameInstance.h"
 CTransform::CTransform(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CComponent { pDevice, pContext }
 {
@@ -197,6 +198,26 @@ void CTransform::LookAt(_fvector vAt)
 	Set_State(STATE::RIGHT, XMVector3Normalize(vRight) * vScale.x);
 	Set_State(STATE::UP, XMVector3Normalize(vUp) * vScale.y);
 	Set_State(STATE::LOOK, XMVector3Normalize(vLook) * vScale.z);
+}
+
+void CTransform::Chase(_fvector vTargetPos, _float fTimeDelta, _float fLimitDistance, _bool isLerp)
+{
+	_vector		vPosition = Get_State(STATE::POSITION);
+	_vector		vDirection = vTargetPos - vPosition;
+	_float		fDist = XMVectorGetX(XMVector3Length(vTargetPos - vPosition));
+
+	if (fDist < fLimitDistance)
+		return;
+
+	_vector		vMove;
+
+	if (isLerp)
+		vMove = (fDist / fLimitDistance) * 0.5f *  XMVector3Normalize(vDirection) * m_fSpeedPerSec * fTimeDelta;
+	else
+		vMove = XMVector3Normalize(vDirection) * m_fSpeedPerSec * fTimeDelta;
+
+	vPosition += vMove;
+	Set_State(STATE::POSITION, vPosition);
 }
 
 CTransform* CTransform::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

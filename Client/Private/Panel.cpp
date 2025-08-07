@@ -41,6 +41,8 @@ void CPanel::Late_Update(_float fTimeDelta)
 
 HRESULT CPanel::Render()
 {
+    __super::Render();
+
     return S_OK;
 }
 
@@ -55,10 +57,6 @@ HRESULT CPanel::Bind_ShaderResources()
 void CPanel::Free()
 {
     __super::Free();
-
-    Safe_Release(m_pTextureCom);
-    Safe_Release(m_pShaderCom);
-    Safe_Release(m_pVIBufferCom);
 
     for (auto& iter : m_Childs)
         Safe_Release(iter);

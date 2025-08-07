@@ -25,7 +25,7 @@ HRESULT CDecimalUI::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_iCurrentIndex = 0;
+	m_iTextureIdx = 0;
 
 	return S_OK;
 }
@@ -46,17 +46,7 @@ void CDecimalUI::Late_Update(_float fTimeDelta)
 
 HRESULT CDecimalUI::Render()
 {
-	if (FAILED(Bind_ShaderResources()))
-		return E_FAIL;
-
-	if (FAILED(m_pShaderCom->Begin(0)))
-		return E_FAIL;
-
-	if (FAILED(m_pVIBufferCom->Bind_Resources()))
-		return E_FAIL;
-
-	if (FAILED(m_pVIBufferCom->Render()))
-		return E_FAIL;
+	__super::Render();
 
 	return S_OK;
 }
@@ -115,8 +105,4 @@ CGameObject* CDecimalUI::Clone(void* pArg)
 void CDecimalUI::Free()
 {
 	__super::Free();
-
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pTextureCom);
-	Safe_Release(m_pVIBufferCom);
 }

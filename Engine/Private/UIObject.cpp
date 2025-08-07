@@ -67,6 +67,18 @@ void CUIObject::Late_Update(_float fTimeDelta)
 
 HRESULT CUIObject::Render()
 {
+    if (FAILED(Bind_ShaderResources()))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Begin(m_iShaderPassIdx)))
+        return E_FAIL;
+
+    if (FAILED(m_pVIBufferCom->Bind_Resources()))
+        return E_FAIL;
+
+    if (FAILED(m_pVIBufferCom->Render()))
+        return E_FAIL;
+
     return S_OK;
 }
 
@@ -81,7 +93,7 @@ HRESULT CUIObject::Bind_ShaderResources()
     if (FAILED(m_pOrthogonalCom->Bind_ProjMatrix(m_pShaderCom, "g_ProjMatrix")))
         return E_FAIL;
 
-    if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
+    if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", m_iTextureIdx)))
         return E_FAIL;
 
     return S_OK;
@@ -92,4 +104,7 @@ void CUIObject::Free()
     __super::Free();
 
     Safe_Release(m_pOrthogonalCom);
+    Safe_Release(m_pShaderCom);
+    Safe_Release(m_pTextureCom);
+    Safe_Release(m_pVIBufferCom);
 }

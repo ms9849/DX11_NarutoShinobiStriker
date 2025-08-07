@@ -30,6 +30,7 @@ private:
 	_float4x4	m_PipeLine_Matrices[ENUM_CLASS(D3DTS::END)];
 	_float4x4	m_PipeLine_InverseMatrices[ENUM_CLASS(D3DTS::END)];
 	_float4		m_vCamStates[ENUM_CLASS(STATE::END)];
+	_float4		m_vCamDirection = {};
 
 public:
 	static CPipeLine* Create();

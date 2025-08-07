@@ -65,7 +65,7 @@ HRESULT CCamera::Bind_Matrices()
 {
 	m_pGameInstance->Set_Pipeline_Matrix(D3DTS::VIEW, XMMatrixInverse(nullptr, XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr())));
 	m_pGameInstance->Set_Pipeline_Matrix(D3DTS::PROJ, XMMatrixPerspectiveFovLH(m_fFovy, m_fAspect, m_fNear, m_fFar));
-	
+
 	return S_OK;
 }
 

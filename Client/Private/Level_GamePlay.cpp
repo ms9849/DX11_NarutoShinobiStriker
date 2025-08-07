@@ -50,8 +50,6 @@ HRESULT CLevel_GamePlay::Render()
 
 HRESULT CLevel_GamePlay::Ready_Lights()
 {
-
-	
 	return S_OK;
 }
 

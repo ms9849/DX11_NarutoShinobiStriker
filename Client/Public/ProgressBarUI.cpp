@@ -48,17 +48,7 @@ void CProgressBarUI::Late_Update(_float fTimeDelta)
 
 HRESULT CProgressBarUI::Render()
 {
-	if (FAILED(Bind_ShaderResources()))
-		return E_FAIL;
-
-	if (FAILED(m_pShaderCom->Begin(0)))
-		return E_FAIL;
-
-	if (FAILED(m_pVIBufferCom->Bind_Resources()))
-		return E_FAIL;
-
-	if (FAILED(m_pVIBufferCom->Render()))
-		return E_FAIL;
+	__super::Render();
 
 	return S_OK;
 }
@@ -113,7 +103,7 @@ HRESULT CProgressBarUI::Ready_Components()
 HRESULT CProgressBarUI::Bind_ShaderResources()
 {
 	if(FAILED(__super::Bind_ShaderResources()))
-		return E_FAIL;
+		return E_FAIL;;
 
 	return S_OK;
 }
@@ -147,8 +137,4 @@ CGameObject* CProgressBarUI::Clone(void* pArg)
 void CProgressBarUI::Free()
 {
 	__super::Free();
-
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pTextureCom);
-	Safe_Release(m_pVIBufferCom);
 }

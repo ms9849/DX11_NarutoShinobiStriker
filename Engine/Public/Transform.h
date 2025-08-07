@@ -61,6 +61,9 @@ public:
 
 	void LookAt(_fvector vAt);
 
+	/* 정해진 지점으로 추적하는 함수. Lerp를 통해 깔끔하게 보간한다. */
+	void Chase(_fvector vTargetPos, _float fTimeDelta, _float fLimitDistance = 0.f, _bool isLerp = false);
+
 private:
 	_float				m_fSpeedPerSec = {};
 	_float				m_fRotationPerSec = {};
