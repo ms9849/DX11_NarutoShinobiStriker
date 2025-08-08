@@ -92,16 +92,13 @@ public:
 	void SetChannelVolume(CHANNELID eID, float fVolume);
 #pragma endregion
 
-#pragma region KEY_MANAGER
+#pragma region INPUT_MANAGER
 	_bool		Key_Pressing(_ubyte byKey);
 	_bool		Key_Up(_ubyte byKey);
 	_bool		Key_Down(_ubyte byKey);
-#pragma endregion
-
-#pragma region MOUSE_MANAGER
-	_bool	Mouse_Down(MOUSEKEYSTATE eMouse);
-	_bool	Mouse_Up(MOUSEKEYSTATE eMouse);
-	_long	Get_MouseMove(MOUSEMOVESTATE eMouseState);
+	_bool		Mouse_Down(MOUSEKEYSTATE eMouse);
+	_bool		Mouse_Up(MOUSEKEYSTATE eMouse);
+	_long		Get_MouseMove(MOUSEMOVESTATE eMouseState);
 #pragma endregion
 
 #pragma region IMGUI_MANAGER
@@ -119,8 +116,7 @@ private:
 	class CPicking*					m_pPicking = { nullptr };
 	class CPipeLine*				m_pPipeLine = { nullptr };
 	class CSound_Manager*			m_pSound_Manager = { nullptr };
-	class CKey_Manager*				m_pKey_Manager = { nullptr };
-	class CMouse_Manager*			m_pMouse_Manager = { nullptr };
+	class CInput_Manager*				m_pInput_Manager = { nullptr };
 	class CPooling_Manager*			m_pPooling_Manager = { nullptr };
 	class CIMGUI_Manager*			m_pIMGUI_Manager = { nullptr };
 

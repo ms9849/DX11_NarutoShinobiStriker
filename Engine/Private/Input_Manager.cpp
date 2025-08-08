@@ -1,10 +1,10 @@
-#include "Key_Manager.h"
+#include "Input_Manager.h"
 
-CKey_Manager::CKey_Manager()
+CInput_Manager::CInput_Manager()
 {
 }
 
-HRESULT CKey_Manager::Initialize(HINSTANCE hInst, HWND hWnd)
+HRESULT CInput_Manager::Initialize(HINSTANCE hInst, HWND hWnd)
 {
 	ZeroMemory(m_byKeyState, KEY_MAX);
 	ZeroMemory(m_byPreKeyState, KEY_MAX);
@@ -30,45 +30,67 @@ HRESULT CKey_Manager::Initialize(HINSTANCE hInst, HWND hWnd)
 	// 장치에 대한 access 버전을 받아오는 함수
 	m_pKeyBoard->Acquire();
 
+	// 마우스 객체 생성 및 할당.
+	if (FAILED(m_pInputSDK->CreateDevice(GUID_SysMouse, &m_pMouse, nullptr)))
+		return E_FAIL;
+
+	m_pMouse->SetDataFormat(&c_dfDIMouse);
+	m_pMouse->SetCooperativeLevel(hWnd, DISCL_BACKGROUND | DISCL_NONEXCLUSIVE);
+	m_pMouse->Acquire();
+
 	return S_OK;
 }
 
-void CKey_Manager::Update()
+void CInput_Manager::Update()
 {
 	memcpy(m_byPreKeyState, m_byKeyState, KEY_MAX);
 	m_pKeyBoard->GetDeviceState(KEY_MAX, m_byKeyState);
+
+	memcpy(&m_tPreMouseState, &m_tMouseState, sizeof(m_tMouseState));
+	m_pMouse->GetDeviceState(sizeof(m_tMouseState), &m_tMouseState);
 }
 
-_bool CKey_Manager::Key_Pressing(_ubyte byKey)
+_bool CInput_Manager::Key_Pressing(_ubyte byKey)
 {
 	return (m_byPreKeyState[byKey] & 0x80) && (m_byKeyState[byKey] & 0x80);
 }
 
-_bool CKey_Manager::Key_Down(_ubyte byKey)
+_bool CInput_Manager::Key_Down(_ubyte byKey)
 {
 	return (m_byPreKeyState[byKey] & 0x80) && (m_byKeyState[byKey] & 0x80);
 }
 
-_bool CKey_Manager::Key_Up(_ubyte byKey)
+_bool CInput_Manager::Key_Up(_ubyte byKey)
 {
 	return (m_byPreKeyState[byKey] & 0x80) && !(m_byKeyState[byKey] & 0x80);
 }
 
-CKey_Manager* CKey_Manager::Create(HINSTANCE hInstance, HWND hWnd)
+_bool CInput_Manager::Mouse_Down(MOUSEKEYSTATE eMouse)
 {
-	CKey_Manager* pInstance = new CKey_Manager();
+	return !m_tPreMouseState.rgbButtons[ENUM_CLASS(eMouse)] && m_tMouseState.rgbButtons[ENUM_CLASS(eMouse)];
+}
+
+_bool CInput_Manager::Mouse_Up(MOUSEKEYSTATE eMouse)
+{
+	return m_tPreMouseState.rgbButtons[ENUM_CLASS(eMouse)] && !m_tMouseState.rgbButtons[ENUM_CLASS(eMouse)];
+}
+
+CInput_Manager* CInput_Manager::Create(HINSTANCE hInstance, HWND hWnd)
+{
+	CInput_Manager* pInstance = new CInput_Manager();
 
 	if (FAILED(pInstance->Initialize(hInstance, hWnd)))
 	{
-		MSG_BOX("Created Failed : Key Manager");
+		MSG_BOX("Created Failed : Input Manager");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CKey_Manager::Free()
+void CInput_Manager::Free()
 {
+	Safe_Release(m_pMouse);
 	Safe_Release(m_pKeyBoard);
 	Safe_Release(m_pInputSDK);
 }

@@ -154,11 +154,8 @@
     <ClInclude Include="..\Public\Camera.h">
       <Filter>01.Utility\02.GameObjects\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Key_Manager.h">
+    <ClInclude Include="..\Public\Input_Manager.h">
       <Filter>01.Utility\97. Input\Key</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Mouse_Manager.h">
-      <Filter>01.Utility\97. Input\Mouse</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -270,10 +267,7 @@
     <ClCompile Include="..\Private\Camera.cpp">
       <Filter>01.Utility\02.GameObjects\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Mouse_Manager.cpp">
-      <Filter>01.Utility\97. Input\Mouse</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Key_Manager.cpp">
+    <ClCompile Include="..\Private\Input_Manager.cpp">
       <Filter>01.Utility\97. Input\Key</Filter>
     </ClCompile>
   </ItemGroup>
@@ -397,9 +391,6 @@
     </Filter>
     <Filter Include="01.Utility\97. Input\Key">
       <UniqueIdentifier>{e9569967-ad3f-4805-8a3d-1562d4830f60}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Utility\97. Input\Mouse">
-      <UniqueIdentifier>{e6ae7b75-12fe-4f77-96c1-df43a8c5c171}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

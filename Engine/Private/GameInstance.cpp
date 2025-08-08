@@ -7,8 +7,7 @@
 #include "Level_Manager.h"
 #include "Timer_Manager.h"
 #include "Sound_Manager.h"
-#include "Key_Manager.h"
-#include "Mouse_Manager.h"
+#include "Input_Manager.h"
 #include "Renderer.h"
 #include "PipeLine.h"
 #include "IMGUI_Manager.h"
@@ -53,12 +52,8 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	if (nullptr == m_pSound_Manager)
 		return E_FAIL;
 
-	m_pKey_Manager = CKey_Manager::Create(EngineDesc.hInstance, EngineDesc.hWnd);
-	if (nullptr == m_pKey_Manager)
-		return E_FAIL;
-
-	m_pMouse_Manager = CMouse_Manager::Create(EngineDesc.hInstance, EngineDesc.hWnd);
-	if (nullptr == m_pMouse_Manager)
+	m_pInput_Manager = CInput_Manager::Create(EngineDesc.hInstance, EngineDesc.hWnd);
+	if (nullptr == m_pInput_Manager)
 		return E_FAIL;
 
 	m_pPooling_Manager = CPooling_Manager::Create(EngineDesc.iNumLevels);
@@ -74,9 +69,8 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 
 void CGameInstance::Update_Engine(_float fTimeDelta)
 {
-	/* 키 매니저, 마우스 매니저 업데이트 */
-	m_pKey_Manager->Update();
-	m_pMouse_Manager->Update();
+	/* 인풋 매니저 업데이트 */
+	m_pInput_Manager->Update();
 
 	/* 객체 업데이트 계층 */
 	m_pObject_Manager->Priority_Update(fTimeDelta);
@@ -350,17 +344,17 @@ void CGameInstance::SetChannelVolume(CHANNELID eID, float fVolume)
 
 _bool CGameInstance::Key_Pressing(_ubyte byKey)
 {
-	return m_pKey_Manager->Key_Pressing(byKey);
+	return m_pInput_Manager->Key_Pressing(byKey);
 }
 
 _bool CGameInstance::Key_Up(_ubyte byKey)
 {
-	return m_pKey_Manager->Key_Up(byKey);
+	return m_pInput_Manager->Key_Up(byKey);
 }
 
 _bool CGameInstance::Key_Down(_ubyte byKey)
 {
-	return m_pKey_Manager->Key_Down(byKey);
+	return m_pInput_Manager->Key_Down(byKey);
 }
 
 #pragma endregion
@@ -369,17 +363,17 @@ _bool CGameInstance::Key_Down(_ubyte byKey)
 
 _bool CGameInstance::Mouse_Down(MOUSEKEYSTATE eMouse)
 {
-	return m_pMouse_Manager->Mouse_Down(eMouse);
+	return m_pInput_Manager->Mouse_Down(eMouse);
 }
 
 _bool CGameInstance::Mouse_Up(MOUSEKEYSTATE eMouse)
 {
-	return m_pMouse_Manager->Mouse_Up(eMouse);
+	return m_pInput_Manager->Mouse_Up(eMouse);
 }
 
 _long CGameInstance::Get_MouseMove(MOUSEMOVESTATE eMouseState)
 {
-	return m_pMouse_Manager->Get_MouseMove(eMouseState);
+	return m_pInput_Manager->Get_MouseMove(eMouseState);
 }
 
 #pragma endregion
@@ -409,8 +403,7 @@ void CGameInstance::Release_Engine()
 	Safe_Release(m_pLevel_Manager);
 	Safe_Release(m_pGraphic_Device);
 	Safe_Release(m_pSound_Manager);
-	Safe_Release(m_pKey_Manager);
-	Safe_Release(m_pMouse_Manager);
+	Safe_Release(m_pInput_Manager);
 	Safe_Release(m_pPooling_Manager);
 	Safe_Release(m_pIMGUI_Manager);
 	Safe_Release(m_pPipeLine);
