@@ -23,6 +23,13 @@ namespace Client
 
 		END 
 	};
+
+	enum class SHADER_VTXPOSTEX_IDX {
+		UI,
+		UI_PROGRESS_BAR,
+		UI_FADE_OUT,
+	};
+
 }
 
 using namespace Client;

@@ -3,6 +3,8 @@ matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 
 texture2D g_Texture;
 
+float g_Alpha;
+
 sampler DefaultSampler = sampler_state
 {
     Filter = MIN_MAG_MIP_LINEAR;
@@ -56,8 +58,19 @@ PS_OUT PS_MAIN(PS_IN In)
     Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
     
     /* 알파 테스팅. 블렌딩은 서치가 더 필요하다. */ 
-    if (Out.vColor.a < 0.3)
-       discard;
+    //if (Out.vColor.a < 0.3)
+    //   discard;
+    
+    return Out;
+}
+
+PS_OUT PS_FadeOut(PS_IN In)
+{
+    PS_OUT Out;
+    Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
+    
+    /* g_Alpha값 입력받아서 세팅해줄 수 있게 해야 한다. */
+    Out.vColor.a *= g_Alpha;
     
     return Out;
 }
@@ -70,5 +83,16 @@ technique11 DefaultTechnique
         PixelShader = compile ps_5_0 PS_MAIN();
     }
 
- 
+    pass UI_ProgressBar
+    {
+        VertexShader = compile vs_5_0 VS_MAIN();
+        PixelShader = compile ps_5_0 PS_MAIN();
+    }
+
+    pass UI_FadeOut
+    {
+        VertexShader = compile vs_5_0 VS_MAIN();
+        PixelShader = compile ps_5_0 PS_FadeOut();
+    }
+
 }

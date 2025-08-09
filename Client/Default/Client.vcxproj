@@ -153,11 +153,13 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Public\AttackType.h" />
     <ClInclude Include="..\Public\Button.h" />
     <ClInclude Include="..\Public\Camera_Manager.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\DecimalUI.h" />
     <ClInclude Include="..\Public\Dummy.h" />
+    <ClInclude Include="..\Public\GameManager.h" />
     <ClInclude Include="..\Public\Level_Edit.h" />
     <ClInclude Include="..\Public\Level_GamePlay.h" />
     <ClInclude Include="..\Public\Level_Loading.h" />
@@ -168,9 +170,12 @@
     <ClInclude Include="..\Public\LogoPanel.h" />
     <ClInclude Include="..\Public\MainApp.h" />
     <ClInclude Include="..\Public\Panel.h" />
+    <ClInclude Include="..\Public\Player.h" />
     <ClInclude Include="..\Public\PressAnyButtonUI.h" />
     <ClInclude Include="..\Public\ProgressBarUI.h" />
+    <ClInclude Include="..\Public\QuestLog.h" />
     <ClInclude Include="..\Public\RotationIconUI.h" />
+    <ClInclude Include="..\Public\Skill.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\TestButton.h" />
     <ClInclude Include="..\Public\TestCamera.h" />
@@ -183,10 +188,12 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Private\AttackType.cpp" />
     <ClCompile Include="..\Private\Button.cpp" />
     <ClCompile Include="..\Private\Camera_Manager.cpp" />
     <ClCompile Include="..\Private\DecimalUI.cpp" />
     <ClCompile Include="..\Private\Dummy.cpp" />
+    <ClCompile Include="..\Private\GameManager.cpp" />
     <ClCompile Include="..\Private\Level_Edit.cpp" />
     <ClCompile Include="..\Private\Level_GamePlay.cpp" />
     <ClCompile Include="..\Private\Level_Loading.cpp" />
@@ -197,8 +204,11 @@
     <ClCompile Include="..\Private\LogoPanel.cpp" />
     <ClCompile Include="..\Private\MainApp.cpp" />
     <ClCompile Include="..\Private\Panel.cpp" />
+    <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\Private\PressAnyButtonUI.cpp" />
+    <ClCompile Include="..\Private\QuestLog.cpp" />
     <ClCompile Include="..\Private\RotationIconUI.cpp" />
+    <ClCompile Include="..\Private\Skill.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\TestButton.cpp" />
     <ClCompile Include="..\Private\TestCamera.cpp" />

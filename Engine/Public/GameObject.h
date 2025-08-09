@@ -38,6 +38,8 @@ public:
 		m_isDead = bFlag;
 	}
 
+	_float Get_CamDistance() const;
+
 	class CComponent* Find_Component(const _wstring& strComponentTag);
 
 protected:

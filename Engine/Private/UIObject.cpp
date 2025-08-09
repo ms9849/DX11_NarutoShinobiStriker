@@ -42,7 +42,10 @@ HRESULT CUIObject::Initialize(void* pArg)
     m_fX = pDesc->fX;
     m_fY = pDesc->fY;
     m_fZ = pDesc->fZ;
+    m_fSizeX = pDesc->fSizeX;
+    m_fSizeY = pDesc->fSizeY;
     m_fAngle = pDesc->fAngle;
+
 
     m_pTransformCom->Set_Scale(pDesc->fSizeX, pDesc->fSizeY, 1.f);
 

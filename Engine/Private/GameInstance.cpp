@@ -396,17 +396,17 @@ void CGameInstance::Release_Engine()
 {
 	DestroyInstance();
 
+	Safe_Release(m_pIMGUI_Manager);
 	Safe_Release(m_pTimer_Manager);
 	Safe_Release(m_pRenderer);
 	Safe_Release(m_pPrototype_Manager);
 	Safe_Release(m_pObject_Manager);
 	Safe_Release(m_pLevel_Manager);
-	Safe_Release(m_pGraphic_Device);
 	Safe_Release(m_pSound_Manager);
 	Safe_Release(m_pInput_Manager);
 	Safe_Release(m_pPooling_Manager);
-	Safe_Release(m_pIMGUI_Manager);
 	Safe_Release(m_pPipeLine);
+	Safe_Release(m_pGraphic_Device);
 }
 
 void CGameInstance::Free()

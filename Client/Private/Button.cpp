@@ -74,8 +74,4 @@ _bool CButton::IsHovered()
 void CButton::Free()
 {
 	__super::Free();
-
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pTextureCom);
-	Safe_Release(m_pVIBufferCom);
 }

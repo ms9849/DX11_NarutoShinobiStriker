@@ -49,6 +49,7 @@ protected:
 	// 빌보드 패턴은 안쓸수도 있고, 로직이 긴 편은 아니라서 생략.
 	// class CBillBoard* m_pBillBoard = { nullptr };
 	_float m_fX{}, m_fY{}, m_fZ{};
+	_float m_fSizeX{}, m_fSizeY{};
 	_float m_fAngle{};
 	_uint  m_iShaderPassIdx = {0};
 	_uint  m_iTextureIdx = { 0 };

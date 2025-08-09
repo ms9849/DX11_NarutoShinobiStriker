@@ -38,7 +38,9 @@ void CPressAnyButtonUI::Update(_float fTimeDelta)
         m_bTriggered = true;
 
     if (m_bTriggered)
+    {
         Play_Animation(fTimeDelta);
+    }
 }
 
 void CPressAnyButtonUI::Late_Update(_float fTimeDelta)
@@ -57,13 +59,20 @@ void CPressAnyButtonUI::Play_Animation(_float fTimeDelta)
 {
     m_fTimeAcc += fTimeDelta;
 
-    if (m_fTimeAcc >= 0.1f && m_iTextureIdx < 2)
+    if (m_fTimeAcc >= 0.05f && m_iTextureIdx < 2)
     {
         m_iTextureIdx++;
         m_fTimeAcc = 0.f;
     }
 
-    if (m_fTimeAcc > 1.5f)
+    if (m_fTimeAcc < m_fMaxTimeAcc && m_iTextureIdx == 2)
+    {
+        m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADE_OUT);
+        /* 원래 사이즈에서 m_fMaxTimeAcc 까지 커짐. */
+        m_pTransformCom->Set_Scale(m_fSizeX * (1 + m_fTimeAcc * 3.f), m_fSizeY * (1 + m_fTimeAcc * 5.f), 1.f);
+    }
+
+    else if (m_fTimeAcc >= m_fMaxTimeAcc && m_iTextureIdx == 2)
         m_pGameInstance->Request_LevelChange();
 }
 
@@ -88,6 +97,9 @@ HRESULT CPressAnyButtonUI::Bind_ShaderResources()
 {
     if (FAILED(__super::Bind_ShaderResources()))
         return E_FAIL;
+
+    if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADE_OUT))
+        m_pShaderCom->Bind_Float("g_Alpha", (m_fMaxTimeAcc - m_fTimeAcc) / m_fMaxTimeAcc);
 
     return S_OK;
 }
