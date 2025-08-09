@@ -8,6 +8,11 @@
 #include "DirectXTK/DDSTextureLoader.h"
 #include "DirectXTK/WICTextureLoader.h"
 #include "FX11/d3dx11effect.h"
+
+/* assimp library */
+#include "assimp/scene.h"
+#include "assimp/postprocess.h"
+#include "assimp/Importer.hpp"
 using namespace DirectX;
 
 #define KEY_MAX		256 
