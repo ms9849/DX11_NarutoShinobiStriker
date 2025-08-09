@@ -113,10 +113,9 @@ private:
 	class CPrototype_Manager*		m_pPrototype_Manager = { nullptr };
 	class CObject_Manager*			m_pObject_Manager = { nullptr };
 	class CRenderer*				m_pRenderer = { nullptr };
-	class CPicking*					m_pPicking = { nullptr };
 	class CPipeLine*				m_pPipeLine = { nullptr };
 	class CSound_Manager*			m_pSound_Manager = { nullptr };
-	class CInput_Manager*				m_pInput_Manager = { nullptr };
+	class CInput_Manager*			m_pInput_Manager = { nullptr };
 	class CPooling_Manager*			m_pPooling_Manager = { nullptr };
 	class CIMGUI_Manager*			m_pIMGUI_Manager = { nullptr };
 

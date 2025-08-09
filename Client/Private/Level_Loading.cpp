@@ -22,7 +22,7 @@ HRESULT CLevel_Loading::Initialize(LEVEL eNextLevelID)
 	if (nullptr == m_pLoader)
 		return E_FAIL;
 
-	/* 이 레벨을 구성하기위한 객체를 만든다. */
+	///* 이 레벨을 구성하기위한 객체를 만든다. */
 	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
 		return E_FAIL;
 

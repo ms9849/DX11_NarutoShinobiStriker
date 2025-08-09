@@ -11,8 +11,8 @@ CTexture::CTexture(const CTexture& rhs)
     , m_iNumSRVs { rhs.m_iNumSRVs }
     , m_SRVs { rhs.m_SRVs }
 {
-    for (auto& iter : m_SRVs)
-        Safe_AddRef(iter);
+    for (auto& pSRV : m_SRVs)
+        Safe_AddRef(pSRV);
 }
 
 HRESULT CTexture::Initialize_Prototype(const _tchar* pTextureFilePath, _uint iNumTextures)
@@ -90,10 +90,8 @@ void CTexture::Free()
 {
     __super::Free();
     
-    for (auto& iter : m_SRVs)
-    {
-        Safe_Release(iter);
-    }
+    for (auto& pSRV : m_SRVs)
+        Safe_Release(pSRV);
 
     m_SRVs.clear();
 }

@@ -76,11 +76,11 @@ HRESULT CTimerPanel::Ready_Decimals()
 			break;
 
 		case 1:
-			Desc = CUIObject::CreateDesc(m_fX + 7, m_fY + 7, m_fZ - 0.05f, 90.f, 45.f, 0.f);
+			Desc = CUIObject::CreateDesc(m_fX + 7, m_fY + 7, m_fZ - 0.10f, 90.f, 45.f, 0.f);
 			break;
 
 		case 2:
-			Desc = CUIObject::CreateDesc(m_fX + 37, m_fY + 7, m_fZ - 0.05f, 90.f, 45.f, 0.f);
+			Desc = CUIObject::CreateDesc(m_fX + 37, m_fY + 7, m_fZ - 0.15f, 90.f, 45.f, 0.f);
 			break;
 
 		default:

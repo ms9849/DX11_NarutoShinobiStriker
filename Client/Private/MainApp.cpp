@@ -10,11 +10,15 @@
 #include "LoadingBarPanel.h"
 #include "ProgressBarUI.h"
 
+#include "GameManager.h"
+
 /* 테스트 브랜치용 주석 */
 Client::CMainApp::CMainApp()	
 	: m_pGameInstance { CGameInstance::GetInstance() }
+	, m_pGameManager { CGameManager::GetInstance() }
 {
 	Safe_AddRef(m_pGameInstance);
+	Safe_AddRef(m_pGameManager);
 }
 
 HRESULT Client::CMainApp::Initialize()
@@ -64,6 +68,26 @@ HRESULT Client::CMainApp::Render()
 
 HRESULT CMainApp::Ready_Default_Setting()
 {
+	D3D11_BLEND_DESC Desc = {};
+
+	Desc.AlphaToCoverageEnable = false;
+	Desc.IndependentBlendEnable = false;
+	Desc.RenderTarget[0].BlendEnable = true;
+	Desc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA; // 소스 알파 값
+	Desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA; // 대상 알파 값의 역수
+	Desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD; // 더하기 연산
+	Desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE; // 소스 알파 값을 1,
+	Desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO; // 대상 알파 값 0로.
+	Desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD; // 더하기 연산
+	Desc.RenderTarget[0].RenderTargetWriteMask = 0x0f;
+
+	ID3D11BlendState* pBlendState;
+	if(FAILED(m_pDevice->CreateBlendState(&Desc, &pBlendState)))
+		return E_FAIL;
+
+	m_pContext->OMSetBlendState(pBlendState, nullptr, 0xffffffff);
+	Safe_Release(pBlendState); 
+
 	return S_OK;
 }
 
@@ -164,8 +188,9 @@ void Client::CMainApp::Free()
 
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);
-
 	m_pGameInstance->Release_Engine();
+	Safe_Release(m_pGameInstance);
 
-	Safe_Release(m_pGameInstance);	
+	m_pGameManager->Release_GameManager();
+	Safe_Release(m_pGameManager);
 }

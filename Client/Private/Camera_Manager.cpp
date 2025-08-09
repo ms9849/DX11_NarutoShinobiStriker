@@ -3,7 +3,7 @@
 #include "Camera.h"
 #include "GameInstance.h"
 
-IMPLEMENT_SINGLETON(CCamera_Manager);
+//IMPLEMENT_SINGLETON(CCamera_Manager);
 
 CCamera_Manager::CCamera_Manager()
     : m_pGameInstance { CGameInstance::GetInstance()}
@@ -49,9 +49,9 @@ HRESULT CCamera_Manager::Change_Camera(const _wstring& strCameraTag)
 
 void CCamera_Manager::Release_CameraManager()
 {
-    DestroyInstance();
+    //DestroyInstance();
 
-    Safe_Release(m_pGameInstance);
+    //Safe_Release(m_pGameInstance);
 }
 
 void CCamera_Manager::Free()

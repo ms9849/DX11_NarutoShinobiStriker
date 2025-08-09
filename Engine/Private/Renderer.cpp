@@ -62,12 +62,12 @@ void CRenderer::Render_NonBlend()
 	m_RenderObjects[ENUM_CLASS(RENDER::NONBLEND)].clear();
 }
 
-
-
-
 void CRenderer::Render_Blend()
 {
-
+	m_RenderObjects[ENUM_CLASS(RENDER::BLEND)].sort([](CGameObject* pSour, CGameObject* pDest)->_bool
+	{
+		return static_cast<CGameObject*>(pSour)->Get_CamDistance() > static_cast<CGameObject*>(pDest)->Get_CamDistance();
+	});
 
 	for (auto& pRenderObject : m_RenderObjects[ENUM_CLASS(RENDER::BLEND)])
 	{
@@ -82,6 +82,11 @@ void CRenderer::Render_Blend()
 
 void CRenderer::Render_UI()
 {
+	m_RenderObjects[ENUM_CLASS(RENDER::UI)].sort([](CGameObject* pSour, CGameObject* pDest)->_bool
+		{
+			return static_cast<CGameObject*>(pSour)->Get_CamDistance() > static_cast<CGameObject*>(pDest)->Get_CamDistance();
+		});
+
 	for (auto& pRenderObject : m_RenderObjects[ENUM_CLASS(RENDER::UI)])
 	{
 		if (nullptr != pRenderObject)

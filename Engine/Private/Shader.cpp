@@ -96,6 +96,19 @@ HRESULT CShader::Bind_SRV(const _char* pConstantName, ID3D11ShaderResourceView* 
     return pSRVariable->SetResource(pSRV);
 }
 
+HRESULT CShader::Bind_Float(const _char* pConstantName, _float fValue)
+{
+    ID3DX11EffectVariable* pVariable = m_pEffect->GetVariableByName(pConstantName);
+    if (nullptr == pVariable)
+        return E_FAIL;
+
+    ID3DX11EffectScalarVariable* pScalarVariable = pVariable->AsScalar();
+    if (nullptr == pScalarVariable)
+        return E_FAIL;
+
+    return pScalarVariable->SetFloat(fValue);
+}
+
 HRESULT CShader::Begin(_uint iPassIndex)
 {
     if (iPassIndex >= m_iNumPasses)
@@ -141,4 +154,6 @@ void CShader::Free()
 
     for (auto& pInputLayout : m_InputLayouts)
         Safe_Release(pInputLayout);
+
+    m_InputLayouts.clear();
 }

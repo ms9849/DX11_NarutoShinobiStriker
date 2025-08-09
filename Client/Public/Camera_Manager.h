@@ -12,7 +12,7 @@ NS_BEGIN(Client)
 
 class CCamera_Manager final: public CBase
 {
-	DECLARE_SINGLETON(CCamera_Manager);
+	//DECLARE_SINGLETON(CCamera_Manager);
 
 private:
 	CCamera_Manager();

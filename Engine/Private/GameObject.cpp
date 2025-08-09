@@ -5,8 +5,8 @@
 CGameObject::CGameObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iObjectID)
 	: m_pDevice { pDevice }
 	, m_pContext { pContext }
-	, m_iObjectID{ iObjectID }
 	, m_pGameInstance { CGameInstance::GetInstance() }
+	, m_iObjectID{ iObjectID }
 {
 	Safe_AddRef(m_pGameInstance);
 	Safe_AddRef(m_pDevice);
@@ -74,6 +74,12 @@ void CGameObject::Set_Desc(GAMEOBJECT_DESC* pDesc)
 }
 
 
+_float CGameObject::Get_CamDistance() const
+{
+	_float fDist = XMVectorGetZ(m_pTransformCom->Get_State(STATE::POSITION));
+	return  fDist;
+}
+
 CComponent* CGameObject::Find_Component(const _wstring& strComponentTag)
 {
 	auto	iter = m_Components.find(strComponentTag);
@@ -127,8 +133,8 @@ void CGameObject::Free()
 
 	m_Components.clear();
 
+	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pGameInstance);
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);
-	Safe_Release(m_pTransformCom);
 }

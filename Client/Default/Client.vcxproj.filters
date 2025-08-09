@@ -97,6 +97,21 @@
     <Filter Include="02.GameObjects\UI\ProgressBar">
       <UniqueIdentifier>{fa5b1260-e0e3-4753-ae0b-a2b06e181e9b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Player">
+      <UniqueIdentifier>{39f86bc5-1f38-4606-85c7-c84d7b014e48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Quest">
+      <UniqueIdentifier>{b5ecb75a-93ed-45be-8999-be4af82451ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="96. GameManager">
+      <UniqueIdentifier>{cbbcf245-a0c9-476e-9bd0-e4b7f4ee4ef1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Player\Skill">
+      <UniqueIdentifier>{64e4eb31-93a9-41c9-96d4-282cea9d45cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Player\AttackType">
+      <UniqueIdentifier>{71d96ae9-ca0d-4697-ad1f-54adea515f39}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -182,6 +197,21 @@
     </ClInclude>
     <ClInclude Include="..\Public\LoadingBarPanel.h">
       <Filter>02.GameObjects\UI\Panel\LOADING\LoadingBarPanel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player.h">
+      <Filter>02.GameObjects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\GameManager.h">
+      <Filter>96. GameManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\QuestLog.h">
+      <Filter>03. Quest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Skill.h">
+      <Filter>02.GameObjects\Player\Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AttackType.h">
+      <Filter>02.GameObjects\Player\AttackType</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -269,6 +299,21 @@
     </ClCompile>
     <ClCompile Include="..\Private\LoadingBarPanel.cpp">
       <Filter>02.GameObjects\UI\Panel\LOADING\LoadingBarPanel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player.cpp">
+      <Filter>02.GameObjects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\GameManager.cpp">
+      <Filter>96. GameManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\QuestLog.cpp">
+      <Filter>03. Quest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Skill.cpp">
+      <Filter>02.GameObjects\Player\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AttackType.cpp">
+      <Filter>02.GameObjects\Player\AttackType</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
