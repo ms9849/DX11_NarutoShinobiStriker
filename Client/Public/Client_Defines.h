@@ -15,12 +15,13 @@ namespace Client
 	모든 객체는 고유한 ID를 가지게 된다.
 	*/
 	enum class OBJECTID { 
-		BACKGROUND, DUMMY, TERRAIN,
+		BACKGROUND, DUMMY, TERRAIN, PLAYER, ENEMY,
+		
 		TESTPANEL, TESTBUTTON, 
 		LOGO_PANEL, LOADING_PANEL, LOADINGBAR_PANEL,
 		DECIMAL_UI, TIMER_UI, TITLE_UI, PRESSANYBUTTON_UI, ROTATIONICON_UI, PROGRESSBAR_UI,
+		
 		TEST_CAMERA,
-
 		END 
 	};
 
@@ -30,6 +31,12 @@ namespace Client
 		UI_FADE_OUT,
 	};
 
+	enum class CHARACTER_ATTACK_TYPE {
+		MELEE, // 체술 ( 나선환 + 나선 수리검 )
+		SHOOTING, // 인술 ( 치도리 호화구 )
+		DEFENSIVE, // 방어형 (토둔 + 목둔)
+		//수둔형이 필요하다면 그건 나중에 구현할 것..
+	};
 }
 
 using namespace Client;

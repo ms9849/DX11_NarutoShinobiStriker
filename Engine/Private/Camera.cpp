@@ -58,7 +58,7 @@ void CCamera::Late_Update(_float fTimeDelta)
 
 HRESULT CCamera::Render()
 {
-    return S_OK;
+	return S_OK;
 }
 
 HRESULT CCamera::Bind_Matrices()

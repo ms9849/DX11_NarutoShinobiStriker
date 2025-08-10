@@ -41,10 +41,10 @@ HRESULT CTransform::Initialize(void* pArg)
 	/* 월드 행렬 Identity 수행, Store함수로 저장해주는 것을 볼 수 있다 */
 	XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
 
+	TRANSFORM_DESC* pDesc = static_cast<TRANSFORM_DESC*>(pArg);
+
 	if (nullptr == pArg)
 		return S_OK;
-
-	TRANSFORM_DESC* pDesc = static_cast<TRANSFORM_DESC*>(pArg);
 
 	m_fSpeedPerSec = pDesc->fSpeedPerSec;
 	m_fRotationPerSec = pDesc->fRotationPerSec;

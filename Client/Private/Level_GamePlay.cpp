@@ -85,12 +85,16 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const _wstring& strLayerTag)
 
 HRESULT CLevel_GamePlay::Ready_Layer_Player(const _wstring& strLayerTag)
 {
-	/*for (size_t i = 0; i < 1; i++)
+	CGameObject::GAMEOBJECT_DESC Desc;
+	Desc.fSpeedPerSec = 5.f;
+	Desc.fRotationPerSec = XMConvertToRadians(180.f);
+
+	for (size_t i = 0; i < 1; i++)
 	{
-		if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Player"),
-			ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag)))
+		if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Player"),
+			ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
 			return E_FAIL;
-	}*/
+	}
 	
 
 	return S_OK;
