@@ -157,6 +157,9 @@
     <ClInclude Include="..\Public\Input_Manager.h">
       <Filter>01.Utility\97. Input\Key</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Mesh.h">
+      <Filter>01.Utility\03.Components\Model\Mesh</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\Model.h">
       <Filter>01.Utility\03.Components\Model</Filter>
     </ClInclude>
@@ -272,6 +275,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Input_Manager.cpp">
       <Filter>01.Utility\97. Input\Key</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Mesh.cpp">
+      <Filter>01.Utility\03.Components\Model\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Model.cpp">
       <Filter>01.Utility\03.Components\Model</Filter>

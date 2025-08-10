@@ -10,6 +10,9 @@
 #include "LoadingBarPanel.h"
 #include "ProgressBarUI.h"
 
+#include "Model.h"
+#include "Player.h"
+
 #include "GameManager.h"
 
 /* 테스트 브랜치용 주석 */
@@ -101,9 +104,24 @@ HRESULT CMainApp::Start_Level(LEVEL eLevelID)
 
 HRESULT CMainApp::Ready_Prototypes()
 {
+	/* For.Prototype_GameObject_Player */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Player"),
+		CPlayer::Create(m_pDevice, m_pContext, OBJECTID::PLAYER))))
+		return E_FAIL;
+
 	/* For.Prototype_GameObject_Dummy */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Dummy"),
 		CDummy::Create(m_pDevice, m_pContext, OBJECTID::DUMMY))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Fiona */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_Fiona"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Fiona/Fiona.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_Fiona */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Fiona"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Fiona/fiona_D.png"), 1))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Pooling*/
@@ -124,6 +142,11 @@ HRESULT CMainApp::Ready_Prototypes()
 	/* For.Prototype_Component_Shader_VtxNorTex */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxNorTex"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxNorTex.hlsl"), VTXNORTEX::Elements, VTXNORTEX::iNumElements))))
+		return E_FAIL;
+	
+	/* For.Prototype_Component_Shader_VtxMesh */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxMesh"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxMesh.hlsl"), VTXMESH::Elements, VTXMESH::iNumElements))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Texture_LoadingPanel */
@@ -188,6 +211,7 @@ void Client::CMainApp::Free()
 
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);
+
 	m_pGameInstance->Release_Engine();
 	Safe_Release(m_pGameInstance);
 
