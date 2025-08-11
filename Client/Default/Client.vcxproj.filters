@@ -97,20 +97,35 @@
     <Filter Include="02.GameObjects\UI\ProgressBar">
       <UniqueIdentifier>{fa5b1260-e0e3-4753-ae0b-a2b06e181e9b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Player">
-      <UniqueIdentifier>{39f86bc5-1f38-4606-85c7-c84d7b014e48}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03. Quest">
       <UniqueIdentifier>{b5ecb75a-93ed-45be-8999-be4af82451ce}</UniqueIdentifier>
     </Filter>
     <Filter Include="96. GameManager">
       <UniqueIdentifier>{cbbcf245-a0c9-476e-9bd0-e4b7f4ee4ef1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Player\Skill">
-      <UniqueIdentifier>{64e4eb31-93a9-41c9-96d4-282cea9d45cb}</UniqueIdentifier>
+    <Filter Include="02.GameObjects\Character">
+      <UniqueIdentifier>{7febea39-ff99-491d-9fa7-837adb0fe75e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Player\Skill\Rasengan">
-      <UniqueIdentifier>{b0ed33fa-32d9-4aec-a583-794ed26a0433}</UniqueIdentifier>
+    <Filter Include="02.GameObjects\Character\Player">
+      <UniqueIdentifier>{39f86bc5-1f38-4606-85c7-c84d7b014e48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Enemy">
+      <UniqueIdentifier>{34935787-5105-4ed4-aea5-eae298f28013}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Skill">
+      <UniqueIdentifier>{3cfbfd6f-0c65-4c0d-addc-22c944de628d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Panel\GAMEPLAY">
+      <UniqueIdentifier>{ec2f7ddd-4c4e-4c70-b493-20b5068f14dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Panel\GAMEPLAY\SkillSlotPanel">
+      <UniqueIdentifier>{d2a5ee04-8fd4-47d6-b481-c423cf0581b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Panel\GAMEPLAY\SkillSlotPanel\SpecialSkillSlot">
+      <UniqueIdentifier>{204aaa34-956a-4cff-a3ce-5a2486f58cd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Panel\GAMEPLAY\SkillSlotPanel\SkillSlot">
+      <UniqueIdentifier>{f14b89e7-2e67-4cf8-9468-1a82f3937eed}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -198,9 +213,6 @@
     <ClInclude Include="..\Public\QuestLog.h">
       <Filter>03. Quest</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Skill.h">
-      <Filter>02.GameObjects\Player\Skill</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\ProgressBarUI.h">
       <Filter>02.GameObjects\UI\ProgressBar</Filter>
     </ClInclude>
@@ -208,7 +220,19 @@
       <Filter>02.GameObjects\UI\Panel\Timer\Decimal</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Player.h">
-      <Filter>02.GameObjects\Player</Filter>
+      <Filter>02.GameObjects\Character\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Character.h">
+      <Filter>02.GameObjects\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Skill_Table.h">
+      <Filter>02.GameObjects\Character\Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SkillSlot.h">
+      <Filter>02.GameObjects\UI\Panel\GAMEPLAY\SkillSlotPanel\SkillSlot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SkillSlotPanel.h">
+      <Filter>02.GameObjects\UI\Panel\GAMEPLAY\SkillSlotPanel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -297,9 +321,6 @@
     <ClCompile Include="..\Private\QuestLog.cpp">
       <Filter>03. Quest</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Skill.cpp">
-      <Filter>02.GameObjects\Player\Skill</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\ProgressBarUI.cpp">
       <Filter>02.GameObjects\UI\ProgressBar</Filter>
     </ClCompile>
@@ -307,7 +328,16 @@
       <Filter>02.GameObjects\UI\Panel\Timer\Decimal</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Player.cpp">
-      <Filter>02.GameObjects\Player</Filter>
+      <Filter>02.GameObjects\Character\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Character.cpp">
+      <Filter>02.GameObjects\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SkillSlot.cpp">
+      <Filter>02.GameObjects\UI\Panel\GAMEPLAY\SkillSlotPanel\SkillSlot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SkillSlotPanel.cpp">
+      <Filter>02.GameObjects\UI\Panel\GAMEPLAY\SkillSlotPanel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

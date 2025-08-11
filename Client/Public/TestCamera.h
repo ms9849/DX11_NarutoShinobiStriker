@@ -12,11 +12,6 @@ public:
 		_float fMouseSensitiy;
 	} TEST_CAMERA_DESC;
 
-	enum class TESTCAMERA_STATE
-	{
-		IDLE,
-		SLOPE,
-	};
 private:
 	CTestCamera(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	CTestCamera(const CTestCamera& rhs);
@@ -34,7 +29,6 @@ private:
 	_float m_fMouseSensivity = { 0.f };
 	_float m_fSlopeTime = { 1.f };
 	_float m_vSlopeDir = { 0.f };
-	TESTCAMERA_STATE m_eState = { TESTCAMERA_STATE::IDLE };
 
 public:
 	static CTestCamera* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);

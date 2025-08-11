@@ -1,15 +1,20 @@
 #include "DecimalUI.h"
 
 #include "GameInstance.h"
+#include "GameManager.h"
 
 CDecimalUI::CDecimalUI(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 	: CUIObject { pDevice, pContext, ENUM_CLASS(eObjectID) }
+	, m_pGameManager { CGameManager::GetInstance() }
 {
+	Safe_AddRef(m_pGameManager);
 }
 
 CDecimalUI::CDecimalUI(const CDecimalUI& rhs)
 	: CUIObject { rhs }
+	, m_pGameManager{ CGameManager::GetInstance() }
 {
+	Safe_AddRef(m_pGameManager);
 }
 
 HRESULT CDecimalUI::Initialize_Prototype()
@@ -61,7 +66,7 @@ HRESULT CDecimalUI::Ready_Components()
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_DecimalUI"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(m_pGameManager->Get_NextLevel()), TEXT("Prototype_Component_Texture_DecimalUI"),
 		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 		return E_FAIL;
 
@@ -105,4 +110,6 @@ CGameObject* CDecimalUI::Clone(void* pArg)
 void CDecimalUI::Free()
 {
 	__super::Free();
+
+	Safe_Release(m_pGameManager);
 }

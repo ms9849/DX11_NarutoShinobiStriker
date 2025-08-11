@@ -2,15 +2,20 @@
 
 #include "TestButton.h"
 #include "GameInstance.h"
+#include "GameManager.h"
 
 CPanel::CPanel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CUIObject { pDevice, pContext, ENUM_CLASS(eObjectID) }
+    , m_pGameManager { CGameManager::GetInstance() }
 {
+    Safe_AddRef(m_pGameManager);
 }
 
 CPanel::CPanel(const CPanel& rhs)
     : CUIObject { rhs }
+    , m_pGameManager{ CGameManager::GetInstance() }
 {
+    Safe_AddRef(m_pGameManager);
 }
 
 HRESULT CPanel::Initialize_Prototype()
@@ -62,4 +67,6 @@ void CPanel::Free()
         Safe_Release(iter);
 
     m_Childs.clear();
+
+    Safe_Release(m_pGameManager);
 }

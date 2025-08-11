@@ -1,12 +1,17 @@
 #include "Player.h"
 
-#include "Model.h"
-
 #include "GameInstance.h"
 #include "GameManager.h"
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
-	: CGameObject{ pDevice, pContext, ENUM_CLASS(eObjectID)}
+	: CCharacter { pDevice, pContext, eObjectID }
+	, m_pGameManager{ CGameManager::GetInstance() }
+{
+	Safe_AddRef(m_pGameManager);
+}
+
+CPlayer::CPlayer(const CPlayer& rhs)
+	: CCharacter{ rhs }
 	, m_pGameManager{ CGameManager::GetInstance() }
 {
 	Safe_AddRef(m_pGameManager);
@@ -25,6 +30,15 @@ HRESULT CPlayer::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+	/* 게임 매니저에 현재 플레이어 정보 세팅. 레벨 변경되도 안전할거니까.. */
+	m_pGameManager->Set_PlayerPtr(this);
+
+	/* 플레이어는 모든 스킬을 사용할 수 있다. */
+	for (_uint i = 0; i < ENUM_CLASS(SKILL::END); ++i)
+	{
+		m_Skills.emplace(static_cast<SKILL>(i), g_SkillTable[i]);
+	}
+
 	return S_OK;
 }
 
@@ -39,19 +53,14 @@ void CPlayer::Update(_float fTimeDelta)
 
 void CPlayer::Late_Update(_float fTimeDelta)
 {
+	__super::Change_AttackType();
+
 	m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 
 HRESULT CPlayer::Render()
 {
-	if (FAILED(Bind_ShaderResources()))
-		return E_FAIL;
-
-	if (FAILED(m_pShaderCom->Begin(0)))
-		return E_FAIL;
-
-	if (FAILED(m_pModelCom->Render()))
-		return E_FAIL;
+	__super::Render();
 
 	return S_OK;
 }
@@ -71,24 +80,6 @@ HRESULT CPlayer::Ready_Components()
 	/* Com_Texture */
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Fiona"),
 		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
-		return E_FAIL;
-
-	return S_OK;
-}
-
-HRESULT CPlayer::Bind_ShaderResources()
-{
-	/*m_pShaderCom->Bind_Matrix("g_WorldMatrix", );*/
-	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
-		return E_FAIL;
-
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", m_pGameInstance->Get_PipeLine_Float4x4(D3DTS::VIEW))))
-		return E_FAIL;
-
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_PipeLine_Float4x4(D3DTS::PROJ))))
-		return E_FAIL;
-
-	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
 		return E_FAIL;
 
 	return S_OK;
@@ -148,7 +139,4 @@ void CPlayer::Free()
 	__super::Free();
 
 	Safe_Release(m_pGameManager);
-	Safe_Release(m_pModelCom);
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pTextureCom);
 }

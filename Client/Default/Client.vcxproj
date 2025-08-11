@@ -155,6 +155,7 @@
   <ItemGroup>
     <ClInclude Include="..\Public\Button.h" />
     <ClInclude Include="..\Public\Camera_Manager.h" />
+    <ClInclude Include="..\Public\Character.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\DecimalUI.h" />
     <ClInclude Include="..\Public\Dummy.h" />
@@ -174,7 +175,9 @@
     <ClInclude Include="..\Public\ProgressBarUI.h" />
     <ClInclude Include="..\Public\QuestLog.h" />
     <ClInclude Include="..\Public\RotationIconUI.h" />
-    <ClInclude Include="..\Public\Skill.h" />
+    <ClInclude Include="..\Public\SkillSlot.h" />
+    <ClInclude Include="..\Public\SkillSlotPanel.h" />
+    <ClInclude Include="..\Public\Skill_Table.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\TestButton.h" />
     <ClInclude Include="..\Public\TestCamera.h" />
@@ -189,6 +192,7 @@
   <ItemGroup>
     <ClCompile Include="..\Private\Button.cpp" />
     <ClCompile Include="..\Private\Camera_Manager.cpp" />
+    <ClCompile Include="..\Private\Character.cpp" />
     <ClCompile Include="..\Private\DecimalUI.cpp" />
     <ClCompile Include="..\Private\Dummy.cpp" />
     <ClCompile Include="..\Private\GameManager.cpp" />
@@ -207,7 +211,8 @@
     <ClCompile Include="..\Private\ProgressBarUI.cpp" />
     <ClCompile Include="..\Private\QuestLog.cpp" />
     <ClCompile Include="..\Private\RotationIconUI.cpp" />
-    <ClCompile Include="..\Private\Skill.cpp" />
+    <ClCompile Include="..\Private\SkillSlot.cpp" />
+    <ClCompile Include="..\Private\SkillSlotPanel.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\TestButton.cpp" />
     <ClCompile Include="..\Private\TestCamera.cpp" />

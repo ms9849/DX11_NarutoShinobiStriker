@@ -18,16 +18,22 @@ private:
 	virtual ~CGameManager() = default;
 
 public:
-	HRESULT Initialize();
-	void	Release_GameManager();
+	HRESULT		Initialize_GameManager();
+	void		Release_GameManager();
 
 public:
 	HRESULT Set_PlayerPtr(class CPlayer* pPlayer);
 	HRESULT Set_QuestPtr(class CQuestLog* pQuestLog);
+	HRESULT	Set_NextLevelID(LEVEL eLevelID);
+
+public:
+	LEVEL Get_NextLevel();
+	
 private:
 	class CPlayer* m_pPlayer = {};
 	class CQuestLog* m_pQuestLog = {};
 	CGameInstance* m_pGameInstance = { nullptr };
+	LEVEL			m_eNextLevel = {};
 
 public:
 	virtual void Free() override;

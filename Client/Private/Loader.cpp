@@ -7,12 +7,15 @@
 #include "TestPanel.h"
 #include "TestButton.h"
 
-#include "TimerPanel.h"
-#include "DecimalUI.h"
-
 #include "LogoPanel.h"
 #include "TitleUI.h"
 #include "PressAnyButtonUI.h"
+
+#include "SkillSlotPanel.h"
+#include "SkillSlot.h"
+
+#include "TimerPanel.h"
+#include "DecimalUI.h"
 
 #include "GameInstance.h"
 
@@ -92,26 +95,6 @@ HRESULT CLoader::Loading_For_Logo()
 	m_fLoadingProgress += 0.4f;
 	m_strMessage = TEXT("텍스쳐를(을) 로딩 중 입니다.");
 
-	/* For.Prototype_Component_Texture_Panel */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_Panel"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Panel/Panel%d.png"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_Button */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_Button"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Button/Button%d.png"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_TimerPanel */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_TimerUI"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Timer/Timer%d.png"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_DecimalUI */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_DecimalUI"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Decimal/Decimal%d.png"), 10))))
-		return E_FAIL;
-
 	/* For.Prototype_Component_Texture_LogoPanel */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_LogoPanel"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Logo/LogoPanel.jpg"), 1))))
@@ -126,6 +109,17 @@ HRESULT CLoader::Loading_For_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_PressAnyButtonUI"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Logo/PressAnyButton%d.png"), 3))))
 		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_TimerPanel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_TimerPanel"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Timer/Timer%d.png"), 1))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_DecimalUI */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_DecimalUI"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Decimal/Decimal%d.png"), 10))))
+		return E_FAIL;
+
 	m_fLoadingProgress += 0.2f;
 
 	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
@@ -150,16 +144,6 @@ HRESULT CLoader::Loading_For_Logo()
 		CTestPanel::Create(m_pDevice, m_pContext, OBJECTID::TESTPANEL))))
 		return E_FAIL;
 
-	/* For.Prototype_GameObject_DecimalUI */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_DecimalUI"),
-		CDecimalUI::Create(m_pDevice, m_pContext, OBJECTID::DECIMAL_UI))))
-		return E_FAIL;
-
-	/* For.Prototype_GameObject_TimerPanel */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_TimerPanel"),
-		CTimerPanel::Create(m_pDevice, m_pContext, OBJECTID::TIMER_UI))))
-		return E_FAIL;
-
 	/* For.Prototype_GameObject_LogoPanel */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_LogoPanel"),
 		CLogoPanel::Create(m_pDevice, m_pContext, OBJECTID::LOGO_PANEL))))
@@ -173,6 +157,16 @@ HRESULT CLoader::Loading_For_Logo()
 	/* For.Prototype_GameObject_PressAnyButtonUI */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_PressAnyButtonUI"),
 		CPressAnyButtonUI::Create(m_pDevice, m_pContext, OBJECTID::PRESSANYBUTTON_UI))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_DecimalUI */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_DecimalUI"),
+		CDecimalUI::Create(m_pDevice, m_pContext, OBJECTID::DECIMAL_UI))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_TimerPanel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_TimerPanel"),
+		CTimerPanel::Create(m_pDevice, m_pContext, OBJECTID::TIMER_UI))))
 		return E_FAIL;
 
 	m_fLoadingProgress += 0.2f;
@@ -192,26 +186,20 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Tile0.jpg"), 1))))
 		return E_FAIL;
 
-	///* For.Prototype_Component_Texture_Player */
-	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Player"),
-	//	CTexture::Create(m_pDevice, m_pContext, TEXTURE::PLANE, TEXT("../Bin/Resources/Textures/Player/Player0.png"), 1))))
-	//	return E_FAIL;
+	/* For.Prototype_Component_Texture_SkillSlotUI*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_SkillSlotUI"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/SkillSlot/SkillSlot%d.png"), 2))))
+		return E_FAIL;
 
-	///* For.Prototype_Component_Texture_Monster */
-	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Monster"),
-	//	CTexture::Create(m_pDevice, m_pContext, TEXTURE::PLANE, TEXT("../Bin/Resources/Textures/Monster/Ma.jpg"), 1))))
-	//	return E_FAIL;
+	/* For.Prototype_Component_Texture_TimerPanel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_TimerPanel"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Timer/Timer%d.png"), 1))))
+		return E_FAIL;
 
-	///* For.Prototype_Component_Texture_Sky */
-	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Sky"),
-	//	CTexture::Create(m_pDevice, m_pContext, TEXTURE::CUBE, TEXT("../Bin/Resources/Textures/SkyBox/Sky_%d.dds"), 4))))
-	//	return E_FAIL;
-
-	///* For.Prototype_Component_Texture_Effect */
-	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Effect"),
-	//	CTexture::Create(m_pDevice, m_pContext, TEXTURE::PLANE, TEXT("../Bin/Resources/Textures/Explosion/Explosion%d.png"), 90))))
-	//	return E_FAIL;
-
+	/* For.Prototype_Component_Texture_DecimalUI */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_DecimalUI"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Decimal/Decimal%d.png"), 10))))
+		return E_FAIL;
 	
 	m_fLoadingProgress += 0.3f;
 	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
@@ -238,25 +226,31 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CTestCamera::Create(m_pDevice, m_pContext, OBJECTID::TEST_CAMERA))))
 		return E_FAIL;
 
-	///* For.Prototype_GameObject_Player */
-	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Player"),
-	//	CPlayer::Create(m_pDevice, m_pContext))))
+	/* For.Prototype_GameObject_SkillSlotUI */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_SkillSlotUI"),
+		CSkillSlot::Create(m_pDevice, m_pContext, OBJECTID::SKILLSLOT_UI))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_SkillSlotPanel*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_SkillSlotPanel"),
+		CSkillSlotPanel::Create(m_pDevice, m_pContext, OBJECTID::SKILLSLOT_PANEL))))
+		return E_FAIL;
+
+	///* For.Prototype_Component_Texture_Skill_Icon */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_Skill_Icon"),
+	//	CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Decimal/Skill_Icon%d.png"), 1))))
 	//	return E_FAIL;
 
-	///* For.Prototype_GameObject_Monster */
-	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Monster"),
-	//	CMonster::Create(m_pDevice, m_pContext))))
-	//	return E_FAIL;
+	/* For.Prototype_GameObject_DecimalUI */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_DecimalUI"),
+		CDecimalUI::Create(m_pDevice, m_pContext, OBJECTID::DECIMAL_UI))))
+		return E_FAIL;
 
-	///* For.Prototype_GameObject_Sky */
-	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Sky"),
-	//	CSky::Create(m_pDevice, m_pContext))))
-	//	return E_FAIL;
+	/* For.Prototype_GameObject_TimerPanel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_TimerPanel"),
+		CTimerPanel::Create(m_pDevice, m_pContext, OBJECTID::TIMER_UI))))
+		return E_FAIL;
 
-	///* For.Prototype_GameObject_Effect */
-	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Effect"),
-	//	CEffect::Create(m_pDevice, m_pContext))))
-	//	return E_FAIL;
 	m_strMessage = TEXT("로딩이 완료되었습니다..");
 	Sleep(500);
 	m_isFinished = true;

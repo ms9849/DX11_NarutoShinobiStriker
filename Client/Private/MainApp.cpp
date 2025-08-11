@@ -1,6 +1,7 @@
 #include "MainApp.h"
 #include "GameInstance.h"
 #include "Level_Loading.h"
+
 #include "Pooling.h"
 #include "Dummy.h"
 
@@ -35,6 +36,9 @@ HRESULT Client::CMainApp::Initialize()
 	EngineDesc.iNumLevels = ENUM_CLASS(LEVEL::END);
 
 	if (FAILED(m_pGameInstance->Initialize_Engine(EngineDesc, &m_pDevice, &m_pContext)))
+		return E_FAIL;
+
+	if (FAILED(m_pGameManager->Initialize_GameManager()))
 		return E_FAIL;
 
 	if (FAILED(Ready_Default_Setting()))
@@ -212,9 +216,9 @@ void Client::CMainApp::Free()
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);
 
-	m_pGameInstance->Release_Engine();
-	Safe_Release(m_pGameInstance);
-
 	m_pGameManager->Release_GameManager();
 	Safe_Release(m_pGameManager);
+
+	m_pGameInstance->Release_Engine();
+	Safe_Release(m_pGameInstance);
 }
