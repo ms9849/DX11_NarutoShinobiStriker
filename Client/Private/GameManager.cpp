@@ -6,15 +6,24 @@
 
 IMPLEMENT_SINGLETON(CGameManager);
 
-CGameManager::CGameManager()  
-	: m_pGameInstance { CGameInstance::GetInstance() }
+CGameManager::CGameManager() 
+	: m_pGameInstance{ CGameInstance::GetInstance() }
 {
 	Safe_AddRef(m_pGameInstance);
+}
+
+HRESULT CGameManager::Initialize_GameManager()
+{
+	return S_OK;
 }
 
 void CGameManager::Release_GameManager()
 {
 	DestroyInstance();
+
+	Safe_Release(m_pPlayer);
+	Safe_Release(m_pQuestLog);
+	Safe_Release(m_pGameInstance);
 }
 
 HRESULT CGameManager::Set_PlayerPtr(CPlayer* pPlayer)
@@ -46,11 +55,22 @@ HRESULT CGameManager::Set_QuestPtr(CQuestLog* pQuestLog)
 	return S_OK;
 }
 
+HRESULT CGameManager::Set_NextLevelID(LEVEL eLevelID)
+{
+	m_eNextLevel = eLevelID;
+
+	return S_OK;
+}
+
+LEVEL CGameManager::Get_NextLevel()
+{
+	if (m_pGameInstance->Get_LevelID() != ENUM_CLASS(LEVEL::LOADING))
+		return LEVEL::END;
+
+	return m_eNextLevel;
+}
+
 void CGameManager::Free()
 {
 	__super::Free();
-
-	Safe_Release(m_pPlayer);
-	Safe_Release(m_pQuestLog);
-	Safe_Release(m_pGameInstance);
 }

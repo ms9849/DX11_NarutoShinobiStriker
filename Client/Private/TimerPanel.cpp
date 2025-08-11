@@ -2,6 +2,8 @@
 
 #include "GameInstance.h"
 #include "DecimalUI.h"
+#include "Level_Loading.h"
+#include "GameManager.h"
 
 CTimerPanel::CTimerPanel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 	: CPanel { pDevice, pContext, eObjectID }
@@ -87,11 +89,11 @@ HRESULT CTimerPanel::Ready_Decimals()
 			break;
 		}
 
-		CDecimalUI* pDecimal = static_cast<CDecimalUI*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_DecimalUI"), &Desc));
+		CDecimalUI* pDecimal = static_cast<CDecimalUI*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_pGameManager->Get_NextLevel()), TEXT("Prototype_GameObject_DecimalUI"), &Desc));
 		if (nullptr == pDecimal)
 			return E_FAIL;
 
-		m_pGameInstance->Add_Clone_ToLayer(pDecimal, ENUM_CLASS(LEVEL::LOGO), TEXT("Layer_UI"));
+		m_pGameInstance->Add_Clone_ToLayer(pDecimal, ENUM_CLASS(m_pGameManager->Get_NextLevel()), TEXT("Layer_UI"));
 		m_Childs.push_back(pDecimal);
 		Safe_AddRef(pDecimal);
 	}
@@ -118,7 +120,7 @@ HRESULT CTimerPanel::Ready_Components()
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_TimerUI"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(m_pGameManager->Get_NextLevel()), TEXT("Prototype_Component_Texture_TimerPanel"),
 		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 		return E_FAIL;
 
@@ -139,7 +141,7 @@ CTimerPanel* CTimerPanel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pCo
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Create Failed : CTimerUI");
+		MSG_BOX("Create Failed : CTimerPanel");
 		Safe_Release(pInstance);
 	}
 
@@ -152,7 +154,7 @@ CGameObject* CTimerPanel::Clone(void* pArg)
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Clone Failed : CTimerUI");
+		MSG_BOX("Clone Failed : CTimerPanel");
 		Safe_Release(pInstance);
 	}
 

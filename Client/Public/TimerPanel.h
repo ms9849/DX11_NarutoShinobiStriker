@@ -21,9 +21,6 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	HRESULT Ready_Decimals();
-	void Calc_Timer();
-
 	void Add_LeftTime(_uint iSec) {
 		m_iLeftTime += iSec;
 	}
@@ -35,6 +32,10 @@ private:
 private:
 	HRESULT Ready_Components();
 	virtual HRESULT Bind_ShaderResources() override;
+
+private:
+	HRESULT Ready_Decimals();
+	void Calc_Timer();
 
 public:
 	static CTimerPanel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);

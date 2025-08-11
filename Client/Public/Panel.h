@@ -76,6 +76,7 @@ public:
 
 protected:
 	vector<CUIObject*> m_Childs = {};
+	class CGameManager* m_pGameManager = { nullptr };
 
 protected:
 	virtual HRESULT Bind_ShaderResources() override;

@@ -2,6 +2,7 @@
 
 #include "Loader.h"
 #include "GameInstance.h"
+#include "GameManager.h"
 
 #include "Level_Logo.h"
 #include "Level_GamePlay.h"
@@ -10,13 +11,15 @@
 
 CLevel_Loading::CLevel_Loading(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID)
 	: CLevel { pDevice, pContext, ENUM_CLASS(eLevelID)}
+	, m_pGameManager { CGameManager::GetInstance() }
 {
-
+	Safe_AddRef(m_pGameManager);
 }
 
 HRESULT CLevel_Loading::Initialize(LEVEL eNextLevelID)
 {
 	m_eNextLevelID = eNextLevelID;
+	m_pGameManager->Set_NextLevelID(m_eNextLevelID);
 	/* 다음 레벨에 대한 자원을 로드하여 준비해둔다. */
 	m_pLoader = CLoader::Create(m_pDevice, m_pContext, eNextLevelID);
 	if (nullptr == m_pLoader)
@@ -100,4 +103,5 @@ void CLevel_Loading::Free()
 
 	Safe_Release(m_pLoader);
 	Safe_Release(m_pLoadingBarPanel);
+	Safe_Release(m_pGameManager);
 }

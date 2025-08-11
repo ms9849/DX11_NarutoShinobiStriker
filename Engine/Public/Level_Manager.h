@@ -13,7 +13,7 @@ private:
 	virtual ~CLevel_Manager() = default;
 
 public:
-	_uint Get_LevelID() const;
+	_uint Get_LevelID();
 
 	_bool IsLevelChangeRequested() const {
 		return m_IsChangeRequested;

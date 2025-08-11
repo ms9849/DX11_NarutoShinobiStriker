@@ -19,10 +19,16 @@ public:
 	virtual void Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+public:
+	LEVEL Get_NextLevelID() const {
+		return m_eNextLevelID;
+	}
+	
 private:
 	LEVEL				m_eNextLevelID = { LEVEL::END };
 	class CLoader*		m_pLoader = { nullptr };
 	class CLoadingBarPanel* m_pLoadingBarPanel = { nullptr };
+	class CGameManager* m_pGameManager = { nullptr };
 
 private:
 	HRESULT Ready_Layer_UI(const _wstring& strLayerTag);

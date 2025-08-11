@@ -3,20 +3,14 @@
 #include "Client_Defines.h"
 #include "UIObject.h"
 
-NS_BEGIN(Engine)
-class CTexture;
-class CVIBuffer;
-class CShader;
-NS_END
-
 NS_BEGIN(Client)
 
-class CDecimalUI final : public CUIObject
+class CSkillSlot : public CUIObject
 {
 private:
-	CDecimalUI(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
-	CDecimalUI(const CDecimalUI& rhs);
-	virtual ~CDecimalUI() = default;
+	CSkillSlot(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
+	CSkillSlot(const CSkillSlot& rhs);
+	virtual ~CSkillSlot() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -26,20 +20,15 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
-	void Set_CurrentIdx(_uint iIdx) {
-		m_iTextureIdx = iIdx;
-	}
-
 private:
 	class CGameManager* m_pGameManager = { nullptr };
-
 private:
 	HRESULT Ready_Components();
 	virtual HRESULT Bind_ShaderResources() override;
 
 public:
-	static CDecimalUI* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
-	virtual CGameObject* Clone(void* pArg);
+	static CSkillSlot* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
+	virtual CGameObject* Clone(void* pArg) override;;
 	virtual void Free() override;
 };
 

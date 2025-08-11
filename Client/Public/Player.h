@@ -1,6 +1,5 @@
 #pragma once
-#include "Client_Defines.h"
-#include "GameObject.h"
+#include "Character.h"
 
  
 // 플레이어에게 필요한 정보
@@ -20,18 +19,13 @@
 // 1. 스킬 구조 플레이어 내부에 작성 -> AttackType은 열거형으로 작성. 스킬 두개 (나선환 나선수리검) 작성해서 일단 추가해놓고.. 
 // 2. 퀘스트 작성 및 UI 묶기
 
-NS_BEGIN(Engine)
-class CModel;
-class CShader;
-class CTexture;
-NS_END
-
 NS_BEGIN(Client)
 
-class CPlayer final : public CGameObject
+class CPlayer final : public CCharacter
 {
 private:
 	CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
+	CPlayer(const CPlayer& rhs);
 	virtual ~CPlayer() = default;
 
 public:
@@ -44,14 +38,9 @@ public:
 
 private:
 	class CGameManager* m_pGameManager = { nullptr };
-	CModel* m_pModelCom = { nullptr };
-	CShader* m_pShaderCom = { nullptr };
-	CTexture* m_pTextureCom = { nullptr };
-	CHARACTER_ATTACK_TYPE eAttackType = { CHARACTER_ATTACK_TYPE::MELEE };
 
 private:
 	HRESULT Ready_Components();
-	HRESULT Bind_ShaderResources();
 
 private:
 	void Key_Input(_float fTimeDelta);
