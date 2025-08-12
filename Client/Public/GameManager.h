@@ -26,6 +26,10 @@ public:
 	HRESULT Set_QuestPtr(class CQuestLog* pQuestLog);
 	HRESULT	Set_NextLevelID(LEVEL eLevelID);
 
+	class CPlayer* Get_PlayerPtr() {
+		return m_pPlayer;
+	}
+
 public:
 	LEVEL Get_NextLevel();
 	

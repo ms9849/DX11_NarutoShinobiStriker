@@ -94,9 +94,6 @@
     <Filter Include="02.GameObjects\UI\Panel\LOGO\LogoPanel\Title">
       <UniqueIdentifier>{71ec2d16-f97f-4f7f-bc7b-fd35d4ab518d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\UI\ProgressBar">
-      <UniqueIdentifier>{fa5b1260-e0e3-4753-ae0b-a2b06e181e9b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03. Quest">
       <UniqueIdentifier>{b5ecb75a-93ed-45be-8999-be4af82451ce}</UniqueIdentifier>
     </Filter>
@@ -121,11 +118,14 @@
     <Filter Include="02.GameObjects\UI\Panel\GAMEPLAY\SkillSlotPanel">
       <UniqueIdentifier>{d2a5ee04-8fd4-47d6-b481-c423cf0581b6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\UI\Panel\GAMEPLAY\SkillSlotPanel\SpecialSkillSlot">
-      <UniqueIdentifier>{204aaa34-956a-4cff-a3ce-5a2486f58cd4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\UI\Panel\GAMEPLAY\SkillSlotPanel\SkillSlot">
       <UniqueIdentifier>{f14b89e7-2e67-4cf8-9468-1a82f3937eed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Panel\ProgressBar">
+      <UniqueIdentifier>{fa5b1260-e0e3-4753-ae0b-a2b06e181e9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Panel\GAMEPLAY\AttackTypePanel">
+      <UniqueIdentifier>{db06d948-9262-4c30-9730-ffbc41d02b0d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -214,7 +214,7 @@
       <Filter>03. Quest</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\ProgressBarUI.h">
-      <Filter>02.GameObjects\UI\ProgressBar</Filter>
+      <Filter>02.GameObjects\UI\Panel\ProgressBar</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\DecimalUI.h">
       <Filter>02.GameObjects\UI\Panel\Timer\Decimal</Filter>
@@ -228,11 +228,14 @@
     <ClInclude Include="..\Public\Skill_Table.h">
       <Filter>02.GameObjects\Character\Skill</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\SkillSlot.h">
+    <ClInclude Include="..\Public\SkillSlotUI.h">
       <Filter>02.GameObjects\UI\Panel\GAMEPLAY\SkillSlotPanel\SkillSlot</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\SkillSlotPanel.h">
       <Filter>02.GameObjects\UI\Panel\GAMEPLAY\SkillSlotPanel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AttackTypePanel.h">
+      <Filter>02.GameObjects\UI\Panel\GAMEPLAY\AttackTypePanel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -322,7 +325,7 @@
       <Filter>03. Quest</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\ProgressBarUI.cpp">
-      <Filter>02.GameObjects\UI\ProgressBar</Filter>
+      <Filter>02.GameObjects\UI\Panel\ProgressBar</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\DecimalUI.cpp">
       <Filter>02.GameObjects\UI\Panel\Timer\Decimal</Filter>
@@ -333,11 +336,14 @@
     <ClCompile Include="..\Private\Character.cpp">
       <Filter>02.GameObjects\Character</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\SkillSlot.cpp">
+    <ClCompile Include="..\Private\SkillSlotUI.cpp">
       <Filter>02.GameObjects\UI\Panel\GAMEPLAY\SkillSlotPanel\SkillSlot</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\SkillSlotPanel.cpp">
       <Filter>02.GameObjects\UI\Panel\GAMEPLAY\SkillSlotPanel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AttackTypePanel.cpp">
+      <Filter>02.GameObjects\UI\Panel\GAMEPLAY\AttackTypePanel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

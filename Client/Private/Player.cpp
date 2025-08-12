@@ -3,6 +3,9 @@
 #include "GameInstance.h"
 #include "GameManager.h"
 
+#include "SkillSlotPanel.h"
+#include "AttackTypePanel.h"
+
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 	: CCharacter { pDevice, pContext, eObjectID }
 	, m_pGameManager{ CGameManager::GetInstance() }
@@ -15,6 +18,23 @@ CPlayer::CPlayer(const CPlayer& rhs)
 	, m_pGameManager{ CGameManager::GetInstance() }
 {
 	Safe_AddRef(m_pGameManager);
+}
+
+void CPlayer::Set_SkillSlotPanel(CSkillSlotPanel* pPanel)
+{
+	m_pSkillSlotPanel = pPanel;
+	Safe_AddRef(m_pSkillSlotPanel);
+
+	for (_uint i = ENUM_CLASS(SKILLNUM::SECOND); i < ENUM_CLASS(SKILLNUM::END); ++i)
+		m_pSkillSlotPanel->Change_Skill(i, m_ActivatedSkills[i]);
+}
+
+void CPlayer::Set_AttackTypePanel(CAttackTypePanel* pPanel)
+{
+	m_pAttackTypePanel = pPanel;
+	Safe_AddRef(m_pAttackTypePanel);
+
+	m_pAttackTypePanel->Change_AttackType(m_eCurAttackType);
 }
 
 HRESULT CPlayer::Initialize_Prototype()
@@ -35,9 +55,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 
 	/* 플레이어는 모든 스킬을 사용할 수 있다. */
 	for (_uint i = 0; i < ENUM_CLASS(SKILL::END); ++i)
-	{
 		m_Skills.emplace(static_cast<SKILL>(i), g_SkillTable[i]);
-	}
 
 	return S_OK;
 }
@@ -48,11 +66,20 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
 void CPlayer::Update(_float fTimeDelta)
 {
+	/* 임시로 둔 코드. 손봐야 한다 */
+	m_Skills[m_ActivatedSkills[ENUM_CLASS(SKILLNUM::SPECIAL)]].fGaugeAcc = 100.f;
+	m_pSkillSlotPanel->Set_MaxSpecialSkillProgress(200.f);
+	m_pSkillSlotPanel->Set_SpecialSkillProgress(100.f);
+
 	Key_Input(fTimeDelta);
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
 {
+	/* 스킬이 바뀌었다면. */
+	if (m_eCurAttackType != m_ePreAttackType)
+		Change_Skills();
+
 	__super::Change_AttackType();
 
 	m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
@@ -106,6 +133,25 @@ void CPlayer::Key_Input(_float fTimeDelta)
 	{
 		m_pTransformCom->Go_Right(fTimeDelta);
 	}
+
+	if (m_pGameInstance->Key_Down(DIK_6))
+	{
+		m_eCurAttackType = static_cast<ATTACK_TYPE>(ENUM_CLASS(m_eCurAttackType) + 1);
+	
+		if (m_eCurAttackType == ATTACK_TYPE::END)
+			m_eCurAttackType = ATTACK_TYPE::MELEE;
+	}
+}
+
+void CPlayer::Change_Skills()
+{
+	if (m_pSkillSlotPanel == nullptr || m_pAttackTypePanel == nullptr)
+		return;
+
+	for (_uint i = ENUM_CLASS(SKILLNUM::SECOND); i < ENUM_CLASS(SKILLNUM::END); ++i)
+		m_pSkillSlotPanel->Change_Skill(i, m_ActivatedSkills[i]);
+
+	m_pAttackTypePanel->Change_AttackType(m_eCurAttackType);
 }
 
 CPlayer* CPlayer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
@@ -139,4 +185,6 @@ void CPlayer::Free()
 	__super::Free();
 
 	Safe_Release(m_pGameManager);
+	Safe_Release(m_pSkillSlotPanel);
+	Safe_Release(m_pAttackTypePanel);
 }

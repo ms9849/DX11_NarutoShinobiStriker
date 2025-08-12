@@ -89,7 +89,7 @@ HRESULT CLoadingBarPanel::Bind_ShaderResources()
 
 HRESULT CLoadingBarPanel::Ready_ProgressBar()
 {
-    CUIObject::UIOBJECT_DESC Desc = CUIObject::CreateDesc(m_fX, m_fY, m_fZ - 0.05f, g_iWinSizeX - 300, 10, 0.f);
+    UIOBJECT_DESC Desc = CUIObject::CreateDesc(m_fX, m_fY, m_fZ - 0.05f, g_iWinSizeX - 300, 10, 1, 0.f);
 
     CProgressBarUI* pProgressBar = static_cast<CProgressBarUI*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC),
         TEXT("Prototype_GameObject_ProgressBarUI"), &Desc));

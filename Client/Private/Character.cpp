@@ -22,7 +22,7 @@ HRESULT CCharacter::Initialize(void* pArg)
 		return E_FAIL;
 
 	/* 0번은 그림자 바꿔치기로 확정. */
-	m_ActivatedSkills[0] = SKILL::SHADOW_ESCAPE;
+	m_ActivatedSkills[ENUM_CLASS(SKILLNUM::FIRST)] = SKILL::SHADOW_ESCAPE;
 
 	Change_AttackType();
 

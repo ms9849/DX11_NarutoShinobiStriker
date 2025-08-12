@@ -13,7 +13,7 @@ CPanel::CPanel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eO
 
 CPanel::CPanel(const CPanel& rhs)
     : CUIObject { rhs }
-    , m_pGameManager{ CGameManager::GetInstance() }
+    , m_pGameManager{ rhs.m_pGameManager }
 {
     Safe_AddRef(m_pGameManager);
 }

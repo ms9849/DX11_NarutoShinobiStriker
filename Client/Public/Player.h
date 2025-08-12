@@ -29,6 +29,10 @@ private:
 	virtual ~CPlayer() = default;
 
 public:
+	void Set_SkillSlotPanel(class CSkillSlotPanel* pPanel);
+	void Set_AttackTypePanel(class CAttackTypePanel* pPanel);
+
+public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Priority_Update(_float fTimeDelta) override;
@@ -38,12 +42,15 @@ public:
 
 private:
 	class CGameManager* m_pGameManager = { nullptr };
+	class CSkillSlotPanel* m_pSkillSlotPanel = { nullptr };
+	class CAttackTypePanel* m_pAttackTypePanel = { nullptr };
 
 private:
 	HRESULT Ready_Components();
 
 private:
 	void Key_Input(_float fTimeDelta);
+	void Change_Skills();
 
 public:
 	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);

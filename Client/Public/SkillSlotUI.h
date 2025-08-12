@@ -1,16 +1,25 @@
 #pragma once
 
 #include "Client_Defines.h"
+#include "Skill_Table.h"
 #include "UIObject.h"
 
 NS_BEGIN(Client)
 
-class CSkillSlot : public CUIObject
+class CSkillSlotUI : public CUIObject
 {
+public:
+	typedef struct tagSkillSlotDesc : public UIOBJECT_DESC {
+		_uint iSkillNum;
+	} SKILLSLOT_DESC;
+
 private:
-	CSkillSlot(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
-	CSkillSlot(const CSkillSlot& rhs);
-	virtual ~CSkillSlot() = default;
+	CSkillSlotUI(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
+	CSkillSlotUI(const CSkillSlotUI& rhs);
+	virtual ~CSkillSlotUI() = default;
+
+public:
+	void Change_Skill(SKILL eSkill);
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -22,12 +31,16 @@ public:
 
 private:
 	class CGameManager* m_pGameManager = { nullptr };
+	CTexture*			m_pTextureCom_Skill = { nullptr };
+	_uint				m_iTextureIdx_Skill = {};
+	_uint				m_iSkillNum = {};
+
 private:
 	HRESULT Ready_Components();
 	virtual HRESULT Bind_ShaderResources() override;
 
 public:
-	static CSkillSlot* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
+	static CSkillSlotUI* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	virtual CGameObject* Clone(void* pArg) override;;
 	virtual void Free() override;
 };
