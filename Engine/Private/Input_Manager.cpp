@@ -57,7 +57,7 @@ _bool CInput_Manager::Key_Pressing(_ubyte byKey)
 
 _bool CInput_Manager::Key_Down(_ubyte byKey)
 {
-	return (m_byPreKeyState[byKey] & 0x80) && (m_byKeyState[byKey] & 0x80);
+	return !(m_byPreKeyState[byKey] & 0x80) && (m_byKeyState[byKey] & 0x80);
 }
 
 _bool CInput_Manager::Key_Up(_ubyte byKey)

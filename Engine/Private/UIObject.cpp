@@ -45,7 +45,7 @@ HRESULT CUIObject::Initialize(void* pArg)
     m_fSizeX = pDesc->fSizeX;
     m_fSizeY = pDesc->fSizeY;
     m_fAngle = pDesc->fAngle;
-
+    m_iTextureIdx = pDesc->iTextureNum;
 
     m_pTransformCom->Set_Scale(pDesc->fSizeX, pDesc->fSizeY, 1.f);
 

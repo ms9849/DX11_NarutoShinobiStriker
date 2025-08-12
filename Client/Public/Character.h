@@ -19,11 +19,6 @@ NS_BEGIN(Client)
 
 class CCharacter abstract : public CGameObject
 {
-public:
-	enum class ATTACK_TYPE {
-		MELEE, NINJUTSU, DEFENSIVE, END
-	};
-
 protected:
 	CCharacter(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	CCharacter(const CCharacter& rhs);
@@ -38,12 +33,17 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	void Change_AttackType();
+	ATTACK_TYPE Get_AttackType() {
+		return m_eCurAttackType;
+	}
 
 	const SKILL_INFO& Get_Skill_Info(const SKILL& eSkill) {
 		auto iter = m_Skills.find(eSkill);
-
 		return iter->second;
+	}
+
+	SKILL Get_Skill_Slot(_uint iSlotNum) {
+		return m_ActivatedSkills[iSlotNum];
 	}
 
 protected:
@@ -62,7 +62,7 @@ protected:
 
 	/* 활성화된 스킬들의 ENUM CLASS를 들고 있게 한다. */
 	/* 0~2번은 일반 스킬, 3번은 필살기 */
-	SKILL m_ActivatedSkills[4];
+	SKILL m_ActivatedSkills[ENUM_CLASS(SKILLNUM::END)];
 	map<SKILL, SKILL_INFO> m_Skills;
 	/*
 	스킬 INFO는 Map으로 따로 관리.
@@ -72,6 +72,7 @@ protected:
 
 protected:
 	HRESULT Bind_ShaderResources();
+	virtual void Change_AttackType();
 
 public:
 	virtual CGameObject* Clone(void* pArg) override = 0;

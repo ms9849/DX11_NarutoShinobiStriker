@@ -23,9 +23,11 @@ HRESULT CProgressBarUI::Initialize(void* pArg)
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))
-		return E_FAIL;
+		return E_FAIL;;
 
-	m_fMaxSize = static_cast<CUIObject::UIOBJECT_DESC*>(pArg)->fSizeX;
+	m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_PROGRESSBAR);
+	m_fMaxSize = static_cast<UIOBJECT_DESC*>(pArg)->fSizeX;
+
 	XMStoreFloat3(&m_vOriginPos, m_pTransformCom->Get_State(STATE::POSITION));
 
 	return S_OK;
@@ -37,8 +39,6 @@ void CProgressBarUI::Priority_Update(_float fTimeDelta)
 
 void CProgressBarUI::Update(_float fTimeDelta)
 {
-	if(m_fProgress != 0.f)
-		Play_Animation(fTimeDelta);
 }
 
 void CProgressBarUI::Late_Update(_float fTimeDelta)
@@ -48,7 +48,7 @@ void CProgressBarUI::Late_Update(_float fTimeDelta)
 
 HRESULT CProgressBarUI::Render()
 {
-	__super::Render();
+  	__super::Render();
 
 	return S_OK;
 }
@@ -65,22 +65,6 @@ void CProgressBarUI::Set_Progress(_float fProgress)
 void CProgressBarUI::Set_MaxProgress(_float fMaxProgress)
 {
 	m_fMaxProgress = fMaxProgress;
-}
-
-void CProgressBarUI::Play_Animation(_float fTimeDelta)
-{
-	_float3 vScale = m_pTransformCom->Get_Scale();
-
-	m_pTransformCom->Set_Scale(m_fMaxSize * m_fProgress, vScale.y, vScale.z);
-
-	if (m_fPreProgress != m_fProgress)
-	{
-		_float4 vPosition;
-		XMStoreFloat4(&vPosition, m_pTransformCom->Get_State(STATE::POSITION));
-		vPosition.x = m_vOriginPos.x - (m_fMaxSize / 2.f * (m_fMaxProgress - m_fProgress));
-
-		m_pTransformCom->Set_State(STATE::POSITION, XMLoadFloat4(&vPosition));
-	}
 }
 
 HRESULT CProgressBarUI::Ready_Components()
@@ -103,7 +87,13 @@ HRESULT CProgressBarUI::Ready_Components()
 HRESULT CProgressBarUI::Bind_ShaderResources()
 {
 	if(FAILED(__super::Bind_ShaderResources()))
-		return E_FAIL;;
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_Float("g_ProgressRate", m_fProgress / m_fMaxProgress)))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_Integer("g_iProgressBarTextureNum", m_iTextureIdx)))
+		return E_FAIL;
 
 	return S_OK;
 }

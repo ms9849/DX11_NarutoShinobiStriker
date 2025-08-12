@@ -84,7 +84,7 @@ HRESULT CLogoPanel::Ready_LogoUIs()
 	CUIObject::UIOBJECT_DESC Desc;
 	/* Title */
 
-	Desc = CUIObject::CreateDesc(m_fX, m_fY / 2.f + 50, m_fZ - 0.05f, 800.f, 200.f, m_fAngle);
+	Desc = CUIObject::CreateDesc(m_fX, m_fY / 2.f + 50, m_fZ - 0.05f, 800.f, 200.f, 0, m_fAngle);
 
 	CTitleUI* pTitle = static_cast<CTitleUI*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_TitleUI"), &Desc));
 	if (nullptr == pTitle)
@@ -95,7 +95,7 @@ HRESULT CLogoPanel::Ready_LogoUIs()
 	Safe_AddRef(pTitle);
 
 	/* Press Any Button */
-	Desc = CUIObject::CreateDesc(m_fX, m_fY / 2.f + 350, m_fZ - 0.1f, 600.f, 100.f, m_fAngle);
+	Desc = CUIObject::CreateDesc(m_fX, m_fY / 2.f + 350, m_fZ - 0.1f, 600.f, 100.f, 0, m_fAngle);
 
 	CPressAnyButtonUI* pPressAnyButton = static_cast<CPressAnyButtonUI*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_PressAnyButtonUI"), &Desc));
 	if (nullptr == pPressAnyButton)

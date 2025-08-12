@@ -2,6 +2,18 @@
 
 namespace Client
 {
+	enum class ATTACK_TYPE {
+		MELEE, NINJUTSU, DEFENSIVE, END
+	};
+
+	enum class SKILLNUM {
+		FIRST,
+		SECOND,
+		THIRD,
+		SPECIAL,
+		END
+	};
+
 	enum class SKILL {
 		SHADOW_ESCAPE,
 		RASENGAN, RASEN_SHURIKEN, /* ¹Ð¸® */

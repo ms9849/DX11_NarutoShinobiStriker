@@ -12,10 +12,12 @@
 #include "PressAnyButtonUI.h"
 
 #include "SkillSlotPanel.h"
-#include "SkillSlot.h"
+#include "SkillSlotUI.h"
 
 #include "TimerPanel.h"
 #include "DecimalUI.h"
+
+#include "AttackTypePanel.h"
 
 #include "GameInstance.h"
 
@@ -201,6 +203,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Decimal/Decimal%d.png"), 10))))
 		return E_FAIL;
 	
+	/* For.Prototype_Component_Texture_AttackTypePanel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_AttackTypePanel"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/AttackType/AttackType%d.png"), 4))))
+		return E_FAIL;
+
 	m_fLoadingProgress += 0.3f;
 	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
 	/* For.Prototype_Component_VIBuffer_Terrain */
@@ -228,7 +235,7 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 	/* For.Prototype_GameObject_SkillSlotUI */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_SkillSlotUI"),
-		CSkillSlot::Create(m_pDevice, m_pContext, OBJECTID::SKILLSLOT_UI))))
+		CSkillSlotUI::Create(m_pDevice, m_pContext, OBJECTID::SKILLSLOT_UI))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_SkillSlotPanel*/
@@ -236,10 +243,10 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CSkillSlotPanel::Create(m_pDevice, m_pContext, OBJECTID::SKILLSLOT_PANEL))))
 		return E_FAIL;
 
-	///* For.Prototype_Component_Texture_Skill_Icon */
-	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_Skill_Icon"),
-	//	CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Decimal/Skill_Icon%d.png"), 1))))
-	//	return E_FAIL;
+	/* For.Prototype_Component_Texture_Skill_Icon */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Skill_Icon"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/SkillIcon/Skill_Icon_%d.png"), 10))))
+		return E_FAIL;
 
 	/* For.Prototype_GameObject_DecimalUI */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_DecimalUI"),
@@ -249,6 +256,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_GameObject_TimerPanel */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_TimerPanel"),
 		CTimerPanel::Create(m_pDevice, m_pContext, OBJECTID::TIMER_UI))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_AttackTypePanel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_AttackTypePanel"),
+		CAttackTypePanel::Create(m_pDevice, m_pContext, OBJECTID::ATTACKTYPE_PANEL))))
 		return E_FAIL;
 
 	m_strMessage = TEXT("로딩이 완료되었습니다..");

@@ -11,10 +11,11 @@ public:
 	{
 		_float  fX, fY, fZ;
 		_float  fSizeX, fSizeY;
+		_uint	iTextureNum = 0;
 		_float  fAngle = { 0.f };
 	} UIOBJECT_DESC;
 
-	static const tagUIObjectDesc CreateDesc(_float fX, _float fY, _float fZ, _float fSizeX, _float fSizeY, _float fAngle = 0.f)
+	static const tagUIObjectDesc CreateDesc(_float fX, _float fY, _float fZ, _float fSizeX, _float fSizeY, _uint iTextureNum = 0, _float fAngle = 0.f)
 	{
 		tagUIObjectDesc Desc;
 
@@ -23,6 +24,7 @@ public:
 		Desc.fZ = fZ;
 		Desc.fSizeX = fSizeX;
 		Desc.fSizeY = fSizeY;
+		Desc.iTextureNum = iTextureNum;
 		Desc.fAngle = fAngle;
 
 		return Desc;

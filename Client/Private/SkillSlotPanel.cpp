@@ -1,8 +1,12 @@
 #include "SkillSlotPanel.h"
 
 #include "GameInstance.h"
-#include "SkillSlot.h"
 #include "GameManager.h"
+
+#include "SkillSlotUI.h"
+#include "ProgressBarUI.h"
+
+#include "Player.h"
 
 CSkillSlotPanel::CSkillSlotPanel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 	: CPanel { pDevice, pContext, eObjectID }
@@ -27,6 +31,11 @@ HRESULT CSkillSlotPanel::Initialize(void* pArg)
 	if (FAILED(Ready_SkillSlots()))
 		return E_FAIL;
 
+	if (FAILED(Ready_ProgressBar()))
+		return E_FAIL;
+
+	m_pGameManager->Get_PlayerPtr()->Set_SkillSlotPanel(this);
+
 	return S_OK;
 }
 
@@ -47,39 +56,82 @@ HRESULT CSkillSlotPanel::Render()
 	return S_OK;
 }
 
+void CSkillSlotPanel::Set_SpecialSkillProgress(_float fProgress)
+{
+	static_cast<CProgressBarUI*>(m_Childs[4])->Set_Progress(fProgress);
+}
+
+void CSkillSlotPanel::Set_MaxSpecialSkillProgress(_float fMaxProgress)
+{
+	static_cast<CProgressBarUI*>(m_Childs[4])->Set_MaxProgress(fMaxProgress);
+}
+
+void CSkillSlotPanel::Change_Skill(_uint iSkillIdx, SKILL eSkill)
+{
+	static_cast<CSkillSlotUI*>(m_Childs[iSkillIdx])->Change_Skill(eSkill);
+}
+
 HRESULT CSkillSlotPanel::Ready_SkillSlots()
 {
-	/* 여기서 플레이어 정보랑 묶어주면 된다. 몇번째 스킬 가져올건지 등.. */
-	for (_int i = 0; i < 3; ++i)
-	{
-		CUIObject::UIOBJECT_DESC Desc;
+	CSkillSlotUI::SKILLSLOT_DESC SrcDesc;
+	UIOBJECT_DESC DstDesc;
 
+	/* 여기서 플레이어 정보랑 묶어주면 된다. 몇번째 스킬 가져올건지 등.. */
+	for (_int i = 0; i < 4; ++i)
+	{
 		switch (i)
 		{
 		case 0:
-			Desc = CUIObject::CreateDesc(m_fX - 100, m_fY, m_fZ - 0.05f, 94.f, 94.f, 0.f);
+			DstDesc = CUIObject::CreateDesc(m_fX - 100, m_fY, m_fZ - 0.05f, 72.f, 66.f, 0, 0.f);
+			memcpy(&SrcDesc, &DstDesc, sizeof(UIOBJECT_DESC));
+			SrcDesc.iSkillNum = ENUM_CLASS(SKILLNUM::FIRST);
 			break;
 
 		case 1:
-			Desc = CUIObject::CreateDesc(m_fX, m_fY, m_fZ - 0.05f, 94.f, 94.f, 0.f);
+			DstDesc = CUIObject::CreateDesc(m_fX, m_fY, m_fZ - 0.05f, 80.f, 76.f, 0, 0.f);
+			memcpy(&SrcDesc, &DstDesc, sizeof(UIOBJECT_DESC));
+			SrcDesc.iSkillNum = ENUM_CLASS(SKILLNUM::SECOND);
 			break;
 
 		case 2:
-			Desc = CUIObject::CreateDesc(m_fX + 100, m_fY, m_fZ - 0.05f, 94.f, 94.f, 0.f);
+			DstDesc = CUIObject::CreateDesc(m_fX + 100, m_fY, m_fZ - 0.05f, 80.f, 76.f, 0, 0.f);
+			memcpy(&SrcDesc, &DstDesc, sizeof(UIOBJECT_DESC));
+			SrcDesc.iSkillNum = ENUM_CLASS(SKILLNUM::THIRD);
 			break;
+
+		case 3:
+			DstDesc = CUIObject::CreateDesc(m_fX - 875, m_fY, m_fZ - 0.05f, 400.f, 100.f, 0, 0.f);
+			memcpy(&SrcDesc, &DstDesc, sizeof(UIOBJECT_DESC));
+			SrcDesc.iSkillNum = ENUM_CLASS(SKILLNUM::SPECIAL);
+			break;
+
 
 		default:
 			break;
 		}
 
-		CSkillSlot* pDecimal = static_cast<CSkillSlot*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_pGameManager->Get_NextLevel()), TEXT("Prototype_GameObject_SkillSlotUI"), &Desc));
-		if (nullptr == pDecimal)
+		CSkillSlotUI* pSkillSlot = static_cast<CSkillSlotUI*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_pGameManager->Get_NextLevel()), TEXT("Prototype_GameObject_SkillSlotUI"), &SrcDesc));
+		if (nullptr == pSkillSlot)
 			return E_FAIL;
 
-		m_pGameInstance->Add_Clone_ToLayer(pDecimal, ENUM_CLASS(m_pGameManager->Get_NextLevel()), TEXT("Layer_UI"));
-		m_Childs.push_back(pDecimal);
-		Safe_AddRef(pDecimal);
+		m_pGameInstance->Add_Clone_ToLayer(pSkillSlot, ENUM_CLASS(m_pGameManager->Get_NextLevel()), TEXT("Layer_UI"));
+		m_Childs.push_back(pSkillSlot);
+		Safe_AddRef(pSkillSlot);
 	}
+
+	return S_OK;
+}
+
+HRESULT CSkillSlotPanel::Ready_ProgressBar()
+{
+	UIOBJECT_DESC Desc;
+	Desc = CUIObject::CreateDesc(m_fX - 830, m_fY + 19, m_fZ - 0.10f, 380.f, 46.f, 2, 0.f);
+
+	//여기서 Progress바 하나 생성.
+	CProgressBarUI* pProgressBar = static_cast<CProgressBarUI*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ProgressBarUI"), &Desc));
+	m_pGameInstance->Add_Clone_ToLayer(pProgressBar, ENUM_CLASS(m_pGameManager->Get_NextLevel()), TEXT("Layer_UI"));
+	m_Childs.push_back(pProgressBar);
+	Safe_AddRef(pProgressBar);
 
 	return S_OK;
 }

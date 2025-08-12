@@ -1,9 +1,11 @@
 
 matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 
-texture2D g_Texture;
+texture2D g_Texture, g_Texture_Skill;
 
-float g_Alpha;
+float   g_Alpha;
+float   g_ProgressRate;
+int     g_iProgressBarTextureNum;
 
 sampler DefaultSampler = sampler_state
 {
@@ -64,13 +66,89 @@ PS_OUT PS_MAIN(PS_IN In)
     return Out;
 }
 
-PS_OUT PS_FadeOut(PS_IN In)
+PS_OUT PS_ProgressBar(PS_IN In)
+{
+    PS_OUT Out;
+    
+    /* 필살기 게이지 */
+    if(g_iProgressBarTextureNum == 2)
+    {
+        float fSlope = 0.05f;
+        
+        Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
+        
+        if (In.vTexcoord.x < g_ProgressRate - fSlope * (In.vTexcoord.y - 0.5f))
+        {
+            Out.vColor = float4(0.0f, 0.9f, 0.f, Out.vColor.a);
+        }
+    }
+    
+    else
+    {
+        if (In.vTexcoord.x < g_ProgressRate)
+            Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
+        else
+            discard;   
+    }
+    
+    return Out;
+}
+
+
+PS_OUT PS_FadeInOut(PS_IN In)
 {
     PS_OUT Out;
     Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
-    
     /* g_Alpha값 입력받아서 세팅해줄 수 있게 해야 한다. */
     Out.vColor.a *= g_Alpha;
+
+    return Out;
+}
+
+PS_OUT PS_Skill(PS_IN In)
+{
+    PS_OUT Out;
+    float2 vCenter = float2(0.5, 0.5);
+    float fDist = length(In.vTexcoord - vCenter);
+    
+    /* 스킬 아이콘 그려짐 */
+    if (fDist < 0.4)
+    {
+        float fScale = 1.2;
+        // 중심 0.5 0.5에서 떨어진 거리 구하고, 그만큼 스케일링 해줌.
+        float2 vUV = vCenter + (In.vTexcoord - vCenter) * fScale;
+
+        Out.vColor = g_Texture_Skill.Sample(DefaultSampler, vUV);
+    }
+    
+    else
+        Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
+    
+    return Out;
+}
+
+PS_OUT PS_SpecialSkill(PS_IN In)
+{
+    PS_OUT Out;
+    float2 vCenter = float2(0.2, 0.55);
+    float2 vTextureCenter = float2(0.5, 0.5);
+    float fRatio = 4.0f;
+    
+    float2 vDiff = In.vTexcoord - vCenter;
+    vDiff.x *= fRatio;
+    
+    float fDist = length(vDiff);
+    /* 스킬 아이콘 그려짐 */
+    if (fDist < 0.30)
+    {
+        float fScale = 1.8f;
+        // 중심 0.5 0.5에서 떨어진 거리 구하고, 그만큼 스케일링 해줌.
+        float2 vUV = vTextureCenter + vDiff * fScale;
+
+        Out.vColor = g_Texture_Skill.Sample(DefaultSampler, vUV);
+    }
+    else
+        Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
     
     return Out;
 }
@@ -86,13 +164,24 @@ technique11 DefaultTechnique
     pass UI_ProgressBar
     {
         VertexShader = compile vs_5_0 VS_MAIN();
-        PixelShader = compile ps_5_0 PS_MAIN();
+        PixelShader = compile ps_5_0 PS_ProgressBar();
     }
 
-    pass UI_FadeOut
+    pass UI_FadeInOut
     {
         VertexShader = compile vs_5_0 VS_MAIN();
-        PixelShader = compile ps_5_0 PS_FadeOut();
+        PixelShader = compile ps_5_0 PS_FadeInOut();
     }
 
+    pass UI_Skill
+    {
+        VertexShader = compile vs_5_0 VS_MAIN();
+        PixelShader = compile ps_5_0 PS_Skill();
+    }
+
+    pass UI_SpecialSkill
+    {
+        VertexShader = compile vs_5_0 VS_MAIN();
+        PixelShader = compile ps_5_0 PS_SpecialSkill();
+    }
 }
