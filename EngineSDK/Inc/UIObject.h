@@ -53,7 +53,7 @@ protected:
 	_float m_fX{}, m_fY{}, m_fZ{};
 	_float m_fSizeX{}, m_fSizeY{};
 	_float m_fAngle{};
-	_uint  m_iShaderPassIdx = { 0 };
+	_uint  m_iShaderPassIdx = {0};
 	_uint  m_iTextureIdx = { 0 };
 
 protected:

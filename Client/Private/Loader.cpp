@@ -19,6 +19,8 @@
 
 #include "AttackTypePanel.h"
 
+#include "MissionAlertPanel.h"
+
 #include "GameInstance.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -119,7 +121,7 @@ HRESULT CLoader::Loading_For_Logo()
 
 	/* For.Prototype_Component_Texture_DecimalUI */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_Component_Texture_DecimalUI"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Decimal/Decimal%d.png"), 10))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Decimal/Decimal%d.png"), 20))))
 		return E_FAIL;
 
 	m_fLoadingProgress += 0.2f;
@@ -200,9 +202,14 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 	/* For.Prototype_Component_Texture_DecimalUI */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_DecimalUI"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Decimal/Decimal%d.png"), 10))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Decimal/Decimal%d.png"), 20))))
 		return E_FAIL;
 	
+	/* For.Prototype_Component_Texture_MissionAlertPanel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_MissionAlertPanel"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/MissionAlert/MissionAlert.png"), 1))))
+		return E_FAIL;
+
 	/* For.Prototype_Component_Texture_AttackTypePanel */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_AttackTypePanel"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/AttackType/AttackType%d.png"), 4))))
@@ -261,6 +268,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_GameObject_AttackTypePanel */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_AttackTypePanel"),
 		CAttackTypePanel::Create(m_pDevice, m_pContext, OBJECTID::ATTACKTYPE_PANEL))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_MissionAlertPanel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_MissionAlertPanel"),
+		CMissionAlertPanel::Create(m_pDevice, m_pContext, OBJECTID::MISSIONALERT_PANEL))))
 		return E_FAIL;
 
 	m_strMessage = TEXT("로딩이 완료되었습니다..");

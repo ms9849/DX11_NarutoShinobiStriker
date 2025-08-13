@@ -150,8 +150,7 @@ CSkillSlotPanel* CSkillSlotPanel::Create(ID3D11Device* pDevice, ID3D11DeviceCont
 }
 
 CGameObject* CSkillSlotPanel::Clone(void* pArg)
-{
-	CSkillSlotPanel* pInstance = new CSkillSlotPanel(*this);
+{	CSkillSlotPanel* pInstance = new CSkillSlotPanel(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
@@ -160,6 +159,7 @@ CGameObject* CSkillSlotPanel::Clone(void* pArg)
 	}
 
 	return pInstance;
+
 }
 
 void CSkillSlotPanel::Free()

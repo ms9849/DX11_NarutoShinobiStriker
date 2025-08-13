@@ -30,7 +30,8 @@ HRESULT CDecimalUI::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_iTextureIdx = 0;
+	m_eDecimalType = static_cast<DECIMAL_DESC*>(pArg)->eDecimal;
+  	m_iTextureIdx = ENUM_CLASS(m_eDecimalType) * 10 + 0;
 
 	return S_OK;
 }

@@ -158,6 +158,7 @@
     <ClInclude Include="..\Public\Camera_Manager.h" />
     <ClInclude Include="..\Public\Character.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
+    <ClInclude Include="..\Public\ComboKOPanel.h" />
     <ClInclude Include="..\Public\DecimalUI.h" />
     <ClInclude Include="..\Public\Dummy.h" />
     <ClInclude Include="..\Public\GameManager.h" />
@@ -170,6 +171,7 @@
     <ClInclude Include="..\Public\LoadingPanel.h" />
     <ClInclude Include="..\Public\LogoPanel.h" />
     <ClInclude Include="..\Public\MainApp.h" />
+    <ClInclude Include="..\Public\MissionAlertPanel.h" />
     <ClInclude Include="..\Public\Panel.h" />
     <ClInclude Include="..\Public\Player.h" />
     <ClInclude Include="..\Public\PressAnyButtonUI.h" />
@@ -195,6 +197,7 @@
     <ClCompile Include="..\Private\Button.cpp" />
     <ClCompile Include="..\Private\Camera_Manager.cpp" />
     <ClCompile Include="..\Private\Character.cpp" />
+    <ClCompile Include="..\Private\ComboKOPanel.cpp" />
     <ClCompile Include="..\Private\DecimalUI.cpp" />
     <ClCompile Include="..\Private\Dummy.cpp" />
     <ClCompile Include="..\Private\GameManager.cpp" />
@@ -207,6 +210,7 @@
     <ClCompile Include="..\Private\LoadingPanel.cpp" />
     <ClCompile Include="..\Private\LogoPanel.cpp" />
     <ClCompile Include="..\Private\MainApp.cpp" />
+    <ClCompile Include="..\Private\MissionAlertPanel.cpp" />
     <ClCompile Include="..\Private\Panel.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\Private\PressAnyButtonUI.cpp" />
