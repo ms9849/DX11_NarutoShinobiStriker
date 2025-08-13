@@ -153,6 +153,12 @@ HRESULT CLevel_GamePlay::Ready_Layer_UI(const _wstring& strLayerTag)
 		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
 		return E_FAIL;
 
+	Desc = CUIObject::CreateDesc(g_iWinSizeX / 2.f, g_iWinSizeY / 2.f - 240, 0.30f, g_iWinSizeX - 250, 50, 0, 0.f);
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_MissionAlertPanel"),
+		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
+		return E_FAIL;
+
 	return S_OK;
 }
 

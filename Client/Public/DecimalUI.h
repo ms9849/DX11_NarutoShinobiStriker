@@ -13,6 +13,13 @@ NS_BEGIN(Client)
 
 class CDecimalUI final : public CUIObject
 {
+public:
+	enum class DECIMAL_TYPE { TIMER, COMBO, END };
+
+	typedef struct tagDecimalUI : public UIOBJECT_DESC {
+		DECIMAL_TYPE eDecimal;
+	} DECIMAL_DESC;
+
 private:
 	CDecimalUI(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	CDecimalUI(const CDecimalUI& rhs);
@@ -27,11 +34,17 @@ public:
 	virtual HRESULT Render() override;
 
 	void Set_CurrentIdx(_uint iIdx) {
-		m_iTextureIdx = iIdx;
+		m_iTextureIdx = ENUM_CLASS(m_eDecimalType) * 10 + iIdx;
+	}
+
+	void Set_Visible(_bool bFlag) {
+		m_bVisible = bFlag;
 	}
 
 private:
 	class CGameManager* m_pGameManager = { nullptr };
+	DECIMAL_TYPE m_eDecimalType = {};
+	_bool m_bVisible = { true };
 
 private:
 	HRESULT Ready_Components();

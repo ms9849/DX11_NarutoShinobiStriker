@@ -127,6 +127,12 @@
     <Filter Include="02.GameObjects\UI\Panel\GAMEPLAY\AttackTypePanel">
       <UniqueIdentifier>{db06d948-9262-4c30-9730-ffbc41d02b0d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\UI\Panel\GAMEPLAY\MissionAlertPanel">
+      <UniqueIdentifier>{9378c90d-6e09-4c8b-ad02-037a77452425}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Panel\GAMEPLAY\ComboKOPanel">
+      <UniqueIdentifier>{5d21c979-df97-4f3f-9042-1f55f4603c6f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -237,6 +243,12 @@
     <ClInclude Include="..\Public\AttackTypePanel.h">
       <Filter>02.GameObjects\UI\Panel\GAMEPLAY\AttackTypePanel</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\MissionAlertPanel.h">
+      <Filter>02.GameObjects\UI\Panel\GAMEPLAY\MissionAlertPanel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ComboKOPanel.h">
+      <Filter>02.GameObjects\UI\Panel\GAMEPLAY\ComboKOPanel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -344,6 +356,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\AttackTypePanel.cpp">
       <Filter>02.GameObjects\UI\Panel\GAMEPLAY\AttackTypePanel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\MissionAlertPanel.cpp">
+      <Filter>02.GameObjects\UI\Panel\GAMEPLAY\MissionAlertPanel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ComboKOPanel.cpp">
+      <Filter>02.GameObjects\UI\Panel\GAMEPLAY\ComboKOPanel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

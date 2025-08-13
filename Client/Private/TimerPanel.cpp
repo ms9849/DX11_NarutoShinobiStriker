@@ -69,27 +69,34 @@ HRESULT CTimerPanel::Ready_Decimals()
 {
 	for (_int i = 0; i < 3; ++i)
 	{
-		CUIObject::UIOBJECT_DESC Desc;
+		CDecimalUI::DECIMAL_DESC SrcDesc;
+		UIOBJECT_DESC DstDesc;
 
 		switch (i)
 		{
 		case 0:
-			Desc = CUIObject::CreateDesc(m_fX -40, m_fY+7, m_fZ-0.05f, 90.f, 45.f, 0.f);
+			DstDesc = CUIObject::CreateDesc(m_fX -40, m_fY+7, m_fZ-0.05f, 90.f, 45.f, 0, 0.f);
+			memcpy(&SrcDesc, &DstDesc, sizeof(UIOBJECT_DESC));
+			SrcDesc.eDecimal = CDecimalUI::DECIMAL_TYPE::TIMER;
 			break;
 
 		case 1:
-			Desc = CUIObject::CreateDesc(m_fX + 7, m_fY + 7, m_fZ - 0.10f, 90.f, 45.f, 0.f);
+			DstDesc = CUIObject::CreateDesc(m_fX + 7, m_fY + 7, m_fZ - 0.10f, 90.f, 45.f, 0, 0.f);
+			memcpy(&SrcDesc, &DstDesc, sizeof(UIOBJECT_DESC));
+			SrcDesc.eDecimal = CDecimalUI::DECIMAL_TYPE::TIMER;
 			break;
 
 		case 2:
-			Desc = CUIObject::CreateDesc(m_fX + 37, m_fY + 7, m_fZ - 0.15f, 90.f, 45.f, 0.f);
+			DstDesc = CUIObject::CreateDesc(m_fX + 37, m_fY + 7, m_fZ - 0.15f, 90.f, 45.f, 0, 0.f);
+			memcpy(&SrcDesc, &DstDesc, sizeof(UIOBJECT_DESC));
+			SrcDesc.eDecimal = CDecimalUI::DECIMAL_TYPE::TIMER;
 			break;
 
 		default:
 			break;
 		}
 
-		CDecimalUI* pDecimal = static_cast<CDecimalUI*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_pGameManager->Get_NextLevel()), TEXT("Prototype_GameObject_DecimalUI"), &Desc));
+		CDecimalUI* pDecimal = static_cast<CDecimalUI*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_pGameManager->Get_NextLevel()), TEXT("Prototype_GameObject_DecimalUI"), &SrcDesc));
 		if (nullptr == pDecimal)
 			return E_FAIL;
 
