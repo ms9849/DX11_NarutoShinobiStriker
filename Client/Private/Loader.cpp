@@ -22,6 +22,9 @@
 #include "MissionAlertPanel.h"
 
 #include "GameInstance.h"
+#include "Model.h"
+
+#include "KonohaVillage.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice { pDevice }
@@ -286,8 +289,25 @@ HRESULT CLoader::Loading_For_Edit()
 {
 	m_strMessage = TEXT("텍스쳐를(을) 로딩 중 입니다.");
 	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
+
+	/* For.Prototype_Component_Model_KonohaVillage */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_KonohaVillage"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/KonohaVillage/KonohaVillage.fbx"))))
+		return E_FAIL;
+
 	m_strMessage = TEXT("셰이더를(을) 로딩 중 입니다.");
 	m_strMessage = TEXT("객체원형를(을) 로딩 중 입니다.");
+	
+	/* For.Prototype_GameObject_TestCamera */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_GameObject_TestCamera"),
+		CTestCamera::Create(m_pDevice, m_pContext, OBJECTID::TEST_CAMERA))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_KonohaVillage */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_GameObject_KonohaVillage"),
+		CKonohaVillage::Create(m_pDevice, m_pContext, OBJECTID::KONOHA_VILLAGE))))
+		return E_FAIL;
+
 	m_strMessage = TEXT("로딩이 완료되었습니다..");
 
 	m_isFinished = true;
