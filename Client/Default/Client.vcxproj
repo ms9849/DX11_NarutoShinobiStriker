@@ -162,6 +162,7 @@
     <ClInclude Include="..\Public\DecimalUI.h" />
     <ClInclude Include="..\Public\Dummy.h" />
     <ClInclude Include="..\Public\GameManager.h" />
+    <ClInclude Include="..\Public\KonohaVillage.h" />
     <ClInclude Include="..\Public\Level_Edit.h" />
     <ClInclude Include="..\Public\Level_GamePlay.h" />
     <ClInclude Include="..\Public\Level_Loading.h" />
@@ -201,6 +202,7 @@
     <ClCompile Include="..\Private\DecimalUI.cpp" />
     <ClCompile Include="..\Private\Dummy.cpp" />
     <ClCompile Include="..\Private\GameManager.cpp" />
+    <ClCompile Include="..\Private\KonohaVillage.cpp" />
     <ClCompile Include="..\Private\Level_Edit.cpp" />
     <ClCompile Include="..\Private\Level_GamePlay.cpp" />
     <ClCompile Include="..\Private\Level_Loading.cpp" />
