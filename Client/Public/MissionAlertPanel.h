@@ -32,8 +32,9 @@ private:
 	_float m_fFadeOutTimeAcc = { 0.f };
 	_float m_fFadeOutMaxTimeAcc = { 0.3f };
 
-	_float m_fLifeTime = 10.f;
+	/* Fade IN 끝난뒤, 수명 체크용 */
 	_float m_fTimeAcc = 0.f;
+	_float m_fLifeTime = 10.f;
 	_bool  m_bVisible = { true };
 
 private:

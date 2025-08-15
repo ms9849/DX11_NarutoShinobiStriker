@@ -31,7 +31,7 @@ private:
 	virtual HRESULT Bind_ShaderResources() override;
 	
 private:
-	void Play_Animation(_float fTimeDelta);
+	void Play_Animation_Rotate(_float fTimeDelta);
 
 public:
 	static CRotationIconUI* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);

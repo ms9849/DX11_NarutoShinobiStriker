@@ -43,9 +43,6 @@ private:
 	HRESULT Ready_Components();
 	virtual HRESULT Bind_ShaderResources() override;
 
-private:
-	void Play_Animation(_float fTimeDelta);
-
 public:
 	static CProgressBarUI* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	virtual CGameObject* Clone(void* pArg);

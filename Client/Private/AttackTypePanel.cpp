@@ -53,7 +53,7 @@ void CAttackTypePanel::Priority_Update(_float fTimeDelta)
 void CAttackTypePanel::Update(_float fTimeDelta)
 {
     if(m_bTriggered)
-        Play_Animation(fTimeDelta);
+        Play_Animation_FadeIn(fTimeDelta);
 }
 
 void CAttackTypePanel::Late_Update(_float fTimeDelta)
@@ -102,7 +102,7 @@ HRESULT CAttackTypePanel::Ready_Texts()
     return S_OK;
 }
 
-void CAttackTypePanel::Play_Animation(_float fTimeDelta)
+void CAttackTypePanel::Play_Animation_FadeIn(_float fTimeDelta)
 {
     m_fTimeAcc += fTimeDelta;
     

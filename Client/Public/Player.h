@@ -31,6 +31,7 @@ private:
 public:
 	void Set_SkillSlotPanel(class CSkillSlotPanel* pPanel);
 	void Set_AttackTypePanel(class CAttackTypePanel* pPanel);
+	void Set_ComboKOPanel(class CComboKOPanel* pPanel);
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -44,12 +45,21 @@ private:
 	class CGameManager* m_pGameManager = { nullptr };
 	class CSkillSlotPanel* m_pSkillSlotPanel = { nullptr };
 	class CAttackTypePanel* m_pAttackTypePanel = { nullptr };
+	class CComboKOPanel* m_pComboKOPanel = { nullptr };
+
+	_uint m_iComboCount = { 0 };
+	_uint  m_iMaxComboCount = { 99 };
+
+	_float m_fComboTimeAcc = { 0 };
+	_bool m_bEnemyHit = { false };
+	_bool m_bEnemyKO = { false };
 
 private:
 	HRESULT Ready_Components();
 
 private:
 	void Key_Input(_float fTimeDelta);
+	void ComboKO_System(_float fTimeDelta);
 	void Change_Skills();
 
 public:

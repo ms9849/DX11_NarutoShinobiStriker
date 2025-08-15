@@ -5,6 +5,7 @@
 
 #include "SkillSlotPanel.h"
 #include "AttackTypePanel.h"
+#include "ComboKOPanel.h"
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 	: CCharacter { pDevice, pContext, eObjectID }
@@ -35,6 +36,12 @@ void CPlayer::Set_AttackTypePanel(CAttackTypePanel* pPanel)
 	Safe_AddRef(m_pAttackTypePanel);
 
 	m_pAttackTypePanel->Change_AttackType(m_eCurAttackType);
+}
+
+void CPlayer::Set_ComboKOPanel(CComboKOPanel* pPanel)
+{
+	m_pComboKOPanel = pPanel;
+	Safe_AddRef(m_pComboKOPanel);
 }
 
 HRESULT CPlayer::Initialize_Prototype()
@@ -72,15 +79,17 @@ void CPlayer::Update(_float fTimeDelta)
 	m_pSkillSlotPanel->Set_SpecialSkillProgress(100.f);
 
 	Key_Input(fTimeDelta);
+	ComboKO_System(fTimeDelta);
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
 {
 	/* 스킬이 바뀌었다면. */
 	if (m_eCurAttackType != m_ePreAttackType)
+	{
 		Change_Skills();
-
-	__super::Change_AttackType();
+		__super::Change_AttackType();
+	}
 
 	m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
@@ -137,10 +146,54 @@ void CPlayer::Key_Input(_float fTimeDelta)
 	if (m_pGameInstance->Key_Down(DIK_6))
 	{
 		m_eCurAttackType = static_cast<ATTACK_TYPE>(ENUM_CLASS(m_eCurAttackType) + 1);
-	
+
 		if (m_eCurAttackType == ATTACK_TYPE::END)
 			m_eCurAttackType = ATTACK_TYPE::MELEE;
 	}
+
+	if (m_pGameInstance->Key_Down(DIK_7))
+	{
+		/* 콤보 시스템에서 초기화해줌.*/
+		/* 로직은 묶였지만 아직 bool 타입 못 묶음..*/
+		m_bEnemyHit = true;
+	}
+
+	if (m_pGameInstance->Key_Down(DIK_8))
+	{
+		/* 콤보 시스템에서 초기화해줌.*/
+		/* 로직은 묶였지만 아직 bool 타입 못 묶음..*/
+		m_bEnemyKO = true;
+	}
+}
+
+void CPlayer::ComboKO_System(_float fTimeDelta)
+{
+	m_fComboTimeAcc += fTimeDelta;
+
+	/* KO 시스템 */
+	if (m_bEnemyKO)
+	{
+		m_pComboKOPanel->PopUp_KO();
+		m_bEnemyKO = false;
+	}
+
+	/* 콤보 시스템 */
+	if (m_bEnemyHit)
+	{
+		if(m_iComboCount < m_iMaxComboCount)
+			m_iComboCount++;
+		m_fComboTimeAcc = 0.f;
+	}
+
+	/* 콤보 초기화 */
+	if (m_iComboCount >= 1 && m_fComboTimeAcc >= 2.f)
+	{
+		m_iComboCount = 0;
+		m_fComboTimeAcc = 0.f;
+	}
+
+	m_pComboKOPanel->Update_Combo(m_iComboCount);
+	m_bEnemyHit = false;
 }
 
 void CPlayer::Change_Skills()
@@ -148,6 +201,7 @@ void CPlayer::Change_Skills()
 	if (m_pSkillSlotPanel == nullptr || m_pAttackTypePanel == nullptr)
 		return;
 
+	/* 첫 번째 스킬은 그림자 분신이니까 교체 안함. */
 	for (_uint i = ENUM_CLASS(SKILLNUM::SECOND); i < ENUM_CLASS(SKILLNUM::END); ++i)
 		m_pSkillSlotPanel->Change_Skill(i, m_ActivatedSkills[i]);
 
@@ -187,4 +241,5 @@ void CPlayer::Free()
 	Safe_Release(m_pGameManager);
 	Safe_Release(m_pSkillSlotPanel);
 	Safe_Release(m_pAttackTypePanel);
+	Safe_Release(m_pComboKOPanel);
 }

@@ -21,6 +21,9 @@
 
 #include "MissionAlertPanel.h"
 
+#include "ComboKOPanel.h"
+#include "KOUI.h"
+
 #include "GameInstance.h"
 #include "Model.h"
 
@@ -218,6 +221,17 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/AttackType/AttackType%d.png"), 4))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Texture_ComboKOPanel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_ComboKOPanel"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/ComboKO/ComboKOPanel%d.png"), 2))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_KOUI */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_KOUI"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/ComboKO/KO_%d.png"), 1))))
+		return E_FAIL;
+
+
 	m_fLoadingProgress += 0.3f;
 	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
 	/* For.Prototype_Component_VIBuffer_Terrain */
@@ -276,6 +290,16 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_GameObject_MissionAlertPanel */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_MissionAlertPanel"),
 		CMissionAlertPanel::Create(m_pDevice, m_pContext, OBJECTID::MISSIONALERT_PANEL))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_ComboKOPanel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_ComboKOPanel"),
+		CComboKOPanel::Create(m_pDevice, m_pContext, OBJECTID::COMBOKO_PANEL))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_KOUI */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_KOUI"),
+		CKOUI::Create(m_pDevice, m_pContext, OBJECTID::KO_UI))))
 		return E_FAIL;
 
 	m_strMessage = TEXT("로딩이 완료되었습니다..");

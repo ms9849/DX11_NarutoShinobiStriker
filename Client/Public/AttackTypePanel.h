@@ -37,7 +37,7 @@ private:
 	HRESULT Ready_Texts();
 
 private:
-	void Play_Animation(_float fTimeDelta);
+	void Play_Animation_FadeIn(_float fTimeDelta);
 
 public:
 	static CAttackTypePanel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
