@@ -1,28 +1,28 @@
-#include "DecimalUI.h"
+#include "KOUI.h"
 
 #include "GameInstance.h"
 #include "GameManager.h"
 
-CDecimalUI::CDecimalUI(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
-	: CUIObject { pDevice, pContext, ENUM_CLASS(eObjectID) }
+CKOUI::CKOUI(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
+	: CUIObject{ pDevice, pContext, ENUM_CLASS(eObjectID) }
 	, m_pGameManager { CGameManager::GetInstance() }
 {
 	Safe_AddRef(m_pGameManager);
 }
 
-CDecimalUI::CDecimalUI(const CDecimalUI& rhs)
-	: CUIObject { rhs }
+CKOUI::CKOUI(const CKOUI& rhs)
+	: CUIObject{ rhs }
 	, m_pGameManager{ CGameManager::GetInstance() }
 {
 	Safe_AddRef(m_pGameManager);
 }
 
-HRESULT CDecimalUI::Initialize_Prototype()
+HRESULT CKOUI::Initialize_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CDecimalUI::Initialize(void* pArg)
+HRESULT CKOUI::Initialize(void* pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
@@ -30,32 +30,41 @@ HRESULT CDecimalUI::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_eDecimalType = static_cast<DECIMAL_DESC*>(pArg)->eDecimal;
-  	m_iTextureIdx = ENUM_CLASS(m_eDecimalType) * 10 + 0;
-
 	return S_OK;
 }
 
-void CDecimalUI::Priority_Update(_float fTimeDelta)
+void CKOUI::Priority_Update(_float fTimeDelta)
 {
 }
 
-void CDecimalUI::Update(_float fTimeDelta)
+void CKOUI::Update(_float fTimeDelta)
 {
 	if (m_bFadeIn)
 		Play_Animation_FadeIn(fTimeDelta);
 
 	if (m_bFadeOut)
 		Play_Animation_FadeOut(fTimeDelta);
+
+	/* 페이드 인 이후, 2초가 지나면 페이드 아웃 수행 */
+	if (m_bTriggered)
+	{
+		m_fTimeAcc += fTimeDelta;
+
+		if (m_fTimeAcc >= 2.0f)
+		{
+			m_fTimeAcc = 0.f;
+			Start_FadeOut();
+		}
+	}
 }
 
-void CDecimalUI::Late_Update(_float fTimeDelta)
+void CKOUI::Late_Update(_float fTimeDelta)
 {
-	if(m_bVisible)
- 		m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
+	if (m_bVisible)
+		m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
 }
 
-HRESULT CDecimalUI::Render()
+HRESULT CKOUI::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -63,15 +72,18 @@ HRESULT CDecimalUI::Render()
 	return S_OK;
 }
 
-void CDecimalUI::Start_FadeIn()
+void CKOUI::Start_FadeIn()
 {
 	m_bVisible = true;
 	m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT);
 	m_bFadeIn = true;
 	m_fFadeInTimeAcc = 0.f;
+
+	m_bTriggered = true;
+	m_fTimeAcc = 0.f;
 }
 
-void CDecimalUI::Start_FadeOut()
+void CKOUI::Start_FadeOut()
 {
 	m_bVisible = true;
 	m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT);
@@ -79,7 +91,7 @@ void CDecimalUI::Start_FadeOut()
 	m_fFadeOutTimeAcc = 0.f;
 }
 
-HRESULT CDecimalUI::Ready_Components()
+HRESULT CKOUI::Ready_Components()
 {
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
 		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
@@ -89,14 +101,14 @@ HRESULT CDecimalUI::Ready_Components()
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(m_pGameManager->Get_NextLevel()), TEXT("Prototype_Component_Texture_DecimalUI"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(m_pGameManager->Get_NextLevel()), TEXT("Prototype_Component_Texture_KOUI"),
 		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 		return E_FAIL;
 
 	return S_OK;
 }
 
-HRESULT CDecimalUI::Bind_ShaderResources()
+HRESULT CKOUI::Bind_ShaderResources()
 {
 	if (FAILED(__super::Bind_ShaderResources()))
 		return E_FAIL;
@@ -110,7 +122,7 @@ HRESULT CDecimalUI::Bind_ShaderResources()
 	return S_OK;
 }
 
-void CDecimalUI::Play_Animation_FadeIn(_float fTimeDelta)
+void CKOUI::Play_Animation_FadeIn(_float fTimeDelta)
 {
 	m_fFadeInTimeAcc += fTimeDelta;
 
@@ -129,7 +141,7 @@ void CDecimalUI::Play_Animation_FadeIn(_float fTimeDelta)
 	}
 }
 
-void CDecimalUI::Play_Animation_FadeOut(_float fTimeDelta)
+void CKOUI::Play_Animation_FadeOut(_float fTimeDelta)
 {
 	m_fFadeOutTimeAcc += fTimeDelta;
 
@@ -141,41 +153,42 @@ void CDecimalUI::Play_Animation_FadeOut(_float fTimeDelta)
 	/* 애니메이션 종료 */
 	if (m_fFadeOutTimeAcc >= m_fFadeOutMaxTimeAcc)
 	{
-		m_pTransformCom->Set_Scale(m_fSizeX , m_fSizeY, m_fZ);
+		m_pTransformCom->Set_Scale(m_fSizeX, m_fSizeY, m_fZ);
 		m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI);
 		m_bFadeOut = false;
 		m_bVisible = false;
+		m_bTriggered = false;
 		m_fFadeOutTimeAcc = 0.f;
 	}
 }
 
-CDecimalUI* CDecimalUI::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
+CKOUI* CKOUI::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 {
-	CDecimalUI* pInstance = new CDecimalUI(pDevice, pContext, eObjectID);
+	CKOUI* pInstance = new CKOUI(pDevice, pContext, eObjectID);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Create Failed : Decimal UI");
+		MSG_BOX("Create Failed : KO UI");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CDecimalUI::Clone(void* pArg)
+CGameObject* CKOUI::Clone(void* pArg)
 {
-	CDecimalUI* pInstance = new CDecimalUI(*this);
+	CKOUI* pInstance = new CKOUI(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Clone Failed : Decimal UI");
+		MSG_BOX("Clone Failed : KO UI");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CDecimalUI::Free()
+void CKOUI::Free()
 {
 	__super::Free();
 

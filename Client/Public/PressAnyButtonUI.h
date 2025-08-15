@@ -27,7 +27,7 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	void Play_Animation(_float fTimeDelta);
+	void Play_Animation_FadeOut(_float fTimeDelta);
 
 private:
 	/* 애니메이션 재생 및 플레이 끝남을 확인하기 위함 .*/

@@ -1,20 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "Panel.h"
-
-/* 
-콤보는 최대 99까지. 
-1 콤보 -> 큰 HIT로 땜빵
-2 콤보 이상 -> Decimal UI 가져다 써야할 듯
-
-KO -> 별개로 적 처치시에 띄워줄 거니까.. UI 별개로 필요함. (KO랑 콤보랑은 다름)
-
-Hit, Hits는 ComboPanel에서 출력.
-숫자는 Decimal.
-
-KO는 KO UI 에서.
-*/
+#include "UIObject.h"
 
 NS_BEGIN(Engine)
 class CTexture;
@@ -24,16 +11,17 @@ NS_END
 
 NS_BEGIN(Client)
 
-class CComboKOPanel final : public CPanel
+class CKOUI final : public CUIObject
 {
 private:
-	CComboKOPanel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
-	CComboKOPanel(const CComboKOPanel& rhs);
-	virtual ~CComboKOPanel() = default;
+	CKOUI(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
+	CKOUI(const CKOUI& rhs);
+	virtual ~CKOUI() = default;
 
 public:
-	void Update_Combo(_uint iComboCount);
-	void PopUp_KO();
+	void Set_Visible(_bool bFlag) {
+		m_bVisible = bFlag;
+	}
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -43,16 +31,20 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+public:
+	void Start_FadeIn();
+	void Start_FadeOut();
+
 private:
-	_float m_fScale = { 1.f };
-	_uint m_iComboCount = { 0 };
-	_float m_fComboTimeAcc = { 0.f };
-
-	_bool m_IsEnemyKO = { false };
-	_float m_fEnemyKOTimeAcc = { 0.f };
-
+	class CGameManager* m_pGameManager = { nullptr };
 	_bool m_bVisible = { false };
+
 	_float m_fMaxScale = { 1.5f };
+
+	/* 페이드 인 이후 일정 시간이 지나면 자동으로 페이드 아웃 수행해주기 위함 */
+	_bool m_bTriggered = { false };
+	_float m_fTimeAcc = { 0.f };
+
 	/* 페이드 인*/
 	_bool  m_bFadeIn = { false };
 	_float m_fFadeInTimeAcc = { 0.f };
@@ -64,18 +56,16 @@ private:
 	_float m_fFadeOutMaxTimeAcc = { 0.2f };
 
 private:
-	virtual HRESULT Bind_ShaderResources() override;
 	HRESULT Ready_Components();
-	HRESULT Ready_Deicmals();
-	HRESULT Ready_KO();
+	HRESULT Bind_ShaderResources();
 
 private:
 	void	Play_Animation_FadeIn(_float fTimeDelta);
 	void	Play_Animation_FadeOut(_float fTimeDelta);
 
 public:
-	static CComboKOPanel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
-	virtual CGameObject* Clone(void* pArg);
+	static CKOUI* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
+	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 };
 

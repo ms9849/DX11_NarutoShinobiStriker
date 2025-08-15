@@ -34,7 +34,7 @@ void CRotationIconUI::Priority_Update(_float fTimeDelta)
 
 void CRotationIconUI::Update(_float fTimeDelta)
 {
-    Play_Animation(fTimeDelta);
+    Play_Animation_Rotate(fTimeDelta);
 }
 
 void CRotationIconUI::Late_Update(_float fTimeDelta)
@@ -49,7 +49,7 @@ HRESULT CRotationIconUI::Render()
     return S_OK;
 }
 
-void CRotationIconUI::Play_Animation(_float fTimeDelta)
+void CRotationIconUI::Play_Animation_Rotate(_float fTimeDelta)
 {
     m_pTransformCom->Turn(m_pTransformCom->Get_State(STATE::LOOK), fTimeDelta);
 }

@@ -13,17 +13,17 @@ private:
 	virtual ~CTimerPanel() = default;
 
 public:
+	void Add_LeftTime(_uint iSec) {
+		m_iLeftTime += iSec;
+	}
+
+public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Priority_Update(_float fTimeDelta) override;
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
-
-public:
-	void Add_LeftTime(_uint iSec) {
-		m_iLeftTime += iSec;
-	}
 
 private:
 	_float m_fTimeAcc = {};

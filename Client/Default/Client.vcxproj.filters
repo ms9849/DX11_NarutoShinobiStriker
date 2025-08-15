@@ -136,6 +136,9 @@
     <Filter Include="02.GameObjects\KonohaVillage">
       <UniqueIdentifier>{569f86bd-3122-4a1c-a169-8fb992524cd4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\UI\Panel\GAMEPLAY\ComboKOPanel\KO">
+      <UniqueIdentifier>{f64198ff-95e5-4d40-a247-e90e0937e3eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -255,6 +258,9 @@
     <ClInclude Include="..\Public\KonohaVillage.h">
       <Filter>02.GameObjects\KonohaVillage</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\KOUI.h">
+      <Filter>02.GameObjects\UI\Panel\GAMEPLAY\ComboKOPanel\KO</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -371,6 +377,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\KonohaVillage.cpp">
       <Filter>02.GameObjects\KonohaVillage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\KOUI.cpp">
+      <Filter>02.GameObjects\UI\Panel\GAMEPLAY\ComboKOPanel\KO</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

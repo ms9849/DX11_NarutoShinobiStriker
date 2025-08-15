@@ -38,7 +38,7 @@ void CPressAnyButtonUI::Update(_float fTimeDelta)
         m_bTriggered = true;
 
     if (m_bTriggered)
-        Play_Animation(fTimeDelta);
+        Play_Animation_FadeOut(fTimeDelta);
 }
 
 void CPressAnyButtonUI::Late_Update(_float fTimeDelta)
@@ -53,7 +53,7 @@ HRESULT CPressAnyButtonUI::Render()
     return S_OK;
 }
 
-void CPressAnyButtonUI::Play_Animation(_float fTimeDelta)
+void CPressAnyButtonUI::Play_Animation_FadeOut(_float fTimeDelta)
 {
     m_fTimeAcc += fTimeDelta;
 
