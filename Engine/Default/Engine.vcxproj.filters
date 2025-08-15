@@ -163,6 +163,9 @@
     <ClInclude Include="..\Public\Model.h">
       <Filter>01.Utility\03.Components\Model</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Picking.h">
+      <Filter>01.Utility\07. Picking</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -281,6 +284,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Model.cpp">
       <Filter>01.Utility\03.Components\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Picking.cpp">
+      <Filter>01.Utility\07. Picking</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -409,6 +415,9 @@
     </Filter>
     <Filter Include="01.Utility\03.Components\Model\Mesh">
       <UniqueIdentifier>{15eb6c1e-bfed-48f0-9848-fa42c62219d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\07. Picking">
+      <UniqueIdentifier>{b495b8ad-024f-467c-80d7-7791cf763d26}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

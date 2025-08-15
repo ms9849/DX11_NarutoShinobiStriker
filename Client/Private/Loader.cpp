@@ -187,6 +187,11 @@ HRESULT CLoader::Loading_For_Logo()
 	return S_OK;
 }
 
+HRESULT CLoader::Loading_For_OutfitSelect()
+{
+	return S_OK;
+}
+
 HRESULT CLoader::Loading_For_GamePlay()
 {
 	m_fLoadingProgress += 0.4f;

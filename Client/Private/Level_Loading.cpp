@@ -5,6 +5,7 @@
 #include "GameManager.h"
 
 #include "Level_Logo.h"
+#include "Level_OutfitSelect.h"
 #include "Level_GamePlay.h"
 #include "Level_Edit.h"
 #include "LoadingBarPanel.h"
@@ -44,6 +45,9 @@ void CLevel_Loading::Update(_float fTimeDelta)
 		{
 		case LEVEL::LOGO:
 			pNewLevel = CLevel_Logo::Create(m_pDevice, m_pContext, m_eNextLevelID);
+			break;
+		case LEVEL::OUTFIT_SELECT:
+			pNewLevel = CLevel_OutfitSelect::Create(m_pDevice, m_pContext, m_eNextLevelID);
 			break;
 		case LEVEL::GAMEPLAY:
 			pNewLevel = CLevel_GamePlay::Create(m_pDevice, m_pContext, m_eNextLevelID);
