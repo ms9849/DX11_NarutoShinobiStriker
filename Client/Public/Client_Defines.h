@@ -8,7 +8,7 @@ namespace Client
 	const unsigned int			g_iWinSizeX = 1280;
 	const unsigned int			g_iWinSizeY = 720;
 
-	enum class LEVEL { STATIC, LOADING, LOGO, GAMEPLAY, EDIT, END };
+	enum class LEVEL { STATIC, LOADING, LOGO, OUTFIT_SELECT, GAMEPLAY, EDIT, END };
 	
 	/*
 	OBJECT ID? -> Abstract 계층이 아닌, 실제 구현되는 객체들만 가지게 될 ID.

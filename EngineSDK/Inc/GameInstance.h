@@ -82,6 +82,10 @@ public:
 	const _float4* Get_CamState(STATE eState);
 #pragma endregion
 
+#pragma region PICKING
+
+#pragma endregion
+
 #pragma region SOUND_MANAGER
 	void PlaySoundOnce(const _wstring& pSoundKey, CHANNELID eID, float fVolume);
 	void PlaySoundLoop(const _wstring& pSoundKey, CHANNELID eID, float fVolume);
@@ -114,6 +118,7 @@ private:
 	class CObject_Manager*			m_pObject_Manager = { nullptr };
 	class CRenderer*				m_pRenderer = { nullptr };
 	class CPipeLine*				m_pPipeLine = { nullptr };
+	class CPicking*					m_pPicking = { nullptr };
 	class CSound_Manager*			m_pSound_Manager = { nullptr };
 	class CInput_Manager*			m_pInput_Manager = { nullptr };
 	class CPooling_Manager*			m_pPooling_Manager = { nullptr };

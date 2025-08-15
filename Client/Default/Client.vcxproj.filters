@@ -139,6 +139,9 @@
     <Filter Include="02.GameObjects\UI\Panel\GAMEPLAY\ComboKOPanel\KO">
       <UniqueIdentifier>{f64198ff-95e5-4d40-a247-e90e0937e3eb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Levels\OutfitSelect">
+      <UniqueIdentifier>{86e00ab3-f0a9-436b-89c3-30077c30a8b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -261,6 +264,9 @@
     <ClInclude Include="..\Public\KOUI.h">
       <Filter>02.GameObjects\UI\Panel\GAMEPLAY\ComboKOPanel\KO</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Level_OutfitSelect.h">
+      <Filter>01.Levels\OutfitSelect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -380,6 +386,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\KOUI.cpp">
       <Filter>02.GameObjects\UI\Panel\GAMEPLAY\ComboKOPanel\KO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_OutfitSelect.cpp">
+      <Filter>01.Levels\OutfitSelect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

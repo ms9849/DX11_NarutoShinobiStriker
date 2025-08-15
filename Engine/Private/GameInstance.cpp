@@ -10,6 +10,7 @@
 #include "Input_Manager.h"
 #include "Renderer.h"
 #include "PipeLine.h"
+#include "Picking.h"
 #include "IMGUI_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
@@ -30,6 +31,10 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 
 	m_pTimer_Manager = CTimer_Manager::Create();
 	if (nullptr == m_pTimer_Manager)
+		return E_FAIL;
+
+	m_pPicking = CPicking::Create(*ppDevice, *ppContext, EngineDesc.hWnd);
+	if (nullptr == m_pPicking)
 		return E_FAIL;
 
 	m_pPrototype_Manager = CPrototype_Manager::Create(EngineDesc.iNumLevels);
@@ -406,6 +411,7 @@ void CGameInstance::Release_Engine()
 	Safe_Release(m_pInput_Manager);
 	Safe_Release(m_pPooling_Manager);
 	Safe_Release(m_pPipeLine);
+	Safe_Release(m_pPicking);
 	Safe_Release(m_pGraphic_Device);
 }
 

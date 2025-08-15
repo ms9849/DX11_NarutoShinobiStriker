@@ -52,6 +52,7 @@ private:
 
 private:
 	HRESULT Loading_For_Logo();
+	HRESULT Loading_For_OutfitSelect();
 	HRESULT Loading_For_GamePlay();
 	HRESULT Loading_For_Edit();
 
