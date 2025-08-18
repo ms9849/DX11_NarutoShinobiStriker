@@ -1,8 +1,18 @@
 #include "Level_OutfitSelect.h"
 
+#include "GameManager.h"
+#include "GameInstance.h"
+
+#include "Level_Loading.h"
+
+#include "TestCamera.h"
+#include "UIObject.h"
+
 CLevel_OutfitSelect::CLevel_OutfitSelect(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID)
     : CLevel { pDevice, pContext, ENUM_CLASS(eLevelID) }
+    , m_pGameManager { CGameManager::GetInstance() }
 {
+    Safe_AddRef(m_pGameManager);
 }
 
 HRESULT CLevel_OutfitSelect::Initialize()
@@ -13,26 +23,68 @@ HRESULT CLevel_OutfitSelect::Initialize()
     if (FAILED(Ready_Layer_Outfits(TEXT("Layer_Outfits"))))
         return E_FAIL;
 
-    if (FAILED(Ready_Layer_PlayerDummy(TEXT("Layer_PlayerDummy"))))
+    if (FAILED(Ready_Layer_Mannequin(TEXT("Layer_Mannequin"))))
         return E_FAIL;
 
     if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
         return E_FAIL;
+
+    m_pGameManager->Change_Camera(LEVEL::OUTFITSELECT, TEXT("OutfitSelect_Camera"));
 
     return S_OK;
 }
 
 void CLevel_OutfitSelect::Update(_float fTimeDelta)
 {
+    if (m_pGameInstance->Key_Down(DIK_F8))
+    {
+        m_pGameManager->Clear();
+
+        if (FAILED(m_pGameInstance->Change_Level(CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL::LOADING, LEVEL::GAMEPLAY))))
+            return;
+    }
 }
 
 HRESULT CLevel_OutfitSelect::Render()
 {
+    SetWindowText(g_hWnd, TEXT("외형 선택 레벨"));
+
     return S_OK;
 }
 
 HRESULT CLevel_OutfitSelect::Ready_Layer_Camera(const _wstring& strLayerTag)
 {
+    /* 추후 OutfitSelect 전용 카메라로 바꿔야한다. */
+    CTestCamera::TEST_CAMERA_DESC			TestCameraDesc{};
+
+    TestCameraDesc.fFovy = XMConvertToRadians(60.0f);
+    TestCameraDesc.fNear = 0.1f;
+    TestCameraDesc.fFar = 1000.f;
+    TestCameraDesc.vEye = _float4(0.f, 1.f, -1.f, 1.f);
+    TestCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
+    TestCameraDesc.fSpeedPerSec = 20.f;
+    TestCameraDesc.fRotationPerSec = XMConvertToRadians(90.0f);
+    TestCameraDesc.fMouseSensitiy = 0.2f;
+
+    /* 카메라는 게임 매니저에 추가하여 관리한다. */
+    if (FAILED(m_pGameManager->Add_Camera(LEVEL::OUTFITSELECT, TEXT("Test_Camera"), static_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
+        PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_GameObject_TestCamera"), &TestCameraDesc)))))
+        return E_FAIL;
+
+    CCamera::CAMERA_DESC CameraDesc{};
+
+    TestCameraDesc.fFovy = XMConvertToRadians(60.0f);
+    TestCameraDesc.fNear = 0.1f;
+    TestCameraDesc.fFar = 1000.f;
+    TestCameraDesc.vEye = _float4(0.f, 10.f, -10.f, 1.f);
+    TestCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
+    TestCameraDesc.fSpeedPerSec = 1.f;
+    TestCameraDesc.fRotationPerSec = XMConvertToRadians(90.0f);
+
+    if (FAILED(m_pGameManager->Add_Camera(LEVEL::OUTFITSELECT, TEXT("OutfitSelect_Camera"), static_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
+        PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_GameObject_OutfitSelectCamera"), &TestCameraDesc)))))
+        return E_FAIL;
+
     return S_OK;
 }
 
@@ -41,13 +93,23 @@ HRESULT CLevel_OutfitSelect::Ready_Layer_Outfits(const _wstring& strLayerTag)
     return S_OK;
 }
 
-HRESULT CLevel_OutfitSelect::Ready_Layer_PlayerDummy(const _wstring& strLayerTag)
+HRESULT CLevel_OutfitSelect::Ready_Layer_Mannequin(const _wstring& strLayerTag)
 {
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_GameObject_Mannequin"),
+        ENUM_CLASS(LEVEL::OUTFITSELECT), strLayerTag)))
+        return E_FAIL;
+
     return S_OK;
 }
 
 HRESULT CLevel_OutfitSelect::Ready_Layer_UI(const _wstring& strLayerTag)
 {
+    CUIObject::UIOBJECT_DESC Desc = CUIObject::CreateDesc(g_iWinSizeX / 2.f, g_iWinSizeY / 2.f, 1.0f, g_iWinSizeX, g_iWinSizeY, 0, 0.f);
+    
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_GameObject_OutfitSelectPanel"),
+        ENUM_CLASS(LEVEL::OUTFITSELECT), strLayerTag, &Desc)))
+        return E_FAIL;
+
     return S_OK;
 }
 
@@ -67,4 +129,6 @@ CLevel_OutfitSelect* CLevel_OutfitSelect::Create(ID3D11Device* pDevice, ID3D11De
 void CLevel_OutfitSelect::Free()
 {
     __super::Free();
+
+    Safe_Release(m_pGameManager);
 }

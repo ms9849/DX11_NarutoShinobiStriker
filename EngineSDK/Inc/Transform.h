@@ -59,15 +59,20 @@ public:
 	/* 항등 기준으로 임의의 축으로 공전.*/
 	void Orbit(_fvector vAxisPos, _fvector vAxis, _float fRadian);
 
+	/* Lookat 2가지 버전 구분*/
 	void LookAt(_fvector vAt);
+	void LookAt_Lerp(_fvector vAt);
 
-	/* 정해진 지점으로 추적하는 함수. Lerp를 통해 깔끔하게 보간한다. */
-	void Chase(_fvector vTargetPos, _float fTimeDelta, _float fLimitDistance = 0.f, _bool isLerp = false);
+	/* 정해진 지점으로 추적하는 함수. Lerp를 통해 깔끔하게 보간하는 기능을 제공한다. */
+	void Chase(_fvector vTargetPos, _float fTimeDelta, _float fLimitDistance = 0.f);
+	void Chase_Lerp(_fvector vTargetPos, _float fTimeDelta, _float fLimitDistance = 0.f);
 
 private:
 	_float				m_fSpeedPerSec = {};
 	_float				m_fRotationPerSec = {};
 	_float4x4			m_WorldMatrix{};
+
+	_float4x4			m_PreWorldMatrix{};
 
 public:
 	static CTransform* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

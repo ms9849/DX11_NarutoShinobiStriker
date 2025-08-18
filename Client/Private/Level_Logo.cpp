@@ -1,14 +1,17 @@
 #include "Level_Logo.h"
 
-#include "GameObject.h"
-#include "GameInstance.h"
-#include "Level_Loading.h"
 #include "UIObject.h"
+
+#include "GameManager.h"
+#include "GameInstance.h"
+
+#include "Level_Loading.h"
 
 CLevel_Logo::CLevel_Logo(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID)
 	: CLevel { pDevice, pContext, ENUM_CLASS(eLevelID)}
+	, m_pGameManager { CGameManager::GetInstance() }
 {
-
+	Safe_AddRef(m_pGameManager);
 }
 
 HRESULT CLevel_Logo::Initialize()
@@ -31,7 +34,9 @@ void CLevel_Logo::Update(_float fTimeDelta)
 
 	if (m_pGameInstance->IsLevelChangeRequested())
 	{
-		if (FAILED(m_pGameInstance->Change_Level(CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL::LOADING, LEVEL::GAMEPLAY))))
+		m_pGameManager->Clear();
+
+		if (FAILED(m_pGameInstance->Change_Level(CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL::LOADING, LEVEL::OUTFITSELECT))))
 			return;
 	}
 }
@@ -91,7 +96,6 @@ HRESULT CLevel_Logo::Ready_Layer_UI(const _wstring& strLayerTag)
 	//	return E_FAIL;
 
 	CUIObject::UIOBJECT_DESC Desc = CUIObject::CreateDesc(g_iWinSizeX - 100.f, 65.f, 0.45f, 120, 120, 0, 0.f);
-	Desc.iLevelID = m_iID;
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LOGO), TEXT("Prototype_GameObject_TimerPanel"),
 		ENUM_CLASS(LEVEL::LOGO), strLayerTag, &Desc)))
@@ -143,5 +147,5 @@ void CLevel_Logo::Free()
 {
 	__super::Free();
 
-
+	Safe_Release(m_pGameManager);
 }

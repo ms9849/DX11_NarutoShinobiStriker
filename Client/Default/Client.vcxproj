@@ -155,7 +155,6 @@
   <ItemGroup>
     <ClInclude Include="..\Public\AttackTypePanel.h" />
     <ClInclude Include="..\Public\Button.h" />
-    <ClInclude Include="..\Public\Camera_Manager.h" />
     <ClInclude Include="..\Public\Character.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\ComboKOPanel.h" />
@@ -174,7 +173,10 @@
     <ClInclude Include="..\Public\LoadingPanel.h" />
     <ClInclude Include="..\Public\LogoPanel.h" />
     <ClInclude Include="..\Public\MainApp.h" />
+    <ClInclude Include="..\Public\Mannequin.h" />
     <ClInclude Include="..\Public\MissionAlertPanel.h" />
+    <ClInclude Include="..\Public\OutfitSelectCamera.h" />
+    <ClInclude Include="..\Public\OutfitSelectPanel.h" />
     <ClInclude Include="..\Public\Panel.h" />
     <ClInclude Include="..\Public\Player.h" />
     <ClInclude Include="..\Public\PressAnyButtonUI.h" />
@@ -198,7 +200,6 @@
   <ItemGroup>
     <ClCompile Include="..\Private\AttackTypePanel.cpp" />
     <ClCompile Include="..\Private\Button.cpp" />
-    <ClCompile Include="..\Private\Camera_Manager.cpp" />
     <ClCompile Include="..\Private\Character.cpp" />
     <ClCompile Include="..\Private\ComboKOPanel.cpp" />
     <ClCompile Include="..\Private\DecimalUI.cpp" />
@@ -216,7 +217,10 @@
     <ClCompile Include="..\Private\LoadingPanel.cpp" />
     <ClCompile Include="..\Private\LogoPanel.cpp" />
     <ClCompile Include="..\Private\MainApp.cpp" />
+    <ClCompile Include="..\Private\Mannequin.cpp" />
     <ClCompile Include="..\Private\MissionAlertPanel.cpp" />
+    <ClCompile Include="..\Private\OutfitSelectCamera.cpp" />
+    <ClCompile Include="..\Private\OutfitSelectPanel.cpp" />
     <ClCompile Include="..\Private\Panel.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\Private\PressAnyButtonUI.cpp" />

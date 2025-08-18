@@ -8,7 +8,7 @@ class ENGINE_DLL CGameObject abstract : public CBase
 {
 public:
 	typedef struct tagGameObjectDesc : public CTransform::TRANSFORM_DESC {
-		_uint iLevelID;
+
 	} GAMEOBJECT_DESC;
 protected:
 	CGameObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iObjectID);

@@ -3,6 +3,7 @@
 #include "Prototype_Manager.h"
 #include "Pooling_Manager.h"
 #include "Object_Manager.h"
+#include "Picking.h"
 #include "GameObject.h"
 #include "Layer.h"
 
@@ -19,7 +20,7 @@ CIMGUI_Manager::CIMGUI_Manager(ID3D11Device* pDevice, ID3D11DeviceContext* pCont
     Safe_AddRef(m_pGameInstance);
 }
 
-HRESULT CIMGUI_Manager::Initialize(HWND hWnd, class CPrototype_Manager* pPrototype_Manager, class CObject_Manager* pObject_Manager, class CPooling_Manager* pPooling_Manager)
+HRESULT CIMGUI_Manager::Initialize(HWND hWnd, CPrototype_Manager* pPrototype_Manager, CObject_Manager* pObject_Manager, CPooling_Manager* pPooling_Manager, CPicking* pPicking)
 {
     memset(m_bVisibleFlag, 0, ENUM_CLASS(IMGUI_VISIBLE::END));
 
@@ -40,6 +41,9 @@ HRESULT CIMGUI_Manager::Initialize(HWND hWnd, class CPrototype_Manager* pPrototy
 
     m_pPooling_Manager = pPooling_Manager;
     Safe_AddRef(m_pPooling_Manager);
+
+    m_pPicking = pPicking;
+    Safe_AddRef(m_pPicking);
 
     return S_OK;
 }
@@ -94,10 +98,10 @@ HRESULT CIMGUI_Manager::Ready_IMGUI(HWND hWnd)
 void CIMGUI_Manager::Update(_float fTimeDelta)
 {
     if (m_pGameInstance->Key_Down(DIK_F3))
-        m_pGameInstance->Set_Visible_All_IMGUI(true);
+        Set_Visible_All_IMGUI(true);
 
     if (m_pGameInstance->Key_Down(DIK_F4))
-        m_pGameInstance->Set_Visible_All_IMGUI(false);
+        Set_Visible_All_IMGUI(false);
 
     /* 여기서 Imgui 함수, 메서드, 뭐든 떄려박을 것.*/
     ImGui_ImplDX11_NewFrame();
@@ -107,6 +111,7 @@ void CIMGUI_Manager::Update(_float fTimeDelta)
     Show_Managers(fTimeDelta);
     Show_GameInfo(fTimeDelta);
     Show_ObjectInspector(fTimeDelta);
+    Show_PickingInspector();
 }
 
 void CIMGUI_Manager::Render()
@@ -123,7 +128,10 @@ void CIMGUI_Manager::Set_Visible_IMGUI(_bool bFlag, _uint iIMGUIID)
 
 void CIMGUI_Manager::Set_Visible_All_IMGUI(_bool bFlag)
 {
-    memset(m_bVisibleFlag, bFlag, sizeof(_bool) * ENUM_CLASS(IMGUI_VISIBLE::END));
+    for (_uint i = 0; i < ENUM_CLASS(IMGUI_VISIBLE::END); ++i)
+    {
+        m_bVisibleFlag[i] = bFlag;
+    }
 }
 
 void CIMGUI_Manager::Release_IMGUI()
@@ -337,6 +345,242 @@ void CIMGUI_Manager::Show_GameInfo(_float fTimeDelta)
     ImGui::End();
 }
 
+void CIMGUI_Manager::Show_PickingInspector()
+{
+    if (!m_bVisibleFlag[ENUM_CLASS(IMGUI_VISIBLE::PICKING_INFO)])
+        return;
+
+    CTransform* pTransform = { nullptr };
+    _float4 vSource;
+    _string strBuffer;
+
+    //pTransform = static_cast<CTransform*>(m_pSelectedGameObject->Find_Component(g_strTransformTag));
+
+    ImGui::Begin("Picking Inspector");
+
+    ImGui::BeginTabBar("Mouse Ray Info");
+    if (ImGui::BeginTabItem("Mouse Ray Info"))
+    {
+        strBuffer = "World Ray Pos: ";
+        ImGui::Text(strBuffer.c_str());
+
+        ImGui::PushItemWidth(70);
+        
+        ImGui::InputFloat("##X ", &m_pPicking->m_vRayPos[ENUM_CLASS(RAY::WORLD)].x, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+        ImGui::SameLine();
+        ImGui::InputFloat("##Y ", &m_pPicking->m_vRayPos[ENUM_CLASS(RAY::WORLD)].y, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+        ImGui::SameLine();
+        
+        ImGui::InputFloat("##Z ", &m_pPicking->m_vRayPos[ENUM_CLASS(RAY::WORLD)].z, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+        ImGui::PopItemWidth();
+
+
+        strBuffer = "World Ray Dir: ";
+        ImGui::Text(strBuffer.c_str());
+        ImGui::PushItemWidth(70);
+        
+        ImGui::InputFloat("##X ", &m_pPicking->m_vRayDir[ENUM_CLASS(RAY::WORLD)].x, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+        ImGui::SameLine();
+        ImGui::InputFloat("##Y ", &m_pPicking->m_vRayDir[ENUM_CLASS(RAY::WORLD)].y, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+        ImGui::SameLine();
+        ImGui::InputFloat("##Z ", &m_pPicking->m_vRayDir[ENUM_CLASS(RAY::WORLD)].z, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+        
+        ImGui::PopItemWidth();
+
+        ImGui::EndTabItem();
+    }
+    ImGui::EndTabBar();
+
+    //ImGui::BeginTabBar("Picking Object Info");
+    //if (ImGui::BeginTabItem("Picking Object Info"))
+    //{
+    //    if (m_pPicking->m_pPickedObject != nullptr)
+    //    {
+    //        strBuffer = "Layer: " + m_strSelectedLayer;
+    //        ImGui::Text(strBuffer.c_str());
+
+    //        strBuffer = "Object ID: " + to_string(m_iSelectedObjectID);
+    //        ImGui::Text(strBuffer.c_str());
+
+    //        strBuffer = "Object Index: " + to_string(m_iSelectedObjectIndex);
+    //        ImGui::Text(strBuffer.c_str());
+    //    }
+    //    ImGui::EndTabItem();
+    //}
+    //ImGui::EndTabBar();
+
+    //ImGui::BeginTabBar("Components");
+    //if (ImGui::BeginTabItem("Transform"))
+    //{
+    //    if (m_pPicking->m_pPickedObject != nullptr)
+    //    {
+    //        ImGui::PushItemWidth(70);
+
+    //        ImGui::Text("RIGHT ");
+    //        ImGui::SameLine();
+    //        XMStoreFloat4(&vSource, pTransform->Get_State(STATE::RIGHT));
+    //        ImGui::InputFloat("##1,1", &vSource.x, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+    //        ImGui::SameLine();
+    //        ImGui::InputFloat("##1,2", &vSource.y, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+    //        ImGui::SameLine();
+    //        ImGui::InputFloat("##1,3", &vSource.z, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+    //        ImGui::SameLine();
+    //        ImGui::InputFloat("##1,4", &vSource.w, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+
+    //        ImGui::Text("UP \t  ");
+    //        ImGui::SameLine();
+    //        XMStoreFloat4(&vSource, pTransform->Get_State(STATE::UP));
+    //        ImGui::InputFloat("##2,1", &vSource.x, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+    //        ImGui::SameLine();
+    //        ImGui::InputFloat("##2,2", &vSource.y, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+    //        ImGui::SameLine();
+    //        ImGui::InputFloat("##2,3", &vSource.z, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+    //        ImGui::SameLine();
+    //        ImGui::InputFloat("##2,4", &vSource.w, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+
+    //        ImGui::Text("LOOK  ");
+    //        ImGui::SameLine();
+    //        XMStoreFloat4(&vSource, pTransform->Get_State(STATE::LOOK));
+    //        ImGui::InputFloat("##3,1", &vSource.x, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+    //        ImGui::SameLine();
+    //        ImGui::InputFloat("##3,2", &vSource.y, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+    //        ImGui::SameLine();
+    //        ImGui::InputFloat("##3,3", &vSource.z, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+    //        ImGui::SameLine();
+    //        ImGui::InputFloat("##3,4", &vSource.w, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+
+    //        ImGui::Text("POS \t");
+    //        ImGui::SameLine();
+    //        XMStoreFloat4(&vSource, pTransform->Get_State(STATE::POSITION));
+    //        ImGui::InputFloat("##4,1", &vSource.x, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+    //        ImGui::SameLine();
+    //        ImGui::InputFloat("##4,2", &vSource.y, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+    //        ImGui::SameLine();
+    //        ImGui::InputFloat("##4,3", &vSource.z, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+    //        ImGui::SameLine();
+    //        ImGui::InputFloat("##4,4", &vSource.w, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+
+    //        ImGui::PopItemWidth();
+
+    //        ImGui::BeginTabBar("Transform Inspector");
+    //        if (ImGui::BeginTabItem("Scale"))
+    //        {
+    //            ImGui::PushItemWidth(70);
+
+    //            ImGui::Text("Input Scale");
+    //            ImGui::InputFloat("##ScaleX", &m_vObjectScale.x, 0.0f, 0.0f, "%.3f");
+    //            ImGui::SameLine();
+    //            ImGui::InputFloat("##ScaleY", &m_vObjectScale.y, 0.0f, 0.0f, "%.3f");
+    //            ImGui::SameLine();
+    //            ImGui::InputFloat("##ScaleZ", &m_vObjectScale.z, 0.0f, 0.0f, "%.3f");
+    //            ImGui::SameLine();
+
+    //            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.3f, 0.6f, 0.3f, 1.0f));
+    //            if (ImGui::Button("Apply"))
+    //            {
+    //                pTransform->Set_Scale(m_vObjectScale.x, m_vObjectScale.y, m_vObjectScale.z);
+    //                m_vObjectScale = _float3{ 1.f, 1.f, 1.f };
+    //            }
+    //            ImGui::PopStyleColor();
+
+    //            ImGui::PopItemWidth();
+    //            ImGui::EndTabItem();
+    //        }
+
+    //        if (ImGui::BeginTabItem("Rotation"))
+    //        {
+    //            ImGui::PushItemWidth(70);
+
+    //            ImGui::Text("Rotation By Axis Right ");
+    //            ImGui::SameLine();
+    //            ImGui::InputFloat("##AngleRight", &m_fAngleRight, 0.0f, 0.0f, "%.3f");
+    //            ImGui::SameLine();
+    //            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.3f, 0.6f, 0.3f, 1.0f));
+
+    //            ImGui::PushID("Apply Right");
+    //            if (ImGui::Button("Apply"))
+    //            {
+    //                pTransform->Rotation(pTransform->Get_State(STATE::RIGHT), XMConvertToRadians(m_fAngleRight));
+    //                m_fAngleRight = 0.f;
+    //            }
+    //            ImGui::PopID();
+    //            ImGui::PopStyleColor();
+
+    //            ImGui::Separator();
+
+    //            ImGui::Text("Rotation By Axis Up\t ");
+    //            ImGui::SameLine();
+    //            ImGui::InputFloat("##AngleUp", &m_fAngleUp, 0.0f, 0.0f, "%.3f");
+    //            ImGui::SameLine();
+    //            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.3f, 0.6f, 0.3f, 1.0f));
+
+    //            ImGui::PushID("Apply Up");
+    //            if (ImGui::Button("Apply"))
+    //            {
+    //                pTransform->Rotation(pTransform->Get_State(STATE::UP), XMConvertToRadians(m_fAngleUp));
+    //                m_fAngleUp = 0.f;
+    //            }
+    //            ImGui::PopID();
+    //            ImGui::PopStyleColor();
+
+    //            ImGui::Separator();
+
+    //            ImGui::Text("Rotation By Axis Look ");
+    //            ImGui::SameLine();
+    //            ImGui::InputFloat("##AngleLook", &m_fAngleLook, 0.0f, 0.0f, "%.3f");
+    //            ImGui::SameLine();
+    //            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.3f, 0.6f, 0.3f, 1.0f));
+
+    //            ImGui::PushID("Apply Look");
+    //            if (ImGui::Button("Apply"))
+    //            {
+    //                pTransform->Rotation(pTransform->Get_State(STATE::LOOK), XMConvertToRadians(m_fAngleLook));
+    //                m_fAngleLook = 0.f;
+    //            }
+    //            ImGui::PopID();
+    //            ImGui::PopStyleColor();
+
+    //            ImGui::PopItemWidth();
+    //            ImGui::EndTabItem();
+    //        }
+
+    //        if (ImGui::BeginTabItem("Position"))
+    //        {
+    //            ImGui::PushItemWidth(70);
+    //            ImGui::Text("Input Position");
+    //            ImGui::InputFloat("##PosX", &m_vObjectPos.x, 0.0f, 0.0f, "%.3f");
+    //            ImGui::SameLine();
+    //            ImGui::InputFloat("##PosY", &m_vObjectPos.y, 0.0f, 0.0f, "%.3f");
+    //            ImGui::SameLine();
+    //            ImGui::InputFloat("##PosZ", &m_vObjectPos.z, 0.0f, 0.0f, "%.3f");
+    //            ImGui::SameLine();
+
+    //            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.3f, 0.6f, 0.3f, 1.0f));
+    //            if (ImGui::Button("Apply"))
+    //            {
+    //                pTransform->Set_State(STATE::POSITION, XMVectorSet(m_vObjectPos.x, m_vObjectPos.y, m_vObjectPos.z, 1.f));
+    //                m_vObjectPos = { 0.f, 0.f, 0.f };
+    //            }
+    //            ImGui::PopStyleColor();
+
+    //            ImGui::PopItemWidth();
+    //            ImGui::EndTabItem();
+    //        }
+    //        ImGui::EndTabBar();
+    //    }
+    //    ImGui::EndTabItem();
+    //}
+
+    //if (ImGui::BeginTabItem("Test Tab Bar"))
+    //{
+    //    ImGui::Text("Test For Tab Bar");
+    //    ImGui::EndTabItem();
+    //}
+
+    //ImGui::EndTabBar();
+    ImGui::End();
+}
+
 void CIMGUI_Manager::Show_ObjectInspector(_float fTimeDelta)
 {
     if (!m_bVisibleFlag[ENUM_CLASS(IMGUI_VISIBLE::OBJECT_INSPECTOR)])
@@ -544,11 +788,11 @@ void CIMGUI_Manager::Show_ObjectInspector(_float fTimeDelta)
 }
 
 CIMGUI_Manager* CIMGUI_Manager::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HWND hWnd,
-    CPrototype_Manager* pPrototype_Manager, CObject_Manager* pObject_Manager, CPooling_Manager* pPooling_Manager)
+    CPrototype_Manager* pPrototype_Manager, CObject_Manager* pObject_Manager, CPooling_Manager* pPooling_Manager, CPicking* pPicking)
 {
     CIMGUI_Manager* pInstance = new CIMGUI_Manager(pDevice, pContext);
     
-    if (FAILED(pInstance->Initialize(hWnd, pPrototype_Manager, pObject_Manager, pPooling_Manager)))
+    if (FAILED(pInstance->Initialize(hWnd, pPrototype_Manager, pObject_Manager, pPooling_Manager, pPicking)))
     {
         MSG_BOX("Create Failed : IMGUI_Manager");
         Safe_Release(pInstance);
@@ -567,6 +811,8 @@ void CIMGUI_Manager::Free()
     Safe_Release(m_pPrototype_Manager);
     Safe_Release(m_pObject_Manager);
     Safe_Release(m_pPooling_Manager);
+    Safe_Release(m_pPicking);
+
     Safe_Release(m_pGameInstance);
 
     Safe_Release(m_pSelectedGameObject);

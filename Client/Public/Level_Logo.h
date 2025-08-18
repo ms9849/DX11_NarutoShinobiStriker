@@ -23,6 +23,7 @@ public:
 	HRESULT Ready_Layer_UI(const _wstring& strLayerTag);
 
 private:
+	class CGameManager* m_pGameManager = { nullptr };
 	void Pooling_Test(_float fTimeDelta);
 	_float m_fTimeAcc = {};
 

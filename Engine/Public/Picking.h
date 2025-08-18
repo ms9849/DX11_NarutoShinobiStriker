@@ -24,7 +24,7 @@ private:
 	virtual ~CPicking() = default;
 
 public:
-	HRESULT Initialize(HWND hWnd);
+	HRESULT Initialize(HWND hWnd, _uint iWinSizeX, _uint iWinSizeY);
 	void Update();
 	void Transform_ToLocalSpace(const _float4x4* pWorldMatrixInverse);
 
@@ -32,13 +32,18 @@ public:
 	_bool Picking_InLocalSpace(const _float3& vPointA, const _float3& vPointB, const _float3& vPointC, _float3* pOut);
 
 private:
-	ID3D11Device* m_pDevice = {};
-	ID3D11DeviceContext* m_pContext = {};
-	HWND m_hWnd = {};
-	_uint m_iWinSizeX{}, m_iWinSizeY{};
+	class CGameInstance*	m_pGameInstance = {};
+	ID3D11Device*			m_pDevice = {};
+	ID3D11DeviceContext*	m_pContext = {};
+	HWND					m_hWnd = {};
+
+	_uint					m_iWinSizeX{}, m_iWinSizeY{};
+	_float3					m_vRayPos[ENUM_CLASS(RAY::END)];
+	_float3					m_vRayDir[ENUM_CLASS(RAY::END)];
+	class CGameObject*		m_pPickedObject = { nullptr };
 
 public:
-	static CPicking* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HWND hWnd);
+	static CPicking* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iWinSizeX, _uint iWinSizeY, HWND hWnd);
 	virtual void Free() override;
 };
 

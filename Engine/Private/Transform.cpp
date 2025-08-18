@@ -190,17 +190,32 @@ void CTransform::Orbit(_fvector vAxisPos, _fvector vAxis, _float fRadian)
 void CTransform::LookAt(_fvector vAt)
 {
 	_float3		vScale = Get_Scale();
+	_vector		vRight, vUp, vLook;
 
-	_vector		vLook = vAt - Get_State(STATE::POSITION);
-	_vector		vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
-	_vector		vUp = XMVector3Cross(vLook, vRight);
+	vLook = vAt - Get_State(STATE::POSITION);
+	vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
+	vUp = XMVector3Cross(vLook, vRight);
 
 	Set_State(STATE::RIGHT, XMVector3Normalize(vRight) * vScale.x);
 	Set_State(STATE::UP, XMVector3Normalize(vUp) * vScale.y);
 	Set_State(STATE::LOOK, XMVector3Normalize(vLook) * vScale.z);
 }
 
-void CTransform::Chase(_fvector vTargetPos, _float fTimeDelta, _float fLimitDistance, _bool isLerp)
+void CTransform::LookAt_Lerp(_fvector vAt)
+{
+	_float3		vScale = Get_Scale();
+	_vector		vRight, vUp, vLook;
+
+	vLook = XMQuaternionSlerp(XMVector3Normalize(Get_State(STATE::LOOK)), XMVector3Normalize(vAt - Get_State(STATE::POSITION)), 0.15f);
+	vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
+	vUp = XMVector3Cross(vLook, vRight);
+
+	Set_State(STATE::RIGHT, XMVector3Normalize(vRight) * vScale.x);
+	Set_State(STATE::UP, XMVector3Normalize(vUp) * vScale.y);
+	Set_State(STATE::LOOK, XMVector3Normalize(vLook) * vScale.z);
+}
+
+void CTransform::Chase(_fvector vTargetPos, _float fTimeDelta, _float fLimitDistance)
 {
 	_vector		vPosition = Get_State(STATE::POSITION);
 	_vector		vDirection = vTargetPos - vPosition;
@@ -211,10 +226,24 @@ void CTransform::Chase(_fvector vTargetPos, _float fTimeDelta, _float fLimitDist
 
 	_vector		vMove;
 
-	if (isLerp)
-		vMove = (fDist / fLimitDistance) * 0.5f *  XMVector3Normalize(vDirection) * m_fSpeedPerSec * fTimeDelta;
-	else
-		vMove = XMVector3Normalize(vDirection) * m_fSpeedPerSec * fTimeDelta;
+	vMove = XMVector3Normalize(vDirection) * m_fSpeedPerSec * fTimeDelta;
+
+	vPosition += vMove;
+	Set_State(STATE::POSITION, vPosition);
+}
+
+void CTransform::Chase_Lerp(_fvector vTargetPos, _float fTimeDelta, _float fLimitDistance)
+{
+	_vector		vPosition = Get_State(STATE::POSITION);
+	_vector		vDirection = vTargetPos - vPosition;
+	_float		fDist = XMVectorGetX(XMVector3Length(vTargetPos - vPosition));
+
+	if (fDist < fLimitDistance)
+		return;
+
+	_vector		vMove;
+
+	vMove = (fDist / fLimitDistance) * 0.5f * XMVector3Normalize(vDirection) * m_fSpeedPerSec * fTimeDelta;
 
 	vPosition += vMove;
 	Set_State(STATE::POSITION, vPosition);
