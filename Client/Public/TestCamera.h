@@ -27,8 +27,6 @@ public:
 
 private:
 	_float m_fMouseSensivity = { 0.f };
-	_float m_fSlopeTime = { 1.f };
-	_float m_vSlopeDir = { 0.f };
 
 public:
 	static CTestCamera* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);

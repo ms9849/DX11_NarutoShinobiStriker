@@ -33,7 +33,7 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	if (nullptr == m_pTimer_Manager)
 		return E_FAIL;
 
-	m_pPicking = CPicking::Create(*ppDevice, *ppContext, EngineDesc.hWnd);
+	m_pPicking = CPicking::Create(*ppDevice, *ppContext, EngineDesc.iWinSizeX, EngineDesc.iWinSizeY, EngineDesc.hWnd);
 	if (nullptr == m_pPicking)
 		return E_FAIL;
 
@@ -65,7 +65,7 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	if (nullptr == m_pPooling_Manager)
 		return E_FAIL;
 
-	m_pIMGUI_Manager = CIMGUI_Manager::Create(*ppDevice, *ppContext, EngineDesc.hWnd, m_pPrototype_Manager, m_pObject_Manager, m_pPooling_Manager);
+	m_pIMGUI_Manager = CIMGUI_Manager::Create(*ppDevice, *ppContext, EngineDesc.hWnd, m_pPrototype_Manager, m_pObject_Manager, m_pPooling_Manager, m_pPicking);
 	if (nullptr == m_pIMGUI_Manager)
 		return E_FAIL;
 
@@ -77,11 +77,14 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 	/* 인풋 매니저 업데이트 */
 	m_pInput_Manager->Update();
 
-	/* 객체 업데이트 계층 */
+	/* Priority Update */
 	m_pObject_Manager->Priority_Update(fTimeDelta);
 
+	/* 뷰, 투영 행렬 세팅 및 마우스 피킹 정보 세팅 */
 	m_pPipeLine->Update();
+	m_pPicking->Update();
 
+	/* 객체 업데이트 계층 */
 	m_pObject_Manager->Update(fTimeDelta);
 
 	m_pObject_Manager->Late_Update(fTimeDelta);

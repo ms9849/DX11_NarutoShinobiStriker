@@ -1,6 +1,8 @@
 #include "GameManager.h"
 
 #include "GameInstance.h"
+
+#include "Camera.h"
 #include "Player.h"
 #include "QuestLog.h"
 
@@ -24,6 +26,28 @@ void CGameManager::Release_GameManager()
 	Safe_Release(m_pPlayer);
 	Safe_Release(m_pQuestLog);
 	Safe_Release(m_pGameInstance);
+
+	for (_uint i = 0; i < ENUM_CLASS(LEVEL::END); ++i)
+	{
+		for (auto& pCamera : m_Cameras[i])
+			Safe_Release(pCamera.second);
+
+		m_Cameras[i].clear();
+	}
+}
+
+void CGameManager::Clear()
+{
+	Safe_Release(m_pPlayer);
+	Safe_Release(m_pQuestLog);
+
+	for (_uint i = 0; i < ENUM_CLASS(LEVEL::END); ++i)
+	{
+		for (auto& pCamera : m_Cameras[i])
+			Safe_Release(pCamera.second);
+
+		m_Cameras[i].clear();
+	}
 }
 
 HRESULT CGameManager::Set_PlayerPtr(CPlayer* pPlayer)
@@ -58,6 +82,40 @@ HRESULT CGameManager::Set_QuestPtr(CQuestLog* pQuestLog)
 HRESULT CGameManager::Set_NextLevelID(LEVEL eLevelID)
 {
 	m_eNextLevel = eLevelID;
+
+	return S_OK;
+}
+
+HRESULT CGameManager::Add_Camera(LEVEL eLevelID, const _wstring& strCameraTag, CCamera* pCamera)
+{
+	/* 이미 카메라가 존재하면 FAIL 반환. */
+	auto iter = m_Cameras[ENUM_CLASS(eLevelID)].find(strCameraTag);
+
+	if (iter != m_Cameras[ENUM_CLASS(eLevelID)].end())
+		return E_FAIL;
+
+	m_Cameras[ENUM_CLASS(eLevelID)].emplace(strCameraTag, pCamera);
+
+	return S_OK;
+}
+
+HRESULT CGameManager::Change_Camera(LEVEL eLevelID, const _wstring& strCameraTag)
+{
+	/* 태그에 해당하는 카메라가 존재하지 않으면 FAIL 반환. */
+	auto iter = m_Cameras[ENUM_CLASS(eLevelID)].find(strCameraTag);
+
+	if (iter == m_Cameras[ENUM_CLASS(eLevelID)].end())
+		return E_FAIL;
+
+	/* 기존 카메라 Set Dead 세팅. 오브젝트 매니저에서 빠져 나오게 된다. */
+	if(nullptr != m_pActivatedCamera)
+		m_pActivatedCamera->Set_Dead(true);
+
+	m_pGameInstance->Add_Clone_ToLayer(iter->second, ENUM_CLASS(eLevelID), TEXT("Layer_Camera"));
+
+	/* 활성화중인 카메라 교체 */
+	m_pActivatedCamera = iter->second;
+	Safe_AddRef(m_pActivatedCamera);
 
 	return S_OK;
 }

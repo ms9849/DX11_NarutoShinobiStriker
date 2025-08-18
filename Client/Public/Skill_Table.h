@@ -16,7 +16,7 @@ namespace Client
 
 	enum class SKILL {
 		SHADOW_ESCAPE,
-		RASENGAN, RASEN_SHURIKEN, /* 밀리 */
+		RASENGAN, RASEN_SHURIKEN, /* 근접? */
 		CHIDORI, FIREBALL, /* 인술*/
 		WOOD_WALL, WOOD_HAND, /* 방어형 */
 		BIG_RASENGAN, BIG_SHARK, KAMUI, /* 필살기류 */

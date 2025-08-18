@@ -44,7 +44,7 @@ void CTestCamera::Priority_Update(_float fTimeDelta)
 	if (m_pGameInstance->Key_Pressing(DIK_F7))
 	{
 		_float4 vTargetPos = { 30.f, 30.f, 30.f, 1.f };
-		m_pTransformCom->Chase(XMLoadFloat4(&vTargetPos), fTimeDelta, 2.f, true);
+		m_pTransformCom->Chase_Lerp(XMLoadFloat4(&vTargetPos), fTimeDelta, 2.f);
 	}
 
 	_long iMouseMove = {0};

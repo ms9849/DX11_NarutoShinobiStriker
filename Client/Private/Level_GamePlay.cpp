@@ -38,6 +38,8 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Effect(TEXT("Layer_Effect"))))
 		return E_FAIL;
 
+	m_pGameManager->Change_Camera(LEVEL::GAMEPLAY, TEXT("Test_Camera"));
+
 	return S_OK;
 }
 
@@ -45,6 +47,8 @@ void CLevel_GamePlay::Update(_float fTimeDelta)
 {
 	if (m_pGameInstance->Key_Down(DIK_F8))
 	{
+		m_pGameManager->Clear();
+
 		if (FAILED(m_pGameInstance->Change_Level(CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL::LOADING, LEVEL::EDIT))))
 			return;
 	}
@@ -84,8 +88,9 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const _wstring& strLayerTag)
 	TestCameraDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 	TestCameraDesc.fMouseSensitiy = 0.2f;
 
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_TestCamera"),
-		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag, &TestCameraDesc)))
+	/* 카메라는 게임 매니저에 추가하여 관리한다. */
+	if(FAILED(m_pGameManager->Add_Camera(LEVEL::GAMEPLAY, TEXT("Test_Camera"), static_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
+		PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_TestCamera"), &TestCameraDesc)))))
 		return E_FAIL;
 
 	return S_OK;

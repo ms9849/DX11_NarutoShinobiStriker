@@ -23,7 +23,8 @@ public:
 	HRESULT Initialize(HWND hWnd, 
 		class CPrototype_Manager* pPrototype_Manager, 
 		class CObject_Manager* pObject_Manager, 
-		class CPooling_Manager* pPooling_Manager);
+		class CPooling_Manager* pPooling_Manager,
+		class CPicking *pPicking);
 	void	Update(_float fTimeDelta);
 	void	Render();
 	void	Set_Visible_IMGUI(_bool bFlag, _uint iIMGUIID);
@@ -49,6 +50,11 @@ private:
 	void Show_GameInfo(_float fTimeDelta);
 #pragma endregion
 
+#pragma region PICKINGINFO
+	//클라이언트에선 Edit 레벨에서만 쓸 수 있게 할 것.
+	void Show_PickingInspector();
+#pragma endregion
+
 #pragma region INSPECTOR
 	//Transform 등의 컴포넌트를 보여주는 메서드
 	void Show_ObjectInspector(_float fTimeDelta);
@@ -68,6 +74,7 @@ private:
 	class CPrototype_Manager* m_pPrototype_Manager = { nullptr };
 	class CObject_Manager* m_pObject_Manager = { nullptr };
 	class CPooling_Manager* m_pPooling_Manager = { nullptr };
+	class CPicking* m_pPicking = { nullptr };
 	class CGameInstance* m_pGameInstance = { nullptr };
 #pragma endregion
 
@@ -93,7 +100,8 @@ public:
 	static CIMGUI_Manager* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HWND hWnd, 
 		class CPrototype_Manager* pPrototype_Manager, 
 		class CObject_Manager* pObject_Manager,
-		class CPooling_Manager* pPooling_Manager);
+		class CPooling_Manager* pPooling_Manager,
+		class CPicking* pPicking);
 
 	virtual void Free() override;
 };

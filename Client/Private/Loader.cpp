@@ -11,6 +11,10 @@
 #include "TitleUI.h"
 #include "PressAnyButtonUI.h"
 
+#include "OutfitSelectCamera.h"
+#include "OutfitSelectPanel.h"
+#include "Mannequin.h"
+
 #include "SkillSlotPanel.h"
 #include "SkillSlotUI.h"
 
@@ -78,6 +82,9 @@ HRESULT CLoader::Loading()
 	{
 	case LEVEL::LOGO:
 		hr = Loading_For_Logo();
+		break;
+	case LEVEL::OUTFITSELECT:
+		hr = Loading_For_OutfitSelect();
 		break;
 	case LEVEL::GAMEPLAY:
 		hr = Loading_For_GamePlay();
@@ -189,6 +196,57 @@ HRESULT CLoader::Loading_For_Logo()
 
 HRESULT CLoader::Loading_For_OutfitSelect()
 {
+	m_fLoadingProgress += 0.4f;
+	m_strMessage = TEXT("텍스쳐를(을) 로딩 중 입니다.");
+
+	/* For.Prototype_Component_Texture_TimerPanel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_Component_Texture_OutfirSelectPanel"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/OutfitSelect/OutfitSelectPanel.png"), 1))))
+		return E_FAIL;
+
+	m_fLoadingProgress += 0.3f;
+	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
+
+	/*
+	테스트 용으로 집어넣은 단일 모델. 
+	추후 모델 분리 배우면 모델들 다 따로 
+	집어넣고 세팅해줘야 한다.
+	*/
+
+	/* For.Prototype_Component_Model_Fiona */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_Component_Model_Mannequin"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Outfits/Mannequin.fbx"))))
+		return E_FAIL;
+
+	m_fLoadingProgress += 0.3f;
+	m_strMessage = TEXT("셰이더를(을) 로딩 중 입니다.");
+
+	m_strMessage = TEXT("객체원형를(을) 로딩 중 입니다.");
+
+	/* For.Prototype_GameObject_TestCamera */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_GameObject_TestCamera"),
+		CTestCamera::Create(m_pDevice, m_pContext, OBJECTID::TEST_CAMERA))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_OutfitSelectCamera */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_GameObject_OutfitSelectCamera"),
+		COutfitSelectCamera::Create(m_pDevice, m_pContext, OBJECTID::OUTFITSELECT_CAMERA))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_OutfitSelectPanel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_GameObject_OutfitSelectPanel"),
+		COutfitSelectPanel::Create(m_pDevice, m_pContext, OBJECTID::OUTFITSELECT_PANEL))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Mannequin */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_GameObject_Mannequin"),
+		CMannequin::Create(m_pDevice, m_pContext, OBJECTID::MANNEQUIN))))
+		return E_FAIL;
+
+	m_strMessage = TEXT("로딩이 완료되었습니다..");
+	
+	m_isFinished = true;
+
 	return S_OK;
 }
 

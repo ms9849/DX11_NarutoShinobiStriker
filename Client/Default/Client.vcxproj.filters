@@ -67,9 +67,6 @@
     <Filter Include="02.GameObjects\Camera">
       <UniqueIdentifier>{93509e39-d89a-4305-89c2-4b7e6016d2e6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Camera\Manager">
-      <UniqueIdentifier>{3565544c-12c1-4abd-9e97-8469bc08ec6d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\UI\Panel\LOADING">
       <UniqueIdentifier>{b03aa11f-bc35-443c-8df4-047d761a464d}</UniqueIdentifier>
     </Filter>
@@ -142,6 +139,21 @@
     <Filter Include="01.Levels\OutfitSelect">
       <UniqueIdentifier>{86e00ab3-f0a9-436b-89c3-30077c30a8b5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\UI\Panel\OUTFIT_SELECT">
+      <UniqueIdentifier>{d8397129-7560-4315-8e6d-aaf995cf86ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Panel\OUTFIT_SELECT\OutfitPanel">
+      <UniqueIdentifier>{6dd9bf23-1e62-4e59-b2b0-5d66eaab6c48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Mannequin">
+      <UniqueIdentifier>{ea9082e8-e6a3-4f60-b167-7b855b91c3d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Camera\OutfitSelect">
+      <UniqueIdentifier>{3265bd8b-e104-49ed-9c30-c8ccf617e15d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Camera\Test">
+      <UniqueIdentifier>{2fbb6edc-fe80-4fab-965d-60e8ca2df4eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -197,12 +209,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\Terrain.h">
       <Filter>02.GameObjects\Terrain</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\TestCamera.h">
-      <Filter>02.GameObjects\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Camera_Manager.h">
-      <Filter>02.GameObjects\Camera\Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\LogoPanel.h">
       <Filter>02.GameObjects\UI\Panel\LOGO\LogoPanel</Filter>
@@ -267,6 +273,18 @@
     <ClInclude Include="..\Public\Level_OutfitSelect.h">
       <Filter>01.Levels\OutfitSelect</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\OutfitSelectPanel.h">
+      <Filter>02.GameObjects\UI\Panel\OUTFIT_SELECT\OutfitPanel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Mannequin.h">
+      <Filter>02.GameObjects\Character\Mannequin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\OutfitSelectCamera.h">
+      <Filter>02.GameObjects\Camera\OutfitSelect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\TestCamera.h">
+      <Filter>02.GameObjects\Camera\Test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -323,12 +341,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\Terrain.cpp">
       <Filter>02.GameObjects\Terrain</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\TestCamera.cpp">
-      <Filter>02.GameObjects\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Camera_Manager.cpp">
-      <Filter>02.GameObjects\Camera\Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\TitleUI.cpp">
       <Filter>02.GameObjects\UI\Panel\LOGO\LogoPanel\Title</Filter>
@@ -389,6 +401,18 @@
     </ClCompile>
     <ClCompile Include="..\Private\Level_OutfitSelect.cpp">
       <Filter>01.Levels\OutfitSelect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\OutfitSelectPanel.cpp">
+      <Filter>02.GameObjects\UI\Panel\OUTFIT_SELECT\OutfitPanel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Mannequin.cpp">
+      <Filter>02.GameObjects\Character\Mannequin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\OutfitSelectCamera.cpp">
+      <Filter>02.GameObjects\Camera\OutfitSelect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TestCamera.cpp">
+      <Filter>02.GameObjects\Camera\Test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
