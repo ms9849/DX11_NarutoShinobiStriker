@@ -379,7 +379,7 @@ HRESULT CLoader::Loading_For_Edit()
 
 	/* For.Prototype_Component_Model_KonohaVillage */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_KonohaVillage"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/KonohaVillage/KonohaVillage.fbx"))))
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/TutorialMap/TutorialMap.fbx"))))
 		return E_FAIL;
 
 	m_strMessage = TEXT("셰이더를(을) 로딩 중 입니다.");
