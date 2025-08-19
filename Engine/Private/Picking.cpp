@@ -12,11 +12,14 @@ CPicking::CPicking(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     Safe_AddRef(m_pGameInstance);
 }
 
-HRESULT CPicking::Initialize(HWND hWnd, _uint iWinSizeX, _uint iWinSizeY)
+HRESULT CPicking::Initialize(HWND hWnd, _uint iWinSizeX, _uint iWinSizeY, _uint iNumLevels)
 {
     m_hWnd = hWnd;
     m_iWinSizeX = iWinSizeX;
     m_iWinSizeY = iWinSizeY;
+
+    m_iNumLevels = iNumLevels;
+    m_pPickingTargets = new list<CGameObject*>[m_iNumLevels];
 
     return S_OK;
 }
@@ -72,14 +75,36 @@ _bool CPicking::Picking_InWorldSpace(const _float3& vPointA, const _float3& vPoi
 
 _bool CPicking::Picking_InLocalSpace(const _float3& vPointA, const _float3& vPointB, const _float3& vPointC, _float3* pOut)
 {
+    /* 해당 객체의 Transform을 Get Component로 꺼내와서 IntersectTri로 수행해줄 것 */
     return true;
 }
 
-CPicking* CPicking::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iWinSizeX, _uint iWinSizeY, HWND hWnd)
+HRESULT CPicking::Add_GameObject_ToPicking(CGameObject* pGameObject, _uint iLevelIdx)
+{
+    if (iLevelIdx >= m_iNumLevels)
+        return E_FAIL;
+
+    m_pPickingTargets[iLevelIdx].push_back(pGameObject);
+    Safe_AddRef(pGameObject);
+
+    return S_OK;
+}
+
+void CPicking::Clear(_uint iLevelIndex)
+{
+    for (auto& pGameObject : m_pPickingTargets[iLevelIndex])
+    {
+        Safe_Release(pGameObject);
+    }
+
+    m_pPickingTargets[iLevelIndex].clear();
+}
+
+CPicking* CPicking::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iWinSizeX, _uint iWinSizeY, HWND hWnd, _uint iNumLevels)
 {
     CPicking* pInstance = new CPicking(pDevice, pContext);
 
-    if (FAILED(pInstance->Initialize(hWnd, iWinSizeX, iWinSizeY)))
+    if (FAILED(pInstance->Initialize(hWnd, iWinSizeX, iWinSizeY, iNumLevels)))
     {
         MSG_BOX("Create Failed : Picking");
         Safe_Release(pInstance);
@@ -95,4 +120,16 @@ void CPicking::Free()
     Safe_Release(m_pDevice);
     Safe_Release(m_pContext);
     Safe_Release(m_pGameInstance);
+
+    for (_uint i = 0; i < m_iNumLevels; ++i)
+    {
+        for (auto& pGameObject : m_pPickingTargets[i])
+        {
+            Safe_Release(pGameObject);
+        }
+
+        m_pPickingTargets[i].clear();
+    }
+
+    Safe_Delete_Array(m_pPickingTargets);
 }

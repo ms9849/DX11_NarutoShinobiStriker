@@ -24,26 +24,36 @@ private:
 	virtual ~CPicking() = default;
 
 public:
-	HRESULT Initialize(HWND hWnd, _uint iWinSizeX, _uint iWinSizeY);
+	HRESULT Initialize(HWND hWnd, _uint iWinSizeX, _uint iWinSizeY, _uint iNumLevels);
 	void Update();
 	void Transform_ToLocalSpace(const _float4x4* pWorldMatrixInverse);
 
 	_bool Picking_InWorldSpace(const _float3& vPointA, const _float3& vPointB, const _float3& vPointC, _float3* pOut);
 	_bool Picking_InLocalSpace(const _float3& vPointA, const _float3& vPointB, const _float3& vPointC, _float3* pOut);
 
-private:
-	class CGameInstance*	m_pGameInstance = {};
-	ID3D11Device*			m_pDevice = {};
-	ID3D11DeviceContext*	m_pContext = {};
-	HWND					m_hWnd = {};
+public:
+	HRESULT Add_GameObject_ToPicking(class CGameObject* pGameObject, _uint iLevelIdx);
+	void Clear(_uint iLevelIndex);
 
-	_uint					m_iWinSizeX{}, m_iWinSizeY{};
-	_float3					m_vRayPos[ENUM_CLASS(RAY::END)];
-	_float3					m_vRayDir[ENUM_CLASS(RAY::END)];
-	class CGameObject*		m_pPickedObject = { nullptr };
+private:
+	class CGameInstance*				m_pGameInstance = {};
+	ID3D11Device*						m_pDevice = {};
+	ID3D11DeviceContext*				m_pContext = {};
+	HWND								m_hWnd = {};
+
+	_uint								m_iWinSizeX{}, m_iWinSizeY{};
+	_uint								m_iNumLevels = {};
+
+	_float3								m_vRayPos[ENUM_CLASS(RAY::END)];
+	_float3								m_vRayDir[ENUM_CLASS(RAY::END)];
+	
+	class CGameObject*					m_pPickedObject = { nullptr };
+
+	/* map으로 고쳐야 한다 */
+	list<class CGameObject*>*			m_pPickingTargets = {};
 
 public:
-	static CPicking* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iWinSizeX, _uint iWinSizeY, HWND hWnd);
+	static CPicking* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iWinSizeX, _uint iWinSizeY, HWND hWnd, _uint iNumLevels);
 	virtual void Free() override;
 };
 

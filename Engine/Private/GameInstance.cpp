@@ -33,7 +33,7 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	if (nullptr == m_pTimer_Manager)
 		return E_FAIL;
 
-	m_pPicking = CPicking::Create(*ppDevice, *ppContext, EngineDesc.iWinSizeX, EngineDesc.iWinSizeY, EngineDesc.hWnd);
+	m_pPicking = CPicking::Create(*ppDevice, *ppContext, EngineDesc.iWinSizeX, EngineDesc.iWinSizeY, EngineDesc.hWnd, EngineDesc.iNumLevels);
 	if (nullptr == m_pPicking)
 		return E_FAIL;
 
@@ -118,6 +118,8 @@ void CGameInstance::Clear_Resources(_uint iLevelIndex)
 	m_pPrototype_Manager->Clear(iLevelIndex);
 	m_pObject_Manager->Clear(iLevelIndex);
 	m_pPooling_Manager->Clear(iLevelIndex);
+	m_pPicking->Clear(iLevelIndex);
+
 	m_pIMGUI_Manager->Clear();
 }
 
@@ -309,6 +311,14 @@ const _float4* CGameInstance::Get_CamState(STATE eState)
 
 #pragma endregion
 
+#pragma region PICKING
+
+HRESULT CGameInstance::Add_GameObject_ToPicking(class CGameObject* pGameObject, _uint iLevelIdx)
+{
+	return m_pPicking->Add_GameObject_ToPicking(pGameObject, iLevelIdx);
+}
+
+#pragma endregion
 #pragma region SOUND_MANAGER
 
 void CGameInstance::PlaySoundOnce(const _wstring& pSoundKey, CHANNELID eID, float fVolume)
