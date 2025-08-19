@@ -83,7 +83,7 @@ public:
 #pragma endregion
 
 #pragma region PICKING
-
+	HRESULT Add_GameObject_ToPicking(class CGameObject* pGameObject, _uint iLevelIdx);
 #pragma endregion
 
 #pragma region SOUND_MANAGER
