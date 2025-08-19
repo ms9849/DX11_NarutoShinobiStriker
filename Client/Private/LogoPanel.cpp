@@ -49,7 +49,8 @@ void CLogoPanel::Late_Update(_float fTimeDelta)
 
 HRESULT CLogoPanel::Render()
 {
-	__super::Render();
+	if (FAILED(__super::Render()))
+		return E_FAIL;
 
 	return S_OK;
 }

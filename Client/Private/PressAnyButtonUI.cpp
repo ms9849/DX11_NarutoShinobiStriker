@@ -48,7 +48,8 @@ void CPressAnyButtonUI::Late_Update(_float fTimeDelta)
 
 HRESULT CPressAnyButtonUI::Render()
 {
-    __super::Render();
+    if (FAILED(__super::Render()))
+        return E_FAIL;
 
     return S_OK;
 }

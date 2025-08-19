@@ -29,13 +29,23 @@ HRESULT CLevel_OutfitSelect::Initialize()
     if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
         return E_FAIL;
 
-    m_pGameManager->Change_Camera(LEVEL::OUTFITSELECT, TEXT("OutfitSelect_Camera"));
+    if(FAILED(m_pGameManager->Change_Camera(LEVEL::OUTFITSELECT, TEXT("OutfitSelect_Camera"))))
+        return E_FAIL;
 
     return S_OK;
 }
 
 void CLevel_OutfitSelect::Update(_float fTimeDelta)
 {
+    if (m_pGameInstance->Key_Down(DIK_0))
+    {
+        m_pGameManager->Change_Camera(LEVEL::OUTFITSELECT, TEXT("Test_Camera"));
+    }
+    if (m_pGameInstance->Key_Down(DIK_9))
+    {
+        m_pGameManager->Change_Camera(LEVEL::OUTFITSELECT, TEXT("OutfitSelect_Camera"));
+
+    }
     if (m_pGameInstance->Key_Down(DIK_F8))
     {
         m_pGameManager->Clear();

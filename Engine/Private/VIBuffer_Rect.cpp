@@ -40,13 +40,13 @@ HRESULT CVIBuffer_Rect::Initialize_Prototype()
     pVertices[0].vPosition = m_pVertexPositions[0] = _float3{ -0.5f, 0.5f, 0.f };
     pVertices[0].vTexCoord = _float2{ 0.f, 0.f };
 
-    pVertices[1].vPosition = m_pVertexPositions[0] = _float3{ 0.5f, 0.5f, 0.f };
+    pVertices[1].vPosition = m_pVertexPositions[1] = _float3{ 0.5f, 0.5f, 0.f };
     pVertices[1].vTexCoord = _float2{ 1.f, 0.f };
 
-    pVertices[2].vPosition = m_pVertexPositions[0] = _float3{ 0.5f, -0.5f, 0.f };
+    pVertices[2].vPosition = m_pVertexPositions[2] = _float3{ 0.5f, -0.5f, 0.f };
     pVertices[2].vTexCoord = _float2{ 1.f, 1.f };
 
-    pVertices[3].vPosition = m_pVertexPositions[0] = _float3{ -0.5f, -0.5f, 0.f };
+    pVertices[3].vPosition = m_pVertexPositions[3] = _float3{ -0.5f, -0.5f, 0.f };
     pVertices[3].vTexCoord = _float2{ 0.f, 1.f };
 
     D3D11_SUBRESOURCE_DATA InitialVBData{};

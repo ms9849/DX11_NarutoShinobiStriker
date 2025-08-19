@@ -38,7 +38,8 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Effect(TEXT("Layer_Effect"))))
 		return E_FAIL;
 
-	m_pGameManager->Change_Camera(LEVEL::GAMEPLAY, TEXT("Test_Camera"));
+	if(FAILED(m_pGameManager->Change_Camera(LEVEL::GAMEPLAY, TEXT("Test_Camera"))))
+		return E_FAIL;
 
 	return S_OK;
 }
