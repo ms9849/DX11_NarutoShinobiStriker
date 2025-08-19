@@ -48,6 +48,8 @@ void CGameManager::Clear()
 
 		m_Cameras[i].clear();
 	}
+
+	m_pActivatedCamera = nullptr;
 }
 
 HRESULT CGameManager::Set_PlayerPtr(CPlayer* pPlayer)
@@ -103,7 +105,7 @@ HRESULT CGameManager::Change_Camera(LEVEL eLevelID, const _wstring& strCameraTag
 {
 	/* 태그에 해당하는 카메라가 존재하지 않으면 FAIL 반환. */
 	auto iter = m_Cameras[ENUM_CLASS(eLevelID)].find(strCameraTag);
-
+	
 	if (iter == m_Cameras[ENUM_CLASS(eLevelID)].end())
 		return E_FAIL;
 
@@ -111,6 +113,7 @@ HRESULT CGameManager::Change_Camera(LEVEL eLevelID, const _wstring& strCameraTag
 	if(nullptr != m_pActivatedCamera)
 		m_pActivatedCamera->Set_Dead(true);
 
+	static_cast<CGameObject*>(iter->second)->Set_Dead(false);
 	m_pGameInstance->Add_Clone_ToLayer(iter->second, ENUM_CLASS(eLevelID), TEXT("Layer_Camera"));
 
 	/* 활성화중인 카메라 교체 */
