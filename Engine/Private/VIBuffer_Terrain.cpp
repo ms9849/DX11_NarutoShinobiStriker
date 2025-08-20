@@ -1,5 +1,7 @@
 #include "VIBuffer_Terrain.h"
 
+#include "GameInstance.h"
+
 CVIBuffer_Terrain::CVIBuffer_Terrain(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CVIBuffer { pDevice, pContext }
 {
@@ -10,6 +12,43 @@ CVIBuffer_Terrain::CVIBuffer_Terrain(const CVIBuffer_Terrain& rhs)
     , m_iNumVerticesX{ rhs.m_iNumVerticesX }
     , m_iNumVerticesZ{ rhs.m_iNumVerticesZ }
 {
+}
+
+_bool CVIBuffer_Terrain::Picking(_fmatrix WolrdMatrixInverse, _float3* pOut)
+{
+	/* 마우스 정보를 지형의 로컬로 변환시킨다. */
+	m_pGameInstance->Transform_Picking_ToLocalSpace(WolrdMatrixInverse);
+
+	_uint	iNumIndices = {};
+
+	for (_uint i = 0; i < m_iNumVerticesZ - 1; i++)
+	{
+		for (_uint j = 0; j < m_iNumVerticesX - 1; j++)
+		{
+			_uint	iIndex = i * m_iNumVerticesX + j;
+
+			_uint	iIndices[4] = {
+				iIndex + m_iNumVerticesX,
+				iIndex + m_iNumVerticesX + 1,
+				iIndex + 1,
+				iIndex
+			};
+
+			if (true == m_pGameInstance->Picking_InLocalSpace(XMLoadFloat3(&m_pVertexPositions[iIndices[0]]), XMLoadFloat3(&m_pVertexPositions[iIndices[1]]), XMLoadFloat3(&m_pVertexPositions[iIndices[2]]), pOut))
+			{
+				XMStoreFloat3(pOut, XMVector3TransformCoord(XMLoadFloat3(pOut), XMMatrixInverse(nullptr, WolrdMatrixInverse)));
+				return true;
+			}
+
+			if (true == m_pGameInstance->Picking_InLocalSpace(XMLoadFloat3(&m_pVertexPositions[iIndices[0]]), XMLoadFloat3(&m_pVertexPositions[iIndices[2]]), XMLoadFloat3(&m_pVertexPositions[iIndices[3]]), pOut))
+			{
+				XMStoreFloat3(pOut, XMVector3TransformCoord(XMLoadFloat3(pOut), XMMatrixInverse(nullptr, WolrdMatrixInverse)));
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 HRESULT CVIBuffer_Terrain::Initialize_Prototype(const _tchar* pHeightMapFilePath)

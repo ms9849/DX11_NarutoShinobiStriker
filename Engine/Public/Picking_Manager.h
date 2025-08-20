@@ -5,6 +5,8 @@
 /*
 피킹을 담당하는 클래스.
 
+피킹 기능 + 피킹 된 오브젝트들에 대한 제어를 담당한다.
+
 피킹 된 물체도 가져올 수 있게 해야하나?
 
 -> 피킹 클래스 내부에 Picking List 작성.
@@ -20,7 +22,7 @@
 
 /*
 피킹 용도 -> 현재 모작할 게임은 맵 배치용만 사용
-+ 추가적으로 사용한다면 터레인 피킹, 오브젝트 피킹 정도.
++ 추가적으로 사용한다면 터레인 하이트 맵, 오브젝트 피킹 정도.
 
 피킹한 뒤 필요한 것 -> 
 1. 피킹된 오브젝트 정보 
@@ -31,7 +33,7 @@
 피킹된 오브젝트는 어디서 제어? -> 
 
 1. 피킹된 오브젝트 내부 컴포넌트 ( VIBuffer )
-2. 혹은 클라이언트
+2. 클라이언트
 3. 피킹 클래스 (현재 이 파일)
 
 1,3번 다 상관없을 것 같다. 다만 2번에서 해야될 일이 생기면 골치아파짐..
@@ -41,25 +43,26 @@
 
 NS_BEGIN(Engine)
 
-class CPicking final : public CBase
+class CPicking_Manager final : public CBase
 {
 	friend class CIMGUI_Manager;
 private:
-	CPicking(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	virtual ~CPicking() = default;
+	CPicking_Manager(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	virtual ~CPicking_Manager() = default;
 
 public:
 	HRESULT Initialize(HWND hWnd, _uint iWinSizeX, _uint iWinSizeY, _uint iNumLevels);
 	void Update();
-	void Transform_ToLocalSpace(const _float4x4* pWorldMatrixInverse);
 
-	_bool Picking_InWorldSpace(const _float3& vPointA, const _float3& vPointB, const _float3& vPointC, _float3* pOut);
-	_bool Picking_InLocalSpace(const _float3& vPointA, const _float3& vPointB, const _float3& vPointC, _float3* pOut);
+public:
+	_bool Picking(_uint iLevelIdx, _float3* pOut);
+	_bool Picking_InWorldSpace(_fvector vPointA, _fvector vPointB, _fvector vPointC, _float3* pOut);
+	void Transform_ToLocalSpace(_fmatrix WorldMatrixInverse);
+	_bool Picking_InLocalSpace(_fvector vPointA, _fvector vPointB, _fvector vPointC, _float3* pOut);
 
 public:
 	/* 레벨 / 객체 / 버퍼 가져옴. 트랜스폼은 직접 꺼내준다. */
 	/* 메쉬가 여러개일 수 있으니까 (Model 컴포넌트), CComponent 타입으로 받아올까? */
-	/* 추후에 콜라이더 타입으로 받아오게 할 것. 사각형 타입 콜라이더 / 아니면 구 콜라이더 뭐든 상관없을 듯 */
 
 	HRESULT Add_GameObject_ToPicking(_uint iLevelIdx, class CGameObject* pGameObject, class CVIBuffer* pVIBuffer);
 	void Clear(_uint iLevelIndex);
@@ -81,7 +84,7 @@ private:
 	list<pair<class CGameObject *, class CVIBuffer *>>*			m_pPickingTargets = {};
 
 public:
-	static CPicking* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iWinSizeX, _uint iWinSizeY, HWND hWnd, _uint iNumLevels);
+	static CPicking_Manager* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iWinSizeX, _uint iWinSizeY, HWND hWnd, _uint iNumLevels);
 	virtual void Free() override;
 };
 

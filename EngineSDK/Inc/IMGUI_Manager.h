@@ -24,7 +24,7 @@ public:
 		class CPrototype_Manager* pPrototype_Manager, 
 		class CObject_Manager* pObject_Manager, 
 		class CPooling_Manager* pPooling_Manager,
-		class CPicking *pPicking);
+		class CPicking_Manager *pPicking);
 	void	Update(_float fTimeDelta);
 	void	Render();
 	void	Set_Visible_IMGUI(_bool bFlag, _uint iIMGUIID);
@@ -74,7 +74,7 @@ private:
 	class CPrototype_Manager* m_pPrototype_Manager = { nullptr };
 	class CObject_Manager* m_pObject_Manager = { nullptr };
 	class CPooling_Manager* m_pPooling_Manager = { nullptr };
-	class CPicking* m_pPicking = { nullptr };
+	class CPicking_Manager* m_pPicking_Manager = { nullptr };
 	class CGameInstance* m_pGameInstance = { nullptr };
 #pragma endregion
 
@@ -101,7 +101,7 @@ public:
 		class CPrototype_Manager* pPrototype_Manager, 
 		class CObject_Manager* pObject_Manager,
 		class CPooling_Manager* pPooling_Manager,
-		class CPicking* pPicking);
+		class CPicking_Manager* pPicking);
 
 	virtual void Free() override;
 };

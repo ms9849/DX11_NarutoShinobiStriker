@@ -3,7 +3,7 @@
 #include "Prototype_Manager.h"
 #include "Pooling_Manager.h"
 #include "Object_Manager.h"
-#include "Picking.h"
+#include "Picking_Manager.h"
 #include "GameObject.h"
 #include "Layer.h"
 
@@ -20,7 +20,7 @@ CIMGUI_Manager::CIMGUI_Manager(ID3D11Device* pDevice, ID3D11DeviceContext* pCont
     Safe_AddRef(m_pGameInstance);
 }
 
-HRESULT CIMGUI_Manager::Initialize(HWND hWnd, CPrototype_Manager* pPrototype_Manager, CObject_Manager* pObject_Manager, CPooling_Manager* pPooling_Manager, CPicking* pPicking)
+HRESULT CIMGUI_Manager::Initialize(HWND hWnd, CPrototype_Manager* pPrototype_Manager, CObject_Manager* pObject_Manager, CPooling_Manager* pPooling_Manager, CPicking_Manager* pPicking)
 {
     memset(m_bVisibleFlag, 0, ENUM_CLASS(IMGUI_VISIBLE::END));
 
@@ -42,8 +42,8 @@ HRESULT CIMGUI_Manager::Initialize(HWND hWnd, CPrototype_Manager* pPrototype_Man
     m_pPooling_Manager = pPooling_Manager;
     Safe_AddRef(m_pPooling_Manager);
 
-    m_pPicking = pPicking;
-    Safe_AddRef(m_pPicking);
+    m_pPicking_Manager = pPicking;
+    Safe_AddRef(m_pPicking_Manager);
 
     return S_OK;
 }
@@ -351,7 +351,7 @@ void CIMGUI_Manager::Show_PickingInspector()
         return;
 
     CTransform* pTransform = { nullptr };
-    _float4 vSource;
+    //_float4 vSource;
     _string strBuffer;
 
     //pTransform = static_cast<CTransform*>(m_pSelectedGameObject->Find_Component(g_strTransformTag));
@@ -366,12 +366,12 @@ void CIMGUI_Manager::Show_PickingInspector()
 
         ImGui::PushItemWidth(70);
         
-        ImGui::InputFloat("##X ", &m_pPicking->m_vRayPos[ENUM_CLASS(RAY::WORLD)].x, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+        ImGui::InputFloat("##X ", &m_pPicking_Manager->m_vRayPos[ENUM_CLASS(RAY::WORLD)].x, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
         ImGui::SameLine();
-        ImGui::InputFloat("##Y ", &m_pPicking->m_vRayPos[ENUM_CLASS(RAY::WORLD)].y, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+        ImGui::InputFloat("##Y ", &m_pPicking_Manager->m_vRayPos[ENUM_CLASS(RAY::WORLD)].y, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
         ImGui::SameLine();
         
-        ImGui::InputFloat("##Z ", &m_pPicking->m_vRayPos[ENUM_CLASS(RAY::WORLD)].z, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+        ImGui::InputFloat("##Z ", &m_pPicking_Manager->m_vRayPos[ENUM_CLASS(RAY::WORLD)].z, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
         ImGui::PopItemWidth();
 
 
@@ -379,11 +379,11 @@ void CIMGUI_Manager::Show_PickingInspector()
         ImGui::Text(strBuffer.c_str());
         ImGui::PushItemWidth(70);
         
-        ImGui::InputFloat("##X ", &m_pPicking->m_vRayDir[ENUM_CLASS(RAY::WORLD)].x, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+        ImGui::InputFloat("##X ", &m_pPicking_Manager->m_vRayDir[ENUM_CLASS(RAY::WORLD)].x, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
         ImGui::SameLine();
-        ImGui::InputFloat("##Y ", &m_pPicking->m_vRayDir[ENUM_CLASS(RAY::WORLD)].y, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+        ImGui::InputFloat("##Y ", &m_pPicking_Manager->m_vRayDir[ENUM_CLASS(RAY::WORLD)].y, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
         ImGui::SameLine();
-        ImGui::InputFloat("##Z ", &m_pPicking->m_vRayDir[ENUM_CLASS(RAY::WORLD)].z, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
+        ImGui::InputFloat("##Z ", &m_pPicking_Manager->m_vRayDir[ENUM_CLASS(RAY::WORLD)].z, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
         
         ImGui::PopItemWidth();
 
@@ -394,7 +394,7 @@ void CIMGUI_Manager::Show_PickingInspector()
     //ImGui::BeginTabBar("Picking Object Info");
     //if (ImGui::BeginTabItem("Picking Object Info"))
     //{
-    //    if (m_pPicking->m_pPickedObject != nullptr)
+    //    if (m_pPicking_Manager->m_pPickedObject != nullptr)
     //    {
     //        strBuffer = "Layer: " + m_strSelectedLayer;
     //        ImGui::Text(strBuffer.c_str());
@@ -412,7 +412,7 @@ void CIMGUI_Manager::Show_PickingInspector()
     //ImGui::BeginTabBar("Components");
     //if (ImGui::BeginTabItem("Transform"))
     //{
-    //    if (m_pPicking->m_pPickedObject != nullptr)
+    //    if (m_pPicking_Manager->m_pPickedObject != nullptr)
     //    {
     //        ImGui::PushItemWidth(70);
 
@@ -788,7 +788,7 @@ void CIMGUI_Manager::Show_ObjectInspector(_float fTimeDelta)
 }
 
 CIMGUI_Manager* CIMGUI_Manager::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HWND hWnd,
-    CPrototype_Manager* pPrototype_Manager, CObject_Manager* pObject_Manager, CPooling_Manager* pPooling_Manager, CPicking* pPicking)
+    CPrototype_Manager* pPrototype_Manager, CObject_Manager* pObject_Manager, CPooling_Manager* pPooling_Manager, CPicking_Manager* pPicking)
 {
     CIMGUI_Manager* pInstance = new CIMGUI_Manager(pDevice, pContext);
     
@@ -811,7 +811,7 @@ void CIMGUI_Manager::Free()
     Safe_Release(m_pPrototype_Manager);
     Safe_Release(m_pObject_Manager);
     Safe_Release(m_pPooling_Manager);
-    Safe_Release(m_pPicking);
+    Safe_Release(m_pPicking_Manager);
 
     Safe_Release(m_pGameInstance);
 

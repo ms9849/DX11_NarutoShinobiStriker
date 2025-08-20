@@ -26,6 +26,9 @@ HRESULT CTerrain::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
+
+    m_pGameInstance->Add_GameObject_ToPicking(ENUM_CLASS(LEVEL::GAMEPLAY), this, m_pVIBufferCom);
+
     return S_OK;
 }
 
