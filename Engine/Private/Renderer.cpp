@@ -1,7 +1,6 @@
 #include "Renderer.h"
 
-#include "GameObject.h"
-
+#include "UIObject.h"
 
 CRenderer::CRenderer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice{ pDevice }
@@ -84,7 +83,7 @@ void CRenderer::Render_UI()
 {
 	m_RenderObjects[ENUM_CLASS(RENDER::UI)].sort([](CGameObject* pSour, CGameObject* pDest)->_bool
 		{
-			return static_cast<CGameObject*>(pSour)->Get_CamDistance() > static_cast<CGameObject*>(pDest)->Get_CamDistance();
+			return static_cast<CUIObject*>(pSour)->Get_ZOrder() > static_cast<CUIObject*>(pDest)->Get_ZOrder();
 		});
 
 	for (auto& pRenderObject : m_RenderObjects[ENUM_CLASS(RENDER::UI)])

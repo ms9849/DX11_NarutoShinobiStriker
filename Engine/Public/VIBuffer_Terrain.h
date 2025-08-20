@@ -12,6 +12,9 @@ private:
 	virtual ~CVIBuffer_Terrain() = default;
 
 public:
+	virtual _bool Picking(_fmatrix WolrdMatrixInverse, _float3* pOut) override;
+
+public:
 	virtual HRESULT Initialize_Prototype(const _tchar* pHeightMapFilePath);
 	virtual HRESULT Initialize(void* pArg) override;
 

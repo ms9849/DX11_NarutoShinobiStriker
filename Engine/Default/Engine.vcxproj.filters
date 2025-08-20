@@ -163,7 +163,7 @@
     <ClInclude Include="..\Public\Model.h">
       <Filter>01.Utility\03.Components\Model</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Picking.h">
+    <ClInclude Include="..\Public\Picking_Manager.h">
       <Filter>01.Utility\07. Picking</Filter>
     </ClInclude>
   </ItemGroup>
@@ -285,7 +285,7 @@
     <ClCompile Include="..\Private\Model.cpp">
       <Filter>01.Utility\03.Components\Model</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Picking.cpp">
+    <ClCompile Include="..\Private\Picking_Manager.cpp">
       <Filter>01.Utility\07. Picking</Filter>
     </ClCompile>
   </ItemGroup>

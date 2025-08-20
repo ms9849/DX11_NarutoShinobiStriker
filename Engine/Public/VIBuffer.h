@@ -16,6 +16,9 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 
 public:
+	virtual _bool Picking(_fmatrix WolrdMatrixInverse, _float3* pOut);
+
+public:
 	virtual HRESULT	Bind_Resources();
 	virtual HRESULT Render();
 

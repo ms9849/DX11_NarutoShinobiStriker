@@ -33,6 +33,11 @@ HRESULT CVIBuffer::Initialize(void* pArg)
 	return S_OK;
 }
 
+_bool CVIBuffer::Picking(_fmatrix WolrdMatrixInverse, _float3* pOut)
+{
+	return false;
+}
+
 HRESULT CVIBuffer::Bind_Resources()
 {
 	ID3D11Buffer* pVertexBuffers[] = {

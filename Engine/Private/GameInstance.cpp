@@ -10,7 +10,7 @@
 #include "Input_Manager.h"
 #include "Renderer.h"
 #include "PipeLine.h"
-#include "Picking.h"
+#include "Picking_Manager.h"
 #include "IMGUI_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
@@ -33,8 +33,8 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	if (nullptr == m_pTimer_Manager)
 		return E_FAIL;
 
-	m_pPicking = CPicking::Create(*ppDevice, *ppContext, EngineDesc.iWinSizeX, EngineDesc.iWinSizeY, EngineDesc.hWnd, EngineDesc.iNumLevels);
-	if (nullptr == m_pPicking)
+	m_pPicking_Manager = CPicking_Manager::Create(*ppDevice, *ppContext, EngineDesc.iWinSizeX, EngineDesc.iWinSizeY, EngineDesc.hWnd, EngineDesc.iNumLevels);
+	if (nullptr == m_pPicking_Manager)
 		return E_FAIL;
 
 	m_pPrototype_Manager = CPrototype_Manager::Create(EngineDesc.iNumLevels);
@@ -65,7 +65,7 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	if (nullptr == m_pPooling_Manager)
 		return E_FAIL;
 
-	m_pIMGUI_Manager = CIMGUI_Manager::Create(*ppDevice, *ppContext, EngineDesc.hWnd, m_pPrototype_Manager, m_pObject_Manager, m_pPooling_Manager, m_pPicking);
+	m_pIMGUI_Manager = CIMGUI_Manager::Create(*ppDevice, *ppContext, EngineDesc.hWnd, m_pPrototype_Manager, m_pObject_Manager, m_pPooling_Manager, m_pPicking_Manager);
 	if (nullptr == m_pIMGUI_Manager)
 		return E_FAIL;
 
@@ -82,7 +82,7 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 
 	/* 뷰, 투영 행렬 세팅 및 마우스 피킹 정보 세팅 */
 	m_pPipeLine->Update();
-	m_pPicking->Update();
+	m_pPicking_Manager->Update();
 
 	/* 객체 업데이트 계층 */
 	m_pObject_Manager->Update(fTimeDelta);
@@ -118,7 +118,7 @@ void CGameInstance::Clear_Resources(_uint iLevelIndex)
 	m_pPrototype_Manager->Clear(iLevelIndex);
 	m_pObject_Manager->Clear(iLevelIndex);
 	m_pPooling_Manager->Clear(iLevelIndex);
-	m_pPicking->Clear(iLevelIndex);
+	m_pPicking_Manager->Clear(iLevelIndex);
 
 	m_pIMGUI_Manager->Clear();
 }
@@ -313,9 +313,29 @@ const _float4* CGameInstance::Get_CamState(STATE eState)
 
 #pragma region PICKING
 
-HRESULT CGameInstance::Add_GameObject_ToPicking(class CGameObject* pGameObject, _uint iLevelIdx)
+_bool CGameInstance::Picking(_uint iLevelIdx, _float3* pOut)
 {
-	return m_pPicking->Add_GameObject_ToPicking(pGameObject, iLevelIdx);
+	return m_pPicking_Manager->Picking(iLevelIdx, pOut);
+}
+
+HRESULT CGameInstance::Add_GameObject_ToPicking(_uint iLevelIdx, class CGameObject* pGameObject, class CVIBuffer* pVIBuffer)
+{
+	return m_pPicking_Manager->Add_GameObject_ToPicking(iLevelIdx, pGameObject, pVIBuffer);
+}
+
+_bool CGameInstance::Picking_InWorldSpace(_fvector vPointA, _fvector vPointB, _fvector vPointC, _float3* pOut)
+{
+	return m_pPicking_Manager->Picking_InWorldSpace(vPointA, vPointB, vPointC, pOut);
+}
+
+void CGameInstance::Transform_Picking_ToLocalSpace(_fmatrix WorldMatrixInverse)
+{
+	return m_pPicking_Manager->Transform_ToLocalSpace(WorldMatrixInverse);
+}
+
+_bool CGameInstance::Picking_InLocalSpace(_fvector vPointA, _fvector vPointB, _fvector vPointC, _float3* pOut)
+{
+	return m_pPicking_Manager->Picking_InLocalSpace(vPointA, vPointB, vPointC, pOut);
 }
 
 #pragma endregion
@@ -424,7 +444,7 @@ void CGameInstance::Release_Engine()
 	Safe_Release(m_pInput_Manager);
 	Safe_Release(m_pPooling_Manager);
 	Safe_Release(m_pPipeLine);
-	Safe_Release(m_pPicking);
+	Safe_Release(m_pPicking_Manager);
 	Safe_Release(m_pGraphic_Device);
 }
 

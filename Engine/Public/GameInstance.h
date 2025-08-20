@@ -83,7 +83,11 @@ public:
 #pragma endregion
 
 #pragma region PICKING
-	HRESULT Add_GameObject_ToPicking(class CGameObject* pGameObject, _uint iLevelIdx);
+	_bool	Picking(_uint iLevelIdx, _float3* pOut);
+	HRESULT Add_GameObject_ToPicking(_uint iLevelIdx, class CGameObject* pGameObject, class CVIBuffer* pVIBuffer);
+	_bool	Picking_InWorldSpace(_fvector vPointA, _fvector vPointB, _fvector vPointC, _float3* pOut);
+	void	Transform_Picking_ToLocalSpace(_fmatrix WorldMatrixInverse);
+	_bool	Picking_InLocalSpace(_fvector vPointA, _fvector vPointB, _fvector vPointC, _float3* pOut);
 #pragma endregion
 
 #pragma region SOUND_MANAGER
@@ -118,7 +122,7 @@ private:
 	class CObject_Manager*			m_pObject_Manager = { nullptr };
 	class CRenderer*				m_pRenderer = { nullptr };
 	class CPipeLine*				m_pPipeLine = { nullptr };
-	class CPicking*					m_pPicking = { nullptr };
+	class CPicking_Manager*					m_pPicking_Manager = { nullptr };
 	class CSound_Manager*			m_pSound_Manager = { nullptr };
 	class CInput_Manager*			m_pInput_Manager = { nullptr };
 	class CPooling_Manager*			m_pPooling_Manager = { nullptr };
