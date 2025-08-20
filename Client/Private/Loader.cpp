@@ -12,8 +12,12 @@
 #include "PressAnyButtonUI.h"
 
 #include "OutfitSelectCamera.h"
-#include "OutfitSelectPanel.h"
 #include "Mannequin.h"
+#include "OutfitSelectPanel.h"
+#include "CreateCharacterUI.h"
+#include "ModelPanel.h"
+#include "ModelSelectButtonUI.h"
+#include "ModelDecideButtonUI.h"
 
 #include "SkillSlotPanel.h"
 #include "SkillSlotUI.h"
@@ -199,9 +203,29 @@ HRESULT CLoader::Loading_For_OutfitSelect()
 	m_fLoadingProgress += 0.4f;
 	m_strMessage = TEXT("텍스쳐를(을) 로딩 중 입니다.");
 
-	/* For.Prototype_Component_Texture_TimerPanel */
+	/* For.Prototype_Component_Texture_OutfirSelectPanel */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_Component_Texture_OutfirSelectPanel"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/OutfitSelect/OutfitSelectPanel.png"), 1))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_CreateCharacterUI */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_Component_Texture_CreateCharacterUI"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/OutfitSelect/CreateCharacterUI.png"), 1))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_ModelPanel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_Component_Texture_ModelPanel"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/ModelPanel/ModelPanel.png"), 1))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_ModelSelectButtonUI */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_Component_Texture_ModelSelectButtonUI"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/ModelSelectButton/ModelSelectButton%d.png"), 2))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_ModelDecideButtonUI */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_Component_Texture_ModelDecideButtonUI"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/ModelDecideButton/ModelDecideButton%d.png"), 2))))
 		return E_FAIL;
 
 	m_fLoadingProgress += 0.3f;
@@ -236,6 +260,26 @@ HRESULT CLoader::Loading_For_OutfitSelect()
 	/* For.Prototype_GameObject_OutfitSelectPanel */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_GameObject_OutfitSelectPanel"),
 		COutfitSelectPanel::Create(m_pDevice, m_pContext, OBJECTID::OUTFITSELECT_PANEL))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_CreateCharacterUI */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_GameObject_CreateCharacterUI"),
+		CCreateCharacterUI::Create(m_pDevice, m_pContext, OBJECTID::CREATECHARACTER_UI))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_ModelPanel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_GameObject_ModelPanel"),
+		CModelPanel::Create(m_pDevice, m_pContext, OBJECTID::MODEL_PANEL))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_ModelSelectButtonUI */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_GameObject_ModelSelectButtonUI"),
+		CModelSelectButtonUI::Create(m_pDevice, m_pContext, OBJECTID::MODELSELECTBUTTON_UI))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_ModelDecideButtonUI */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_GameObject_ModelDecideButtonUI"),
+		CModelDecideButtonUI::Create(m_pDevice, m_pContext, OBJECTID::MODELDECIDEBUTTON_UI))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_Mannequin */
