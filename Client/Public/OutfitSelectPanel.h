@@ -23,6 +23,7 @@ public:
 private:
 	HRESULT Ready_Components();
 	HRESULT Bind_ShaderResources();
+	HRESULT Ready_CreateCharacterUI();
 
 public:
 	static COutfitSelectPanel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);

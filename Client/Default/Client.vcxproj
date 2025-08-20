@@ -158,6 +158,7 @@
     <ClInclude Include="..\Public\Character.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\ComboKOPanel.h" />
+    <ClInclude Include="..\Public\CreateCharacterUI.h" />
     <ClInclude Include="..\Public\DecimalUI.h" />
     <ClInclude Include="..\Public\Dummy.h" />
     <ClInclude Include="..\Public\GameManager.h" />
@@ -175,6 +176,9 @@
     <ClInclude Include="..\Public\MainApp.h" />
     <ClInclude Include="..\Public\Mannequin.h" />
     <ClInclude Include="..\Public\MissionAlertPanel.h" />
+    <ClInclude Include="..\Public\ModelDecideButtonUI.h" />
+    <ClInclude Include="..\Public\ModelPanel.h" />
+    <ClInclude Include="..\Public\ModelSelectButtonUI.h" />
     <ClInclude Include="..\Public\OutfitSelectCamera.h" />
     <ClInclude Include="..\Public\OutfitSelectPanel.h" />
     <ClInclude Include="..\Public\Panel.h" />
@@ -202,6 +206,7 @@
     <ClCompile Include="..\Private\Button.cpp" />
     <ClCompile Include="..\Private\Character.cpp" />
     <ClCompile Include="..\Private\ComboKOPanel.cpp" />
+    <ClCompile Include="..\Private\CreateCharacterUI.cpp" />
     <ClCompile Include="..\Private\DecimalUI.cpp" />
     <ClCompile Include="..\Private\Dummy.cpp" />
     <ClCompile Include="..\Private\GameManager.cpp" />
@@ -219,6 +224,9 @@
     <ClCompile Include="..\Private\MainApp.cpp" />
     <ClCompile Include="..\Private\Mannequin.cpp" />
     <ClCompile Include="..\Private\MissionAlertPanel.cpp" />
+    <ClCompile Include="..\Private\ModelDecideButtonUI.cpp" />
+    <ClCompile Include="..\Private\ModelPanel.cpp" />
+    <ClCompile Include="..\Private\ModelSelectButtonUI.cpp" />
     <ClCompile Include="..\Private\OutfitSelectCamera.cpp" />
     <ClCompile Include="..\Private\OutfitSelectPanel.cpp" />
     <ClCompile Include="..\Private\Panel.cpp" />
