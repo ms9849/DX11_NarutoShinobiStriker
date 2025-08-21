@@ -72,6 +72,14 @@ _bool CButton::IsHovered()
 	//return PtInRect(&m_rcButton, m_pGameInstance->Get_MousePos());
 }
 
+void CButton::Toggle_Focus()
+{
+	if (m_iTextureIdx == 0)
+		m_iTextureIdx = 1;
+	else
+		m_iTextureIdx = 0;
+}
+
 void CButton::Free()
 {
 	__super::Free();

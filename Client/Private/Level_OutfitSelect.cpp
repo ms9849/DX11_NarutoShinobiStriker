@@ -126,20 +126,6 @@ HRESULT CLevel_OutfitSelect::Ready_Layer_UI(const _wstring& strLayerTag)
         ENUM_CLASS(LEVEL::OUTFITSELECT), strLayerTag, &Desc)))
         return E_FAIL;
 
-    /* 테스트용 모델 선택 버튼 */
-    Desc = CUIObject::CreateDesc(g_iWinSizeX / 2.f - 300.f, g_iWinSizeY / 2.f + 150.f, 0.75f, 350.f, 40.f, 0, 0.f);
-
-    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_GameObject_ModelSelectButtonUI"),
-        ENUM_CLASS(LEVEL::OUTFITSELECT), strLayerTag, &Desc)))
-        return E_FAIL;
-
-    /* 테스트용 모델 외형 결정 버튼 */
-    Desc = CUIObject::CreateDesc(g_iWinSizeX / 2.f - 300.f, g_iWinSizeY / 2.f + 300.f, 0.75f, 250.f, 50.f, 0, 0.f);
-
-    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_GameObject_ModelDecideButtonUI"),
-        ENUM_CLASS(LEVEL::OUTFITSELECT), strLayerTag, &Desc)))
-        return E_FAIL;
-
     return S_OK;
 }
 

@@ -19,6 +19,10 @@ protected:
 	virtual ~CButton() = default;
 
 public:
+	_bool IsClicked();
+	_bool IsHovered();
+	void  Toggle_Focus();
+public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Priority_Update(_float fTimeDelta) override;
@@ -31,10 +35,6 @@ protected:
 
 protected:
 	virtual HRESULT Bind_ShaderResources() override;
-
-public:
-	_bool IsClicked();
-	_bool IsHovered();
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;
