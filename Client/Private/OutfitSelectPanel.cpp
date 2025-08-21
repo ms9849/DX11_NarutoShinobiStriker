@@ -83,6 +83,7 @@ HRESULT COutfitSelectPanel::Bind_ShaderResources()
 HRESULT COutfitSelectPanel::Ready_CreateCharacterUI()
 {
     UIOBJECT_DESC Desc = CUIObject::CreateDesc(m_fX - g_iWinSizeX / 2.f + 275, m_fY - g_iWinSizeY / 2.f + 100, m_fZ - 0.05f, 550.f, 200.f, 0, 0.f);
+    
     CCreateCharacterUI* pCreateCharacterUI = static_cast<CCreateCharacterUI*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_GameObject_CreateCharacterUI"), &Desc));
     m_pGameInstance->Add_Clone_ToLayer(pCreateCharacterUI, ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Layer_UI"));
 

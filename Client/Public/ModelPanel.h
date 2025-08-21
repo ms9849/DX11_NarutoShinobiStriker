@@ -66,6 +66,16 @@ public:
 	virtual HRESULT Render() override;
 
 private:
+	/* 0 ~ 8 */
+	_int m_iFocusedNum = { 0 };
+	SELECT_TYPE m_eSelectType = { SELECT_TYPE::PARTS };
+private:
+	void Change_FocusedButton(_int iNum);
+	void Change_SelectType();
+	void Change_Outfits();
+	void Key_Input();
+
+private:
 	HRESULT Ready_Components();
 
 	HRESULT Bind_ShaderResources();
