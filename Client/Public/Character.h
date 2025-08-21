@@ -7,7 +7,6 @@
 NS_BEGIN(Engine)
 class CModel;
 class CShader;
-class CTexture;
 NS_END
 
 NS_BEGIN(Client)
@@ -50,8 +49,7 @@ protected:
 	class CGameManager* m_pGameManager = { nullptr };
 	CModel* m_pModelCom = { nullptr };
 	CShader* m_pShaderCom = { nullptr };
-	CTexture* m_pTextureCom = { nullptr };
-	
+	_uint		m_iNumMeshes = {};
 protected:
 	// 스킬에 따라 1,2,3번 스킬이 변경됨
 	// 스킬은 곧 모션(애니메이션)이니까?

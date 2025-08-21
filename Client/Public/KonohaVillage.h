@@ -5,7 +5,6 @@
 
 NS_BEGIN(Engine)
 class CModel;
-class CTexture;
 NS_END 
 
 NS_BEGIN(Client)
@@ -30,7 +29,7 @@ private:
 
 	CModel* m_pModelCom = { nullptr };
 	CShader* m_pShaderCom = { nullptr };
-	CTexture* m_pTextureCom = { nullptr };
+	_uint  m_iNumMeshes = {};
 
 private:
 	HRESULT Ready_Components();

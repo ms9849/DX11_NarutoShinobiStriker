@@ -12,10 +12,15 @@ private:
 	virtual ~CModel() = default;
 
 public:
+	_uint Get_NumMeshes() const {
+		return m_iNumMeshes;
+	}
+
+public:
 	virtual HRESULT Initialize_Prototype(const _char* pModelFilePath);
 	virtual HRESULT Initialize(void* pArg) override;
-	HRESULT Render();
-
+	HRESULT Bind_Material(_uint iMeshIndex, class CShader* pShader, const _char* pConstantName, aiTextureType eType, _uint iTextureIndex);
+	HRESULT Render(_uint iMeshIndex);
 private:
 
 	const aiScene* m_pAIScene = { nullptr };
@@ -25,11 +30,12 @@ private:
 	_uint					m_iNumMeshes = {};
 	vector<class CMesh*>	m_Meshes;
 
+	_uint					m_iNumMaterials = {};
+	vector<class CMaterial*> m_Materials;
 
 private:
 	HRESULT Ready_Meshes();
-
-
+	HRESULT Ready_Materials(const _char* pModelFilePath);
 
 public:
 	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* pModelFilePath);

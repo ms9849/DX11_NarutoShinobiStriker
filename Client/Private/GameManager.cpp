@@ -38,8 +38,13 @@ void CGameManager::Release_GameManager()
 
 void CGameManager::Clear()
 {
+	/* 지울때 레퍼런스 카운트가 0임을 보장하지 않음*/
+	/* 따라서 명시적으로 nullptr 처리 해줘야함 */
 	Safe_Release(m_pPlayer);
+	m_pPlayer = nullptr;
+
 	Safe_Release(m_pQuestLog);
+	m_pQuestLog = nullptr;
 
 	for (_uint i = 0; i < ENUM_CLASS(LEVEL::END); ++i)
 	{

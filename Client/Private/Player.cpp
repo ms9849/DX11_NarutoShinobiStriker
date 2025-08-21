@@ -57,6 +57,8 @@ HRESULT CPlayer::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+	m_iNumMeshes = m_pModelCom->Get_NumMeshes();
+
 	/* 게임 매니저에 현재 플레이어 정보 세팅. 레벨 변경되도 안전할거니까.. */
 	m_pGameManager->Set_PlayerPtr(this);
 
@@ -96,7 +98,8 @@ void CPlayer::Late_Update(_float fTimeDelta)
 
 HRESULT CPlayer::Render()
 {
-	__super::Render();
+	if(FAILED(__super::Render()))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -111,11 +114,6 @@ HRESULT CPlayer::Ready_Components()
 	/* Com_Model */
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_Fiona"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
-		return E_FAIL;
-
-	/* Com_Texture */
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Fiona"),
-		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 		return E_FAIL;
 
 	return S_OK;

@@ -166,6 +166,9 @@
     <ClInclude Include="..\Public\Picking_Manager.h">
       <Filter>01.Utility\07. Picking</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Material.h">
+      <Filter>01.Utility\03.Components\Model\Material</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -287,6 +290,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Picking_Manager.cpp">
       <Filter>01.Utility\07. Picking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Material.cpp">
+      <Filter>01.Utility\03.Components\Model\Material</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -418,6 +424,9 @@
     </Filter>
     <Filter Include="01.Utility\07. Picking">
       <UniqueIdentifier>{b495b8ad-024f-467c-80d7-7791cf763d26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Model\Material">
+      <UniqueIdentifier>{c0514e39-501c-4b58-8609-e2aa3c08ba99}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
