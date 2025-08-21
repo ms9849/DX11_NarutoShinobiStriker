@@ -142,9 +142,6 @@
     <Filter Include="02.GameObjects\UI\Panel\OUTFIT_SELECT">
       <UniqueIdentifier>{d8397129-7560-4315-8e6d-aaf995cf86ae}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Character\Mannequin">
-      <UniqueIdentifier>{ea9082e8-e6a3-4f60-b167-7b855b91c3d8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Camera\OutfitSelect">
       <UniqueIdentifier>{3265bd8b-e104-49ed-9c30-c8ccf617e15d}</UniqueIdentifier>
     </Filter>
@@ -165,6 +162,9 @@
     </Filter>
     <Filter Include="02.GameObjects\UI\Panel\OUTFIT_SELECT\ModelPanel\ModelDecideButton">
       <UniqueIdentifier>{b57199bc-be64-49ca-a20f-5c6529932061}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Mannequin">
+      <UniqueIdentifier>{ea9082e8-e6a3-4f60-b167-7b855b91c3d8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -289,7 +289,7 @@
       <Filter>02.GameObjects\UI\Panel\OUTFIT_SELECT\OutfitSelectPanel</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Mannequin.h">
-      <Filter>02.GameObjects\Character\Mannequin</Filter>
+      <Filter>02.GameObjects\Mannequin</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\OutfitSelectCamera.h">
       <Filter>02.GameObjects\Camera\OutfitSelect</Filter>
@@ -430,7 +430,7 @@
       <Filter>02.GameObjects\UI\Panel\OUTFIT_SELECT\OutfitSelectPanel</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Mannequin.cpp">
-      <Filter>02.GameObjects\Character\Mannequin</Filter>
+      <Filter>02.GameObjects\Mannequin</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\OutfitSelectCamera.cpp">
       <Filter>02.GameObjects\Camera\OutfitSelect</Filter>

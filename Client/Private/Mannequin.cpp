@@ -26,6 +26,8 @@ HRESULT CMannequin::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+	m_iNumMeshes = m_pModelCom->Get_NumMeshes();
+
 	return S_OK;
 }
 
@@ -47,11 +49,17 @@ HRESULT CMannequin::Render()
 	if (FAILED(Bind_ShaderResources()))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Begin(0)))
-		return E_FAIL;
+	for (_uint i = 0; i < m_iNumMeshes; ++i)
+	{
+		if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", aiTextureType_DIFFUSE, 0)))
+			return E_FAIL;
 
-	if (FAILED(m_pModelCom->Render()))
-		return E_FAIL;
+		if (FAILED(m_pShaderCom->Begin(0)))
+			return E_FAIL;
+
+		if (FAILED(m_pModelCom->Render(i)))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }
@@ -68,11 +76,6 @@ HRESULT CMannequin::Ready_Components()
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 
-	/* Com_Texture */
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Fiona"),
-		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
-		return E_FAIL;
-
 	return S_OK;
 }
 
@@ -86,9 +89,6 @@ HRESULT CMannequin::Bind_ShaderResources()
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_PipeLine_Float4x4(D3DTS::PROJ))))
-		return E_FAIL;
-
-	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
 		return E_FAIL;
 
 	return S_OK;
@@ -126,5 +126,4 @@ void CMannequin::Free()
 
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pTextureCom);
 }

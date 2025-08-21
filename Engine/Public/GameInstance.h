@@ -25,8 +25,7 @@ public:
 
 	_string	ToString(_wstring wStr);
 	_wstring ToWstring(_string Str);
-	_float Lerp(_float fSource, _float fDest, _float fLerpRate);
-	_vector LerpVector(_fvector vSource, _fvector vDest, _float fLerpRate);
+	_float Lerp_Float(_float fSource, _float fDest, _float fLerpRate);
 #pragma endregion
 
 #pragma region GRAPHIC_DEVICE
@@ -82,7 +81,7 @@ public:
 	const _float4* Get_CamState(STATE eState);
 #pragma endregion
 
-#pragma region PICKING
+#pragma region PICKING_MANAGER
 	_bool	Picking(_uint iLevelIdx, _float3* pOut);
 	HRESULT Add_GameObject_ToPicking(_uint iLevelIdx, class CGameObject* pGameObject, class CVIBuffer* pVIBuffer);
 	_bool	Picking_InWorldSpace(_fvector vPointA, _fvector vPointB, _fvector vPointC, _float3* pOut);

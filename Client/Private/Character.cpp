@@ -46,11 +46,17 @@ HRESULT CCharacter::Render()
 	if (FAILED(Bind_ShaderResources()))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Begin(0)))
-		return E_FAIL;
+	for (_uint i = 0; i < m_iNumMeshes; ++i)
+	{
+		if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", aiTextureType_DIFFUSE, 0)))
+			return E_FAIL;
 
-	if (FAILED(m_pModelCom->Render()))
-		return E_FAIL;
+		if (FAILED(m_pShaderCom->Begin(0)))
+			return E_FAIL;
+
+		if (FAILED(m_pModelCom->Render(i)))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }
@@ -104,9 +110,6 @@ HRESULT CCharacter::Bind_ShaderResources()
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_PipeLine_Float4x4(D3DTS::PROJ))))
 		return E_FAIL;
 
-	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
-		return E_FAIL;
-
 	return S_OK;
 }
 
@@ -116,5 +119,4 @@ void CCharacter::Free()
 
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);
-	Safe_Release(m_pTextureCom);
 }

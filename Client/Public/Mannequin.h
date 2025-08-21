@@ -4,7 +4,6 @@
 #include "GameObject.h"
 
 NS_BEGIN(Engine)
-class CTexture;
 class CShader;
 class CModel;
 NS_END
@@ -28,9 +27,9 @@ public:
 
 private:
 	class CGameManager* m_pGameManager = { nullptr };
-	CTexture* m_pTextureCom = { nullptr };
 	CShader* m_pShaderCom = { nullptr };
 	CModel* m_pModelCom = { nullptr };
+	_uint  m_iNumMeshes = {};
 
 private:
 	HRESULT Ready_Components();

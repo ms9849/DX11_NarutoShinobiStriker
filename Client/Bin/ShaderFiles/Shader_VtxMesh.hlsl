@@ -1,7 +1,7 @@
 
 matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 
-texture2D g_Texture;
+texture2D g_DiffuseTexture;
 
 sampler DefaultSampler = sampler_state
 {
@@ -55,7 +55,7 @@ PS_OUT PS_MAIN(PS_IN In)
 {
     PS_OUT Out;
     
-    Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
+    Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexcoord);
     
     /* 알파 테스팅. 블렌딩은 서치가 더 필요하다. */ 
     if (Out.vColor.a < 0.3)

@@ -154,14 +154,9 @@ _wstring CGameInstance::ToWstring(_string Str)
 	return Result;
 }
 
-_float CGameInstance::Lerp(_float fSource, _float fDest, _float fLerpRate)
+_float CGameInstance::Lerp_Float(_float fSource, _float fDest, _float fLerpRate)
 {
 	return fSource + (fDest - fSource) * fLerpRate;
-}
-
-_vector CGameInstance::LerpVector(_fvector vSource, _fvector vDest, _float fLerpRate)
-{
-	return vSource + (vDest - vSource) * fLerpRate;
 }
 
 #pragma endregion
@@ -311,7 +306,7 @@ const _float4* CGameInstance::Get_CamState(STATE eState)
 
 #pragma endregion
 
-#pragma region PICKING
+#pragma region PICKING_MANAGER
 
 _bool CGameInstance::Picking(_uint iLevelIdx, _float3* pOut)
 {
