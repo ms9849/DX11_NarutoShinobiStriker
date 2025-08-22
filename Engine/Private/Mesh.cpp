@@ -13,7 +13,6 @@ CMesh::CMesh(const CMesh& rhs)
 HRESULT CMesh::Initialize_Prototype(const aiMesh* pAIMesh, _fmatrix PreTransformMatrix)
 {
     /* 몇 번째 머테리얼을 가져다 쓰는지 저장하기 위함. */
-
     m_iMaterialIndex = pAIMesh->mMaterialIndex;
     m_iNumVertexBuffers = 1;
     m_iNumVertices = pAIMesh->mNumVertices;

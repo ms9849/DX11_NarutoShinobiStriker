@@ -24,6 +24,11 @@ CModel::CModel(const CModel& Prototype)
 		Safe_AddRef(pMaterial);
 }
 
+HRESULT CModel::Save_Model_ToBinary()
+{
+	return S_OK;
+}
+
 HRESULT CModel::Initialize_Prototype(MODEL eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix)
 {
 	/* 
@@ -50,6 +55,14 @@ HRESULT CModel::Initialize_Prototype(MODEL eType, const _char* pModelFilePath, _
 
 	if (FAILED(Ready_Materials(pModelFilePath)))
 		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CModel::Initialize_Prototype(MODEL eType, const _tchar* pBinaryFilePath, _fmatrix PreTransformMatrix)
+{
+	// 바이너리로 로딩
+	m_isBinary = true;
 
 	return S_OK;
 }
@@ -128,7 +141,20 @@ CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, MOD
 
 	if (FAILED(pInstance->Initialize_Prototype(eType, pModelFilePath, PreTransformMatrix)))
 	{
-		MSG_BOX("Create Failed : CModel");
+		MSG_BOX("Create Failed : CModel (By Assimp)");
+		Safe_Release(pInstance);
+	}
+	
+	return pInstance;
+}
+
+CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, MODEL eType, const _tchar* pBinaryFilePath, _fmatrix PreTransformMatrix)
+{
+	CModel* pInstance = new CModel(pDevice, pContext);
+
+	if (FAILED(pInstance->Initialize_Prototype(eType, pBinaryFilePath, PreTransformMatrix)))
+	{
+		MSG_BOX("Create Failed : CModel (By Binary)");
 		Safe_Release(pInstance);
 	}
 

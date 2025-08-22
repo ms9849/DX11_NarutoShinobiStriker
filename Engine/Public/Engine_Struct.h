@@ -12,6 +12,32 @@ namespace Engine
 		WINMODE				eWindowMode;
 	}ENGINE_DESC;
 
+	/* Save For Model Info */
+	typedef struct tagModelDesc {
+		_uint iNumMeshes;
+		MESH_DESC* pMeshInfo;
+
+		_uint iNumMaterials;
+		MATERIAL_DESC* pMeshInfo;
+
+	} MODEL_DESC;
+
+	/* Save For Mesh Info */
+	typedef struct tagMeshDesc {
+		_uint iMaterialIndex;
+		_uint iNumVertices;
+		_uint iNumFaces;
+
+		VTXPOSTEX* pVertices;
+		_uint* pIndices;
+	} MESH_DESC;
+
+	/* Save For Material Info */
+	typedef struct tagMaterialDesc {
+		_uint* iNumSRVs[AI_TEXTURE_TYPE_MAX];
+		_char** pTexturePath[AI_TEXTURE_TYPE_MAX];
+	} MATERIAL_DESC;
+
 	typedef struct tagVertexPositionTexcoord
 	{
 		XMFLOAT3				vPosition;
