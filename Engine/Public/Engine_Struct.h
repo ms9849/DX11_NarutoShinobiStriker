@@ -10,33 +10,7 @@ namespace Engine
 		unsigned int		iNumLevels;
 		unsigned int		iWinSizeX, iWinSizeY;
 		WINMODE				eWindowMode;
-	}ENGINE_DESC;
-
-	/* Save For Model Info */
-	typedef struct tagModelDesc {
-		_uint iNumMeshes;
-		MESH_DESC* pMeshInfo;
-
-		_uint iNumMaterials;
-		MATERIAL_DESC* pMeshInfo;
-
-	} MODEL_DESC;
-
-	/* Save For Mesh Info */
-	typedef struct tagMeshDesc {
-		_uint iMaterialIndex;
-		_uint iNumVertices;
-		_uint iNumFaces;
-
-		VTXPOSTEX* pVertices;
-		_uint* pIndices;
-	} MESH_DESC;
-
-	/* Save For Material Info */
-	typedef struct tagMaterialDesc {
-		_uint* iNumSRVs[AI_TEXTURE_TYPE_MAX];
-		_char** pTexturePath[AI_TEXTURE_TYPE_MAX];
-	} MATERIAL_DESC;
+	} ENGINE_DESC;
 
 	typedef struct tagVertexPositionTexcoord
 	{
@@ -79,6 +53,32 @@ namespace Engine
 			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 36, D3D11_INPUT_PER_VERTEX_DATA, 0}
 		};
 	}VTXMESH;
+
+	/* Save For Mesh Info */
+	typedef struct tagMeshDesc {
+		int iMaterialIndex;
+		int iNumVertices;
+		int iNumFaces;
+
+		VTXMESH* pVertices;
+		unsigned int* pIndices;
+	} MESH_DESC;
+
+	/* Save For Material Info */
+	typedef struct tagMaterialDesc {
+		int* iNumSRVs[AI_TEXTURE_TYPE_MAX];
+		char** pTexturePath[AI_TEXTURE_TYPE_MAX];
+	} MATERIAL_DESC;
+
+	/* Save For Model Info */
+	typedef struct tagModelDesc {
+		unsigned int iNumMeshes;
+		MESH_DESC* pMeshInfo;
+
+		unsigned int iNumMaterials;
+		MATERIAL_DESC* pMaterialInfo;
+
+	} MODEL_DESC;
 }
 
 #endif // Engine_Struct_h__
