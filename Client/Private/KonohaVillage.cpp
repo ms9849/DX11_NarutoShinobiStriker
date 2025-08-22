@@ -74,7 +74,7 @@ HRESULT CKonohaVillage::Ready_Components()
 	//	return E_FAIL;
 
 	/* Com_Model */
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_KonohaVillage"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_KonohaVillage"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 

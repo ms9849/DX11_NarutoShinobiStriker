@@ -19,7 +19,7 @@ HRESULT CMaterial::Initialize(const _char* pModelFilePath, const aiMaterial* pAI
 
 		for (_uint j = 0; j < m_iNumSRVs[i]; ++j)
 		{
-			/*pModelFilePath : 모델파일이 저장되어있느 ㄴㄱ경로 + 모델파일이름 + 모델파일확장자. */
+			/*pModelFilePath : 모델파일이 저장되어있는 경로 + 모델파일이름 + 모델파일확장자. */
 			/* 추출한파일의경로 + 파일이름 + 확장자 */
 
 			aiString strTexturePath;
@@ -34,6 +34,8 @@ HRESULT CMaterial::Initialize(const _char* pModelFilePath, const aiMaterial* pAI
 				continue;
 
 			_char szTextureFilePath[MAX_PATH] = {};
+			/* 드라이브 경로 / 파일 경로 / 파일 이름 / 파일 확장자 4개로 나뉘는걸 유의할 것 */
+
 			/* 모델 파일 경로로부터 모델의 드라이브 ,파일 경로를 가져온다. */
 			_splitpath_s(pModelFilePath, szDrive, MAX_PATH, szDir, MAX_PATH, nullptr, 0, nullptr, 0);
 
@@ -51,6 +53,7 @@ HRESULT CMaterial::Initialize(const _char* pModelFilePath, const aiMaterial* pAI
 
 			ID3D11ShaderResourceView* pSRV = { nullptr };
 
+			/* 텍스쳐 로딩과 동일. 확장자가 DDS냐, TGA냐, 혹은 그 외의 것이냐에 따라 처리 해줌.*/
 			HRESULT hr;
 			if (false == strcmp(szEXT, ".dds"))
 				hr = CreateDDSTextureFromFile(m_pDevice, szPerfectTextureFilePath, nullptr, &pSRV);
@@ -72,6 +75,7 @@ HRESULT CMaterial::Initialize(const _char* pModelFilePath, const aiMaterial* pAI
 
 HRESULT CMaterial::Bind_SRV(CShader* pShader, const _char* pConstantName, aiTextureType eType, _uint iTextureIndex)
 {
+	/* 출력할 때도 예외처리. */
 	if (iTextureIndex >= m_SRVs[eType].size())
 		return S_OK;
 

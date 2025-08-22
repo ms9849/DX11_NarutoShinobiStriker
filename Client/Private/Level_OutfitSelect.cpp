@@ -37,6 +37,16 @@ HRESULT CLevel_OutfitSelect::Initialize()
 
 void CLevel_OutfitSelect::Update(_float fTimeDelta)
 {
+    if (m_pGameInstance->Key_Down(DIK_F3))
+    {
+        m_pGameInstance->Set_Visible_IMGUI(true, ENUM_CLASS(IMGUI_VISIBLE::GAMEINFO));
+    }
+
+    if (m_pGameInstance->Key_Down(DIK_F4))
+    {
+        m_pGameInstance->Set_Visible_IMGUI(false, ENUM_CLASS(IMGUI_VISIBLE::GAMEINFO));
+    }
+
     if (m_pGameInstance->Key_Down(DIK_0))
     {
         m_pGameManager->Change_Camera(LEVEL::OUTFITSELECT, TEXT("Test_Camera"));
@@ -86,7 +96,7 @@ HRESULT CLevel_OutfitSelect::Ready_Layer_Camera(const _wstring& strLayerTag)
     TestCameraDesc.fFovy = XMConvertToRadians(60.0f);
     TestCameraDesc.fNear = 0.1f;
     TestCameraDesc.fFar = 1000.f;
-    TestCameraDesc.vEye = _float4(0.f, 10.f, -10.f, 1.f);
+    TestCameraDesc.vEye = _float4(0.f, 10.f, 10.f, 1.f);
     TestCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
     TestCameraDesc.fSpeedPerSec = 1.f;
     TestCameraDesc.fRotationPerSec = XMConvertToRadians(90.0f);

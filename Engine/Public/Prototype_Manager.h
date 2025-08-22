@@ -16,12 +16,14 @@ NS_BEGIN(Engine)
 
 class CPrototype_Manager final : public CBase
 {
-	friend class CIMGUI_Manager;
-
 private:
 	CPrototype_Manager();
 	virtual ~CPrototype_Manager() = default;
 
+public:
+	map<const _wstring, class CBase*>* Get_Prototypes(_uint iLevelID) {
+		return &m_pPrototypes[iLevelID];
+	}
 public:
 	HRESULT Initialize(_uint iNumLevels);
 	HRESULT Add_Prototype(_uint iLevelIndex, const _wstring& strPrototypeTag, class CBase* pPrototype);

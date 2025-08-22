@@ -6,12 +6,15 @@ NS_BEGIN(Engine)
 
 class CLayer final : public CBase
 {
-	friend class CIMGUI_Manager;
 private:
 	CLayer();
 	virtual ~CLayer() = default;
 
 public:
+	list<class CGameObject*> Get_GameObjects() {
+		return m_GameObjects;
+	}
+
 	class CComponent* Get_Component(const _wstring& strComponentTag, _uint iIndex = 0);
 
 public:

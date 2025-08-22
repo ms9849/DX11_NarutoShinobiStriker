@@ -20,15 +20,16 @@ private:
 	virtual ~CIMGUI_Manager() = default;
 
 public:
-	HRESULT Initialize(HWND hWnd, 
-		class CPrototype_Manager* pPrototype_Manager, 
-		class CObject_Manager* pObject_Manager, 
+	HRESULT Initialize(HWND hWnd,
+		class CPrototype_Manager* pPrototype_Manager,
+		class CObject_Manager* pObject_Manager,
 		class CPooling_Manager* pPooling_Manager,
-		class CPicking_Manager *pPicking);
+		class CPicking_Manager* pPicking);
 	void	Update(_float fTimeDelta);
 	void	Render();
 	void	Set_Visible_IMGUI(_bool bFlag, _uint iIMGUIID);
 	void	Set_Visible_All_IMGUI(_bool bFlag);
+	void    Align_Center(const _char* pText);
 
 public:
 	void Clear();
@@ -38,27 +39,23 @@ private:
 
 private:
 	//여기서 IMGUI와 관련된 기능들을 추가해줄 것.
-#pragma region MANAGERS
-	void Show_Managers(_float fTimeDelta);
-	void Show_PoolManager(_float fTimeDelta, _uint iLevelID);
-	void Show_PrototypeManager(_float fTimeDelta, _uint iLevelID);
-	void Show_ObjectManager(_float fTimeDelta, _uint iLevelID);
-#pragma endregion 
-
 #pragma region GAMEINFO
-	//FPS, 현재 레벨 표시해주는 메서드
+	//FPS 및 여러 정보들 표시해주는 메서드
 	void Show_GameInfo(_float fTimeDelta);
-#pragma endregion
-
-#pragma region PICKINGINFO
-	//클라이언트에선 Edit 레벨에서만 쓸 수 있게 할 것.
-	void Show_PickingInspector();
 #pragma endregion
 
 #pragma region INSPECTOR
 	//Transform 등의 컴포넌트를 보여주는 메서드
 	void Show_ObjectInspector(_float fTimeDelta);
 #pragma endregion
+
+#pragma region EDITOR
+	void Show_Editor(_float fTimeDelta);
+	void Map_Editor();
+	void Animation_Editor();
+	void Effect_Editor();
+#pragma endregion
+
 private:
 	_bool m_bVisibleFlag[ENUM_CLASS(IMGUI_VISIBLE::END)];
 
@@ -93,6 +90,14 @@ private:
 	_float	m_fLimitDistance = {};
 #pragma endregion
 
+
+#pragma region EDITOR
+	_char m_szClonePrototype[256] = {};
+	_int m_iClonePrototypeLevel = {};
+	_char m_szLayerTag[256] = {};
+	_int m_iLayerLevel = {};
+
+#pragma endregion
 	ID3D11Device* m_pDevice = { nullptr };
 	ID3D11DeviceContext* m_pContext = { nullptr };
 

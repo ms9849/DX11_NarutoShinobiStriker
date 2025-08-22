@@ -17,7 +17,7 @@
 #include "GameManager.h"
 
 /* 테스트 브랜치용 주석 */
-Client::CMainApp::CMainApp()	
+CMainApp::CMainApp()	
 	: m_pGameInstance { CGameInstance::GetInstance() }
 	, m_pGameManager { CGameManager::GetInstance() }
 {
@@ -25,7 +25,7 @@ Client::CMainApp::CMainApp()
 	Safe_AddRef(m_pGameManager);
 }
 
-HRESULT Client::CMainApp::Initialize()
+HRESULT CMainApp::Initialize()
 {
 	ENGINE_DESC				EngineDesc{};
 	EngineDesc.hInstance = g_hInstance;
@@ -55,12 +55,12 @@ HRESULT Client::CMainApp::Initialize()
 	return S_OK;
 }
 
-void Client::CMainApp::Update(_float fTimeDelta)
+void CMainApp::Update(_float fTimeDelta)
 {
 	m_pGameInstance->Update_Engine(fTimeDelta);
 }
 
-HRESULT Client::CMainApp::Render()
+HRESULT CMainApp::Render()
 {
 	_float4			vClearColor = _float4(0.f, 0.f, 1.f, 1.f);
 
@@ -118,9 +118,12 @@ HRESULT CMainApp::Ready_Prototypes()
 		CDummy::Create(m_pDevice, m_pContext, OBJECTID::DUMMY))))
 		return E_FAIL;
 
+	_matrix			PreTransformMatrix = XMMatrixIdentity();
 	/* For.Prototype_Component_Model_Fiona */
+
+  	PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_Fiona"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Fiona/Fiona.fbx"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Fiona/Fiona.fbx", PreTransformMatrix))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Texture_Fiona */
@@ -196,7 +199,7 @@ HRESULT CMainApp::Ready_Prototypes()
 	return S_OK;
 }
 
-CMainApp* Client::CMainApp::Create()
+CMainApp* CMainApp::Create()
 {
 	CMainApp* pInstance = new CMainApp();
 
@@ -209,7 +212,7 @@ CMainApp* Client::CMainApp::Create()
 	return pInstance;
 }
 
-void Client::CMainApp::Free()
+void CMainApp::Free()
 {
 	__super::Free();
 

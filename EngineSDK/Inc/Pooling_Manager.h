@@ -6,10 +6,18 @@ NS_BEGIN(Engine)
 
 class CPooling_Manager final : public CBase
 {
-	friend class CIMGUI_Manager;
 private:
 	CPooling_Manager();
 	virtual ~CPooling_Manager() = default;
+
+public:
+	map<_wstring, list<class CGameObject*>>* Get_PoolObjects(_uint iLevelID) {
+		return &m_PoolObjects[iLevelID];
+	}
+
+	map<_wstring, _uint>* Get_PoolCounts(_uint iLevelID) {
+		return &m_PoolCounts[iLevelID];
+	}
 
 public:
 	HRESULT Initialize(_uint iNumLevels);

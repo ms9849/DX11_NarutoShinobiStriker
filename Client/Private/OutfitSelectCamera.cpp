@@ -72,25 +72,25 @@ void COutfitSelectCamera::Camera_Action(_float fTimeDelta)
 	/* 타입에 따라 카메라의 위치를 변경할 것. */
 	if (SELECT_STATE::HEAD == m_eSelectState)
 	{
-		m_pTransformCom->LookAt_Lerp(XMVectorSet(0.f, 1.f, 1.f, 1.f));
-		m_pTransformCom->Chase_Lerp(XMVectorSet(0.f, 0.5f, -0.5f, 1.f), fTimeDelta, 0.2f);
+		m_pTransformCom->LookAt_Lerp(XMVectorSet(0.f, 1.f, -1.f, 1.f));
+		m_pTransformCom->Chase_Lerp(XMVectorSet(0.f, 0.5f, 0.5f, 1.f), fTimeDelta, 0.2f);
 	}
 
 	else if (SELECT_STATE::UPPER == m_eSelectState)
 	{
-		m_pTransformCom->LookAt_Lerp(XMVectorSet(0.f, 0.7f, 0.7f, 1.f));
-		m_pTransformCom->Chase_Lerp(XMVectorSet(0.f, 1.f, -1.f, 1.f), fTimeDelta, 0.2f);
+		m_pTransformCom->LookAt_Lerp(XMVectorSet(0.f, 0.7f, -0.7f, 1.f));
+		m_pTransformCom->Chase_Lerp(XMVectorSet(0.f, 1.f, 1.f, 1.f), fTimeDelta, 0.2f);
 	}
 
 	else if (SELECT_STATE::LOWER == m_eSelectState)
 	{
-		m_pTransformCom->LookAt_Lerp(XMVectorSet(0.f, 0.4f, 0.4f, 1.f));
-		m_pTransformCom->Chase_Lerp(XMVectorSet(0.f, 1.f, -0.5f, 1.f), fTimeDelta, 0.2f);
+		m_pTransformCom->LookAt_Lerp(XMVectorSet(0.f, 0.4f, -0.4f, 1.f));
+		m_pTransformCom->Chase_Lerp(XMVectorSet(0.f, 1.f, 0.5f, 1.f), fTimeDelta, 0.2f);
 	}
 	else if (SELECT_STATE::BODY == m_eSelectState)
 	{
-		m_pTransformCom->LookAt_Lerp(XMVectorSet(0.f, 1.f, 1.f, 1.f));
-		m_pTransformCom->Chase_Lerp(XMVectorSet(0.f, 1.5f, -1.5f, 1.f), fTimeDelta, 0.2f);
+		m_pTransformCom->LookAt_Lerp(XMVectorSet(0.f, 1.f, -1.f, 1.f));
+		m_pTransformCom->Chase_Lerp(XMVectorSet(0.f, 1.5f, 1.5f, 1.f), fTimeDelta, 0.2f);
 	}
 }
 

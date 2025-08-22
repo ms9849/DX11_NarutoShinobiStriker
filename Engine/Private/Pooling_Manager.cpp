@@ -2,7 +2,6 @@
 
 #include "GameInstance.h"
 #include "Pooling.h"
-#include "IMGUI_Manager.h"
 
 CPooling_Manager::CPooling_Manager() 
     : m_pGameInstance { CGameInstance::GetInstance() }
