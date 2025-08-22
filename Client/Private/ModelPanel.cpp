@@ -78,16 +78,14 @@ void CModelPanel::Change_FocusedButton(_int iNum)
     m_iFocusedNum = iNum;
 }
 
-void CModelPanel::Change_SelectType()
+void CModelPanel::Change_SelectType_ToParts()
 {
-    if (m_eSelectType != SELECT_TYPE::PARTS)
-    {
-
-    }
+    // SELECT TYPE PARTS로 변경
 }
 
 void CModelPanel::Change_Outfits()
 {
+     // SELECT TYPE 변경, 혹은 외형 변경
 }
 
 void CModelPanel::Key_Input()
@@ -104,20 +102,12 @@ void CModelPanel::Key_Input()
 
     if (m_pGameInstance->Key_Down(DIK_SPACE))
     {
-        if (m_eSelectType == SELECT_TYPE::PARTS)
-        {
-            Change_SelectType();
-        }
-
-        else
-        {
-            Change_Outfits();
-        }
+        Change_Outfits();
     }
 
     if (m_pGameInstance->Key_Down(DIK_ESCAPE))
     {
-        Change_SelectType();
+        Change_SelectType_ToParts();
     }
 }
 

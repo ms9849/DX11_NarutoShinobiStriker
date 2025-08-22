@@ -17,7 +17,7 @@ public:
 	}
 
 public:
-	virtual HRESULT Initialize_Prototype(const _char* pModelFilePath);
+	virtual HRESULT Initialize_Prototype(MODEL eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix);
 	virtual HRESULT Initialize(void* pArg) override;
 	HRESULT Bind_Material(_uint iMeshIndex, class CShader* pShader, const _char* pConstantName, aiTextureType eType, _uint iTextureIndex);
 	HRESULT Render(_uint iMeshIndex);
@@ -33,12 +33,14 @@ private:
 	_uint					m_iNumMaterials = {};
 	vector<class CMaterial*> m_Materials;
 
+	MODEL					m_eType = {};
+	_float4x4				m_PreTransformMatrix = {};
 private:
 	HRESULT Ready_Meshes();
 	HRESULT Ready_Materials(const _char* pModelFilePath);
 
 public:
-	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* pModelFilePath);
+	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, MODEL eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix = XMMatrixIdentity());
 	virtual CComponent* Clone(void* pArg) override;
 	virtual void Free() override;
 

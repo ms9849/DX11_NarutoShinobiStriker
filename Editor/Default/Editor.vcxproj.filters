@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="98. DEFAULTS">
+      <UniqueIdentifier>{4b5ae14d-d1e8-44ff-8758-6b3daa52f7ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99. DEFINES">
+      <UniqueIdentifier>{c64061f0-7e2b-41b7-8457-42f24ab71cd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. LEVELS">
+      <UniqueIdentifier>{07807689-0221-41c1-a40f-2cc1a1bb8345}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. LEVELS\EDIT">
+      <UniqueIdentifier>{02a6138d-1acd-4fe8-b582-ca7c85972c7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00. EDITAPP">
+      <UniqueIdentifier>{b3ffc006-b9a5-451e-83a2-7f61ba936b66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GAMEOBJECTS">
+      <UniqueIdentifier>{1c8494ed-32d2-4a0f-a731-3e9e1700c21b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GAMEOBJECTS\CAMERA">
+      <UniqueIdentifier>{be1c3e35-d74b-4ea7-a615-2ca3f739bce2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GAMEOBJECTS\EFFECT">
+      <UniqueIdentifier>{401dc0e7-1187-44fc-8d8e-666dec66e0e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GAMEOBJECTS\TERRAIN">
+      <UniqueIdentifier>{d446c5af-10ea-4904-b152-f1787c957506}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GAMEOBJECTS\MODEL">
+      <UniqueIdentifier>{e253edcf-3302-416a-b0ac-27d5fc40d8dc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Editor.h">
+      <Filter>98. DEFAULTS</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>98. DEFAULTS</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>98. DEFAULTS</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>98. DEFAULTS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\EditApp.h">
+      <Filter>00. EDITAPP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Editor_Defines.h">
+      <Filter>99. DEFINES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Level_Edit.h">
+      <Filter>01. LEVELS\EDIT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Terrain.h">
+      <Filter>02. GAMEOBJECTS\TERRAIN</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Mannequin.h">
+      <Filter>02. GAMEOBJECTS\MODEL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\TestCamera.h">
+      <Filter>02. GAMEOBJECTS\CAMERA</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Editor.cpp">
+      <Filter>98. DEFAULTS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\EditApp.cpp">
+      <Filter>00. EDITAPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_Edit.cpp">
+      <Filter>01. LEVELS\EDIT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Terrain.cpp">
+      <Filter>02. GAMEOBJECTS\TERRAIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Mannequin.cpp">
+      <Filter>02. GAMEOBJECTS\MODEL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TestCamera.cpp">
+      <Filter>02. GAMEOBJECTS\CAMERA</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Editor.ico">
+      <Filter>98. DEFAULTS</Filter>
+    </Image>
+    <Image Include="small.ico">
+      <Filter>98. DEFAULTS</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Editor.rc">
+      <Filter>98. DEFAULTS</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

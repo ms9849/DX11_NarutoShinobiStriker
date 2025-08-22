@@ -121,11 +121,11 @@ private:
 	class CObject_Manager*			m_pObject_Manager = { nullptr };
 	class CRenderer*				m_pRenderer = { nullptr };
 	class CPipeLine*				m_pPipeLine = { nullptr };
-	class CPicking_Manager*					m_pPicking_Manager = { nullptr };
+	class CIMGUI_Manager*			m_pIMGUI_Manager = { nullptr };
+	class CPicking_Manager*			m_pPicking_Manager = { nullptr };
 	class CSound_Manager*			m_pSound_Manager = { nullptr };
 	class CInput_Manager*			m_pInput_Manager = { nullptr };
 	class CPooling_Manager*			m_pPooling_Manager = { nullptr };
-	class CIMGUI_Manager*			m_pIMGUI_Manager = { nullptr };
 
 public:
 	void Release_Engine();

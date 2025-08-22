@@ -10,8 +10,10 @@ CMesh::CMesh(const CMesh& rhs)
 {
 }
 
-HRESULT CMesh::Initialize_Prototype(const aiMesh* pAIMesh)
+HRESULT CMesh::Initialize_Prototype(const aiMesh* pAIMesh, _fmatrix PreTransformMatrix)
 {
+    /* 몇 번째 머테리얼을 가져다 쓰는지 저장하기 위함. */
+
     m_iMaterialIndex = pAIMesh->mMaterialIndex;
     m_iNumVertexBuffers = 1;
     m_iNumVertices = pAIMesh->mNumVertices;
@@ -41,9 +43,16 @@ HRESULT CMesh::Initialize_Prototype(const aiMesh* pAIMesh)
     for (_uint i = 0; i < m_iNumVertices; ++i)
     {
         memcpy(&pVertices[i].vPosition, &pAIMesh->mVertices[i], sizeof(_float3));
+        XMStoreFloat3(&pVertices[i].vPosition, XMVector3TransformCoord(XMLoadFloat3(&pVertices[i].vPosition), PreTransformMatrix));
+
         memcpy(&pVertices[i].vNormal, &pAIMesh->mNormals[i], sizeof(_float3));
+        XMStoreFloat3(&pVertices[i].vNormal, XMVector3Normalize(XMVector3TransformNormal(XMLoadFloat3(&pVertices[i].vNormal), PreTransformMatrix)));
+
         memcpy(&pVertices[i].vTangent, &pAIMesh->mTangents[i], sizeof(_float3));
+        XMStoreFloat3(&pVertices[i].vTangent, XMVector3Normalize(XMVector3TransformNormal(XMLoadFloat3(&pVertices[i].vTangent), PreTransformMatrix)));
+
         memcpy(&pVertices[i].vTexcoord, &pAIMesh->mTextureCoords[0][i], sizeof(_float2));
+
     }
 
     D3D11_SUBRESOURCE_DATA	InitialVBData{};
@@ -94,11 +103,11 @@ HRESULT CMesh::Initialize(void* pArg)
     return S_OK;
 }
 
-CMesh* CMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const aiMesh* pAIMesh)
+CMesh* CMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const aiMesh* pAIMesh, _fmatrix PreTransformMatrix)
 {
     CMesh* pInstance = new CMesh(pDevice, pContext);
 
-    if (FAILED(pInstance->Initialize_Prototype(pAIMesh)))
+    if (FAILED(pInstance->Initialize_Prototype(pAIMesh, PreTransformMatrix)))
     {
         MSG_BOX("Create Failed : Mesh");
         Safe_Release(pInstance);

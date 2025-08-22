@@ -93,9 +93,6 @@ HRESULT CLoader::Loading()
 	case LEVEL::GAMEPLAY:
 		hr = Loading_For_GamePlay();
 		break;
-	case LEVEL::EDIT:
-		hr = Loading_For_Edit();
-		break;
 	}
 
 	LeaveCriticalSection(&m_CriticalSection);
@@ -237,9 +234,12 @@ HRESULT CLoader::Loading_For_OutfitSelect()
 	집어넣고 세팅해줘야 한다.
 	*/
 
-	/* For.Prototype_Component_Model_Fiona */
+	_matrix			PreTransformMatrix = XMMatrixIdentity();
+
+	/* For.Prototype_Component_Model_Mannequin */
+	PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_Component_Model_Mannequin"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Outfits/Mannequin.fbx"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Outfits/Mannequin.fbx"))))
 		return E_FAIL;
 
 	m_fLoadingProgress += 0.3f;
@@ -416,35 +416,35 @@ HRESULT CLoader::Loading_For_GamePlay()
 	return S_OK;
 }
 
-HRESULT CLoader::Loading_For_Edit()
-{
-	m_strMessage = TEXT("텍스쳐를(을) 로딩 중 입니다.");
-	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
-
-	/* For.Prototype_Component_Model_KonohaVillage */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_KonohaVillage"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/TutorialMap/TutorialMap.fbx"))))
-		return E_FAIL;
-
-	m_strMessage = TEXT("셰이더를(을) 로딩 중 입니다.");
-	m_strMessage = TEXT("객체원형를(을) 로딩 중 입니다.");
-	
-	/* For.Prototype_GameObject_TestCamera */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_GameObject_TestCamera"),
-		CTestCamera::Create(m_pDevice, m_pContext, OBJECTID::TEST_CAMERA))))
-		return E_FAIL;
-
-	/* For.Prototype_GameObject_KonohaVillage */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_GameObject_KonohaVillage"),
-		CKonohaVillage::Create(m_pDevice, m_pContext, OBJECTID::KONOHA_VILLAGE))))
-		return E_FAIL;
-
-	m_strMessage = TEXT("로딩이 완료되었습니다..");
-
-	m_isFinished = true;
-
-	return S_OK;
-}
+//HRESULT CLoader::Loading_For_Edit()
+//{
+//	m_strMessage = TEXT("텍스쳐를(을) 로딩 중 입니다.");
+//	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
+//
+//	/* For.Prototype_Component_Model_KonohaVillage */
+//	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_KonohaVillage"),
+//		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/TutorialMap/TutorialMap.fbx"))))
+//		return E_FAIL;
+//
+//	m_strMessage = TEXT("셰이더를(을) 로딩 중 입니다.");
+//	m_strMessage = TEXT("객체원형를(을) 로딩 중 입니다.");
+//	
+//	/* For.Prototype_GameObject_TestCamera */
+//	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_GameObject_TestCamera"),
+//		CTestCamera::Create(m_pDevice, m_pContext, OBJECTID::TEST_CAMERA))))
+//		return E_FAIL;
+//
+//	/* For.Prototype_GameObject_KonohaVillage */
+//	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_GameObject_KonohaVillage"),
+//		CKonohaVillage::Create(m_pDevice, m_pContext, OBJECTID::KONOHA_VILLAGE))))
+//		return E_FAIL;
+//
+//	m_strMessage = TEXT("로딩이 완료되었습니다..");
+//
+//	m_isFinished = true;
+//
+//	return S_OK;
+//}
 
 CLoader* CLoader::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eNextLevelID)
 {

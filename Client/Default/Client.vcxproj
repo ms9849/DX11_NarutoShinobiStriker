@@ -164,7 +164,6 @@
     <ClInclude Include="..\Public\GameManager.h" />
     <ClInclude Include="..\Public\KonohaVillage.h" />
     <ClInclude Include="..\Public\KOUI.h" />
-    <ClInclude Include="..\Public\Level_Edit.h" />
     <ClInclude Include="..\Public\Level_GamePlay.h" />
     <ClInclude Include="..\Public\Level_Loading.h" />
     <ClInclude Include="..\Public\Level_Logo.h" />
@@ -185,6 +184,7 @@
     <ClInclude Include="..\Public\Player.h" />
     <ClInclude Include="..\Public\PressAnyButtonUI.h" />
     <ClInclude Include="..\Public\ProgressBarUI.h" />
+    <ClInclude Include="..\Public\Props.h" />
     <ClInclude Include="..\Public\QuestLog.h" />
     <ClInclude Include="..\Public\RotationIconUI.h" />
     <ClInclude Include="..\Public\SkillSlotUI.h" />
@@ -212,7 +212,6 @@
     <ClCompile Include="..\Private\GameManager.cpp" />
     <ClCompile Include="..\Private\KonohaVillage.cpp" />
     <ClCompile Include="..\Private\KOUI.cpp" />
-    <ClCompile Include="..\Private\Level_Edit.cpp" />
     <ClCompile Include="..\Private\Level_GamePlay.cpp" />
     <ClCompile Include="..\Private\Level_Loading.cpp" />
     <ClCompile Include="..\Private\Level_Logo.cpp" />
@@ -233,6 +232,7 @@
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\Private\PressAnyButtonUI.cpp" />
     <ClCompile Include="..\Private\ProgressBarUI.cpp" />
+    <ClCompile Include="..\Private\Props.cpp" />
     <ClCompile Include="..\Private\QuestLog.cpp" />
     <ClCompile Include="..\Private\RotationIconUI.cpp" />
     <ClCompile Include="..\Private\SkillSlotUI.cpp" />

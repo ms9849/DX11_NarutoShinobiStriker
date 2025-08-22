@@ -45,11 +45,18 @@ NS_BEGIN(Engine)
 
 class CPicking_Manager final : public CBase
 {
-	friend class CIMGUI_Manager;
 private:
 	CPicking_Manager(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual ~CPicking_Manager() = default;
 
+public:
+	_float3 Get_RayPos(RAY eRayType) {
+		return m_vRayPos[ENUM_CLASS(eRayType)];
+	}
+
+	_float3 Get_RayDir(RAY eRayType) {
+		return m_vRayDir[ENUM_CLASS(eRayType)];
+	}
 public:
 	HRESULT Initialize(HWND hWnd, _uint iWinSizeX, _uint iWinSizeY, _uint iNumLevels);
 	void Update();

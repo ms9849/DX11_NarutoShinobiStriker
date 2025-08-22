@@ -96,7 +96,7 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 
 	/* 레벨 업데이트 */
 	m_pLevel_Manager->Update(fTimeDelta);
-	
+
 	/* IMGUI 업데이트 */
 	m_pIMGUI_Manager->Update(fTimeDelta);
 }
@@ -408,11 +408,9 @@ _long CGameInstance::Get_MouseMove(MOUSEMOVESTATE eMouseState)
 {
 	return m_pInput_Manager->Get_MouseMove(eMouseState);
 }
-
 #pragma endregion
 
 #pragma region IMGUI_MANAGER
-
 void CGameInstance::Set_Visible_IMGUI(_bool bFlag, _uint iIMGUIID)
 {
 	m_pIMGUI_Manager->Set_Visible_IMGUI(bFlag, iIMGUIID);

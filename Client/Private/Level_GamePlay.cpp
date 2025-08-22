@@ -46,22 +46,14 @@ HRESULT CLevel_GamePlay::Initialize()
 
 void CLevel_GamePlay::Update(_float fTimeDelta)
 {
-	/* 피킹 확인용 코드. 엔진단에서 작동해야지.. 그리고 콜라이더로 수정할 필요가 있음 */
-	//_float3 vPoint;
-	//if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON))
-	//{
-	//	if (m_pGameInstance->Picking(m_iID, &vPoint))
-	//	{
-	//		vPoint = vPoint;
-	//	}
-	//}
-
-	if (m_pGameInstance->Key_Down(DIK_F8))
+	if (m_pGameInstance->Key_Down(DIK_F3))
 	{
-		m_pGameManager->Clear();
+		m_pGameInstance->Set_Visible_IMGUI(true, ENUM_CLASS(IMGUI_VISIBLE::GAMEINFO));
+	}
 
-		if (FAILED(m_pGameInstance->Change_Level(CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL::LOADING, LEVEL::EDIT))))
-			return;
+	if (m_pGameInstance->Key_Down(DIK_F4))
+	{
+		m_pGameInstance->Set_Visible_IMGUI(false, ENUM_CLASS(IMGUI_VISIBLE::GAMEINFO));
 	}
 }
 

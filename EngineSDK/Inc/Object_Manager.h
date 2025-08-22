@@ -8,11 +8,14 @@ NS_BEGIN(Engine)
 
 class CObject_Manager final : public CBase
 {
-	friend class CIMGUI_Manager;
 private:
 	CObject_Manager();
 	virtual ~CObject_Manager() = default;
 
+public:
+	map<const _wstring, class CLayer*>* Get_Layers(_uint iLevelID) {
+		return &m_pLayers[iLevelID];
+	}
 public:
 	class CComponent* Get_Component(_uint iLevelIndex, const _wstring& strLayerTag, const _wstring& strComponentTag, _uint iIndex = 0);
 

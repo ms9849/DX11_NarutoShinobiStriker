@@ -28,9 +28,6 @@
     <Filter Include="02.GameObjects">
       <UniqueIdentifier>{6822825a-d704-42c1-aab4-274a2e135da0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Levels\Edit">
-      <UniqueIdentifier>{556a7229-e790-4a04-8346-9534c9b037b2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Dummy">
       <UniqueIdentifier>{5543306a-a425-4cee-8998-381822428b8b}</UniqueIdentifier>
     </Filter>
@@ -166,6 +163,9 @@
     <Filter Include="02.GameObjects\Mannequin">
       <UniqueIdentifier>{ea9082e8-e6a3-4f60-b167-7b855b91c3d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Props">
+      <UniqueIdentifier>{4e677acd-09fd-49bb-824a-a1cf58e54e3e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -197,9 +197,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\Client_Defines.h">
       <Filter>99.Defines</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Level_Edit.h">
-      <Filter>01.Levels\Edit</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Dummy.h">
       <Filter>02.GameObjects\Dummy</Filter>
@@ -309,6 +306,9 @@
     <ClInclude Include="..\Public\ModelDecideButtonUI.h">
       <Filter>02.GameObjects\UI\Panel\OUTFIT_SELECT\ModelPanel\ModelDecideButton</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Props.h">
+      <Filter>02.GameObjects\Props</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -341,9 +341,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\Loader.cpp">
       <Filter>01.Levels\Loading\Loader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Level_Edit.cpp">
-      <Filter>01.Levels\Edit</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Dummy.cpp">
       <Filter>02.GameObjects\Dummy</Filter>
@@ -449,6 +446,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\ModelDecideButtonUI.cpp">
       <Filter>02.GameObjects\UI\Panel\OUTFIT_SELECT\ModelPanel\ModelDecideButton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Props.cpp">
+      <Filter>02.GameObjects\Props</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
