@@ -45,7 +45,7 @@ public:
 	}
 
 public:
-	HRESULT Save_Model_ToBinary();
+	HRESULT Save_Model_ToBinary(const _char* pModelSavePath);
 
 public:
 	virtual HRESULT Initialize_Prototype(MODEL eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix);
@@ -70,6 +70,7 @@ private:
 	MODEL					m_eType = {};
 	_float4x4				m_PreTransformMatrix = {};
 	_bool					m_isBinary = { false };
+	_char					m_szModelName[MAX_PATH];
 private:
 	HRESULT Ready_Meshes();
 	HRESULT Ready_Materials(const _char* pModelFilePath);

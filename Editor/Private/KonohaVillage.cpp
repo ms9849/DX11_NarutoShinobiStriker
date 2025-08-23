@@ -1,23 +1,22 @@
-#include "Mannequin.h"
-
+#include "KonohaVillage.h"
 #include "GameInstance.h"
 
-CMannequin::CMannequin(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, Client::OBJECTID eObjectID)
-	: CGameObject { pDevice, pContext, ENUM_CLASS(eObjectID) }
+CKonohaVillage::CKonohaVillage(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, Client::OBJECTID eObjectID)
+	: CGameObject{ pDevice, pContext, ENUM_CLASS(eObjectID) }
 {
 }
 
-CMannequin::CMannequin(const CMannequin& rhs)
-	: CGameObject { rhs }
+CKonohaVillage::CKonohaVillage(const CKonohaVillage& rhs)
+	: CGameObject{ rhs }
 {
 }
 
-HRESULT CMannequin::Initialize_Prototype()
+HRESULT CKonohaVillage::Initialize_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CMannequin::Initialize(void* pArg)
+HRESULT CKonohaVillage::Initialize(void* pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
@@ -30,20 +29,20 @@ HRESULT CMannequin::Initialize(void* pArg)
 	return S_OK;
 }
 
-void CMannequin::Priority_Update(_float fTimeDelta)
+void CKonohaVillage::Priority_Update(_float fTimeDelta)
 {
 }
 
-void CMannequin::Update(_float fTimeDelta)
+void CKonohaVillage::Update(_float fTimeDelta)
 {
 }
 
-void CMannequin::Late_Update(_float fTimeDelta)
+void CKonohaVillage::Late_Update(_float fTimeDelta)
 {
 	m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 
-HRESULT CMannequin::Render()
+HRESULT CKonohaVillage::Render()
 {
 	if (FAILED(Bind_ShaderResources()))
 		return E_FAIL;
@@ -62,8 +61,7 @@ HRESULT CMannequin::Render()
 
 	return S_OK;
 }
-
-HRESULT CMannequin::Ready_Components()
+HRESULT CKonohaVillage::Ready_Components()
 {
 	/* Com_Shader */
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Shader_VtxMesh"),
@@ -71,14 +69,14 @@ HRESULT CMannequin::Ready_Components()
 		return E_FAIL;
 
 	/* Com_Model */
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Fiona_Binary"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_KonohaVillage"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 
 	return S_OK;
 }
 
-HRESULT CMannequin::Bind_ShaderResources()
+HRESULT CKonohaVillage::Bind_ShaderResources()
 {
 	/*m_pShaderCom->Bind_Matrix("g_WorldMatrix", );*/
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
@@ -93,36 +91,37 @@ HRESULT CMannequin::Bind_ShaderResources()
 	return S_OK;
 }
 
-CMannequin* CMannequin::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, Client::OBJECTID eObjectID)
+CKonohaVillage* CKonohaVillage::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, Client::OBJECTID eObjectID)
 {
-	CMannequin* pInstance = new CMannequin(pDevice, pContext, eObjectID);
+	CKonohaVillage* pInstance = new CKonohaVillage(pDevice, pContext, eObjectID);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Create Failed ! : CMannequin");
+		MSG_BOX("Create Failed: KonohaVillage");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CMannequin::Clone(void* pArg)
+CGameObject* CKonohaVillage::Clone(void* pArg)
 {
-	CMannequin* pInstance = new CMannequin(*this);
+	CKonohaVillage* pInstance = new CKonohaVillage(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Clone Failed ! : CMannequin");
+		MSG_BOX("Clone Failed: KonohaVillage");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CMannequin::Free()
+
+void CKonohaVillage::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pModelCom);
 	Safe_Release(m_pShaderCom);
+	Safe_Release(m_pModelCom);
 }
