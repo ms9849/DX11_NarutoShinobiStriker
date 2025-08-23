@@ -9,7 +9,7 @@ CVIBuffer::CVIBuffer(const CVIBuffer& rhs)
 	: CComponent { rhs }
 	, m_pVB { rhs.m_pVB }
 	, m_pIB { rhs.m_pIB }
-	, m_pVertexPositions{ rhs.m_pVertexPositions }
+	, m_pVertexPositions { rhs.m_pVertexPositions }
 	, m_iNumVertices { rhs.m_iNumVertices }
 	, m_iVertexStride { rhs.m_iVertexStride }
 	, m_iNumIndices { rhs.m_iNumIndices }

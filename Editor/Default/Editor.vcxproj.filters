@@ -31,6 +31,12 @@
     <Filter Include="02. GAMEOBJECTS\MODEL">
       <UniqueIdentifier>{e253edcf-3302-416a-b0ac-27d5fc40d8dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GAMEOBJECTS\MODEL\MANNEQUIN">
+      <UniqueIdentifier>{3540cf55-fb0e-4e9e-81b2-a7f63c2acf05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GAMEOBJECTS\MODEL\KONOHAVILLAGE">
+      <UniqueIdentifier>{152dd1c2-e234-4d7b-ae1b-e4d1d21d7577}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Editor.h">
@@ -57,11 +63,14 @@
     <ClInclude Include="..\Public\Terrain.h">
       <Filter>02. GAMEOBJECTS\TERRAIN</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Mannequin.h">
-      <Filter>02. GAMEOBJECTS\MODEL</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\TestCamera.h">
       <Filter>02. GAMEOBJECTS\CAMERA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Mannequin.h">
+      <Filter>02. GAMEOBJECTS\MODEL\MANNEQUIN</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\KonohaVillage.h">
+      <Filter>02. GAMEOBJECTS\MODEL\KONOHAVILLAGE</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -77,11 +86,14 @@
     <ClCompile Include="..\Private\Terrain.cpp">
       <Filter>02. GAMEOBJECTS\TERRAIN</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Mannequin.cpp">
-      <Filter>02. GAMEOBJECTS\MODEL</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\TestCamera.cpp">
       <Filter>02. GAMEOBJECTS\CAMERA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Mannequin.cpp">
+      <Filter>02. GAMEOBJECTS\MODEL\MANNEQUIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\KonohaVillage.cpp">
+      <Filter>02. GAMEOBJECTS\MODEL\KONOHAVILLAGE</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

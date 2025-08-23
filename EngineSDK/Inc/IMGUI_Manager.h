@@ -52,7 +52,7 @@ private:
 #pragma region EDITOR
 	void Show_Editor(_float fTimeDelta);
 	void Map_Editor();
-	void Animation_Editor();
+	void Model_Editor();
 	void Effect_Editor();
 #pragma endregion
 
@@ -96,6 +96,7 @@ private:
 	_int m_iClonePrototypeLevel = {};
 	_char m_szLayerTag[256] = {};
 	_int m_iLayerLevel = {};
+	_char m_szModelSavePath[MAX_PATH] = {};
 
 #pragma endregion
 	ID3D11Device* m_pDevice = { nullptr };

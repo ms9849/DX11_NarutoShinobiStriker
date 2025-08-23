@@ -30,6 +30,7 @@ using namespace DirectX;
 #include <iostream>
 #include <conio.h>
 #include <io.h>
+#include <tchar.h>
 
 using namespace std;
 

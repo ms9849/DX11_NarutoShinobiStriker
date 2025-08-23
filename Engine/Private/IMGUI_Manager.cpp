@@ -557,24 +557,24 @@ void CIMGUI_Manager::Show_ObjectInspector(_float fTimeDelta)
                 ImGui::EndTabItem();
             }
 
-        ImGui::EndTabBar();
+            ImGui::EndTabBar();
 
-        ImGui::Separator();
+            ImGui::Separator();
 
-        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.f, 0.f, 1.0f));
-        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.8f, 0.f, 0.f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.f, 0.f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.8f, 0.f, 0.f, 1.0f));
 
-        if (ImGui::Button("Close"))
-        {
-            Safe_Release(m_pSelectedGameObject);
-            m_pSelectedGameObject = nullptr;
+            if (ImGui::Button("Close"))
+            {
+                Safe_Release(m_pSelectedGameObject);
+                m_pSelectedGameObject = nullptr;
 
-        }
+            }
 
-        ImGui::PopStyleColor();
-        ImGui::PopStyleColor();
+            ImGui::PopStyleColor();
+            ImGui::PopStyleColor();
 
-    ImGui::End();
+            ImGui::End();
 }
 
 void CIMGUI_Manager::Show_Editor(_float fTimeDelta)
@@ -585,11 +585,11 @@ void CIMGUI_Manager::Show_Editor(_float fTimeDelta)
     CTransform* pTransform = { nullptr };
 
     ImGui::Begin("Editor");
-        ImGui::BeginTabBar("Editor");
-            Map_Editor();
-            Animation_Editor();
-            Effect_Editor();
-        ImGui::EndTabBar();
+    ImGui::BeginTabBar("Editor");
+    Map_Editor();
+    Model_Editor();
+    Effect_Editor();
+    ImGui::EndTabBar();
     ImGui::End();
 }
 
@@ -598,61 +598,161 @@ void CIMGUI_Manager::Map_Editor()
     /* 맵 제어 */
     if (ImGui::BeginTabItem("Map"))
     {
-        ImGui::Text("Current Picked Object: ");
+        ImGui::Text("Current Selected Object: ");
+        if (ImGui::Button("Drag X")) {
+            // 클릭 순간 처리
+        }
+        if (ImGui::IsItemActive() && ImGui::IsMouseDragging(ImGuiMouseButton_Left)) {
+            ImVec2 dragDelta = ImGui::GetMouseDragDelta(ImGuiMouseButton_Left);
+            ImGui::Text("Dragging: %.1f, %.1f", dragDelta.x, dragDelta.y);
+        }
 
-        ImGui::Separator();
-
-        ImGui::Text("Input Prototype Tag:   ");
         ImGui::SameLine();
-        ImGui::InputText("##Input Prototype Tag", m_szClonePrototype, IM_ARRAYSIZE(m_szClonePrototype));
 
-        ImGui::Text("Input Prototype Level: ");
+        if (ImGui::Button("Drag Y")) {
+            // 클릭 순간 처리
+        }
+        if (ImGui::IsItemActive() && ImGui::IsMouseDragging(ImGuiMouseButton_Left)) {
+            ImVec2 dragDelta = ImGui::GetMouseDragDelta(ImGuiMouseButton_Left);
+            ImGui::Text("Dragging: %.1f, %.1f", dragDelta.x, dragDelta.y);
+        }
+
         ImGui::SameLine();
-        ImGui::PushItemWidth(80.f);
-        ImGui::InputInt("##Input Prototype Level", &m_iClonePrototypeLevel);
-        ImGui::PopItemWidth();
 
-        ImGui::Text("Input Layer Tag:       ");
-        ImGui::SameLine();
-        ImGui::InputText("##Input Layer Tag", m_szLayerTag, IM_ARRAYSIZE(m_szLayerTag));
+        ImGui::Button("Wheel To Control Z Value");
 
-        ImGui::Text("Input Layer Level:     ");
-        ImGui::SameLine();
-        ImGui::PushItemWidth(80.f);
-        ImGui::InputInt("##Input Layer Level", &m_iLayerLevel);
-        ImGui::PopItemWidth();
+        if (ImGui::IsItemHovered()) {
+            _float wheel = ImGui::GetIO().MouseWheel;
+            if (wheel != 0.0f)
+                ImGui::Text("Scrolled %.1f on button", wheel);
+        }
 
-        if (ImGui::Button("Clone"))
+        ImGui::Dummy(ImVec2(0.f, 50.f));
+
+        if (ImGui::BeginTabBar("MAPEDIT"))
         {
-            _wstring strPrototypeTag = wstring(m_szClonePrototype, m_szClonePrototype + strlen(m_szClonePrototype));
-            _wstring strLayerTag = wstring(m_szLayerTag, m_szLayerTag + strlen(m_szLayerTag));
-            if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(m_iClonePrototypeLevel), strPrototypeTag, m_iLayerLevel, strLayerTag)))
+            if (ImGui::BeginTabItem("Clone Prototype"))
             {
-                ImGui::OpenPopup("CLONE_FAILED");
+                ImGui::Text("Input Prototype Tag:   ");
+                ImGui::SameLine();
+                ImGui::InputText("##Input Prototype Tag", m_szClonePrototype, IM_ARRAYSIZE(m_szClonePrototype));
+
+                ImGui::Text("Input Prototype Level: ");
+                ImGui::SameLine();
+                ImGui::PushItemWidth(80.f);
+                ImGui::InputInt("##Input Prototype Level", &m_iClonePrototypeLevel);
+                ImGui::PopItemWidth();
+
+                ImGui::Text("Input Layer Tag:       ");
+                ImGui::SameLine();
+                ImGui::InputText("##Input Layer Tag", m_szLayerTag, IM_ARRAYSIZE(m_szLayerTag));
+
+                ImGui::Text("Input Layer Level:     ");
+                ImGui::SameLine();
+                ImGui::PushItemWidth(80.f);
+                ImGui::InputInt("##Input Layer Level", &m_iLayerLevel);
+                ImGui::PopItemWidth();
+
+                if (ImGui::Button("Clone"))
+                {
+                    _wstring strPrototypeTag = wstring(m_szClonePrototype, m_szClonePrototype + strlen(m_szClonePrototype));
+                    _wstring strLayerTag = wstring(m_szLayerTag, m_szLayerTag + strlen(m_szLayerTag));
+                    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(m_iClonePrototypeLevel), strPrototypeTag, m_iLayerLevel, strLayerTag)))
+                    {
+                        ImGui::OpenPopup("CLONE_FAILED");
+                    }
+                }
+
+                if (ImGui::BeginPopupModal("CLONE_FAILED", 0, ImGuiWindowFlags_NoResize))
+                {
+                    Align_Center("Check Tag, LevelIdx");
+                    ImGui::Text("Check Tag, LevelIdx");
+
+                    ImGui::Dummy(ImVec2{ 0.f, 10.f });
+
+                    Align_Center("Confirm");
+                    if (ImGui::Button("Confirm"))
+                        ImGui::CloseCurrentPopup();
+                    ImGui::EndPopup();
+                }
+
+                ImGui::EndTabItem();
             }
+
+            if (ImGui::BeginTabItem("Select Objects"))
+            {
+                ImGui::Text("Selected Index");
+
+                ImGui::BeginChild("ObjectList", ImVec2(0, 150), true);
+
+                    if (ImGui::Selectable("TEST SELECTABLE OBJECT", true)) {
+                        // 선택 동작
+                    }
+                ImGui::EndChild();
+                
+                if (ImGui::Button("Delete Object")) {
+                    // 삭제 동작
+                }
+
+                ImGui::EndTabItem();
+            }
+
+            ImGui::EndTabBar();
         }
 
-        if (ImGui::BeginPopupModal("CLONE_FAILED", 0, ImGuiWindowFlags_NoResize))
-        {
-            Align_Center("Check Tag, LevelIdx");
-            ImGui::Text("Check Tag, LevelIdx");
-
-            ImGui::Dummy(ImVec2{ 0.f, 10.f });
-
-            Align_Center("Confirm");
-            if (ImGui::Button("Confirm"))
-                ImGui::CloseCurrentPopup();
-            ImGui::EndPopup();
-        }
         ImGui::EndTabItem();
     }
 }
 
-void CIMGUI_Manager::Animation_Editor()
+void CIMGUI_Manager::Model_Editor()
 {
     /* 애니메이션 제어 */
     if (ImGui::BeginTabItem("Model"))
     {
+        if (ImGui::BeginTabBar("Model_Control"))
+        {
+            if (ImGui::BeginTabItem("Converter"))
+            {
+                ImGui::Text("Convert FBX Model Files to Custom Binary");
+                ImGui::Text("(Only Converts Prototype Models In Edit Level)");
+                ImGui::Dummy(ImVec2(0.0f, 20.0f));
+                ImGui::Text("Input Save File Path: ");
+
+                ImGui::SameLine();
+                ImGui::InputText("##Input_Path", m_szModelSavePath, IM_ARRAYSIZE(m_szModelSavePath));
+
+                if (ImGui::Button("Convert")) {
+                    auto pPrototypes = m_pPrototype_Manager->Get_Prototypes(m_pGameInstance->Get_LevelID());
+                
+                    for (auto& Prototype : *pPrototypes)
+                    {
+                        CModel* pModelCom = dynamic_cast<CModel*>(Prototype.second);
+                        if (pModelCom != nullptr)
+                        {
+                            pModelCom->Save_Model_ToBinary(m_szModelSavePath);
+                        }
+                    }
+                    ImGui::OpenPopup("CONVERT_DONE");
+                }
+
+                if (ImGui::BeginPopupModal("CONVERT_DONE", 0, ImGuiWindowFlags_NoResize))
+                {
+                    Align_Center("Convert has Done");
+                    ImGui::Text("Convert has Done");
+
+                    ImGui::Dummy(ImVec2{ 0.f, 10.f });
+
+                    Align_Center("Confirm");
+                    if (ImGui::Button("Confirm"))
+                        ImGui::CloseCurrentPopup();
+                    ImGui::EndPopup();
+                }
+                ImGui::Separator();
+                ImGui::EndTabItem();
+            }
+
+            ImGui::EndTabBar();
+        }
 
         ImGui::EndTabItem();
     }
