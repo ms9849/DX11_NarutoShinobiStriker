@@ -317,7 +317,7 @@ HRESULT CModel::Bind_Material(_uint iMeshIndex, CShader* pShader, const _char* p
 {
 	/* 머테리얼과 메시 양쪽 다 접근하는 함수. 헷갈릴 수 있으니 순서를 잘 봐둘 것 *
 	/*
-	1. MeshIndex 번째의 Mesh의 MaterialIndex를 가져온다.
+	1. MeshIndex 번째의 Mesh의 "MaterialIndex"를 가져온다.
 	2. 해당 Material Index에 해당하는 Material에 접근하여 Bind_SRV를 수행한다.
 
 		pShader->Bind_SRV(pConstantName, m_SRVs[eType][iTextureIndex]);

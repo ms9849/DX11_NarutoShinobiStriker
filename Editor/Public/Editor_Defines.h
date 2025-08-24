@@ -7,7 +7,7 @@
 namespace Editor
 {
 	/* 에디터에서 필요한 정보들 넘겨줄 것 */
-	enum class LEVEL { STATIC, EDIT, END };
+	enum class LEVEL { EDIT, END };
 
 }
 

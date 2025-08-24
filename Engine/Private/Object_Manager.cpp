@@ -11,6 +11,11 @@ CObject_Manager::CObject_Manager()
 	Safe_AddRef(m_pGameInstance);
 }
 
+map<const _wstring, class CLayer*>* CObject_Manager::Get_Layers(_uint iLevelID)
+{
+	return &m_pLayers[iLevelID];
+}
+
 CComponent* CObject_Manager::Get_Component(_uint iLevelIndex, const _wstring& strLayerTag, const _wstring& strComponentTag, _uint iIndex)
 {
 	CLayer*		pLayer = Find_Layer(iLevelIndex, strLayerTag);
@@ -18,6 +23,26 @@ CComponent* CObject_Manager::Get_Component(_uint iLevelIndex, const _wstring& st
 		return nullptr;
 
 	return pLayer->Get_Component(strComponentTag, iIndex);	
+}
+
+CGameObject* CObject_Manager::Get_GameObject(_uint iLevelIndex, const _wstring& strLayerTag, _uint iIndex)
+{
+	CLayer* pLayer = Find_Layer(iLevelIndex, strLayerTag);
+	if (nullptr == pLayer)
+		return nullptr;
+
+	class CGameObject* pGameObject = pLayer->Get_GameObject(iIndex);
+
+	return pGameObject;
+}
+
+size_t CObject_Manager::Get_LayerSize(_uint iLevelIndex, const _wstring& strLayerTag)
+{
+	CLayer* pLayer = Find_Layer(iLevelIndex, strLayerTag);
+	if (nullptr == pLayer)
+		return 0;
+
+	return  pLayer->Get_Size();
 }
 
 HRESULT CObject_Manager::Initialize(_uint iNumLevels)

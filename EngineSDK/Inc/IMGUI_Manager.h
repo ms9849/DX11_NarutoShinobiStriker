@@ -11,6 +11,8 @@ NS_BEGIN(Engine)
 3. 풀링 매니저 멤버 순회 ->
 ====================================================
 4. 애니메이션, 본 정보 뽑아서 순회 가능하게끔 하기
+
+렌더는 클라단에서 수행. (클라쪽도 IMGUI 활용하기 위함)
 */
 
 class ENGINE_DLL CIMGUI_Manager final : public CBase
@@ -26,10 +28,8 @@ public:
 		class CPooling_Manager* pPooling_Manager,
 		class CPicking_Manager* pPicking);
 	void	Update(_float fTimeDelta);
-	void	Render();
 	void	Set_Visible_IMGUI(_bool bFlag, _uint iIMGUIID);
 	void	Set_Visible_All_IMGUI(_bool bFlag);
-	void    Align_Center(const _char* pText);
 
 public:
 	void Clear();
@@ -47,13 +47,6 @@ private:
 #pragma region INSPECTOR
 	//Transform 등의 컴포넌트를 보여주는 메서드
 	void Show_ObjectInspector(_float fTimeDelta);
-#pragma endregion
-
-#pragma region EDITOR
-	void Show_Editor(_float fTimeDelta);
-	void Map_Editor();
-	void Model_Editor();
-	void Effect_Editor();
 #pragma endregion
 
 private:
@@ -90,15 +83,6 @@ private:
 	_float	m_fLimitDistance = {};
 #pragma endregion
 
-
-#pragma region EDITOR
-	_char m_szClonePrototype[256] = {};
-	_int m_iClonePrototypeLevel = {};
-	_char m_szLayerTag[256] = {};
-	_int m_iLayerLevel = {};
-	_char m_szModelSavePath[MAX_PATH] = {};
-
-#pragma endregion
 	ID3D11Device* m_pDevice = { nullptr };
 	ID3D11DeviceContext* m_pContext = { nullptr };
 

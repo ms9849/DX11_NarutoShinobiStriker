@@ -23,7 +23,7 @@ public:
 	virtual void Late_Update(_float fTimeDelta);
 	virtual HRESULT Render();
 
-	virtual void Set_Desc(GAMEOBJECT_DESC* pDesc);
+	virtual void Set_Desc(void* pDesc);
 
 public:
 	_bool IsDead() const {

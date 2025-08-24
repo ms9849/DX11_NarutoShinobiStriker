@@ -42,7 +42,7 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
-	virtual void Set_Desc(GAMEOBJECT_DESC* pDesc) override;
+	virtual void Set_Desc(void* pDesc) override;
 private:
 	CPooling* m_pPoolingCom = {};
 	_float	  m_fLife = { 0.f };

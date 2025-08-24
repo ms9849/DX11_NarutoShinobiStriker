@@ -69,7 +69,7 @@ HRESULT CGameObject::Render()
 	return S_OK;
 }
 
-void CGameObject::Set_Desc(GAMEOBJECT_DESC* pDesc)
+void CGameObject::Set_Desc(void* pDesc)
 {
 }
 

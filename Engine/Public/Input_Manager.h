@@ -21,6 +21,8 @@ public:
 
 	_bool	Mouse_Down(MOUSEKEYSTATE eMouse);
 	_bool	Mouse_Up(MOUSEKEYSTATE eMouse);
+	_bool   Mouse_Pressing(MOUSEKEYSTATE eMouse);
+
 	_long	Get_MouseMove(MOUSEMOVESTATE eMouseState) {
 		return *((reinterpret_cast<_long*>(&m_tMouseState)) + ENUM_CLASS(eMouseState));
 	}

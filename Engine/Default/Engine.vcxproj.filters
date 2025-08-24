@@ -139,12 +139,6 @@
     <ClInclude Include="..\Public\Shader.h">
       <Filter>01.Utility\03.Components\Shader</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\IMPLOT\implot.h">
-      <Filter>01.Utility\98. IMGUI\implot</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\IMPLOT\implot_internal.h">
-      <Filter>01.Utility\98. IMGUI\implot</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\VIBuffer_Terrain.h">
       <Filter>01.Utility\03.Components\VIBuffer\VIBuffer_Terrain</Filter>
     </ClInclude>
@@ -168,9 +162,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\Material.h">
       <Filter>01.Utility\03.Components\Model\Material</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\StaticObject.h">
-      <Filter>01.Utility\02.GameObjects\StaticObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -267,12 +258,6 @@
     <ClCompile Include="..\Private\IMGUI\imgui_widgets.cpp">
       <Filter>01.Utility\98. IMGUI\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\IMPLOT\implot.cpp">
-      <Filter>01.Utility\98. IMGUI\implot</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\IMPLOT\implot_items.cpp">
-      <Filter>01.Utility\98. IMGUI\implot</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\VIBuffer_Terrain.cpp">
       <Filter>01.Utility\03.Components\VIBuffer\VIBuffer_Terrain</Filter>
     </ClCompile>
@@ -296,9 +281,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\Material.cpp">
       <Filter>01.Utility\03.Components\Model\Material</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\StaticObject.cpp">
-      <Filter>01.Utility\02.GameObjects\StaticObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -398,9 +380,6 @@
     <Filter Include="01.Utility\98. IMGUI\imgui">
       <UniqueIdentifier>{b5ddabf2-923f-4693-b44c-134594761710}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\98. IMGUI\implot">
-      <UniqueIdentifier>{764800d2-bcd4-49fb-b0a2-d50625ebe381}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\96. Sound">
       <UniqueIdentifier>{de6ecbaf-6771-4e72-a5c8-6b6f190ef860}</UniqueIdentifier>
     </Filter>
@@ -433,9 +412,6 @@
     </Filter>
     <Filter Include="01.Utility\03.Components\Model\Material">
       <UniqueIdentifier>{c0514e39-501c-4b58-8609-e2aa3c08ba99}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Utility\02.GameObjects\StaticObject">
-      <UniqueIdentifier>{b982edfd-044d-4b1f-b4cc-8304acee8916}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

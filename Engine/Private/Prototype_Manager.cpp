@@ -7,6 +7,20 @@ CPrototype_Manager::CPrototype_Manager()
 {
 }
 
+map<const _wstring, class CBase*>* CPrototype_Manager::Get_Prototypes(_uint iLevelID)
+{
+	return &m_pPrototypes[iLevelID];
+}
+
+CBase* CPrototype_Manager::Get_Prototype(_uint iLevelID, const _wstring& strPrototypeTag)
+{
+	CBase* pPrototype = Find_Prototype(iLevelID, strPrototypeTag);
+	if (nullptr == pPrototype)
+		return nullptr;
+
+	return pPrototype;
+}
+
 HRESULT CPrototype_Manager::Initialize(_uint iNumLevels)
 {
 	m_iNumLevels = iNumLevels;

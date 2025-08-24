@@ -3,6 +3,11 @@
 #include "Editor_Defines.h"
 #include "Camera.h"
 
+
+/*
+클라단에서 가져온 테스트용 카메라. 기본적인 기능만 들어가있음
+*/
+
 NS_BEGIN(Editor)
 
 class CTestCamera final : public CCamera
