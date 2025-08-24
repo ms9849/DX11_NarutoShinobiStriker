@@ -36,6 +36,7 @@ public:
 	
 private:
 	map<const _wstring, class CLayer*>* m_pLayers = { nullptr };
+
 	_uint								m_iNumLevels = {};
 	class CGameInstance*				m_pGameInstance = { nullptr };
 

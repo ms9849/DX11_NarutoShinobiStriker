@@ -599,7 +599,7 @@ void CIMGUI_Manager::Map_Editor()
     if (ImGui::BeginTabItem("Map"))
     {
         ImGui::Text("Current Selected Object: ");
-        if (ImGui::Button("Drag X")) {
+        if (ImGui::Button("Drag X", ImVec2{100.f, 30.f})) {
             // 클릭 순간 처리
         }
         if (ImGui::IsItemActive() && ImGui::IsMouseDragging(ImGuiMouseButton_Left)) {
@@ -608,8 +608,10 @@ void CIMGUI_Manager::Map_Editor()
         }
 
         ImGui::SameLine();
+        ImGui::Dummy(ImVec2{ 10.f, 0.f });
+        ImGui::SameLine();
 
-        if (ImGui::Button("Drag Y")) {
+        if (ImGui::Button("Drag Y", ImVec2{ 100.f, 30.f })) {
             // 클릭 순간 처리
         }
         if (ImGui::IsItemActive() && ImGui::IsMouseDragging(ImGuiMouseButton_Left)) {
@@ -618,13 +620,26 @@ void CIMGUI_Manager::Map_Editor()
         }
 
         ImGui::SameLine();
+        ImGui::Dummy(ImVec2{ 10.f, 0.f });
+        ImGui::SameLine();
 
-        ImGui::Button("Wheel To Control Z Value");
+        ImGui::Button("Wheel Z", ImVec2{ 100.f, 30.f });
 
         if (ImGui::IsItemHovered()) {
             _float wheel = ImGui::GetIO().MouseWheel;
             if (wheel != 0.0f)
                 ImGui::Text("Scrolled %.1f on button", wheel);
+        }
+
+        ImGui::Separator();
+
+        /* 드래그 / 휠 스피드 조정 */
+        if (ImGui::Button("Transform Speed", ImVec2{ 400.f, 20.f })) {
+            // 클릭 순간 처리
+        }
+        if (ImGui::IsItemActive() && ImGui::IsMouseDragging(ImGuiMouseButton_Left)) {
+            ImVec2 dragDelta = ImGui::GetMouseDragDelta(ImGuiMouseButton_Left);
+            ImGui::Text("Dragging: %.1f, %.1f", dragDelta.x, dragDelta.y);
         }
 
         ImGui::Dummy(ImVec2(0.f, 50.f));
@@ -679,15 +694,34 @@ void CIMGUI_Manager::Map_Editor()
                 ImGui::EndTabItem();
             }
 
-            if (ImGui::BeginTabItem("Select Objects"))
+            if (ImGui::BeginTabItem("Map Objects"))
             {
-                ImGui::Text("Selected Index");
+                ImGui::Text("Selected Index: ");
 
                 ImGui::BeginChild("ObjectList", ImVec2(0, 150), true);
+                auto pGameObjects = m_pObject_Manager->Get_Layers(m_pGameInstance->Get_LevelID());
 
-                    if (ImGui::Selectable("TEST SELECTABLE OBJECT", true)) {
-                        // 선택 동작
+                for(auto& Layers : *pGameObjects)
+                {
+                    _string strLayerTag = m_pGameInstance->ToString(Layers.first);
+
+                    if (strLayerTag != m_pGameInstance->ToString(g_strLayerMapObjectTag))
+                        continue;
+
+                    /* 오브젝트 인덱스 정보 찾아내야 한다. */
+                    _uint iObjectIdx = { 0 };
+                    auto pGameObjects = Layers.second->Get_GameObjects();
+
+                    for (auto& pGameObject : pGameObjects)
+                    {
+                        _string strBuffer = to_string(iObjectIdx) + ". Test Selectable Object" + " (" + strLayerTag + ")";
+                        if (ImGui::Selectable(strBuffer.c_str(), true)) {
+                            // 선택 동작
+                        }
+                        iObjectIdx++;
                     }
+                }
+
                 ImGui::EndChild();
                 
                 if (ImGui::Button("Delete Object")) {
