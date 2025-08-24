@@ -37,6 +37,15 @@
     <Filter Include="02. GAMEOBJECTS\MODEL\KONOHAVILLAGE">
       <UniqueIdentifier>{152dd1c2-e234-4d7b-ae1b-e4d1d21d7577}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GAMEOBJECTS\CAMERA\TESTCAMERA">
+      <UniqueIdentifier>{3a00591f-16ed-4b16-8177-fa5071d87f4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GAMEOBJECTS\CAMERA\EDITCAMERA">
+      <UniqueIdentifier>{3b6922de-3103-4772-acab-5af02dd6c4cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GAMEOBJECTS\MODEL\PROPS">
+      <UniqueIdentifier>{8dfdeb24-8de6-4384-ad24-dd832c57575b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Editor.h">
@@ -63,14 +72,20 @@
     <ClInclude Include="..\Public\Terrain.h">
       <Filter>02. GAMEOBJECTS\TERRAIN</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\TestCamera.h">
-      <Filter>02. GAMEOBJECTS\CAMERA</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Mannequin.h">
       <Filter>02. GAMEOBJECTS\MODEL\MANNEQUIN</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\KonohaVillage.h">
       <Filter>02. GAMEOBJECTS\MODEL\KONOHAVILLAGE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\TestCamera.h">
+      <Filter>02. GAMEOBJECTS\CAMERA\TESTCAMERA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\EditCamera.h">
+      <Filter>02. GAMEOBJECTS\CAMERA\EDITCAMERA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Props.h">
+      <Filter>02. GAMEOBJECTS\MODEL\PROPS</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -86,14 +101,20 @@
     <ClCompile Include="..\Private\Terrain.cpp">
       <Filter>02. GAMEOBJECTS\TERRAIN</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\TestCamera.cpp">
-      <Filter>02. GAMEOBJECTS\CAMERA</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Mannequin.cpp">
       <Filter>02. GAMEOBJECTS\MODEL\MANNEQUIN</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\KonohaVillage.cpp">
       <Filter>02. GAMEOBJECTS\MODEL\KONOHAVILLAGE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TestCamera.cpp">
+      <Filter>02. GAMEOBJECTS\CAMERA\TESTCAMERA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\EditCamera.cpp">
+      <Filter>02. GAMEOBJECTS\CAMERA\EDITCAMERA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Props.cpp">
+      <Filter>02. GAMEOBJECTS\MODEL\PROPS</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

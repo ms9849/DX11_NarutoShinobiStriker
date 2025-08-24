@@ -107,9 +107,6 @@ HRESULT CGameInstance::Draw()
 
 	m_pLevel_Manager->Render();
 
-	/* IMGUI ·»´õ */
-	m_pIMGUI_Manager->Render();
-
 	return S_OK;
 }
 
@@ -231,13 +228,28 @@ CBase* CGameInstance::Clone_Prototype(PROTOTYPE ePrototype, _uint iLevelIndex, c
 	return m_pPrototype_Manager->Clone_Prototype(ePrototype, iLevelIndex, strPrototypeTag, pArg);;
 }
 
+CBase* CGameInstance::Get_Prototype(_uint iLevelID, const _wstring& strPrototypeTag)
+{
+	return m_pPrototype_Manager->Get_Prototype(iLevelID, strPrototypeTag);
+}
+
 #pragma endregion
 
 #pragma region OBJECT_MANAGER
 
+CGameObject* CGameInstance::Get_GameObject(_uint iLevelIndex, const _wstring& strLayerTag, _uint iIndex)
+{
+	return m_pObject_Manager->Get_GameObject(iLevelIndex, strLayerTag, iIndex);
+}
+
 CComponent* CGameInstance::Get_Component(_uint iLevelIndex, const _wstring& strLayerTag, const _wstring& strComponentTag, _uint iIndex)
 {
 	return m_pObject_Manager->Get_Component(iLevelIndex, strLayerTag, strComponentTag, iIndex);	
+}
+
+size_t CGameInstance::Get_LayerSize(_uint iLevelIndex, const _wstring& strLayerTag)
+{
+	return m_pObject_Manager->Get_LayerSize(iLevelIndex, strLayerTag);
 }
 
 HRESULT CGameInstance::Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, _uint iLayerLevelIndex, const _wstring& strLayerTag, void* pArg)
@@ -404,6 +416,11 @@ _bool CGameInstance::Mouse_Up(MOUSEKEYSTATE eMouse)
 	return m_pInput_Manager->Mouse_Up(eMouse);
 }
 
+_bool CGameInstance::Mouse_Pressing(MOUSEKEYSTATE eMouse)
+{
+	return m_pInput_Manager->Mouse_Pressing(eMouse);
+}
+
 _long CGameInstance::Get_MouseMove(MOUSEMOVESTATE eMouseState)
 {
 	return m_pInput_Manager->Get_MouseMove(eMouseState);
@@ -411,6 +428,7 @@ _long CGameInstance::Get_MouseMove(MOUSEMOVESTATE eMouseState)
 #pragma endregion
 
 #pragma region IMGUI_MANAGER
+
 void CGameInstance::Set_Visible_IMGUI(_bool bFlag, _uint iIMGUIID)
 {
 	m_pIMGUI_Manager->Set_Visible_IMGUI(bFlag, iIMGUIID);

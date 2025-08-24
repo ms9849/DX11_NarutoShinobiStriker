@@ -23,7 +23,7 @@ public:
 		return XMLoadFloat4(reinterpret_cast<const _float4*>(&m_WorldMatrix.m[ENUM_CLASS(eState)]));		
 	}
 
-	_float3 Get_Scale() const ;
+	_float3 Get_Scale() const;
 	void Set_Scale(_float fX, _float fY, _float fZ);
 
 	void Set_State(STATE eState, _fvector vState) {

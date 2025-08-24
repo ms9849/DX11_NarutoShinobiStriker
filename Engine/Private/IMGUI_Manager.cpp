@@ -70,7 +70,6 @@ HRESULT CIMGUI_Manager::Ready_IMGUI(HWND hWnd)
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImPlot::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
@@ -93,21 +92,9 @@ HRESULT CIMGUI_Manager::Ready_IMGUI(HWND hWnd)
 
 void CIMGUI_Manager::Update(_float fTimeDelta)
 {
-    /* 여기서 Imgui 함수, 메서드, 뭐든 떄려박을 것.*/
-    ImGui_ImplDX11_NewFrame();
-    ImGui_ImplWin32_NewFrame();
-    ImGui::NewFrame();
-
+    /* 여기서 엔진단에서 제공해야될 정보들을 IMGUI로 작성할 것.*/
     Show_GameInfo(fTimeDelta);
     Show_ObjectInspector(fTimeDelta);
-    Show_Editor(fTimeDelta);
-}
-
-void CIMGUI_Manager::Render()
-{
-    /* 여기서 Imgui 렌더 수행해줄 것 */
-    ImGui::Render();
-    ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
 
 void CIMGUI_Manager::Set_Visible_IMGUI(_bool bFlag, _uint iIMGUIID)
@@ -123,21 +110,12 @@ void CIMGUI_Manager::Set_Visible_All_IMGUI(_bool bFlag)
     }
 }
 
-void CIMGUI_Manager::Align_Center(const _char* pText)
-{
-    ImVec2 WindowSize = ImGui::GetWindowSize();
-    _float TextSize = ImGui::CalcTextSize(pText).x + ImGui::GetStyle().FramePadding.x * 2.0f;
-
-    ImGui::SetCursorPosX((WindowSize.x - TextSize) * 0.5f);
-}
-
 void CIMGUI_Manager::Release_IMGUI()
 {
     /* Free할때 실행해줄 것. */
     ImGui_ImplDX11_Shutdown();
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
-    ImPlot::DestroyContext();
 }
 
 void CIMGUI_Manager::Show_GameInfo(_float fTimeDelta)
@@ -575,230 +553,6 @@ void CIMGUI_Manager::Show_ObjectInspector(_float fTimeDelta)
             ImGui::PopStyleColor();
 
             ImGui::End();
-}
-
-void CIMGUI_Manager::Show_Editor(_float fTimeDelta)
-{
-    if (!m_bVisibleFlag[ENUM_CLASS(IMGUI_VISIBLE::EDITOR)])
-        return;
-
-    CTransform* pTransform = { nullptr };
-
-    ImGui::Begin("Editor");
-    ImGui::BeginTabBar("Editor");
-    Map_Editor();
-    Model_Editor();
-    Effect_Editor();
-    ImGui::EndTabBar();
-    ImGui::End();
-}
-
-void CIMGUI_Manager::Map_Editor()
-{
-    /* 맵 제어 */
-    if (ImGui::BeginTabItem("Map"))
-    {
-        ImGui::Text("Current Selected Object: ");
-        if (ImGui::Button("Drag X", ImVec2{100.f, 30.f})) {
-            // 클릭 순간 처리
-        }
-        if (ImGui::IsItemActive() && ImGui::IsMouseDragging(ImGuiMouseButton_Left)) {
-            ImVec2 dragDelta = ImGui::GetMouseDragDelta(ImGuiMouseButton_Left);
-            ImGui::Text("Dragging: %.1f, %.1f", dragDelta.x, dragDelta.y);
-        }
-
-        ImGui::SameLine();
-        ImGui::Dummy(ImVec2{ 10.f, 0.f });
-        ImGui::SameLine();
-
-        if (ImGui::Button("Drag Y", ImVec2{ 100.f, 30.f })) {
-            // 클릭 순간 처리
-        }
-        if (ImGui::IsItemActive() && ImGui::IsMouseDragging(ImGuiMouseButton_Left)) {
-            ImVec2 dragDelta = ImGui::GetMouseDragDelta(ImGuiMouseButton_Left);
-            ImGui::Text("Dragging: %.1f, %.1f", dragDelta.x, dragDelta.y);
-        }
-
-        ImGui::SameLine();
-        ImGui::Dummy(ImVec2{ 10.f, 0.f });
-        ImGui::SameLine();
-
-        ImGui::Button("Wheel Z", ImVec2{ 100.f, 30.f });
-
-        if (ImGui::IsItemHovered()) {
-            _float wheel = ImGui::GetIO().MouseWheel;
-            if (wheel != 0.0f)
-                ImGui::Text("Scrolled %.1f on button", wheel);
-        }
-
-        ImGui::Separator();
-
-        /* 드래그 / 휠 스피드 조정 */
-        if (ImGui::Button("Transform Speed", ImVec2{ 400.f, 20.f })) {
-            // 클릭 순간 처리
-        }
-        if (ImGui::IsItemActive() && ImGui::IsMouseDragging(ImGuiMouseButton_Left)) {
-            ImVec2 dragDelta = ImGui::GetMouseDragDelta(ImGuiMouseButton_Left);
-            ImGui::Text("Dragging: %.1f, %.1f", dragDelta.x, dragDelta.y);
-        }
-
-        ImGui::Dummy(ImVec2(0.f, 50.f));
-
-        if (ImGui::BeginTabBar("MAPEDIT"))
-        {
-            if (ImGui::BeginTabItem("Clone Prototype"))
-            {
-                ImGui::Text("Input Prototype Tag:   ");
-                ImGui::SameLine();
-                ImGui::InputText("##Input Prototype Tag", m_szClonePrototype, IM_ARRAYSIZE(m_szClonePrototype));
-
-                ImGui::Text("Input Prototype Level: ");
-                ImGui::SameLine();
-                ImGui::PushItemWidth(80.f);
-                ImGui::InputInt("##Input Prototype Level", &m_iClonePrototypeLevel);
-                ImGui::PopItemWidth();
-
-                ImGui::Text("Input Layer Tag:       ");
-                ImGui::SameLine();
-                ImGui::InputText("##Input Layer Tag", m_szLayerTag, IM_ARRAYSIZE(m_szLayerTag));
-
-                ImGui::Text("Input Layer Level:     ");
-                ImGui::SameLine();
-                ImGui::PushItemWidth(80.f);
-                ImGui::InputInt("##Input Layer Level", &m_iLayerLevel);
-                ImGui::PopItemWidth();
-
-                if (ImGui::Button("Clone"))
-                {
-                    _wstring strPrototypeTag = wstring(m_szClonePrototype, m_szClonePrototype + strlen(m_szClonePrototype));
-                    _wstring strLayerTag = wstring(m_szLayerTag, m_szLayerTag + strlen(m_szLayerTag));
-                    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(m_iClonePrototypeLevel), strPrototypeTag, m_iLayerLevel, strLayerTag)))
-                    {
-                        ImGui::OpenPopup("CLONE_FAILED");
-                    }
-                }
-
-                if (ImGui::BeginPopupModal("CLONE_FAILED", 0, ImGuiWindowFlags_NoResize))
-                {
-                    Align_Center("Check Tag, LevelIdx");
-                    ImGui::Text("Check Tag, LevelIdx");
-
-                    ImGui::Dummy(ImVec2{ 0.f, 10.f });
-
-                    Align_Center("Confirm");
-                    if (ImGui::Button("Confirm"))
-                        ImGui::CloseCurrentPopup();
-                    ImGui::EndPopup();
-                }
-
-                ImGui::EndTabItem();
-            }
-
-            if (ImGui::BeginTabItem("Map Objects"))
-            {
-                ImGui::Text("Selected Index: ");
-
-                ImGui::BeginChild("ObjectList", ImVec2(0, 150), true);
-                auto pGameObjects = m_pObject_Manager->Get_Layers(m_pGameInstance->Get_LevelID());
-
-                for(auto& Layers : *pGameObjects)
-                {
-                    _string strLayerTag = m_pGameInstance->ToString(Layers.first);
-
-                    if (strLayerTag != m_pGameInstance->ToString(g_strLayerMapObjectTag))
-                        continue;
-
-                    /* 오브젝트 인덱스 정보 찾아내야 한다. */
-                    _uint iObjectIdx = { 0 };
-                    auto pGameObjects = Layers.second->Get_GameObjects();
-
-                    for (auto& pGameObject : pGameObjects)
-                    {
-                        _string strBuffer = to_string(iObjectIdx) + ". Test Selectable Object" + " (" + strLayerTag + ")";
-                        if (ImGui::Selectable(strBuffer.c_str(), true)) {
-                            // 선택 동작
-                        }
-                        iObjectIdx++;
-                    }
-                }
-
-                ImGui::EndChild();
-                
-                if (ImGui::Button("Delete Object")) {
-                    // 삭제 동작
-                }
-
-                ImGui::EndTabItem();
-            }
-
-            ImGui::EndTabBar();
-        }
-
-        ImGui::EndTabItem();
-    }
-}
-
-void CIMGUI_Manager::Model_Editor()
-{
-    /* 애니메이션 제어 */
-    if (ImGui::BeginTabItem("Model"))
-    {
-        if (ImGui::BeginTabBar("Model_Control"))
-        {
-            if (ImGui::BeginTabItem("Converter"))
-            {
-                ImGui::Text("Convert FBX Model Files to Custom Binary");
-                ImGui::Text("(Only Converts Prototype Models In Edit Level)");
-                ImGui::Dummy(ImVec2(0.0f, 20.0f));
-                ImGui::Text("Input Save File Path: ");
-
-                ImGui::SameLine();
-                ImGui::InputText("##Input_Path", m_szModelSavePath, IM_ARRAYSIZE(m_szModelSavePath));
-
-                if (ImGui::Button("Convert")) {
-                    auto pPrototypes = m_pPrototype_Manager->Get_Prototypes(m_pGameInstance->Get_LevelID());
-                
-                    for (auto& Prototype : *pPrototypes)
-                    {
-                        CModel* pModelCom = dynamic_cast<CModel*>(Prototype.second);
-                        if (pModelCom != nullptr)
-                        {
-                            pModelCom->Save_Model_ToBinary(m_szModelSavePath);
-                        }
-                    }
-                    ImGui::OpenPopup("CONVERT_DONE");
-                }
-
-                if (ImGui::BeginPopupModal("CONVERT_DONE", 0, ImGuiWindowFlags_NoResize))
-                {
-                    Align_Center("Convert has Done");
-                    ImGui::Text("Convert has Done");
-
-                    ImGui::Dummy(ImVec2{ 0.f, 10.f });
-
-                    Align_Center("Confirm");
-                    if (ImGui::Button("Confirm"))
-                        ImGui::CloseCurrentPopup();
-                    ImGui::EndPopup();
-                }
-                ImGui::Separator();
-                ImGui::EndTabItem();
-            }
-
-            ImGui::EndTabBar();
-        }
-
-        ImGui::EndTabItem();
-    }
-}
-
-void CIMGUI_Manager::Effect_Editor()
-{
-    if (ImGui::BeginTabItem("Effect"))
-    {
-
-        ImGui::EndTabItem();
-    }
 }
 
 CIMGUI_Manager* CIMGUI_Manager::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HWND hWnd,

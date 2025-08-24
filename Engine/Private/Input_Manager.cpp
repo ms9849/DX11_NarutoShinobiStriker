@@ -75,6 +75,11 @@ _bool CInput_Manager::Mouse_Up(MOUSEKEYSTATE eMouse)
 	return m_tPreMouseState.rgbButtons[ENUM_CLASS(eMouse)] && !m_tMouseState.rgbButtons[ENUM_CLASS(eMouse)];
 }
 
+_bool CInput_Manager::Mouse_Pressing(MOUSEKEYSTATE eMouse)
+{
+	return m_tPreMouseState.rgbButtons[ENUM_CLASS(eMouse)] && m_tMouseState.rgbButtons[ENUM_CLASS(eMouse)];
+}
+
 CInput_Manager* CInput_Manager::Create(HINSTANCE hInstance, HWND hWnd)
 {
 	CInput_Manager* pInstance = new CInput_Manager();

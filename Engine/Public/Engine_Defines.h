@@ -39,8 +39,6 @@ using namespace std;
 #include "IMGUI/imgui.h"
 #include "IMGUI/imgui_impl_dx11.h"
 #include "IMGUI/imgui_impl_win32.h"
-#include "IMPLOT/implot.h"
-#include "IMPLOT/implot_internal.h"
 
 #include "Engine_Enum.h"
 #include "Engine_Macro.h"
@@ -52,8 +50,6 @@ namespace Engine
 {
 	const static wstring g_strTransformTag = { TEXT("Com_Transform") };
 	const static wstring g_strPoolingTag = { TEXT("Com_Pooling")};
-
-	const static wstring g_strLayerMapObjectTag = { TEXT("Layer_StaticObjects") };
 }
 
 #pragma warning(disable : 4251)

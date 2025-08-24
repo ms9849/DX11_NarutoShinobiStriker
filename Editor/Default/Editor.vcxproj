@@ -20,10 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\EditApp.h" />
+    <ClInclude Include="..\Public\EditCamera.h" />
     <ClInclude Include="..\Public\Editor_Defines.h" />
     <ClInclude Include="..\Public\KonohaVillage.h" />
     <ClInclude Include="..\Public\Level_Edit.h" />
     <ClInclude Include="..\Public\Mannequin.h" />
+    <ClInclude Include="..\Public\Props.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\TestCamera.h" />
     <ClInclude Include="Editor.h" />
@@ -33,9 +35,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\EditApp.cpp" />
+    <ClCompile Include="..\Private\EditCamera.cpp" />
     <ClCompile Include="..\Private\KonohaVillage.cpp" />
     <ClCompile Include="..\Private\Level_Edit.cpp" />
     <ClCompile Include="..\Private\Mannequin.cpp" />
+    <ClCompile Include="..\Private\Props.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\TestCamera.cpp" />
     <ClCompile Include="Editor.cpp" />

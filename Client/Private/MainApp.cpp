@@ -13,6 +13,7 @@
 
 #include "Model.h"
 #include "Player.h"
+#include "Props.h"
 
 #include "GameManager.h"
 
@@ -57,6 +58,10 @@ HRESULT CMainApp::Initialize()
 
 void CMainApp::Update(_float fTimeDelta)
 {
+	ImGui_ImplDX11_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+
 	m_pGameInstance->Update_Engine(fTimeDelta);
 }
 
@@ -67,6 +72,10 @@ HRESULT CMainApp::Render()
 	m_pGameInstance->Render_Begin(&vClearColor);
 
 	m_pGameInstance->Draw();
+
+	/* IMGUI ·»´õ */
+	ImGui::Render();
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
 	m_pGameInstance->Render_End();
 
@@ -118,10 +127,21 @@ HRESULT CMainApp::Ready_Prototypes()
 		CDummy::Create(m_pDevice, m_pContext, OBJECTID::DUMMY))))
 		return E_FAIL;
 
-	_matrix			PreTransformMatrix = XMMatrixIdentity();
-	/* For.Prototype_Component_Model_Fiona */
+	/* For.Prototype_GameObject_Props */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Props"),
+		CProps::Create(m_pDevice, m_pContext, OBJECTID::PROPS))))
+		return E_FAIL;
 
-  	PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+	_matrix			PreTransformMatrix = XMMatrixIdentity();
+
+	/* For.Prototype_Component_Model_Props */
+	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_Props"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Props/PlantA.fbx", PreTransformMatrix))))
+		return E_FAIL;
+	
+	/* For.Prototype_Component_Model_Fiona */
+	PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_Fiona"),
 		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Fiona/Fiona.fbx", PreTransformMatrix))))
 		return E_FAIL;

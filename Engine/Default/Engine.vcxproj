@@ -172,8 +172,6 @@
     <ClInclude Include="..\Public\IMGUI\imstb_textedit.h" />
     <ClInclude Include="..\Public\IMGUI\imstb_truetype.h" />
     <ClInclude Include="..\Public\IMGUI_Manager.h" />
-    <ClInclude Include="..\Public\IMPLOT\implot.h" />
-    <ClInclude Include="..\Public\IMPLOT\implot_internal.h" />
     <ClInclude Include="..\Public\Input_Manager.h" />
     <ClInclude Include="..\Public\Layer.h" />
     <ClInclude Include="..\Public\Level.h" />
@@ -191,7 +189,6 @@
     <ClInclude Include="..\Public\Renderer.h" />
     <ClInclude Include="..\Public\Shader.h" />
     <ClInclude Include="..\Public\Sound_Manager.h" />
-    <ClInclude Include="..\Public\StaticObject.h" />
     <ClInclude Include="..\Public\Texture.h" />
     <ClInclude Include="..\Public\Timer.h" />
     <ClInclude Include="..\Public\Timer_Manager.h" />
@@ -216,8 +213,6 @@
     <ClCompile Include="..\Private\IMGUI\imgui_tables.cpp" />
     <ClCompile Include="..\Private\IMGUI\imgui_widgets.cpp" />
     <ClCompile Include="..\Private\IMGUI_Manager.cpp" />
-    <ClCompile Include="..\Private\IMPLOT\implot.cpp" />
-    <ClCompile Include="..\Private\IMPLOT\implot_items.cpp" />
     <ClCompile Include="..\Private\Input_Manager.cpp" />
     <ClCompile Include="..\Private\Layer.cpp" />
     <ClCompile Include="..\Private\Level.cpp" />
@@ -235,7 +230,6 @@
     <ClCompile Include="..\Private\Renderer.cpp" />
     <ClCompile Include="..\Private\Shader.cpp" />
     <ClCompile Include="..\Private\Sound_Manager.cpp" />
-    <ClCompile Include="..\Private\StaticObject.cpp" />
     <ClCompile Include="..\Private\Texture.cpp" />
     <ClCompile Include="..\Private\Timer.cpp" />
     <ClCompile Include="..\Private\Timer_Manager.cpp" />

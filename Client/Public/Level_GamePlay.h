@@ -24,7 +24,7 @@ private:
 	HRESULT Ready_Layer_Monster(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_Effect(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_UI(const _wstring& strLayerTag);
-
+	HRESULT Ready_Layer_StaticObjects(const _wstring& strLayerTag);
 private:
 	class CGameManager* m_pGameManager = { nullptr };
 

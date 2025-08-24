@@ -3,12 +3,6 @@
 #include "GameInstance.h"
 #include "Level_Edit.h"
 
-#include "Terrain.h"
-#include "Mannequin.h"
-#include "TestCamera.h"
-
-#include "Pooling.h"
-
 CEditApp::CEditApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
 {
@@ -31,9 +25,6 @@ HRESULT CEditApp::Initialize()
 	if (FAILED(Ready_Default_Setting()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Prototypes()))
-		return E_FAIL;
-
 	if (FAILED(Start_Level(LEVEL::EDIT)))
 		return E_FAIL;
 
@@ -44,6 +35,10 @@ HRESULT CEditApp::Initialize()
 
 void CEditApp::Update(_float fTimeDelta)
 {
+	ImGui_ImplDX11_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+
 	m_pGameInstance->Update_Engine(fTimeDelta);
 }
 
@@ -54,6 +49,10 @@ HRESULT CEditApp::Render()
 	m_pGameInstance->Render_Begin(&vClearColor);
 
 	m_pGameInstance->Draw();
+
+	/* IMGUI ·»´õ */
+	ImGui::Render();
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
 	m_pGameInstance->Render_End();
 
@@ -89,90 +88,6 @@ HRESULT CEditApp::Start_Level(LEVEL eLevelID)
 {
 	if (FAILED(m_pGameInstance->Change_Level(CLevel_Edit::Create(m_pDevice, m_pContext, LEVEL::EDIT))))
 		return E_FAIL;
-
-	return S_OK;
-}
-
-HRESULT CEditApp::Ready_Prototypes()
-{
-
-#pragma region TEXTURE
-	/* For.Prototype_Component_Texture_Terrain */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Texture_Terrain"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Terrain/Tile0.jpg"), 1))))
-		return E_FAIL;
-
-#pragma endregion
-
-#pragma region MODEL 
- 	_matrix			PreTransformMatrix = XMMatrixIdentity();
-
-	/* For.Prototype_Component_Model_Fiona */
-	PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Fiona"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/Fiona/Fiona.fbx", PreTransformMatrix))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Model_Fiona_Binary */
-	PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Fiona_Binary"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, TEXT("../../Client/Bin/Resources/Models/Fiona/Fiona.bin"), PreTransformMatrix))))
-		return E_FAIL;
-#pragma endregion
-
-#pragma region COMPONENT
-	/* For.Prototype_Component_Pooling*/
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Pooling"),
-		CPooling::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-#pragma endregion
-
-#pragma region BUFFER 
-	/* For.Prototype_Component_VIBuffer_Terrain */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_VIBuffer_Terrain"),
-		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Terrain/Height1.bmp")))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_VIBuffer_Rect */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_VIBuffer_Rect"),
-		CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-#pragma endregion
-
-#pragma region SHADER
-	/* For.Prototype_Component_Shader_VtxPosTex */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Shader_VtxPosTex"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/ShaderFiles/Shader_VtxPosTex.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Shader_VtxNorTex */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Shader_VtxNorTex"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/ShaderFiles/Shader_VtxNorTex.hlsl"), VTXNORTEX::Elements, VTXNORTEX::iNumElements))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Shader_VtxMesh */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Shader_VtxMesh"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/ShaderFiles/Shader_VtxMesh.hlsl"), VTXMESH::Elements, VTXMESH::iNumElements))))
-		return E_FAIL;
-#pragma endregion
-
-#pragma region OBJECT
-	/* For.Prototype_GameObject_TestCamera */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_GameObject_TestCamera"),
-		CTestCamera::Create(m_pDevice, m_pContext, Client::OBJECTID::TEST_CAMERA))))
-		return E_FAIL;
-
-	/* For.Prototype_GameObject_Terrain */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_GameObject_Terrain"),
-		CTerrain::Create(m_pDevice, m_pContext, Client::OBJECTID::TERRAIN))))
-		return E_FAIL;
-
-	/* For.Prototype_GameObject_Mannequin */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_GameObject_Mannequin"),
-		CMannequin::Create(m_pDevice, m_pContext, Client::OBJECTID::MANNEQUIN))))
-		return E_FAIL;
-#pragma endregion
 
 	return S_OK;
 }

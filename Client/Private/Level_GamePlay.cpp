@@ -7,6 +7,7 @@
 
 #include "GameManager.h"
 #include "Player.h"
+#include "Props.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID)
 	: CLevel { pDevice, pContext, ENUM_CLASS(eLevelID)}
@@ -24,6 +25,9 @@ HRESULT CLevel_GamePlay::Initialize()
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
+		return E_FAIL;
+
+	if(FAILED(Ready_Layer_StaticObjects(TEXT("Layer_StaticObjects"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
@@ -49,11 +53,13 @@ void CLevel_GamePlay::Update(_float fTimeDelta)
 	if (m_pGameInstance->Key_Down(DIK_F3))
 	{
 		m_pGameInstance->Set_Visible_IMGUI(true, ENUM_CLASS(IMGUI_VISIBLE::GAMEINFO));
+		m_pGameInstance->Set_Visible_IMGUI(true, ENUM_CLASS(IMGUI_VISIBLE::OBJECT_INSPECTOR));
 	}
 
 	if (m_pGameInstance->Key_Down(DIK_F4))
 	{
 		m_pGameInstance->Set_Visible_IMGUI(false, ENUM_CLASS(IMGUI_VISIBLE::GAMEINFO));
+		m_pGameInstance->Set_Visible_IMGUI(false, ENUM_CLASS(IMGUI_VISIBLE::OBJECT_INSPECTOR));
 	}
 }
 
@@ -175,6 +181,20 @@ HRESULT CLevel_GamePlay::Ready_Layer_UI(const _wstring& strLayerTag)
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_ComboKOPanel"),
 		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CLevel_GamePlay::Ready_Layer_StaticObjects(const _wstring& strLayerTag)
+{
+	/* 스태틱 오브젝트들 추가. */
+	CProps::PROP_DESC PropDesc;
+	PropDesc.iMeshIdx = 0;
+	PropDesc.iShaderPassIdx = 0;
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Props"),
+		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag, &PropDesc)))
 		return E_FAIL;
 
 	return S_OK;

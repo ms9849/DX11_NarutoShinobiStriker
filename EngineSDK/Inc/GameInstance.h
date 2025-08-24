@@ -51,13 +51,18 @@ public:
 
 #pragma region PROTOTYPE_MANAGER
 	HRESULT Add_Prototype(_uint iLevelIndex, const _wstring& strPrototypeTag, class CBase* pPrototype);
-	class CBase* Clone_Prototype(PROTOTYPE ePrototype, _uint iLevelIndex, const _wstring& strPrototypeTag, void* pArg = nullptr);
+	CBase* Clone_Prototype(PROTOTYPE ePrototype, _uint iLevelIndex, const _wstring& strPrototypeTag, void* pArg = nullptr);
+	CBase* Get_Prototype(_uint iLevelID, const _wstring& strPrototypeTag);
 #pragma endregion
 
 #pragma region OBJECT_MANAGER
+	CGameObject* Get_GameObject(_uint iLevelIndex, const _wstring& strLayerTag, _uint iIndex = 0);
 	CComponent* Get_Component(_uint iLevelIndex, const _wstring& strLayerTag, const _wstring& strComponentTag, _uint iIndex = 0);
+	size_t	Get_LayerSize(_uint iLevelIndex, const _wstring& strLayerTag);
+
 	HRESULT Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, _uint iLayerLevelIndex, const _wstring& strLayerTag, void* pArg = nullptr);
 	HRESULT Add_Clone_ToLayer(class CGameObject* pClone, _uint iLayerLevelIndex, const _wstring& strLayerTag);
+	
 #pragma endregion
 
 #pragma region POOLING_MANAGER
@@ -105,6 +110,7 @@ public:
 	_bool		Key_Down(_ubyte byKey);
 	_bool		Mouse_Down(MOUSEKEYSTATE eMouse);
 	_bool		Mouse_Up(MOUSEKEYSTATE eMouse);
+	_bool		Mouse_Pressing(MOUSEKEYSTATE eMouse);
 	_long		Get_MouseMove(MOUSEMOVESTATE eMouseState);
 #pragma endregion
 

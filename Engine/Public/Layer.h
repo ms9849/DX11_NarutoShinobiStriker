@@ -11,11 +11,13 @@ private:
 	virtual ~CLayer() = default;
 
 public:
-	list<class CGameObject*> Get_GameObjects() {
-		return m_GameObjects;
-	}
 
+	list<class CGameObject*> Get_GameObjects() { return m_GameObjects; }
+	size_t Get_Size() { return m_GameObjects.size(); }
+
+public:
 	class CComponent* Get_Component(const _wstring& strComponentTag, _uint iIndex = 0);
+	class CGameObject* Get_GameObject(_uint iIndex = 0);
 
 public:
 	HRESULT Add_GameObject(class CGameObject* pGameObject);
