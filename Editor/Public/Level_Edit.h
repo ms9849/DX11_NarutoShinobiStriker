@@ -51,6 +51,7 @@ private:
 	_float3					m_vDegrees = { 0.f, 0.f, 0.f };
 	_float4					m_vPosition = { 0.f, 0.f, 0.f, 1.f };
 
+	_uint					m_iSelectedMeshNum = {};
 	_wstring				m_strLayerMapObjectTag = { TEXT("Layer_StaticObjects") };
 	_float					m_fMouseActionSpeed = { 1.f };
 	_char					m_szClonePrototype[256] = {};
