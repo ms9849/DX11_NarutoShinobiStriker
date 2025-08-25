@@ -44,6 +44,9 @@ public:
 		return m_iNumMeshes;
 	}
 
+	_wstring Get_MeshName(_uint iIdx) const {
+		return m_MeshNames[iIdx];
+	}
 public:
 	HRESULT Save_Model_ToBinary(const _char* pModelSavePath);
 
@@ -62,7 +65,10 @@ private:
 
 private:
 	_uint					m_iNumMeshes = {};
+
+	vector<_wstring>		m_MeshNames = {};
 	vector<class CMesh*>	m_Meshes;
+
 
 	_uint					m_iNumMaterials = {};
 	vector<class CMaterial*> m_Materials;
@@ -71,9 +77,18 @@ private:
 	_float4x4				m_PreTransformMatrix = {};
 	_bool					m_isBinary = { false };
 	_char					m_szModelName[MAX_PATH];
+
 private:
 	HRESULT Ready_Meshes();
 	HRESULT Ready_Materials(const _char* pModelFilePath);
+
+	HRESULT Load_NonAnimModel_Assimp(const _char* pModelFilePath);
+	HRESULT Load_NonAnimModel_Binary(const _tchar* pModelFilePath);
+	HRESULT Save_NonAnimModel_ToBinary(const _char* pModelSavePath);
+
+	HRESULT Load_AnimModel_Assimp();
+	HRESULT Load_AnimModel_Binary();
+	HRESULT Save_AnimModel_ToBinary(const _char* pModelSavePath);
 
 public:
 	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, MODEL eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix = XMMatrixIdentity());

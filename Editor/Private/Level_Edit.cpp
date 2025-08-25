@@ -74,7 +74,7 @@ HRESULT CLevel_Edit::Ready_Prototypes()
     /* For.Prototype_Component_Model_Props */
     PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Props"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/Props/PlantA.fbx", PreTransformMatrix))))
+        CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/Props/Props.fbx", PreTransformMatrix))))
         return E_FAIL;
     m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Props"));
 
@@ -82,7 +82,7 @@ HRESULT CLevel_Edit::Ready_Prototypes()
 
 #pragma region MODEL_BINARY
 
-    /* For.Prototype_Component_Model_Fiona_Binary */
+    ///* For.Prototype_Component_Model_Fiona_Binary */
     PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Fiona_Binary"),
         CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, TEXT("../../Client/Bin/Resources/Models/Fiona/Fiona.bin"), PreTransformMatrix))))
@@ -256,14 +256,30 @@ void CLevel_Edit::Map_Editor()
         {
             if (ImGui::BeginTabItem("Create Prop"))
             {
-                ImGui::Text("Prototype Tag: ");
+                ImGui::Text("Select Prop Mesh");
                 ImGui::SameLine();
-                ImGui::InputText("##INPUT_PROTOTYPE_TAG", m_szClonePrototype, IM_ARRAYSIZE(m_szClonePrototype));
+                ImGui::Text(("(Current Selected IDX: " + to_string(m_iSelectedMeshNum)).c_str());
+                //프롭 생성 여기서 작성
+                ImGui::BeginChild("Mesh List", ImVec2(0, 150), true);
+                CModel* pModel = static_cast<CModel*>(m_pGameInstance->Get_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Props")));
+                for (size_t i = 0; i < pModel->Get_NumMeshes(); ++i)
+                {
+                    _string Buffer = m_pGameInstance->ToString(pModel->Get_MeshName(i));
+                    if (ImGui::Selectable(Buffer.c_str(), true)) {
+                        // 선택 동작
+                        m_iSelectedMeshNum = i;
+                    }
+                }
+
+                ImGui::EndChild();
 
                 if (ImGui::Button("Clone"))
                 {
-                    _wstring strPrototypeTag = wstring(m_szClonePrototype, m_szClonePrototype + strlen(m_szClonePrototype));
-                    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::EDIT), strPrototypeTag, ENUM_CLASS(LEVEL::EDIT), m_strLayerMapObjectTag)))
+                    CProps::PROP_DESC Desc;
+                    Desc.iMeshIdx = m_iSelectedMeshNum;
+                    Desc.iShaderPassIdx = 0;
+
+                    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_GameObject_Props"), ENUM_CLASS(LEVEL::EDIT), m_strLayerMapObjectTag, &Desc)))
                     {
                         ImGui::OpenPopup("CLONE_FAILED");
                     }
@@ -300,7 +316,8 @@ void CLevel_Edit::Map_Editor()
 
                     _uint iMeshIdx = static_cast<CProps*>(pGameObject)->Get_MeshIdx();
                     _uint iShaderPassIdx = static_cast<CProps*>(pGameObject)->Get_ShaderPassIdx();
-                    _string strBuffer = to_string(i) + ". Prop Info (Mesh: " + to_string(iMeshIdx) + ") " + "(Shader Pass: " + to_string(iShaderPassIdx) + ")";
+                    CModel* pModel = static_cast<CModel*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::EDIT), TEXT("Layer_StaticObjects"), TEXT("Com_Model"), i));
+                    _string strBuffer = to_string(i) + ". Prop Info (Mesh: " + m_pGameInstance->ToString(pModel->Get_MeshName(iMeshIdx)) + ") " + "(Shader Pass: " + to_string(iShaderPassIdx) + ")";
 
                     if (ImGui::Selectable(strBuffer.c_str(), true)) {
                         // 선택 동작

@@ -166,6 +166,9 @@
     <Filter Include="02.GameObjects\Props">
       <UniqueIdentifier>{4e677acd-09fd-49bb-824a-a1cf58e54e3e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Props\PROP_INFO">
+      <UniqueIdentifier>{a2c3c0a2-d7c7-4f2d-b13e-e66742b464af}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -308,6 +311,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\Props.h">
       <Filter>02.GameObjects\Props</Filter>
+    </ClInclude>
+    <ClInclude Include="Props_Info.h">
+      <Filter>02.GameObjects\Props\PROP_INFO</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
