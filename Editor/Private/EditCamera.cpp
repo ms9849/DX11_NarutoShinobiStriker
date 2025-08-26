@@ -22,10 +22,10 @@ void CEditCamera::Set_Desc(void* pArg)
 
 void CEditCamera::Key_Input(_float fTimeDelta)
 {
-	m_pTransformCom->Go_Straight(fTimeDelta * (m_pGameInstance->Get_MouseMove(MOUSEMOVESTATE::W)) * 0.2f);
-
 	if (false == m_IsCameraActivated || m_pGameInstance->Mouse_Pressing(MOUSEKEYSTATE::RBUTTON))
 		return;
+
+	m_pTransformCom->Go_Straight(fTimeDelta * (m_pGameInstance->Get_MouseMove(MOUSEMOVESTATE::W)) * 0.2f);
 
 	if (m_pGameInstance->Key_Pressing(DIK_W))
 		m_pTransformCom->Go_Straight(fTimeDelta * m_fSpeedFactor);
