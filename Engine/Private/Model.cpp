@@ -32,7 +32,7 @@ CModel::CModel(const CModel& Prototype)
 		Safe_AddRef(pMaterial);
 }
 
-HRESULT CModel::Load_NonAnimModel_Binary(const _tchar* pBinaryFilePath)
+HRESULT CModel::Load_Model_FromBinary(const _tchar* pBinaryFilePath)
 {
 	/* ../Bin/Resources/Models/Binary/Fiona.bin */
 	_char szModelFilePath[MAX_PATH];
@@ -58,108 +58,42 @@ HRESULT CModel::Load_NonAnimModel_Binary(const _tchar* pBinaryFilePath)
 
 	DWORD	dwByte(0);
 
-#pragma region LOAD_MATERIAL
+	/* 본 갯수 로딩 */
+	if (false == ReadFile(hHandle, &m_iNumBones, sizeof(_uint), &dwByte, nullptr))
+		return E_FAIL;
+	/* 본 정보 로딩 */
+	for (_uint i = 0; i < m_iNumBones; ++i)
+	{
+		CBone* pBone = CBone::Create(hHandle, &dwByte);
+		m_Bones.push_back(pBone);
+	}
+
 	/* 머테리얼 갯수 로딩. */
 	if (false == ReadFile(hHandle, &m_iNumMaterials, sizeof(_uint), &dwByte, nullptr))
 		return E_FAIL;
-
 	/* 머테리얼 정보 로딩 */
 	for (_uint i = 0; i < m_iNumMaterials; ++i)
 	{
-		IMPORT_MATERIAL_DESC* ImportMaterialDesc = new IMPORT_MATERIAL_DESC();
-
-		for (_uint j = 0; j < AI_TEXTURE_TYPE_MAX; ++j)
-		{
-			if (false == ReadFile(hHandle, &ImportMaterialDesc->iNumSRVs[j], sizeof(_uint), &dwByte, nullptr))
-				return E_FAIL;
-
-			/* 보통은 1개만 있으니까.. */
-			for (_uint k = 0; k < ImportMaterialDesc->iNumSRVs[j]; ++k)
-			{
-				if (false == ReadFile(hHandle, ImportMaterialDesc->szTexturePath[j], MAX_PATH, &dwByte, nullptr))
-					return E_FAIL;
-			}
-		}
-
-		CMaterial* pMaterial = CMaterial::Create(m_pDevice, m_pContext, pBinaryFilePath, *ImportMaterialDesc);
-		if (nullptr == pMaterial)
-			return E_FAIL;
-
+		CMaterial* pMaterial = CMaterial::Create(m_pDevice, m_pContext, hHandle, &dwByte, pBinaryFilePath);
 		m_Materials.push_back(pMaterial);
-
-		Safe_Delete(ImportMaterialDesc);
 	}
-#pragma endregion
 
-#pragma region LOAD_MESH
 	/* 메쉬 갯수 로딩 */
 	if (false == ReadFile(hHandle, &m_iNumMeshes, sizeof(_uint), &dwByte, nullptr))
 		return E_FAIL;
-
-	///* 메쉬 이름 로딩 */
+	/* 메쉬 이름 로딩 */
 	for (_uint i = 0; i < m_iNumMeshes; ++i)
 	{
-		_int iLength;
-		_wstring strMeshName;
-
-		if (false == ReadFile(hHandle, &iLength, sizeof(_int), &dwByte, nullptr))
-			return E_FAIL;
-
-		strMeshName.resize(iLength);
-
-		if (false == ReadFile(hHandle, (void *)strMeshName.data(), sizeof(_tchar) * iLength, &dwByte, nullptr))
-			return E_FAIL;
-
-		m_MeshNames.push_back(strMeshName);
-	}
-
-	IMPORT_MESH_DESC ImportMeshDesc;
-
-	/* 메쉬 정보 로딩 */
-	for (_uint i = 0; i < m_iNumMeshes; ++i)
-	{
-		/* iMaterialIndex, iNumFaces, iNumVertices */
-		if (false == ReadFile(hHandle, &ImportMeshDesc, sizeof(_uint) * 3, &dwByte, nullptr))
-			return E_FAIL;
-
-		ImportMeshDesc.pVertices = new VTXMESH[ImportMeshDesc.iNumVertices];
-		ImportMeshDesc.pIndices = new _uint[ImportMeshDesc.iNumFaces * 3];
-
-		/* 정점 정보 로딩 */
-		for (_uint j = 0; j < ImportMeshDesc.iNumVertices; ++j)
-		{
-			if (false == ReadFile(hHandle, &ImportMeshDesc.pVertices[j], sizeof(VTXMESH), &dwByte, nullptr))
-				return E_FAIL;
-		}
-
-		_uint iNumIndices = { 0 };
-
-		/* 인덱스 정보 로딩 */
-		for (_uint j = 0; j < ImportMeshDesc.iNumFaces; ++j)
-		{
-			if (false == ReadFile(hHandle, &ImportMeshDesc.pIndices[iNumIndices], sizeof(_uint) * 3, &dwByte, nullptr))
-				return E_FAIL;
-
-			iNumIndices += 3;
-		}
-
-		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, m_eType, this, ImportMeshDesc, XMLoadFloat4x4(&m_PreTransformMatrix));
-		if (nullptr == pMesh)
-			return E_FAIL;
-
+		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, m_eType, this, hHandle, &dwByte, XMLoadFloat4x4(&m_PreTransformMatrix));
 		m_Meshes.push_back(pMesh);
-
-		Safe_Delete_Array(ImportMeshDesc.pIndices);
-		Safe_Delete_Array(ImportMeshDesc.pVertices);
 	}
 
-#pragma endregion
 	CloseHandle(hHandle);
 
 	return S_OK;
 }
 
-HRESULT CModel::Save_NonAnimModel_ToBinary(const _char* pModelSavePath)
+HRESULT CModel::Save_Model_ToBinary(const _char* pModelSavePath)
 {
 	if (true == m_isBinary)
 		return S_OK;
@@ -187,129 +121,38 @@ HRESULT CModel::Save_NonAnimModel_ToBinary(const _char* pModelSavePath)
 								NULL);	// 생성될 파일의 속성을 제공할 템플릿 파일(안쓸것이기 때문에 NULL)
 
 	if (hHandle == INVALID_HANDLE_VALUE)
-	{
 		return E_FAIL;
-	}
 
 	DWORD	dwByte(0);
 
-#pragma region SAVE_MATERIAL
+	/* 본 갯수 저장 */
+	WriteFile(hHandle, &m_iNumBones, sizeof(_uint), &dwByte, nullptr);
+	for (_uint i = 0; i < m_iNumBones; ++i)
+		if(FAILED(m_Bones[i]->Save_Bone_ToBinary(hHandle, &dwByte)))
+			return E_FAIL;
+
 	/* 머테리얼 갯수 저장 */
 	WriteFile(hHandle, &m_iNumMaterials, sizeof(_uint), &dwByte, nullptr);
-
 	/* 머테리얼 정보 저장 */
 	for (_uint i = 0; i < m_iNumMaterials; ++i)
-	{
-		aiMaterial* pAIMaterial = m_pAIScene->mMaterials[i];
-		EXPORT_MATERIAL_DESC MaterialDesc;
+		if(FAILED(m_Materials[i]->Save_Material_ToBinary(hHandle, &dwByte, m_pAIScene->mMaterials[i])))
+			return E_FAIL;
 
-		for (_uint j = 0; j < AI_TEXTURE_TYPE_MAX; ++j)
-		{
-			/* 텍스쳐 갯수 저장 */
-			MaterialDesc.iNumSRVs[j] = pAIMaterial->GetTextureCount(static_cast<aiTextureType>(j));
-			WriteFile(hHandle, &MaterialDesc.iNumSRVs[j], sizeof(_uint), &dwByte, nullptr);
-			/* 텍스쳐 경로 저장 */
-			for (_uint k = 0; k < MaterialDesc.iNumSRVs[j]; ++k)
-			{
-				aiString strTexturePath;
-
-				_char szDrive[MAX_PATH] = {};
-				_char szDir[MAX_PATH] = {};
-				_char szFileName[MAX_PATH] = {};
-				_char szEXT[MAX_PATH] = {};
-
-				/* 만약 텍스쳐가 존재하지 않는다면 continue */
-				pAIMaterial->GetTexture(static_cast<aiTextureType>(j), k, &strTexturePath);
-
-				_char szTextureFilePath[MAX_PATH] = {};
-				/* 드라이브 경로 / 파일 경로 / 파일 이름 / 파일 확장자 4개로 나뉘는걸 유의할 것 */
-
-				/* 모델을 저장할 경로의 드라이브, 파일 경로를 가져온다. */
-				_splitpath_s(pModelSavePath, szDrive, MAX_PATH, szDir, MAX_PATH, nullptr, 0, nullptr, 0);
-
-				/* 텍스쳐 파일 경로로부터 이름, 확장자를 가져온다. */
-				_splitpath_s(strTexturePath.data, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szEXT, MAX_PATH);
-
-				strcpy_s(szTextureFilePath, szDrive);
-				strcat_s(szTextureFilePath, szDir);
-				strcat_s(szTextureFilePath, szFileName);
-				strcat_s(szTextureFilePath, szEXT);
-
-				WriteFile(hHandle, szTextureFilePath, MAX_PATH, &dwByte, nullptr);
-			}
-
-		}
-	}
-#pragma endregion
-
-#pragma region SAVE_MESH
 	/* 메쉬 갯수 저장 */
 	WriteFile(hHandle, &m_iNumMeshes, sizeof(_uint), &dwByte, nullptr);
-
 	/* 메쉬 이름 저장 (메쉬 문자열 크기, 문자열 순). */
-
 	for (_uint i = 0; i < m_iNumMeshes; ++i)
-	{
-		const _tchar* pString = m_MeshNames[i].c_str();
-		_int iSize = m_MeshNames[i].length();
+		if(FAILED(m_Meshes[i]->Save_Mesh_ToBinary(hHandle, &dwByte, m_pAIScene->mMeshes[i])))
+			return E_FAIL;
 
-		WriteFile(hHandle, &iSize, sizeof(_int), &dwByte, nullptr);
-		WriteFile(hHandle, pString, sizeof(_tchar) * iSize, &dwByte, nullptr);
-	}
-
-	/* 메쉬 정보 저장 */
-	for (_uint i = 0; i < m_iNumMeshes; ++i)
-	{
-		aiMesh* pAIMesh = m_pAIScene->mMeshes[i];
-		EXPORT_MESH_DESC MeshDesc;
-
-		MeshDesc.iMaterialIndex = pAIMesh->mMaterialIndex;
-		MeshDesc.iNumFaces = pAIMesh->mNumFaces;
-		MeshDesc.iNumVertices = pAIMesh->mNumVertices;
-
-		// 12바이트 저장. 이후에는 동적으로 pIndices, pVertices 저장해줄 예정
-		WriteFile(hHandle, &MeshDesc, sizeof(_uint) * 3, &dwByte, nullptr);
-
-		/* 정점 정보 저장 */
-		for (_uint j = 0; j < MeshDesc.iNumVertices; ++j)
-		{
-			/* 인덱스 갯수는 삼각형의 갯수 * 3개 */
-			VTXMESH VtxMesh;
-
-			memcpy(&VtxMesh.vPosition, &pAIMesh->mVertices[j], sizeof(_float3));
-			memcpy(&VtxMesh.vNormal, &pAIMesh->mNormals[j], sizeof(_float3));
-			memcpy(&VtxMesh.vTangent, &pAIMesh->mTangents[j], sizeof(_float3));
-			memcpy(&VtxMesh.vTexcoord, &pAIMesh->mTextureCoords[0][j], sizeof(_float2));
-
-			WriteFile(hHandle, &VtxMesh, sizeof(VtxMesh), &dwByte, nullptr);
-		}
-
-		_uint Indices[3];
-		
-		/* 인덱스 정보 저장 */
-		for (_uint j = 0; j < pAIMesh->mNumFaces; ++j)
-		{
-			Indices[0] = pAIMesh->mFaces[j].mIndices[0];
-			Indices[1] = pAIMesh->mFaces[j].mIndices[1];
-			Indices[2] = pAIMesh->mFaces[j].mIndices[2];
-
-			WriteFile(hHandle, &Indices, sizeof(_uint) * 3, &dwByte, nullptr);
-		}
-	}
-#pragma endregion
 	CloseHandle(hHandle);
 
 	return S_OK;
 }
 
-HRESULT CModel::Load_AnimModel_Binary()
+_wstring CModel::Get_MeshName(_uint iIdx) const
 {
-	return S_OK;
-}
-
-HRESULT CModel::Save_AnimModel_ToBinary(const _char* pModelSavePath)
-{
-	return S_OK;
+	return m_Meshes[iIdx]->Get_Name();
 }
 
 _int CModel::Get_BoneIndex(const _char* pBoneName) const
@@ -331,19 +174,6 @@ _int CModel::Get_BoneIndex(const _char* pBoneName) const
 	return iBoneIndex;
 }
 
-/* 바이너리로 저장하는 함수 */
-HRESULT CModel::Save_Model_ToBinary(const _char* pModelSavePath)
-{
-	if (MODEL::NONANIM == m_eType)
-		Save_NonAnimModel_ToBinary(pModelSavePath);
-
-
-	else if (MODEL::ANIM == m_eType)
-		Save_AnimModel_ToBinary(pModelSavePath);
-
-	return S_OK;
-}
-
 HRESULT CModel::Initialize_Prototype(MODEL eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix)
 {
 	_uint			iFlag = {};
@@ -351,7 +181,7 @@ HRESULT CModel::Initialize_Prototype(MODEL eType, const _char* pModelFilePath, _
 	//aiProcessPreset_TargetRealtime_Fast
 	iFlag = aiProcess_ConvertToLeftHanded | aiProcessPreset_TargetRealtime_Fast;
 
-	if (MODEL::NONANIM == m_eType)
+	if (MODEL::NONANIM == eType)
 		iFlag |= aiProcess_PreTransformVertices;
 
 	m_pAIScene = m_Importer.ReadFile(pModelFilePath, iFlag);
@@ -371,6 +201,8 @@ HRESULT CModel::Initialize_Prototype(MODEL eType, const _char* pModelFilePath, _
 	if (FAILED(Ready_Bones(m_pAIScene->mRootNode, -1)))
 		return E_FAIL;
 
+	m_iNumBones = (_uint)m_Bones.size();
+
 	if (FAILED(Ready_Meshes()))
 		return E_FAIL;
 
@@ -387,16 +219,10 @@ HRESULT CModel::Initialize_Prototype(MODEL eType, const _tchar* pBinaryFilePath,
 	m_isBinary = true;
 	XMStoreFloat4x4(&m_PreTransformMatrix, PreTransformMatrix);
 
-	HRESULT hr;
+	if(FAILED(Load_Model_FromBinary(pBinaryFilePath)))
+		return E_FAIL;
 
-	if (MODEL::NONANIM == m_eType)
-		hr = Load_NonAnimModel_Binary(pBinaryFilePath);
-
-	/* 아직 구현되지 않음 */
-	else if (MODEL::ANIM == m_eType)
-		hr = Load_AnimModel_Binary();
-
-	return hr;
+	return S_OK;
 }
 
 HRESULT CModel::Initialize(void* pArg)
@@ -495,7 +321,7 @@ HRESULT CModel::Ready_Bones(const aiNode* pAINode, _int iParentIndex)
 
 	m_Bones.push_back(pBone);
 
-	_int	iParent = m_Bones.size() - 1;
+	_int	iParent = (_uint)m_Bones.size() - 1;
 
 	for (size_t i = 0; i < pAINode->mNumChildren; i++)
 	{

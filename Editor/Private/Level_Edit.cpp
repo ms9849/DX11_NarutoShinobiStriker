@@ -6,8 +6,11 @@
 #include "Terrain.h"
 #include "Mannequin.h"
 #include "Props.h"
+#include "KonohaVillage.h"
 
 #include "Pooling.h"
+
+#include "MapConverter.h"
 
 /* 부모의 멤버 변수 세팅은 부모에서 처리해야 한다.. */
 CLevel_Edit::CLevel_Edit(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID) :
@@ -25,10 +28,12 @@ HRESULT CLevel_Edit::Initialize()
     if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
         return E_FAIL;
 
-    if (FAILED(Ready_Layer_StaticObjects(TEXT("Layer_StaticObjects"))))
+    if (FAILED(Ready_Layer_Props(TEXT("Layer_Props"))))
         return E_FAIL;
 
     m_pGameInstance->Set_Visible_All_IMGUI(true);
+
+    m_MapConverter = CMapConverter::Create(m_pDevice, m_pContext);
 
     return S_OK;
 }
@@ -74,18 +79,24 @@ HRESULT CLevel_Edit::Ready_Prototypes()
     /* For.Prototype_Component_Model_Props */
     PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Props"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/Props/Props.fbx", PreTransformMatrix))))
+        CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/StaticObjects/Props/Props.fbx", PreTransformMatrix))))
         return E_FAIL;
     m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Props"));
+
+    /* For.Prototype_Component_Model_KonohaVillage */
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_KonohaVillage"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client//Bin/Resources/Models/TutorialMap/TutorialMap.fbx", PreTransformMatrix))))
+        return E_FAIL;
+
 
 #pragma endregion
 
 #pragma region MODEL_BINARY
 
-    ///* For.Prototype_Component_Model_Fiona_Binary */
+    /* For.Prototype_Component_Model_Fiona_Binary */
     PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Fiona_Binary"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, TEXT("../../Client/Bin/Resources/Models/Fiona/Fiona.bin"), PreTransformMatrix))))
+        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, TEXT("../../Client/Bin/Resources/Models/Fiona/Fiona.bin"), PreTransformMatrix))))
         return E_FAIL;
 #pragma endregion
 
@@ -151,6 +162,12 @@ HRESULT CLevel_Edit::Ready_Prototypes()
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_GameObject_Props"),
         CProps::Create(m_pDevice, m_pContext, Client::OBJECTID::PROPS))))
         return E_FAIL;
+
+    /* For.Prototype_GameObject_KonohaVillage */
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_GameObject_KonohaVillage"),
+        CKonohaVillage::Create(m_pDevice, m_pContext, Client::OBJECTID::KONOHA_VILLAGE))))
+        return E_FAIL;
+
 #pragma endregion
 
     return S_OK;
@@ -189,16 +206,16 @@ HRESULT CLevel_Edit::Ready_Layer_BackGround(const _wstring& strLayerTag)
     return S_OK;
 }
 
-HRESULT CLevel_Edit::Ready_Layer_StaticObjects(const _wstring& strLayerTag)
+HRESULT CLevel_Edit::Ready_Layer_Props(const _wstring& strLayerTag)
 {
-    /* 스태틱 오브젝트들 추가. */
-    CProps::PROP_DESC PropDesc;
-    PropDesc.iMeshIdx = 0;
-    PropDesc.iShaderPassIdx = 0;
+    ///* 스태틱 오브젝트들 추가. */
+    //CProps::PROP_DESC PropDesc;
+    //PropDesc.iMeshIdx = 0;
+    //PropDesc.iShaderPassIdx = 0;
 
-    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_GameObject_Props"),
-        ENUM_CLASS(LEVEL::EDIT), strLayerTag, &PropDesc)))
-        return E_FAIL;
+    //if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_GameObject_Props"),
+    //    ENUM_CLASS(LEVEL::EDIT), strLayerTag, &PropDesc)))
+    //    return E_FAIL;
 
     return S_OK;
 }
@@ -222,7 +239,13 @@ void CLevel_Edit::Map_Editor()
     /* 맵 제어 */
     if (ImGui::BeginTabItem("Deploy"))
     {
-        if (ImGui::Checkbox("Camera Activate", &m_IsCameraOn)) 
+        if (m_pGameInstance->Key_Down(DIK_F2))
+        {
+            m_IsCameraOn = !m_IsCameraOn;
+            m_pEditCamera->Activate_Camera(m_IsCameraOn);
+        }
+
+        if (ImGui::Checkbox("Camera Activate (Press F2 To Toggle)", &m_IsCameraOn)) 
         {
             m_pEditCamera->Activate_Camera(m_IsCameraOn);
         }
@@ -321,7 +344,7 @@ void CLevel_Edit::Map_Editor()
 
                     _uint iMeshIdx = static_cast<CProps*>(pGameObject)->Get_MeshIdx();
                     _uint iShaderPassIdx = static_cast<CProps*>(pGameObject)->Get_ShaderPassIdx();
-                    CModel* pModel = static_cast<CModel*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::EDIT), TEXT("Layer_StaticObjects"), TEXT("Com_Model"), i));
+                    CModel* pModel = static_cast<CModel*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::EDIT), TEXT("Layer_Props"), TEXT("Com_Model"), i));
                     _string strBuffer = to_string(i) + ". Prop Info (Mesh: " + m_pGameInstance->ToString(pModel->Get_MeshName(iMeshIdx)) + ") " + "(Shader Pass: " + to_string(iShaderPassIdx) + ")";
 
                     if (ImGui::Selectable(strBuffer.c_str(), true)) {
@@ -342,6 +365,39 @@ void CLevel_Edit::Map_Editor()
                 }
 
                 ImGui::EndTabItem();
+            }
+
+            ImGui::EndTabBar();
+        }
+
+        ImGui::Dummy(ImVec2{ 0.f, 10.f });
+        
+        ImGui::Text("Add Map Meshes");
+
+        if (ImGui::BeginTabBar("MAPMESH"))
+        {
+            if (ImGui::BeginTabItem("Create Map Meshes"))
+            {
+                ImGui::BeginChild("Map List", ImVec2(0, 150), true);
+
+                //나뭇잎 마을
+                m_pGameInstance->Get_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_GameObject_KonohaVillage"));
+                if (ImGui::Selectable("Prototype_GameObject_KonohaVillage", true)) {
+                    // 선택 동작
+                    m_strSelectedMapName = TEXT("Prototype_GameObject_KonohaVillage");
+                }
+
+                ImGui::EndChild();
+
+                ImGui::EndTabItem();
+            }
+
+            if (ImGui::Button("Clone"))
+            {
+                if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::EDIT), m_strSelectedMapName, ENUM_CLASS(LEVEL::EDIT), TEXT("Layer_Map"))))
+                {
+                    ImGui::OpenPopup("CLONE_FAILED");
+                }
             }
 
             ImGui::EndTabBar();
@@ -645,38 +701,64 @@ void CLevel_Edit::ExportAndImport()
     if (ImGui::BeginTabItem("Export"))
     {
         ImGui::Dummy(ImVec2{ 0.f, 10.f });
+
         if (ImGui::BeginTabBar("EXPORTANDIMPONT"))
         {
-            if (ImGui::BeginTabItem("Export Props"))
+            if (ImGui::BeginTabItem("Impot Map Data"))
             {
-                ImGui::Text("Save Props in \"Layer_StaticObjects\".");
-                ImGui::Text("DONT FORGET TO SAVE PROPS BEFORE QUIT.");
+                ImGui::Text("Input Map File Path: ");
+
+                ImGui::SameLine();
+                ImGui::InputText("##Input_LoadMapPath", m_szLoadMapFileName, IM_ARRAYSIZE(m_szLoadMapFileName));
+
+                if (ImGui::Button("Import Maps")) {
+                    /* SAVE MAP */
+                    m_MapConverter->Import_MapFiles(m_pGameInstance->ToWstring(m_szLoadMapFileName).c_str(), LEVEL::EDIT, LEVEL::EDIT);
+                    ImGui::OpenPopup("IMPORT_MAPS_DONE");
+                }
+
+                if (ImGui::BeginPopupModal("IMPORT_MAPS_DONE", 0, ImGuiWindowFlags_NoResize))
+                {
+                    Align_Center("Import Map has Done");
+                    ImGui::Text("Import Map has Done");
+
+                    ImGui::Dummy(ImVec2{ 0.f, 10.f });
+
+                    Align_Center("Confirm");
+                    if (ImGui::Button("Confirm"))
+                        ImGui::CloseCurrentPopup();
+                    ImGui::EndPopup();
+                }
+
+                ImGui::EndTabItem();
+            }
+
+            if (ImGui::BeginTabItem("Export Map Data "))
+            {
+                ImGui::Text("Save Map Datas. in \"Layer_Props\", \"Layer_Map\", \"Layer_Objects\".");
+                ImGui::Text("DONT FORGET TO SAVE MAP DATAS BEFORE QUIT.");
 
                 ImGui::Dummy(ImVec2(0.0f, 20.0f));
                 ImGui::Text("Input Save File Path: ");
 
                 ImGui::SameLine();
-                ImGui::InputText("##Input_Path", m_szMapSavePath, IM_ARRAYSIZE(m_szMapSavePath));
+                ImGui::InputText("##Input_MapPath", m_szMapSavePath, IM_ARRAYSIZE(m_szMapSavePath));
 
-                if (ImGui::Button("Export Props")) {
+                ImGui::Text("Input Save Map Name: ");
 
-                    size_t iPrototypeCnt = m_ModelPrototypeTags.size();
+                ImGui::SameLine();
+                ImGui::InputText("##Input_MapName", m_szMapFileName, IM_ARRAYSIZE(m_szMapFileName));
 
-                    for (size_t i = 0; i < iPrototypeCnt; ++i)
-                    {
-                        CModel* pModelCom = dynamic_cast<CModel*>(m_pGameInstance->Get_Prototype(m_pGameInstance->Get_LevelID(), m_ModelPrototypeTags[i]));
-                        if (pModelCom != nullptr)
-                        {
-                            pModelCom->Save_Model_ToBinary(m_szModelSavePath);
-                        }
-                    }
-                    ImGui::OpenPopup("EXPORT_PROPS_DONE");
+                if (ImGui::Button("Export Maps")) {
+                    /* SAVE MAP */
+                    m_MapConverter->Export_MapFiles(m_pGameInstance->ToWstring(m_szMapFileName).c_str(), m_pGameInstance->ToWstring(m_szMapSavePath).c_str(), LEVEL::EDIT);
+                    ImGui::OpenPopup("EXPORT_MAPS_DONE");
                 }
 
-                if (ImGui::BeginPopupModal("EXPORT_PROPS_DONE", 0, ImGuiWindowFlags_NoResize))
+                if (ImGui::BeginPopupModal("EXPORT_MAPS_DONE", 0, ImGuiWindowFlags_NoResize))
                 {
-                    Align_Center("Export Props has Done");
-                    ImGui::Text("Export Props has Done");
+                    Align_Center("Export Map has Done");
+                    ImGui::Text("Export Map has Done");
 
                     ImGui::Dummy(ImVec2{ 0.f, 10.f });
 
@@ -761,4 +843,5 @@ void CLevel_Edit::Free()
     __super::Free();
 
     Safe_Release(m_pEditCamera);
+    Safe_Release(m_MapConverter);
 }

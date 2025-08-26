@@ -137,7 +137,7 @@ HRESULT CMainApp::Ready_Prototypes()
 	/* For.Prototype_Component_Model_Props */
 	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_Props"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Props/PlantA.fbx", PreTransformMatrix))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/StaticObjects/Props/Props.fbx", PreTransformMatrix))))
 		return E_FAIL;
 	
 	/* For.Prototype_Component_Model_Fiona */

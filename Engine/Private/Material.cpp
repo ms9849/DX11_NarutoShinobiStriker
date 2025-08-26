@@ -73,48 +73,104 @@ HRESULT CMaterial::Initialize(const _char* pModelFilePath, const aiMaterial* pAI
 	return S_OK;
 }
 
-HRESULT CMaterial::Initialize(const _tchar* pBinaryFilePath, const IMPORT_MATERIAL_DESC& MaterialDesc)
+HRESULT CMaterial::Initialize(HANDLE hHandle, DWORD* dwByte, const _tchar* pBinaryFilePath)
 {
+	if (FAILED(Load_Materail_FromBinary(hHandle, dwByte, pBinaryFilePath)))
+		return E_FAIL;
+	return S_OK;
+}
+
+HRESULT CMaterial::Bind_SRV(CShader* pShader, const _char* pConstantName, aiTextureType eType, _uint iTextureIndex)
+{
+	/* 출력할 때도 예외처리. */
+	if (iTextureIndex >= m_SRVs[eType].size())
+		return S_OK;
+
+	return pShader->Bind_SRV(pConstantName, m_SRVs[eType][iTextureIndex]);
+}
+
+HRESULT CMaterial::Save_Material_ToBinary(HANDLE hHandle, DWORD* dwByte, const aiMaterial* pAIMaterial)
+{
+	EXPORT_MATERIAL_DESC MaterialDesc;
+
 	for (_uint i = 0; i < AI_TEXTURE_TYPE_MAX; ++i)
 	{
-		m_iNumSRVs[i] = MaterialDesc.iNumSRVs[i];
-		m_SRVs[i].reserve(m_iNumSRVs[i]);
+		/* 텍스쳐 갯수 저장 */
+		MaterialDesc.iNumSRVs[i] = pAIMaterial->GetTextureCount(static_cast<aiTextureType>(i));
+		WriteFile(hHandle, &MaterialDesc.iNumSRVs[i], sizeof(_uint), dwByte, nullptr);
 
-		for (_uint j = 0; j < m_iNumSRVs[i]; ++j)
+		/* 텍스쳐 경로 저장 */
+		for (_uint j = 0; j < MaterialDesc.iNumSRVs[i]; ++j)
 		{
-			if (m_iNumSRVs[i] == 0)
+			if (0 == MaterialDesc.iNumSRVs[i])
 				continue;
 
-			_char szDrive[MAX_PATH] = {};
-			_char szDir[MAX_PATH] = {};
+			aiString strTexturePath;
+
 			_char szFileName[MAX_PATH] = {};
 			_char szEXT[MAX_PATH] = {};
 
-			_char szModelFilePath[MAX_PATH] = {};
-			_char szTextureFilePath[MAX_PATH] = {};
+			/* 만약 텍스쳐가 존재하지 않는다면 continue */
+			pAIMaterial->GetTexture(static_cast<aiTextureType>(i), j, &strTexturePath);
 
+			_char szTextureFilePath[MAX_PATH] = {};
 			/* 드라이브 경로 / 파일 경로 / 파일 이름 / 파일 확장자 4개로 나뉘는걸 유의할 것 */
 
-			WideCharToMultiByte(CP_ACP, 0, pBinaryFilePath, (_int)_tcslen(pBinaryFilePath),
+			/* 텍스쳐 파일 경로로부터 이름, 확장자를 가져온다. */
+			_splitpath_s(strTexturePath.data, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szEXT, MAX_PATH);
+
+			strcat_s(szTextureFilePath, szFileName);
+			strcat_s(szTextureFilePath, szEXT);
+
+			WriteFile(hHandle, szTextureFilePath, MAX_PATH, dwByte, nullptr);
+		}
+	}
+
+	return S_OK;
+}
+
+HRESULT CMaterial::Load_Materail_FromBinary(HANDLE hHandle, DWORD* dwByte, const _tchar* pBinaryFilePath)
+{
+	for (_uint i = 0; i < AI_TEXTURE_TYPE_MAX; ++i)
+	{
+		if (false == ReadFile(hHandle, &m_iNumSRVs[i], sizeof(_uint), dwByte, nullptr))
+			return E_FAIL;
+
+		/* 보통은 1개만 있으니까.. */
+		_char szTextureName[MAX_PATH] = {};
+		_char szModelFilePath[MAX_PATH] = {};
+		_char szTextureFilePath[MAX_PATH] = {};
+
+		_char szDriveName[MAX_PATH] = {};
+		_char szDirName[MAX_PATH] = {};
+		_char szFileName[MAX_PATH] = {};
+		_char szEXT[MAX_PATH] = {};
+
+		for (_uint j = 0; j < m_iNumSRVs[i]; ++j)
+		{
+			if (0 == m_iNumSRVs[i])
+				continue;
+
+			if (false == ReadFile(hHandle, &szTextureName, MAX_PATH, dwByte, nullptr))
+				return E_FAIL;
+
+			WideCharToMultiByte(CP_ACP, 0, pBinaryFilePath, -1,
 				szModelFilePath, MAX_PATH, NULL, NULL);
 
-			/* 모델 파일 경로로부터 모델의 드라이브 ,파일 경로를 가져온다. */
-			_splitpath_s(szModelFilePath, szDrive, MAX_PATH, szDir, MAX_PATH, nullptr, 0, nullptr, 0);
+			_splitpath_s(szModelFilePath, szDriveName, MAX_PATH, szDirName, MAX_PATH, nullptr, 0, nullptr, 0);
+			_splitpath_s(szTextureName, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szEXT, MAX_PATH);
 
-			/* 텍스쳐 파일 경로로부터 이름, 확장자를 가져온다. */
+			ID3D11ShaderResourceView* pSRV = { nullptr };
 
-			_splitpath_s(&MaterialDesc.szTexturePath[i][j], nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szEXT, MAX_PATH);
 
-			strcpy_s(szTextureFilePath, szDrive);
-			strcat_s(szTextureFilePath, szDir);
+			strcat_s(szTextureFilePath, szDriveName);
+			strcat_s(szTextureFilePath, szDirName);
 			strcat_s(szTextureFilePath, szFileName);
 			strcat_s(szTextureFilePath, szEXT);
 
 			_tchar szPerfectTextureFilePath[MAX_PATH] = {};
 			MultiByteToWideChar(CP_ACP, 0, szTextureFilePath, (_int)strlen(szTextureFilePath),
 				szPerfectTextureFilePath, MAX_PATH);
-
-			ID3D11ShaderResourceView* pSRV = { nullptr };
 
 			/* 텍스쳐 로딩과 동일. 확장자가 DDS냐, TGA냐, 혹은 그 외의 것이냐에 따라 처리 해줌.*/
 			HRESULT hr;
@@ -136,16 +192,7 @@ HRESULT CMaterial::Initialize(const _tchar* pBinaryFilePath, const IMPORT_MATERI
 	return S_OK;
 }
 
-HRESULT CMaterial::Bind_SRV(CShader* pShader, const _char* pConstantName, aiTextureType eType, _uint iTextureIndex)
-{
-	/* 출력할 때도 예외처리. */
-	if (iTextureIndex >= m_SRVs[eType].size())
-		return S_OK;
-
-	return pShader->Bind_SRV(pConstantName, m_SRVs[eType][iTextureIndex]);
-}
-
-CMaterial* CMaterial::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* pModelFilePath, const aiMaterial* pAIMaterial)
+CMaterial* CMaterial::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const _char * pModelFilePath, const aiMaterial * pAIMaterial)
 {
 	CMaterial* pInstance = new CMaterial(pDevice, pContext);
 
@@ -158,16 +205,15 @@ CMaterial* CMaterial::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContex
 	return pInstance;
 }
 
-CMaterial* CMaterial::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pBinaryFilePath, const IMPORT_MATERIAL_DESC& MaterialDesc)
+CMaterial* CMaterial::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE hHandle, DWORD* dwByte, const _tchar* pBinaryFilePath)
 {
 	CMaterial* pInstance = new CMaterial(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize(pBinaryFilePath, MaterialDesc)))
+	if (FAILED(pInstance->Initialize(hHandle, dwByte, pBinaryFilePath)))
 	{
 		MSG_BOX("Create Failed : Material By Binary");
 		Safe_Release(pInstance);
 	}
-
 
 	return pInstance;
 }
