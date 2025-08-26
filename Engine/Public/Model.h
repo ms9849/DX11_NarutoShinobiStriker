@@ -44,14 +44,13 @@ public:
 		return m_iNumMeshes;
 	}
 
-	_wstring Get_MeshName(_uint iIdx) const {
-		return m_MeshNames[iIdx];
-	}
+	_wstring Get_MeshName(_uint iIdx) const;
 
 	_int Get_BoneIndex(const _char* pBoneName) const;
 
 public:
 	HRESULT Save_Model_ToBinary(const _char* pModelSavePath);
+	HRESULT Load_Model_FromBinary(const _tchar* pModelFilePath);
 
 public:
 	virtual HRESULT Initialize_Prototype(MODEL eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix);
@@ -83,18 +82,13 @@ private:
 	_bool					m_isBinary = { false };
 	_char					m_szModelName[MAX_PATH];
 
-	vector<class CBone*>		m_Bones;
+	_uint					m_iNumBones;
+	vector<class CBone*>	m_Bones;
 
 private:
 	HRESULT Ready_Meshes();
 	HRESULT Ready_Materials(const _char* pModelFilePath);
 	HRESULT Ready_Bones(const aiNode* pAINode, _int iParentIndex);
-
-	HRESULT Load_NonAnimModel_Binary(const _tchar* pModelFilePath);
-	HRESULT Save_NonAnimModel_ToBinary(const _char* pModelSavePath);
-
-	HRESULT Load_AnimModel_Binary();
-	HRESULT Save_AnimModel_ToBinary(const _char* pModelSavePath);
 
 public:
 	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, MODEL eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix = XMMatrixIdentity());

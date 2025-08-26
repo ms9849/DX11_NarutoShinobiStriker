@@ -26,7 +26,7 @@ public:
 	/* 이 레벨에서 쓰기위한 객체들을 생성한다. */
 	HRESULT Ready_Layer_Camera(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_BackGround(const _wstring& strLayerTag);
-	HRESULT Ready_Layer_StaticObjects(const _wstring& strLayerTag);
+	HRESULT Ready_Layer_Props(const _wstring& strLayerTag);
 public:
 	void Editor_GUI();
 
@@ -52,17 +52,23 @@ private:
 	_float4					m_vPosition = { 0.f, 0.f, 0.f, 1.f };
 
 	_uint					m_iSelectedMeshNum = {};
-	_wstring				m_strLayerMapObjectTag = { TEXT("Layer_StaticObjects") };
+	_wstring				m_strLayerMapObjectTag = { TEXT("Layer_Props") };
 	_float					m_fMouseActionSpeed = { 1.f };
 	_char					m_szClonePrototype[256] = {};
 	_char					m_szMapSavePath[MAX_PATH] = {};
 	_char					m_szModelSavePath[MAX_PATH] = {};
 	vector<_wstring>		m_ModelPrototypeTags = {};
 
-	class CGameObject* m_pSelectedGameObject = { nullptr };
-	class CTransform* m_pSelectedTransform = { nullptr };
+	class CGameObject*		m_pSelectedGameObject = { nullptr };
+	class CTransform*		m_pSelectedTransform = { nullptr };
 	_uint					m_iSelectedObjectID = {};
+
+	_wstring				m_strSelectedMapName = {};
+	_char					m_szMapFileName[MAX_PATH] = {};
+	_char					m_szLoadMapFileName[MAX_PATH] = {};
 #pragma endregion
+
+	class CMapConverter*		m_MapConverter = { nullptr };
 public:
 	static CLevel_Edit* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID);
 	virtual void Free() override;

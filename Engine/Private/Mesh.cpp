@@ -1,5 +1,6 @@
 #include "Mesh.h"
 
+#include "GameInstance.h"
 #include "Model.h"
 #include "Bone.h"
 #include "Shader.h"
@@ -14,6 +15,11 @@ CMesh::CMesh(const CMesh& rhs)
 {
 }
 
+_wstring CMesh::Get_Name() const
+{
+    return m_pGameInstance->ToWstring(string(m_szName));
+}
+
 HRESULT CMesh::Initialize_Prototype(MODEL eType, const class CModel* pModel, const aiMesh* pAIMesh, _fmatrix PreTransformMatrix)
 {
     strcpy_s(m_szName, pAIMesh->mName.data);
@@ -22,7 +28,6 @@ HRESULT CMesh::Initialize_Prototype(MODEL eType, const class CModel* pModel, con
     m_iMaterialIndex = pAIMesh->mMaterialIndex;
     m_iNumVertexBuffers = 1;
     m_iNumVertices = pAIMesh->mNumVertices;
-    m_iVertexStride = sizeof(VTXMESH);
 
     m_iNumIndices = pAIMesh->mNumFaces * 3;
     m_iIndexStride = 4;
@@ -75,100 +80,16 @@ HRESULT CMesh::Initialize_Prototype(MODEL eType, const class CModel* pModel, con
     return S_OK;
 }
 
-/* 고칠게 많다. 본 정보도 넣어줘야 하고.. */
-HRESULT CMesh::Initialize_Prototype(MODEL eType, const class CModel* pModel, const IMPORT_MESH_DESC& Desc, _fmatrix PreTransformMatrix)
+HRESULT CMesh::Initialize_Prototype(MODEL eType, const CModel* pModel, HANDLE hHandle, DWORD* dwByte, _fmatrix PreTransformMatrix)
 {
-    /* 몇 번째 머테리얼을 가져다 쓰는지 저장하기 위함. */
-    m_iMaterialIndex = Desc.iMaterialIndex;
     m_iNumVertexBuffers = 1;
-    m_iNumVertices = Desc.iNumVertices;
-    m_iVertexStride = sizeof(VTXMESH);
-
-    m_iNumIndices = Desc.iNumFaces * 3;
     m_iIndexStride = 4;
 
     m_eIndexFormat = DXGI_FORMAT_R32_UINT;
     m_ePrimitive = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
-#pragma region VERTEX
-
-    HRESULT hr = MODEL::ANIM == eType ?
-        Ready_VertexBuffer_For_Anim_Binary(pModel, Desc) :
-        Ready_VertexBuffer_For_NonAnim_Binary(Desc, PreTransformMatrix);
-
-    if (FAILED(hr))
+    if (FAILED(Load_Mesh_FromBinary(hHandle, dwByte, eType)))
         return E_FAIL;
-
-    D3D11_BUFFER_DESC VBDesc;
-    VBDesc.ByteWidth = m_iNumVertices * m_iVertexStride;
-    VBDesc.Usage = D3D11_USAGE_DEFAULT;
-    VBDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-    VBDesc.StructureByteStride = m_iVertexStride;
-    VBDesc.CPUAccessFlags = 0;
-    VBDesc.MiscFlags = 0;
-
-    VTXMESH* pVertices = new VTXMESH[m_iNumVertices];
-    ZeroMemory(pVertices, sizeof(VTXMESH) * m_iNumVertices);
-
-    m_pVertexPositions = new _float3[m_iNumVertices];
-    ZeroMemory(m_pVertexPositions, sizeof(_float3) * m_iNumVertices);
-
-    for (_uint i = 0; i < m_iNumVertices; ++i)
-    {
-        memcpy(&pVertices[i].vPosition, &Desc.pVertices[i].vPosition, sizeof(_float3));
-        XMStoreFloat3(&pVertices[i].vPosition, XMVector3TransformCoord(XMLoadFloat3(&pVertices[i].vPosition), PreTransformMatrix));
-
-        memcpy(&pVertices[i].vNormal, &Desc.pVertices[i].vNormal, sizeof(_float3));
-        XMStoreFloat3(&pVertices[i].vNormal, XMVector3Normalize(XMVector3TransformNormal(XMLoadFloat3(&pVertices[i].vNormal), PreTransformMatrix)));
-
-        memcpy(&pVertices[i].vTangent, &Desc.pVertices[i].vTangent, sizeof(_float3));
-        XMStoreFloat3(&pVertices[i].vTangent, XMVector3Normalize(XMVector3TransformNormal(XMLoadFloat3(&pVertices[i].vTangent), PreTransformMatrix)));
-
-        memcpy(&pVertices[i].vTexcoord, &Desc.pVertices[i].vTexcoord, sizeof(_float2));
-
-    }
-
-    D3D11_SUBRESOURCE_DATA	InitialVBData{};
-    InitialVBData.pSysMem = pVertices;
-
-    if (FAILED(m_pDevice->CreateBuffer(&VBDesc, &InitialVBData, &m_pVB)))
-        return E_FAIL;
-
-    Safe_Delete_Array(pVertices);
-#pragma endregion
-
-
-#pragma region INDEX
-    D3D11_BUFFER_DESC IBDesc;
-    IBDesc.ByteWidth = m_iNumIndices * m_iIndexStride;
-    IBDesc.Usage = D3D11_USAGE_DEFAULT;
-    IBDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-    IBDesc.StructureByteStride = m_iIndexStride;
-    IBDesc.CPUAccessFlags = 0;
-    IBDesc.MiscFlags = 0;
-
-    _uint* pIndices = new _uint[m_iNumIndices];
-    ZeroMemory(pIndices, sizeof(_uint) * m_iNumIndices);
-
-    _uint iNumIndices = { 0 };
-
-    for (_uint i = 0; i < Desc.iNumFaces; ++i)
-    {
-        memcpy(&pIndices[iNumIndices], &Desc.pIndices[iNumIndices], sizeof(_uint) * 3);
-
-        iNumIndices += 3;
-    }
-
-    D3D11_SUBRESOURCE_DATA InitialIBData{};
-    InitialIBData.pSysMem = pIndices;
-
-    if (FAILED(m_pDevice->CreateBuffer(&IBDesc, &InitialIBData, &m_pIB)))
-        return E_FAIL;
-
-    Safe_Delete_Array(pIndices);
-#pragma endregion
-
-
     return S_OK;
 }
 
@@ -195,10 +116,189 @@ HRESULT CMesh::Bind_BoneMatrices(const vector<class CBone*>& Bones, CShader* pSh
     return pShader->Bind_Matrices(pConstantName, m_pBoneMatrices, m_iNumBones);
 }
 
+HRESULT CMesh::Save_Mesh_ToBinary(HANDLE hHandle, DWORD* dwByte, const aiMesh* pAIMesh) const
+{
+    /*
+    * pBoneMatrices는 할당만 해주면 됨. (m_iNumBones에 맞춰서
+    * 버텍스 포지션도 마찬가지로 m_pVB에서 받아오면 됨
+    */
+
+    if (false == WriteFile(hHandle, &m_szName, MAX_PATH, dwByte, nullptr))
+        return E_FAIL;
+
+    if (false == WriteFile(hHandle, &m_iMaterialIndex, sizeof(_uint), dwByte, nullptr))
+        return E_FAIL;
+
+    if (false == WriteFile(hHandle, &m_iNumBones, sizeof(_uint), dwByte, nullptr))
+        return E_FAIL;
+
+    for(_uint i = 0; i < m_iNumBones; ++i)
+        if (false == WriteFile(hHandle, &m_BoneIndices[i], sizeof(_uint), dwByte, nullptr))
+            return E_FAIL;
+
+    for(_uint i = 0; i < m_iNumBones; ++i)
+        if (false == WriteFile(hHandle, &m_OffsetMatrices[i], sizeof(_float4x4), dwByte, nullptr))
+            return E_FAIL;
+
+    if (false == WriteFile(hHandle, &m_iVertexStride, sizeof(_uint), dwByte, nullptr))
+        return E_FAIL;
+
+    if (false == WriteFile(hHandle, &m_iNumVertices, sizeof(_uint), dwByte, nullptr))
+        return E_FAIL;
+
+    if (false == WriteFile(hHandle, &m_iNumIndices, sizeof(_uint), dwByte, nullptr))
+        return E_FAIL;
+
+    if (false == WriteFile(hHandle, &m_iIndexStride, sizeof(_uint), dwByte, nullptr))
+        return E_FAIL;
+
+    if (false == WriteFile(hHandle, &m_eIndexFormat, sizeof(DXGI_FORMAT), dwByte, nullptr))
+        return E_FAIL;
+
+    /* 정점 정보 저장 */
+
+    D3D11_BUFFER_DESC VBDesc{};
+    m_pVB->GetDesc(&VBDesc);
+
+    D3D11_BUFFER_DESC StagingDesc = VBDesc;
+    StagingDesc.Usage = D3D11_USAGE_STAGING;
+    StagingDesc.BindFlags = 0; 
+    StagingDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+    StagingDesc.MiscFlags = 0;
+
+    ID3D11Buffer* pStagingVB = {};
+    if (FAILED(m_pDevice->CreateBuffer(&StagingDesc, nullptr, &pStagingVB)))
+        return E_FAIL;
+
+    m_pContext->CopyResource(pStagingVB, m_pVB);
+
+    D3D11_MAPPED_SUBRESOURCE StagingData{};
+    if(FAILED(m_pContext->Map(pStagingVB, 0, D3D11_MAP_READ, 0, &StagingData)))
+        return E_FAIL;
+
+    WriteFile(hHandle, StagingData.pData, VBDesc.ByteWidth, dwByte, nullptr);
+
+
+    /* 인덱스 정보 저장 */
+    _uint Indices[3];
+    for (_uint j = 0; j < m_iNumIndices / 3; ++j)
+    {
+        Indices[0] = pAIMesh->mFaces[j].mIndices[0];
+        Indices[1] = pAIMesh->mFaces[j].mIndices[1];
+        Indices[2] = pAIMesh->mFaces[j].mIndices[2];
+
+        WriteFile(hHandle, &Indices, sizeof(_uint) * 3, dwByte, nullptr);
+    }
+
+
+    return S_OK;
+}
+
+HRESULT CMesh::Load_Mesh_FromBinary(HANDLE hHandle, DWORD* dwByte, MODEL eType)
+{
+    /*
+    * pBoneMatrices는 할당만 해주면 됨. (m_iNumBones에 맞춰서
+    * 버텍스 포지션도 마찬가지로 정점 정보에서 받아오면 됨
+    */
+
+    if (false == ReadFile(hHandle, &m_szName, MAX_PATH, dwByte, nullptr))
+        return E_FAIL;
+
+    if (false == ReadFile(hHandle, &m_iMaterialIndex, sizeof(_uint), dwByte, nullptr))
+        return E_FAIL;
+
+    if (false == ReadFile(hHandle, &m_iNumBones, sizeof(_uint), dwByte, nullptr))
+        return E_FAIL;
+
+    m_pBoneMatrices = new _float4x4[m_iNumBones];
+
+    m_BoneIndices.reserve(m_iNumBones);
+    for (_uint i = 0; i < m_iNumBones; ++i)
+    {
+        _uint iData;
+
+        if (false == ReadFile(hHandle, &iData, sizeof(_uint), dwByte, nullptr))
+            return E_FAIL;
+
+        m_BoneIndices.push_back(iData);
+    }
+
+    m_OffsetMatrices.reserve(m_iNumBones);
+    for (_uint i = 0; i < m_iNumBones; ++i)
+    {
+        _float4x4 Matrix;
+
+        if (false == ReadFile(hHandle, &Matrix, sizeof(_float4x4), dwByte, nullptr))
+            return E_FAIL;
+
+        m_OffsetMatrices.push_back(Matrix);
+    }
+
+    if (false == ReadFile(hHandle, &m_iVertexStride, sizeof(_uint), dwByte, nullptr))
+        return E_FAIL;
+
+    if (false == ReadFile(hHandle, &m_iNumVertices, sizeof(_uint), dwByte, nullptr))
+        return E_FAIL;
+
+    if (false == ReadFile(hHandle, &m_iNumIndices, sizeof(_uint), dwByte, nullptr))
+        return E_FAIL;
+
+    if (false == ReadFile(hHandle, &m_iIndexStride, sizeof(_uint), dwByte, nullptr))
+        return E_FAIL;
+
+    if (false == ReadFile(hHandle, &m_eIndexFormat, sizeof(DXGI_FORMAT), dwByte, nullptr))
+        return E_FAIL;
+
+#pragma region VERTEX
+    /* 정점 정보 로딩 */
+    HRESULT hr = m_iVertexStride == sizeof(VTXANIMMESH) ? 
+        Ready_VertexBuffer_For_Anim_Binary(hHandle, dwByte) : Ready_VertexBuffer_For_NonAnim_Binary(hHandle, dwByte);
+
+    if (FAILED(hr))
+        return E_FAIL;
+#pragma endregion
+
+#pragma region INDEX
+    D3D11_BUFFER_DESC IBDesc;
+    IBDesc.ByteWidth = m_iNumIndices * m_iIndexStride;
+    IBDesc.Usage = D3D11_USAGE_DEFAULT;
+    IBDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+    IBDesc.StructureByteStride = m_iIndexStride;
+    IBDesc.CPUAccessFlags = 0;
+    IBDesc.MiscFlags = 0;
+
+    _uint* pIndices = new _uint[m_iNumIndices];
+    ZeroMemory(pIndices, sizeof(_uint) * m_iNumIndices);
+
+    _uint iNumIndices = {};
+    _uint Indices[3];
+
+    /* 인덱스 정보 로딩 */
+    for (_uint j = 0; j < m_iNumIndices / 3; ++j)
+    {
+        if(FAILED(ReadFile(hHandle, &Indices, sizeof(_uint) * 3, dwByte, nullptr)))
+            return E_FAIL;
+
+        pIndices[iNumIndices++] = Indices[0];
+        pIndices[iNumIndices++] = Indices[1];
+        pIndices[iNumIndices++] = Indices[2];
+    }
+
+    D3D11_SUBRESOURCE_DATA InitialIBData{};
+    InitialIBData.pSysMem = pIndices;
+
+    if (FAILED(m_pDevice->CreateBuffer(&IBDesc, &InitialIBData, &m_pIB)))
+        return E_FAIL;
+
+    Safe_Delete_Array(pIndices);
+#pragma endregion
+    return S_OK;
+}
+
 HRESULT CMesh::Ready_VertexBuffer_For_NonAnim_Assimp(const aiMesh* pAIMesh, _fmatrix PreTransformMatrix)
 {
     m_iVertexStride = sizeof(VTXMESH);
-    D3D11_BUFFER_DESC		VBDesc{};
+    D3D11_BUFFER_DESC	VBDesc;
     VBDesc.ByteWidth = m_iVertexStride * m_iNumVertices;
     VBDesc.Usage = D3D11_USAGE_DEFAULT;
     VBDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
@@ -294,27 +394,29 @@ HRESULT CMesh::Ready_VertexBuffer_For_Anim_Assimp(const CModel* pModel, const ai
 
             if (0.f == pVertices[AIWeight.mVertexId].vBlendWeight.x)
             {
-                pVertices[AIWeight.mVertexId].vBlendIndex.x = (_uint)i;
+                pVertices[AIWeight.mVertexId].vBlendIndex.x = i;
                 pVertices[AIWeight.mVertexId].vBlendWeight.x = AIWeight.mWeight;
             }
 
             else if (0.f == pVertices[AIWeight.mVertexId].vBlendWeight.y)
             {
-                pVertices[AIWeight.mVertexId].vBlendIndex.y = (_uint)i;
+                pVertices[AIWeight.mVertexId].vBlendIndex.y = i;
                 pVertices[AIWeight.mVertexId].vBlendWeight.y = AIWeight.mWeight;
             }
 
             else if (0.f == pVertices[AIWeight.mVertexId].vBlendWeight.z)
             {
-                pVertices[AIWeight.mVertexId].vBlendIndex.z = (_uint)i;
+                pVertices[AIWeight.mVertexId].vBlendIndex.z = i;
                 pVertices[AIWeight.mVertexId].vBlendWeight.z = AIWeight.mWeight;
             }
 
             else
             {
-                pVertices[AIWeight.mVertexId].vBlendIndex.w = (_uint)i;
+                pVertices[AIWeight.mVertexId].vBlendIndex.w = i;
                 pVertices[AIWeight.mVertexId].vBlendWeight.w = AIWeight.mWeight;
             }
+            /*test */
+            int a = 10;
         }
     }
 
@@ -338,13 +440,85 @@ HRESULT CMesh::Ready_VertexBuffer_For_Anim_Assimp(const CModel* pModel, const ai
     return S_OK;
 }
 
-HRESULT CMesh::Ready_VertexBuffer_For_NonAnim_Binary(const IMPORT_MESH_DESC& Desc, _fmatrix PreTransformMatrix)
+HRESULT CMesh::Ready_VertexBuffer_For_NonAnim_Binary(HANDLE hHandle, DWORD* dwByte)
 {
+    m_iVertexStride = sizeof(VTXMESH);
+    D3D11_BUFFER_DESC		VBDesc{};
+    VBDesc.ByteWidth = m_iVertexStride * m_iNumVertices;
+    VBDesc.Usage = D3D11_USAGE_DEFAULT;
+    VBDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+    VBDesc.StructureByteStride = m_iVertexStride;
+    VBDesc.CPUAccessFlags = 0;
+    VBDesc.MiscFlags = 0;
+
+    VTXMESH* pVertices = new VTXMESH[m_iNumVertices];
+    ZeroMemory(pVertices, sizeof(VTXMESH) * m_iNumVertices);
+
+    m_pVertexPositions = new _float3[m_iNumVertices];
+    ZeroMemory(m_pVertexPositions, sizeof(_float3) * m_iNumVertices);
+
+    for (_uint i = 0; i < m_iNumVertices; ++i)
+    {
+        VTXMESH VtxMesh;
+        if(false == (ReadFile(hHandle, &VtxMesh, sizeof(VTXMESH), dwByte, nullptr)))
+            return E_FAIL;
+
+        pVertices[i].vPosition = m_pVertexPositions[i] = VtxMesh.vPosition;
+        pVertices[i].vNormal = VtxMesh.vNormal;
+        pVertices[i].vTangent = VtxMesh.vTangent;
+        pVertices[i].vTexcoord = VtxMesh.vTexcoord;
+    }
+
+    D3D11_SUBRESOURCE_DATA	InitialVBData{};
+    InitialVBData.pSysMem = pVertices;
+
+    if (FAILED(m_pDevice->CreateBuffer(&VBDesc, &InitialVBData, &m_pVB)))
+        return E_FAIL;
+
+    Safe_Delete_Array(pVertices);
+
     return S_OK;
 }
 
-HRESULT CMesh::Ready_VertexBuffer_For_Anim_Binary(const CModel* pModel, const IMPORT_MESH_DESC& Desc)
+HRESULT CMesh::Ready_VertexBuffer_For_Anim_Binary(HANDLE hHandle, DWORD* dwByte)
 {
+    m_iVertexStride = sizeof(VTXANIMMESH);
+    D3D11_BUFFER_DESC		VBDesc{};
+    VBDesc.ByteWidth = m_iVertexStride * m_iNumVertices;
+    VBDesc.Usage = D3D11_USAGE_DEFAULT;
+    VBDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+    VBDesc.StructureByteStride = m_iVertexStride;
+    VBDesc.CPUAccessFlags = 0;
+    VBDesc.MiscFlags = 0;
+
+    VTXANIMMESH* pVertices = new VTXANIMMESH[m_iNumVertices];
+    ZeroMemory(pVertices, sizeof(VTXANIMMESH) * m_iNumVertices);
+
+    m_pVertexPositions = new _float3[m_iNumVertices];
+    ZeroMemory(m_pVertexPositions, sizeof(_float3) * m_iNumVertices);
+
+    for (_uint i = 0; i < m_iNumVertices; ++i)
+    {
+        VTXANIMMESH VtxAnimMesh;
+        if (false == (ReadFile(hHandle, &VtxAnimMesh, sizeof(VTXANIMMESH), dwByte, nullptr)))
+            return E_FAIL;
+
+        pVertices[i].vPosition = m_pVertexPositions[i] = VtxAnimMesh.vPosition;
+        pVertices[i].vNormal = VtxAnimMesh.vNormal;
+        pVertices[i].vTangent = VtxAnimMesh.vTangent;
+        pVertices[i].vTexcoord = VtxAnimMesh.vTexcoord;
+        pVertices[i].vBlendIndex = VtxAnimMesh.vBlendIndex;
+        pVertices[i].vBlendWeight = VtxAnimMesh.vBlendWeight;
+    }
+
+    D3D11_SUBRESOURCE_DATA	InitialVBData{};
+    InitialVBData.pSysMem = pVertices;
+
+    if (FAILED(m_pDevice->CreateBuffer(&VBDesc, &InitialVBData, &m_pVB)))
+        return E_FAIL;
+
+    Safe_Delete_Array(pVertices);
+
     return S_OK;
 }
 
@@ -362,11 +536,11 @@ CMesh* CMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, MODEL
     return pInstance;
 }
 
-CMesh* CMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, MODEL eType, const class CModel* pModel, const IMPORT_MESH_DESC& Desc, _fmatrix PreTransformMatrix)
+CMesh* CMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, MODEL eType, const CModel* pModel, HANDLE hHandle, DWORD* dwByte, _fmatrix PreTransformMatrix)
 {
     CMesh* pInstance = new CMesh(pDevice, pContext);
 
-    if (FAILED(pInstance->Initialize_Prototype(eType, pModel, Desc, PreTransformMatrix)))
+    if (FAILED(pInstance->Initialize_Prototype(eType, pModel, hHandle, dwByte, PreTransformMatrix)))
     {
         MSG_BOX("Create Failed : Mesh By Binary");
         Safe_Release(pInstance);

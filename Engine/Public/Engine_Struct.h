@@ -88,27 +88,11 @@ namespace Engine
 	\________|\__|  \__|\__|       \______/ \__|  \__|  \__|                           
 	*/
 
-	/* 메쉬 하나의 정보 */
-	typedef struct tagExportMeshDesc {
-		unsigned int iMaterialIndex;
-		unsigned int iNumVertices;
-		unsigned int iNumFaces;
-
-		//VTXMESH* pVertices;
-		//unsigned int* pIndices;
-	} EXPORT_MESH_DESC;
-
 	/* 머테리얼 하나의 정보. */
 	typedef struct tagExportMaterialDesc {
 		unsigned int iNumSRVs[AI_TEXTURE_TYPE_MAX];
 	} EXPORT_MATERIAL_DESC;
 
-	/* 모델 하나의 정보. */
-	typedef struct tagExportModelDesc {
-		unsigned int iNumMaterials;
-		unsigned int iNumMeshes;
-
-	} EXPORT_MODEL_DESC;
 
 	/*
 	$$$$$$\ $$\      $$\ $$$$$$$\   $$$$$$\  $$$$$$$\ $$$$$$$$\ 
@@ -120,15 +104,6 @@ namespace Engine
 	$$$$$$\ $$ | \_/ $$ |$$ |       $$$$$$  |$$ |  $$ |  $$ |   
 	\______|\__|     \__|\__|       \______/ \__|  \__|  \__|   
 	*/
-	/* 메쉬 하나의 읽어들일 정보 */
-	typedef struct tagImportMeshDesc {
-		unsigned int iMaterialIndex;
-		unsigned int iNumVertices;
-		unsigned int iNumFaces;
-
-		VTXMESH* pVertices;
-		unsigned int* pIndices;
-	} IMPORT_MESH_DESC;
 
 	/* 머테리얼 하나의 읽어들일 정보. */
 	typedef struct tagImportMaterialDesc {
@@ -136,12 +111,6 @@ namespace Engine
 		char szTexturePath[AI_TEXTURE_TYPE_MAX][MAX_PATH];
 	} IMPORT_MATERIAL_DESC;
 
-	/* 모델 하나의 읽어들일 정보. */
-	typedef struct tagImportModelDesc {
-		unsigned int iNumMaterials;
-		unsigned int iNumMeshes;
-
-	} IMPORT_MODEL_DESC;
 }
 
 #endif // Engine_Struct_h__

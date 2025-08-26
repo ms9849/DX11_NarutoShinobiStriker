@@ -20,6 +20,10 @@ public:
 
 public:
 	HRESULT Initialize(const aiNode* pAINode, _int iParentIndex);
+	HRESULT Initialize(HANDLE hHandle, DWORD* dwByte);
+
+	HRESULT Save_Bone_ToBinary(HANDLE hHandle, DWORD* dwByte);
+	HRESULT Load_Bone_FromBinary(HANDLE hHandle, DWORD* dwByte);
 	void Update_CombinedTransformationMatrix(const vector<CBone*>& Bones, _fmatrix PreTransformMatrix);
 
 private:
@@ -31,6 +35,7 @@ private:
 
 public:
 	static CBone* Create(const aiNode* pAINode, _int iParentIndex);
+	static CBone* Create(HANDLE hHandle, DWORD* dwByte);
 	virtual void Free() override;
 };
 

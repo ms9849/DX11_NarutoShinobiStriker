@@ -46,6 +46,9 @@
     <Filter Include="02. GAMEOBJECTS\MODEL\PROPS">
       <UniqueIdentifier>{8dfdeb24-8de6-4384-ad24-dd832c57575b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. LEVELS\MapImporter">
+      <UniqueIdentifier>{3766ec47-4f62-4148-be89-c6cf2cb0638f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Editor.h">
@@ -87,6 +90,9 @@
     <ClInclude Include="..\Public\Props.h">
       <Filter>02. GAMEOBJECTS\MODEL\PROPS</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\MapConverter.h">
+      <Filter>01. LEVELS\MapImporter</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Editor.cpp">
@@ -115,6 +121,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Props.cpp">
       <Filter>02. GAMEOBJECTS\MODEL\PROPS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\MapConverter.cpp">
+      <Filter>01. LEVELS\MapImporter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -6,6 +6,8 @@ texture2D g_DiffuseTexture;
 sampler DefaultSampler = sampler_state
 {
     Filter = MIN_MAG_MIP_LINEAR;
+    AddressU = wrap;
+    AddressV = wrap;
 };
 
 struct VS_IN
@@ -58,7 +60,7 @@ PS_OUT PS_MAIN(PS_IN In)
     Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexcoord);
     
     /* 알파 테스팅. 블렌딩은 서치가 더 필요하다. */ 
-    if (Out.vColor.a < 0.3)
+    if (Out.vColor.a < 0.3f)
         discard;
     
     return Out;

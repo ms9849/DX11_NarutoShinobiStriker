@@ -21,6 +21,44 @@ HRESULT CBone::Initialize(const aiNode* pAINode, _int iParentIndex)
 	return S_OK;
 }
 
+HRESULT CBone::Initialize(HANDLE hHandle, DWORD* dwByte)
+{
+	if (FAILED(Load_Bone_FromBinary(hHandle, dwByte)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CBone::Save_Bone_ToBinary(HANDLE hHandle, DWORD* dwByte)
+{
+	/* 본의 이름, 본의 인덱스, 본 자기 자신만의 행렬 순으로 저장*/
+	if (false == WriteFile(hHandle, &m_szName, MAX_PATH, dwByte, nullptr))
+		return E_FAIL;
+
+	if (false == WriteFile(hHandle, &m_iParentBoneIndex, sizeof(_uint), dwByte, nullptr))
+		return E_FAIL;
+
+	if (false == WriteFile(hHandle, &m_TransformationMatrix, sizeof(_float4x4), dwByte, nullptr))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CBone::Load_Bone_FromBinary(HANDLE hHandle, DWORD* dwByte)
+{
+	/* 본의 이름, 본의 인덱스, 본 자기 자신만의 행렬 순으로 로드*/
+	if (false == ReadFile(hHandle, &m_szName, MAX_PATH, dwByte, nullptr))
+		return E_FAIL;
+
+	if (false == ReadFile(hHandle, &m_iParentBoneIndex, sizeof(_uint), dwByte, nullptr))
+		return E_FAIL;
+
+	if (false == ReadFile(hHandle, &m_TransformationMatrix, sizeof(_float4x4), dwByte, nullptr))
+		return E_FAIL;
+
+	return S_OK;
+}
+
 void CBone::Update_CombinedTransformationMatrix(const vector<CBone*>& Bones, _fmatrix PreTransformMatrix)
 {
 	if (-1 == m_iParentBoneIndex)
@@ -38,6 +76,19 @@ CBone* CBone::Create(const aiNode* pAINode, _int iParentIndex)
 	CBone* pInstance = new CBone();
 
 	if (FAILED(pInstance->Initialize(pAINode, iParentIndex)))
+	{
+		MSG_BOX("Failed to Created : CBone");
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
+}
+
+CBone* CBone::Create(HANDLE hHandle, DWORD* dwByte)
+{
+	CBone* pInstance = new CBone();
+
+	if (FAILED(pInstance->Initialize(hHandle, dwByte)))
 	{
 		MSG_BOX("Failed to Created : CBone");
 		Safe_Release(pInstance);
