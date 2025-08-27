@@ -54,7 +54,6 @@ private:
 
 	_uint		m_iMeshIdx = {};
 	_uint		m_iShaderPassIdx = {};
-	vector<wstring> m_strPropLists = {};
 
 private:
 	HRESULT Ready_Components();

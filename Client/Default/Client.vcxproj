@@ -162,6 +162,7 @@
     <ClInclude Include="..\Public\DecimalUI.h" />
     <ClInclude Include="..\Public\Dummy.h" />
     <ClInclude Include="..\Public\GameManager.h" />
+    <ClInclude Include="..\Public\Gate.h" />
     <ClInclude Include="..\Public\KonohaVillage.h" />
     <ClInclude Include="..\Public\KOUI.h" />
     <ClInclude Include="..\Public\Level_GamePlay.h" />
@@ -196,9 +197,9 @@
     <ClInclude Include="..\Public\TestPanel.h" />
     <ClInclude Include="..\Public\TitleUI.h" />
     <ClInclude Include="..\Public\TimerPanel.h" />
+    <ClInclude Include="..\Public\Tree.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="Props_Info.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -211,6 +212,7 @@
     <ClCompile Include="..\Private\DecimalUI.cpp" />
     <ClCompile Include="..\Private\Dummy.cpp" />
     <ClCompile Include="..\Private\GameManager.cpp" />
+    <ClCompile Include="..\Private\Gate.cpp" />
     <ClCompile Include="..\Private\KonohaVillage.cpp" />
     <ClCompile Include="..\Private\KOUI.cpp" />
     <ClCompile Include="..\Private\Level_GamePlay.cpp" />
@@ -244,6 +246,7 @@
     <ClCompile Include="..\Private\TestPanel.cpp" />
     <ClCompile Include="..\Private\TitleUI.cpp" />
     <ClCompile Include="..\Private\TimerPanel.cpp" />
+    <ClCompile Include="..\Private\Tree.cpp" />
     <ClCompile Include="Client.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -30,6 +30,7 @@ public:
 public:
 	void Editor_GUI();
 
+	void Scene_Setting();
 	void Map_Editor();
 	void Show_SelectedObject();
 	void Edit_SelectedObject();
@@ -54,12 +55,16 @@ private:
 	_float4					m_vPosition = { 0.f, 0.f, 0.f, 1.f };
 
 	_uint					m_iSelectedMeshNum = {};
-	_wstring				m_strLayerMapObjectTag = { TEXT("Layer_Props") };
+	_wstring				m_strLayerPropTag = { TEXT("Layer_Props") };
+	_wstring				m_strLayerMapObjectTag = { TEXT("Layer_MapObjects") };
+
 	_float					m_fMouseActionSpeed = { 1.f };
 	_char					m_szClonePrototype[256] = {};
 	_char					m_szMapSavePath[MAX_PATH] = {};
 	_char					m_szModelSavePath[MAX_PATH] = {};
 	vector<_wstring>		m_ModelPrototypeTags = {};
+	vector<_wstring>		m_MapObjectPrototypeTags = {};
+	_uint					m_iSelectedMapPrototypeTag = {};
 
 	class CGameObject*		m_pSelectedGameObject = { nullptr };
 	class CTransform*		m_pSelectedTransform = { nullptr };

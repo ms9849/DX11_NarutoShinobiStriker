@@ -163,11 +163,17 @@
     <Filter Include="02.GameObjects\Mannequin">
       <UniqueIdentifier>{ea9082e8-e6a3-4f60-b167-7b855b91c3d8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Props">
+    <Filter Include="02.GameObjects\MapObjects">
+      <UniqueIdentifier>{4c1a73d1-5685-4c4a-9433-17d9e4d7f81d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\MapObjects\Props">
       <UniqueIdentifier>{4e677acd-09fd-49bb-824a-a1cf58e54e3e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Props\PROP_INFO">
-      <UniqueIdentifier>{a2c3c0a2-d7c7-4f2d-b13e-e66742b464af}</UniqueIdentifier>
+    <Filter Include="02.GameObjects\MapObjects\Gate">
+      <UniqueIdentifier>{235ba622-55b1-46bb-8095-16f35f80dad1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\MapObjects\Tree">
+      <UniqueIdentifier>{abff9e1c-d249-4b3f-803d-7d9be4d3b3db}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -310,10 +316,13 @@
       <Filter>02.GameObjects\UI\Panel\OUTFIT_SELECT\ModelPanel\ModelDecideButton</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Props.h">
-      <Filter>02.GameObjects\Props</Filter>
+      <Filter>02.GameObjects\MapObjects\Props</Filter>
     </ClInclude>
-    <ClInclude Include="Props_Info.h">
-      <Filter>02.GameObjects\Props\PROP_INFO</Filter>
+    <ClInclude Include="..\Public\Gate.h">
+      <Filter>02.GameObjects\MapObjects\Gate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Tree.h">
+      <Filter>02.GameObjects\MapObjects\Tree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -454,7 +463,13 @@
       <Filter>02.GameObjects\UI\Panel\OUTFIT_SELECT\ModelPanel\ModelDecideButton</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Props.cpp">
-      <Filter>02.GameObjects\Props</Filter>
+      <Filter>02.GameObjects\MapObjects\Props</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Gate.cpp">
+      <Filter>02.GameObjects\MapObjects\Gate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Tree.cpp">
+      <Filter>02.GameObjects\MapObjects\Tree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
