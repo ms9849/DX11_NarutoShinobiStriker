@@ -47,6 +47,8 @@ void CLevel_Edit::Update(_float fTimeDelta)
         m_pGameInstance->Set_Visible_All_IMGUI(false);
 
     Editor_GUI();
+
+    Move_Props();
 }
 
 HRESULT CLevel_Edit::Render()
@@ -156,6 +158,10 @@ HRESULT CLevel_Edit::Ready_Prototypes()
 #pragma endregion
 
 #pragma region OBJECT
+    /*추후 여기서 게이트, 나무 추가*/
+    m_MapObjectPrototypeTags.push_back(TEXT("Prototype_GameObject_Tree"));
+    m_MapObjectPrototypeTags.push_back(TEXT("Prototype_GameObject_Gate"));
+
     /* For.Prototype_GameObject_TestCamera */
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_GameObject_EditCamera"),
         CEditCamera::Create(m_pDevice, m_pContext, Client::OBJECTID::TEST_CAMERA))))
@@ -236,6 +242,9 @@ HRESULT CLevel_Edit::Ready_Layer_Props(const _wstring& strLayerTag)
 void CLevel_Edit::Editor_GUI()
 {
     ImGui::Begin("Editor");
+    
+    Scene_Setting();
+
     ImGui::BeginTabBar("Editor");
 
     ExportAndImport();
@@ -247,41 +256,57 @@ void CLevel_Edit::Editor_GUI()
     ImGui::End();
 }
 
+void CLevel_Edit::Scene_Setting()
+{
+    if (ImGui::BeginTabBar("SCENE_SETTING"))
+    {
+        if (ImGui::BeginTabItem("Scene"))
+        {
+            if (m_pGameInstance->Key_Down(DIK_F1))
+            {
+                m_IsPickingOn = !m_IsPickingOn;
+            }
+
+            if (m_pGameInstance->Key_Down(DIK_F2))
+            {
+                m_IsCameraOn = !m_IsCameraOn;
+                m_pEditCamera->Activate_Camera(m_IsCameraOn);
+            }
+
+            if (ImGui::Checkbox("Picking Activate (Press F1 To Toggle)", &m_IsPickingOn)) {}
+
+            if (ImGui::Checkbox("Camera Activate (Press F2 To Toggle)", &m_IsCameraOn))
+            {
+                m_pEditCamera->Activate_Camera(m_IsCameraOn);
+            }
+
+            ImGui::InputFloat("Camera Sensivity", &m_fCameraSensivity);
+            ImGui::InputFloat("Camera SpeedFactor", &m_fCameraSpeedFactor);
+
+            if (ImGui::Button("Apply Camera"))
+            {
+                CEditCamera::EDIT_CAMERA_DESC Desc;
+                Desc.fMouseSensitiy = m_fCameraSensivity;
+                Desc.fSpeedPerSec = m_fCameraSpeedFactor;
+
+                m_pEditCamera->Set_Desc(&Desc);
+            }
+
+            ImGui::EndTabItem();
+        }
+
+        ImGui::EndTabBar();
+    }
+
+    ImGui::Dummy(ImVec2{ 0.f, 5.f });
+}
+
 void CLevel_Edit::Map_Editor()
 {
+
     /* 맵 제어 */
     if (ImGui::BeginTabItem("Deploy"))
     {
-        if (m_pGameInstance->Key_Down(DIK_F1))
-        {
-            m_IsPickingOn = !m_IsPickingOn;
-        }
-
-        if (m_pGameInstance->Key_Down(DIK_F2))
-        {
-            m_IsCameraOn = !m_IsCameraOn;
-            m_pEditCamera->Activate_Camera(m_IsCameraOn);
-        }
-
-        if (ImGui::Checkbox("Picking Activate (Press F1 To Toggle)", &m_IsPickingOn)) {}
-
-        if (ImGui::Checkbox("Camera Activate (Press F2 To Toggle)", &m_IsCameraOn)) 
-        {
-            m_pEditCamera->Activate_Camera(m_IsCameraOn);
-        }
-
-        ImGui::InputFloat("Camera Sensivity", &m_fCameraSensivity);
-        ImGui::InputFloat("Camera SpeedFactor", &m_fCameraSpeedFactor);
-
-        if (ImGui::Button("Apply Camera"))
-        {
-            CEditCamera::EDIT_CAMERA_DESC Desc;
-            Desc.fMouseSensitiy = m_fCameraSensivity;
-            Desc.fSpeedPerSec = m_fCameraSpeedFactor;
-
-            m_pEditCamera->Set_Desc(&Desc);
-        }
-
         ImGui::Dummy(ImVec2(0.0f, 10.f));
 
         ImGui::DragFloat("Mouse Speed", &m_fMouseActionSpeed, 0.02f, 0.1f, 10.0f, "%.3f");
@@ -296,6 +321,90 @@ void CLevel_Edit::Map_Editor()
             Show_SelectedObject();
             ImGui::Dummy(ImVec2{ 0.f,10.f });
             Edit_SelectedObject();
+        }
+
+        ImGui::Dummy(ImVec2(0.f, 15.f));
+
+        if (ImGui::BeginTabBar("CREATEOBJECT"))
+        {
+            if (ImGui::BeginTabItem("Create Object"))
+            {
+                ImGui::Text("Create Objects");
+
+                ImGui::BeginChild("MapObject List", ImVec2(0, 60), true);
+
+                for (size_t i = 0; i < m_MapObjectPrototypeTags.size(); ++i)
+                {
+                    _string Buffer = m_pGameInstance->ToString(m_MapObjectPrototypeTags[i]);
+                    if (ImGui::Selectable(Buffer.c_str(), true)) {
+                        // 선택 동작
+                        m_iSelectedMapPrototypeTag = i;
+                    }
+                }
+
+                ImGui::EndChild();
+
+                if (ImGui::Button("Clone"))
+                {
+                    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::EDIT), m_MapObjectPrototypeTags[m_iSelectedMapPrototypeTag], ENUM_CLASS(LEVEL::EDIT), m_strLayerMapObjectTag)))
+                    {
+                        ImGui::OpenPopup("CLONE_FAILED");
+                    }
+                }
+
+                if (ImGui::BeginPopupModal("CLONE_FAILED", 0, ImGuiWindowFlags_NoResize))
+                {
+                    Align_Center("Check Tag, LevelIdx");
+                    ImGui::Text("Check Tag, LevelIdx");
+
+                    ImGui::Dummy(ImVec2{ 0.f, 10.f });
+
+                    Align_Center("Confirm");
+                    if (ImGui::Button("Confirm"))
+                        ImGui::CloseCurrentPopup();
+                    ImGui::EndPopup();
+
+                }
+
+                ImGui::EndTabItem();
+            }
+
+            if (ImGui::BeginTabItem("Deployed Object"))
+            {
+                string strBuffer = "Selected Index: " + to_string(m_iSelectedObjectID);
+                ImGui::Text(strBuffer.c_str());
+
+                ImGui::BeginChild(m_pGameInstance->ToString(m_strLayerMapObjectTag).c_str(), ImVec2(0, 150), true);
+
+                size_t iObjectCnt = m_pGameInstance->Get_LayerSize(m_pGameInstance->Get_LevelID(), m_strLayerMapObjectTag);
+
+                for (size_t i = 0; i < iObjectCnt; ++i)
+                {
+                    CGameObject* pGameObject = m_pGameInstance->Get_GameObject(m_pGameInstance->Get_LevelID(), m_strLayerMapObjectTag, (_uint)i);
+                    _uint iObjectID = pGameObject->Get_ObjectID();
+                    _string strBuffer = to_string(i) + ". " + (iObjectID == ENUM_CLASS(Client::OBJECTID::TREE) ? "Tree" : "Gate");
+
+                    if (ImGui::Selectable(strBuffer.c_str(), true)) {
+                        // 선택 동작
+                        m_iSelectedObjectID = (_uint)i;
+                        m_pSelectedGameObject = pGameObject;
+                        m_pSelectedTransform = static_cast<CTransform*>(m_pGameInstance->Get_Component(m_pGameInstance->Get_LevelID(), m_strLayerPropTag, Engine::g_strTransformTag, (_uint)i));
+                    }
+                }
+
+                ImGui::EndChild();
+
+                if (ImGui::Button("Delete Object")) {
+                    // 삭제 동작
+                    CGameObject* pGameObject = m_pGameInstance->Get_GameObject(m_pGameInstance->Get_LevelID(), m_strLayerPropTag, (_uint)m_iSelectedObjectID);
+                    if (pGameObject != nullptr)
+                        pGameObject->Set_Dead(true);
+                }
+
+                ImGui::EndTabItem();
+            }
+
+            ImGui::EndTabBar();
         }
 
         ImGui::Dummy(ImVec2(0.f, 15.f));
@@ -327,7 +436,7 @@ void CLevel_Edit::Map_Editor()
                     Desc.iMeshIdx = m_iSelectedMeshNum;
                     Desc.iShaderPassIdx = 0;
 
-                    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_GameObject_Props"), ENUM_CLASS(LEVEL::EDIT), m_strLayerMapObjectTag, &Desc)))
+                    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_GameObject_Props"), ENUM_CLASS(LEVEL::EDIT), m_strLayerPropTag, &Desc)))
                     {
                         ImGui::OpenPopup("CLONE_FAILED");
                     }
@@ -351,18 +460,16 @@ void CLevel_Edit::Map_Editor()
 
             if (ImGui::BeginTabItem("Deployed Props"))
             {
-                Move_Props();
-
                 string strBuffer = "Selected Index: " + to_string(m_iSelectedObjectID);
                 ImGui::Text(strBuffer.c_str());
 
-                ImGui::BeginChild(m_pGameInstance->ToString(m_strLayerMapObjectTag).c_str(), ImVec2(0, 150), true);
+                ImGui::BeginChild(m_pGameInstance->ToString(m_strLayerPropTag).c_str(), ImVec2(0, 150), true);
 
-                size_t iObjectCnt = m_pGameInstance->Get_LayerSize(m_pGameInstance->Get_LevelID(), m_strLayerMapObjectTag);
+                size_t iObjectCnt = m_pGameInstance->Get_LayerSize(m_pGameInstance->Get_LevelID(), m_strLayerPropTag);
 
                 for (size_t i = 0; i < iObjectCnt; ++i)
                 {
-                    CGameObject* pGameObject = m_pGameInstance->Get_GameObject(m_pGameInstance->Get_LevelID(), m_strLayerMapObjectTag, (_uint)i);
+                    CGameObject* pGameObject = m_pGameInstance->Get_GameObject(m_pGameInstance->Get_LevelID(), m_strLayerPropTag, (_uint)i);
 
                     _uint iMeshIdx = static_cast<CProps*>(pGameObject)->Get_MeshIdx();
                     _uint iShaderPassIdx = static_cast<CProps*>(pGameObject)->Get_ShaderPassIdx();
@@ -373,7 +480,7 @@ void CLevel_Edit::Map_Editor()
                         // 선택 동작
                         m_iSelectedObjectID = (_uint)i;
                         m_pSelectedGameObject = pGameObject;
-                        m_pSelectedTransform = static_cast<CTransform*>(m_pGameInstance->Get_Component(m_pGameInstance->Get_LevelID(), m_strLayerMapObjectTag, Engine::g_strTransformTag, (_uint)i));
+                        m_pSelectedTransform = static_cast<CTransform*>(m_pGameInstance->Get_Component(m_pGameInstance->Get_LevelID(), m_strLayerPropTag, Engine::g_strTransformTag, (_uint)i));
                     }
                 }
 
@@ -381,7 +488,7 @@ void CLevel_Edit::Map_Editor()
 
                 if (ImGui::Button("Delete Object")) {
                     // 삭제 동작
-                    CGameObject* pGameObject = m_pGameInstance->Get_GameObject(m_pGameInstance->Get_LevelID(), m_strLayerMapObjectTag, (_uint)m_iSelectedObjectID);
+                    CGameObject* pGameObject = m_pGameInstance->Get_GameObject(m_pGameInstance->Get_LevelID(), m_strLayerPropTag, (_uint)m_iSelectedObjectID);
                     if (pGameObject != nullptr)
                         pGameObject->Set_Dead(true);
                 }
@@ -416,10 +523,14 @@ void CLevel_Edit::Map_Editor()
 
             if (ImGui::Button("Clone"))
             {
-                if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::EDIT), m_strSelectedMapName, ENUM_CLASS(LEVEL::EDIT), TEXT("Layer_Map"))))
+                if (m_pGameInstance->Get_LayerSize(ENUM_CLASS(LEVEL::EDIT), TEXT("Layer_Map")) < 1)
                 {
-                    ImGui::OpenPopup("CLONE_FAILED");
+                    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::EDIT), m_strSelectedMapName, ENUM_CLASS(LEVEL::EDIT), TEXT("Layer_Map"))))
+                    {
+                        ImGui::OpenPopup("CLONE_FAILED");
+                    }
                 }
+
             }
 
             ImGui::EndTabBar();
@@ -757,7 +868,7 @@ void CLevel_Edit::ExportAndImport()
 
             if (ImGui::BeginTabItem("Export Map Data "))
             {
-                ImGui::Text("Save Map Datas. in \"Layer_Props\", \"Layer_Map\", \"Layer_Objects\".");
+                ImGui::Text("Save Map Datas. in \"Layer_Props\", \"Layer_Map\", \"Layer_MapObjects\".");
                 ImGui::Text("DONT FORGET TO SAVE MAP DATAS BEFORE QUIT.");
 
                 ImGui::Dummy(ImVec2(0.0f, 20.0f));

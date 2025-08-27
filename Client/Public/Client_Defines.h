@@ -15,7 +15,7 @@ namespace Client
 	모든 객체는 고유한 ID를 가지게 된다.
 	*/
 	enum class OBJECTID { 
-		BACKGROUND, DUMMY, TERRAIN, PROPS,
+		BACKGROUND, DUMMY, TERRAIN, PROPS, GATE, TREE,
 		MANNEQUIN, PLAYER, ENEMY,
 
 		KONOHA_VILLAGE,
