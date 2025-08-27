@@ -174,6 +174,35 @@ _int CModel::Get_BoneIndex(const _char* pBoneName) const
 	return iBoneIndex;
 }
 
+_bool CModel::Picking_Meshes(_fmatrix WolrdMatrixInverse, _float3* vOut)
+{
+	_float4 vCamPos = *m_pGameInstance->Get_CamState(STATE::POSITION);
+	_float  fMinDist = FLT_MAX;
+	_float3 vMinOut;
+
+	for (_uint i = 0; i < m_iNumMeshes; ++i)
+	{
+		if (m_Meshes[i]->Picking(WolrdMatrixInverse, vOut))
+		{
+			_float fDist = XMVectorGetX(XMVector4Length(XMVectorSet(vOut->x, vOut->y, vOut->z, 1.f) - XMLoadFloat4(&vCamPos)));
+
+			if (fDist < fMinDist)
+			{
+				fMinDist = fDist;
+				vMinOut = *vOut;
+			}
+		}
+	}
+
+	if (fMinDist != FLT_MAX)
+	{
+		*vOut = vMinOut;
+		return true;
+	}
+
+	return false;
+}
+
 HRESULT CModel::Initialize_Prototype(MODEL eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix)
 {
 	_uint			iFlag = {};

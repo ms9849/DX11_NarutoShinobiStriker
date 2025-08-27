@@ -72,6 +72,8 @@ public:
 	/* 메쉬가 여러개일 수 있으니까 (Model 컴포넌트), CComponent 타입으로 받아올까? */
 
 	HRESULT Add_GameObject_ToPicking(_uint iLevelIdx, class CGameObject* pGameObject, class CVIBuffer* pVIBuffer);
+	HRESULT Add_GameObject_ToPicking(_uint iLevelIdx, class CGameObject* pGameObject, class CModel* pModel);
+
 	void Clear(_uint iLevelIndex);
 
 private:
@@ -88,7 +90,9 @@ private:
 	
 	class CGameObject*					m_pPickedObject = { nullptr };
 
+	/* 레벨 단위로 피킹할 타겟들 들고 있는 컨테이너 */
 	list<pair<class CGameObject *, class CVIBuffer *>>*			m_pPickingTargets = {};
+	list<pair<class CGameObject*, class CModel*>>*				m_pPickingModels = {};
 
 public:
 	static CPicking_Manager* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iWinSizeX, _uint iWinSizeY, HWND hWnd, _uint iNumLevels);

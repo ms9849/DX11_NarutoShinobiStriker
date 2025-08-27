@@ -56,6 +56,19 @@ HRESULT CLevel_Edit::Render()
     return S_OK;
 }
 
+void CLevel_Edit::Move_Props()
+{
+    if (!m_IsPickingOn)
+        return;
+
+    if (m_pSelectedGameObject != nullptr && m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON))
+    {
+        _float3 vOut;
+        if (m_pGameInstance->Picking(ENUM_CLASS(LEVEL::EDIT), &vOut))
+            m_pSelectedTransform->Set_State(STATE::POSITION, XMVectorSet(vOut.x, vOut.y, vOut.z, 1.f));
+    }
+}
+
 HRESULT CLevel_Edit::Ready_Prototypes()
 {
 #pragma region TEXTURE
@@ -239,11 +252,18 @@ void CLevel_Edit::Map_Editor()
     /* ¸Ê Á¦¾î */
     if (ImGui::BeginTabItem("Deploy"))
     {
+        if (m_pGameInstance->Key_Down(DIK_F1))
+        {
+            m_IsPickingOn = !m_IsPickingOn;
+        }
+
         if (m_pGameInstance->Key_Down(DIK_F2))
         {
             m_IsCameraOn = !m_IsCameraOn;
             m_pEditCamera->Activate_Camera(m_IsCameraOn);
         }
+
+        if (ImGui::Checkbox("Picking Activate (Press F1 To Toggle)", &m_IsPickingOn)) {}
 
         if (ImGui::Checkbox("Camera Activate (Press F2 To Toggle)", &m_IsCameraOn)) 
         {
@@ -331,6 +351,8 @@ void CLevel_Edit::Map_Editor()
 
             if (ImGui::BeginTabItem("Deployed Props"))
             {
+                Move_Props();
+
                 string strBuffer = "Selected Index: " + to_string(m_iSelectedObjectID);
                 ImGui::Text(strBuffer.c_str());
 

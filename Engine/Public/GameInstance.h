@@ -89,6 +89,7 @@ public:
 #pragma region PICKING_MANAGER
 	_bool	Picking(_uint iLevelIdx, _float3* pOut);
 	HRESULT Add_GameObject_ToPicking(_uint iLevelIdx, class CGameObject* pGameObject, class CVIBuffer* pVIBuffer);
+	HRESULT Add_GameObject_ToPicking(_uint iLevelIdx, class CGameObject* pGameObject, class CModel* pModel);
 	_bool	Picking_InWorldSpace(_fvector vPointA, _fvector vPointB, _fvector vPointC, _float3* pOut);
 	void	Transform_Picking_ToLocalSpace(_fmatrix WorldMatrixInverse);
 	_bool	Picking_InLocalSpace(_fvector vPointA, _fvector vPointB, _fvector vPointC, _float3* pOut);

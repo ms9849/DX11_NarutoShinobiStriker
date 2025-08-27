@@ -19,6 +19,9 @@ public:
 	_wstring Get_Name() const;
 
 public:
+	virtual _bool Picking(_fmatrix WolrdMatrixInverse, _float3* pOut);
+
+public:
 	virtual HRESULT Initialize_Prototype(MODEL eType, const class CModel* pModel, const aiMesh* pAIMesh, _fmatrix PreTransformMatrix);
 	virtual HRESULT Initialize_Prototype(MODEL eType, const class CModel* pModel, HANDLE hHandle, DWORD* dwByte, _fmatrix PreTransformMatrix);
 	virtual HRESULT Initialize(void* pArg) override;
@@ -29,13 +32,16 @@ public:
 	HRESULT Load_Mesh_FromBinary(HANDLE hHandle, DWORD* dwByte, MODEL eType);
 
 private:
-	_char				m_szName[MAX_PATH] = {};
-	_uint				m_iMaterialIndex;
-	_uint				m_iNumBones = { };
-	vector<_int>		m_BoneIndices;
-	_float4x4*			m_pBoneMatrices = { nullptr };
-	vector<_float4x4>	m_OffsetMatrices;
+	_char						m_szName[MAX_PATH] = {};
+	_uint						m_iMaterialIndex;
+	_uint						m_iNumBones = { };
 
+	vector<_int>				m_BoneIndices;
+	_float4x4*					m_pBoneMatrices = { nullptr };
+	vector<_float4x4>			m_OffsetMatrices;
+
+	ID3D11Buffer*				m_pStagingIB = {};
+	D3D11_MAPPED_SUBRESOURCE	m_StagingData{};
 private:
 	HRESULT Ready_VertexBuffer_For_NonAnim_Assimp(const aiMesh* pAIMesh, _fmatrix PreTransformMatrix);
 	HRESULT Ready_VertexBuffer_For_Anim_Assimp(const class CModel* pModel, const aiMesh* pAIMesh);

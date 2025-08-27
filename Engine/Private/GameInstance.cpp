@@ -330,6 +330,11 @@ HRESULT CGameInstance::Add_GameObject_ToPicking(_uint iLevelIdx, class CGameObje
 	return m_pPicking_Manager->Add_GameObject_ToPicking(iLevelIdx, pGameObject, pVIBuffer);
 }
 
+HRESULT CGameInstance::Add_GameObject_ToPicking(_uint iLevelIdx, CGameObject* pGameObject, CModel* pModel)
+{
+	return m_pPicking_Manager->Add_GameObject_ToPicking(iLevelIdx, pGameObject, pModel);
+}
+
 _bool CGameInstance::Picking_InWorldSpace(_fvector vPointA, _fvector vPointB, _fvector vPointC, _float3* pOut)
 {
 	return m_pPicking_Manager->Picking_InWorldSpace(vPointA, vPointB, vPointC, pOut);

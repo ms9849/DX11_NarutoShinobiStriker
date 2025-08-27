@@ -53,6 +53,7 @@ public:
 	HRESULT Load_Model_FromBinary(const _tchar* pModelFilePath);
 
 public:
+	_bool	Picking_Meshes(_fmatrix WolrdMatrixInverse, _float3* vOut);
 	virtual HRESULT Initialize_Prototype(MODEL eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix);
 	virtual HRESULT Initialize_Prototype(MODEL eType, const _tchar* pBinaryFilePath, _fmatrix PreTransformMatrix);
 

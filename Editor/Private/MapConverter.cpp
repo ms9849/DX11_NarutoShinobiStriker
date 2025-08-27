@@ -85,7 +85,7 @@ HRESULT CMapConverter::Export_MapFiles(const _tchar* pMapName, const _tchar* pFi
 	for (_uint i = 0; i < iMapCount; ++i)
 	{
 		CGameObject* pGameObject = m_pGameInstance->Get_GameObject(ENUM_CLASS(eLevelID), TEXT("Layer_Map"), i);
-		CTransform* pTransform = static_cast<CTransform*>(m_pGameInstance->Get_Component(ENUM_CLASS(eLevelID), TEXT("Layer_Props"), Engine::g_strTransformTag, i));
+		CTransform* pTransform = static_cast<CTransform*>(m_pGameInstance->Get_Component(ENUM_CLASS(eLevelID), TEXT("Layer_Map"), Engine::g_strTransformTag, i));
 
 		_uint iObjectID = pGameObject->Get_ObjectID();
 		_float4x4 WorldMatrix = *(pTransform->Get_WorldMatrixPtr());
