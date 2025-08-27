@@ -20,6 +20,7 @@ HRESULT CPicking_Manager::Initialize(HWND hWnd, _uint iWinSizeX, _uint iWinSizeY
 
     m_iNumLevels = iNumLevels;
     m_pPickingTargets = new list<pair<class CGameObject*, class CVIBuffer*>>[m_iNumLevels];
+    m_pPickingModels = new list<pair<class CGameObject*, class CModel*>>[m_iNumLevels];
 
     return S_OK;
 }
@@ -114,12 +115,29 @@ _bool CPicking_Manager::Picking(_uint iLevelIdx, _float3* pOut)
             return static_cast<CGameObject*>(pSour.first)->Get_CamDistance() > static_cast<CGameObject*>(pDest.first)->Get_CamDistance();
         });
 
+    m_pPickingModels[iLevelIdx].sort([](pair<CGameObject*, CModel*>(pSour), pair<CGameObject*, CModel*>(pDest))->_bool
+        {
+            return static_cast<CGameObject*>(pSour.first)->Get_CamDistance() > static_cast<CGameObject*>(pDest.first)->Get_CamDistance();
+        });
+
+
     for (auto& Pair : m_pPickingTargets[iLevelIdx])
     {
         _matrix WorldMatrixInverse = XMMatrixInverse(nullptr, XMLoadFloat4x4(static_cast<CTransform*>(Pair.first->Find_Component(g_strTransformTag))->Get_WorldMatrixPtr()));
         
         if (Pair.second->Picking(WorldMatrixInverse, pOut))
         {
+            m_pPickedObject = Pair.first;
+            return true;
+        }
+    }
+
+    for (auto& Pair : m_pPickingModels[iLevelIdx])
+    {
+        _matrix WorldMatrixInverse = XMMatrixInverse(nullptr, XMLoadFloat4x4(static_cast<CTransform*>(Pair.first->Find_Component(g_strTransformTag))->Get_WorldMatrixPtr()));
+
+        if (Pair.second->Picking_Meshes(WorldMatrixInverse, pOut))
+        { 
             m_pPickedObject = Pair.first;
             return true;
         }
@@ -137,6 +155,19 @@ HRESULT CPicking_Manager::Add_GameObject_ToPicking(_uint iLevelIdx, CGameObject*
 
     Safe_AddRef(pGameObject);
     Safe_AddRef(pVIBuffer);
+
+    return S_OK;
+}
+
+HRESULT CPicking_Manager::Add_GameObject_ToPicking(_uint iLevelIdx, CGameObject* pGameObject, CModel* pModel)
+{
+    if (iLevelIdx >= m_iNumLevels)
+        return E_FAIL;
+
+    m_pPickingModels[iLevelIdx].push_back(make_pair(pGameObject, pModel));
+
+    Safe_AddRef(pGameObject);
+    Safe_AddRef(pModel);
 
     return S_OK;
 }
@@ -184,5 +215,17 @@ void CPicking_Manager::Free()
         m_pPickingTargets[i].clear();
     }
 
+    for (_uint i = 0; i < m_iNumLevels; ++i)
+    {
+        for (auto& pPair : m_pPickingModels[i])
+        {
+            Safe_Release(pPair.first);
+            Safe_Release(pPair.second);
+        }
+
+        m_pPickingModels[i].clear();
+    }
+
     Safe_Delete_Array(m_pPickingTargets);
+    Safe_Delete_Array(m_pPickingModels);
 }

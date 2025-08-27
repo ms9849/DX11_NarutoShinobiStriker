@@ -20,7 +20,7 @@ public:
 	virtual HRESULT Initialize() override;
 	virtual void Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
-
+	void	Move_Props();
 public:
 	HRESULT Ready_Prototypes();
 	/* 이 레벨에서 쓰기위한 객체들을 생성한다. */
@@ -45,6 +45,8 @@ private:
 	class CEditCamera*		m_pEditCamera = { nullptr };
 	_float					m_fCameraSensivity = {};
 	_float					m_fCameraSpeedFactor = {};
+
+	_bool					m_IsPickingOn = { false };
 
 	_bool					m_IsCameraOn = { true };
 	_float3					m_vScale = { 1.f, 1.f, 1.f };

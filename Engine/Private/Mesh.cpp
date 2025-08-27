@@ -20,6 +20,43 @@ _wstring CMesh::Get_Name() const
     return m_pGameInstance->ToWstring(string(m_szName));
 }
 
+_bool CMesh::Picking(_fmatrix WolrdMatrixInverse, _float3* pOut)
+{
+    m_pGameInstance->Transform_Picking_ToLocalSpace(WolrdMatrixInverse);
+
+    _uint   iNumIndices = {0};
+    _uint   iIndex[3];
+    _float  fMinDist = FLT_MAX;
+    _float3 vMinOut;
+    _float4 vCamPos = *m_pGameInstance->Get_CamState(STATE::POSITION);
+
+    for (_uint i = 0; i < m_iNumIndices / 3; ++i)
+    {
+        iIndex[0] = *((_uint*)(m_StagingData.pData) + iNumIndices++);
+        iIndex[1] = *((_uint*)(m_StagingData.pData) + iNumIndices++);
+        iIndex[2] = *((_uint*)(m_StagingData.pData) + iNumIndices++);
+
+        if (true == m_pGameInstance->Picking_InLocalSpace(XMLoadFloat3(&m_pVertexPositions[iIndex[2]]), XMLoadFloat3(&m_pVertexPositions[iIndex[1]]), XMLoadFloat3(&m_pVertexPositions[iIndex[0]]), pOut))
+        {
+            _float fDist = XMVectorGetX(XMVector4Length(XMVectorSet(pOut->x, pOut->y, pOut->z, 1.f) - XMLoadFloat4(&vCamPos)));
+            
+            if (fDist < fMinDist)
+            {
+                fMinDist = fDist;
+                vMinOut = *pOut;
+            }
+        }
+    }
+
+    if (fMinDist != FLT_MAX)
+    {
+        *pOut = vMinOut;
+        return true;
+    }
+
+    return false;
+}
+
 HRESULT CMesh::Initialize_Prototype(MODEL eType, const class CModel* pModel, const aiMesh* pAIMesh, _fmatrix PreTransformMatrix)
 {
     strcpy_s(m_szName, pAIMesh->mName.data);
@@ -73,9 +110,24 @@ HRESULT CMesh::Initialize_Prototype(MODEL eType, const class CModel* pModel, con
 
     if (FAILED(m_pDevice->CreateBuffer(&IBDesc, &InitialIBData, &m_pIB)))
         return E_FAIL;
-   
+    
     Safe_Delete_Array(pIndices);
 #pragma endregion
+
+    D3D11_BUFFER_DESC StagingDesc{};
+    m_pIB->GetDesc(&StagingDesc);
+    StagingDesc.Usage = D3D11_USAGE_STAGING;
+    StagingDesc.BindFlags = 0;
+    StagingDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+    StagingDesc.MiscFlags = 0;
+
+    if (FAILED(m_pDevice->CreateBuffer(&StagingDesc, nullptr, &m_pStagingIB)))
+        return E_FAIL;
+
+    m_pContext->CopyResource(m_pStagingIB, m_pIB);
+
+    if (FAILED(m_pContext->Map(m_pStagingIB, 0, D3D11_MAP_READ, 0, &m_StagingData)))
+        return E_FAIL;
 
     return S_OK;
 }
@@ -90,6 +142,24 @@ HRESULT CMesh::Initialize_Prototype(MODEL eType, const CModel* pModel, HANDLE hH
 
     if (FAILED(Load_Mesh_FromBinary(hHandle, dwByte, eType)))
         return E_FAIL;
+
+    D3D11_BUFFER_DESC StagingDesc{};
+    m_pIB->GetDesc(&StagingDesc);
+
+    StagingDesc.Usage = D3D11_USAGE_STAGING;
+    StagingDesc.BindFlags = 0;
+    StagingDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+    StagingDesc.MiscFlags = 0;
+
+    if (FAILED(m_pDevice->CreateBuffer(&StagingDesc, nullptr, &m_pStagingIB)))
+        return E_FAIL;
+
+    m_pContext->CopyResource(m_pStagingIB, m_pIB);
+    D3D11_MAPPED_SUBRESOURCE StagingData{};
+
+    if (FAILED(m_pContext->Map(m_pStagingIB, 0, D3D11_MAP_READ, 0, &StagingData)))
+        return E_FAIL;
+
     return S_OK;
 }
 
@@ -177,7 +247,7 @@ HRESULT CMesh::Save_Mesh_ToBinary(HANDLE hHandle, DWORD* dwByte, const aiMesh* p
         return E_FAIL;
 
     WriteFile(hHandle, StagingData.pData, VBDesc.ByteWidth, dwByte, nullptr);
-
+    Safe_Release(pStagingVB);
 
     /* 인덱스 정보 저장 */
     _uint Indices[3];
@@ -316,6 +386,7 @@ HRESULT CMesh::Ready_VertexBuffer_For_NonAnim_Assimp(const aiMesh* pAIMesh, _fma
     {
         memcpy(&pVertices[i].vPosition, &pAIMesh->mVertices[i], sizeof(_float3));
         XMStoreFloat3(&pVertices[i].vPosition, XMVector3TransformCoord(XMLoadFloat3(&pVertices[i].vPosition), PreTransformMatrix));
+        memcpy(&m_pVertexPositions[i], &pVertices[i], sizeof(_float3));
 
         memcpy(&pVertices[i].vNormal, &pAIMesh->mNormals[i], sizeof(_float3));
         XMStoreFloat3(&pVertices[i].vNormal, XMVector3Normalize(XMVector3TransformNormal(XMLoadFloat3(&pVertices[i].vNormal), PreTransformMatrix)));
@@ -357,6 +428,8 @@ HRESULT CMesh::Ready_VertexBuffer_For_Anim_Assimp(const CModel* pModel, const ai
     for (_uint i = 0; i < m_iNumVertices; ++i)
     {
         memcpy(&pVertices[i].vPosition, &pAIMesh->mVertices[i], sizeof(_float3));
+        memcpy(&m_pVertexPositions[i], &pVertices[i], sizeof(_float3));
+
         memcpy(&pVertices[i].vNormal, &pAIMesh->mNormals[i], sizeof(_float3));
         memcpy(&pVertices[i].vTangent, &pAIMesh->mTangents[i], sizeof(_float3));
         memcpy(&pVertices[i].vTexcoord, &pAIMesh->mTextureCoords[0][i], sizeof(_float2));
@@ -459,14 +532,10 @@ HRESULT CMesh::Ready_VertexBuffer_For_NonAnim_Binary(HANDLE hHandle, DWORD* dwBy
 
     for (_uint i = 0; i < m_iNumVertices; ++i)
     {
-        VTXMESH VtxMesh;
-        if(false == (ReadFile(hHandle, &VtxMesh, sizeof(VTXMESH), dwByte, nullptr)))
+        if(false == (ReadFile(hHandle, &pVertices[i], sizeof(VTXMESH), dwByte, nullptr)))
             return E_FAIL;
 
-        pVertices[i].vPosition = m_pVertexPositions[i] = VtxMesh.vPosition;
-        pVertices[i].vNormal = VtxMesh.vNormal;
-        pVertices[i].vTangent = VtxMesh.vTangent;
-        pVertices[i].vTexcoord = VtxMesh.vTexcoord;
+        memcpy(&m_pVertexPositions[i], &pVertices[i], sizeof(_float3));
     }
 
     D3D11_SUBRESOURCE_DATA	InitialVBData{};
@@ -499,16 +568,10 @@ HRESULT CMesh::Ready_VertexBuffer_For_Anim_Binary(HANDLE hHandle, DWORD* dwByte)
 
     for (_uint i = 0; i < m_iNumVertices; ++i)
     {
-        VTXANIMMESH VtxAnimMesh;
-        if (false == (ReadFile(hHandle, &VtxAnimMesh, sizeof(VTXANIMMESH), dwByte, nullptr)))
+        if (false == (ReadFile(hHandle, &pVertices[i], sizeof(VTXANIMMESH), dwByte, nullptr)))
             return E_FAIL;
 
-        pVertices[i].vPosition = m_pVertexPositions[i] = VtxAnimMesh.vPosition;
-        pVertices[i].vNormal = VtxAnimMesh.vNormal;
-        pVertices[i].vTangent = VtxAnimMesh.vTangent;
-        pVertices[i].vTexcoord = VtxAnimMesh.vTexcoord;
-        pVertices[i].vBlendIndex = VtxAnimMesh.vBlendIndex;
-        pVertices[i].vBlendWeight = VtxAnimMesh.vBlendWeight;
+        memcpy(&m_pVertexPositions[i], &pVertices[i], sizeof(_float3));
     }
 
     D3D11_SUBRESOURCE_DATA	InitialVBData{};
@@ -568,4 +631,5 @@ void CMesh::Free()
     __super::Free();
 
     Safe_Delete_Array(m_pBoneMatrices);
+    Safe_Release(m_pStagingIB);
 }
