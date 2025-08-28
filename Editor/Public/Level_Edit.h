@@ -54,6 +54,7 @@ private:
 	_float3					m_vDegrees = { 0.f, 0.f, 0.f };
 	_float4					m_vPosition = { 0.f, 0.f, 0.f, 1.f };
 
+
 	_uint					m_iSelectedMeshNum = {};
 	_wstring				m_strLayerPropTag = { TEXT("Layer_Props") };
 	_wstring				m_strLayerMapObjectTag = { TEXT("Layer_MapObjects") };
@@ -66,9 +67,11 @@ private:
 	vector<_wstring>		m_MapObjectPrototypeTags = {};
 	_uint					m_iSelectedMapPrototypeTag = {};
 
-	class CGameObject*		m_pSelectedGameObject = { nullptr };
+	class CGameObject*		m_pSelectedObject = { nullptr };
 	class CTransform*		m_pSelectedTransform = { nullptr };
 	_uint					m_iSelectedObjectID = {};
+
+	_bool					m_IsSelectedProps = { false };
 
 	_wstring				m_strSelectedMapName = {};
 	_char					m_szMapFileName[MAX_PATH] = {};

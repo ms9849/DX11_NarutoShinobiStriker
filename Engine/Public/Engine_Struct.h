@@ -77,6 +77,19 @@ namespace Engine
 		};
 	} VTXANIMMESH;
 
+	/* 
+	Channel에서 사용하는 키프레임 별 Scale, Rotation, Translation.
+	추후 선형 보간을 통해 키프레임 사이의 애니메이션을 직접 만들어줘야 한다.
+	*/
+	typedef struct tagKeyFrame
+	{
+		XMFLOAT3		vScale;
+		XMFLOAT4		vRotation;
+		XMFLOAT3		vTranslation;
+		float			fTrackPosition;
+
+	}KEYFRAME;
+
 	/*
 	$$$$$$$$\ $$\   $$\ $$$$$$$\   $$$$$$\  $$$$$$$\ $$$$$$$$\ 
 	$$  _____|$$ |  $$ |$$  __$$\ $$  __$$\ $$  __$$\\__$$  __|

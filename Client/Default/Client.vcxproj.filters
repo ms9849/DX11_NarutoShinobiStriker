@@ -127,9 +127,6 @@
     <Filter Include="02.GameObjects\UI\Panel\GAMEPLAY\ComboKOPanel">
       <UniqueIdentifier>{5d21c979-df97-4f3f-9042-1f55f4603c6f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\KonohaVillage">
-      <UniqueIdentifier>{569f86bd-3122-4a1c-a169-8fb992524cd4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\UI\Panel\GAMEPLAY\ComboKOPanel\KO">
       <UniqueIdentifier>{f64198ff-95e5-4d40-a247-e90e0937e3eb}</UniqueIdentifier>
     </Filter>
@@ -174,6 +171,15 @@
     </Filter>
     <Filter Include="02.GameObjects\MapObjects\Tree">
       <UniqueIdentifier>{abff9e1c-d249-4b3f-803d-7d9be4d3b3db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Map">
+      <UniqueIdentifier>{b036b9ec-e2f3-471a-b67a-147c76be412a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Map\KonohaVillage">
+      <UniqueIdentifier>{569f86bd-3122-4a1c-a169-8fb992524cd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Map\TutorialMap">
+      <UniqueIdentifier>{be3db220-9732-4da8-8bdf-d04af97df2e5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -283,7 +289,7 @@
       <Filter>02.GameObjects\UI\Panel\GAMEPLAY\ComboKOPanel</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\KonohaVillage.h">
-      <Filter>02.GameObjects\KonohaVillage</Filter>
+      <Filter>02.GameObjects\Map\KonohaVillage</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\KOUI.h">
       <Filter>02.GameObjects\UI\Panel\GAMEPLAY\ComboKOPanel\KO</Filter>
@@ -323,6 +329,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\Tree.h">
       <Filter>02.GameObjects\MapObjects\Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\TutorialMap.h">
+      <Filter>02.GameObjects\Map\TutorialMap</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -430,7 +439,7 @@
       <Filter>02.GameObjects\UI\Panel\GAMEPLAY\ComboKOPanel</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\KonohaVillage.cpp">
-      <Filter>02.GameObjects\KonohaVillage</Filter>
+      <Filter>02.GameObjects\Map\KonohaVillage</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\KOUI.cpp">
       <Filter>02.GameObjects\UI\Panel\GAMEPLAY\ComboKOPanel\KO</Filter>
@@ -470,6 +479,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Tree.cpp">
       <Filter>02.GameObjects\MapObjects\Tree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TutorialMap.cpp">
+      <Filter>02.GameObjects\Map\TutorialMap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -49,6 +49,15 @@
     <Filter Include="01. LEVELS\MapImporter">
       <UniqueIdentifier>{3766ec47-4f62-4148-be89-c6cf2cb0638f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GAMEOBJECTS\MODEL\TREE">
+      <UniqueIdentifier>{0e2fe5a9-b7c1-42e5-be52-589186abeda7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GAMEOBJECTS\MODEL\GATE">
+      <UniqueIdentifier>{1f0a5d2a-effb-4dc6-8e26-aadebebb1185}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GAMEOBJECTS\MODEL\TUTORIALMAP">
+      <UniqueIdentifier>{8566f67e-817a-460a-ba8b-43fefe6f2816}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Editor.h">
@@ -93,6 +102,15 @@
     <ClInclude Include="..\Public\MapConverter.h">
       <Filter>01. LEVELS\MapImporter</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Tree.h">
+      <Filter>02. GAMEOBJECTS\MODEL\TREE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Gate.h">
+      <Filter>02. GAMEOBJECTS\MODEL\GATE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\TutorialMap.h">
+      <Filter>02. GAMEOBJECTS\MODEL\TUTORIALMAP</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Editor.cpp">
@@ -124,6 +142,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\MapConverter.cpp">
       <Filter>01. LEVELS\MapImporter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Tree.cpp">
+      <Filter>02. GAMEOBJECTS\MODEL\TREE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Gate.cpp">
+      <Filter>02. GAMEOBJECTS\MODEL\GATE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TutorialMap.cpp">
+      <Filter>02. GAMEOBJECTS\MODEL\TUTORIALMAP</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

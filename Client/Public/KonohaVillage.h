@@ -25,8 +25,6 @@ public:
 	HRESULT Render();
 
 private:
-	class CGameManager* m_pGameManager = { nullptr };
-
 	CModel* m_pModelCom = { nullptr };
 	CShader* m_pShaderCom = { nullptr };
 	_uint  m_iNumMeshes = {};

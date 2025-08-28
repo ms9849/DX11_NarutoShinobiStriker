@@ -166,6 +166,12 @@
     <ClInclude Include="..\Public\Bone.h">
       <Filter>01.Utility\03.Components\Model\Bone</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Animation.h">
+      <Filter>01.Utility\03.Components\Model\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Channel.h">
+      <Filter>01.Utility\03.Components\Model\Animation\Channel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -287,6 +293,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Bone.cpp">
       <Filter>01.Utility\03.Components\Model\Bone</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Animation.cpp">
+      <Filter>01.Utility\03.Components\Model\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Channel.cpp">
+      <Filter>01.Utility\03.Components\Model\Animation\Channel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -421,6 +433,12 @@
     </Filter>
     <Filter Include="01.Utility\03.Components\Model\Bone">
       <UniqueIdentifier>{11ef9adb-068f-4c5f-9355-9efb497730e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Model\Animation">
+      <UniqueIdentifier>{9649bd49-7ac8-4be5-93cb-8a10d93c455d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Model\Animation\Channel">
+      <UniqueIdentifier>{6ae031e7-29aa-41a3-81ab-8c5ce6fd63db}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

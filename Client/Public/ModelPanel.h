@@ -65,6 +65,15 @@ public:
 	virtual void	Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+public:
+	void Select_Parts();
+	void Select_Head();
+	void Select_Eye();
+	void Select_Upper();
+	void Select_Lower();
+	void Select_Mask();
+	void Select_Accessory();
+
 private:
 	/* 0 ~ 8 */
 	_int m_iFocusedNum = { 0 };
