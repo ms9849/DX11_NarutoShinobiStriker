@@ -66,6 +66,9 @@ public:
 	virtual HRESULT Render() override;
 
 public:
+	void Play_Animation_FadeIn(_float fTimeDelta);
+	void Play_Animation_FadeOut(_float fTimeDelta);
+
 	void Select_Parts();
 	void Select_Head();
 	void Select_Eye();
@@ -76,14 +79,32 @@ public:
 
 private:
 	/* 0 ~ 8 */
+	/* 
+		임시로 하드코딩. 추후 모델 정보 뽑아오면 갯수 카운팅해서 
+		데이터 받아온뒤 세팅해주는 
+		방식으로 진행. 
+	*/
+	_uint m_iCurrentIdx;
+	_int m_ButtonInfos[ENUM_CLASS(SELECT_TYPE::END)] = { 6,5,5,5,5,4,4 };
 	_int m_iFocusedNum = { 0 };
+	_int m_iMaxActivateNum = { 0 };
+	_int m_iDecideButtonNum = { 0 };
 	SELECT_TYPE m_eSelectType = { SELECT_TYPE::PARTS };
+
+	_bool m_bFadeOut = { false };
+	_bool m_bFadeIn = { false };
+	_bool m_bChangeSelectType = { false };
+	_bool m_bBackToParts = { false };
+
+	_float m_fFadeOutMaxTimeAcc = { 0.5f };
+	_float m_fFadeOutTimeAcc = { 0.f };
 
 private:
 	void Change_FocusedButton(_int iNum);
-	void Change_SelectType_ToParts();
-	void Change_Outfits();
+	void Change_SelectType();
+	void Back_ToParts();
 	void Key_Input();
+	void Set_Visible_Buttons(_uint iMaxIdx);
 
 private:
 	HRESULT Ready_Components();
