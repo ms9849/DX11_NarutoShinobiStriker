@@ -204,6 +204,7 @@ void CTransform::LookAt(_fvector vAt)
 void CTransform::LookAt_Lerp(_fvector vAt)
 {
 	_float3		vScale = Get_Scale();
+
 	_vector		vRight, vUp, vLook;
 
 	vLook = XMQuaternionSlerp(XMVector3Normalize(Get_State(STATE::LOOK)), XMVector3Normalize(vAt - Get_State(STATE::POSITION)), 0.15f);

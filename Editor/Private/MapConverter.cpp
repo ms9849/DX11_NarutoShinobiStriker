@@ -97,9 +97,28 @@ HRESULT CMapConverter::Export_MapFiles(const _tchar* pMapName, const _tchar* pFi
 			return E_FAIL;
 	}
 
-	/*
-	오브젝트는 보류. 시간 남으면 할 것
-	*/
+
+	/* 맵 오브젝트 (게이트, 나무) 갯수 저장 */
+	_uint iObjectCount = m_pGameInstance->Get_LayerSize(ENUM_CLASS(eLevelID), TEXT("Layer_MapObjects"));
+	if (false == (WriteFile(hHandle, &iObjectCount, sizeof(_uint), &dwByte, nullptr)))
+		return E_FAIL;
+
+	/* 맵 오브젝트 (게이트, 나무)  정보 저장 */
+	for (_uint i = 0; i < iObjectCount; ++i)
+	{
+		CGameObject* pGameObject = m_pGameInstance->Get_GameObject(ENUM_CLASS(eLevelID), TEXT("Layer_MapObjects"), i);
+		CTransform* pTransform = static_cast<CTransform*>(m_pGameInstance->Get_Component(ENUM_CLASS(eLevelID), TEXT("Layer_MapObjects"), Engine::g_strTransformTag, i));
+
+		_uint iObjectID = pGameObject->Get_ObjectID();
+		_float4x4 WorldMatrix = *(pTransform->Get_WorldMatrixPtr());
+
+		if (false == (WriteFile(hHandle, &iObjectID, sizeof(_uint), &dwByte, nullptr)))
+			return E_FAIL;
+
+		if (false == (WriteFile(hHandle, &WorldMatrix, sizeof(_float4x4), &dwByte, nullptr)))
+			return E_FAIL;
+	}
+
 	CloseHandle(hHandle);
 	return S_OK;
 }
@@ -178,7 +197,10 @@ HRESULT CMapConverter::Import_MapFiles(const _tchar* pFilePath, LEVEL eLevelID, 
 		{
 			m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(ePrototypeLevelID), TEXT("Prototype_GameObject_KonohaVillage"), ENUM_CLASS(eLevelID), TEXT("Layer_Map"));
 		}
-		else {}
+		else if (iObjectID == ENUM_CLASS(Client::OBJECTID::TUTORIAL_MAP))
+		{
+			m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(ePrototypeLevelID), TEXT("Prototype_GameObject_TutorialMap"), ENUM_CLASS(eLevelID), TEXT("Layer_Map"));
+		}
 
 		//월드 매트릭스 세팅
 		CTransform* pTransform = static_cast<CTransform*>(m_pGameInstance->Get_Component(ENUM_CLASS(eLevelID), TEXT("Layer_Map"), Engine::g_strTransformTag, i));
@@ -188,6 +210,48 @@ HRESULT CMapConverter::Import_MapFiles(const _tchar* pFilePath, LEVEL eLevelID, 
 			pTransform->Set_State(static_cast<STATE>(j), XMLoadFloat4((_float4*)(&WorldMatrix.m[j][0])));
 		}
 	}
+
+	/* 맵 오브젝트 (게이트, 나무) 갯수 로드 */
+	_uint iObjectCount;
+	if (false == (ReadFile(hHandle, &iObjectCount, sizeof(_uint), &dwByte, nullptr)))
+		return E_FAIL;
+
+	/* 맵 오브젝트 (게이트, 나무)  정보 로드 */
+	for (_uint i = 0; i < iObjectCount; ++i)
+	{
+		_uint iObjectID;
+		_float4x4 WorldMatrix;
+
+		if (false == (ReadFile(hHandle, &iObjectID, sizeof(_uint), &dwByte, nullptr)))
+			return E_FAIL;
+
+		if (false == (ReadFile(hHandle, &WorldMatrix, sizeof(_float4x4), &dwByte, nullptr)))
+			return E_FAIL;
+
+
+		/* 
+		당장은 게이트, 트리만 설정
+		문자열 태그를 바꿔줘도 될 것 같긴 함..
+		*/
+		if (iObjectID == ENUM_CLASS(Client::OBJECTID::GATE))
+		{
+			m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(ePrototypeLevelID), TEXT("Prototype_GameObject_Gate"), ENUM_CLASS(eLevelID), TEXT("Layer_MapObjects"));
+		}
+
+		else if (iObjectID == ENUM_CLASS(Client::OBJECTID::TREE))
+		{
+			m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(ePrototypeLevelID), TEXT("Prototype_GameObject_Tree"), ENUM_CLASS(eLevelID), TEXT("Layer_MapObjects"));
+		}
+
+		CTransform* pTransform = static_cast<CTransform*>(m_pGameInstance->Get_Component(ENUM_CLASS(eLevelID), TEXT("Layer_MapObjects"), Engine::g_strTransformTag, i));
+
+		//월드 매트릭스 세팅
+		for (_uint j = 0; j < 4; ++j)
+		{
+			pTransform->Set_State(static_cast<STATE>(j), XMLoadFloat4((_float4*)(&WorldMatrix.m[j][0])));
+		}
+	}
+
 	CloseHandle(hHandle);
 
 	return S_OK;

@@ -61,6 +61,41 @@ HRESULT CModelPanel::Render()
     return S_OK;
 }
 
+void CModelPanel::Select_Parts()
+{
+
+}
+
+void CModelPanel::Select_Head()
+{
+
+}
+
+void CModelPanel::Select_Eye()
+{
+
+}
+
+void CModelPanel::Select_Upper()
+{
+
+}
+
+void CModelPanel::Select_Lower()
+{
+
+}
+
+void CModelPanel::Select_Mask()
+{
+
+}
+
+void CModelPanel::Select_Accessory()
+{
+
+}
+
 void CModelPanel::Change_FocusedButton(_int iNum)
 {
     if(m_iFocusedNum >= 0 && m_iFocusedNum <= 8)

@@ -7,10 +7,13 @@
 #include "Mannequin.h"
 #include "Props.h"
 #include "KonohaVillage.h"
+#include "TutorialMap.h"
 
 #include "Pooling.h"
 
 #include "MapConverter.h"
+#include "Tree.h"
+#include "Gate.h"
 
 /* 부모의 멤버 변수 세팅은 부모에서 처리해야 한다.. */
 CLevel_Edit::CLevel_Edit(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID) :
@@ -63,7 +66,7 @@ void CLevel_Edit::Move_Props()
     if (!m_IsPickingOn)
         return;
 
-    if (m_pSelectedGameObject != nullptr && m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON))
+    if (m_pSelectedObject != nullptr && m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON))
     {
         _float3 vOut;
         if (m_pGameInstance->Picking(ENUM_CLASS(LEVEL::EDIT), &vOut))
@@ -94,15 +97,32 @@ HRESULT CLevel_Edit::Ready_Prototypes()
     /* For.Prototype_Component_Model_Props */
     PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Props"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/StaticObjects/Props/Props.fbx", PreTransformMatrix))))
+        CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/Props/Props.fbx", PreTransformMatrix))))
         return E_FAIL;
     m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Props"));
 
     /* For.Prototype_Component_Model_KonohaVillage */
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_KonohaVillage"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client//Bin/Resources/Models/TutorialMap/TutorialMap.fbx", PreTransformMatrix))))
+        CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/KonohaVillage/KonohaVillage.fbx", PreTransformMatrix))))
         return E_FAIL;
 
+    /* For.Prototype_Component_Model_TutorialMap */
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_TutorialMap"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/TutorialMap/TutorialMap.fbx", PreTransformMatrix))))
+        return E_FAIL;
+
+
+    /* For.Prototype_Component_Model_Tree */
+    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Tree"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/Tree/Tree.fbx", PreTransformMatrix))))
+        return E_FAIL;
+
+    /* For.Prototype_Component_Model_Gate */
+    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Gate"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/Gate/Gate.fbx", PreTransformMatrix))))
+        return E_FAIL;
 
 #pragma endregion
 
@@ -159,8 +179,18 @@ HRESULT CLevel_Edit::Ready_Prototypes()
 
 #pragma region OBJECT
     /*추후 여기서 게이트, 나무 추가*/
-    m_MapObjectPrototypeTags.push_back(TEXT("Prototype_GameObject_Tree"));
+
+    /* For.Prototype_GameObject_Gate */
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_GameObject_Gate"),
+        CGate::Create(m_pDevice, m_pContext, Client::OBJECTID::GATE))))
+        return E_FAIL;
     m_MapObjectPrototypeTags.push_back(TEXT("Prototype_GameObject_Gate"));
+
+    /* For.Prototype_GameObject_Tree */
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_GameObject_Tree"),
+        CTree::Create(m_pDevice, m_pContext, Client::OBJECTID::TREE))))
+        return E_FAIL;
+    m_MapObjectPrototypeTags.push_back(TEXT("Prototype_GameObject_Tree"));
 
     /* For.Prototype_GameObject_TestCamera */
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_GameObject_EditCamera"),
@@ -185,6 +215,11 @@ HRESULT CLevel_Edit::Ready_Prototypes()
     /* For.Prototype_GameObject_KonohaVillage */
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_GameObject_KonohaVillage"),
         CKonohaVillage::Create(m_pDevice, m_pContext, Client::OBJECTID::KONOHA_VILLAGE))))
+        return E_FAIL;
+
+    /* For.Prototype_GameObject_TutorialMap */
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_GameObject_TutorialMap"),
+        CTutorialMap::Create(m_pDevice, m_pContext, Client::OBJECTID::TUTORIAL_MAP))))
         return E_FAIL;
 
 #pragma endregion
@@ -316,7 +351,7 @@ void CLevel_Edit::Map_Editor()
 
         ImGui::Text("TRANSFORM (Current Selected Object) : ");
 
-        if (nullptr != m_pSelectedGameObject)
+        if (nullptr != m_pSelectedObject || nullptr != m_pSelectedObject)
         {
             Show_SelectedObject();
             ImGui::Dummy(ImVec2{ 0.f,10.f });
@@ -386,9 +421,10 @@ void CLevel_Edit::Map_Editor()
 
                     if (ImGui::Selectable(strBuffer.c_str(), true)) {
                         // 선택 동작
+                        m_IsSelectedProps = false;
                         m_iSelectedObjectID = (_uint)i;
-                        m_pSelectedGameObject = pGameObject;
-                        m_pSelectedTransform = static_cast<CTransform*>(m_pGameInstance->Get_Component(m_pGameInstance->Get_LevelID(), m_strLayerPropTag, Engine::g_strTransformTag, (_uint)i));
+                        m_pSelectedObject = pGameObject;
+                        m_pSelectedTransform = static_cast<CTransform*>(m_pGameInstance->Get_Component(m_pGameInstance->Get_LevelID(), m_strLayerMapObjectTag, Engine::g_strTransformTag, (_uint)i));
                     }
                 }
 
@@ -478,8 +514,9 @@ void CLevel_Edit::Map_Editor()
 
                     if (ImGui::Selectable(strBuffer.c_str(), true)) {
                         // 선택 동작
+                        m_IsSelectedProps = true;
                         m_iSelectedObjectID = (_uint)i;
-                        m_pSelectedGameObject = pGameObject;
+                        m_pSelectedObject = pGameObject;
                         m_pSelectedTransform = static_cast<CTransform*>(m_pGameInstance->Get_Component(m_pGameInstance->Get_LevelID(), m_strLayerPropTag, Engine::g_strTransformTag, (_uint)i));
                     }
                 }
@@ -514,6 +551,13 @@ void CLevel_Edit::Map_Editor()
                 if (ImGui::Selectable("Prototype_GameObject_KonohaVillage", true)) {
                     // 선택 동작
                     m_strSelectedMapName = TEXT("Prototype_GameObject_KonohaVillage");
+                }
+
+                //튜토 맵
+                m_pGameInstance->Get_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_GameObject_TutorialMap"));
+                if (ImGui::Selectable("Prototype_GameObject_TutorialMap", true)) {
+                    // 선택 동작
+                    m_strSelectedMapName = TEXT("Prototype_GameObject_TutorialMap");
                 }
 
                 ImGui::EndChild();
