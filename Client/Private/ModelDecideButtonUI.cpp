@@ -34,6 +34,7 @@ void CModelDecideButtonUI::Priority_Update(_float fTimeDelta)
 
 void CModelDecideButtonUI::Update(_float fTimeDelta)
 {
+	__super::Update(fTimeDelta);
 }
 
 void CModelDecideButtonUI::Late_Update(_float fTimeDelta)

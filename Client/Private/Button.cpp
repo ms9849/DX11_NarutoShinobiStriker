@@ -39,6 +39,9 @@ void CButton::Priority_Update(_float fTimeDelta)
 
 void CButton::Update(_float fTimeDelta)
 {
+	if (m_bFadeOut)
+		Play_Animation_FadeOut(fTimeDelta);
+
 }
 
 void CButton::Late_Update(_float fTimeDelta)
@@ -47,6 +50,9 @@ void CButton::Late_Update(_float fTimeDelta)
 
 HRESULT CButton::Render()
 {
+	if (false == m_bVisible)
+		return S_OK;
+
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
@@ -58,7 +64,19 @@ HRESULT CButton::Bind_ShaderResources()
 	if (FAILED(__super::Bind_ShaderResources()))
 		return E_FAIL;
 
+	if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_bFadeOut)
+		m_pShaderCom->Bind_Float("g_Alpha", 1 - (m_fFadeOutTimeAcc / m_fFadeOutMaxTimeAcc));
+
+	//else if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_bFadeIn)
+	//	m_pShaderCom->Bind_Float("g_Alpha", m_fFadeInTimeAcc / m_fFadeInMaxTimeAcc);
+
 	return S_OK;
+}
+
+void CButton::Trigger_FadeOut()
+{
+	m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT);
+	m_bFadeOut = true;
 }
 
 _bool CButton::IsClicked()
@@ -78,6 +96,22 @@ void CButton::Toggle_Focus()
 		m_iTextureIdx = 1;
 	else
 		m_iTextureIdx = 0;
+}
+
+void CButton::Play_Animation_FadeOut(_float fTimeDelta)
+{
+	m_fFadeOutTimeAcc += fTimeDelta;
+
+	if (m_fFadeOutTimeAcc > m_fFadeOutMaxTimeAcc)
+		m_fFadeOutTimeAcc = m_fFadeOutMaxTimeAcc;
+
+	/* 애니메이션 종료 */
+	if (m_fFadeOutTimeAcc >= m_fFadeOutMaxTimeAcc)
+	{
+		m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI);
+		m_bFadeOut = false;
+		m_fFadeOutTimeAcc = 0.f;
+	}
 }
 
 void CButton::Free()

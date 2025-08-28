@@ -36,6 +36,10 @@ HRESULT CModelPanel::Initialize(void* pArg)
 
     m_iFocusedNum = -1;
 
+    m_eSelectType = SELECT_TYPE::PARTS;
+    m_iMaxActivateNum = m_ButtonInfos[ENUM_CLASS(m_eSelectType)];
+    Set_Visible_Buttons(m_iMaxActivateNum);
+
     return S_OK;
 }
 
@@ -46,6 +50,9 @@ void CModelPanel::Priority_Update(_float fTimeDelta)
 void CModelPanel::Update(_float fTimeDelta)
 {
     Key_Input();
+
+    if (m_bFadeOut)
+        Play_Animation_FadeOut(fTimeDelta);
 }
 
 void CModelPanel::Late_Update(_float fTimeDelta)
@@ -59,6 +66,35 @@ HRESULT CModelPanel::Render()
         return E_FAIL;
 
     return S_OK;
+}
+
+void CModelPanel::Play_Animation_FadeIn(_float fTimeDelta)
+{
+}
+
+void CModelPanel::Play_Animation_FadeOut(_float fTimeDelta)
+{
+    m_fFadeOutTimeAcc += fTimeDelta;
+
+    /* 애니메이션 종료 */
+    if (m_fFadeOutTimeAcc >= m_fFadeOutMaxTimeAcc)
+    {
+        m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI);
+        m_bFadeOut = false;
+        m_fFadeOutTimeAcc = 0.f;
+
+        if (true == m_bChangeSelectType)
+        {
+            Change_SelectType();
+            m_bChangeSelectType = false;
+        }
+
+        else if (true == m_bBackToParts)
+        {
+            Back_ToParts();
+            m_bBackToParts = false;
+        }
+    }
 }
 
 void CModelPanel::Select_Parts()
@@ -97,34 +133,83 @@ void CModelPanel::Select_Accessory()
 }
 
 void CModelPanel::Change_FocusedButton(_int iNum)
-{
-    if(m_iFocusedNum >= 0 && m_iFocusedNum <= 8)
-        static_cast<CButton*>(m_Childs[m_iFocusedNum])->Toggle_Focus();
-    
-    if (iNum > 8)
-        iNum = 0;
-    else if (iNum < 0)
-        iNum = 8;
+{   
+    if (m_eSelectType != SELECT_TYPE::PARTS)
+    {
+        if (m_iFocusedNum >= 0 && m_iFocusedNum <= m_iMaxActivateNum -1)
+            static_cast<CButton*>(m_Childs[m_iFocusedNum])->Toggle_Focus();
 
-    if (iNum >= 0 && iNum <= 8)
-        static_cast<CButton*>(m_Childs[iNum])->Toggle_Focus();
-        
+        if (iNum > m_iMaxActivateNum - 1)
+            iNum = 0;
+        else if (iNum < 0)
+            iNum = m_iMaxActivateNum - 1;
+
+        if (iNum >= 0 && iNum <= m_iMaxActivateNum -1)
+            static_cast<CButton*>(m_Childs[iNum])->Toggle_Focus();
+    }
+    else
+    {
+        if ((m_iFocusedNum >= 0 && m_iFocusedNum <= m_iMaxActivateNum - 1) ||
+            (m_iFocusedNum == m_iDecideButtonNum))
+            static_cast<CButton*>(m_Childs[m_iFocusedNum])->Toggle_Focus();
+
+        // 아래 버튼 누른 상태라면.
+        if (iNum > m_iMaxActivateNum - 1 && m_iFocusedNum == (iNum + 1))
+            iNum = m_ButtonInfos[ENUM_CLASS(SELECT_TYPE::PARTS)] - 1;
+        // 위 버튼 누른 상태라면 
+        else if (iNum <= m_iDecideButtonNum && iNum > m_iMaxActivateNum - 1 && m_iFocusedNum == (iNum - 1) || iNum < 0)
+            iNum = m_iDecideButtonNum;
+
+        else if (iNum > m_iDecideButtonNum)
+            iNum = 0;
+
+        if ((iNum >= 0 && iNum <= m_iMaxActivateNum - 1) || iNum == m_iDecideButtonNum)
+            static_cast<CButton*>(m_Childs[iNum])->Toggle_Focus();
+    }
 
     m_iFocusedNum = iNum;
 }
 
-void CModelPanel::Change_SelectType_ToParts()
-{
-    // SELECT TYPE PARTS로 변경
-}
 
-void CModelPanel::Change_Outfits()
+void CModelPanel::Change_SelectType()
 {
      // SELECT TYPE 변경, 혹은 외형 변경
+    if (m_iFocusedNum < 0)
+        return;
+
+    if (SELECT_TYPE::PARTS == m_eSelectType)
+    {
+        m_eSelectType = static_cast<SELECT_TYPE>(m_iFocusedNum + 1);
+        m_iMaxActivateNum = m_ButtonInfos[ENUM_CLASS(m_eSelectType)];
+        Set_Visible_Buttons(m_iMaxActivateNum);
+    }
+
+    /* 늘 포커스는 잃게해줘야 한다. */
+    if (m_iFocusedNum != -1)
+        static_cast<CButton*>(m_Childs[m_iFocusedNum])->Toggle_Focus();
+    m_iFocusedNum = -1;
+    Set_Visible_Buttons(m_iMaxActivateNum);
+}
+
+void CModelPanel::Back_ToParts()
+{
+    m_eSelectType = SELECT_TYPE::PARTS;
+    m_iMaxActivateNum = m_ButtonInfos[ENUM_CLASS(SELECT_TYPE::PARTS)];
+
+
+    /* 늘 포커스는 잃게해줘야 한다. */
+    if(m_iFocusedNum != -1)
+        static_cast<CButton*>(m_Childs[m_iFocusedNum])->Toggle_Focus();
+    m_iFocusedNum = -1;
+    Set_Visible_Buttons(m_iMaxActivateNum);
 }
 
 void CModelPanel::Key_Input()
 {
+    /* 애니메이션 재생중이면 키 입력 안받게 할 것. 변수 생긴다..*/
+    if (true == m_bFadeIn || true == m_bFadeOut)
+        return;
+
     if (m_pGameInstance->Key_Down(DIK_DOWN))
     {
         Change_FocusedButton(m_iFocusedNum + 1);
@@ -133,17 +218,53 @@ void CModelPanel::Key_Input()
     if (m_pGameInstance->Key_Down(DIK_UP))
     {
         Change_FocusedButton(m_iFocusedNum - 1);
+
     }
 
-    if (m_pGameInstance->Key_Down(DIK_SPACE))
+    if (m_pGameInstance->Key_Down(DIK_SPACE) && m_iFocusedNum != m_iDecideButtonNum)
     {
-        Change_Outfits();
+        m_bFadeOut = true;
+        m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT);
+
+        for (_int i = 0; i < m_iMaxActivateNum; ++i)
+            static_cast<CButton*>(m_Childs[i])->Trigger_FadeOut();
+       
+        if(SELECT_TYPE::PARTS == m_eSelectType)
+            static_cast<CButton*>(m_Childs[m_iDecideButtonNum])->Trigger_FadeOut();
+
+        m_bChangeSelectType = true;
+
     }
 
     if (m_pGameInstance->Key_Down(DIK_ESCAPE))
     {
-        Change_SelectType_ToParts();
+        if (m_eSelectType == SELECT_TYPE::PARTS)
+            return;
+
+        m_bFadeOut = true;
+        m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT);
+
+        for (_int i = 0; i < m_iMaxActivateNum; ++i)
+            static_cast<CButton*>(m_Childs[i])->Trigger_FadeOut();
+
+        m_bBackToParts = true;
     }
+}
+
+void CModelPanel::Set_Visible_Buttons(_uint iMaxIdx)
+{
+    for (_uint i = 0; i < iMaxIdx; ++i)
+    {
+        static_cast<CButton*>(m_Childs[i])->Set_Visible(true);
+    }
+
+    for (_uint i = iMaxIdx; i < m_Childs.size(); ++i)
+    {
+        static_cast<CButton*>(m_Childs[i])->Set_Visible(false);
+    }
+
+    if(m_eSelectType == SELECT_TYPE::PARTS)
+        static_cast<CButton*>(m_Childs[m_iDecideButtonNum])->Set_Visible(true);
 }
 
 HRESULT CModelPanel::Ready_Components()
@@ -167,6 +288,9 @@ HRESULT CModelPanel::Bind_ShaderResources()
 {
     if (FAILED(__super::Bind_ShaderResources()))
         return E_FAIL;
+
+    if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_bFadeOut)
+        m_pShaderCom->Bind_Float("g_Alpha", 1 - (m_fFadeOutTimeAcc / m_fFadeOutMaxTimeAcc));
 
     return S_OK;
 }
@@ -203,6 +327,9 @@ HRESULT CModelPanel::Ready_DecideButton()
 
     m_Childs.push_back(pModelDecideButton);
     Safe_AddRef(pModelDecideButton);
+
+    /* 8번 인덱스는 외형 결정 버튼이다. */
+    m_iDecideButtonNum = 8;
 
     return S_OK;
 }
