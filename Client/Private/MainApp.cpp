@@ -195,9 +195,8 @@ HRESULT CMainApp::Ready_Prototypes()
 		return E_FAIL;
 
 	/* For.Prototype_Component_Font */
-	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Font"),
-		CFont::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Font/MyFont.spritefont")))))
+  	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Font"),
+		CFont::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Fonts/MyFont.spritefont")))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_VIBuffer_Rect */

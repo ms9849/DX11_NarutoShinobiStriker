@@ -113,6 +113,20 @@ void CRenderer::Render_UI()
 
 void CRenderer::Render_Font()
 {
+
+	/* 블렌딩 / 스텐실뎁스 / 래스터라이즈 스테이트 저장해야됨 */
+	ID3D11BlendState*		 pPreBlendState = {};
+	_float					 PreBlendFactor[4] = {};
+	_uint					 PreBlendSampleMask = {};
+	m_pContext->OMGetBlendState(&pPreBlendState, PreBlendFactor, &PreBlendSampleMask);
+
+	ID3D11DepthStencilState* pPreDepthStencilState = {};
+	_uint					 PreDepthStencilRef = {};
+	m_pContext->OMGetDepthStencilState(&pPreDepthStencilState, &PreDepthStencilRef);
+
+	ID3D11RasterizerState*	 pPreRasterizeState = {};
+	m_pContext->RSGetState(&pPreRasterizeState);
+
 	for (auto& pFont : m_Fonts)
 	{
 		if (nullptr != pFont)
@@ -121,7 +135,16 @@ void CRenderer::Render_Font()
 		Safe_Release(pFont);
 	}
 
-	m_RenderObjects[ENUM_CLASS(RENDER::UI)].clear();
+	m_pContext->OMSetBlendState(pPreBlendState, PreBlendFactor, PreBlendSampleMask);
+	Safe_Release(pPreBlendState);
+
+	m_pContext->OMSetDepthStencilState(pPreDepthStencilState, PreDepthStencilRef);
+	Safe_Release(pPreDepthStencilState);
+
+	m_pContext->RSSetState(pPreRasterizeState);
+	Safe_Release(pPreRasterizeState);
+
+	m_Fonts.clear();
 }
 
 CRenderer* CRenderer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -149,9 +172,8 @@ void CRenderer::Free()
 	}
 
 	for (auto& pFont : m_Fonts)
-	{
 		Safe_Release(pFont);
-	}
+
 	m_Fonts.clear();
 
 	Safe_Release(m_pDevice);

@@ -14,7 +14,7 @@ private:
 public:
 	HRESULT Initialize_Prototype(const _tchar* pFontFilePath);
 	HRESULT Initialize(void* pArg);
-	HRESULT Bind_Resources(const _tchar* pText, const _float2& vPosition, _float fAlpha = 1.0f,
+	HRESULT Bind_Resources(const _tchar* pText, const _float2& vPosition,
 		_float fScale = 1.f, _fvector vColor = XMVectorSet(1.f, 1.f, 1.f, 1.f), _float fRotation = 0.f,
 		const _float2& vOrigin = _float2(0.f, 0.f));
 
@@ -30,7 +30,6 @@ private:
 	_vector m_vColor = {};
 	_float  m_fRotation = {};
 	_float2 m_vOrigin = {};
-	_float  m_fAlpha = { 1.0f };
 
 public:
 	static CFont* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pFontFilePath);
