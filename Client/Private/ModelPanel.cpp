@@ -48,13 +48,13 @@ void CModelPanel::Priority_Update(_float fTimeDelta)
 
 void CModelPanel::Update(_float fTimeDelta)
 {
-    Key_Input();
-
     if (m_bFadeIn)
         Play_Animation_FadeIn(fTimeDelta);
 
     if (m_bFadeOut)
         Play_Animation_FadeOut(fTimeDelta);
+
+    Key_Input();
 }
 
 void CModelPanel::Late_Update(_float fTimeDelta)
@@ -77,7 +77,7 @@ void CModelPanel::Play_Animation_FadeIn(_float fTimeDelta)
     if (m_fFadeInTimeAcc >= m_fFadeInMaxTimeAcc)
         m_fFadeInTimeAcc = m_fFadeInMaxTimeAcc;
 
-    else if (m_fFadeInTimeAcc < m_fFadeInMaxTimeAcc)
+    if (m_fFadeInTimeAcc <= m_fFadeInMaxTimeAcc)
         m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet((m_fX - g_iWinSizeX / 2.f - m_fAnimationDist * (1 - m_fFadeInTimeAcc / m_fFadeInMaxTimeAcc)), -1.f * (m_fY - g_iWinSizeY / 2.f), m_fZ, 1.f));
 
     /* 애니메이션 종료 */
@@ -114,9 +114,8 @@ void CModelPanel::Play_Animation_FadeOut(_float fTimeDelta)
     if (m_fFadeOutTimeAcc >= m_fFadeOutMaxTimeAcc)
         m_fFadeOutTimeAcc = m_fFadeOutMaxTimeAcc;
 
-    else if (m_fFadeOutTimeAcc < m_fFadeOutMaxTimeAcc)
+    if (m_fFadeOutTimeAcc <= m_fFadeOutMaxTimeAcc)
         m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet((m_fX - g_iWinSizeX / 2.f - m_fAnimationDist * (m_fFadeOutTimeAcc / m_fFadeOutMaxTimeAcc)), -1.f * (m_fY - g_iWinSizeY / 2.f), m_fZ, 1.f));
-
 
     /* 애니메이션 종료 */
     if (m_fFadeOutTimeAcc >= m_fFadeOutMaxTimeAcc && 
@@ -125,7 +124,7 @@ void CModelPanel::Play_Animation_FadeOut(_float fTimeDelta)
         m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(m_fX - g_iWinSizeX / 2.f, -1.f * (m_fY - g_iWinSizeY / 2.f), m_fZ, 1.f));
         m_bFadeOut = false;
         m_fFadeOutTimeAcc = 0.f;
-        m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI);
+        //m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI);
 
         /* FadeOut 끝났으면 바로 FadeIn 켜버리기 */
         m_bFadeIn = true;
