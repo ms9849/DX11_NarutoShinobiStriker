@@ -282,6 +282,11 @@ HRESULT CGameInstance::Add_RenderGroup(RENDER eRenderGroup, CGameObject* pRender
 	return m_pRenderer->Add_RenderGroup(eRenderGroup, pRenderObject);
 }
 
+HRESULT CGameInstance::Add_Font(CFont* pRenderFont)
+{
+	return m_pRenderer->Add_Font(pRenderFont);
+}
+
 #pragma endregion
 
 #pragma region PIPELINE

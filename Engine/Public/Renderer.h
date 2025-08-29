@@ -18,12 +18,14 @@ private:
 public:
 	HRESULT Initialize();
 	HRESULT Add_RenderGroup(RENDER eRenderGroup, class CGameObject* pRenderObject);
+	HRESULT Add_Font(class CFont* pRenderFont);
 	void Render();
 
 private:
 	ID3D11Device* m_pDevice = { nullptr };
 	ID3D11DeviceContext* m_pContext = { nullptr };
 	list<class CGameObject*>			m_RenderObjects[ENUM_CLASS(RENDER::END)];
+	list<class CFont*>					m_Fonts = {};
 
 
 private:
@@ -31,6 +33,7 @@ private:
 	void Render_NonBlend();
 	void Render_Blend();
 	void Render_UI();
+	void Render_Font();
 
 public:
 	static CRenderer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -172,6 +172,9 @@
     <ClInclude Include="..\Public\Channel.h">
       <Filter>01.Utility\03.Components\Model\Animation\Channel</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Font.h">
+      <Filter>01.Utility\03.Components\Font</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -299,6 +302,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Channel.cpp">
       <Filter>01.Utility\03.Components\Model\Animation\Channel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Font.cpp">
+      <Filter>01.Utility\03.Components\Font</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -439,6 +445,9 @@
     </Filter>
     <Filter Include="01.Utility\03.Components\Model\Animation\Channel">
       <UniqueIdentifier>{6ae031e7-29aa-41a3-81ab-8c5ce6fd63db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Font">
+      <UniqueIdentifier>{c53e8430-de4d-4a3d-a4e9-9771f8116caf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

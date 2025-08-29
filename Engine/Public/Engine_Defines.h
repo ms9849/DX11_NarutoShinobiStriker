@@ -8,7 +8,9 @@
 #include "DirectXTK/DDSTextureLoader.h"
 #include "DirectXTK/WICTextureLoader.h"
 #include "FX11/d3dx11effect.h"
-
+/* 폰트 헤더 */
+#include "DirectXTK/SpriteFont.h"
+#include "DirectXTK/SpriteBatch.h"
 /* assimp library */
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
