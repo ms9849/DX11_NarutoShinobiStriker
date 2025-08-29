@@ -39,9 +39,13 @@ void CButton::Priority_Update(_float fTimeDelta)
 
 void CButton::Update(_float fTimeDelta)
 {
-	if (m_bFadeOut)
+	if (m_bFadeOut && (m_fReserveTime < m_fTimeAcc))
 		Play_Animation_FadeOut(fTimeDelta);
 
+	if (m_bFadeIn && (m_fReserveTime < m_fTimeAcc))
+		Play_Animation_FadeIn(fTimeDelta);
+
+	m_fTimeAcc += fTimeDelta;
 }
 
 void CButton::Late_Update(_float fTimeDelta)
@@ -67,16 +71,12 @@ HRESULT CButton::Bind_ShaderResources()
 	if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_bFadeOut)
 		m_pShaderCom->Bind_Float("g_Alpha", 1 - (m_fFadeOutTimeAcc / m_fFadeOutMaxTimeAcc));
 
-	//else if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_bFadeIn)
-	//	m_pShaderCom->Bind_Float("g_Alpha", m_fFadeInTimeAcc / m_fFadeInMaxTimeAcc);
+	else if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_bFadeIn)
+		m_pShaderCom->Bind_Float("g_Alpha", m_fFadeInTimeAcc / m_fFadeInMaxTimeAcc);
+
+
 
 	return S_OK;
-}
-
-void CButton::Trigger_FadeOut()
-{
-	m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT);
-	m_bFadeOut = true;
 }
 
 _bool CButton::IsClicked()
@@ -87,7 +87,6 @@ _bool CButton::IsClicked()
 _bool CButton::IsHovered()
 {
 	return true;
-	//return PtInRect(&m_rcButton, m_pGameInstance->Get_MousePos());
 }
 
 void CButton::Toggle_Focus()
@@ -98,19 +97,65 @@ void CButton::Toggle_Focus()
 		m_iTextureIdx = 0;
 }
 
+void CButton::Trigger_FadeIn(_float fReserveTime)
+{
+	m_fReserveTime = fReserveTime;
+	m_fTimeAcc = 0.f;
+
+	m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT);
+	m_bVisible = true;
+	m_bFadeIn = true;
+}
+
+void CButton::Trigger_FadeOut(_float fReserveTime)
+{
+	m_fReserveTime = fReserveTime;
+	m_fTimeAcc = 0.f;
+
+	m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT);
+	m_bFadeOut = true;
+}
+
 void CButton::Play_Animation_FadeOut(_float fTimeDelta)
 {
 	m_fFadeOutTimeAcc += fTimeDelta;
 
-	if (m_fFadeOutTimeAcc > m_fFadeOutMaxTimeAcc)
+	if (m_fFadeOutTimeAcc >= m_fFadeOutMaxTimeAcc)
 		m_fFadeOutTimeAcc = m_fFadeOutMaxTimeAcc;
+
+	else if (m_fFadeOutTimeAcc < m_fFadeOutMaxTimeAcc)
+		m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet((m_fX - g_iWinSizeX / 2.f - m_fAnimationDist * (m_fFadeOutTimeAcc / m_fFadeOutMaxTimeAcc)), -1.f * (m_fY - g_iWinSizeY / 2.f), m_fZ, 1.f));
 
 	/* 애니메이션 종료 */
 	if (m_fFadeOutTimeAcc >= m_fFadeOutMaxTimeAcc)
 	{
+		m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(m_fX - g_iWinSizeX / 2.f, -1.f * (m_fY - g_iWinSizeY / 2.f), m_fZ, 1.f));
 		m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI);
 		m_bFadeOut = false;
+		m_bVisible = false;
 		m_fFadeOutTimeAcc = 0.f;
+		m_fTimeAcc = 0.f;
+	}
+}
+
+void CButton::Play_Animation_FadeIn(_float fTimeDelta)
+{
+	m_fFadeInTimeAcc += fTimeDelta;
+
+	if (m_fFadeInTimeAcc >= m_fFadeInMaxTimeAcc)
+		m_fFadeInTimeAcc = m_fFadeInMaxTimeAcc;
+
+	else if (m_fFadeInTimeAcc < m_fFadeInMaxTimeAcc)
+		m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet((m_fX - g_iWinSizeX / 2.f - m_fAnimationDist * (1 - m_fFadeInTimeAcc / m_fFadeInMaxTimeAcc)), -1.f * (m_fY - g_iWinSizeY / 2.f), m_fZ, 1.f));
+
+	/* 애니메이션 종료 */
+	if (m_fFadeInTimeAcc >= m_fFadeInMaxTimeAcc)
+	{
+		m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(m_fX - g_iWinSizeX / 2.f, -1.f * (m_fY - g_iWinSizeY / 2.f), m_fZ, 1.f));
+		m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI);
+		m_bFadeIn = false;
+		m_fFadeInTimeAcc = 0.f;
+		m_fTimeAcc = 0.f;
 	}
 }
 

@@ -104,12 +104,14 @@ void CMissionAlertPanel::Play_Animation_FadeIn(_float fTimeDelta)
 {
     m_fFadeInTimeAcc += fTimeDelta;
 
-    if (m_fFadeInTimeAcc < m_fFadeInMaxTimeAcc)
-    {
+    if (m_fFadeInTimeAcc >= m_fFadeInMaxTimeAcc)
+        m_fFadeInTimeAcc = m_fFadeInMaxTimeAcc;
+
+    else if (m_fFadeInTimeAcc < m_fFadeInMaxTimeAcc)
         m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet((m_fX - g_iWinSizeX / 2.f - m_fAnimationDist * (1 - m_fFadeInTimeAcc / m_fFadeInMaxTimeAcc)), -1.f * (m_fY - g_iWinSizeY / 2.f), m_fZ, 1.f));
-    }
+
     /* 애니메이션 종료 */
-    else if (m_fFadeInTimeAcc >= m_fFadeInMaxTimeAcc)
+    if (m_fFadeInTimeAcc >= m_fFadeInMaxTimeAcc)
     {
         m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(m_fX - g_iWinSizeX / 2.f, -1.f * (m_fY - g_iWinSizeY / 2.f), m_fZ, 1.f));
         m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI);

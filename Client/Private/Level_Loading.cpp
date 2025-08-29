@@ -101,7 +101,7 @@ void CLevel_Loading::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pLoader);
 	Safe_Release(m_pLoadingBarPanel);
+	Safe_Release(m_pLoader);
 	Safe_Release(m_pGameManager);
 }

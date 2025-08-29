@@ -68,24 +68,14 @@ public:
 public:
 	void Play_Animation_FadeIn(_float fTimeDelta);
 	void Play_Animation_FadeOut(_float fTimeDelta);
-
-	void Select_Parts();
-	void Select_Head();
-	void Select_Eye();
-	void Select_Upper();
-	void Select_Lower();
-	void Select_Mask();
-	void Select_Accessory();
-
 private:
 	/* 0 ~ 8 */
 	/* 
-		임시로 하드코딩. 추후 모델 정보 뽑아오면 갯수 카운팅해서 
-		데이터 받아온뒤 세팅해주는 
-		방식으로 진행. 
+	임시로 하드코딩. 추후 모델 정보 뽑아오면 갯수 카운팅해서 
+	데이터 받아온뒤 세팅해주는 
+	방식으로 진행. 
 	*/
-	_uint m_iCurrentIdx;
-	_int m_ButtonInfos[ENUM_CLASS(SELECT_TYPE::END)] = { 6,5,5,5,5,4,4 };
+	_int m_ButtonInfos[ENUM_CLASS(SELECT_TYPE::END)] = { 6,7,5,2,3,4,4 };
 	_int m_iFocusedNum = { 0 };
 	_int m_iMaxActivateNum = { 0 };
 	_int m_iDecideButtonNum = { 0 };
@@ -96,9 +86,14 @@ private:
 	_bool m_bChangeSelectType = { false };
 	_bool m_bBackToParts = { false };
 
+	_float m_fAnimationDist = { 50.f };
 	_float m_fFadeOutMaxTimeAcc = { 0.5f };
 	_float m_fFadeOutTimeAcc = { 0.f };
 
+	_float m_fFadeInMaxTimeAcc = { 0.5f };
+	_float m_fFadeInTimeAcc = { 0.f };
+
+	_float m_fButtonDelay = { 0.07f };
 private:
 	void Change_FocusedButton(_int iNum);
 	void Change_SelectType();
