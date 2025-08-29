@@ -3,6 +3,10 @@
 #include "Client_Defines.h"
 #include "Panel.h"
 
+NS_BEGIN(Engine)
+class CFont;
+NS_END
+
 NS_BEGIN(Client)
 
 class CMissionAlertPanel final : public CPanel
@@ -37,6 +41,7 @@ private:
 	_float m_fLifeTime = 10.f;
 	_bool  m_bVisible = { true };
 
+	CFont* m_pFontCom = { nullptr };
 private:
 	HRESULT Ready_Components();
 	virtual HRESULT Bind_ShaderResources() override;

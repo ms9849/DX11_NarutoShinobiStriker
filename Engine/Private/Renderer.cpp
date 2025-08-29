@@ -1,6 +1,7 @@
 #include "Renderer.h"
 
 #include "UIObject.h"
+#include "Font.h"
 
 CRenderer::CRenderer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice{ pDevice }
@@ -27,12 +28,25 @@ HRESULT CRenderer::Add_RenderGroup(RENDER eRenderGroup, CGameObject* pRenderObje
 	return S_OK;
 }
 
+HRESULT CRenderer::Add_Font(CFont* pRenderFont)
+{
+	if (nullptr == pRenderFont)
+		return E_FAIL;
+
+	m_Fonts.push_back(pRenderFont);
+
+	Safe_AddRef(pRenderFont);
+
+	return S_OK;
+}
+
 void CRenderer::Render()
 {
 	Render_Priority();
 	Render_NonBlend();
 	Render_Blend();
 	Render_UI();
+	Render_Font();
 }
 
 void CRenderer::Render_Priority()
@@ -97,6 +111,19 @@ void CRenderer::Render_UI()
 	m_RenderObjects[ENUM_CLASS(RENDER::UI)].clear();
 }
 
+void CRenderer::Render_Font()
+{
+	for (auto& pFont : m_Fonts)
+	{
+		if (nullptr != pFont)
+			pFont->DrawFont();
+
+		Safe_Release(pFont);
+	}
+
+	m_RenderObjects[ENUM_CLASS(RENDER::UI)].clear();
+}
+
 CRenderer* CRenderer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CRenderer* pInstance = new CRenderer(pDevice, pContext);
@@ -120,6 +147,12 @@ void CRenderer::Free()
 			Safe_Release(pRenderObject);
 		RenderObjects.clear();
 	}
+
+	for (auto& pFont : m_Fonts)
+	{
+		Safe_Release(pFont);
+	}
+	m_Fonts.clear();
 
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);

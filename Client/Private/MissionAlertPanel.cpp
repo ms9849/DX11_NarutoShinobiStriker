@@ -2,6 +2,7 @@
 
 #include "GameInstance.h"
 #include "GameManager.h"
+#include "Font.h"
 
 CMissionAlertPanel::CMissionAlertPanel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CPanel { pDevice, pContext, eObjectID }
@@ -59,6 +60,8 @@ void CMissionAlertPanel::Late_Update(_float fTimeDelta)
 {
     if(m_bVisible)
         m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
+
+    m_pGameInstance->Add_Font(m_pFontCom);
 }
 
 HRESULT CMissionAlertPanel::Render()
@@ -77,6 +80,10 @@ HRESULT CMissionAlertPanel::Ready_Components()
 
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxPosTex"),
         TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
+        return E_FAIL;
+
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Font"),
+        TEXT("Com_Font"), reinterpret_cast<CComponent**>(&m_pFontCom))))
         return E_FAIL;
 
     if (FAILED(__super::Add_Component(ENUM_CLASS(m_pGameManager->Get_NextLevel()), TEXT("Prototype_Component_Texture_MissionAlertPanel"),
