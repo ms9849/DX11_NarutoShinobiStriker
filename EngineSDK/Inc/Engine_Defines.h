@@ -11,6 +11,7 @@
 /* 폰트 헤더 */
 #include "DirectXTK/SpriteFont.h"
 #include "DirectXTK/SpriteBatch.h"
+#include "DirectXTK/CommonStates.h"
 /* assimp library */
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"

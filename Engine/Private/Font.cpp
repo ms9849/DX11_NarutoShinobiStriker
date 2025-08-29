@@ -38,7 +38,7 @@ HRESULT CFont::Initialize(void* pArg)
     return S_OK;
 }
 
-HRESULT CFont::Bind_Resources(const _tchar* pText, const _float2& vPosition, _float fAlpha, _float fScale, _fvector vColor, _float fRotation, const _float2& vOrigin)
+HRESULT CFont::Bind_Resources(const _tchar* pText, const _float2& vPosition, _float fScale, _fvector vColor, _float fRotation, const _float2& vOrigin)
 {
     m_pText = pText;
     m_vPosition = vPosition;
@@ -46,7 +46,6 @@ HRESULT CFont::Bind_Resources(const _tchar* pText, const _float2& vPosition, _fl
     m_vColor = vColor;
     m_fRotation = fRotation;
     m_vOrigin = vOrigin;
-    m_fAlpha = fAlpha;
 
     return S_OK;
 }
@@ -57,7 +56,13 @@ HRESULT CFont::DrawFont()
     /* 폰트에 따라 서로 다른 이펙트를 받긴 해야 하니까.. */
     /* 그렇다고 셰이더에 종속시키고 싶진 않고.. */
     // -> 알파값만 받아올 것
-    m_pBatch->Begin();
+
+    CommonStates State(m_pDevice);
+
+    m_pBatch->Begin(
+        SpriteSortMode_Deferred,
+        State.NonPremultiplied()
+    );
 
     m_pFont->DrawString(m_pBatch, m_pText, m_vPosition, m_vColor, m_fRotation, m_vOrigin, m_fScale);
 

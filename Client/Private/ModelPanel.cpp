@@ -238,7 +238,7 @@ void CModelPanel::Key_Input()
 
     if (m_pGameInstance->Key_Down(DIK_SPACE) && m_iFocusedNum != m_iDecideButtonNum)
     {
-        if (m_iFocusedNum < 0)
+        if (m_iFocusedNum < 0 || m_bFadeIn || m_bFadeOut)
             return;
 
         if (SELECT_TYPE::PARTS == m_eSelectType)
@@ -265,7 +265,7 @@ void CModelPanel::Key_Input()
 
     if (m_pGameInstance->Key_Down(DIK_ESCAPE))
     {
-        if (m_eSelectType == SELECT_TYPE::PARTS)
+        if (m_eSelectType == SELECT_TYPE::PARTS || m_bFadeIn || m_bFadeOut)
             return;
 
         m_bFadeOut = true;
