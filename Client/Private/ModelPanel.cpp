@@ -35,7 +35,6 @@ HRESULT CModelPanel::Initialize(void* pArg)
         return E_FAIL;
 
     m_iFocusedNum = -1;
-
     m_eSelectType = SELECT_TYPE::PARTS;
     m_iMaxActivateNum = m_ButtonInfos[ENUM_CLASS(m_eSelectType)];
     Set_Visible_Buttons(m_iMaxActivateNum);
@@ -50,6 +49,9 @@ void CModelPanel::Priority_Update(_float fTimeDelta)
 void CModelPanel::Update(_float fTimeDelta)
 {
     Key_Input();
+
+    if (m_bFadeIn)
+        Play_Animation_FadeIn(fTimeDelta);
 
     if (m_bFadeOut)
         Play_Animation_FadeOut(fTimeDelta);
@@ -70,66 +72,82 @@ HRESULT CModelPanel::Render()
 
 void CModelPanel::Play_Animation_FadeIn(_float fTimeDelta)
 {
+    m_fFadeInTimeAcc += fTimeDelta;
+
+    if (m_fFadeInTimeAcc >= m_fFadeInMaxTimeAcc)
+        m_fFadeInTimeAcc = m_fFadeInMaxTimeAcc;
+
+    else if (m_fFadeInTimeAcc < m_fFadeInMaxTimeAcc)
+        m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet((m_fX - g_iWinSizeX / 2.f - m_fAnimationDist * (1 - m_fFadeInTimeAcc / m_fFadeInMaxTimeAcc)), -1.f * (m_fY - g_iWinSizeY / 2.f), m_fZ, 1.f));
+
+    /* 애니메이션 종료 */
+    if (m_fFadeInTimeAcc >= m_fFadeInMaxTimeAcc && 
+        static_cast<CButton*>(m_Childs[m_iMaxActivateNum])->IsPlaying() == false)
+    {
+        m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(m_fX - g_iWinSizeX / 2.f, -1.f * (m_fY - g_iWinSizeY / 2.f), m_fZ, 1.f));
+        m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI);
+        m_bFadeIn = false;
+        m_fFadeInTimeAcc = 0.f;
+
+        if (m_bChangeSelectType)
+        {
+            Change_SelectType();
+            m_bChangeSelectType = false;
+        }
+
+        if (m_bBackToParts)
+        {
+            Back_ToParts();
+            m_bBackToParts = false;
+        }
+
+        for (_int i = 0; i < m_Childs.size(); ++i)
+            static_cast<CButton*>(m_Childs[i])->Toggle_ShowNormal();
+
+    }
 }
 
 void CModelPanel::Play_Animation_FadeOut(_float fTimeDelta)
 {
     m_fFadeOutTimeAcc += fTimeDelta;
 
-    /* 애니메이션 종료 */
     if (m_fFadeOutTimeAcc >= m_fFadeOutMaxTimeAcc)
+        m_fFadeOutTimeAcc = m_fFadeOutMaxTimeAcc;
+
+    else if (m_fFadeOutTimeAcc < m_fFadeOutMaxTimeAcc)
+        m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet((m_fX - g_iWinSizeX / 2.f - m_fAnimationDist * (m_fFadeOutTimeAcc / m_fFadeOutMaxTimeAcc)), -1.f * (m_fY - g_iWinSizeY / 2.f), m_fZ, 1.f));
+
+
+    /* 애니메이션 종료 */
+    if (m_fFadeOutTimeAcc >= m_fFadeOutMaxTimeAcc && 
+        static_cast<CButton*>(m_Childs[m_iMaxActivateNum - 1])->IsPlaying() == false)
     {
-        m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI);
+        m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(m_fX - g_iWinSizeX / 2.f, -1.f * (m_fY - g_iWinSizeY / 2.f), m_fZ, 1.f));
         m_bFadeOut = false;
         m_fFadeOutTimeAcc = 0.f;
+        m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI);
+
+        /* FadeOut 끝났으면 바로 FadeIn 켜버리기 */
+        m_bFadeIn = true;
 
         if (true == m_bChangeSelectType)
         {
-            Change_SelectType();
-            m_bChangeSelectType = false;
+            for (_int i = 0; i < m_ButtonInfos[m_iFocusedNum + 1]; ++i)
+                static_cast<CButton*>(m_Childs[i])->Trigger_FadeIn((i + 1) * m_fButtonDelay);
+
+            static_cast<CButton*>(m_Childs[m_iDecideButtonNum])->Set_Visible(false);
+
         }
 
         else if (true == m_bBackToParts)
         {
-            Back_ToParts();
-            m_bBackToParts = false;
+            for (_int i = 0; i < m_ButtonInfos[ENUM_CLASS(SELECT_TYPE::PARTS)]; ++i)
+                static_cast<CButton*>(m_Childs[i])->Trigger_FadeIn((i + 1) * m_fButtonDelay);
+            
+            /* 결정 버튼도 애니메이션 재생해주기 */
+            static_cast<CButton*>(m_Childs[m_iDecideButtonNum])->Trigger_FadeIn(0.f);
         }
     }
-}
-
-void CModelPanel::Select_Parts()
-{
-
-}
-
-void CModelPanel::Select_Head()
-{
-
-}
-
-void CModelPanel::Select_Eye()
-{
-
-}
-
-void CModelPanel::Select_Upper()
-{
-
-}
-
-void CModelPanel::Select_Lower()
-{
-
-}
-
-void CModelPanel::Select_Mask()
-{
-
-}
-
-void CModelPanel::Select_Accessory()
-{
-
 }
 
 void CModelPanel::Change_FocusedButton(_int iNum)
@@ -181,7 +199,6 @@ void CModelPanel::Change_SelectType()
     {
         m_eSelectType = static_cast<SELECT_TYPE>(m_iFocusedNum + 1);
         m_iMaxActivateNum = m_ButtonInfos[ENUM_CLASS(m_eSelectType)];
-        Set_Visible_Buttons(m_iMaxActivateNum);
     }
 
     /* 늘 포커스는 잃게해줘야 한다. */
@@ -218,22 +235,33 @@ void CModelPanel::Key_Input()
     if (m_pGameInstance->Key_Down(DIK_UP))
     {
         Change_FocusedButton(m_iFocusedNum - 1);
-
     }
 
     if (m_pGameInstance->Key_Down(DIK_SPACE) && m_iFocusedNum != m_iDecideButtonNum)
     {
-        m_bFadeOut = true;
-        m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT);
+        if (m_iFocusedNum < 0)
+            return;
 
-        for (_int i = 0; i < m_iMaxActivateNum; ++i)
-            static_cast<CButton*>(m_Childs[i])->Trigger_FadeOut();
-       
-        if(SELECT_TYPE::PARTS == m_eSelectType)
-            static_cast<CButton*>(m_Childs[m_iDecideButtonNum])->Trigger_FadeOut();
+        if (SELECT_TYPE::PARTS == m_eSelectType)
+        {
+            m_bFadeOut = true;
+            m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT);
 
-        m_bChangeSelectType = true;
+            for (_int i = 0; i < m_iMaxActivateNum; ++i)
+                static_cast<CButton*>(m_Childs[i])->Trigger_FadeOut((i + 1) * m_fButtonDelay);
 
+            for (_int i = 0; i < m_Childs.size(); ++i)
+                static_cast<CButton*>(m_Childs[i])->Toggle_ShowNormal();
+
+            if (SELECT_TYPE::PARTS == m_eSelectType)
+                static_cast<CButton*>(m_Childs[m_iDecideButtonNum])->Trigger_FadeOut(0.f);
+
+            m_bChangeSelectType = true;
+        }
+        else
+        {
+            /* 여기서 외형 바꿔주면 될 것 */
+        }
     }
 
     if (m_pGameInstance->Key_Down(DIK_ESCAPE))
@@ -245,7 +273,10 @@ void CModelPanel::Key_Input()
         m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT);
 
         for (_int i = 0; i < m_iMaxActivateNum; ++i)
-            static_cast<CButton*>(m_Childs[i])->Trigger_FadeOut();
+            static_cast<CButton*>(m_Childs[i])->Trigger_FadeOut((i + 1) * m_fButtonDelay);
+
+        for (_int i = 0; i < m_Childs.size(); ++i)
+            static_cast<CButton*>(m_Childs[i])->Toggle_ShowNormal();
 
         m_bBackToParts = true;
     }
@@ -254,15 +285,12 @@ void CModelPanel::Key_Input()
 void CModelPanel::Set_Visible_Buttons(_uint iMaxIdx)
 {
     for (_uint i = 0; i < iMaxIdx; ++i)
-    {
         static_cast<CButton*>(m_Childs[i])->Set_Visible(true);
-    }
 
     for (_uint i = iMaxIdx; i < m_Childs.size(); ++i)
-    {
         static_cast<CButton*>(m_Childs[i])->Set_Visible(false);
-    }
 
+    /* 결정 버튼 */
     if(m_eSelectType == SELECT_TYPE::PARTS)
         static_cast<CButton*>(m_Childs[m_iDecideButtonNum])->Set_Visible(true);
 }
@@ -288,6 +316,9 @@ HRESULT CModelPanel::Bind_ShaderResources()
 {
     if (FAILED(__super::Bind_ShaderResources()))
         return E_FAIL;
+
+    if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_bFadeIn)
+        m_pShaderCom->Bind_Float("g_Alpha", m_fFadeInTimeAcc / m_fFadeInMaxTimeAcc);
 
     if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_bFadeOut)
         m_pShaderCom->Bind_Float("g_Alpha", 1 - (m_fFadeOutTimeAcc / m_fFadeOutMaxTimeAcc));

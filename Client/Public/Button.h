@@ -19,17 +19,27 @@ protected:
 	virtual ~CButton() = default;
 
 public:
+	void Toggle_ShowNormal() { 
+		m_bShowNormal = !m_bShowNormal; 
+	}
+
 	void Set_Visible(_bool bFlag) {
 		m_bVisible = bFlag;
 	}
 
-	void Trigger_FadeOut();
+	_bool IsPlaying() {
+		return m_bFadeIn || m_bFadeOut;
+	}
 
 public:
-	_bool IsClicked();
-	_bool IsHovered();
-	void  Toggle_Focus();
-	void  Play_Animation_FadeOut(_float fTimeDelta);
+	_bool	IsClicked();
+	_bool	IsHovered();
+	void	Toggle_Focus();
+	/* 추후 폰트도 입력받게 하기.. */
+	void	Trigger_FadeIn(_float fReserveTime);
+	void	Trigger_FadeOut(_float fReserveTime);
+	void	Play_Animation_FadeOut(_float fTimeDelta);
+	void	Play_Animation_FadeIn(_float fTimeDelta);
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -42,10 +52,20 @@ public:
 protected:
 	RECT m_rcButton = {};
 	_bool m_bVisible = { true };
+
+	_float m_fReserveTime = { 0.f };
+	_float m_fTimeAcc = { 0.f };
+
+	_float m_fAnimationDist = { 50.f };
 	_float m_fFadeOutTimeAcc = { 0.f };
 	_float m_fFadeOutMaxTimeAcc = { 0.5f };
-	_bool m_bFadeOut = { false };
+	_bool  m_bFadeOut = { false };
 
+	_float m_fFadeInTimeAcc = { 0.f };
+	_float m_fFadeInMaxTimeAcc = { 0.5f };
+	_bool  m_bFadeIn = { false };
+
+	_bool  m_bShowNormal = { false };
 protected:
 	virtual HRESULT Bind_ShaderResources() override;
 

@@ -40,11 +40,13 @@ void CLevel_OutfitSelect::Update(_float fTimeDelta)
     if (m_pGameInstance->Key_Down(DIK_F3))
     {
         m_pGameInstance->Set_Visible_IMGUI(true, ENUM_CLASS(IMGUI_VISIBLE::GAMEINFO));
+        m_pGameInstance->Set_Visible_IMGUI(true, ENUM_CLASS(IMGUI_VISIBLE::OBJECT_INSPECTOR));
     }
 
     if (m_pGameInstance->Key_Down(DIK_F4))
     {
         m_pGameInstance->Set_Visible_IMGUI(false, ENUM_CLASS(IMGUI_VISIBLE::GAMEINFO));
+        m_pGameInstance->Set_Visible_IMGUI(true, ENUM_CLASS(IMGUI_VISIBLE::OBJECT_INSPECTOR));
     }
 
     if (m_pGameInstance->Key_Down(DIK_0))

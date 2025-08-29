@@ -114,20 +114,20 @@ HRESULT CMesh::Initialize_Prototype(MODEL eType, const class CModel* pModel, con
     Safe_Delete_Array(pIndices);
 #pragma endregion
 
-    D3D11_BUFFER_DESC StagingDesc{};
-    m_pIB->GetDesc(&StagingDesc);
-    StagingDesc.Usage = D3D11_USAGE_STAGING;
-    StagingDesc.BindFlags = 0;
-    StagingDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
-    StagingDesc.MiscFlags = 0;
+    //D3D11_BUFFER_DESC StagingDesc{};
+    //m_pIB->GetDesc(&StagingDesc);
+    //StagingDesc.Usage = D3D11_USAGE_STAGING;
+    //StagingDesc.BindFlags = 0;
+    //StagingDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+    //StagingDesc.MiscFlags = 0;
 
-    if (FAILED(m_pDevice->CreateBuffer(&StagingDesc, nullptr, &m_pStagingIB)))
-        return E_FAIL;
+    //if (FAILED(m_pDevice->CreateBuffer(&StagingDesc, nullptr, &m_pStagingIB)))
+    //    return E_FAIL;
 
-    m_pContext->CopyResource(m_pStagingIB, m_pIB);
+    //m_pContext->CopyResource(m_pStagingIB, m_pIB);
 
-    if (FAILED(m_pContext->Map(m_pStagingIB, 0, D3D11_MAP_READ, 0, &m_StagingData)))
-        return E_FAIL;
+    //if (FAILED(m_pContext->Map(m_pStagingIB, 0, D3D11_MAP_READ, 0, &m_StagingData)))
+    //    return E_FAIL;
 
     return S_OK;
 }
@@ -143,6 +143,11 @@ HRESULT CMesh::Initialize_Prototype(MODEL eType, const CModel* pModel, HANDLE hH
     if (FAILED(Load_Mesh_FromBinary(hHandle, dwByte, eType)))
         return E_FAIL;
 
+    return S_OK;
+}
+
+HRESULT CMesh::Initialize(void* pArg)
+{
     D3D11_BUFFER_DESC StagingDesc{};
     m_pIB->GetDesc(&StagingDesc);
 
@@ -160,11 +165,6 @@ HRESULT CMesh::Initialize_Prototype(MODEL eType, const CModel* pModel, HANDLE hH
     if (FAILED(m_pContext->Map(m_pStagingIB, 0, D3D11_MAP_READ, 0, &StagingData)))
         return E_FAIL;
 
-    return S_OK;
-}
-
-HRESULT CMesh::Initialize(void* pArg)
-{
     return S_OK;
 }
 
