@@ -1,6 +1,7 @@
 #include "Animation.h"
 
 #include "Channel.h"
+#include "Bone.h"
 
 CAnimation::CAnimation()
 {
@@ -27,14 +28,14 @@ HRESULT CAnimation::Initialize(const class CModel* pModel, const aiAnimation* pA
 	return S_OK;
 }
 
-void CAnimation::Update_TransformationMatrices(_float fTimeDelta)
+void CAnimation::Update_TransformationMatrices(const vector<CBone*>& Bones, _float fTimeDelta)
 {
 	/* 내 애니메이션의 현재 재생위치. */
 	m_fCurrentTrackPosition += m_fTickPerSecond * fTimeDelta;
 
 	for (auto& pChannel : m_Channels)
 	{
-		pChannel->Update_TransformationMatrix(m_fCurrentTrackPosition);
+		pChannel->Update_TransformationMatrix(Bones, m_fCurrentTrackPosition);
 	}
 }
 

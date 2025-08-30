@@ -37,6 +37,8 @@ void CMannequin::Priority_Update(_float fTimeDelta)
 
 void CMannequin::Update(_float fTimeDelta)
 {
+	m_pModelCom->Set_AnimIndex(4);
+	m_pModelCom->Play_Animation(fTimeDelta);
 }
 
 void CMannequin::Late_Update(_float fTimeDelta)
@@ -51,6 +53,9 @@ HRESULT CMannequin::Render()
 
 	for (_uint i = 0; i < m_iNumMeshes; ++i)
 	{
+		if (FAILED(m_pModelCom->Bind_BoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
+			return E_FAIL;
+
 		if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", aiTextureType_DIFFUSE, 0)))
 			return E_FAIL;
 
@@ -67,7 +72,7 @@ HRESULT CMannequin::Render()
 HRESULT CMannequin::Ready_Components()
 {
 	/* Com_Shader */
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxMesh"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxAnimMesh"),
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 

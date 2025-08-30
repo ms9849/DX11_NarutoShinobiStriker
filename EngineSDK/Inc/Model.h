@@ -40,6 +40,10 @@ private:
 	virtual ~CModel() = default;
 
 public:
+	void Set_AnimIndex(_uint iIdx) {
+		m_iCurrentAnimIndex = iIdx;
+	}
+
 	_uint Get_NumMeshes() const {
 		return m_iNumMeshes;
 	}
@@ -86,10 +90,15 @@ private:
 	_uint					m_iNumBones;
 	vector<class CBone*>	m_Bones;
 
+	_int						m_iCurrentAnimIndex = { -1 };
+	_uint						m_iNumAnimations = {};
+	vector<class CAnimation*>	m_Animations;
+
 private:
 	HRESULT Ready_Meshes();
 	HRESULT Ready_Materials(const _char* pModelFilePath);
 	HRESULT Ready_Bones(const aiNode* pAINode, _int iParentIndex);
+	HRESULT Ready_Animations();
 
 public:
 	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, MODEL eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix = XMMatrixIdentity());
