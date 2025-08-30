@@ -89,8 +89,8 @@ void CPlayer::Late_Update(_float fTimeDelta)
 	/* 스킬이 바뀌었다면. */
 	if (m_eCurAttackType != m_ePreAttackType)
 	{
-		Change_Skills();
 		__super::Change_AttackType();
+		Change_Skills();
 	}
 
 	m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);

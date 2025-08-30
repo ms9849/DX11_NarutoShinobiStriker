@@ -58,25 +58,27 @@ void CMissionAlertPanel::Update(_float fTimeDelta)
 
 void CMissionAlertPanel::Late_Update(_float fTimeDelta)
 {
-    if (m_bVisible)
-    {
-        m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
+    if (false == m_bVisible)
+        return;
 
-        _float3 vPosition;
-        XMStoreFloat3(&vPosition, m_pTransformCom->Get_State(STATE::POSITION));
+    /* 렌더러에 자기자신 추가 */
+    m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
 
-        if(m_bFadeIn)
-            m_pFontCom->Bind_Resources(TEXT("적을 쓰러뜨려라"), _float2{vPosition.x, vPosition.y}, 1.f, 
-            XMVectorSet(1.f, 1.f, 1.f, m_fFadeInTimeAcc / m_fFadeInMaxTimeAcc));
-        else if(m_bFadeOut)
-            m_pFontCom->Bind_Resources(TEXT("적을 쓰러뜨려라"), _float2{ vPosition.x, vPosition.y }, 1.f,
-                XMVectorSet(1.f, 1.f, 1.f, 1 - (m_fFadeOutTimeAcc / m_fFadeOutMaxTimeAcc)));
-        else
-            m_pFontCom->Bind_Resources(TEXT("적을 쓰러뜨려라"), _float2{ vPosition.x, vPosition.y }, 1.f,
-                XMVectorSet(1.f, 1.f, 1.f, 1.f));
+    /* 폰트 추가 */
+    _float4 vPosition = m_pTransformCom->Get_State_Float4(STATE::POSITION);
+    _float fAlpha = 1.f;
 
-        m_pGameInstance->Add_Font(m_pFontCom);
-    }
+    if (m_bFadeIn)
+        fAlpha = m_fFadeInTimeAcc / m_fFadeInMaxTimeAcc;
+
+    else if (m_bFadeOut)
+        fAlpha = 1 - (m_fFadeOutTimeAcc / m_fFadeOutMaxTimeAcc);
+
+    m_pFontCom->Bind_Resources(TEXT("적을 쓰러뜨려라!"), _float2{vPosition.x, vPosition.y}, 
+        1.f, XMVectorSet(1.f, 1.f, 1.f, fAlpha));
+
+    m_pGameInstance->Add_Font(m_pFontCom);
+
 }
 
 HRESULT CMissionAlertPanel::Render()
@@ -192,4 +194,6 @@ CGameObject* CMissionAlertPanel::Clone(void* pArg)
 void CMissionAlertPanel::Free()
 {
     __super::Free();
+
+    Safe_Release(m_pFontCom);
 }

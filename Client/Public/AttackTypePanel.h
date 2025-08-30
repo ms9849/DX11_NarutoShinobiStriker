@@ -4,6 +4,10 @@
 #include "Skill_Table.h"
 #include "Panel.h"
 
+NS_BEGIN(Engine)
+class CFont;
+NS_END
+
 NS_BEGIN(Client)
 
 class CAttackTypePanel : public CPanel
@@ -31,6 +35,8 @@ private:
 	_float m_fMaxTimeAcc = { 0.5f };
 	_float m_fAnimationDist = { 30.f };
 
+	CFont* m_pFontCom = { nullptr };
+	_wstring m_strFontText = {};
 private:
 	virtual HRESULT Bind_ShaderResources() override;
 	HRESULT Ready_Components();
