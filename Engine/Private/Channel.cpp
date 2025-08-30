@@ -1,5 +1,6 @@
 #include "Channel.h"
 #include "Model.h"
+#include "Bone.h"
 
 CChannel::CChannel()
 {
@@ -70,7 +71,7 @@ HRESULT CChannel::Initialize(const CModel* pModel, const aiNodeAnim* pAIChannel)
     return S_OK;
 }
 
-void CChannel::Update_TransformationMatrix(_float fCurrentTrackPosition)
+void CChannel::Update_TransformationMatrix(const vector<CBone*>& Bones, _float fCurrentTrackPosition)
 {
 	KEYFRAME		LastKeyFrame = m_KeyFrames.back();
 
@@ -78,21 +79,17 @@ void CChannel::Update_TransformationMatrix(_float fCurrentTrackPosition)
 	_vector			vRotation{};
 	_vector			vTranslation{};
 
-	/* 마지막 프레임이라면 이전 키프레임에만 영향을 받아야한다. */
 	if (fCurrentTrackPosition >= LastKeyFrame.fTrackPosition)
 	{
 		vScale = XMLoadFloat3(&LastKeyFrame.vScale);
 		vRotation = XMLoadFloat4(&LastKeyFrame.vRotation);
 		vTranslation = XMVectorSetW(XMLoadFloat3(&LastKeyFrame.vTranslation), 1.f);
 	}
-	/*
-	위 케이스가 아니라면 현재 진행중인 키프레임 & 키프레임 + 1,
-	두 개의 키프레임으로부터 선형보간 하여 상태 행렬을 뽑아내야 한다.
-	*/
-	else
+
+	else /* 선형보간을 해야겠다. */
 	{
 		if (fCurrentTrackPosition >= m_KeyFrames[m_iCurrentKeyFrameIndex + 1].fTrackPosition)
-			++m_iCurrentKeyFrameIndex;
+			++fCurrentTrackPosition;
 
 		_float3		vSourScale{}, vDestScale{};
 		_float4		vSourRotation{}, vDestRotation{};
@@ -119,7 +116,7 @@ void CChannel::Update_TransformationMatrix(_float fCurrentTrackPosition)
 	// _matrix		BoneTransformationMatrix = XMMatrixScaling() * 자전행렬 * ;
 	_matrix		BoneTransformationMatrix = XMMatrixAffineTransformation(vScale, XMVectorSet(0.f, 0.f, 0.f, 1.f), vRotation, vTranslation);
 
-	// Bones[m_iBoneIndex]->Set_Transformation(BoneTransformationMatrix);
+	Bones[m_iBoneIndex]->Set_Transformation(BoneTransformationMatrix);
 
 
 }

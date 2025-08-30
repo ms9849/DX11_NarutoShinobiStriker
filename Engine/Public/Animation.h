@@ -21,7 +21,7 @@ private:
 
 public:
 	HRESULT Initialize(const class CModel* pModel, const aiAnimation* pAIAnimation);
-	void Update_TransformationMatrices(_float fTimeDelta);
+	void Update_TransformationMatrices(const vector<class CBone*>& Bones, _float fTimeDelta);
 
 private:
 	_char						m_szName[MAX_PATH] = {};

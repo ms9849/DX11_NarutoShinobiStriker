@@ -18,6 +18,9 @@ public:
 		return !strcmp(pBoneName, m_szName);
 	}
 
+	void Set_Transformation(_fmatrix BoneTransformationMatrix) {
+		XMStoreFloat4x4(&m_TransformationMatrix, BoneTransformationMatrix);
+	}
 public:
 	HRESULT Initialize(const aiNode* pAINode, _int iParentIndex);
 	HRESULT Initialize(HANDLE hHandle, DWORD* dwByte);

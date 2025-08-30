@@ -5,6 +5,7 @@
 #include "Mesh.h"
 #include "Shader.h"
 #include "Material.h"
+#include "Animation.h"
 
 CModel::CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CComponent { pDevice, pContext }
@@ -15,12 +16,15 @@ CModel::CModel(const CModel& Prototype)
 	: CComponent{ Prototype }
 	, m_eType { Prototype.m_eType }
 	, m_iNumMeshes { Prototype.m_iNumMeshes }
+	, m_MeshNames{ Prototype.m_MeshNames }
 	, m_Meshes { Prototype.m_Meshes }
 	, m_iNumMaterials { Prototype.m_iNumMaterials }
 	, m_Materials { Prototype.m_Materials }
-	, m_PreTransformMatrix { Prototype.m_PreTransformMatrix }
-	, m_MeshNames { Prototype.m_MeshNames }
 	, m_Bones{ Prototype.m_Bones }
+	, m_iNumAnimations{ Prototype.m_iNumAnimations }
+	, m_Animations { Prototype.m_Animations }
+	, m_PreTransformMatrix{ Prototype.m_PreTransformMatrix }
+
 {
 	for (auto& pBone : m_Bones)
 		Safe_AddRef(pBone);
@@ -30,6 +34,9 @@ CModel::CModel(const CModel& Prototype)
 
 	for (auto& pMaterial : m_Materials)
 		Safe_AddRef(pMaterial);
+	
+	for (auto& pAnimation : m_Animations)
+		Safe_AddRef(pAnimation);
 }
 
 HRESULT CModel::Load_Model_FromBinary(const _tchar* pBinaryFilePath)
@@ -159,14 +166,15 @@ _int CModel::Get_BoneIndex(const _char* pBoneName) const
 {
 	_int	iBoneIndex = {};
 
-	auto iter = find_if(m_Bones.begin(), m_Bones.end(), [&](CBone* pBone)->_bool {
-		if (true == pBone->Compare_Name(pBoneName))
-			return true;
+	auto	iter = find_if(m_Bones.begin(), m_Bones.end(), [&](CBone* pBone)->_bool
+		{
+			if (true == pBone->Compare_Name(pBoneName))
+				return true;
 
-		++iBoneIndex;
+			++iBoneIndex;
 
-		return false;
-	});
+			return false;
+		});
 	
 	if (iter == m_Bones.end())
 		return -1;
@@ -207,7 +215,6 @@ HRESULT CModel::Initialize_Prototype(MODEL eType, const _char* pModelFilePath, _
 {
 	_uint			iFlag = {};
 
-	//aiProcessPreset_TargetRealtime_Fast
 	iFlag = aiProcess_ConvertToLeftHanded | aiProcessPreset_TargetRealtime_Fast;
 
 	if (MODEL::NONANIM == eType)
@@ -236,6 +243,9 @@ HRESULT CModel::Initialize_Prototype(MODEL eType, const _char* pModelFilePath, _
 		return E_FAIL;
 
 	if (FAILED(Ready_Materials(pModelFilePath)))
+		return E_FAIL;
+
+	if (FAILED(Ready_Animations()))
 		return E_FAIL;
 
 	return S_OK;
@@ -292,7 +302,12 @@ HRESULT CModel::Bind_Material(_uint iMeshIndex, CShader* pShader, const _char* p
 
 void CModel::Play_Animation(_float fTimeDelta)
 {
+	if (-1 == m_iCurrentAnimIndex ||
+		m_iCurrentAnimIndex >= m_iNumAnimations)
+		return;
+
 	/* 내가 재생하고자하는 애니메이션(공격모션)이 이용하고 있는 뼈들의 상태 변환정보(TransformationMatrix)를 갱신해준다.*/
+	m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, fTimeDelta);
 
 	/* 모든 뼈를 순회하면서 CombinedTransformationMatrix를 갱신한다. */
 	for (auto& pBone : m_Bones)
@@ -350,7 +365,7 @@ HRESULT CModel::Ready_Bones(const aiNode* pAINode, _int iParentIndex)
 
 	m_Bones.push_back(pBone);
 
-	_int	iParent = (_uint)m_Bones.size() - 1;
+	_int	iParent = m_Bones.size() - 1;
 
 	for (size_t i = 0; i < pAINode->mNumChildren; i++)
 	{
@@ -358,6 +373,22 @@ HRESULT CModel::Ready_Bones(const aiNode* pAINode, _int iParentIndex)
 		Ready_Bones(pAINode->mChildren[i], iParent);
 	}
 
+
+	return S_OK;
+}
+
+HRESULT CModel::Ready_Animations()
+{
+	m_iNumAnimations = m_pAIScene->mNumAnimations;
+
+	for (size_t i = 0; i < m_iNumAnimations; i++)
+	{
+		CAnimation* pAnimation = CAnimation::Create(this, m_pAIScene->mAnimations[i]);
+		if (nullptr == pAnimation)
+			return E_FAIL;
+
+		m_Animations.push_back(pAnimation);
+	}
 
 	return S_OK;
 }
@@ -417,5 +448,9 @@ void CModel::Free()
 		Safe_Release(pMesh);
 	m_Meshes.clear();
 	
+	for (auto& pAnimation : m_Animations)
+		Safe_Release(pAnimation);
+	m_Animations.clear();
+
 	m_Importer.FreeScene();
 }
