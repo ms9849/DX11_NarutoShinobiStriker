@@ -21,6 +21,7 @@ public:
 	HRESULT DrawFont();
 
 private:
+	ID3D11BlendState* m_pBlendState = { nullptr };
 	SpriteFont* m_pFont = { nullptr };
 	SpriteBatch* m_pBatch = { nullptr };
 
@@ -30,6 +31,7 @@ private:
 	_vector m_vColor = {};
 	_float  m_fRotation = {};
 	_float2 m_vOrigin = {};
+	_float  m_fWinSizeX{}, m_fWinSizeY{};
 
 public:
 	static CFont* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pFontFilePath);

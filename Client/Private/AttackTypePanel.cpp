@@ -19,6 +19,24 @@ void CAttackTypePanel::Change_AttackType(ATTACK_TYPE eAttackType)
     /* 애니메이션도 여기서 재생 시켜줌 */
     m_iTextureIdx = ENUM_CLASS(eAttackType);
 
+    switch (eAttackType)
+    {
+    case ATTACK_TYPE::MELEE:
+        m_strFontText = TEXT("근접형");
+        break;
+
+    case ATTACK_TYPE::NINJUTSU:
+        m_strFontText = TEXT("인술형");
+        break;
+
+    case ATTACK_TYPE::DEFENSIVE:
+        m_strFontText = TEXT("방어형");
+        break;
+
+    default:
+        break;
+    }
+
     m_fTimeAcc = 0.f;
     m_bTriggered = true;
     m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT);
@@ -59,6 +77,18 @@ void CAttackTypePanel::Update(_float fTimeDelta)
 void CAttackTypePanel::Late_Update(_float fTimeDelta)
 {
     m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
+
+    /* 폰트 추가 */
+    _float4 vPosition = m_pTransformCom->Get_State_Float4(STATE::POSITION);
+    _float fAlpha = 1.f;
+
+    if (m_bTriggered)
+        fAlpha = m_fTimeAcc / m_fMaxTimeAcc;
+
+    m_pFontCom->Bind_Resources(m_strFontText.c_str(), _float2{vPosition.x + 20.f, vPosition.y - 10.f},
+        0.5f, XMVectorSet(1.f, 1.f, 1.f, fAlpha));
+
+    m_pGameInstance->Add_Font(m_pFontCom);
 }
 
 HRESULT CAttackTypePanel::Render()
@@ -93,6 +123,11 @@ HRESULT CAttackTypePanel::Ready_Components()
     if (FAILED(__super::Add_Component(ENUM_CLASS(m_pGameManager->Get_NextLevel()), TEXT("Prototype_Component_Texture_AttackTypePanel"),
         TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
         return E_FAIL;
+
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Font"),
+        TEXT("Com_Font"), reinterpret_cast<CComponent**>(&m_pFontCom))))
+        return E_FAIL;
+
 
     return S_OK;
 }
@@ -149,4 +184,6 @@ CGameObject* CAttackTypePanel::Clone(void* pArg)
 void CAttackTypePanel::Free()
 {
     __super::Free();
+
+    Safe_Release(m_pFontCom);
 }

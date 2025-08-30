@@ -92,7 +92,7 @@ void CChannel::Update_TransformationMatrix(_float fCurrentTrackPosition)
 	else
 	{
 		if (fCurrentTrackPosition >= m_KeyFrames[m_iCurrentKeyFrameIndex + 1].fTrackPosition)
-			++fCurrentTrackPosition;
+			++m_iCurrentKeyFrameIndex;
 
 		_float3		vSourScale{}, vDestScale{};
 		_float4		vSourRotation{}, vDestRotation{};

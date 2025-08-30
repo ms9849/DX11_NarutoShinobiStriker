@@ -74,11 +74,11 @@ HRESULT CMainApp::Render()
 
 	m_pGameInstance->Render_Begin(&vClearColor);
 
+	m_pGameInstance->Draw();
+
 	/* IMGUI ·»´õ */
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
-	m_pGameInstance->Draw();
 
 	m_pGameInstance->Render_End();
 

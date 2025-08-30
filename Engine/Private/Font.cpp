@@ -14,7 +14,11 @@ CFont::CFont(const CFont& rhs)
     : CComponent { rhs }
     , m_pFont { rhs.m_pFont }
     , m_pBatch { rhs.m_pBatch }
+    , m_pBlendState { rhs.m_pBlendState }
+    , m_fWinSizeX { rhs.m_fWinSizeX }
+    , m_fWinSizeY { rhs.m_fWinSizeY }
 {
+    Safe_AddRef(m_pBlendState);
 }
 
 HRESULT CFont::Initialize_Prototype(const _tchar* pFontFilePath)
@@ -29,6 +33,23 @@ HRESULT CFont::Initialize_Prototype(const _tchar* pFontFilePath)
     if (nullptr == m_pFont)
         return E_FAIL;
 
+    CommonStates* BatchState = new CommonStates(m_pDevice);
+    if (nullptr == BatchState)
+        return E_FAIL;
+
+    m_pBlendState = BatchState->NonPremultiplied();
+    Safe_AddRef(m_pBlendState);
+
+    Safe_Delete(BatchState);
+
+    D3D11_VIEWPORT ViewPortDesc{};
+    //앞으로는 뷰포트가 여러개가 될거고, 갯수를 입력받는게 당연해질 것이라고 하심.
+    _uint          iNumViewPorts = { 1 };
+
+    m_pContext->RSGetViewports(&iNumViewPorts, &ViewPortDesc);
+    m_fWinSizeX = ViewPortDesc.Width;
+    m_fWinSizeY = ViewPortDesc.Height;
+
     return S_OK;
 }
 
@@ -41,7 +62,12 @@ HRESULT CFont::Initialize(void* pArg)
 HRESULT CFont::Bind_Resources(const _tchar* pText, const _float2& vPosition, _float fScale, _fvector vColor, _float fRotation, const _float2& vOrigin)
 {
     m_pText = pText;
-    m_vPosition = vPosition;
+
+    _vector vDest = m_pFont->MeasureString(pText);
+    _float2 vTextSize;
+    XMStoreFloat2(&vTextSize, vDest);
+
+    m_vPosition = _float2{ m_fWinSizeX / 2.f + vPosition.x - vTextSize.x/2.f, m_fWinSizeY/2.f - vPosition.y - vTextSize.y / 2.f } ;
     m_fScale = fScale;
     m_vColor = vColor;
     m_fRotation = fRotation;
@@ -57,11 +83,9 @@ HRESULT CFont::DrawFont()
     /* 그렇다고 셰이더에 종속시키고 싶진 않고.. */
     // -> 알파값만 받아올 것
 
-    CommonStates State(m_pDevice);
-
     m_pBatch->Begin(
         SpriteSortMode_Deferred,
-        State.NonPremultiplied()
+        m_pBlendState
     );
 
     m_pFont->DrawString(m_pBatch, m_pText, m_vPosition, m_vColor, m_fRotation, m_vOrigin, m_fScale);
@@ -90,7 +114,7 @@ CComponent* CFont::Clone(void* pArg)
 
     if (FAILED(pInstance->Initialize(pArg)))
     {
-        MSG_BOX("Create Failed! : CFont");
+        MSG_BOX("Clone Failed! : CFont");
         Safe_Release(pInstance);
     }
 
@@ -106,4 +130,6 @@ void CFont::Free()
         Safe_Delete(m_pFont);
         Safe_Delete(m_pBatch);
     }
+
+    Safe_Release(m_pBlendState);
 }
