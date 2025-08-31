@@ -152,28 +152,28 @@
       <Filter>01.Utility\97. Input\Key</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Mesh.h">
-      <Filter>01.Utility\03.Components\Model\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Model.h">
-      <Filter>01.Utility\03.Components\Model</Filter>
+      <Filter>01.Utility\03.Components\Model\ASSIMP\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Picking_Manager.h">
       <Filter>01.Utility\07. Picking</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Material.h">
-      <Filter>01.Utility\03.Components\Model\Material</Filter>
+      <Filter>01.Utility\03.Components\Model\ASSIMP\Material</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Bone.h">
-      <Filter>01.Utility\03.Components\Model\Bone</Filter>
+      <Filter>01.Utility\03.Components\Model\ASSIMP\Bone</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Animation.h">
-      <Filter>01.Utility\03.Components\Model\Animation</Filter>
+      <Filter>01.Utility\03.Components\Model\ASSIMP\Animation</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Channel.h">
-      <Filter>01.Utility\03.Components\Model\Animation\Channel</Filter>
+      <Filter>01.Utility\03.Components\Model\ASSIMP\Animation\Channel</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Font.h">
       <Filter>01.Utility\03.Components\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Model.h">
+      <Filter>01.Utility\03.Components\Model\ASSIMP</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -283,28 +283,28 @@
       <Filter>01.Utility\97. Input\Key</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Mesh.cpp">
-      <Filter>01.Utility\03.Components\Model\Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Model.cpp">
-      <Filter>01.Utility\03.Components\Model</Filter>
+      <Filter>01.Utility\03.Components\Model\ASSIMP\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Picking_Manager.cpp">
       <Filter>01.Utility\07. Picking</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Material.cpp">
-      <Filter>01.Utility\03.Components\Model\Material</Filter>
+      <Filter>01.Utility\03.Components\Model\ASSIMP\Material</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Bone.cpp">
-      <Filter>01.Utility\03.Components\Model\Bone</Filter>
+      <Filter>01.Utility\03.Components\Model\ASSIMP\Bone</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Animation.cpp">
-      <Filter>01.Utility\03.Components\Model\Animation</Filter>
+      <Filter>01.Utility\03.Components\Model\ASSIMP\Animation</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Channel.cpp">
-      <Filter>01.Utility\03.Components\Model\Animation\Channel</Filter>
+      <Filter>01.Utility\03.Components\Model\ASSIMP\Animation\Channel</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Font.cpp">
       <Filter>01.Utility\03.Components\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Model.cpp">
+      <Filter>01.Utility\03.Components\Model\ASSIMP</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -428,26 +428,32 @@
     <Filter Include="01.Utility\03.Components\Model">
       <UniqueIdentifier>{a38764fb-2a37-4c7b-8bad-45163f660b98}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\03.Components\Model\Mesh">
-      <UniqueIdentifier>{15eb6c1e-bfed-48f0-9848-fa42c62219d3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\07. Picking">
       <UniqueIdentifier>{b495b8ad-024f-467c-80d7-7791cf763d26}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\03.Components\Model\Material">
-      <UniqueIdentifier>{c0514e39-501c-4b58-8609-e2aa3c08ba99}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Utility\03.Components\Model\Bone">
-      <UniqueIdentifier>{11ef9adb-068f-4c5f-9355-9efb497730e0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Utility\03.Components\Model\Animation">
-      <UniqueIdentifier>{9649bd49-7ac8-4be5-93cb-8a10d93c455d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Utility\03.Components\Model\Animation\Channel">
-      <UniqueIdentifier>{6ae031e7-29aa-41a3-81ab-8c5ce6fd63db}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\03.Components\Font">
       <UniqueIdentifier>{c53e8430-de4d-4a3d-a4e9-9771f8116caf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Model\ASSIMP">
+      <UniqueIdentifier>{bb10fe78-34fe-4dea-9c33-c2bcc1bd36f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Model\ASSIMP\Mesh">
+      <UniqueIdentifier>{15eb6c1e-bfed-48f0-9848-fa42c62219d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Model\ASSIMP\Material">
+      <UniqueIdentifier>{c0514e39-501c-4b58-8609-e2aa3c08ba99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Model\ASSIMP\Bone">
+      <UniqueIdentifier>{11ef9adb-068f-4c5f-9355-9efb497730e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Model\ASSIMP\Animation">
+      <UniqueIdentifier>{9649bd49-7ac8-4be5-93cb-8a10d93c455d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Model\ASSIMP\Animation\Channel">
+      <UniqueIdentifier>{6ae031e7-29aa-41a3-81ab-8c5ce6fd63db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Model\BINARY">
+      <UniqueIdentifier>{5fe47600-2ddb-4c28-b50a-ea8fcf7fb75f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

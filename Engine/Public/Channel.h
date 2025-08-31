@@ -17,6 +17,8 @@ private:
 public:
 	HRESULT Initialize(const class CModel* pModel, const aiNodeAnim* pAIChannel);
 	void Update_TransformationMatrix(const vector<class CBone*>& Bones, _float fCurrentTrackPosition);
+	HRESULT Save_Channel_ToBinary(HANDLE hHandle, DWORD* dwByte, const aiNodeAnim* pAIChannel) const;
+	HRESULT Load_Channel_ToBinary(HANDLE hHandle, DWORD* dwByte);
 
 private:
 	/* 접근할 뼈의 이름 (CBone) */

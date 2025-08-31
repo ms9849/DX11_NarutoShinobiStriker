@@ -152,6 +152,14 @@ HRESULT CModel::Save_Model_ToBinary(const _char* pModelSavePath)
 		if(FAILED(m_Meshes[i]->Save_Mesh_ToBinary(hHandle, &dwByte, m_pAIScene->mMeshes[i])))
 			return E_FAIL;
 
+	/* 애니메이션 갯수 저장 */
+	WriteFile(hHandle, &m_iNumAnimations, sizeof(_uint), &dwByte, nullptr);
+	/* 메쉬 이름 저장 (메쉬 문자열 크기, 문자열 순). */
+	for (_uint i = 0; i < m_iNumAnimations; ++i)
+		if (FAILED(m_Animations[i]->Save_Animation_ToBinary(hHandle, &dwByte, m_pAIScene->mAnimations[i])))
+			return E_FAIL;
+
+
 	CloseHandle(hHandle);
 
 	return S_OK;

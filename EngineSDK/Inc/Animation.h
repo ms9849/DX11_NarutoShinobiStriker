@@ -23,9 +23,12 @@ public:
 	HRESULT Initialize(const class CModel* pModel, const aiAnimation* pAIAnimation);
 	void Update_TransformationMatrices(const vector<class CBone*>& Bones, _float fTimeDelta);
 
+	HRESULT Save_Animation_ToBinary(HANDLE hHandle, DWORD* dwByte, const aiAnimation* pAIAnimation) const;
+	HRESULT Load_Animation_ToBinary(HANDLE hHandle, DWORD* dwByte);
+
 private:
 	_char						m_szName[MAX_PATH] = {};
-	_float						m_fCurrentTrackPosition = {};
+	_float						m_fCurrentTrackPosition = { 0 };
 	/* 애니메이션 재생을 위한 전체 길이 */
 	_float						m_fDuration = {};
 	/* 초당 얼마나 재생되어야하는지 : 재생 속도 */

@@ -39,6 +39,43 @@ void CAnimation::Update_TransformationMatrices(const vector<CBone*>& Bones, _flo
 	}
 }
 
+HRESULT CAnimation::Save_Animation_ToBinary(HANDLE hHandle, DWORD* dwByte, const aiAnimation* pAIAnimation) const
+{
+	/* 
+	1. 이름 
+	2. 총 길이 ( m_fDuration )  
+	3. 재생 속도 
+	4. 채널 갯수 
+	5. 채널 정보
+	*/
+	/* 애니메이션의 이름 저장 */
+	if (false == WriteFile(hHandle, &m_szName, MAX_PATH, dwByte, nullptr))
+		return E_FAIL;
+	/* 애니메이션의 총 길이 저장 */
+	if (false == WriteFile(hHandle, &m_fDuration, sizeof(_float), dwByte, nullptr))
+		return E_FAIL;
+	/* 애니메이션의 속도 저장*/
+	if (false == WriteFile(hHandle, &m_fTickPerSecond, sizeof(_float), dwByte, nullptr))
+		return E_FAIL;
+	/* 애니메이션의 채널갯수 저장 */
+	if (false == WriteFile(hHandle, &m_iNumChannels, sizeof(_uint), dwByte, nullptr))
+		return E_FAIL;
+	/* 애니메이션 전체 저장 */
+	for (_int i = 0; i < m_iNumChannels; ++i)
+	{
+		if (FAILED(m_Channels[i]->Save_Channel_ToBinary(hHandle,  dwByte, pAIAnimation->mChannels[i])))
+			return E_FAIL;
+	}
+
+	return S_OK;
+}
+
+HRESULT CAnimation::Load_Animation_ToBinary(HANDLE hHandle, DWORD* dwByte)
+{
+
+	return S_OK;
+}
+
 CAnimation* CAnimation::Create(const class CModel* pModel, const aiAnimation* pAIAnimation)
 {
 	CAnimation* pInstance = new CAnimation();
