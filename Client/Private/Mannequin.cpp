@@ -37,7 +37,7 @@ void CMannequin::Priority_Update(_float fTimeDelta)
 
 void CMannequin::Update(_float fTimeDelta)
 {
-	m_pModelCom->Set_AnimIndex(4);
+	m_pModelCom->Set_AnimIndex(3);
 	m_pModelCom->Play_Animation(fTimeDelta);
 }
 

@@ -121,6 +121,38 @@ void CChannel::Update_TransformationMatrix(const vector<CBone*>& Bones, _float f
 
 }
 
+HRESULT CChannel::Save_Channel_ToBinary(HANDLE hHandle, DWORD* dwByte, const aiNodeAnim* pAIChannel) const
+{
+	/* 저장할 정보들 */
+	/* 1. 접근할 뼈의 이름 (CBone) */
+	/* 2. 접근할 뼈의 인덱스 (CBone) */
+	/* 3. 총 키프레임의 갯수 */
+	/* 4. 키프레임들. */
+
+	/* 뼈의 이름 저장 */
+	if (false == WriteFile(hHandle, &m_szName, MAX_PATH, dwByte, nullptr))
+		return E_FAIL;
+	/* 접근할 뼈의 인덱스 저장 */
+	if (false == WriteFile(hHandle, &m_iBoneIndex, sizeof(_int), dwByte, nullptr))
+		return E_FAIL;
+	/* 키프레임 갯수 저장 */
+	if (false == WriteFile(hHandle, &m_iNumKeyFrames, sizeof(_int), dwByte, nullptr))
+		return E_FAIL;
+	/* 순회하면서 키프레임까지 저장. */
+	for (_int i = 0; i < m_iNumKeyFrames; ++i)
+	{
+		if (false == WriteFile(hHandle, &m_KeyFrames[i], sizeof(KEYFRAME), dwByte, nullptr))
+			return E_FAIL;
+	}
+
+	return S_OK;
+}
+
+HRESULT CChannel::Load_Channel_ToBinary(HANDLE hHandle, DWORD* dwByte)
+{
+	return S_OK;
+}
+
 CChannel* CChannel::Create(const CModel* pModel, const aiNodeAnim* pAIChannel)
 {
     CChannel* pInstance = new CChannel();
