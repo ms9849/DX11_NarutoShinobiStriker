@@ -21,9 +21,22 @@ private:
 	virtual ~CAnimation() = default;
 
 public:
+	/* 트랙 포지션 & 키프레임 초기화 */
+	void Reset_Animation();
+
+	vector<class CChannel*>& Get_Channels() {
+		return m_Channels;
+	}
+
+	_float Get_CurrentTrackPosition() {
+		return m_fCurrentTrackPosition;
+	}
+
+public:
 	HRESULT Initialize(const class CModel* pModel, const aiAnimation* pAIAnimation);
 	HRESULT Initialize(HANDLE hHandle, DWORD* dwByte);
 	void Update_TransformationMatrices(const vector<class CBone*>& Bones, _float fTimeDelta);
+	void Update_Blending_TransformationMatrices(_bool* bFlag, vector<CChannel*>& PreChannels, const vector<class CBone*>& Bones, _float PreTrakcPosition, _float fTimeDelta);
 
 	HRESULT Save_Animation_ToBinary(HANDLE hHandle, DWORD* dwByte, const aiAnimation* pAIAnimation) const;
 	HRESULT Load_Animation_FromBinary(HANDLE hHandle, DWORD* dwByte);
@@ -36,10 +49,11 @@ private:
 	/* 초당 얼마나 재생되어야하는지 : 재생 속도 */
 	_float						m_fTickPerSecond = {};
 
+	/* 이 채널들이 어느 본을 움직이는지는 모름. 그럼.. 순회해서 찾아야겠지 */
 	_uint						m_iNumChannels = {};
 	vector<class CChannel*>		m_Channels;
 	vector<_uint>				m_CurrentKeyFrameIndices;
-
+	_float						m_fBlendRatio = { 0.f };
 public:
 	static CAnimation* Create(const class CModel* pModel, const aiAnimation* pAIAnimation);
 	static CAnimation* Create(HANDLE hHandle, DWORD* dwByte);

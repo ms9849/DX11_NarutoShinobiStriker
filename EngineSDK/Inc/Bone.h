@@ -18,6 +18,10 @@ public:
 		return !strcmp(pBoneName, m_szName);
 	}
 
+	_matrix Get_TransformMatrix() {
+		return XMLoadFloat4x4(&m_TransformationMatrix);
+	}
+
 	void Set_Transformation(_fmatrix BoneTransformationMatrix) {
 		XMStoreFloat4x4(&m_TransformationMatrix, BoneTransformationMatrix);
 	}

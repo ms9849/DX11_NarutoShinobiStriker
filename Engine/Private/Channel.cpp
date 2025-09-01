@@ -6,6 +6,18 @@ CChannel::CChannel()
 {
 }
 
+KEYFRAME CChannel::Get_CurKeyFrame(_float fTrackPosition)
+{
+	/* 죵나 위험해보이는데???... */
+	for (_uint i = 1; i < m_KeyFrames.size(); ++i)
+	{
+		if (m_KeyFrames[i].fTrackPosition > fTrackPosition && i != 0)
+			return m_KeyFrames[i - 1];
+	}
+
+	return m_KeyFrames[0];
+}
+
 HRESULT CChannel::Initialize(const CModel* pModel, const aiNodeAnim* pAIChannel)
 {
     strcpy_s(m_szName, pAIChannel->mNodeName.data);
@@ -44,7 +56,7 @@ HRESULT CChannel::Initialize(const CModel* pModel, const aiNodeAnim* pAIChannel)
 			어차피 키프레임 번호(i)가 같으면, 키의 종류(크,자,이) 에 상관없이 
 			같은 Track Position을 반환하니까.
 			*/
-			KeyFrame.fTrackPosition = pAIChannel->mScalingKeys[i].mTime;
+			KeyFrame.fTrackPosition = (_float)pAIChannel->mScalingKeys[i].mTime;
 		}
 
 		if (i < pAIChannel->mNumRotationKeys)
@@ -101,7 +113,7 @@ void CChannel::Update_TransformationMatrix(const vector<class CBone*>& Bones, _f
 
 	else /* 선형보간을 해야겠다. */
 	{
-		if (fCurrentTrackPosition >= m_KeyFrames[*pCurrentKeyFrameIndex + 1].fTrackPosition)
+		while (fCurrentTrackPosition >= m_KeyFrames[*pCurrentKeyFrameIndex + 1].fTrackPosition)
 			++*pCurrentKeyFrameIndex;
 
 		_float3		vSourScale{}, vDestScale{};
@@ -126,12 +138,68 @@ void CChannel::Update_TransformationMatrix(const vector<class CBone*>& Bones, _f
 
 	}
 
-	// _matrix		BoneTransformationMatrix = XMMatrixScaling() * 자전행렬 * ;
 	_matrix		BoneTransformationMatrix = XMMatrixAffineTransformation(vScale, XMVectorSet(0.f, 0.f, 0.f, 1.f), vRotation, vTranslation);
 
 	Bones[m_iBoneIndex]->Set_Transformation(BoneTransformationMatrix);
 
 
+}
+
+void CChannel::Update_Blending_TransformationMatrix(_float BlendRatio, CChannel* pChannel, const vector<class CBone*>& Bones, _float PreTrackPosition)
+{
+	_vector			vScale{};
+	_vector			vRotation{};
+	_vector			vTranslation{};
+
+	/* 매칭되는 채널 없으면 본 다이렉트로 꺼내옴 */
+	if (nullptr == pChannel)
+	{
+		_float3		vSourScale{}, vDestScale{};
+		_float4		vSourRotation{}, vDestRotation{};
+		_float3		vSourTranslation{}, vDestTranslation{};
+		_vector		SourScale{}, SourRotation{}, SourTranslation{};
+
+		/* 매칭 되는 본의 정보 다이렉트로 가져올 것 */
+		XMMatrixDecompose(&SourScale, &SourRotation, &SourTranslation, Bones[m_iBoneIndex]->Get_TransformMatrix());
+		
+		XMStoreFloat3(&vSourScale, SourScale);
+		vDestScale = m_KeyFrames[0].vScale;
+
+		XMStoreFloat4(&vSourRotation, SourRotation);
+		vDestRotation = m_KeyFrames[0].vRotation;
+
+		XMStoreFloat3(&vSourTranslation, SourTranslation);
+		vDestTranslation = m_KeyFrames[0].vTranslation;
+
+		vScale = XMVectorLerp(XMLoadFloat3(&vSourScale), XMLoadFloat3(&vDestScale), BlendRatio);
+		vRotation = XMQuaternionSlerp(XMLoadFloat4(&vSourRotation), XMLoadFloat4(&vDestRotation), BlendRatio);
+		vTranslation = XMVectorSetW(XMVectorLerp(XMLoadFloat3(&vSourTranslation), XMLoadFloat3(&vDestTranslation), BlendRatio), 1.f);
+	}
+
+	else /* 그게 아니라면 선형보간 해줌. */
+	{
+		_float3		vSourScale{}, vDestScale{};
+		_float4		vSourRotation{}, vDestRotation{};
+		_float3		vSourTranslation{}, vDestTranslation{};
+
+		/* 이전 채널의 정보 가져올 것 */
+		vSourScale = pChannel->Get_CurKeyFrame(PreTrackPosition).vScale;
+		vDestScale = m_KeyFrames[0].vScale;
+
+		vSourRotation = pChannel->Get_CurKeyFrame(PreTrackPosition).vRotation;
+		vDestRotation = m_KeyFrames[0].vRotation;
+
+		vSourTranslation = pChannel->Get_CurKeyFrame(PreTrackPosition).vTranslation;
+		vDestTranslation = m_KeyFrames[0].vTranslation;
+
+		vScale = XMVectorLerp(XMLoadFloat3(&vSourScale), XMLoadFloat3(&vDestScale), BlendRatio);
+		vRotation = XMQuaternionSlerp(XMLoadFloat4(&vSourRotation), XMLoadFloat4(&vDestRotation), BlendRatio);
+		vTranslation = XMVectorSetW(XMVectorLerp(XMLoadFloat3(&vSourTranslation), XMLoadFloat3(&vDestTranslation), BlendRatio), 1.f);
+	}
+
+	_matrix		BoneTransformationMatrix = XMMatrixAffineTransformation(vScale, XMVectorSet(0.f, 0.f, 0.f, 1.f), vRotation, vTranslation);
+
+	Bones[m_iBoneIndex]->Set_Transformation(BoneTransformationMatrix);
 }
 
 HRESULT CChannel::Save_Channel_ToBinary(HANDLE hHandle, DWORD* dwByte, const aiNodeAnim* pAIChannel) const
@@ -152,7 +220,7 @@ HRESULT CChannel::Save_Channel_ToBinary(HANDLE hHandle, DWORD* dwByte, const aiN
 	if (false == WriteFile(hHandle, &m_iNumKeyFrames, sizeof(_int), dwByte, nullptr))
 		return E_FAIL;
 	/* 순회하면서 키프레임까지 저장. */
-	for (_int i = 0; i < m_iNumKeyFrames; ++i)
+	for (_uint i = 0; i < m_iNumKeyFrames; ++i)
 	{
 		if (false == WriteFile(hHandle, &m_KeyFrames[i], sizeof(KEYFRAME), dwByte, nullptr))
 			return E_FAIL;
@@ -173,7 +241,7 @@ HRESULT CChannel::Load_Channel_FromBinary(HANDLE hHandle, DWORD* dwByte)
 	if (false == ReadFile(hHandle, &m_iNumKeyFrames, sizeof(_int), dwByte, nullptr))
 		return E_FAIL;
 	/* 순회하면서 키프레임까지 저장. */
-	for (_int i = 0; i < m_iNumKeyFrames; ++i)
+	for (_uint i = 0; i < m_iNumKeyFrames; ++i)
 	{
 		KEYFRAME Dest;
 

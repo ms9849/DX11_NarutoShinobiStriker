@@ -27,6 +27,8 @@ HRESULT CMannequin::Initialize(void* pArg)
 
 	m_iNumMeshes = m_pModelCom->Get_NumMeshes();
 
+	/*m_pModelCom->Set_AnimIndex(0);*/
+
 	return S_OK;
 }
 
@@ -36,7 +38,22 @@ void CMannequin::Priority_Update(_float fTimeDelta)
 
 void CMannequin::Update(_float fTimeDelta)
 {
-	m_pModelCom->Set_AnimIndex(3);
+	if(m_pGameInstance->Key_Down(DIK_0))
+		m_pModelCom->Set_AnimIndex(0);
+
+	if (m_pGameInstance->Key_Down(DIK_1))
+		m_pModelCom->Set_AnimIndex(1);
+
+	if (m_pGameInstance->Key_Down(DIK_2))
+		m_pModelCom->Set_AnimIndex(2);
+
+	if (m_pGameInstance->Key_Down(DIK_3))
+		m_pModelCom->Set_AnimIndex(3);
+
+	if (m_pGameInstance->Key_Down(DIK_4))
+		m_pModelCom->Set_AnimIndex(4);
+
+
 	m_pModelCom->Play_Animation(fTimeDelta);
 }
 

@@ -40,14 +40,6 @@ private:
 	virtual ~CModel() = default;
 
 public:
-	void Set_AnimIndex(_uint iIdx) {
-		m_iCurrentAnimIndex = iIdx;
-	}
-	
-	void Set_AnimationIndex(_int iAnimIndex) {
-		m_iCurrentAnimIndex = iAnimIndex;
-	}
-
 	_uint Get_NumMeshes() const {
 		return m_iNumMeshes;
 	}
@@ -55,6 +47,10 @@ public:
 	_wstring Get_MeshName(_uint iIdx) const;
 
 	_int Get_BoneIndex(const _char* pBoneName) const;
+
+public:
+	/* 이전 채널들의 정보를 전부 꺼내온다. */
+	void Set_AnimIndex(_uint iIdx);
 
 public:
 	HRESULT Save_Model_ToBinary(const _char* pModelSavePath);
@@ -94,10 +90,18 @@ private:
 	_uint					m_iNumBones;
 	vector<class CBone*>	m_Bones;
 
-	_int						m_iCurrentAnimIndex = { -1 };
+	/* 
+	현재 애니메이션 인덱스. 
+	CurrentAnimIndex가 있다면 PreAnimIndex를 체크해서 
+	보간을 수행해줘도 되지 않을까?
+	*/
+	_int						m_iCurrentAnimIndex = { 0 };
 	_uint						m_iNumAnimations = {};
 	vector<class CAnimation*>	m_Animations;
 
+	_float						m_fPreTrackPosition = { 0 };
+	vector<class CChannel*>		m_PreAnimationChannels = {};
+	_bool						m_bAnimationBlending = { false };
 private:
 	HRESULT Ready_Meshes();
 	HRESULT Ready_Materials(const _char* pModelFilePath);

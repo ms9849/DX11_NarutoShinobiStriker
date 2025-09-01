@@ -2,6 +2,8 @@
 
 #include "Channel.h"
 #include "Bone.h"
+#include "Model.h"
+#include "Channel.h"
 
 CAnimation::CAnimation()
 {
@@ -20,6 +22,16 @@ CAnimation::CAnimation(const CAnimation& rhs)
 		Safe_AddRef(pChannel);
 
 	strcpy_s(m_szName, rhs.m_szName);
+}
+
+void CAnimation::Reset_Animation()
+{
+	m_fCurrentTrackPosition = 0;
+
+	for (_uint i = 0; i < m_iNumChannels; ++i)
+	{
+		m_CurrentKeyFrameIndices[i] = 0;
+	}
 }
 
 HRESULT CAnimation::Initialize(const class CModel* pModel, const aiAnimation* pAIAnimation)
@@ -65,9 +77,43 @@ void CAnimation::Update_TransformationMatrices(const vector<CBone*>& Bones, _flo
 
 	_uint		iIndex = {};
 
+
+	for (auto& pChannel : m_Channels)
+		pChannel->Update_TransformationMatrix(Bones, m_fCurrentTrackPosition, &m_CurrentKeyFrameIndices[iIndex++]);
+
+}
+
+void CAnimation::Update_Blending_TransformationMatrices(_bool* bFlag, vector<CChannel*>& PreChannels, const vector<class CBone*>& Bones, _float PreTrackPosition, _float fTimeDelta)
+{
+	_uint		iIndex = {};
+
+	m_fBlendRatio += 0.1f;
+
+	if (m_fBlendRatio >= 1.0f)
+		m_fBlendRatio = 1.f;
+
 	for (auto& pChannel : m_Channels)
 	{
-		pChannel->Update_TransformationMatrix(Bones, m_fCurrentTrackPosition, &m_CurrentKeyFrameIndices[iIndex++]);
+		/* 
+		이전 애니메이션의 채널 정보들 받아와서 
+		본 인덱스 같은 녀석 찾아서 넘기기. nullptr이면 보간 없이 하게끔 처리..
+		*/
+
+		CChannel* PreChannel = { nullptr };
+
+		for (_int i = 0; i < PreChannels.size(); ++i)
+		{
+			if (pChannel->Compare_BoneIndex(PreChannels[i]->Get_BoneIndex()))
+				PreChannel = PreChannels[i];
+		}
+
+		pChannel->Update_Blending_TransformationMatrix(m_fBlendRatio, PreChannel, Bones, PreTrackPosition);
+	}
+
+	if (m_fBlendRatio == 1.0f)
+	{
+		m_fBlendRatio = 0.f;
+		*bFlag = false;
 	}
 }
 
