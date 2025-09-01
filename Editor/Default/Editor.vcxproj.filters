@@ -46,9 +46,6 @@
     <Filter Include="02. GAMEOBJECTS\MODEL\PROPS">
       <UniqueIdentifier>{8dfdeb24-8de6-4384-ad24-dd832c57575b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. LEVELS\MapImporter">
-      <UniqueIdentifier>{3766ec47-4f62-4148-be89-c6cf2cb0638f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GAMEOBJECTS\MODEL\TREE">
       <UniqueIdentifier>{0e2fe5a9-b7c1-42e5-be52-589186abeda7}</UniqueIdentifier>
     </Filter>
@@ -57,6 +54,9 @@
     </Filter>
     <Filter Include="02. GAMEOBJECTS\MODEL\TUTORIALMAP">
       <UniqueIdentifier>{8566f67e-817a-460a-ba8b-43fefe6f2816}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. LEVELS\MAPIMPORTER">
+      <UniqueIdentifier>{3766ec47-4f62-4148-be89-c6cf2cb0638f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -100,7 +100,7 @@
       <Filter>02. GAMEOBJECTS\MODEL\PROPS</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\MapConverter.h">
-      <Filter>01. LEVELS\MapImporter</Filter>
+      <Filter>01. LEVELS\MAPIMPORTER</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Tree.h">
       <Filter>02. GAMEOBJECTS\MODEL\TREE</Filter>
@@ -141,7 +141,7 @@
       <Filter>02. GAMEOBJECTS\MODEL\PROPS</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\MapConverter.cpp">
-      <Filter>01. LEVELS\MapImporter</Filter>
+      <Filter>01. LEVELS\MAPIMPORTER</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Tree.cpp">
       <Filter>02. GAMEOBJECTS\MODEL\TREE</Filter>

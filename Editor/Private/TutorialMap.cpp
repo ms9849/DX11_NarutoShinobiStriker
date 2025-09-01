@@ -27,6 +27,7 @@ HRESULT CTutorialMap::Initialize(void* pArg)
 
 	m_iNumMeshes = m_pModelCom->Get_NumMeshes();
 
+	m_pGameInstance->Add_GameObject_ToPicking(ENUM_CLASS(LEVEL::EDIT), this, m_pModelCom);
 	return S_OK;
 }
 

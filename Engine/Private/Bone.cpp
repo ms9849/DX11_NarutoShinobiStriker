@@ -32,7 +32,7 @@ HRESULT CBone::Initialize(HANDLE hHandle, DWORD* dwByte)
 HRESULT CBone::Save_Bone_ToBinary(HANDLE hHandle, DWORD* dwByte)
 {
 	/* 본의 이름, 본의 인덱스, 본 자기 자신만의 행렬 순으로 저장*/
-	if (false == WriteFile(hHandle, &m_szName, MAX_PATH, dwByte, nullptr))
+	if (false == WriteFile(hHandle, &m_szName, BONE_MAX, dwByte, nullptr))
 		return E_FAIL;
 
 	if (false == WriteFile(hHandle, &m_iParentBoneIndex, sizeof(_uint), dwByte, nullptr))
@@ -47,7 +47,7 @@ HRESULT CBone::Save_Bone_ToBinary(HANDLE hHandle, DWORD* dwByte)
 HRESULT CBone::Load_Bone_FromBinary(HANDLE hHandle, DWORD* dwByte)
 {
 	/* 본의 이름, 본의 인덱스, 본 자기 자신만의 행렬 순으로 로드*/
-	if (false == ReadFile(hHandle, &m_szName, MAX_PATH, dwByte, nullptr))
+	if (false == ReadFile(hHandle, &m_szName, BONE_MAX, dwByte, nullptr))
 		return E_FAIL;
 
 	if (false == ReadFile(hHandle, &m_iParentBoneIndex, sizeof(_uint), dwByte, nullptr))
@@ -94,6 +94,11 @@ CBone* CBone::Create(HANDLE hHandle, DWORD* dwByte)
 	}
 
 	return pInstance;
+}
+
+CBone* CBone::Clone()
+{
+	return new CBone(*this);
 }
 
 void CBone::Free()

@@ -20,23 +20,22 @@ CModel::CModel(const CModel& Prototype)
 	, m_Meshes { Prototype.m_Meshes }
 	, m_iNumMaterials { Prototype.m_iNumMaterials }
 	, m_Materials { Prototype.m_Materials }
-	, m_Bones{ Prototype.m_Bones }
 	, m_iNumAnimations{ Prototype.m_iNumAnimations }
-	, m_Animations { Prototype.m_Animations }
 	, m_PreTransformMatrix{ Prototype.m_PreTransformMatrix }
-
+	//, m_Animations{ Prototype.m_Animations }
+	//, m_Bones{ Prototype.m_Bones }
 {
-	for (auto& pBone : m_Bones)
-		Safe_AddRef(pBone);
+	for (auto& pPrototypeBone : Prototype.m_Bones)
+		m_Bones.push_back(pPrototypeBone->Clone());
 
 	for (auto& pMesh : m_Meshes)
 		Safe_AddRef(pMesh);
 
 	for (auto& pMaterial : m_Materials)
 		Safe_AddRef(pMaterial);
-	
-	for (auto& pAnimation : m_Animations)
-		Safe_AddRef(pAnimation);
+
+	for (auto& pPrototypeAnim : Prototype.m_Animations)
+		m_Animations.push_back(pPrototypeAnim->Clone());
 }
 
 HRESULT CModel::Load_Model_FromBinary(const _tchar* pBinaryFilePath)
@@ -93,6 +92,16 @@ HRESULT CModel::Load_Model_FromBinary(const _tchar* pBinaryFilePath)
 	{
 		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, m_eType, this, hHandle, &dwByte, XMLoadFloat4x4(&m_PreTransformMatrix));
 		m_Meshes.push_back(pMesh);
+	}
+
+	/* 애니메이션 갯수 로딩 */
+	if (false == ReadFile(hHandle, &m_iNumAnimations, sizeof(_uint), &dwByte, nullptr))
+		return E_FAIL;
+	/* 애니메이션 로딩 */
+	for (_uint i = 0; i < m_iNumAnimations; ++i)
+	{
+		CAnimation* pAnimation = CAnimation::Create(hHandle, &dwByte);
+		m_Animations.push_back(pAnimation);
 	}
 
 	CloseHandle(hHandle);
@@ -444,6 +453,10 @@ void CModel::Free()
 {
 	__super::Free();
 
+	for (auto& pAnimation : m_Animations)
+		Safe_Release(pAnimation);
+	m_Animations.clear();
+
 	for (auto& pBone : m_Bones)
 		Safe_Release(pBone);
 	m_Bones.clear();
@@ -455,10 +468,6 @@ void CModel::Free()
 	for (auto& pMesh : m_Meshes)
 		Safe_Release(pMesh);
 	m_Meshes.clear();
-	
-	for (auto& pAnimation : m_Animations)
-		Safe_Release(pAnimation);
-	m_Animations.clear();
 
 	m_Importer.FreeScene();
 }

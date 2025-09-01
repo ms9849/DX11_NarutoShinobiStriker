@@ -181,6 +181,9 @@
     <Filter Include="02.GameObjects\Map\TutorialMap">
       <UniqueIdentifier>{be3db220-9732-4da8-8bdf-d04af97df2e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Character\STATE">
+      <UniqueIdentifier>{d7918d9f-4ea8-4083-8868-f551a6d20400}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -333,6 +336,9 @@
     <ClInclude Include="..\Public\TutorialMap.h">
       <Filter>02.GameObjects\Map\TutorialMap</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\CharacterState.h">
+      <Filter>02.GameObjects\Character\STATE</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -482,6 +488,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\TutorialMap.cpp">
       <Filter>02.GameObjects\Map\TutorialMap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CharacterState.cpp">
+      <Filter>02.GameObjects\Character\STATE</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

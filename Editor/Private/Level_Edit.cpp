@@ -101,16 +101,17 @@ HRESULT CLevel_Edit::Ready_Prototypes()
         return E_FAIL;
     m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Props"));
 
-    /* For.Prototype_Component_Model_KonohaVillage */
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_KonohaVillage"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/KonohaVillage/KonohaVillage.fbx", PreTransformMatrix))))
-        return E_FAIL;
+    ///* For.Prototype_Component_Model_KonohaVillage */
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_KonohaVillage"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/KonohaVillage/KonohaVillage.fbx", PreTransformMatrix))))
+    //    return E_FAIL;
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_KonohaVillage"));
 
     /* For.Prototype_Component_Model_TutorialMap */
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_TutorialMap"),
         CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/TutorialMap/TutorialMap.fbx", PreTransformMatrix))))
         return E_FAIL;
-
+    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_TutorialMap"));
 
     /* For.Prototype_Component_Model_Tree */
     PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
@@ -133,6 +134,13 @@ HRESULT CLevel_Edit::Ready_Prototypes()
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Fiona_Binary"),
         CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, TEXT("../../Client/Bin/Resources/Models/Fiona/Fiona.bin"), PreTransformMatrix))))
         return E_FAIL;
+
+    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    /* For.Prototype_Component_Model_KonohaVillage */
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_KonohaVillage"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, TEXT("../../Client/Bin/Resources/Models/KonohaVillage/KonohaVillage.bin"), PreTransformMatrix))))
+        return E_FAIL;
+
 #pragma endregion
 
 #pragma region COMPONENT

@@ -32,7 +32,7 @@ public:
 	HRESULT Load_Mesh_FromBinary(HANDLE hHandle, DWORD* dwByte, MODEL eType);
 
 private:
-	_char						m_szName[MAX_PATH] = {};
+	_char						m_szName[MESH_MAX] = {};
 	_uint						m_iMaterialIndex;
 	_uint						m_iNumBones = { };
 

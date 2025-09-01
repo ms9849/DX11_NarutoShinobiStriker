@@ -62,13 +62,16 @@ HRESULT CFont::Initialize(void* pArg)
 HRESULT CFont::Bind_Resources(const _tchar* pText, const _float2& vPosition, _float fScale, _fvector vColor, _float fRotation, const _float2& vOrigin)
 {
     m_pText = pText;
+    m_fScale = fScale;
 
-    _vector vDest = m_pFont->MeasureString(pText);
     _float2 vTextSize;
+    _vector vDest = m_pFont->MeasureString(pText);
+    vDest *= m_fScale;
+
     XMStoreFloat2(&vTextSize, vDest);
 
-    m_vPosition = _float2{ m_fWinSizeX / 2.f + vPosition.x - vTextSize.x/2.f, m_fWinSizeY/2.f - vPosition.y - vTextSize.y / 2.f } ;
-    m_fScale = fScale;
+    m_vPosition = _float2{ m_fWinSizeX / 2.f + vPosition.x - vTextSize.x / 2.f, m_fWinSizeY / 2.f - vPosition.y - vTextSize.y / 2.f } ;
+
     m_vColor = vColor;
     m_fRotation = fRotation;
     m_vOrigin = vOrigin;

@@ -19,6 +19,9 @@
 using namespace DirectX;
 
 #define KEY_MAX		256 
+#define ANIM_MAX	128
+#define BONE_MAX	128
+#define MESH_MAX	128
 #define DIRECTINPUT_VERSION	0x0800
 #include <dinput.h>
 
