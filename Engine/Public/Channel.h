@@ -16,13 +16,15 @@ private:
 
 public:
 	HRESULT Initialize(const class CModel* pModel, const aiNodeAnim* pAIChannel);
-	void Update_TransformationMatrix(const vector<class CBone*>& Bones, _float fCurrentTrackPosition);
+	HRESULT Initialize(HANDLE hHandle, DWORD* dwByte);
+
+	void Update_TransformationMatrix(const vector<class CBone*>& Bones, _float fCurrentTrackPosition, _uint* pCurrentKeyFrameIndex);
 	HRESULT Save_Channel_ToBinary(HANDLE hHandle, DWORD* dwByte, const aiNodeAnim* pAIChannel) const;
-	HRESULT Load_Channel_ToBinary(HANDLE hHandle, DWORD* dwByte);
+	HRESULT Load_Channel_FromBinary(HANDLE hHandle, DWORD* dwByte);
 
 private:
 	/* 접근할 뼈의 이름 (CBone) */
-	_char					m_szName[MAX_PATH] = {};
+	_char					m_szName[BONE_MAX] = {};
 
 	/* 접근할 뼈의 인덱스 (CBone) */
 	_int					m_iBoneIndex = { -1 };
@@ -31,11 +33,9 @@ private:
 	_uint					m_iNumKeyFrames = {};
 	vector<KEYFRAME>		m_KeyFrames;
 
-	/* 현재 재생중인 키프레임 */
-	_uint					m_iCurrentKeyFrameIndex = { 0 };
-
 public:
 	static CChannel* Create(const class CModel* pModel, const aiNodeAnim* pAIChannel);
+	static CChannel* Create(HANDLE hHandle, DWORD* dwByte);
 	virtual void Free() override;
 };
 

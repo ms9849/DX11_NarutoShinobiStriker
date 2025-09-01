@@ -85,7 +85,7 @@ void CAttackTypePanel::Late_Update(_float fTimeDelta)
     if (m_bTriggered)
         fAlpha = m_fTimeAcc / m_fMaxTimeAcc;
 
-    m_pFontCom->Bind_Resources(m_strFontText.c_str(), _float2{vPosition.x + 20.f, vPosition.y - 10.f},
+    m_pFontCom->Bind_Resources(m_strFontText.c_str(), _float2{vPosition.x, vPosition.y},
         0.5f, XMVectorSet(1.f, 1.f, 1.f, fAlpha));
 
     m_pGameInstance->Add_Font(m_pFontCom);

@@ -16,6 +16,8 @@ HRESULT CChannel::Initialize(const CModel* pModel, const aiNodeAnim* pAIChannel)
     상관 없어진다.
     */
     m_iBoneIndex = pModel->Get_BoneIndex(m_szName);
+	if (-1 == m_iBoneIndex)
+		return E_FAIL;
 
     /* 프레임 키 중 가장 많은거 */
     m_iNumKeyFrames = max(pAIChannel->mNumScalingKeys, pAIChannel->mNumRotationKeys);
@@ -71,8 +73,19 @@ HRESULT CChannel::Initialize(const CModel* pModel, const aiNodeAnim* pAIChannel)
     return S_OK;
 }
 
-void CChannel::Update_TransformationMatrix(const vector<CBone*>& Bones, _float fCurrentTrackPosition)
+HRESULT CChannel::Initialize(HANDLE hHandle, DWORD* dwByte)
 {
+	if (FAILED(Load_Channel_FromBinary(hHandle, dwByte)))
+		return E_FAIL;
+	return S_OK;
+}
+
+void CChannel::Update_TransformationMatrix(const vector<class CBone*>& Bones, _float fCurrentTrackPosition, _uint* pCurrentKeyFrameIndex)
+{
+	/* 현재 키프레임이 아예 0이라면, 애니메이션이 시작된 순간밖에 없음. */
+	if (0.f == fCurrentTrackPosition)
+		*pCurrentKeyFrameIndex = 0;
+
 	KEYFRAME		LastKeyFrame = m_KeyFrames.back();
 
 	_vector			vScale{};
@@ -88,24 +101,24 @@ void CChannel::Update_TransformationMatrix(const vector<CBone*>& Bones, _float f
 
 	else /* 선형보간을 해야겠다. */
 	{
-		if (fCurrentTrackPosition >= m_KeyFrames[m_iCurrentKeyFrameIndex + 1].fTrackPosition)
-			++fCurrentTrackPosition;
+		if (fCurrentTrackPosition >= m_KeyFrames[*pCurrentKeyFrameIndex + 1].fTrackPosition)
+			++*pCurrentKeyFrameIndex;
 
 		_float3		vSourScale{}, vDestScale{};
 		_float4		vSourRotation{}, vDestRotation{};
 		_float3		vSourTranslation{}, vDestTranslation{};
 
-		vSourScale = m_KeyFrames[m_iCurrentKeyFrameIndex].vScale;
-		vDestScale = m_KeyFrames[m_iCurrentKeyFrameIndex + 1].vScale;
+		vSourScale = m_KeyFrames[*pCurrentKeyFrameIndex].vScale;
+		vDestScale = m_KeyFrames[*pCurrentKeyFrameIndex + 1].vScale;
 
-		vSourRotation = m_KeyFrames[m_iCurrentKeyFrameIndex].vRotation;
-		vDestRotation = m_KeyFrames[m_iCurrentKeyFrameIndex + 1].vRotation;
+		vSourRotation = m_KeyFrames[*pCurrentKeyFrameIndex].vRotation;
+		vDestRotation = m_KeyFrames[*pCurrentKeyFrameIndex + 1].vRotation;
 
-		vSourTranslation = m_KeyFrames[m_iCurrentKeyFrameIndex].vTranslation;
-		vDestTranslation = m_KeyFrames[m_iCurrentKeyFrameIndex + 1].vTranslation;
+		vSourTranslation = m_KeyFrames[*pCurrentKeyFrameIndex].vTranslation;
+		vDestTranslation = m_KeyFrames[*pCurrentKeyFrameIndex + 1].vTranslation;
 
-		_float		fRatio = (fCurrentTrackPosition - m_KeyFrames[m_iCurrentKeyFrameIndex].fTrackPosition) /
-			(m_KeyFrames[m_iCurrentKeyFrameIndex + 1].fTrackPosition - m_KeyFrames[m_iCurrentKeyFrameIndex].fTrackPosition);
+		_float		fRatio = (fCurrentTrackPosition - m_KeyFrames[*pCurrentKeyFrameIndex].fTrackPosition) /
+			(m_KeyFrames[*pCurrentKeyFrameIndex + 1].fTrackPosition - m_KeyFrames[*pCurrentKeyFrameIndex].fTrackPosition);
 
 		vScale = XMVectorLerp(XMLoadFloat3(&vSourScale), XMLoadFloat3(&vDestScale), fRatio);
 		vRotation = XMQuaternionSlerp(XMLoadFloat4(&vSourRotation), XMLoadFloat4(&vDestRotation), fRatio);
@@ -130,7 +143,7 @@ HRESULT CChannel::Save_Channel_ToBinary(HANDLE hHandle, DWORD* dwByte, const aiN
 	/* 4. 키프레임들. */
 
 	/* 뼈의 이름 저장 */
-	if (false == WriteFile(hHandle, &m_szName, MAX_PATH, dwByte, nullptr))
+	if (false == WriteFile(hHandle, &m_szName, BONE_MAX, dwByte, nullptr))
 		return E_FAIL;
 	/* 접근할 뼈의 인덱스 저장 */
 	if (false == WriteFile(hHandle, &m_iBoneIndex, sizeof(_int), dwByte, nullptr))
@@ -148,8 +161,28 @@ HRESULT CChannel::Save_Channel_ToBinary(HANDLE hHandle, DWORD* dwByte, const aiN
 	return S_OK;
 }
 
-HRESULT CChannel::Load_Channel_ToBinary(HANDLE hHandle, DWORD* dwByte)
+HRESULT CChannel::Load_Channel_FromBinary(HANDLE hHandle, DWORD* dwByte)
 {
+	/* 뼈의 이름 저장 */
+	if (false == ReadFile(hHandle, &m_szName, BONE_MAX, dwByte, nullptr))
+		return E_FAIL;
+	/* 접근할 뼈의 인덱스 저장 */
+	if (false == ReadFile(hHandle, &m_iBoneIndex, sizeof(_int), dwByte, nullptr))
+		return E_FAIL;
+	/* 키프레임 갯수 저장 */
+	if (false == ReadFile(hHandle, &m_iNumKeyFrames, sizeof(_int), dwByte, nullptr))
+		return E_FAIL;
+	/* 순회하면서 키프레임까지 저장. */
+	for (_int i = 0; i < m_iNumKeyFrames; ++i)
+	{
+		KEYFRAME Dest;
+
+		if (false == ReadFile(hHandle, &Dest, sizeof(KEYFRAME), dwByte, nullptr))
+			return E_FAIL;
+
+		m_KeyFrames.push_back(Dest);
+	}
+
 	return S_OK;
 }
 
@@ -159,11 +192,24 @@ CChannel* CChannel::Create(const CModel* pModel, const aiNodeAnim* pAIChannel)
 
     if (FAILED(pInstance->Initialize(pModel, pAIChannel)))
     {
-        MSG_BOX("Create Failed : CChannel");
+        MSG_BOX("Create Failed : CChannel By Assimp");
         Safe_Release(pInstance);
     }
 
     return pInstance;
+}
+
+CChannel* CChannel::Create(HANDLE hHandle, DWORD* dwByte)
+{
+	CChannel* pInstance = new CChannel();
+
+	if (FAILED(pInstance->Initialize(hHandle, dwByte)))
+	{
+		MSG_BOX("Create Failed : CChannel By Binary");
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
 }
 
 void CChannel::Free()

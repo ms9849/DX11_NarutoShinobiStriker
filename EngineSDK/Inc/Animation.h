@@ -17,17 +17,19 @@ class CAnimation final : public CBase
 {
 private:
 	CAnimation();
+	CAnimation(const CAnimation& rhs);
 	virtual ~CAnimation() = default;
 
 public:
 	HRESULT Initialize(const class CModel* pModel, const aiAnimation* pAIAnimation);
+	HRESULT Initialize(HANDLE hHandle, DWORD* dwByte);
 	void Update_TransformationMatrices(const vector<class CBone*>& Bones, _float fTimeDelta);
 
 	HRESULT Save_Animation_ToBinary(HANDLE hHandle, DWORD* dwByte, const aiAnimation* pAIAnimation) const;
-	HRESULT Load_Animation_ToBinary(HANDLE hHandle, DWORD* dwByte);
+	HRESULT Load_Animation_FromBinary(HANDLE hHandle, DWORD* dwByte);
 
 private:
-	_char						m_szName[MAX_PATH] = {};
+	_char						m_szName[ANIM_MAX] = {};
 	_float						m_fCurrentTrackPosition = { 0 };
 	/* 애니메이션 재생을 위한 전체 길이 */
 	_float						m_fDuration = {};
@@ -36,9 +38,12 @@ private:
 
 	_uint						m_iNumChannels = {};
 	vector<class CChannel*>		m_Channels;
+	vector<_uint>				m_CurrentKeyFrameIndices;
 
 public:
 	static CAnimation* Create(const class CModel* pModel, const aiAnimation* pAIAnimation);
+	static CAnimation* Create(HANDLE hHandle, DWORD* dwByte);
+	CAnimation* Clone();
 	virtual void Free() override;
 };
 

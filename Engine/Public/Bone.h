@@ -30,7 +30,7 @@ public:
 	void Update_CombinedTransformationMatrix(const vector<CBone*>& Bones, _fmatrix PreTransformMatrix);
 
 private:
-	_char				m_szName[MAX_PATH] = {};
+	_char				m_szName[BONE_MAX] = {};
 	_float4x4			m_TransformationMatrix = {}; /* 이 뼈만의 상태변환행렬 */
 	_float4x4			m_CombinedTransformationMatrix = {}; /* m_TransformatinoMatrix * Parent`s m_CombinedTransformationMatrix */
 	_int				m_iParentBoneIndex = { -1 };
@@ -39,6 +39,7 @@ private:
 public:
 	static CBone* Create(const aiNode* pAINode, _int iParentIndex);
 	static CBone* Create(HANDLE hHandle, DWORD* dwByte);
+	CBone* Clone();
 	virtual void Free() override;
 };
 

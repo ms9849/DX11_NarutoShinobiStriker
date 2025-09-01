@@ -114,20 +114,20 @@ HRESULT CMesh::Initialize_Prototype(MODEL eType, const class CModel* pModel, con
     Safe_Delete_Array(pIndices);
 #pragma endregion
 
-    //D3D11_BUFFER_DESC StagingDesc{};
-    //m_pIB->GetDesc(&StagingDesc);
-    //StagingDesc.Usage = D3D11_USAGE_STAGING;
-    //StagingDesc.BindFlags = 0;
-    //StagingDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
-    //StagingDesc.MiscFlags = 0;
+    D3D11_BUFFER_DESC StagingDesc{};
+    m_pIB->GetDesc(&StagingDesc);
+    StagingDesc.Usage = D3D11_USAGE_STAGING;
+    StagingDesc.BindFlags = 0;
+    StagingDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+    StagingDesc.MiscFlags = 0;
 
-    //if (FAILED(m_pDevice->CreateBuffer(&StagingDesc, nullptr, &m_pStagingIB)))
-    //    return E_FAIL;
+    if (FAILED(m_pDevice->CreateBuffer(&StagingDesc, nullptr, &m_pStagingIB)))
+        return E_FAIL;
 
-    //m_pContext->CopyResource(m_pStagingIB, m_pIB);
+    m_pContext->CopyResource(m_pStagingIB, m_pIB);
 
-    //if (FAILED(m_pContext->Map(m_pStagingIB, 0, D3D11_MAP_READ, 0, &m_StagingData)))
-    //    return E_FAIL;
+    if (FAILED(m_pContext->Map(m_pStagingIB, 0, D3D11_MAP_READ, 0, &m_StagingData)))
+        return E_FAIL;
 
     return S_OK;
 }
@@ -193,7 +193,7 @@ HRESULT CMesh::Save_Mesh_ToBinary(HANDLE hHandle, DWORD* dwByte, const aiMesh* p
     * 버텍스 포지션도 마찬가지로 m_pVB에서 받아오면 됨
     */
 
-    if (false == WriteFile(hHandle, &m_szName, MAX_PATH, dwByte, nullptr))
+    if (false == WriteFile(hHandle, &m_szName, MESH_MAX, dwByte, nullptr))
         return E_FAIL;
 
     if (false == WriteFile(hHandle, &m_iMaterialIndex, sizeof(_uint), dwByte, nullptr))
@@ -271,7 +271,7 @@ HRESULT CMesh::Load_Mesh_FromBinary(HANDLE hHandle, DWORD* dwByte, MODEL eType)
     * 버텍스 포지션도 마찬가지로 정점 정보에서 받아오면 됨
     */
 
-    if (false == ReadFile(hHandle, &m_szName, MAX_PATH, dwByte, nullptr))
+    if (false == ReadFile(hHandle, &m_szName, MESH_MAX, dwByte, nullptr))
         return E_FAIL;
 
     if (false == ReadFile(hHandle, &m_iMaterialIndex, sizeof(_uint), dwByte, nullptr))
@@ -362,6 +362,22 @@ HRESULT CMesh::Load_Mesh_FromBinary(HANDLE hHandle, DWORD* dwByte, MODEL eType)
 
     Safe_Delete_Array(pIndices);
 #pragma endregion
+
+    D3D11_BUFFER_DESC StagingDesc{};
+    m_pIB->GetDesc(&StagingDesc);
+    StagingDesc.Usage = D3D11_USAGE_STAGING;
+    StagingDesc.BindFlags = 0;
+    StagingDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+    StagingDesc.MiscFlags = 0;
+
+    if (FAILED(m_pDevice->CreateBuffer(&StagingDesc, nullptr, &m_pStagingIB)))
+        return E_FAIL;
+
+    m_pContext->CopyResource(m_pStagingIB, m_pIB);
+
+    if (FAILED(m_pContext->Map(m_pStagingIB, 0, D3D11_MAP_READ, 0, &m_StagingData)))
+        return E_FAIL;
+
     return S_OK;
 }
 

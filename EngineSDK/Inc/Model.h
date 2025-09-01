@@ -43,6 +43,10 @@ public:
 	void Set_AnimIndex(_uint iIdx) {
 		m_iCurrentAnimIndex = iIdx;
 	}
+	
+	void Set_AnimationIndex(_int iAnimIndex) {
+		m_iCurrentAnimIndex = iAnimIndex;
+	}
 
 	_uint Get_NumMeshes() const {
 		return m_iNumMeshes;

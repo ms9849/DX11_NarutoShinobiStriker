@@ -15,7 +15,7 @@ CMannequin::CMannequin(const CMannequin& rhs)
 
 HRESULT CMannequin::Initialize_Prototype()
 {
-	return S_OK;
+	return  S_OK;
 }
 
 HRESULT CMannequin::Initialize(void* pArg)
@@ -37,7 +37,7 @@ void CMannequin::Priority_Update(_float fTimeDelta)
 
 void CMannequin::Update(_float fTimeDelta)
 {
-	m_pModelCom->Set_AnimIndex(3);
+	m_pModelCom->Set_AnimIndex(1);
 	m_pModelCom->Play_Animation(fTimeDelta);
 }
 

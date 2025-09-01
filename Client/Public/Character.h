@@ -61,12 +61,14 @@ protected:
 	/* 활성화된 스킬들의 ENUM CLASS를 들고 있게 한다. */
 	/* 0~2번은 일반 스킬, 3번은 필살기 */
 	SKILL m_ActivatedSkills[ENUM_CLASS(SKILLNUM::END)];
-	map<SKILL, SKILL_INFO> m_Skills;
 	/*
 	스킬 INFO는 Map으로 따로 관리.
 	m_ActivatedSkills를 순회하면서 현재 활성화된 스킬들의 정보만
 	업데이트해주고, 정보들을 가져올 수 있게 해줌.
 	*/
+	map<SKILL, SKILL_INFO> m_Skills;
+
+
 
 protected:
 	HRESULT Bind_ShaderResources();
