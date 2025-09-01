@@ -6,6 +6,7 @@
 #include "Shader.h"
 #include "Material.h"
 #include "Animation.h"
+#include "Channel.h"
 
 CModel::CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CComponent { pDevice, pContext }
@@ -107,6 +108,18 @@ HRESULT CModel::Load_Model_FromBinary(const _tchar* pBinaryFilePath)
 	CloseHandle(hHandle);
 
 	return S_OK;
+}
+
+void CModel::Set_AnimIndex(_uint iIdx)
+{
+	if (iIdx == m_iCurrentAnimIndex)
+		return;
+
+	m_PreAnimationChannels = m_Animations[m_iCurrentAnimIndex]->Get_Channels();
+	m_fPreTrackPosition = m_Animations[m_iCurrentAnimIndex]->Get_CurrentTrackPosition();
+	m_Animations[m_iCurrentAnimIndex]->Reset_Animation();
+	m_iCurrentAnimIndex = iIdx;
+	m_bAnimationBlending = true;
 }
 
 HRESULT CModel::Save_Model_ToBinary(const _char* pModelSavePath)
@@ -324,9 +337,14 @@ void CModel::Play_Animation(_float fTimeDelta)
 		return;
 
 	/* 내가 재생하고자하는 애니메이션(공격모션)이 이용하고 있는 뼈들의 상태 변환정보(TransformationMatrix)를 갱신해준다.*/
-	m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, fTimeDelta);
+	if(false == m_bAnimationBlending)
+		m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, fTimeDelta);
+
+	else if(true == m_bAnimationBlending)
+		m_Animations[m_iCurrentAnimIndex]->Update_Blending_TransformationMatrices(&m_bAnimationBlending, m_PreAnimationChannels, m_Bones, m_fPreTrackPosition, fTimeDelta);
 
 	/* 모든 뼈를 순회하면서 CombinedTransformationMatrix를 갱신한다. */
+
 	for (auto& pBone : m_Bones)
 	{
 		pBone->Update_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_PreTransformMatrix));

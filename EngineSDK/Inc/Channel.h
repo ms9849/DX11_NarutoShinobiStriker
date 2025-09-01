@@ -15,10 +15,21 @@ private:
 	virtual ~CChannel() = default;
 
 public:
+	_int Get_BoneIndex() {
+		return m_iBoneIndex;
+	}
+
+	KEYFRAME Get_CurKeyFrame(_float fTrackPosition);
+	_bool Compare_BoneIndex(_int iIdx) {
+		return iIdx == m_iBoneIndex;
+	}
+
+public:
 	HRESULT Initialize(const class CModel* pModel, const aiNodeAnim* pAIChannel);
 	HRESULT Initialize(HANDLE hHandle, DWORD* dwByte);
 
 	void Update_TransformationMatrix(const vector<class CBone*>& Bones, _float fCurrentTrackPosition, _uint* pCurrentKeyFrameIndex);
+	void Update_Blending_TransformationMatrix(_float BlendRatio, CChannel* pChannel, const vector<class CBone*>& Bones, _float PreTrackPosition);
 	HRESULT Save_Channel_ToBinary(HANDLE hHandle, DWORD* dwByte, const aiNodeAnim* pAIChannel) const;
 	HRESULT Load_Channel_FromBinary(HANDLE hHandle, DWORD* dwByte);
 
@@ -31,6 +42,7 @@ private:
 
 	/* 총 키프레임의 갯수와 키프레임들. */
 	_uint					m_iNumKeyFrames = {};
+
 	vector<KEYFRAME>		m_KeyFrames;
 
 public:
