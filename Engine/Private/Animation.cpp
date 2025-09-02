@@ -34,6 +34,22 @@ void CAnimation::Reset_Animation()
 	}
 }
 
+/* TrackPosition에 해당하는 뼈 인덱스 & 키프레임 반환 */
+map<_int, KEYFRAME> CAnimation::Get_KeyFrames(_float fTrackPoistion)
+{
+	map<_int, KEYFRAME> KeyFrames;
+
+	for (_uint i = 0; i < m_iNumChannels; ++i)
+	{
+		_int iBoneIndex = m_Channels[i]->Get_BoneIndex();
+		KEYFRAME KeyFrame = m_Channels[i]->Get_KeyFrame(fTrackPoistion);
+
+		KeyFrames.emplace(iBoneIndex, KeyFrame);
+	}
+
+	return KeyFrames;
+}
+
 HRESULT CAnimation::Initialize(const class CModel* pModel, const aiAnimation* pAIAnimation)
 {
 	strcpy_s(m_szName, pAIAnimation->mName.data);
@@ -65,6 +81,7 @@ HRESULT CAnimation::Initialize(HANDLE hHandle, DWORD* dwByte)
 	return S_OK;
 }
 
+
 void CAnimation::Update_TransformationMatrices(const vector<CBone*>& Bones, _float fTimeDelta)
 {
 	/* 내 애니메이션의 현재 재생위치. */
@@ -83,32 +100,46 @@ void CAnimation::Update_TransformationMatrices(const vector<CBone*>& Bones, _flo
 
 }
 
-void CAnimation::Update_Blending_TransformationMatrices(_bool* bFlag, vector<CChannel*>& PreChannels, const vector<class CBone*>& Bones, _float PreTrackPosition, _float fTimeDelta)
+void CAnimation::Update_Blending_TransformationMatrices(_bool* bFlag, map<_int, KEYFRAME>* pPreKeyFrames, const vector<class CBone*>& Bones, _float PreTrackPosition, _float fTimeDelta)
 {
 	_uint		iIndex = {};
 
+	//애니메이션 교체가 막 시작되는 시점.
+	if (0.f == m_fBlendRatio)
+	{
+		for (auto& pChannel : m_Channels)
+		{
+			auto  iter = pPreKeyFrames->find(pChannel->Get_BoneIndex());
+
+			if (pPreKeyFrames->end() == iter)
+			{
+				_int		iBoneIndex = pChannel->Get_BoneIndex();
+				_matrix		BoneMatrix = Bones[iBoneIndex]->Get_TransformMatrix();
+				KEYFRAME	SourKeyFrame;
+				_vector		SourScale{}, SourRotation{}, SourTranslation{};
+
+				/* 매칭 되는 본의 정보 다이렉트로 가져올 것 */
+				XMMatrixDecompose(&SourScale, &SourRotation, &SourTranslation, BoneMatrix);
+
+				XMStoreFloat3(&SourKeyFrame.vScale, SourScale);
+				XMStoreFloat4(&SourKeyFrame.vRotation, SourRotation);
+				XMStoreFloat3(&SourKeyFrame.vTranslation, SourTranslation);
+
+				SourKeyFrame.fTrackPosition = PreTrackPosition;
+
+				pPreKeyFrames->emplace(iBoneIndex, SourKeyFrame);
+			}	
+		}
+	}
+
+	// 블랜드 ratio 증가
 	m_fBlendRatio += 0.1f;
 
 	if (m_fBlendRatio >= 1.0f)
 		m_fBlendRatio = 1.f;
 
 	for (auto& pChannel : m_Channels)
-	{
-		/* 
-		이전 애니메이션의 채널 정보들 받아와서 
-		본 인덱스 같은 녀석 찾아서 넘기기. nullptr이면 보간 없이 하게끔 처리..
-		*/
-
-		CChannel* PreChannel = { nullptr };
-
-		for (_int i = 0; i < PreChannels.size(); ++i)
-		{
-			if (pChannel->Compare_BoneIndex(PreChannels[i]->Get_BoneIndex()))
-				PreChannel = PreChannels[i];
-		}
-
-		pChannel->Update_Blending_TransformationMatrix(m_fBlendRatio, PreChannel, Bones, PreTrackPosition);
-	}
+		pChannel->Update_Blending_TransformationMatrix(m_fBlendRatio, (*pPreKeyFrames)[pChannel->Get_BoneIndex()], Bones, PreTrackPosition);
 
 	if (m_fBlendRatio == 1.0f)
 	{
