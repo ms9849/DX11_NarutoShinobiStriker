@@ -193,6 +193,12 @@
     <Filter Include="02.GameObjects\Character\Player\Parts\Lower">
       <UniqueIdentifier>{995a8e34-3f70-4b67-879a-a7e250884cec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State">
+      <UniqueIdentifier>{d397b3c9-d69e-4e6f-9147-b1e499ac4f74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\IdleState">
+      <UniqueIdentifier>{279f3fd9-01b0-4a58-a61e-0dd349b1cb71}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -357,6 +363,12 @@
     <ClInclude Include="..\Public\Parts_Player.h">
       <Filter>02.GameObjects\Character\Player\Parts</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\PlayerState.h">
+      <Filter>02.GameObjects\Character\Player\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\IdleState.h">
+      <Filter>02.GameObjects\Character\Player\State\IdleState</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -518,6 +530,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Parts_Player.cpp">
       <Filter>02.GameObjects\Character\Player\Parts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\PlayerState.cpp">
+      <Filter>02.GameObjects\Character\Player\State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\IdleState.cpp">
+      <Filter>02.GameObjects\Character\Player\State\IdleState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

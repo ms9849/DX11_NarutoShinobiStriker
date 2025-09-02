@@ -20,9 +20,10 @@ State 클래스 ? -> FSM을 구현한 상태 제어 클래스.
 class CCharacterState abstract : public CBase
 {
 public:
+	/* 근데 이거 start가 없는 것도 있는데 어떡하지.. */
 	enum class STATE_PHASE{ START, LOOP, END };
 
-private:
+protected:
 	CCharacterState();
 	virtual ~CCharacterState() = default;
 
@@ -35,7 +36,7 @@ public:
 	/* End */
 	virtual void	End(_float fTimeDelta) = 0;
 
-private:
+protected:
 	STATE_PHASE m_Phase = {};
 
 public:
