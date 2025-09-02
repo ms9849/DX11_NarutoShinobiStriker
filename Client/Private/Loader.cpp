@@ -37,6 +37,9 @@
 
 #include "KonohaVillage.h"
 
+#include "Lower_Player.h"
+#include "Upper_Player.h"
+
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice { pDevice }
 	, m_pContext { pContext }
@@ -362,6 +365,16 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_GameObject_TestCamera */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_TestCamera"),
 		CTestCamera::Create(m_pDevice, m_pContext, OBJECTID::TEST_CAMERA))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Upper_Player */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Upper_Player"),
+		CUpper_Player::Create(m_pDevice, m_pContext, OBJECTID::PLAYER))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Lower_Player */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Lower_Player"),
+		CLower_Player::Create(m_pDevice, m_pContext, OBJECTID::PLAYER))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_SkillSlotUI */

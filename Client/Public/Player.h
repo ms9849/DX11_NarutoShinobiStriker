@@ -56,6 +56,7 @@ private:
 
 private:
 	HRESULT Ready_Components();
+	HRESULT Ready_PartObjects();
 
 private:
 	void Key_Input(_float fTimeDelta);

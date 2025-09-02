@@ -23,8 +23,6 @@ CModel::CModel(const CModel& Prototype)
 	, m_Materials { Prototype.m_Materials }
 	, m_iNumAnimations{ Prototype.m_iNumAnimations }
 	, m_PreTransformMatrix{ Prototype.m_PreTransformMatrix }
-	//, m_Animations{ Prototype.m_Animations }
-	//, m_Bones{ Prototype.m_Bones }
 {
 	for (auto& pPrototypeBone : Prototype.m_Bones)
 		m_Bones.push_back(pPrototypeBone->Clone());
@@ -44,12 +42,12 @@ HRESULT CModel::Load_Model_FromBinary(const _tchar* pBinaryFilePath)
 	/* ../Bin/Resources/Models/Binary/Fiona.bin */
 	_char szModelFilePath[MAX_PATH];
 
-	WideCharToMultiByte(CP_ACP, 0, pBinaryFilePath, (_int)_tcslen(pBinaryFilePath),
-		szModelFilePath, MAX_PATH, NULL, NULL);
+	WideCharToMultiByte(CP_ACP, 0, pBinaryFilePath, (_int)_tcslen(pBinaryFilePath), szModelFilePath, MAX_PATH, NULL, NULL);
 
 	_char szModelPath[MAX_PATH] = {};
 	_tchar szPerefectModelName[MAX_PATH] = {};
 
+	DWORD	dwByte(0);
 	HANDLE hHandle = CreateFile(pBinaryFilePath,
 		GENERIC_READ,  // 파일 용도(GENERIC_WRITE : 쓰기(저장), GENERIC_READ : 읽기(불러오기))
 		NULL,			// 공유 방식(NULL인 경우 공유하지 않음)
@@ -59,11 +57,7 @@ HRESULT CModel::Load_Model_FromBinary(const _tchar* pBinaryFilePath)
 		NULL);	// 생성될 파일의 속성을 제공할 템플릿 파일(안쓸것이기 때문에 NULL)
 
 	if (hHandle == INVALID_HANDLE_VALUE)
-	{
 		return E_FAIL;
-	}
-
-	DWORD	dwByte(0);
 
 	/* 본 갯수 로딩 */
 	if (false == ReadFile(hHandle, &m_iNumBones, sizeof(_uint), &dwByte, nullptr))
@@ -138,9 +132,9 @@ HRESULT CModel::Save_Model_ToBinary(const _char* pModelSavePath)
 	strcat_s(szModelPath, m_szModelName);
 	strcat_s(szModelPath, ".Bin");
 	/*  char to tchar */
-	MultiByteToWideChar(CP_ACP, 0, szModelPath, (_int)strlen(szModelPath),
-		szPerefectModelName, MAX_PATH);
+	MultiByteToWideChar(CP_ACP, 0, szModelPath, (_int)strlen(szModelPath), szPerefectModelName, MAX_PATH);
 
+	DWORD	dwByte(0);
 	HANDLE hHandle = CreateFile(szPerefectModelName, 
 								GENERIC_WRITE,  // 파일 용도(GENERIC_WRITE : 쓰기(저장), GENERIC_READ : 읽기(불러오기))
 								NULL,			// 공유 방식(NULL인 경우 공유하지 않음)
@@ -151,8 +145,6 @@ HRESULT CModel::Save_Model_ToBinary(const _char* pModelSavePath)
 
 	if (hHandle == INVALID_HANDLE_VALUE)
 		return E_FAIL;
-
-	DWORD	dwByte(0);
 
 	/* 본 갯수 저장 */
 	WriteFile(hHandle, &m_iNumBones, sizeof(_uint), &dwByte, nullptr);
@@ -296,6 +288,16 @@ HRESULT CModel::Initialize_Prototype(MODEL eType, const _tchar* pBinaryFilePath,
 
 HRESULT CModel::Initialize(void* pArg)
 {
+	MODEL_DESC* pDesc = static_cast<MODEL_DESC*>(pArg);
+
+	/* 루트본 이름이 없다면 상관없음. */
+	if (nullptr == pDesc)
+		return S_OK;
+
+	/* 하지만 루트본 이름이 있다면, Seperated 모델임을 체크 */
+	m_isSeperated = true;
+	strcpy_s(m_szRootBoneName, pDesc->szRootBoneName);
+
 	return S_OK;
 }
 
@@ -333,7 +335,7 @@ HRESULT CModel::Bind_Material(_uint iMeshIndex, CShader* pShader, const _char* p
 void CModel::Play_Animation(_float fTimeDelta)
 {
 	if (-1 == m_iCurrentAnimIndex ||
-		m_iCurrentAnimIndex >= m_iNumAnimations)
+		m_iCurrentAnimIndex >= (_int)m_iNumAnimations)
 		return;
 
 	/* 내가 재생하고자하는 애니메이션(공격모션)이 이용하고 있는 뼈들의 상태 변환정보(TransformationMatrix)를 갱신해준다.*/
@@ -343,16 +345,15 @@ void CModel::Play_Animation(_float fTimeDelta)
 	else if(true == m_bAnimationBlending)
 		m_Animations[m_iCurrentAnimIndex]->Update_Blending_TransformationMatrices(&m_bAnimationBlending, &m_PreAnimKeyFrames, m_Bones, m_fPreTrackPosition, fTimeDelta);
 
-	/* 모든 뼈를 순회하면서 CombinedTransformationMatrix를 갱신한다. */
 
+	/* 모든 뼈를 순회하면서 CombinedTransformationMatrix를 갱신한다. */
 	for (auto& pBone : m_Bones)
-	{
 		pBone->Update_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_PreTransformMatrix));
-	}
 }
 
 HRESULT CModel::Render(_uint iMeshIndex)
 {
+	//여기서 활성화된 메시들만 출력하도록 한다.
 	m_Meshes[iMeshIndex]->Bind_Resources();
 	m_Meshes[iMeshIndex]->Render();
 
@@ -392,6 +393,14 @@ HRESULT CModel::Ready_Materials(const _char* pModelFilePath)
 	return S_OK;
 }
 
+void CModel::Count_BoneChilds(aiNode* pAINode, _uint* iRootHierachyCount)
+{
+	(*iRootHierachyCount)++;
+
+	for (size_t i = 0; i < pAINode->mNumChildren; ++i)
+		Count_BoneChilds(pAINode->mChildren[i], iRootHierachyCount);
+}
+
 HRESULT CModel::Ready_Bones(const aiNode* pAINode, _int iParentIndex)
 {
 	CBone* pBone = CBone::Create(pAINode, iParentIndex);
@@ -402,11 +411,24 @@ HRESULT CModel::Ready_Bones(const aiNode* pAINode, _int iParentIndex)
 
 	_int	iParent = m_Bones.size() - 1;
 
-	for (size_t i = 0; i < pAINode->mNumChildren; i++)
+	/* 파츠 분리된 본이고, 루트 본과 이름이 같다면 루트본 자식 갯수 세버리기. */
+	if (true == m_isSeperated && true == pBone->Compare_Name(m_szRootBoneName))
 	{
+		_uint iHierachyCount = { 0 };
+		_int RootBoneIdx = m_Bones.size();
+		m_iRootBoneNum++;
+
+		for (size_t i = 0; i < pAINode->mNumChildren; ++i)
+			Count_BoneChilds(pAINode->mChildren[i], &iHierachyCount);
+
+		//인덱스와 계층구조 갯수까지 저장.
+		m_RootBoneIndex.emplace(RootBoneIdx, iHierachyCount);
+	}
+
+
+	for (size_t i = 0; i < pAINode->mNumChildren; i++)
 		/* 재귀 형태로 굴러가게 된다. (계층 구조 탐색을 위함) */
 		Ready_Bones(pAINode->mChildren[i], iParent);
-	}
 
 
 	return S_OK;

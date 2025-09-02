@@ -7,6 +7,10 @@
 #include "AttackTypePanel.h"
 #include "ComboKOPanel.h"
 
+#include "Upper_Player.h"
+#include "Lower_Player.h"
+
+
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 	: CCharacter { pDevice, pContext, eObjectID }
 	, m_pGameManager{ CGameManager::GetInstance() }
@@ -51,13 +55,17 @@ HRESULT CPlayer::Initialize_Prototype()
 
 HRESULT CPlayer::Initialize(void* pArg)
 {
-	if (FAILED(__super::Initialize(pArg)))
+	CGameObject::GAMEOBJECT_DESC	Desc{};
+	Desc.fRotationPerSec = XMConvertToRadians(180.0f);
+	Desc.fSpeedPerSec = 10.f;
+
+	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_iNumMeshes = m_pModelCom->Get_NumMeshes();
+	//m_iNumMeshes = m_pModelCom->Get_NumMeshes();
 
 	/* 게임 매니저에 현재 플레이어 정보 세팅. 레벨 변경되도 안전할거니까.. */
 	m_pGameManager->Set_PlayerPtr(this);
@@ -66,11 +74,16 @@ HRESULT CPlayer::Initialize(void* pArg)
 	for (_uint i = 0; i < ENUM_CLASS(SKILL::END); ++i)
 		m_Skills.emplace(static_cast<SKILL>(i), g_SkillTable[i]);
 
+	if (FAILED(Ready_PartObjects()))
+		return E_FAIL;
+
+
 	return S_OK;
 }
 
 void CPlayer::Priority_Update(_float fTimeDelta)
 {
+	__super::Priority_Update(fTimeDelta);
 }
 
 void CPlayer::Update(_float fTimeDelta)
@@ -82,6 +95,8 @@ void CPlayer::Update(_float fTimeDelta)
 
 	Key_Input(fTimeDelta);
 	ComboKO_System(fTimeDelta);
+
+	__super::Update(fTimeDelta);
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
@@ -94,6 +109,8 @@ void CPlayer::Late_Update(_float fTimeDelta)
 	}
 
 	m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+
+	__super::Late_Update(fTimeDelta);
 }
 
 HRESULT CPlayer::Render()
@@ -106,14 +123,35 @@ HRESULT CPlayer::Render()
 
 HRESULT CPlayer::Ready_Components()
 {
-	/* Com_Shader */
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxMesh"),
-		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
+	// 플레이어는 이제 렌더되지 않는다.
+	///* Com_Shader */
+	//if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxMesh"),
+	//	TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
+	//	return E_FAIL;
+
+	///* Com_Model */
+	//if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_Fiona"),
+	//	TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
+	//	return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CPlayer::Ready_PartObjects()
+{
+	CUpper_Player::UPPER_PLAYER_DESC UpperDesc{};
+	UpperDesc.pParentTransform = m_pTransformCom;
+
+	CLower_Player::LOWER_PLAYER_DESC LowerDesc{};
+	LowerDesc.pParentTransform = m_pTransformCom;
+	/* Part_Upper */
+	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Upper_Player"),
+		TEXT("Part_Upper"), &UpperDesc)))
 		return E_FAIL;
 
-	/* Com_Model */
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_Fiona"),
-		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
+	/* Part_Lower */
+	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Lower_Player"),
+		TEXT("Part_Lower"), &LowerDesc)))
 		return E_FAIL;
 
 	return S_OK;
@@ -123,7 +161,19 @@ void CPlayer::Key_Input(_float fTimeDelta)
 {
 	if (m_pGameInstance->Key_Pressing(DIK_UP))
 	{
-		m_pTransformCom->Go_Straight(fTimeDelta);
+		//m_pTransformCom->Go_Straight(fTimeDelta);
+		
+		for (auto& Pair : m_PartObjects)
+		{
+			static_cast<CParts_Player*>(Pair.second)->Set_AnimIndex(1);
+		}
+	}
+	else
+	{
+		for (auto& Pair : m_PartObjects)
+		{
+			static_cast<CParts_Player*>(Pair.second)->Set_AnimIndex(0);
+		}
 	}
 
 	if (m_pGameInstance->Key_Pressing(DIK_DOWN))
