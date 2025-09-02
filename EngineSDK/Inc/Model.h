@@ -34,6 +34,10 @@ NS_BEGIN(Engine)
 
 class ENGINE_DLL CModel final : public CComponent
 {
+public:
+	typedef struct tagModelDesc {
+		const _char* szRootBoneName;
+	} MODEL_DESC;
 private:
 	CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CModel(const CModel& Prototype);
@@ -73,6 +77,12 @@ private:
 	Assimp::Importer			m_Importer;
 
 private:
+	//이건 클라단에서 세팅해줘야 하는거니까 저장할 필요 없음.
+	_bool					m_isSeperated = { false };
+	_char					m_szRootBoneName[MAX_PATH] = {};
+	_uint					m_iRootBoneNum = { 0 };
+	map<_int, _int>			m_RootBoneIndex = {};
+
 	_uint					m_iNumMeshes = {};
 
 	vector<_wstring>		m_MeshNames = {};
@@ -102,9 +112,11 @@ private:
 	_float						m_fPreTrackPosition = { 0 };
 	map<_int , KEYFRAME>		m_PreAnimKeyFrames = {};
 	_bool						m_bAnimationBlending = { false };
+
 private:
 	HRESULT Ready_Meshes();
 	HRESULT Ready_Materials(const _char* pModelFilePath);
+	void	Count_BoneChilds(aiNode* pNode, _uint* iRootHierachyCount);
 	HRESULT Ready_Bones(const aiNode* pAINode, _int iParentIndex);
 	HRESULT Ready_Animations();
 

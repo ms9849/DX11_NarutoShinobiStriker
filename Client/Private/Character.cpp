@@ -2,12 +2,12 @@
 #include "GameInstance.h"
 
 CCharacter::CCharacter(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
-	: CGameObject { pDevice, pContext, ENUM_CLASS(eObjectID) }
+	: CContainerObject{ pDevice, pContext, ENUM_CLASS(eObjectID) }
 {
 }
 
 CCharacter::CCharacter(const CCharacter& rhs)
-	: CGameObject { rhs }
+	: CContainerObject{ rhs }
 {
 }
 
@@ -31,14 +31,17 @@ HRESULT CCharacter::Initialize(void* pArg)
 
 void CCharacter::Priority_Update(_float fTimeDelta)
 {
+	__super::Priority_Update(fTimeDelta);
 }
 
 void CCharacter::Update(_float fTimeDelta)
 {
+	__super::Update(fTimeDelta);
 }
 
 void CCharacter::Late_Update(_float fTimeDelta)
 {
+	__super::Late_Update(fTimeDelta);
 }
 
 HRESULT CCharacter::Render()
@@ -101,14 +104,14 @@ void CCharacter::Change_AttackType()
 HRESULT CCharacter::Bind_ShaderResources()
 {
 	/*m_pShaderCom->Bind_Matrix("g_WorldMatrix", );*/
-	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
-		return E_FAIL;
+	//if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+	//	return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", m_pGameInstance->Get_PipeLine_Float4x4(D3DTS::VIEW))))
-		return E_FAIL;
+	//if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", m_pGameInstance->Get_PipeLine_Float4x4(D3DTS::VIEW))))
+	//	return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_PipeLine_Float4x4(D3DTS::PROJ))))
-		return E_FAIL;
+	//if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_PipeLine_Float4x4(D3DTS::PROJ))))
+	//	return E_FAIL;
 
 	return S_OK;
 }

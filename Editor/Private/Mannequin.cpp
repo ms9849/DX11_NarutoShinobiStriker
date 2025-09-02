@@ -47,11 +47,11 @@ void CMannequin::Update(_float fTimeDelta)
 	if (m_pGameInstance->Key_Down(DIK_2))
 		m_pModelCom->Set_AnimIndex(2);
 
-	if (m_pGameInstance->Key_Down(DIK_3))
-		m_pModelCom->Set_AnimIndex(3);
+	//if (m_pGameInstance->Key_Down(DIK_3))
+	//	m_pModelCom->Set_AnimIndex(3);
 
-	if (m_pGameInstance->Key_Down(DIK_4))
-		m_pModelCom->Set_AnimIndex(4);
+	//if (m_pGameInstance->Key_Down(DIK_4))
+	//	m_pModelCom->Set_AnimIndex(4);
 
 
 	m_pModelCom->Play_Animation(fTimeDelta);
@@ -93,7 +93,7 @@ HRESULT CMannequin::Ready_Components()
 		return E_FAIL;
 
 	/* Com_Model */
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Fiona_Binary"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Test"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 

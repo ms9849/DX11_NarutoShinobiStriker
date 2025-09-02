@@ -2,7 +2,7 @@
 
 #include "Client_Defines.h"
 #include "Skill_Table.h"
-#include "GameObject.h"
+#include "ContainerObject.h"
 
 NS_BEGIN(Engine)
 class CModel;
@@ -16,7 +16,7 @@ NS_BEGIN(Client)
 -> 두는것도 괜찮아보이긴 하는데..
 */
 
-class CCharacter abstract : public CGameObject
+class CCharacter abstract : public CContainerObject
 {
 protected:
 	CCharacter(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);

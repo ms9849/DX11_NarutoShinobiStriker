@@ -87,10 +87,10 @@ HRESULT CLevel_Edit::Ready_Prototypes()
 #pragma region MODEL_FBX
     _matrix			PreTransformMatrix = XMMatrixIdentity();
 
-    /* For.Prototype_Component_Model_Fiona */
-    PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Fiona"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Fiona/Fiona.fbx", PreTransformMatrix))))
+    /* For.Prototype_Component_Model_Test */
+    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Test"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Fiona/MY_Fiona.fbx", PreTransformMatrix))))
         return E_FAIL;
     m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Fiona"));
 

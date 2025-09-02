@@ -174,6 +174,7 @@
     <ClInclude Include="..\Public\LoadingBarPanel.h" />
     <ClInclude Include="..\Public\LoadingPanel.h" />
     <ClInclude Include="..\Public\LogoPanel.h" />
+    <ClInclude Include="..\Public\Lower_Player.h" />
     <ClInclude Include="..\Public\MainApp.h" />
     <ClInclude Include="..\Public\Mannequin.h" />
     <ClInclude Include="..\Public\MissionAlertPanel.h" />
@@ -183,6 +184,7 @@
     <ClInclude Include="..\Public\OutfitSelectCamera.h" />
     <ClInclude Include="..\Public\OutfitSelectPanel.h" />
     <ClInclude Include="..\Public\Panel.h" />
+    <ClInclude Include="..\Public\Parts_Player.h" />
     <ClInclude Include="..\Public\Player.h" />
     <ClInclude Include="..\Public\PressAnyButtonUI.h" />
     <ClInclude Include="..\Public\ProgressBarUI.h" />
@@ -200,6 +202,7 @@
     <ClInclude Include="..\Public\TimerPanel.h" />
     <ClInclude Include="..\Public\Tree.h" />
     <ClInclude Include="..\Public\TutorialMap.h" />
+    <ClInclude Include="..\Public\Upper_Player.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
@@ -226,6 +229,7 @@
     <ClCompile Include="..\Private\LoadingBarPanel.cpp" />
     <ClCompile Include="..\Private\LoadingPanel.cpp" />
     <ClCompile Include="..\Private\LogoPanel.cpp" />
+    <ClCompile Include="..\Private\Lower_Player.cpp" />
     <ClCompile Include="..\Private\MainApp.cpp" />
     <ClCompile Include="..\Private\Mannequin.cpp" />
     <ClCompile Include="..\Private\MissionAlertPanel.cpp" />
@@ -235,6 +239,7 @@
     <ClCompile Include="..\Private\OutfitSelectCamera.cpp" />
     <ClCompile Include="..\Private\OutfitSelectPanel.cpp" />
     <ClCompile Include="..\Private\Panel.cpp" />
+    <ClCompile Include="..\Private\Parts_Player.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\Private\PressAnyButtonUI.cpp" />
     <ClCompile Include="..\Private\ProgressBarUI.cpp" />
@@ -251,6 +256,7 @@
     <ClCompile Include="..\Private\TimerPanel.cpp" />
     <ClCompile Include="..\Private\Tree.cpp" />
     <ClCompile Include="..\Private\TutorialMap.cpp" />
+    <ClCompile Include="..\Private\Upper_Player.cpp" />
     <ClCompile Include="Client.cpp" />
   </ItemGroup>
   <ItemGroup>

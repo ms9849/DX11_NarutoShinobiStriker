@@ -184,6 +184,15 @@
     <Filter Include="02.GameObjects\Character\STATE">
       <UniqueIdentifier>{d7918d9f-4ea8-4083-8868-f551a6d20400}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Character\Player\Parts">
+      <UniqueIdentifier>{f147d662-5586-4b75-aba1-4624b3bf91b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\Parts\Upper">
+      <UniqueIdentifier>{4fb66942-45ee-400c-8131-3eceed95e315}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\Parts\Lower">
+      <UniqueIdentifier>{995a8e34-3f70-4b67-879a-a7e250884cec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -339,6 +348,15 @@
     <ClInclude Include="..\Public\CharacterState.h">
       <Filter>02.GameObjects\Character\STATE</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Upper_Player.h">
+      <Filter>02.GameObjects\Character\Player\Parts\Upper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Lower_Player.h">
+      <Filter>02.GameObjects\Character\Player\Parts\Lower</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Parts_Player.h">
+      <Filter>02.GameObjects\Character\Player\Parts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -491,6 +509,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\CharacterState.cpp">
       <Filter>02.GameObjects\Character\STATE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Upper_Player.cpp">
+      <Filter>02.GameObjects\Character\Player\Parts\Upper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Lower_Player.cpp">
+      <Filter>02.GameObjects\Character\Player\Parts\Lower</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Parts_Player.cpp">
+      <Filter>02.GameObjects\Character\Player\Parts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
