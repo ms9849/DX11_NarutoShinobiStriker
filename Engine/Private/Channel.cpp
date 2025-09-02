@@ -6,7 +6,8 @@ CChannel::CChannel()
 {
 }
 
-KEYFRAME CChannel::Get_CurKeyFrame(_float fTrackPosition)
+/* 입력된 트랙포지션에 맞는 키프레임 반환 */
+KEYFRAME CChannel::Get_KeyFrame(_float fTrackPosition)
 {
 	/* 죵나 위험해보이는데???... */
 	for (_uint i = 1; i < m_KeyFrames.size(); ++i)
@@ -145,57 +146,30 @@ void CChannel::Update_TransformationMatrix(const vector<class CBone*>& Bones, _f
 
 }
 
-void CChannel::Update_Blending_TransformationMatrix(_float BlendRatio, CChannel* pChannel, const vector<class CBone*>& Bones, _float PreTrackPosition)
+void CChannel::Update_Blending_TransformationMatrix(_float BlendRatio, KEYFRAME PreKeyFrame, const vector<class CBone*>& Bones, _float PreTrackPosition)
 {
 	_vector			vScale{};
 	_vector			vRotation{};
 	_vector			vTranslation{};
 
-	/* 매칭되는 채널 없으면 본 다이렉트로 꺼내옴 */
-	if (nullptr == pChannel)
-	{
-		_float3		vSourScale{}, vDestScale{};
-		_float4		vSourRotation{}, vDestRotation{};
-		_float3		vSourTranslation{}, vDestTranslation{};
-		_vector		SourScale{}, SourRotation{}, SourTranslation{};
+	_float3		vSourScale{}, vDestScale{};
+	_float4		vSourRotation{}, vDestRotation{};
+	_float3		vSourTranslation{}, vDestTranslation{};
 
-		/* 매칭 되는 본의 정보 다이렉트로 가져올 것 */
-		XMMatrixDecompose(&SourScale, &SourRotation, &SourTranslation, Bones[m_iBoneIndex]->Get_TransformMatrix());
-		
-		XMStoreFloat3(&vSourScale, SourScale);
-		vDestScale = m_KeyFrames[0].vScale;
+	/* 이전 채널의 정보 가져올 것 */
+	vSourScale = PreKeyFrame.vScale;
+	vDestScale = m_KeyFrames[0].vScale;
 
-		XMStoreFloat4(&vSourRotation, SourRotation);
-		vDestRotation = m_KeyFrames[0].vRotation;
+	vSourRotation = PreKeyFrame.vRotation;
+	vDestRotation = m_KeyFrames[0].vRotation;
 
-		XMStoreFloat3(&vSourTranslation, SourTranslation);
-		vDestTranslation = m_KeyFrames[0].vTranslation;
+	vSourTranslation = PreKeyFrame.vTranslation;
+	vDestTranslation = m_KeyFrames[0].vTranslation;
 
-		vScale = XMVectorLerp(XMLoadFloat3(&vSourScale), XMLoadFloat3(&vDestScale), BlendRatio);
-		vRotation = XMQuaternionSlerp(XMLoadFloat4(&vSourRotation), XMLoadFloat4(&vDestRotation), BlendRatio);
-		vTranslation = XMVectorSetW(XMVectorLerp(XMLoadFloat3(&vSourTranslation), XMLoadFloat3(&vDestTranslation), BlendRatio), 1.f);
-	}
+	vScale = XMVectorLerp(XMLoadFloat3(&vSourScale), XMLoadFloat3(&vDestScale), BlendRatio);
+	vRotation = XMQuaternionSlerp(XMLoadFloat4(&vSourRotation), XMLoadFloat4(&vDestRotation), BlendRatio);
+	vTranslation = XMVectorSetW(XMVectorLerp(XMLoadFloat3(&vSourTranslation), XMLoadFloat3(&vDestTranslation), BlendRatio), 1.f);
 
-	else /* 그게 아니라면 선형보간 해줌. */
-	{
-		_float3		vSourScale{}, vDestScale{};
-		_float4		vSourRotation{}, vDestRotation{};
-		_float3		vSourTranslation{}, vDestTranslation{};
-
-		/* 이전 채널의 정보 가져올 것 */
-		vSourScale = pChannel->Get_CurKeyFrame(PreTrackPosition).vScale;
-		vDestScale = m_KeyFrames[0].vScale;
-
-		vSourRotation = pChannel->Get_CurKeyFrame(PreTrackPosition).vRotation;
-		vDestRotation = m_KeyFrames[0].vRotation;
-
-		vSourTranslation = pChannel->Get_CurKeyFrame(PreTrackPosition).vTranslation;
-		vDestTranslation = m_KeyFrames[0].vTranslation;
-
-		vScale = XMVectorLerp(XMLoadFloat3(&vSourScale), XMLoadFloat3(&vDestScale), BlendRatio);
-		vRotation = XMQuaternionSlerp(XMLoadFloat4(&vSourRotation), XMLoadFloat4(&vDestRotation), BlendRatio);
-		vTranslation = XMVectorSetW(XMVectorLerp(XMLoadFloat3(&vSourTranslation), XMLoadFloat3(&vDestTranslation), BlendRatio), 1.f);
-	}
 
 	_matrix		BoneTransformationMatrix = XMMatrixAffineTransformation(vScale, XMVectorSet(0.f, 0.f, 0.f, 1.f), vRotation, vTranslation);
 

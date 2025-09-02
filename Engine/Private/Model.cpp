@@ -115,8 +115,8 @@ void CModel::Set_AnimIndex(_uint iIdx)
 	if (iIdx == m_iCurrentAnimIndex)
 		return;
 
-	m_PreAnimationChannels = m_Animations[m_iCurrentAnimIndex]->Get_Channels();
 	m_fPreTrackPosition = m_Animations[m_iCurrentAnimIndex]->Get_CurrentTrackPosition();
+	m_PreAnimKeyFrames = m_Animations[m_iCurrentAnimIndex]->Get_KeyFrames(m_fPreTrackPosition);
 	m_Animations[m_iCurrentAnimIndex]->Reset_Animation();
 	m_iCurrentAnimIndex = iIdx;
 	m_bAnimationBlending = true;
@@ -341,7 +341,7 @@ void CModel::Play_Animation(_float fTimeDelta)
 		m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, fTimeDelta);
 
 	else if(true == m_bAnimationBlending)
-		m_Animations[m_iCurrentAnimIndex]->Update_Blending_TransformationMatrices(&m_bAnimationBlending, m_PreAnimationChannels, m_Bones, m_fPreTrackPosition, fTimeDelta);
+		m_Animations[m_iCurrentAnimIndex]->Update_Blending_TransformationMatrices(&m_bAnimationBlending, &m_PreAnimKeyFrames, m_Bones, m_fPreTrackPosition, fTimeDelta);
 
 	/* 모든 뼈를 순회하면서 CombinedTransformationMatrix를 갱신한다. */
 

@@ -100,7 +100,7 @@ private:
 	vector<class CAnimation*>	m_Animations;
 
 	_float						m_fPreTrackPosition = { 0 };
-	vector<class CChannel*>		m_PreAnimationChannels = {};
+	map<_int , KEYFRAME>		m_PreAnimKeyFrames = {};
 	_bool						m_bAnimationBlending = { false };
 private:
 	HRESULT Ready_Meshes();

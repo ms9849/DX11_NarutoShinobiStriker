@@ -19,7 +19,8 @@ public:
 		return m_iBoneIndex;
 	}
 
-	KEYFRAME Get_CurKeyFrame(_float fTrackPosition);
+	KEYFRAME Get_KeyFrame(_float fTrackPosition);
+
 	_bool Compare_BoneIndex(_int iIdx) {
 		return iIdx == m_iBoneIndex;
 	}
@@ -29,7 +30,7 @@ public:
 	HRESULT Initialize(HANDLE hHandle, DWORD* dwByte);
 
 	void Update_TransformationMatrix(const vector<class CBone*>& Bones, _float fCurrentTrackPosition, _uint* pCurrentKeyFrameIndex);
-	void Update_Blending_TransformationMatrix(_float BlendRatio, CChannel* pChannel, const vector<class CBone*>& Bones, _float PreTrackPosition);
+	void Update_Blending_TransformationMatrix(_float BlendRatio, KEYFRAME PreKeyFrame, const vector<class CBone*>& Bones, _float PreTrackPosition);
 	HRESULT Save_Channel_ToBinary(HANDLE hHandle, DWORD* dwByte, const aiNodeAnim* pAIChannel) const;
 	HRESULT Load_Channel_FromBinary(HANDLE hHandle, DWORD* dwByte);
 
