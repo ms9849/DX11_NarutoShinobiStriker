@@ -33,7 +33,7 @@ public:
 	HRESULT Initialize(const class CModel* pModel, const aiAnimation* pAIAnimation);
 	HRESULT Initialize(HANDLE hHandle, DWORD* dwByte);
 	_bool	Update_TransformationMatrices(const vector<class CBone*>& Bones, _bool isLoop, _float fTimeDelta);
-	_bool	Update_Blending_TransformationMatrices(_bool* bFlag, map<_int, KEYFRAME>* pPreKeyFrames, const vector<class CBone*>& Bones, _float PreTrakcPosition, _float fTimeDelta);
+	_bool	Update_Blending_TransformationMatrices(_bool* bFlag, map<_int, KEYFRAME>* pPreKeyFrames, const vector<class CBone*>& Bones, _float PreTrakcPosition, _float fBlendRatio, _float fTimeDelta);
 
 	HRESULT Save_Animation_ToBinary(HANDLE hHandle, DWORD* dwByte) const;
 	HRESULT Load_Animation_FromBinary(HANDLE hHandle, DWORD* dwByte);

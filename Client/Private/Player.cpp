@@ -52,11 +52,11 @@ void CPlayer::Set_ComboKOPanel(CComboKOPanel* pPanel)
 
 #pragma endregion
 
-void CPlayer::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _bool IsBlend)
+void CPlayer::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _bool IsBlend, _float fBlendRatio)
 {
 	/* 플레이어 애니메이션 바꿔주기. */
 	for (auto& iter : m_PartObjects)
-		static_cast<CParts_Player*>(iter.second)->Set_AnimIndex(pAnimName, fAnimationPlayRate, IsBlend);
+		static_cast<CParts_Player*>(iter.second)->Set_AnimIndex(pAnimName, fAnimationPlayRate, IsBlend, fBlendRatio);
 }
 
 void CPlayer::Update_State(_float fTimeDelta)

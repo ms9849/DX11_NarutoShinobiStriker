@@ -34,7 +34,7 @@ HRESULT CMainCamera::Initialize(void* pArg)
 
 void CMainCamera::Priority_Update(_float fTimeDelta)
 {
-    m_pTransformCom->Chase(m_pPlayerTransform->Get_State(STATE::POSITION) + XMVectorSet(0.f, 4.f, -4.f, 0.f), fTimeDelta, 0.1f);
+    m_pTransformCom->Set_State(STATE::POSITION, m_pPlayerTransform->Get_State(STATE::POSITION) + XMVectorSet(0.f, 4.f, -4.f, 0.f));
     m_pTransformCom->LookAt(m_pPlayerTransform->Get_State(STATE::POSITION));
 
     __super::Bind_Matrices();

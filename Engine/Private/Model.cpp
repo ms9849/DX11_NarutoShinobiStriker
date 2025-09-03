@@ -104,7 +104,7 @@ HRESULT CModel::Load_Model_FromBinary(const _tchar* pBinaryFilePath)
 	return S_OK;
 }
 
-void CModel::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _bool IsBlended)
+void CModel::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _bool IsBlended, _float fBlendRatio)
 {
 	if (nullptr == pAnimName)
 		return;
@@ -128,6 +128,7 @@ void CModel::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _b
 		m_bAnimationBlending = true;
 		m_fPreTrackPosition = m_Animations[m_strCurrentAnimName]->Get_CurrentTrackPosition();
 		m_PreAnimKeyFrames = m_Animations[m_strCurrentAnimName]->Get_KeyFrames(m_fPreTrackPosition);
+		m_fBlendRatio = fBlendRatio;
 	}
 
 	m_Animations[m_strCurrentAnimName]->Reset_Animation();
@@ -349,7 +350,7 @@ _bool CModel::Play_Animation(_float fTimeDelta)
 		m_isAnimFinished = m_Animations[m_strCurrentAnimName]->Update_TransformationMatrices(m_Bones, true, fTimeDelta * m_fAnimationPlayRate);
 
 	else if (true == m_bAnimationBlending)
-		m_isAnimFinished = m_Animations[m_strCurrentAnimName]->Update_Blending_TransformationMatrices(&m_bAnimationBlending, &m_PreAnimKeyFrames, m_Bones, m_fPreTrackPosition, fTimeDelta * m_fAnimationPlayRate);
+		m_isAnimFinished = m_Animations[m_strCurrentAnimName]->Update_Blending_TransformationMatrices(&m_bAnimationBlending, &m_PreAnimKeyFrames, m_Bones, m_fPreTrackPosition, m_fBlendRatio, fTimeDelta * m_fAnimationPlayRate);
 
 
 	/* 모든 뼈를 순회하면서 CombinedTransformationMatrix를 갱신한다. */

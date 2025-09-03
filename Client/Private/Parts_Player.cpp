@@ -12,11 +12,11 @@ CParts_Player::CParts_Player(const CParts_Player& rhs)
 {
 }
 
-void CParts_Player::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _bool IsBlend)
+void CParts_Player::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _bool IsBlend, _float fBlendRatio)
 {
 	/* 추후 문자열로 수정해야 함. */
 	if (nullptr != m_pModelCom)
-		m_pModelCom->Set_AnimIndex(pAnimName, fAnimationPlayRate, IsBlend);
+		m_pModelCom->Set_AnimIndex(pAnimName, fAnimationPlayRate, IsBlend, fBlendRatio);
 }
 
 _bool CParts_Player::Play_Animation(_float fTimeDelta)

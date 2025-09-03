@@ -131,7 +131,7 @@ _bool CAnimation::Update_TransformationMatrices(const vector<CBone*>& Bones, _bo
 	return false;
 }
 
-_bool CAnimation::Update_Blending_TransformationMatrices(_bool* bFlag, map<_int, KEYFRAME>* pPreKeyFrames, const vector<class CBone*>& Bones, _float PreTrackPosition, _float fTimeDelta)
+_bool CAnimation::Update_Blending_TransformationMatrices(_bool* bFlag, map<_int, KEYFRAME>* pPreKeyFrames, const vector<class CBone*>& Bones, _float PreTrackPosition, _float fBlendRatio, _float fTimeDelta)
 {
 	_uint		iIndex = {};
 
@@ -164,8 +164,9 @@ _bool CAnimation::Update_Blending_TransformationMatrices(_bool* bFlag, map<_int,
 	}
 
 	// 블랜드 ratio 증가
-	m_fBlendRatio += 0.15f;
+	m_fBlendRatio += fBlendRatio;
 
+	//선형보간 끝.
 	if (m_fBlendRatio >= 1.0f)
 		m_fBlendRatio = 1.f;
 

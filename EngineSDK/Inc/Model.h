@@ -49,7 +49,7 @@ public:
 	_int Get_BoneIndex(const _char* pBoneName) const;
 
 public:
-	void Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate = 1.f, _bool IsBlended = true);
+	void Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate = 1.f, _bool IsBlended = true, _float fBlendRatio = 0.15f);
 
 public:
 	HRESULT Save_Model_ToBinary(const _char* pModelSavePath);
@@ -103,6 +103,7 @@ private:
 	_float						m_fPreTrackPosition = { 0 };
 	map<_int , KEYFRAME>		m_PreAnimKeyFrames = {};
 	_bool						m_bAnimationBlending = { false };
+	_float						m_fBlendRatio = { 0.15f };
 
 private:
 	HRESULT Ready_Meshes();

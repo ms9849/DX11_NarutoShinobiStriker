@@ -34,20 +34,18 @@ CPlayerState* CPlayer_JumpState::Update(_float fTimeDelta)
 	CPlayerState* pNextState = { nullptr };
 
 	// 더블 점프.
-	if (m_pGameInstance->Key_Down(DIK_SPACE) && m_bCanDoubleJump)
+	if (m_pGameInstance->Key_Down(DIK_SPACE) && m_bCanDoubleJump && ANIM_STATE::JUMP == m_eAnimState)
 	{
-		m_pPlayer->Set_AnimIndex("CustomMan_DoubleJump", 4.0f, false);
+		//보간 ratio 추가
+		m_pPlayer->Set_AnimIndex("CustomMan_DoubleJump", 2.5f, false);
 		m_eAnimState = ANIM_STATE::DOUBLE_JUMP;
-
 		m_fTimeAcc = 0.f;
-		m_fMovement = 0.f;
-
 		m_bCanDoubleJump = false;
 	}
-	// 낙하
 
+	// 낙하
 	// 점프 중에 가속도 떨어지거나, 더블점프 중 + 애니 재생 끝났다면
-	if ((m_fMovement < 0.f && m_fTimeAcc != 0.f && ANIM_STATE::FALL != m_eAnimState) 
+	if ((m_fMovement < 0.f && m_fTimeAcc != 0.f && ANIM_STATE::JUMP == m_eAnimState) 
 		|| (ANIM_STATE::DOUBLE_JUMP == m_eAnimState && IsAnimFinished))
 	{
 		m_pPlayer->Set_AnimIndex("CustomMan_Fall_Vertical_Loop", 1.0f, true);
