@@ -33,8 +33,8 @@ CModel::CModel(const CModel& Prototype)
 	for (auto& pMaterial : m_Materials)
 		Safe_AddRef(pMaterial);
 
-	for (auto& pPrototypeAnim : Prototype.m_Animations)
-		m_Animations.push_back(pPrototypeAnim->Clone());
+	for (auto& pPair : Prototype.m_Animations)
+		m_Animations.emplace(pPair.first, pPair.second->Clone());
 }
 
 HRESULT CModel::Load_Model_FromBinary(const _tchar* pBinaryFilePath)
@@ -96,7 +96,7 @@ HRESULT CModel::Load_Model_FromBinary(const _tchar* pBinaryFilePath)
 	for (_uint i = 0; i < m_iNumAnimations; ++i)
 	{
 		CAnimation* pAnimation = CAnimation::Create(hHandle, &dwByte);
-		m_Animations.push_back(pAnimation);
+		m_Animations.emplace(pAnimation->Get_Name(), pAnimation);
 	}
 
 	CloseHandle(hHandle);
@@ -104,32 +104,35 @@ HRESULT CModel::Load_Model_FromBinary(const _tchar* pBinaryFilePath)
 	return S_OK;
 }
 
-void CModel::Set_AnimIndex(_uint iIdx)
+void CModel::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _bool IsBlended)
 {
-	if (iIdx == m_iCurrentAnimIndex)
+	if (nullptr == pAnimName)
 		return;
 
-	m_fPreTrackPosition = m_Animations[m_iCurrentAnimIndex]->Get_CurrentTrackPosition();
-	m_PreAnimKeyFrames = m_Animations[m_iCurrentAnimIndex]->Get_KeyFrames(m_fPreTrackPosition);
-	m_Animations[m_iCurrentAnimIndex]->Reset_Animation();
-	m_iCurrentAnimIndex = iIdx;
-	m_bAnimationBlending = true;
-}
+	string strAnimName = pAnimName;
 
-//void CModel::Set_AnimIndex(const _char* pAnimName)
-//{
-//	for (_int i = 0; i < m_Animations.size(); ++i)
-//	{
-//		if (true == m_Animations[i]->Compare_Name(pAnimName))
-//		{
-//			m_fPreTrackPosition = m_Animations[m_iCurrentAnimIndex]->Get_CurrentTrackPosition();
-//			m_PreAnimKeyFrames = m_Animations[m_iCurrentAnimIndex]->Get_KeyFrames(m_fPreTrackPosition);
-//			m_Animations[m_iCurrentAnimIndex]->Reset_Animation();
-//			m_iCurrentAnimIndex = i;
-//			m_bAnimationBlending = true;
-//		}
-//	}
-//}
+	if (strAnimName == m_strCurrentAnimName)
+		return;
+
+	auto iter = m_Animations.find(strAnimName);
+	if (m_Animations.end() == iter)
+		return;
+
+	m_fAnimationPlayRate = fAnimationPlayRate;
+
+	if (m_strCurrentAnimName == "")
+		m_strCurrentAnimName = strAnimName;
+
+	if (true == IsBlended)
+	{
+		m_bAnimationBlending = true;
+		m_fPreTrackPosition = m_Animations[m_strCurrentAnimName]->Get_CurrentTrackPosition();
+		m_PreAnimKeyFrames = m_Animations[m_strCurrentAnimName]->Get_KeyFrames(m_fPreTrackPosition);
+	}
+
+	m_Animations[m_strCurrentAnimName]->Reset_Animation();
+	m_strCurrentAnimName = strAnimName;
+}
 
 HRESULT CModel::Save_Model_ToBinary(const _char* pModelSavePath)
 {
@@ -184,10 +187,9 @@ HRESULT CModel::Save_Model_ToBinary(const _char* pModelSavePath)
 	/* 애니메이션 갯수 저장 */
 	WriteFile(hHandle, &m_iNumAnimations, sizeof(_uint), &dwByte, nullptr);
 	/* 메쉬 이름 저장 (메쉬 문자열 크기, 문자열 순). */
-	for (_uint i = 0; i < m_iNumAnimations; ++i)
-		if (FAILED(m_Animations[i]->Save_Animation_ToBinary(hHandle, &dwByte, m_pAIScene->mAnimations[i])))
+	for(auto& Pair : m_Animations)
+		if (FAILED(Pair.second->Save_Animation_ToBinary(hHandle, &dwByte)))
 			return E_FAIL;
-
 
 	CloseHandle(hHandle);
 
@@ -303,16 +305,6 @@ HRESULT CModel::Initialize_Prototype(MODEL eType, const _tchar* pBinaryFilePath,
 
 HRESULT CModel::Initialize(void* pArg)
 {
-	MODEL_DESC* pDesc = static_cast<MODEL_DESC*>(pArg);
-
-	/* 루트본 이름이 없다면 상관없음. */
-	if (nullptr == pDesc)
-		return S_OK;
-
-	/* 하지만 루트본 이름이 있다면, Seperated 모델임을 체크 */
-	m_isSeperated = true;
-	strcpy_s(m_szRootBoneName, pDesc->szRootBoneName);
-
 	return S_OK;
 }
 
@@ -347,23 +339,23 @@ HRESULT CModel::Bind_Material(_uint iMeshIndex, CShader* pShader, const _char* p
 	return m_Materials[iMaterialIndex]->Bind_SRV(pShader, pConstantName, eType, iTextureIndex);
 }
 
-void CModel::Play_Animation(_float fTimeDelta)
+_bool CModel::Play_Animation(_float fTimeDelta)
 {
-	if (-1 == m_iCurrentAnimIndex ||
-		m_iCurrentAnimIndex >= (_int)m_iNumAnimations)
-		return;
+	if (m_Animations.end() == m_Animations.find(m_strCurrentAnimName))
+		return false;
 
 	/* 내가 재생하고자하는 애니메이션(공격모션)이 이용하고 있는 뼈들의 상태 변환정보(TransformationMatrix)를 갱신해준다.*/
-	if(false == m_bAnimationBlending)
-		m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, fTimeDelta);
+	if (false == m_bAnimationBlending)
+		m_isAnimFinished = m_Animations[m_strCurrentAnimName]->Update_TransformationMatrices(m_Bones, true, fTimeDelta * m_fAnimationPlayRate);
 
-	else if(true == m_bAnimationBlending)
-		m_Animations[m_iCurrentAnimIndex]->Update_Blending_TransformationMatrices(&m_bAnimationBlending, &m_PreAnimKeyFrames, m_Bones, m_fPreTrackPosition, fTimeDelta);
+	else if (true == m_bAnimationBlending)
+		m_isAnimFinished = m_Animations[m_strCurrentAnimName]->Update_Blending_TransformationMatrices(&m_bAnimationBlending, &m_PreAnimKeyFrames, m_Bones, m_fPreTrackPosition, fTimeDelta * m_fAnimationPlayRate);
 
 
 	/* 모든 뼈를 순회하면서 CombinedTransformationMatrix를 갱신한다. */
 	for (auto& pBone : m_Bones)
 		pBone->Update_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_PreTransformMatrix));
+	return m_isAnimFinished;
 }
 
 HRESULT CModel::Render(_uint iMeshIndex)
@@ -408,14 +400,6 @@ HRESULT CModel::Ready_Materials(const _char* pModelFilePath)
 	return S_OK;
 }
 
-void CModel::Count_BoneChilds(aiNode* pAINode, _uint* iRootHierachyCount)
-{
-	(*iRootHierachyCount)++;
-
-	for (size_t i = 0; i < pAINode->mNumChildren; ++i)
-		Count_BoneChilds(pAINode->mChildren[i], iRootHierachyCount);
-}
-
 HRESULT CModel::Ready_Bones(const aiNode* pAINode, _int iParentIndex)
 {
 	CBone* pBone = CBone::Create(pAINode, iParentIndex);
@@ -426,25 +410,9 @@ HRESULT CModel::Ready_Bones(const aiNode* pAINode, _int iParentIndex)
 
 	_int	iParent = m_Bones.size() - 1;
 
-	/* 파츠 분리된 본이고, 루트 본과 이름이 같다면 루트본 자식 갯수 세버리기. */
-	if (true == m_isSeperated && true == pBone->Compare_Name(m_szRootBoneName))
-	{
-		_uint iHierachyCount = { 0 };
-		_int RootBoneIdx = m_Bones.size();
-		m_iRootBoneNum++;
-
-		for (size_t i = 0; i < pAINode->mNumChildren; ++i)
-			Count_BoneChilds(pAINode->mChildren[i], &iHierachyCount);
-
-		//인덱스와 계층구조 갯수까지 저장.
-		m_RootBoneIndex.emplace(RootBoneIdx, iHierachyCount);
-	}
-
-
 	for (size_t i = 0; i < pAINode->mNumChildren; i++)
 		/* 재귀 형태로 굴러가게 된다. (계층 구조 탐색을 위함) */
 		Ready_Bones(pAINode->mChildren[i], iParent);
-
 
 	return S_OK;
 }
@@ -459,7 +427,13 @@ HRESULT CModel::Ready_Animations()
 		if (nullptr == pAnimation)
 			return E_FAIL;
 
-		m_Animations.push_back(pAnimation);
+		string strAnimKey = pAnimation->Get_Name();
+
+		//같은 이름의 애니메이션이 이미 존재한다면
+		if (m_Animations.end() != m_Animations.find(strAnimKey))
+			return E_FAIL;
+
+		m_Animations.emplace(pAnimation->Get_Name(), pAnimation);
 	}
 
 	return S_OK;
@@ -508,8 +482,8 @@ void CModel::Free()
 {
 	__super::Free();
 
-	for (auto& pAnimation : m_Animations)
-		Safe_Release(pAnimation);
+	for (auto& Pair : m_Animations)
+		Safe_Release(Pair.second);
 	m_Animations.clear();
 
 	for (auto& pBone : m_Bones)

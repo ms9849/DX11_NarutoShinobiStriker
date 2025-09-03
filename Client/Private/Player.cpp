@@ -52,11 +52,11 @@ void CPlayer::Set_ComboKOPanel(CComboKOPanel* pPanel)
 
 #pragma endregion
 
-void CPlayer::Set_AnimIndex(_uint iIndex)
+void CPlayer::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _bool IsBlend)
 {
 	/* 플레이어 애니메이션 바꿔주기. */
 	for (auto& iter : m_PartObjects)
-		static_cast<CParts_Player*>(iter.second)->Set_AnimIndex(iIndex);
+		static_cast<CParts_Player*>(iter.second)->Set_AnimIndex(pAnimName, fAnimationPlayRate, IsBlend);
 }
 
 void CPlayer::Update_State(_float fTimeDelta)
@@ -75,6 +75,16 @@ void CPlayer::Update_State(_float fTimeDelta)
 
 		m_pState = pNextState;
 	}
+}
+
+_bool CPlayer::Play_Animation(_float fTimeDelta)
+{
+	_bool isAnimFinished = { false };
+
+	for (auto& Pair : m_PartObjects)
+		isAnimFinished =static_cast<CParts_Player*>(Pair.second)->Play_Animation(fTimeDelta);
+
+	return isAnimFinished;
 }
 
 HRESULT CPlayer::Initialize_Prototype()
@@ -98,10 +108,6 @@ HRESULT CPlayer::Initialize(void* pArg)
 
 	/* 게임 매니저에 현재 플레이어 정보 세팅. 레벨 변경되도 안전할거니까.. */
 	m_pGameManager->Set_PlayerPtr(this);
-	
-	/* 상태 초기화 및 시작. */
-	m_pState = CPlayer_IdleState::Create(this);
-	m_pState->Start();
 
 	/* 플레이어는 모든 스킬을 사용할 수 있다. */
 	for (_uint i = 0; i < ENUM_CLASS(SKILL::END); ++i)
@@ -110,6 +116,9 @@ HRESULT CPlayer::Initialize(void* pArg)
 	if (FAILED(Ready_PartObjects()))
 		return E_FAIL;
 
+	/* 상태 초기화 및 시작. */
+	m_pState = CPlayer_IdleState::Create(this);
+	m_pState->Start();
 
 	return S_OK;
 }
@@ -178,30 +187,6 @@ HRESULT CPlayer::Ready_PartObjects()
 
 void CPlayer::Key_Input(_float fTimeDelta)
 {
-	if (m_pGameInstance->Key_Pressing(DIK_UP))
-	{
-
-	}
-	else
-	{
-
-	}
-
-	if (m_pGameInstance->Key_Pressing(DIK_DOWN))
-	{
-		m_pTransformCom->Go_Backward(fTimeDelta);
-	}
-
-	if (m_pGameInstance->Key_Pressing(DIK_LEFT))
-	{
-		m_pTransformCom->Go_Left(fTimeDelta);
-	}
-
-	if (m_pGameInstance->Key_Pressing(DIK_RIGHT))
-	{
-		m_pTransformCom->Go_Right(fTimeDelta);
-	}
-
 	if (m_pGameInstance->Key_Down(DIK_6))
 	{
 		m_eCurAttackType = static_cast<ATTACK_TYPE>(ENUM_CLASS(m_eCurAttackType) + 1);

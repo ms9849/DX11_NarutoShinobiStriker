@@ -58,6 +58,7 @@ private:
 
 	map<const _wstring, CCamera*> m_Cameras[ENUM_CLASS(LEVEL::END)] = {};
 	CCamera* m_pActivatedCamera = {};
+	_wstring m_strActivatedCameraTag = {};
 
 	class CPlayer* m_pPlayer = {};
 	class CQuestLog* m_pQuestLog = {};

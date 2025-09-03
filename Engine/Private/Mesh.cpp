@@ -124,6 +124,7 @@ HRESULT CMesh::Initialize_Prototype(MODEL eType, const class CModel* pModel, con
     if (FAILED(m_pDevice->CreateBuffer(&StagingDesc, nullptr, &m_pStagingIB)))
         return E_FAIL;
 
+    //이거 뺴야된다 무조건.
     m_pContext->CopyResource(m_pStagingIB, m_pIB);
 
     if (FAILED(m_pContext->Map(m_pStagingIB, 0, D3D11_MAP_READ, 0, &m_StagingData)))

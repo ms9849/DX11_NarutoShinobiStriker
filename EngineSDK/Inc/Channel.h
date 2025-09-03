@@ -31,7 +31,7 @@ public:
 
 	void Update_TransformationMatrix(const vector<class CBone*>& Bones, _float fCurrentTrackPosition, _uint* pCurrentKeyFrameIndex);
 	void Update_Blending_TransformationMatrix(_float BlendRatio, KEYFRAME PreKeyFrame, const vector<class CBone*>& Bones, _float PreTrackPosition);
-	HRESULT Save_Channel_ToBinary(HANDLE hHandle, DWORD* dwByte, const aiNodeAnim* pAIChannel) const;
+	HRESULT Save_Channel_ToBinary(HANDLE hHandle, DWORD* dwByte) const;
 	HRESULT Load_Channel_FromBinary(HANDLE hHandle, DWORD* dwByte);
 
 private:

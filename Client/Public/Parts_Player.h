@@ -18,8 +18,8 @@ protected:
 	virtual ~CParts_Player() = default;
 
 public:
-	void Set_AnimIndex(_uint iIdx);
-
+	void	Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate = 1.f, _bool IsBlend = true);
+	_bool	Play_Animation(_float fTimeDelta);
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;

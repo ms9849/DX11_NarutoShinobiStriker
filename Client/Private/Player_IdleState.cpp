@@ -7,7 +7,7 @@
 #pragma region TRANSFER_STATE
 
 #include "Player_RunState.h"
-
+#include "Player_JumpState.h"
 #pragma endregion
 
 /* 서로 참조해서 안지워진다 ㅅㅂ.. */
@@ -20,15 +20,20 @@ CPlayer_IdleState::CPlayer_IdleState(CPlayer* pPlayer)
 
 void CPlayer_IdleState::Start()
 {
-	m_pPlayer->Set_AnimIndex(0);
+	m_pPlayer->Set_AnimIndex("CustomMan_Idle_Loop", 1.f, false);
 }
 
 CPlayerState* CPlayer_IdleState::Update(_float fTimeDelta)
 {
+	m_pPlayer->Play_Animation(fTimeDelta);
+
 	CPlayerState* pNextState = { nullptr };
 
-	if (m_pGameInstance->Key_Down(DIK_1))
+	if (m_pGameInstance->Key_Down(DIK_W))
 		 pNextState = CPlayer_RunState::Create(m_pPlayer);
+
+	if (m_pGameInstance->Key_Down(DIK_SPACE))
+		 pNextState = CPlayer_JumpState::Create(m_pPlayer);
 
 	return pNextState;
 }
