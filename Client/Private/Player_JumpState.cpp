@@ -34,7 +34,7 @@ CPlayerState* CPlayer_JumpState::Update(_float fTimeDelta)
 	CPlayerState* pNextState = { nullptr };
 
 	// 더블 점프.
-	if (m_pGameInstance->Key_Down(DIK_SPACE) && m_bCanDoubleJump && ANIM_STATE::JUMP == m_eAnimState)
+	if (m_pGameInstance->Key_Down(DIK_SPACE) && m_bCanDoubleJump && ANIM_STATE::JUMP == m_eAnimState && m_fTimeAcc >= 0.1f)
 	{
 		//보간 ratio 추가
 		m_pPlayer->Set_AnimIndex("CustomMan_DoubleJump", 2.5f, false);
