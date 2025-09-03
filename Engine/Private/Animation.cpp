@@ -24,16 +24,18 @@ CAnimation::CAnimation(const CAnimation& rhs)
 	strcpy_s(m_szName, rhs.m_szName);
 }
 
-_bool CAnimation::Compare_Name(const _char* pAnimName)
+_float CAnimation::Get_CurrentTrackPosition()
 {
-	if (nullptr != strstr(m_szName, pAnimName))
-		return true;
+	//트랙포지션이 0이였다면, 가장 최대 트랙포지션과도 같을 것
+	if (0.f == m_fCurrentTrackPosition)
+		return m_fDuration;
 
-	return false;
+	return m_fCurrentTrackPosition;
 }
 
 void CAnimation::Reset_Animation()
 {
+	m_fBlendRatio = 0.f;
 	m_fCurrentTrackPosition = 0;
 
 	for (_uint i = 0; i < m_iNumChannels; ++i)
@@ -60,7 +62,26 @@ map<_int, KEYFRAME> CAnimation::Get_KeyFrames(_float fTrackPoistion)
 
 HRESULT CAnimation::Initialize(const class CModel* pModel, const aiAnimation* pAIAnimation)
 {
-	strcpy_s(m_szName, pAIAnimation->mName.data);
+	_char pSour[1024];
+	_char* pResult{};
+	_char* pTemp {};
+	_bool isSeperated = { false };
+	
+	/* 이름 | 기준으로 잘라주기. 블렌더용 처리.. */
+	strcpy_s(pSour, pAIAnimation->mName.data);
+	pResult = strtok_s(pSour, "|", &pTemp);
+
+	while (0 != strcmp(pTemp, ""))
+	{
+		pResult = strtok_s(NULL, "|", &pTemp);
+		isSeperated = true;
+	}
+
+	if (isSeperated)
+		strcpy_s(m_szName, pResult);
+
+	else
+		strcpy_s(m_szName, pAIAnimation->mName.data);
 
 	m_fDuration = (_float)pAIAnimation->mDuration;
 	m_fTickPerSecond = (_float)pAIAnimation->mTicksPerSecond;
@@ -90,14 +111,15 @@ HRESULT CAnimation::Initialize(HANDLE hHandle, DWORD* dwByte)
 }
 
 
-void CAnimation::Update_TransformationMatrices(const vector<CBone*>& Bones, _float fTimeDelta)
+_bool CAnimation::Update_TransformationMatrices(const vector<CBone*>& Bones, _bool isLoop, _float fTimeDelta)
 {
 	/* 내 애니메이션의 현재 재생위치. */
 	m_fCurrentTrackPosition += m_fTickPerSecond * fTimeDelta;
 
 	if (m_fCurrentTrackPosition >= m_fDuration)
 	{
-		m_fCurrentTrackPosition = 0.f;
+		Reset_Animation();
+		return true;
 	}
 
 	_uint		iIndex = {};
@@ -106,9 +128,10 @@ void CAnimation::Update_TransformationMatrices(const vector<CBone*>& Bones, _flo
 	for (auto& pChannel : m_Channels)
 		pChannel->Update_TransformationMatrix(Bones, m_fCurrentTrackPosition, &m_CurrentKeyFrameIndices[iIndex++]);
 
+	return false;
 }
 
-void CAnimation::Update_Blending_TransformationMatrices(_bool* bFlag, map<_int, KEYFRAME>* pPreKeyFrames, const vector<class CBone*>& Bones, _float PreTrackPosition, _float fTimeDelta)
+_bool CAnimation::Update_Blending_TransformationMatrices(_bool* bFlag, map<_int, KEYFRAME>* pPreKeyFrames, const vector<class CBone*>& Bones, _float PreTrackPosition, _float fTimeDelta)
 {
 	_uint		iIndex = {};
 
@@ -141,7 +164,7 @@ void CAnimation::Update_Blending_TransformationMatrices(_bool* bFlag, map<_int, 
 	}
 
 	// 블랜드 ratio 증가
-	m_fBlendRatio += 0.1f;
+	m_fBlendRatio += 0.15f;
 
 	if (m_fBlendRatio >= 1.0f)
 		m_fBlendRatio = 1.f;
@@ -154,9 +177,11 @@ void CAnimation::Update_Blending_TransformationMatrices(_bool* bFlag, map<_int, 
 		m_fBlendRatio = 0.f;
 		*bFlag = false;
 	}
+
+	return false;
 }
 
-HRESULT CAnimation::Save_Animation_ToBinary(HANDLE hHandle, DWORD* dwByte, const aiAnimation* pAIAnimation) const
+HRESULT CAnimation::Save_Animation_ToBinary(HANDLE hHandle, DWORD* dwByte) const
 {
 	/* 
 	1. 이름 
@@ -180,7 +205,7 @@ HRESULT CAnimation::Save_Animation_ToBinary(HANDLE hHandle, DWORD* dwByte, const
 	/* 애니메이션 전체 저장 */
 	for (_uint i = 0; i < m_iNumChannels; ++i)
 	{
-		if (FAILED(m_Channels[i]->Save_Channel_ToBinary(hHandle,  dwByte, pAIAnimation->mChannels[i])))
+		if (FAILED(m_Channels[i]->Save_Channel_ToBinary(hHandle, dwByte)))
 			return E_FAIL;
 	}
 

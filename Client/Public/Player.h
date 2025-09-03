@@ -29,15 +29,20 @@ private:
 	virtual ~CPlayer() = default;
 
 public:
+	class CTransform* Get_PlayerTransformPtr() {
+		return m_pTransformCom;
+	}
+
+public:
 	void	Set_SkillSlotPanel(class CSkillSlotPanel* pPanel);
 	void	Set_AttackTypePanel(class CAttackTypePanel* pPanel);
 	void	Set_ComboKOPanel(class CComboKOPanel* pPanel);
-	void	Set_AnimIndex(_uint iIndex);
+	void	Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate = 1.f, _bool IsBlend = true);
 
 public:
 	void	Clear_State();
 	void	Update_State(_float fTimeDelta);
-
+	_bool	Play_Animation(_float fTimeDelta);
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;

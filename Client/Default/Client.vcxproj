@@ -163,6 +163,7 @@
     <ClInclude Include="..\Public\Dummy.h" />
     <ClInclude Include="..\Public\GameManager.h" />
     <ClInclude Include="..\Public\Gate.h" />
+    <ClInclude Include="..\Public\MainCamera.h" />
     <ClInclude Include="..\Public\Player_IdleState.h" />
     <ClInclude Include="..\Public\KonohaVillage.h" />
     <ClInclude Include="..\Public\KOUI.h" />
@@ -187,6 +188,7 @@
     <ClInclude Include="..\Public\Parts_Player.h" />
     <ClInclude Include="..\Public\Player.h" />
     <ClInclude Include="..\Public\PlayerState.h" />
+    <ClInclude Include="..\Public\Player_JumpState.h" />
     <ClInclude Include="..\Public\Player_RunState.h" />
     <ClInclude Include="..\Public\PressAnyButtonUI.h" />
     <ClInclude Include="..\Public\ProgressBarUI.h" />
@@ -220,6 +222,7 @@
     <ClCompile Include="..\Private\Dummy.cpp" />
     <ClCompile Include="..\Private\GameManager.cpp" />
     <ClCompile Include="..\Private\Gate.cpp" />
+    <ClCompile Include="..\Private\MainCamera.cpp" />
     <ClCompile Include="..\Private\Player_IdleState.cpp" />
     <ClCompile Include="..\Private\KonohaVillage.cpp" />
     <ClCompile Include="..\Private\KOUI.cpp" />
@@ -244,6 +247,7 @@
     <ClCompile Include="..\Private\Parts_Player.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\Private\PlayerState.cpp" />
+    <ClCompile Include="..\Private\Player_JumpState.cpp" />
     <ClCompile Include="..\Private\Player_RunState.cpp" />
     <ClCompile Include="..\Private\PressAnyButtonUI.cpp" />
     <ClCompile Include="..\Private\ProgressBarUI.cpp" />

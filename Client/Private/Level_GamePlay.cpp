@@ -2,6 +2,7 @@
 #include "Level_GamePlay.h"
 #include "Level_Loading.h"
 
+#include "MainCamera.h"
 #include "TestCamera.h"
 #include "TimerPanel.h"
 
@@ -21,9 +22,6 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Lights()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
-		return E_FAIL;
-
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
 		return E_FAIL;
 
@@ -36,20 +34,32 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
+		return E_FAIL;
+
+	if(FAILED(m_pGameManager->Change_Camera(LEVEL::GAMEPLAY, TEXT("Main_Camera"))))
+		return E_FAIL;
+
 	//if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
 	//	return E_FAIL;
 
 	//if (FAILED(Ready_Layer_Effect(TEXT("Layer_Effect"))))
 	//	return E_FAIL;
-
-	if(FAILED(m_pGameManager->Change_Camera(LEVEL::GAMEPLAY, TEXT("Test_Camera"))))
-		return E_FAIL;
-
 	return S_OK;
 }
 
 void CLevel_GamePlay::Update(_float fTimeDelta)
 {
+	if (m_pGameInstance->Key_Down(DIK_0))
+	{
+		m_pGameManager->Change_Camera(LEVEL::GAMEPLAY, TEXT("Test_Camera"));
+	}
+
+	if (m_pGameInstance->Key_Down(DIK_9))
+	{
+		m_pGameManager->Change_Camera(LEVEL::GAMEPLAY, TEXT("Main_Camera"));
+	}
+
 	if (m_pGameInstance->Key_Down(DIK_F3))
 	{
 		m_pGameInstance->Set_Visible_IMGUI(true, ENUM_CLASS(IMGUI_VISIBLE::GAMEINFO));
@@ -104,6 +114,21 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const _wstring& strLayerTag)
 	/* 카메라는 게임 매니저에 추가하여 관리한다. */
 	if(FAILED(m_pGameManager->Add_Camera(LEVEL::GAMEPLAY, TEXT("Test_Camera"), static_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
 		PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_TestCamera"), &TestCameraDesc)))))
+		return E_FAIL;
+
+	CMainCamera::MAIN_CAMERA_DESC			MainCameraDesc{};
+
+	MainCameraDesc.fFovy = XMConvertToRadians(60.0f);
+	MainCameraDesc.fNear = 0.1f;
+	MainCameraDesc.fFar = 1000.f;
+	MainCameraDesc.vEye = _float4(0.f, 30.f, -30.f, 1.f);
+	MainCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
+	MainCameraDesc.fSpeedPerSec = 15.f;
+	MainCameraDesc.fRotationPerSec = XMConvertToRadians(90.0f);
+	MainCameraDesc.pPlayerTransform = m_pGameManager->Get_PlayerPtr()->Get_PlayerTransformPtr();
+	/* 카메라는 게임 매니저에 추가하여 관리한다. */
+	if (FAILED(m_pGameManager->Add_Camera(LEVEL::GAMEPLAY, TEXT("Main_Camera"), static_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
+		PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_MainCamera"), &MainCameraDesc)))))
 		return E_FAIL;
 
 	return S_OK;

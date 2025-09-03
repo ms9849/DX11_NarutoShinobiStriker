@@ -36,8 +36,6 @@ void CUpper_Player::Priority_Update(_float fTimeDelta)
 
 void CUpper_Player::Update(_float fTimeDelta)
 {
-	m_pModelCom->Play_Animation(fTimeDelta);
-
 	/* 부모 행렬 적용 */
 	XMStoreFloat4x4(&m_CombinedWorldMatrix,
 		XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()) * XMLoadFloat4x4(m_pParentTransformCom->Get_WorldMatrixPtr()));
@@ -132,7 +130,4 @@ CGameObject* CUpper_Player::Clone(void* pArg)
 void CUpper_Player::Free()
 {
 	__super::Free();
-
-	Safe_Release(m_pModelCom);
-	Safe_Release(m_pShaderCom);
 }

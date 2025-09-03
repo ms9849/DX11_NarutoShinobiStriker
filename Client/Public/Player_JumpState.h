@@ -9,13 +9,13 @@
 */
 NS_BEGIN(Client)
 
-class CPlayer_RunState final : public CPlayerState
+class CPlayer_JumpState final : public CPlayerState
 {
 public:
-	enum class ANIM_STATE { RUN, RUN_END };
+	enum class ANIM_STATE { JUMP, JUMP_FRONT, DOUBLE_JUMP, FALL };
 private:
-	CPlayer_RunState(class CPlayer* pPlayer);
-	virtual ~CPlayer_RunState() = default;
+	CPlayer_JumpState(class CPlayer* pPlayer);
+	virtual ~CPlayer_JumpState() = default;
 
 public:
 	/* Start */
@@ -28,9 +28,12 @@ public:
 private:
 	class CPlayer* m_pPlayer = { nullptr };
 	ANIM_STATE	   m_eAnimState = {};
-
+	_float	       m_fMovement = { 0.f };
+	_float		   m_fSpeed = { 3.f };
+	_float		   m_fTimeAcc = { 0.f };
+	_bool		   m_bCanDoubleJump = false;
 public:
-	static CPlayer_RunState* Create(class CPlayer* pPlayer);
+	static CPlayer_JumpState* Create(class CPlayer* pPlayer);
 	virtual void Free() override;
 };
 

@@ -21,8 +21,9 @@ private:
 	virtual ~CAnimation() = default;
 
 public:
-	_float Get_CurrentTrackPosition() { return m_fCurrentTrackPosition; }
-	_bool  Compare_Name(const _char* pAnimName);
+	const _char* Get_Name() const { return m_szName; }
+	_float Get_CurrentTrackPosition();
+
 public:
 	/* 트랙 포지션 & 키프레임 초기화 */
 	void Reset_Animation();
@@ -31,10 +32,10 @@ public:
 public:
 	HRESULT Initialize(const class CModel* pModel, const aiAnimation* pAIAnimation);
 	HRESULT Initialize(HANDLE hHandle, DWORD* dwByte);
-	void Update_TransformationMatrices(const vector<class CBone*>& Bones, _float fTimeDelta);
-	void Update_Blending_TransformationMatrices(_bool* bFlag, map<_int, KEYFRAME>* pPreKeyFrames, const vector<class CBone*>& Bones, _float PreTrakcPosition, _float fTimeDelta);
+	_bool	Update_TransformationMatrices(const vector<class CBone*>& Bones, _bool isLoop, _float fTimeDelta);
+	_bool	Update_Blending_TransformationMatrices(_bool* bFlag, map<_int, KEYFRAME>* pPreKeyFrames, const vector<class CBone*>& Bones, _float PreTrakcPosition, _float fTimeDelta);
 
-	HRESULT Save_Animation_ToBinary(HANDLE hHandle, DWORD* dwByte, const aiAnimation* pAIAnimation) const;
+	HRESULT Save_Animation_ToBinary(HANDLE hHandle, DWORD* dwByte) const;
 	HRESULT Load_Animation_FromBinary(HANDLE hHandle, DWORD* dwByte);
 
 private:

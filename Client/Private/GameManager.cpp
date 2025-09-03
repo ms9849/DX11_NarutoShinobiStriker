@@ -119,8 +119,12 @@ HRESULT CGameManager::Change_Camera(LEVEL eLevelID, const _wstring& strCameraTag
 	/* 태그에 해당하는 카메라가 존재하지 않으면 FAIL 반환. */
 	auto iter = m_Cameras[ENUM_CLASS(eLevelID)].find(strCameraTag);
 	
-	if (iter == m_Cameras[ENUM_CLASS(eLevelID)].end())
+	if (m_Cameras[ENUM_CLASS(eLevelID)].end() == iter)
 		return E_FAIL;
+
+	/* 같은 태그로 변경하려고 하면 OK만 반환해주게 된다. */
+	if (m_strActivatedCameraTag == strCameraTag)
+		return S_OK;
 
 	/* 기존 카메라 Set Dead 세팅. 오브젝트 매니저에서 빠져 나오게 된다. */
 	if(nullptr != m_pActivatedCamera)
@@ -130,6 +134,7 @@ HRESULT CGameManager::Change_Camera(LEVEL eLevelID, const _wstring& strCameraTag
 	m_pGameInstance->Add_Clone_ToLayer(iter->second, ENUM_CLASS(eLevelID), TEXT("Layer_Camera"));
 
 	/* 활성화중인 카메라 교체 */
+	m_strActivatedCameraTag = strCameraTag;
 	m_pActivatedCamera = iter->second;
 	Safe_AddRef(m_pActivatedCamera);
 

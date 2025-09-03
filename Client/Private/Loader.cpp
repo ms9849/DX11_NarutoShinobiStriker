@@ -36,6 +36,7 @@
 #include "Model.h"
 
 #include "KonohaVillage.h"
+#include "MainCamera.h"
 
 #include "Lower_Player.h"
 #include "Upper_Player.h"
@@ -365,6 +366,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_GameObject_TestCamera */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_TestCamera"),
 		CTestCamera::Create(m_pDevice, m_pContext, OBJECTID::TEST_CAMERA))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_MainCamera */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_MainCamera"),
+		CMainCamera::Create(m_pDevice, m_pContext, OBJECTID::MAIN_CAMERA))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_Upper_Player */

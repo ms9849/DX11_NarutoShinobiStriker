@@ -10,13 +10,16 @@ CChannel::CChannel()
 KEYFRAME CChannel::Get_KeyFrame(_float fTrackPosition)
 {
 	/* 죵나 위험해보이는데???... */
+	if (m_KeyFrames[0].fTrackPosition > fTrackPosition)
+		return m_KeyFrames[0];
+
 	for (_uint i = 1; i < m_KeyFrames.size(); ++i)
 	{
 		if (m_KeyFrames[i].fTrackPosition > fTrackPosition && i != 0)
 			return m_KeyFrames[i - 1];
 	}
 
-	return m_KeyFrames[0];
+	return m_KeyFrames[m_KeyFrames.size() - 1];
 }
 
 HRESULT CChannel::Initialize(const CModel* pModel, const aiNodeAnim* pAIChannel)
@@ -176,7 +179,7 @@ void CChannel::Update_Blending_TransformationMatrix(_float BlendRatio, KEYFRAME 
 	Bones[m_iBoneIndex]->Set_Transformation(BoneTransformationMatrix);
 }
 
-HRESULT CChannel::Save_Channel_ToBinary(HANDLE hHandle, DWORD* dwByte, const aiNodeAnim* pAIChannel) const
+HRESULT CChannel::Save_Channel_ToBinary(HANDLE hHandle, DWORD* dwByte) const
 {
 	/* 저장할 정보들 */
 	/* 1. 접근할 뼈의 이름 (CBone) */

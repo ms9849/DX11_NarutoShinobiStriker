@@ -36,7 +36,6 @@ void CLower_Player::Priority_Update(_float fTimeDelta)
 
 void CLower_Player::Update(_float fTimeDelta)
 {
-	m_pModelCom->Play_Animation(fTimeDelta);
 	/* 부모 행렬 적용 */
 	XMStoreFloat4x4(&m_CombinedWorldMatrix,
 		XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()) * XMLoadFloat4x4(m_pParentTransformCom->Get_WorldMatrixPtr()));
@@ -132,7 +131,4 @@ CGameObject* CLower_Player::Clone(void* pArg)
 void CLower_Player::Free()
 {
 	__super::Free();
-
-	Safe_Release(m_pModelCom);
-	Safe_Release(m_pShaderCom);
 }

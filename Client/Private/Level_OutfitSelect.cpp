@@ -53,11 +53,12 @@ void CLevel_OutfitSelect::Update(_float fTimeDelta)
     {
         m_pGameManager->Change_Camera(LEVEL::OUTFITSELECT, TEXT("Test_Camera"));
     }
+
     if (m_pGameInstance->Key_Down(DIK_9))
     {
         m_pGameManager->Change_Camera(LEVEL::OUTFITSELECT, TEXT("OutfitSelect_Camera"));
-
     }
+
     if (m_pGameInstance->Key_Down(DIK_F8))
     {
         m_pGameManager->Clear();

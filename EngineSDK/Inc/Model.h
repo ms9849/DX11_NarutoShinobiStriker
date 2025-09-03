@@ -34,10 +34,6 @@ NS_BEGIN(Engine)
 
 class ENGINE_DLL CModel final : public CComponent
 {
-public:
-	typedef struct tagModelDesc {
-		const _char* szRootBoneName;
-	} MODEL_DESC;
 private:
 	CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CModel(const CModel& Prototype);
@@ -53,9 +49,8 @@ public:
 	_int Get_BoneIndex(const _char* pBoneName) const;
 
 public:
-	/* 이전 채널들의 정보를 전부 꺼내온다. */
-	void Set_AnimIndex(_uint iIdx);
-	//void Set_AnimIndex(const _char* pAnimName);
+	void Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate = 1.f, _bool IsBlended = true);
+
 public:
 	HRESULT Save_Model_ToBinary(const _char* pModelSavePath);
 	HRESULT Load_Model_FromBinary(const _tchar* pModelFilePath);
@@ -68,21 +63,15 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 	HRESULT Bind_BoneMatrices(_uint iMeshIndex, class CShader* pShader, const _char* pConstantName);
 	HRESULT Bind_Material(_uint iMeshIndex, class CShader* pShader, const _char* pConstantName, aiTextureType eType, _uint iTextureIndex);
-	void	Play_Animation(_float fTimeDelta);
+	_bool	Play_Animation(_float fTimeDelta);
 	HRESULT Render(_uint iMeshIndex);
 
 private:
 
-	const aiScene* m_pAIScene = { nullptr };
-	Assimp::Importer			m_Importer;
+	const aiScene*			m_pAIScene = { nullptr };
+	Assimp::Importer		m_Importer;
 
 private:
-	//이건 클라단에서 세팅해줘야 하는거니까 저장할 필요 없음.
-	_bool					m_isSeperated = { false };
-	_char					m_szRootBoneName[MAX_PATH] = {};
-	_uint					m_iRootBoneNum = { 0 };
-	map<_int, _int>			m_RootBoneIndex = {};
-
 	_uint					m_iNumMeshes = {};
 
 	vector<_wstring>		m_MeshNames = {};
@@ -104,10 +93,12 @@ private:
 	현재 애니메이션 인덱스. 
 	CurrentAnimIndex가 있다면 PreAnimIndex를 체크해서 
 	보간을 수행해줘도 되지 않을까?
-	*/
-	_int						m_iCurrentAnimIndex = { 0 };
-	_uint						m_iNumAnimations = {};
-	vector<class CAnimation*>	m_Animations;
+	*/	
+	_float							m_fAnimationPlayRate = { 1.0f };
+	_string							m_strCurrentAnimName;
+	_uint							m_iNumAnimations = {};
+	_bool							m_isAnimFinished = {};
+	map<_string, class CAnimation*>	m_Animations;
 
 	_float						m_fPreTrackPosition = { 0 };
 	map<_int , KEYFRAME>		m_PreAnimKeyFrames = {};
@@ -116,7 +107,6 @@ private:
 private:
 	HRESULT Ready_Meshes();
 	HRESULT Ready_Materials(const _char* pModelFilePath);
-	void	Count_BoneChilds(aiNode* pNode, _uint* iRootHierachyCount);
 	HRESULT Ready_Bones(const aiNode* pAINode, _int iParentIndex);
 	HRESULT Ready_Animations();
 
