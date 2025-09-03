@@ -156,7 +156,6 @@
     <ClInclude Include="..\Public\AttackTypePanel.h" />
     <ClInclude Include="..\Public\Button.h" />
     <ClInclude Include="..\Public\Character.h" />
-    <ClInclude Include="..\Public\CharacterState.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\ComboKOPanel.h" />
     <ClInclude Include="..\Public\CreateCharacterUI.h" />
@@ -164,7 +163,7 @@
     <ClInclude Include="..\Public\Dummy.h" />
     <ClInclude Include="..\Public\GameManager.h" />
     <ClInclude Include="..\Public\Gate.h" />
-    <ClInclude Include="..\Public\IdleState.h" />
+    <ClInclude Include="..\Public\Player_IdleState.h" />
     <ClInclude Include="..\Public\KonohaVillage.h" />
     <ClInclude Include="..\Public\KOUI.h" />
     <ClInclude Include="..\Public\Level_GamePlay.h" />
@@ -188,6 +187,7 @@
     <ClInclude Include="..\Public\Parts_Player.h" />
     <ClInclude Include="..\Public\Player.h" />
     <ClInclude Include="..\Public\PlayerState.h" />
+    <ClInclude Include="..\Public\Player_RunState.h" />
     <ClInclude Include="..\Public\PressAnyButtonUI.h" />
     <ClInclude Include="..\Public\ProgressBarUI.h" />
     <ClInclude Include="..\Public\Props.h" />
@@ -214,14 +214,13 @@
     <ClCompile Include="..\Private\AttackTypePanel.cpp" />
     <ClCompile Include="..\Private\Button.cpp" />
     <ClCompile Include="..\Private\Character.cpp" />
-    <ClCompile Include="..\Private\CharacterState.cpp" />
     <ClCompile Include="..\Private\ComboKOPanel.cpp" />
     <ClCompile Include="..\Private\CreateCharacterUI.cpp" />
     <ClCompile Include="..\Private\DecimalUI.cpp" />
     <ClCompile Include="..\Private\Dummy.cpp" />
     <ClCompile Include="..\Private\GameManager.cpp" />
     <ClCompile Include="..\Private\Gate.cpp" />
-    <ClCompile Include="..\Private\IdleState.cpp" />
+    <ClCompile Include="..\Private\Player_IdleState.cpp" />
     <ClCompile Include="..\Private\KonohaVillage.cpp" />
     <ClCompile Include="..\Private\KOUI.cpp" />
     <ClCompile Include="..\Private\Level_GamePlay.cpp" />
@@ -245,6 +244,7 @@
     <ClCompile Include="..\Private\Parts_Player.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\Private\PlayerState.cpp" />
+    <ClCompile Include="..\Private\Player_RunState.cpp" />
     <ClCompile Include="..\Private\PressAnyButtonUI.cpp" />
     <ClCompile Include="..\Private\ProgressBarUI.cpp" />
     <ClCompile Include="..\Private\Props.cpp" />

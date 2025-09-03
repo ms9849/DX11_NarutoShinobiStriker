@@ -38,7 +38,7 @@ void CMannequin::Priority_Update(_float fTimeDelta)
 
 void CMannequin::Update(_float fTimeDelta)
 {
-	if(m_pGameInstance->Key_Down(DIK_0))
+	if (m_pGameInstance->Key_Down(DIK_0))
 		m_pModelCom->Set_AnimIndex(0);
 
 	if (m_pGameInstance->Key_Down(DIK_1))

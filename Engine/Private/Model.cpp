@@ -116,6 +116,21 @@ void CModel::Set_AnimIndex(_uint iIdx)
 	m_bAnimationBlending = true;
 }
 
+//void CModel::Set_AnimIndex(const _char* pAnimName)
+//{
+//	for (_int i = 0; i < m_Animations.size(); ++i)
+//	{
+//		if (true == m_Animations[i]->Compare_Name(pAnimName))
+//		{
+//			m_fPreTrackPosition = m_Animations[m_iCurrentAnimIndex]->Get_CurrentTrackPosition();
+//			m_PreAnimKeyFrames = m_Animations[m_iCurrentAnimIndex]->Get_KeyFrames(m_fPreTrackPosition);
+//			m_Animations[m_iCurrentAnimIndex]->Reset_Animation();
+//			m_iCurrentAnimIndex = i;
+//			m_bAnimationBlending = true;
+//		}
+//	}
+//}
+
 HRESULT CModel::Save_Model_ToBinary(const _char* pModelSavePath)
 {
 	if (true == m_isBinary)

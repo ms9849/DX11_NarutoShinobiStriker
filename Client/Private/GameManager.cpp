@@ -23,6 +23,9 @@ void CGameManager::Release_GameManager()
 {
 	DestroyInstance();
 
+	if(nullptr != m_pPlayer)
+		m_pPlayer->Clear_State();
+
 	Safe_Release(m_pPlayer);
 	Safe_Release(m_pQuestLog);
 	Safe_Release(m_pGameInstance);
@@ -40,8 +43,13 @@ void CGameManager::Clear()
 {
 	/* 지울때 레퍼런스 카운트가 0임을 보장하지 않음*/
 	/* 따라서 명시적으로 nullptr 처리 해줘야함 */
+
 	Safe_Release(m_pPlayer);
-	m_pPlayer = nullptr;
+	if (nullptr != m_pPlayer)
+	{
+		m_pPlayer->Clear_State();
+		m_pPlayer = nullptr;
+	}
 
 	Safe_Release(m_pQuestLog);
 	m_pQuestLog = nullptr;
