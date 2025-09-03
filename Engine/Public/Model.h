@@ -55,7 +55,7 @@ public:
 public:
 	/* 이전 채널들의 정보를 전부 꺼내온다. */
 	void Set_AnimIndex(_uint iIdx);
-
+	//void Set_AnimIndex(const _char* pAnimName);
 public:
 	HRESULT Save_Model_ToBinary(const _char* pModelSavePath);
 	HRESULT Load_Model_FromBinary(const _tchar* pModelFilePath);

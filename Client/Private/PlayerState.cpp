@@ -1,13 +1,16 @@
 #include "PlayerState.h"
 
-CPlayerState::CPlayerState()
+#include "GameInstance.h"
+
+CPlayerState::CPlayerState() 
+	: m_pGameInstance { CGameInstance::GetInstance() }
 {
+	Safe_AddRef(m_pGameInstance);
 }
 
-void CPlayerState::Start(_float fTimeDelta)
+void CPlayerState::Free()
 {
-}
+	__super::Free();
 
-void CPlayerState::End(_float fTimeDelta)
-{
+	Safe_Release(m_pGameInstance);
 }

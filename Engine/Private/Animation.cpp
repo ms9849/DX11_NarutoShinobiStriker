@@ -24,6 +24,14 @@ CAnimation::CAnimation(const CAnimation& rhs)
 	strcpy_s(m_szName, rhs.m_szName);
 }
 
+_bool CAnimation::Compare_Name(const _char* pAnimName)
+{
+	if (nullptr != strstr(m_szName, pAnimName))
+		return true;
+
+	return false;
+}
+
 void CAnimation::Reset_Animation()
 {
 	m_fCurrentTrackPosition = 0;

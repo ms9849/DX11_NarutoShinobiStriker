@@ -22,7 +22,7 @@ private:
 
 public:
 	_float Get_CurrentTrackPosition() { return m_fCurrentTrackPosition; }
-
+	_bool  Compare_Name(const _char* pAnimName);
 public:
 	/* 트랙 포지션 & 키프레임 초기화 */
 	void Reset_Animation();

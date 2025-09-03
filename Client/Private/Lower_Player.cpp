@@ -27,8 +27,6 @@ HRESULT CLower_Player::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_pModelCom->Set_AnimIndex(0);
-
 	return S_OK;
 }
 

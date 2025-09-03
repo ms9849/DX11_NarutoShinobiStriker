@@ -34,8 +34,6 @@ HRESULT CLevel_Loading::Initialize(LEVEL eNextLevelID)
 
 void CLevel_Loading::Update(_float fTimeDelta)
 {
-	m_pLoadingBarPanel->Set_LoadingProgress(m_pLoader->Get_LoadingProgress());
-
 	if (true == m_pLoader->isFinished())
 	{
 		CLevel* pNewLevel = { nullptr };
@@ -55,7 +53,9 @@ void CLevel_Loading::Update(_float fTimeDelta)
 
 		if (FAILED(m_pGameInstance->Change_Level(pNewLevel)))
 			return;		
-	}	
+	}
+	else
+		m_pLoadingBarPanel->Set_LoadingProgress(m_pLoader->Get_LoadingProgress());
 }
 
 HRESULT CLevel_Loading::Render()

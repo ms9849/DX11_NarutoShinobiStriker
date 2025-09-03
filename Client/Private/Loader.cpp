@@ -478,7 +478,6 @@ void CLoader::Free()
 	__super::Free();
 
 	WaitForSingleObject(m_hThread, INFINITE);
-
 	CloseHandle(m_hThread);
 
 	DeleteCriticalSection(&m_CriticalSection);

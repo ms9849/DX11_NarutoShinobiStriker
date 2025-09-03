@@ -181,9 +181,6 @@
     <Filter Include="02.GameObjects\Map\TutorialMap">
       <UniqueIdentifier>{be3db220-9732-4da8-8bdf-d04af97df2e5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Character\STATE">
-      <UniqueIdentifier>{d7918d9f-4ea8-4083-8868-f551a6d20400}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Character\Player\Parts">
       <UniqueIdentifier>{f147d662-5586-4b75-aba1-4624b3bf91b9}</UniqueIdentifier>
     </Filter>
@@ -198,6 +195,9 @@
     </Filter>
     <Filter Include="02.GameObjects\Character\Player\State\IdleState">
       <UniqueIdentifier>{279f3fd9-01b0-4a58-a61e-0dd349b1cb71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\RunState">
+      <UniqueIdentifier>{462f1460-9d45-4a06-b324-43af5eda9dad}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -351,9 +351,6 @@
     <ClInclude Include="..\Public\TutorialMap.h">
       <Filter>02.GameObjects\Map\TutorialMap</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\CharacterState.h">
-      <Filter>02.GameObjects\Character\STATE</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Upper_Player.h">
       <Filter>02.GameObjects\Character\Player\Parts\Upper</Filter>
     </ClInclude>
@@ -366,8 +363,11 @@
     <ClInclude Include="..\Public\PlayerState.h">
       <Filter>02.GameObjects\Character\Player\State</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\IdleState.h">
+    <ClInclude Include="..\Public\Player_IdleState.h">
       <Filter>02.GameObjects\Character\Player\State\IdleState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_RunState.h">
+      <Filter>02.GameObjects\Character\Player\State\RunState</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -519,9 +519,6 @@
     <ClCompile Include="..\Private\TutorialMap.cpp">
       <Filter>02.GameObjects\Map\TutorialMap</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\CharacterState.cpp">
-      <Filter>02.GameObjects\Character\STATE</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Upper_Player.cpp">
       <Filter>02.GameObjects\Character\Player\Parts\Upper</Filter>
     </ClCompile>
@@ -534,8 +531,11 @@
     <ClCompile Include="..\Private\PlayerState.cpp">
       <Filter>02.GameObjects\Character\Player\State</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\IdleState.cpp">
+    <ClCompile Include="..\Private\Player_IdleState.cpp">
       <Filter>02.GameObjects\Character\Player\State\IdleState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_RunState.cpp">
+      <Filter>02.GameObjects\Character\Player\State\RunState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -9,7 +9,8 @@
 
 #include "Upper_Player.h"
 #include "Lower_Player.h"
-
+#include "PlayerState.h"
+#include "Player_IdleState.h"
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 	: CCharacter { pDevice, pContext, eObjectID }
@@ -24,6 +25,7 @@ CPlayer::CPlayer(const CPlayer& rhs)
 {
 	Safe_AddRef(m_pGameManager);
 }
+#pragma region UI_Initialize
 
 void CPlayer::Set_SkillSlotPanel(CSkillSlotPanel* pPanel)
 {
@@ -48,6 +50,33 @@ void CPlayer::Set_ComboKOPanel(CComboKOPanel* pPanel)
 	Safe_AddRef(m_pComboKOPanel);
 }
 
+#pragma endregion
+
+void CPlayer::Set_AnimIndex(_uint iIndex)
+{
+	/* 플레이어 애니메이션 바꿔주기. */
+	for (auto& iter : m_PartObjects)
+		static_cast<CParts_Player*>(iter.second)->Set_AnimIndex(iIndex);
+}
+
+void CPlayer::Update_State(_float fTimeDelta)
+{
+	CPlayerState* pNextState = { nullptr };
+	pNextState = m_pState->Update(fTimeDelta);
+
+	if (nullptr != pNextState)
+	{
+		m_pState->End();
+		//현재 스테이트 날려버려.
+		Safe_Release(m_pState);
+
+		//새로운 상태 시작해줘. (내부적으로 플레이어 들게 됨)
+		pNextState->Start();
+
+		m_pState = pNextState;
+	}
+}
+
 HRESULT CPlayer::Initialize_Prototype()
 {
 	return S_OK;
@@ -69,6 +98,10 @@ HRESULT CPlayer::Initialize(void* pArg)
 
 	/* 게임 매니저에 현재 플레이어 정보 세팅. 레벨 변경되도 안전할거니까.. */
 	m_pGameManager->Set_PlayerPtr(this);
+	
+	/* 상태 초기화 및 시작. */
+	m_pState = CPlayer_IdleState::Create(this);
+	m_pState->Start();
 
 	/* 플레이어는 모든 스킬을 사용할 수 있다. */
 	for (_uint i = 0; i < ENUM_CLASS(SKILL::END); ++i)
@@ -88,11 +121,8 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
 void CPlayer::Update(_float fTimeDelta)
 {
-	/* 임시로 둔 코드. 손봐야 한다 */
-	m_Skills[m_ActivatedSkills[ENUM_CLASS(SKILLNUM::SPECIAL)]].fGaugeAcc = 100.f;
-	m_pSkillSlotPanel->Set_MaxSpecialSkillProgress(200.f);
-	m_pSkillSlotPanel->Set_SpecialSkillProgress(100.f);
-
+	/* 스테이트 업데이트. */
+	Update_State(fTimeDelta);
 	Key_Input(fTimeDelta);
 	ComboKO_System(fTimeDelta);
 
@@ -123,17 +153,6 @@ HRESULT CPlayer::Render()
 
 HRESULT CPlayer::Ready_Components()
 {
-	// 플레이어는 이제 렌더되지 않는다.
-	///* Com_Shader */
-	//if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxMesh"),
-	//	TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
-	//	return E_FAIL;
-
-	///* Com_Model */
-	//if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_Fiona"),
-	//	TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
-	//	return E_FAIL;
-
 	return S_OK;
 }
 
@@ -161,19 +180,11 @@ void CPlayer::Key_Input(_float fTimeDelta)
 {
 	if (m_pGameInstance->Key_Pressing(DIK_UP))
 	{
-		//m_pTransformCom->Go_Straight(fTimeDelta);
-		
-		for (auto& Pair : m_PartObjects)
-		{
-			static_cast<CParts_Player*>(Pair.second)->Set_AnimIndex(1);
-		}
+
 	}
 	else
 	{
-		for (auto& Pair : m_PartObjects)
-		{
-			static_cast<CParts_Player*>(Pair.second)->Set_AnimIndex(0);
-		}
+
 	}
 
 	if (m_pGameInstance->Key_Pressing(DIK_DOWN))
@@ -256,6 +267,12 @@ void CPlayer::Change_Skills()
 	m_pAttackTypePanel->Change_AttackType(m_eCurAttackType);
 }
 
+void CPlayer::Clear_State()
+{
+	//순환참조 해결용.
+	Safe_Release(m_pState);
+}
+
 CPlayer* CPlayer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 {
 	CPlayer* pInstance = new CPlayer(pDevice, pContext, eObjectID);
@@ -286,6 +303,7 @@ void CPlayer::Free()
 {
 	__super::Free();
 
+	Safe_Release(m_pState);
 	Safe_Release(m_pGameManager);
 	Safe_Release(m_pSkillSlotPanel);
 	Safe_Release(m_pAttackTypePanel);
