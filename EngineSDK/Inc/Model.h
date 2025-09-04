@@ -44,12 +44,18 @@ public:
 		return m_iNumMeshes;
 	}
 
+	/* 애니메이션이 얼마나 진행됐는지 0 ~ 1 사이 값으로 반환 */
+	_float Get_CurAnimProgress();
+
 	_wstring Get_MeshName(_uint iIdx) const;
 
 	_int Get_BoneIndex(const _char* pBoneName) const;
 
 public:
-	void Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate = 1.f, _bool IsBlended = true, _float fBlendRatio = 0.15f);
+	void Set_AnimIndex(const _char* pAnimName, 
+		_float fAnimationPlayRate = 1.f, 
+		_bool IsBlended = true, 
+		_float fBlendRatio = 0.15f);
 
 public:
 	HRESULT Save_Model_ToBinary(const _char* pModelSavePath);
@@ -100,6 +106,7 @@ private:
 	_bool							m_isAnimFinished = {};
 	map<_string, class CAnimation*>	m_Animations;
 
+	_float						m_fCurTrackPosition = { 0 };
 	_float						m_fPreTrackPosition = { 0 };
 	map<_int , KEYFRAME>		m_PreAnimKeyFrames = {};
 	_bool						m_bAnimationBlending = { false };

@@ -33,6 +33,11 @@ _float CAnimation::Get_CurrentTrackPosition()
 	return m_fCurrentTrackPosition;
 }
 
+_float CAnimation::Get_AnimProgress()
+{
+	return m_fCurrentTrackPosition / m_fDuration;
+}
+
 void CAnimation::Reset_Animation()
 {
 	m_fBlendRatio = 0.f;

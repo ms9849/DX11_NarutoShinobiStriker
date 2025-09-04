@@ -133,7 +133,9 @@ void CModel::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _b
 
 	m_Animations[m_strCurrentAnimName]->Reset_Animation();
 	m_strCurrentAnimName = strAnimName;
+	m_Animations[m_strCurrentAnimName]->Reset_Animation();
 }
+
 
 HRESULT CModel::Save_Model_ToBinary(const _char* pModelSavePath)
 {
@@ -195,6 +197,11 @@ HRESULT CModel::Save_Model_ToBinary(const _char* pModelSavePath)
 	CloseHandle(hHandle);
 
 	return S_OK;
+}
+
+_float CModel::Get_CurAnimProgress()
+{
+	return m_Animations[m_strCurrentAnimName]->Get_AnimProgress();
 }
 
 _wstring CModel::Get_MeshName(_uint iIdx) const
@@ -356,6 +363,9 @@ _bool CModel::Play_Animation(_float fTimeDelta)
 	/* 모든 뼈를 순회하면서 CombinedTransformationMatrix를 갱신한다. */
 	for (auto& pBone : m_Bones)
 		pBone->Update_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_PreTransformMatrix));
+
+	m_fCurTrackPosition = m_Animations[m_strCurrentAnimName]->Get_CurrentTrackPosition();
+
 	return m_isAnimFinished;
 }
 

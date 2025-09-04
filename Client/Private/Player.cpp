@@ -25,6 +25,20 @@ CPlayer::CPlayer(const CPlayer& rhs)
 {
 	Safe_AddRef(m_pGameManager);
 }
+
+_float CPlayer::Get_AnimProgress()
+{
+	/* 플레이어 애니메이션 바꿔주기. */
+	for (auto& iter : m_PartObjects)
+	{
+		CParts_Player* pAnimParts = dynamic_cast<CParts_Player*>(iter.second);
+
+		if (nullptr != pAnimParts)
+			return pAnimParts->Get_AnimProgress();
+	}
+}
+
+
 #pragma region UI_Initialize
 
 void CPlayer::Set_SkillSlotPanel(CSkillSlotPanel* pPanel)
@@ -56,7 +70,12 @@ void CPlayer::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _
 {
 	/* 플레이어 애니메이션 바꿔주기. */
 	for (auto& iter : m_PartObjects)
-		static_cast<CParts_Player*>(iter.second)->Set_AnimIndex(pAnimName, fAnimationPlayRate, IsBlend, fBlendRatio);
+	{
+		CParts_Player* pAnimParts = dynamic_cast<CParts_Player*>(iter.second);
+
+		if(nullptr != pAnimParts)
+			pAnimParts->Set_AnimIndex(pAnimName, fAnimationPlayRate, IsBlend, fBlendRatio);
+	}
 }
 
 void CPlayer::Update_State(_float fTimeDelta)
@@ -66,12 +85,12 @@ void CPlayer::Update_State(_float fTimeDelta)
 
 	if (nullptr != pNextState)
 	{
-		m_pState->End();
+		_bool IsBlend = m_pState->End();
 		//현재 스테이트 날려버려.
 		Safe_Release(m_pState);
 
 		//새로운 상태 시작해줘. (내부적으로 플레이어 들게 됨)
-		pNextState->Start();
+		pNextState->Start(IsBlend);
 
 		m_pState = pNextState;
 	}
@@ -118,7 +137,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 
 	/* 상태 초기화 및 시작. */
 	m_pState = CPlayer_IdleState::Create(this);
-	m_pState->Start();
+	m_pState->Start(true);
 
 	return S_OK;
 }

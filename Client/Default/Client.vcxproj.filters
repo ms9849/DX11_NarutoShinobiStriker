@@ -205,6 +205,18 @@
     <Filter Include="02.GameObjects\Character\Player\State\JumpState">
       <UniqueIdentifier>{d6eaedd5-3cb7-45d5-994a-41c670650541}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\LandState">
+      <UniqueIdentifier>{4dd51abf-7b30-4313-81c8-b26c0c119fe9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\JumpState\Front">
+      <UniqueIdentifier>{b0efc39b-b8e1-4b88-a35b-f4730b3adf10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\JumpState\Vertical">
+      <UniqueIdentifier>{2d8bd7fb-991b-4409-9936-2b795a7d7ad2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\StepState">
+      <UniqueIdentifier>{30d50919-de9d-48af-a559-b261acf0ae68}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -378,8 +390,17 @@
     <ClInclude Include="..\Public\MainCamera.h">
       <Filter>02.GameObjects\Camera\Main</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Player_LandState.h">
+      <Filter>02.GameObjects\Character\Player\State\LandState</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\Player_JumpState.h">
-      <Filter>02.GameObjects\Character\Player\State\JumpState</Filter>
+      <Filter>02.GameObjects\Character\Player\State\JumpState\Vertical</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_FrontJumpState.h">
+      <Filter>02.GameObjects\Character\Player\State\JumpState\Front</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_StepState.h">
+      <Filter>02.GameObjects\Character\Player\State\StepState</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -552,8 +573,17 @@
     <ClCompile Include="..\Private\MainCamera.cpp">
       <Filter>02.GameObjects\Camera\Main</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Player_LandState.cpp">
+      <Filter>02.GameObjects\Character\Player\State\LandState</Filter>
+    </ClCompile>
     <ClCompile Include="..\Private\Player_JumpState.cpp">
-      <Filter>02.GameObjects\Character\Player\State\JumpState</Filter>
+      <Filter>02.GameObjects\Character\Player\State\JumpState\Vertical</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_FrontJumpState.cpp">
+      <Filter>02.GameObjects\Character\Player\State\JumpState\Front</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_StepState.cpp">
+      <Filter>02.GameObjects\Character\Player\State\StepState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

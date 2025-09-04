@@ -21,8 +21,12 @@ private:
 	virtual ~CAnimation() = default;
 
 public:
+	/* 애니메이션 이름 반환 */
 	const _char* Get_Name() const { return m_szName; }
+	/* 현재 Current Position 반환 ( 블렌딩 용 ) */
 	_float Get_CurrentTrackPosition();
+	/* 애니메이션 진행 척도 반환 */
+	_float Get_AnimProgress();
 
 public:
 	/* 트랙 포지션 & 키프레임 초기화 */

@@ -12,6 +12,11 @@ CParts_Player::CParts_Player(const CParts_Player& rhs)
 {
 }
 
+_float CParts_Player::Get_AnimProgress()
+{
+	return m_pModelCom->Get_CurAnimProgress();
+}
+
 void CParts_Player::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _bool IsBlend, _float fBlendRatio)
 {
 	/* 추후 문자열로 수정해야 함. */

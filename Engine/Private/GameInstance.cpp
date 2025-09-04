@@ -121,6 +121,16 @@ void CGameInstance::Clear_Resources(_uint iLevelIndex)
 }
 
 #pragma region TOOLS
+_float CGameInstance::Calc_Linear(_float fLinear, _float fConstant, _float fValue)
+{
+	return fLinear * fValue + fConstant;
+}
+
+_float CGameInstance::Calc_Quadratic(_float fQuad, _float fLinear, _float fConstant, _float fValue)
+{
+	return fQuad * fValue * fValue + fLinear * fValue + fConstant;
+}
+
 _float CGameInstance::Random_Normal()
 {
 	return static_cast<_float>(rand()) / RAND_MAX;	
