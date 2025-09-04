@@ -20,6 +20,10 @@ public:
 	void Clear_Resources(_uint iLevelIndex);
 
 #pragma region TOOLS
+	/* 일차함수 계산기 */
+	_float  Calc_Linear(_float fLinear, _float fConstant, _float fValue);
+	/* 이차함수 계산기 */
+	_float  Calc_Quadratic(_float fQuad, _float fLinear, _float fConstant, _float fValue);
 	_float	Random_Normal();
 	_float	Random(_float fMin, _float fMax);
 

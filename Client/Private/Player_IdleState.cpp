@@ -8,6 +8,9 @@
 
 #include "Player_RunState.h"
 #include "Player_JumpState.h"
+#include "Player_FrontJumpState.h"
+#include "Player_StepState.h"
+
 #pragma endregion
 
 /* 서로 참조해서 안지워진다 ㅅㅂ.. */
@@ -18,9 +21,9 @@ CPlayer_IdleState::CPlayer_IdleState(CPlayer* pPlayer)
 	Safe_AddRef(m_pPlayer);
 }
 
-void CPlayer_IdleState::Start()
+void CPlayer_IdleState::Start(_bool IsBlend)
 {
-	m_pPlayer->Set_AnimIndex("CustomMan_Idle_Loop", 1.f, false);
+	m_pPlayer->Set_AnimIndex("CustomMan_Idle_Loop", 1.f, IsBlend);
 }
 
 CPlayerState* CPlayer_IdleState::Update(_float fTimeDelta)
@@ -29,17 +32,29 @@ CPlayerState* CPlayer_IdleState::Update(_float fTimeDelta)
 
 	CPlayerState* pNextState = { nullptr };
 
-	if (m_pGameInstance->Key_Down(DIK_W))
+	if (m_pGameInstance->Key_Down(DIK_W) || 
+		m_pGameInstance->Key_Down(DIK_A) ||
+		m_pGameInstance->Key_Down(DIK_D)
+		)
 		 pNextState = CPlayer_RunState::Create(m_pPlayer);
 
 	if (m_pGameInstance->Key_Down(DIK_SPACE))
 		 pNextState = CPlayer_JumpState::Create(m_pPlayer);
 
+	// 백스텝
+	if (m_pGameInstance->Key_Pressing(DIK_S))
+	{
+		// 돌다가 스텝 밟으면 상태 변경
+		if (m_pGameInstance->Key_Down(DIK_LSHIFT))
+			pNextState = CPlayer_StepState::Create(m_pPlayer, CPlayer_StepState::ANIM_STATE::BACK);
+	}
+
 	return pNextState;
 }
 
-void CPlayer_IdleState::End()
+_bool CPlayer_IdleState::End()
 {
+	return true;
 }
 
 CPlayer_IdleState* CPlayer_IdleState::Create(CPlayer* pPlayer)

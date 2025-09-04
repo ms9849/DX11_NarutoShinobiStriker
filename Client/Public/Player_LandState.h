@@ -1,17 +1,18 @@
 #pragma once
+
 #include "Client_Defines.h"
 #include "PlayerState.h"
 
-/* 
-가장 기본적인 IDLE STATE 
+/*
+가장 기본적인 IDLE STATE
 */
 NS_BEGIN(Client)
 
-class CPlayer_IdleState final : public CPlayerState
+class CPlayer_LandState final : public CPlayerState
 {
 private:
-	CPlayer_IdleState(class CPlayer* pPlayer);
-	virtual ~CPlayer_IdleState() = default;
+	CPlayer_LandState(class CPlayer* pPlayer);
+	virtual ~CPlayer_LandState() = default;
 
 public:
 	/* Start */
@@ -25,7 +26,7 @@ private:
 	class CPlayer* m_pPlayer = { nullptr };
 
 public:
-	static CPlayer_IdleState* Create(class CPlayer* pPlayer);
+	static CPlayer_LandState* Create(class CPlayer* pPlayer);
 	virtual void Free() override;
 };
 

@@ -1,8 +1,7 @@
-#include "Player_JumpState.h"
+#include "Player_FrontJumpState.h"
 
 #include "Player.h"
 #include "GameInstance.h"
-
 /* 전이 가능한 상태들 */
 #pragma region TRANSFER_STATE
 
@@ -10,28 +9,43 @@
 
 #pragma endregion
 
-CPlayer_JumpState::CPlayer_JumpState(CPlayer* pPlayer)
+CPlayer_FrontJumpState::CPlayer_FrontJumpState(CPlayer* pPlayer)
     : m_pPlayer { pPlayer }
 {
     Safe_AddRef(m_pPlayer);
 }
 
-void CPlayer_JumpState::Start(_bool IsBlend)
+void CPlayer_FrontJumpState::Start(_bool IsBlend)
 {
-    m_pPlayer->Set_AnimIndex("CustomMan_Jump_Vertical", 1.f, IsBlend);
-	m_eAnimState = ANIM_STATE::JUMP;
-	m_bCanDoubleJump = true;
+    m_pPlayer->Set_AnimIndex("CustomMan_Jump_Front", 1.f, true);
+    m_eAnimState = ANIM_STATE::JUMP;
+    m_bCanDoubleJump = true;
 }
 
-CPlayerState* CPlayer_JumpState::Update(_float fTimeDelta)
+CPlayerState* CPlayer_FrontJumpState::Update(_float fTimeDelta)
 {
+    CPlayerState* pNextState = { nullptr };
+
 	_bool IsAnimFinished = m_pPlayer->Play_Animation(fTimeDelta);
 
 	m_fTimeAcc += fTimeDelta;
 	m_fMovement = (m_fTimeAcc - 0.5 * m_fTimeAcc * m_fTimeAcc * 7.0f * (m_fTimeAcc));
 	m_pPlayer->Get_PlayerTransformPtr()->Set_State(STATE::POSITION, m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fMovement, 0.f, 0.f));
 
-	CPlayerState* pNextState = { nullptr };
+	if (m_pGameInstance->Key_Pressing(DIK_W) ||
+		m_pGameInstance->Key_Pressing(DIK_A) ||
+		m_pGameInstance->Key_Pressing(DIK_D)
+		)
+	{
+		m_pPlayer->Get_PlayerTransformPtr()->Go_Straight(fTimeDelta);
+
+		if (m_pGameInstance->Key_Pressing(DIK_D))
+			m_pPlayer->Get_PlayerTransformPtr()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * 0.3f);
+
+		if (m_pGameInstance->Key_Pressing(DIK_A))
+			m_pPlayer->Get_PlayerTransformPtr()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * -0.3f);
+	}
+
 
 	// 더블 점프.
 	if (m_pGameInstance->Key_Down(DIK_SPACE) && m_bCanDoubleJump && ANIM_STATE::JUMP == m_eAnimState && m_fTimeAcc >= 0.15f)
@@ -45,7 +59,7 @@ CPlayerState* CPlayer_JumpState::Update(_float fTimeDelta)
 
 	// 낙하
 	// 점프 중에 가속도 떨어지거나, 더블점프 중 + 애니 재생 끝났다면
-	if ((m_fMovement < 0.f && m_fTimeAcc != 0.f && ANIM_STATE::JUMP == m_eAnimState) 
+	if ((m_fMovement < 0.f && m_fTimeAcc != 0.f && ANIM_STATE::JUMP == m_eAnimState)
 		|| (ANIM_STATE::DOUBLE_JUMP == m_eAnimState && IsAnimFinished))
 	{
 		m_pPlayer->Set_AnimIndex("CustomMan_Fall_Vertical_Loop", 1.0f, true);
@@ -64,19 +78,19 @@ CPlayerState* CPlayer_JumpState::Update(_float fTimeDelta)
 	return pNextState;
 }
 
-_bool CPlayer_JumpState::End()
+_bool CPlayer_FrontJumpState::End()
 {
 	return true;
 }
 
-CPlayer_JumpState* CPlayer_JumpState::Create(CPlayer* pPlayer)
+CPlayer_FrontJumpState* CPlayer_FrontJumpState::Create(CPlayer* pPlayer)
 {
-	return new CPlayer_JumpState(pPlayer);
+    return new CPlayer_FrontJumpState(pPlayer);
 }
 
-void CPlayer_JumpState::Free()
+void CPlayer_FrontJumpState::Free()
 {
-	__super::Free();
+    __super::Free();
 
-	Safe_Release(m_pPlayer);
+    Safe_Release(m_pPlayer);
 }

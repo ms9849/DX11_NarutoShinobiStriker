@@ -19,11 +19,11 @@ private:
 
 public:
 	/* Start */
-	virtual void	Start() override;
+	virtual void	Start(_bool IsBlend) override;
 	/* Loop */
 	virtual CPlayerState* Update(_float fTimeDelta) override;
 	/* End */
-	virtual void	End() override;
+	virtual _bool	End() override;
 
 private:
 	class CPlayer* m_pPlayer = { nullptr };

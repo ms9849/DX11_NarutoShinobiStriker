@@ -33,6 +33,8 @@ public:
 		return m_pTransformCom;
 	}
 
+	_float Get_AnimProgress();
+
 public:
 	void	Set_SkillSlotPanel(class CSkillSlotPanel* pPanel);
 	void	Set_AttackTypePanel(class CAttackTypePanel* pPanel);

@@ -2,16 +2,19 @@
 #include "Client_Defines.h"
 #include "PlayerState.h"
 
-/* 
-가장 기본적인 IDLE STATE 
+/*
+가장 기본적인 IDLE STATE
 */
 NS_BEGIN(Client)
 
-class CPlayer_IdleState final : public CPlayerState
+class CPlayer_StepState final : public CPlayerState
 {
+public:
+	enum class ANIM_STATE { LEFT, RIGHT, BACK, FRONT };
+
 private:
-	CPlayer_IdleState(class CPlayer* pPlayer);
-	virtual ~CPlayer_IdleState() = default;
+	CPlayer_StepState(class CPlayer* pPlayer, ANIM_STATE eAnimState);
+	virtual ~CPlayer_StepState() = default;
 
 public:
 	/* Start */
@@ -23,9 +26,10 @@ public:
 
 private:
 	class CPlayer* m_pPlayer = { nullptr };
+	ANIM_STATE m_eAnimState = { };
 
 public:
-	static CPlayer_IdleState* Create(class CPlayer* pPlayer);
+	static CPlayer_StepState* Create(class CPlayer* pPlayer, ANIM_STATE eAnimState);
 	virtual void Free() override;
 };
 

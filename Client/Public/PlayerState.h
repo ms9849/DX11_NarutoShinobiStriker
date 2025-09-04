@@ -17,14 +17,15 @@ protected:
 
 public:
 	/* Start */
-	virtual void	Start() = 0;
+	virtual void	Start(_bool IsBlend) = 0;
 	/* Loop */
 	virtual CPlayerState* Update(_float fTimeDelta) = 0;
 	/* End */
-	virtual void	End() = 0;
+	virtual _bool	End() = 0;
 
 protected:
 	CGameInstance* m_pGameInstance = { nullptr };
+	_bool		   m_IsNextAnimBlened = { true }; 
 
 public:
 	virtual void Free() override;
