@@ -6,7 +6,7 @@
 #pragma region TRANSFER_STATE
 
 #include "Player_LandState.h"
-
+#include "Player_HandAerialAttackState.h"
 #pragma endregion
 
 CPlayer_FrontJumpState::CPlayer_FrontJumpState(CPlayer* pPlayer)
@@ -74,6 +74,9 @@ CPlayerState* CPlayer_FrontJumpState::Update(_float fTimeDelta)
 		XMStoreFloat4(&PlayerPos, m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::POSITION));
 		m_pPlayer->Get_PlayerTransformPtr()->Set_State(STATE::POSITION, XMVectorSet(PlayerPos.x, 0, PlayerPos.z, 1.f));
 	}
+	// АјАн
+	else if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON))
+		pNextState = CPlayer_HandAerialAttackState::Create(m_pPlayer, m_fTimeAcc);
 
 	return pNextState;
 }

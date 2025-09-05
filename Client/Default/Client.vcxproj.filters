@@ -226,6 +226,9 @@
     <Filter Include="02.GameObjects\Character\Player\Parts\Face">
       <UniqueIdentifier>{8c0aee0e-7dfa-4d5c-98bc-c68ca23bca82}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\HandAttackState\HandAerialAttackState">
+      <UniqueIdentifier>{b0a2f586-19f9-4785-8748-9c90573dbaa5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -420,6 +423,9 @@
     <ClInclude Include="..\Public\Head_Player.h">
       <Filter>02.GameObjects\Character\Player\Parts\Head</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Player_HandAerialAttackState.h">
+      <Filter>02.GameObjects\Character\Player\State\HandAttackState\HandAerialAttackState</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -611,6 +617,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Head_Player.cpp">
       <Filter>02.GameObjects\Character\Player\Parts\Head</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_HandAerialAttackState.cpp">
+      <Filter>02.GameObjects\Character\Player\State\HandAttackState\HandAerialAttackState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

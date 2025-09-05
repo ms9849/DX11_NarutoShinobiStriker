@@ -87,11 +87,11 @@ void CCharacter::Change_AttackType()
 			m_ActivatedSkills[3] = SKILL::BIG_SHARK;
 			break;
 
-		case ATTACK_TYPE::DEFENSIVE:
-			m_ActivatedSkills[1] = SKILL::WOOD_WALL;
-			m_ActivatedSkills[2] = SKILL::WOOD_HAND;
-			m_ActivatedSkills[3] = SKILL::KAMUI;
-			break;
+		//case ATTACK_TYPE::DEFENSIVE:
+		//	m_ActivatedSkills[1] = SKILL::WOOD_WALL;
+		//	m_ActivatedSkills[2] = SKILL::WOOD_HAND;
+		//	m_ActivatedSkills[3] = SKILL::KAMUI;
+		//	break;
 
 		default:
 			break;

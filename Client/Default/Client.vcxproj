@@ -167,6 +167,7 @@
     <ClInclude Include="..\Public\Head_Player.h" />
     <ClInclude Include="..\Public\MainCamera.h" />
     <ClInclude Include="..\Public\Player_FrontJumpState.h" />
+    <ClInclude Include="..\Public\Player_HandAerialAttackState.h" />
     <ClInclude Include="..\Public\Player_HandAttackState.h" />
     <ClInclude Include="..\Public\Player_IdleState.h" />
     <ClInclude Include="..\Public\KonohaVillage.h" />
@@ -232,6 +233,7 @@
     <ClCompile Include="..\Private\Head_Player.cpp" />
     <ClCompile Include="..\Private\MainCamera.cpp" />
     <ClCompile Include="..\Private\Player_FrontJumpState.cpp" />
+    <ClCompile Include="..\Private\Player_HandAerialAttackState.cpp" />
     <ClCompile Include="..\Private\Player_HandAttackState.cpp" />
     <ClCompile Include="..\Private\Player_IdleState.cpp" />
     <ClCompile Include="..\Private\KonohaVillage.cpp" />
