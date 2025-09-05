@@ -29,9 +29,9 @@ void CAttackTypePanel::Change_AttackType(ATTACK_TYPE eAttackType)
         m_strFontText = TEXT("인술형");
         break;
 
-    case ATTACK_TYPE::DEFENSIVE:
-        m_strFontText = TEXT("방어형");
-        break;
+    //case ATTACK_TYPE::DEFENSIVE:
+    //    m_strFontText = TEXT("방어형");
+    //    break;
 
     default:
         break;

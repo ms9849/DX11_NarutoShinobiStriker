@@ -3,7 +3,8 @@
 namespace Client
 {
 	enum class ATTACK_TYPE {
-		MELEE, NINJUTSU, DEFENSIVE, END
+		MELEE, NINJUTSU, END
+		//DEFENSIVE, END
 	};
 
 	enum class SKILLNUM {
