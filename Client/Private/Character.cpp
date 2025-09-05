@@ -46,20 +46,20 @@ void CCharacter::Late_Update(_float fTimeDelta)
 
 HRESULT CCharacter::Render()
 {
-	if (FAILED(Bind_ShaderResources()))
-		return E_FAIL;
+	//if (FAILED(Bind_ShaderResources()))
+	//	return E_FAIL;
 
-	for (_uint i = 0; i < m_iNumMeshes; ++i)
-	{
-		if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", aiTextureType_DIFFUSE, 0)))
-			return E_FAIL;
+	//for (_uint i = 0; i < m_iNumMeshes; ++i)
+	//{
+	//	if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", aiTextureType_DIFFUSE, 0)))
+	//		return E_FAIL;
 
-		if (FAILED(m_pShaderCom->Begin(0)))
-			return E_FAIL;
+	//	if (FAILED(m_pShaderCom->Begin(0)))
+	//		return E_FAIL;
 
-		if (FAILED(m_pModelCom->Render(i)))
-			return E_FAIL;
-	}
+	//	if (FAILED(m_pModelCom->Render(i)))
+	//		return E_FAIL;
+	//}
 
 	return S_OK;
 }

@@ -40,6 +40,8 @@
 
 #include "Lower_Player.h"
 #include "Upper_Player.h"
+#include "Face_Player.h"
+#include "Head_Player.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice { pDevice }
@@ -375,12 +377,22 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 	/* For.Prototype_GameObject_Upper_Player */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Upper_Player"),
-		CUpper_Player::Create(m_pDevice, m_pContext, OBJECTID::PLAYER))))
+		CUpper_Player::Create(m_pDevice, m_pContext, OBJECTID::PLAYER_UPPER))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_Lower_Player */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Lower_Player"),
-		CLower_Player::Create(m_pDevice, m_pContext, OBJECTID::PLAYER))))
+		CLower_Player::Create(m_pDevice, m_pContext, OBJECTID::PLAYER_LOWER))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Face_Player */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Face_Player"),
+		CFace_Player::Create(m_pDevice, m_pContext, OBJECTID::PLAYER_FACE))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Head_Player */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Head_Player"),
+		CHead_Player::Create(m_pDevice, m_pContext, OBJECTID::PLAYER_HEAD))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_SkillSlotUI */

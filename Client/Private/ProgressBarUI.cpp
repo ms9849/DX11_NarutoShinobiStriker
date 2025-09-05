@@ -90,10 +90,11 @@ HRESULT CProgressBarUI::Bind_ShaderResources()
 	if(FAILED(__super::Bind_ShaderResources()))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Bind_Float("g_ProgressRate", m_fProgress / m_fMaxProgress)))
+	_float fAlphaValue = m_fProgress / m_fMaxProgress;
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_ProgressRate", &fAlphaValue, sizeof(_float))))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Bind_Integer("g_iProgressBarTextureNum", m_iTextureIdx)))
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_iProgressBarTextureNum", &m_iTextureIdx, sizeof(_uint))))
 		return E_FAIL;
 
 	return S_OK;

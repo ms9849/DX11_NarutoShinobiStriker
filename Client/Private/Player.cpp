@@ -7,8 +7,11 @@
 #include "AttackTypePanel.h"
 #include "ComboKOPanel.h"
 
+#include "Head_Player.h"
+#include "Face_Player.h"
 #include "Upper_Player.h"
 #include "Lower_Player.h"
+
 #include "PlayerState.h"
 #include "Player_IdleState.h"
 
@@ -28,14 +31,10 @@ CPlayer::CPlayer(const CPlayer& rhs)
 
 _float CPlayer::Get_AnimProgress()
 {
-	/* 플레이어 애니메이션 바꿔주기. */
-	for (auto& iter : m_PartObjects)
-	{
-		CParts_Player* pAnimParts = dynamic_cast<CParts_Player*>(iter.second);
-
-		if (nullptr != pAnimParts)
-			return pAnimParts->Get_AnimProgress();
-	}
+	/* 애니메이션 Progress 받아오기 */
+	CParts_Player* pAnimParts = dynamic_cast<CParts_Player*>(Find_PartObject(TEXT("Part_Upper")));
+	if (nullptr != pAnimParts)
+		return pAnimParts->Get_AnimProgress();
 }
 
 
@@ -68,13 +67,13 @@ void CPlayer::Set_ComboKOPanel(CComboKOPanel* pPanel)
 
 void CPlayer::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _bool IsBlend, _float fBlendRatio)
 {
-	/* 플레이어 애니메이션 바꿔주기. */
+	/*
+	플레이어 애니메이션 바꿔주기. 상하체만 바뀐다.
+	추후 한벌옷도 추가 예정.
+	*/
 	for (auto& iter : m_PartObjects)
 	{
-		CParts_Player* pAnimParts = dynamic_cast<CParts_Player*>(iter.second);
-
-		if(nullptr != pAnimParts)
-			pAnimParts->Set_AnimIndex(pAnimName, fAnimationPlayRate, IsBlend, fBlendRatio);
+		static_cast<CParts_Player*>(iter.second)->Set_AnimIndex(pAnimName, fAnimationPlayRate, IsBlend, fBlendRatio);
 	}
 }
 
@@ -101,7 +100,7 @@ _bool CPlayer::Play_Animation(_float fTimeDelta)
 	_bool isAnimFinished = { false };
 
 	for (auto& Pair : m_PartObjects)
-		isAnimFinished =static_cast<CParts_Player*>(Pair.second)->Play_Animation(fTimeDelta);
+		isAnimFinished = static_cast<CParts_Player*>(Pair.second)->Play_Animation(fTimeDelta);
 
 	return isAnimFinished;
 }
@@ -191,6 +190,10 @@ HRESULT CPlayer::Ready_PartObjects()
 
 	CLower_Player::LOWER_PLAYER_DESC LowerDesc{};
 	LowerDesc.pParentTransform = m_pTransformCom;
+
+	CHead_Player::HEAD_PLAYER_DESC HeadDesc{};
+	HeadDesc.pParentTransform = m_pTransformCom;
+
 	/* Part_Upper */
 	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Upper_Player"),
 		TEXT("Part_Upper"), &UpperDesc)))
@@ -199,6 +202,21 @@ HRESULT CPlayer::Ready_PartObjects()
 	/* Part_Lower */
 	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Lower_Player"),
 		TEXT("Part_Lower"), &LowerDesc)))
+		return E_FAIL;
+
+	/* Part_Head */
+	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Head_Player"),
+		TEXT("Part_Head"), &HeadDesc)))
+		return E_FAIL;
+
+	CFace_Player::FACE_PLAYER_DESC FaceDesc{};
+	CUpper_Player* pUpperPlayer = dynamic_cast<CUpper_Player*>(Find_PartObject(TEXT("Part_Upper")));
+	FaceDesc.pParentTransform = m_pTransformCom;
+	FaceDesc.pSocketMatrix = pUpperPlayer->Get_BoneMatrixPtr("Head");
+
+	/* Part_Face */
+	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Face_Player"),
+		TEXT("Part_Face"), &FaceDesc)))
 		return E_FAIL;
 
 	return S_OK;

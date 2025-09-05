@@ -217,6 +217,15 @@
     <Filter Include="02.GameObjects\Character\Player\State\StepState">
       <UniqueIdentifier>{30d50919-de9d-48af-a559-b261acf0ae68}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\HandAttackState">
+      <UniqueIdentifier>{ef9fe663-4c38-43e4-a95f-54c9c27bc996}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\Parts\Head">
+      <UniqueIdentifier>{d33c8295-219c-42e1-b74d-d7846ea6f1d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\Parts\Face">
+      <UniqueIdentifier>{8c0aee0e-7dfa-4d5c-98bc-c68ca23bca82}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -402,6 +411,15 @@
     <ClInclude Include="..\Public\Player_StepState.h">
       <Filter>02.GameObjects\Character\Player\State\StepState</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Player_HandAttackState.h">
+      <Filter>02.GameObjects\Character\Player\State\HandAttackState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Face_Player.h">
+      <Filter>02.GameObjects\Character\Player\Parts\Face</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Head_Player.h">
+      <Filter>02.GameObjects\Character\Player\Parts\Head</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -584,6 +602,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\Player_StepState.cpp">
       <Filter>02.GameObjects\Character\Player\State\StepState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_HandAttackState.cpp">
+      <Filter>02.GameObjects\Character\Player\State\HandAttackState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Face_Player.cpp">
+      <Filter>02.GameObjects\Character\Player\Parts\Face</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Head_Player.cpp">
+      <Filter>02.GameObjects\Character\Player\Parts\Head</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -209,6 +209,22 @@ _wstring CModel::Get_MeshName(_uint iIdx) const
 	return m_Meshes[iIdx]->Get_Name();
 }
 
+const _float4x4* CModel::Get_BoneMatrixPtr(const _char* pBoneName) const
+{
+	auto	iter = find_if(m_Bones.begin(), m_Bones.end(), [&](CBone* pBone)->_bool
+	{
+		if (true == pBone->Compare_Name(pBoneName))
+			return true;
+
+		return false;
+	});
+
+	if (iter == m_Bones.end())
+		return nullptr;
+
+	return (*iter)->Get_CombinedTransformationMatrixPtr();
+}
+
 _int CModel::Get_BoneIndex(const _char* pBoneName) const
 {
 	_int	iBoneIndex = {};

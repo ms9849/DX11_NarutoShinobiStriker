@@ -11,6 +11,7 @@
 #include "Player_JumpState.h"
 #include "Player_FrontJumpState.h"
 #include "Player_StepState.h"
+#include "Player_HandAttackState.h"
 
 #pragma endregion
 
@@ -58,8 +59,10 @@ CPlayerState* CPlayer_RunState::Update(_float fTimeDelta)
 		if (m_pGameInstance->Key_Pressing(DIK_W))
 		{
 			// 돌다가 스텝 밟으면 상태 변경
-			if (m_pGameInstance->Key_Down(DIK_LSHIFT))
+			if (m_pGameInstance->Key_Down(DIK_LSHIFT) && nullptr == pNextState)
+			{
 				pNextState = CPlayer_StepState::Create(m_pPlayer, CPlayer_StepState::ANIM_STATE::FRONT);
+			}
 		}
 
 		// 오른쪽으로 돌아 
@@ -68,21 +71,45 @@ CPlayerState* CPlayer_RunState::Update(_float fTimeDelta)
 			m_pPlayer->Get_PlayerTransformPtr()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta);
 			
 			// 돌다가 스텝 밟으면 상태 변경
-			if (m_pGameInstance->Key_Down(DIK_LSHIFT))
+			if (m_pGameInstance->Key_Down(DIK_LSHIFT) && nullptr == pNextState)
+			{
 				pNextState = CPlayer_StepState::Create(m_pPlayer, CPlayer_StepState::ANIM_STATE::RIGHT);
+			}
 		}
 		// 왼쪽으로 돌아
-		if (m_pGameInstance->Key_Pressing(DIK_A) )
+		if (m_pGameInstance->Key_Pressing(DIK_A))
 		{
 			m_pPlayer->Get_PlayerTransformPtr()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * -1.f);
 			
 			// 돌다가 스텝 밟으면 상태 변경
-			if (m_pGameInstance->Key_Down(DIK_LSHIFT))
+			if (m_pGameInstance->Key_Down(DIK_LSHIFT) && nullptr == pNextState)
+			{
 				pNextState = CPlayer_StepState::Create(m_pPlayer, CPlayer_StepState::ANIM_STATE::LEFT);
+			}
 		}
 		
 		if (m_pGameInstance->Key_Down(DIK_SPACE))
+		{
 			pNextState = CPlayer_FrontJumpState::Create(m_pPlayer);
+		}
+	}
+	
+	/* 맨손 공격.*/
+	if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON)
+		&& ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType()
+		&& nullptr == pNextState)
+	{
+		pNextState = CPlayer_HandAttackState::Create(m_pPlayer);
+	}
+
+	// 백스텝
+	if (m_pGameInstance->Key_Pressing(DIK_S))
+	{
+		// 돌다가 스텝 밟으면 상태 변경
+		if (m_pGameInstance->Key_Down(DIK_LSHIFT) && nullptr == pNextState)
+		{
+			pNextState = CPlayer_StepState::Create(m_pPlayer, CPlayer_StepState::ANIM_STATE::BACK);
+		}
 	}
 
 	// Loop 재생중인데 키는 뗐다면, 
@@ -93,18 +120,13 @@ CPlayerState* CPlayer_RunState::Update(_float fTimeDelta)
 		m_eAnimState = ANIM_STATE::RUN_END;
 	}
 	else if (ANIM_STATE::RUN_END == m_eAnimState && 
-		m_pGameInstance->Key_Down(DIK_SPACE) && false == IsRunning)
+		m_pGameInstance->Key_Down(DIK_SPACE) && false == IsRunning && nullptr == pNextState)
 		pNextState = CPlayer_JumpState::Create(m_pPlayer);
 	 
-	else if (ANIM_STATE::RUN_END == m_eAnimState && true == IsAnimFinished)
-		pNextState = CPlayer_IdleState::Create(m_pPlayer);
-
-	// 백스텝
-	if (m_pGameInstance->Key_Pressing(DIK_S))
+	else if (ANIM_STATE::RUN_END == m_eAnimState && true == IsAnimFinished && nullptr == pNextState)
 	{
-		// 돌다가 스텝 밟으면 상태 변경
-		if (m_pGameInstance->Key_Down(DIK_LSHIFT))
-			pNextState = CPlayer_StepState::Create(m_pPlayer, CPlayer_StepState::ANIM_STATE::BACK);
+		pNextState = CPlayer_IdleState::Create(m_pPlayer);
+		m_IsNextAnimBlened = false;
 	}
 
 	return pNextState;
@@ -112,7 +134,7 @@ CPlayerState* CPlayer_RunState::Update(_float fTimeDelta)
 
 _bool CPlayer_RunState::End()
 {
-	return true;
+	return m_IsNextAnimBlened;
 }
 
 CPlayer_RunState* CPlayer_RunState::Create(CPlayer* pPlayer)

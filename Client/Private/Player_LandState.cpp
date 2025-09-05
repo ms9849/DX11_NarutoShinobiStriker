@@ -10,6 +10,7 @@
 #include "Player_JumpState.h"
 #include "Player_RunState.h"
 #include "Player_StepState.h"
+#include "Player_HandAttackState.h"
 
 #pragma endregion
 
@@ -38,7 +39,14 @@ CPlayerState* CPlayer_LandState::Update(_float fTimeDelta)
 		m_IsNextAnimBlened = true;
 	}
 
-	if (m_pGameInstance->Key_Down(DIK_SPACE)
+	/* 맨손 공격.*/
+	else if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON)
+		&& ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
+	{
+		pNextState = CPlayer_HandAttackState::Create(m_pPlayer);
+	}
+
+	else if (m_pGameInstance->Key_Down(DIK_SPACE)
 		&& fAnimProgress >= 0.15f)
 	{
 		pNextState = CPlayer_JumpState::Create(m_pPlayer);
@@ -46,13 +54,29 @@ CPlayerState* CPlayer_LandState::Update(_float fTimeDelta)
 	}
 
 	// 백스텝
-	if (m_pGameInstance->Key_Pressing(DIK_S) && m_pGameInstance->Key_Down(DIK_LSHIFT) 
+	else if (m_pGameInstance->Key_Pressing(DIK_S) && m_pGameInstance->Key_Down(DIK_LSHIFT) 
 		&& fAnimProgress >= 0.2f)
 	{
 		pNextState = CPlayer_StepState::Create(m_pPlayer, CPlayer_StepState::ANIM_STATE::BACK);
 		m_IsNextAnimBlened = true;
 	}
 
+	// 오른쪽 스텝
+	else if (m_pGameInstance->Key_Pressing(DIK_D))
+	{
+		if (m_pGameInstance->Key_Down(DIK_LSHIFT) && nullptr == pNextState)
+		{
+			pNextState = CPlayer_StepState::Create(m_pPlayer, CPlayer_StepState::ANIM_STATE::RIGHT);
+		}
+	}
+	// 왼쪽 스텝
+	else if (m_pGameInstance->Key_Pressing(DIK_A))
+	{
+		if (m_pGameInstance->Key_Down(DIK_LSHIFT) && nullptr == pNextState)
+		{
+			pNextState = CPlayer_StepState::Create(m_pPlayer, CPlayer_StepState::ANIM_STATE::LEFT);
+		}
+	}
 	//애니 끝나면 돌아가. 
 	else if (true == IsAnimFinished)
 	{

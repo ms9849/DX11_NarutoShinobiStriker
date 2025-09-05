@@ -161,10 +161,13 @@
     <ClInclude Include="..\Public\CreateCharacterUI.h" />
     <ClInclude Include="..\Public\DecimalUI.h" />
     <ClInclude Include="..\Public\Dummy.h" />
+    <ClInclude Include="..\Public\Face_Player.h" />
     <ClInclude Include="..\Public\GameManager.h" />
     <ClInclude Include="..\Public\Gate.h" />
+    <ClInclude Include="..\Public\Head_Player.h" />
     <ClInclude Include="..\Public\MainCamera.h" />
     <ClInclude Include="..\Public\Player_FrontJumpState.h" />
+    <ClInclude Include="..\Public\Player_HandAttackState.h" />
     <ClInclude Include="..\Public\Player_IdleState.h" />
     <ClInclude Include="..\Public\KonohaVillage.h" />
     <ClInclude Include="..\Public\KOUI.h" />
@@ -223,10 +226,13 @@
     <ClCompile Include="..\Private\CreateCharacterUI.cpp" />
     <ClCompile Include="..\Private\DecimalUI.cpp" />
     <ClCompile Include="..\Private\Dummy.cpp" />
+    <ClCompile Include="..\Private\Face_Player.cpp" />
     <ClCompile Include="..\Private\GameManager.cpp" />
     <ClCompile Include="..\Private\Gate.cpp" />
+    <ClCompile Include="..\Private\Head_Player.cpp" />
     <ClCompile Include="..\Private\MainCamera.cpp" />
     <ClCompile Include="..\Private\Player_FrontJumpState.cpp" />
+    <ClCompile Include="..\Private\Player_HandAttackState.cpp" />
     <ClCompile Include="..\Private\Player_IdleState.cpp" />
     <ClCompile Include="..\Private\KonohaVillage.cpp" />
     <ClCompile Include="..\Private\KOUI.cpp" />
