@@ -75,12 +75,16 @@ HRESULT CButton::Bind_ShaderResources()
 	}
 
 	if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_bFadeOut)
-		m_pShaderCom->Bind_Float("g_Alpha", 1 - (m_fFadeOutTimeAcc / m_fFadeOutMaxTimeAcc));
+	{
+		_float fAlphaValue = 1 - (m_fFadeOutTimeAcc / m_fFadeOutMaxTimeAcc);
+		m_pShaderCom->Bind_RawValue("g_Alpha", &fAlphaValue, sizeof(_float));
+	}
 
 	else if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_bFadeIn)
-		m_pShaderCom->Bind_Float("g_Alpha", m_fFadeInTimeAcc / m_fFadeInMaxTimeAcc);
-
-
+	{
+		_float fAlphaValue = m_fFadeInTimeAcc / m_fFadeInMaxTimeAcc;
+		m_pShaderCom->Bind_RawValue("g_Alpha", &fAlphaValue, sizeof(_float));
+	}
 
 	return S_OK;
 }

@@ -14,6 +14,11 @@ public:
 	_matrix Get_CombinedTransformationMatrix() const {
 		return XMLoadFloat4x4(&m_CombinedTransformationMatrix);
 	}
+
+	const _float4x4* Get_CombinedTransformationMatrixPtr() const {
+		return &m_CombinedTransformationMatrix;
+	}
+	
 	_bool Compare_Name(const _char* pBoneName) const {
 		return !strcmp(pBoneName, m_szName);
 	}

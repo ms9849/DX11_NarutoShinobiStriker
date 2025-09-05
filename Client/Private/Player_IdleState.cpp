@@ -10,6 +10,7 @@
 #include "Player_JumpState.h"
 #include "Player_FrontJumpState.h"
 #include "Player_StepState.h"
+#include "Player_HandAttackState.h"
 
 #pragma endregion
 
@@ -32,17 +33,24 @@ CPlayerState* CPlayer_IdleState::Update(_float fTimeDelta)
 
 	CPlayerState* pNextState = { nullptr };
 
-	if (m_pGameInstance->Key_Down(DIK_W) || 
+	/* 맨손 공격.*/
+	if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON)
+  		&& ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
+	{
+		pNextState = CPlayer_HandAttackState::Create(m_pPlayer);
+	}
+
+	else if (m_pGameInstance->Key_Down(DIK_W) || 
 		m_pGameInstance->Key_Down(DIK_A) ||
 		m_pGameInstance->Key_Down(DIK_D)
 		)
 		 pNextState = CPlayer_RunState::Create(m_pPlayer);
 
-	if (m_pGameInstance->Key_Down(DIK_SPACE))
+	else if (m_pGameInstance->Key_Down(DIK_SPACE))
 		 pNextState = CPlayer_JumpState::Create(m_pPlayer);
 
 	// 백스텝
-	if (m_pGameInstance->Key_Pressing(DIK_S))
+	else if (m_pGameInstance->Key_Pressing(DIK_S))
 	{
 		// 돌다가 스텝 밟으면 상태 변경
 		if (m_pGameInstance->Key_Down(DIK_LSHIFT))

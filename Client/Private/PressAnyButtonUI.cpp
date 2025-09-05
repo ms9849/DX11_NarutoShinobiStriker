@@ -100,7 +100,10 @@ HRESULT CPressAnyButtonUI::Bind_ShaderResources()
         return E_FAIL;
 
     if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT))
-        m_pShaderCom->Bind_Float("g_Alpha", (m_fMaxTimeAcc - m_fTimeAcc) / m_fMaxTimeAcc);
+    {
+        _float fAlphaValue = (m_fMaxTimeAcc - m_fTimeAcc) / m_fMaxTimeAcc;
+        m_pShaderCom->Bind_RawValue("g_Alpha", &fAlphaValue, sizeof(_float));
+    }
 
     return S_OK;
 }

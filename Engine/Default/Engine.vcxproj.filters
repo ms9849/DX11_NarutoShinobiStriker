@@ -181,6 +181,12 @@
     <ClInclude Include="..\Public\ContainerObject.h">
       <Filter>01.Utility\02.GameObjects\ContainerObject</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Light_Manager.h">
+      <Filter>01.Utility\08. Lights\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Light.h">
+      <Filter>01.Utility\08. Lights</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -317,6 +323,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\ContainerObject.cpp">
       <Filter>01.Utility\02.GameObjects\ContainerObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Light_Manager.cpp">
+      <Filter>01.Utility\08. Lights\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Light.cpp">
+      <Filter>01.Utility\08. Lights</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -466,6 +478,12 @@
     </Filter>
     <Filter Include="01.Utility\02.GameObjects\PartObject">
       <UniqueIdentifier>{c8032faf-1b70-4e97-9522-630347bca5ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\08. Lights">
+      <UniqueIdentifier>{bec2f90d-acce-44a6-94fc-9a2c988f4569}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\08. Lights\Manager">
+      <UniqueIdentifier>{220e56f5-67bb-4b67-bb5f-dd5421e5ae8e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

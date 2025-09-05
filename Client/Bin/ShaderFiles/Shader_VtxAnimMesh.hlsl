@@ -1,9 +1,19 @@
 
+
 matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 
-texture2D g_DiffuseTexture;
+vector g_vCamPosition;
 
-/* 메시 하나에게 영향을 주는 뼈들의 집합 ( 렌더링은 메시 단위로 수행되므로 ) */
+vector g_vLightDir;
+vector g_vLightDiffuse;
+vector g_vLightAmbient;
+vector g_vLightSpecular;
+
+texture2D g_DiffuseTexture;
+vector g_vMtrlAmbient = vector(1.f, 1.f, 1.f, 1.f);
+vector g_vMtrlSpecular = vector(1.f, 1.f, 1.f, 1.f);
+
+/* 메시다 ㅇ영향을 주는 뼈들의 집합*/
 matrix g_BoneMatrices[512];
 
 sampler DefaultSampler = sampler_state
@@ -13,6 +23,10 @@ sampler DefaultSampler = sampler_state
     AddressV = wrap;
 };
 
+
+/* 정점 쉐이더 : */
+/* 정점에 대한 셰이딩 == 정점에 필요한 연산을 수행한다 == 정점의 상태변환(월드, 뷰, 투영) + 추가변환 */
+/* 정점의 구성 정보를 수정, 변경한다 */ 
 struct VS_IN
 {
     float3 vPosition : POSITION;
@@ -27,14 +41,15 @@ struct VS_IN
 struct VS_OUT
 {
     float4 vPosition : SV_POSITION;
+    float4 vNormal : NORMAL;
     float2 vTexcoord : TEXCOORD0;
+    float4 vWorldPos : TEXCOORD1;
 };
 
 VS_OUT VS_MAIN(VS_IN In)
 {
     VS_OUT Out;
     
-    /* W값은 그대로 살려서 최소한 영향을 받는 1개 이상의 본은 무조건 가지도록 한다. */
     float fWeightW = 1.f - (In.vBlendWeight.x + In.vBlendWeight.y + In.vBlendWeight.z);
     
     matrix BoneMatrix = g_BoneMatrices[In.vBlendIndex.x] * In.vBlendWeight.x +
@@ -44,6 +59,7 @@ VS_OUT VS_MAIN(VS_IN In)
     
     /* 스키닝 */
     vector vPosition = mul(vector(In.vPosition, 1.f), BoneMatrix);
+    vector vNormal = mul(vector(In.vNormal, 0.f), BoneMatrix);
     
     matrix matWV, matWVP;
     
@@ -51,18 +67,26 @@ VS_OUT VS_MAIN(VS_IN In)
     matWVP = mul(matWV, g_ProjMatrix);
     
     Out.vPosition = mul(vPosition, matWVP);
-    
     /* Out.vPosition.xy => 시야각에 있는 점들을 90에 맞춰준다 */ 
-    /* Out.vPosition.z => n~f사이에 있는 점들의 z를 0 ~ f로 바꿔준다. */     
+    /* Out.vPosition.z => n~f사이에 있는 점들의 z를 0 ~ f로 바꿔준다. */   
+    Out.vNormal = normalize(mul(vNormal, g_WorldMatrix));
     Out.vTexcoord = In.vTexcoord;
-    
+    /* 정점의 월드 위치를 받아온다. */
+    Out.vWorldPos = mul(vPosition, g_WorldMatrix);
+
     return Out;
 }
+
+/* 출력된 정점 위치벡터의 w값으로 모든 성분을 나눈다 -> 투영스페이스로 변환 */ 
+/* 정점의 위치에 대해서 뷰포트 변환을 수행한다 */ 
+/* 정점의 모든 정보를 보간하여 픽셀을 만든다. -> 래스터라이즈 */ 
 
 struct PS_IN
 {
     float4 vPosition : SV_POSITION;
+    float4 vNormal : NORMAL;
     float2 vTexcoord : TEXCOORD0;
+    float4 vWorldPos : TEXCOORD1;
 };
 
 struct PS_OUT
@@ -70,15 +94,22 @@ struct PS_OUT
     float4 vColor : SV_TARGET0;
 };
 
+/* 픽셀 쉐이더 : 픽셀의 최종적인 색을 결정하낟. */
 PS_OUT PS_MAIN(PS_IN In)
 {
     PS_OUT Out;
     
-    Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexcoord);
+    vector vMtrlDiffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexcoord);
     
-    /* 알파 테스팅. 블렌딩은 서치가 더 필요하다. */ 
-    if (Out.vColor.a < 0.3f)
-        discard;
+    float fShade = max(dot(normalize(g_vLightDir) * -1.f, In.vNormal), 0.f);
+    
+    vector vReflect = normalize(reflect(normalize(g_vLightDir), In.vNormal));
+    vector vLook = In.vWorldPos - g_vCamPosition;
+    
+    float fSpecular = pow(max(dot(normalize(vLook) * -1.f, vReflect), 0.f), 50.f);
+    
+    Out.vColor = (g_vLightDiffuse * vMtrlDiffuse) * (fShade + (g_vLightAmbient * g_vMtrlAmbient)) +
+        (g_vLightSpecular * g_vMtrlSpecular) * fSpecular;
     
     return Out;
 }
@@ -90,6 +121,4 @@ technique11 DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         PixelShader = compile ps_5_0 PS_MAIN();
     }
-
- 
 }

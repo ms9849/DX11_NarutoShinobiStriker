@@ -11,6 +11,7 @@ namespace Engine
 	enum class MODEL { ANIM, NONANIM, END };
 	enum class RAY { LOCAL, WORLD, END };
 	enum class D3DTS { VIEW, PROJ, END };
+	enum class LIGHT { DIRECTIONAL, POINT, SPOT, END };
 	enum class CHANNELID { SOUND_EFFECT, SOUND_BGM, SOUND_END };
 	enum class IMGUI_VISIBLE { GAMEINFO, OBJECT_INSPECTOR, END };
 	enum class MOUSEKEYSTATE { LBUTTON, RBUTTON, WBUTTON, XBUTTON };

@@ -12,6 +12,7 @@
 #include "PipeLine.h"
 #include "Picking_Manager.h"
 #include "IMGUI_Manager.h"
+#include "Light_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -25,6 +26,10 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	if (nullptr == m_pGraphic_Device)
 		return E_FAIL;
 
+	m_pLight_Manager = CLight_Manager::Create();
+	if (nullptr == m_pLight_Manager)
+
+		return E_FAIL;
 	m_pPipeLine = CPipeLine::Create();
 	if (nullptr == m_pPipeLine)
 		return E_FAIL;
@@ -461,6 +466,20 @@ void CGameInstance::Set_Visible_All_IMGUI(_bool bFlag)
 
 #pragma endregion
 
+#pragma region LIGHT_MANAGER
+
+const LIGHT_DESC* CGameInstance::Get_LightDesc(_uint iIndex) const
+{
+	return m_pLight_Manager->Get_LightDesc(iIndex);
+}
+
+HRESULT CGameInstance::Add_Light(const LIGHT_DESC& LightDesc)
+{
+	return m_pLight_Manager->Add_Light(LightDesc);
+}
+
+#pragma endregion
+
 void CGameInstance::Release_Engine()
 {
 	DestroyInstance();
@@ -477,6 +496,7 @@ void CGameInstance::Release_Engine()
 	Safe_Release(m_pPipeLine);
 	Safe_Release(m_pPicking_Manager);
 	Safe_Release(m_pGraphic_Device);
+	Safe_Release(m_pLight_Manager);
 }
 
 void CGameInstance::Free()

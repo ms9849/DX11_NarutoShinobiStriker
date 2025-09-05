@@ -10,9 +10,9 @@
 #include "Player_IdleState.h"
 #include "Player_JumpState.h"
 #include "Player_FrontJumpState.h"
+#include "Player_HandAttackState.h"
 
 #pragma endregion
-
 
 CPlayer_StepState::CPlayer_StepState(CPlayer* pPlayer, ANIM_STATE eAnimState)
 	: m_pPlayer { pPlayer }
@@ -52,7 +52,13 @@ CPlayerState* CPlayer_StepState::Update(_float fTimeDelta)
 	{
 		_float fStepSpeed = m_pGameInstance->Calc_Quadratic(-5.f, 4.f, 1.f, fAnimProgress);
 
-		if ((m_pGameInstance->Key_Pressing(DIK_W) ||
+		/* 맨손 공격.*/
+		if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON)
+			&& ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType()
+			&& fAnimProgress >= 0.5f)
+			pNextState = CPlayer_HandAttackState::Create(m_pPlayer);
+
+		else if ((m_pGameInstance->Key_Pressing(DIK_W) ||
 		m_pGameInstance->Key_Pressing(DIK_A) ||
 		m_pGameInstance->Key_Pressing(DIK_D)) 
 		&& m_pGameInstance->Key_Down(DIK_SPACE)
@@ -75,7 +81,13 @@ CPlayerState* CPlayer_StepState::Update(_float fTimeDelta)
 	{
 		_float fStepSpeed = m_pGameInstance->Calc_Quadratic(-5.f, 4.f, 1.f, fAnimProgress);
 
-		if ((m_pGameInstance->Key_Pressing(DIK_W) ||
+		/* 맨손 공격.*/
+		if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON)
+			&& ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType()
+			&& fAnimProgress >= 0.5f)
+			pNextState = CPlayer_HandAttackState::Create(m_pPlayer);
+
+		else if ((m_pGameInstance->Key_Pressing(DIK_W) ||
 			m_pGameInstance->Key_Pressing(DIK_A) ||
 			m_pGameInstance->Key_Pressing(DIK_D))
 			&& m_pGameInstance->Key_Down(DIK_SPACE)
@@ -98,7 +110,13 @@ CPlayerState* CPlayer_StepState::Update(_float fTimeDelta)
 	{
 		_float fStepSpeed = m_pGameInstance->Calc_Quadratic(-7.86f, 3.57f, 1.f, fAnimProgress);
 
-		if (m_pGameInstance->Key_Down(DIK_SPACE) && fAnimProgress >= 0.65f)
+		/* 맨손 공격.*/
+		if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON)
+			&& ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType()
+			&& fAnimProgress >= 0.65f)
+			pNextState = CPlayer_HandAttackState::Create(m_pPlayer);
+
+		else if (m_pGameInstance->Key_Down(DIK_SPACE) && fAnimProgress >= 0.65f)
 			pNextState = CPlayer_JumpState::Create(m_pPlayer);
 
 		else if ((m_pGameInstance->Key_Pressing(DIK_W) ||
@@ -113,7 +131,13 @@ CPlayerState* CPlayer_StepState::Update(_float fTimeDelta)
 	// 앞 짧대시
 	else if (ANIM_STATE::FRONT == m_eAnimState)
 	{
-		if (m_pGameInstance->Key_Down(DIK_SPACE) && fAnimProgress >= 0.35f)
+		/* 맨손 공격.*/
+		if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON)
+			&& ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType()
+			&& fAnimProgress >= 0.35f)
+			pNextState = CPlayer_HandAttackState::Create(m_pPlayer);
+
+		else if (m_pGameInstance->Key_Down(DIK_SPACE) && fAnimProgress >= 0.35f)
 			pNextState = CPlayer_JumpState::Create(m_pPlayer);
 
 		else if ((m_pGameInstance->Key_Pressing(DIK_W) ||

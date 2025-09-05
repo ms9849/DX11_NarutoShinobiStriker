@@ -125,6 +125,12 @@ public:
 	void	Set_Visible_All_IMGUI(_bool bFlag);
 #pragma endregion
 
+#pragma region LIGHT_MANAGER
+	const LIGHT_DESC* Get_LightDesc(_uint iIndex) const;
+	HRESULT Add_Light(const LIGHT_DESC& LightDesc);
+#pragma endregion
+
+
 private:
 	class CGraphic_Device*			m_pGraphic_Device = { nullptr };
 	class CTimer_Manager*			m_pTimer_Manager = { nullptr };
@@ -138,7 +144,7 @@ private:
 	class CSound_Manager*			m_pSound_Manager = { nullptr };
 	class CInput_Manager*			m_pInput_Manager = { nullptr };
 	class CPooling_Manager*			m_pPooling_Manager = { nullptr };
-
+	class CLight_Manager*			m_pLight_Manager = { nullptr };
 public:
 	void Release_Engine();
 	virtual void Free() override;
