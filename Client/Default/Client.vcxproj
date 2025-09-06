@@ -166,6 +166,7 @@
     <ClInclude Include="..\Public\Gate.h" />
     <ClInclude Include="..\Public\Head_Player.h" />
     <ClInclude Include="..\Public\MainCamera.h" />
+    <ClInclude Include="..\Public\Player_AerialFireBallState.h" />
     <ClInclude Include="..\Public\Player_ChidoriAerialReadyState.h" />
     <ClInclude Include="..\Public\Player_ChidoriAttackState.h" />
     <ClInclude Include="..\Public\Player_ChidoriReadyState.h" />
@@ -201,6 +202,7 @@
     <ClInclude Include="..\Public\Player_LandState.h" />
     <ClInclude Include="..\Public\Player_RunState.h" />
     <ClInclude Include="..\Public\Player_StepState.h" />
+    <ClInclude Include="..\Public\Player_SuperSharkState.h" />
     <ClInclude Include="..\Public\Player_SwordAerialAttackState.h" />
     <ClInclude Include="..\Public\Player_SwordAttackState.h" />
     <ClInclude Include="..\Public\PressAnyButtonUI.h" />
@@ -239,6 +241,7 @@
     <ClCompile Include="..\Private\Gate.cpp" />
     <ClCompile Include="..\Private\Head_Player.cpp" />
     <ClCompile Include="..\Private\MainCamera.cpp" />
+    <ClCompile Include="..\Private\Player_AerialFireBallState.cpp" />
     <ClCompile Include="..\Private\Player_ChidoriAerialReadyState.cpp" />
     <ClCompile Include="..\Private\Player_ChidoriAttackState.cpp" />
     <ClCompile Include="..\Private\Player_ChidoriReadyState.cpp" />
@@ -274,6 +277,7 @@
     <ClCompile Include="..\Private\Player_LandState.cpp" />
     <ClCompile Include="..\Private\Player_RunState.cpp" />
     <ClCompile Include="..\Private\Player_StepState.cpp" />
+    <ClCompile Include="..\Private\Player_SuperSharkState.cpp" />
     <ClCompile Include="..\Private\Player_SwordAerialAttackState.cpp" />
     <ClCompile Include="..\Private\Player_SwordAttackState.cpp" />
     <ClCompile Include="..\Private\PressAnyButtonUI.cpp" />

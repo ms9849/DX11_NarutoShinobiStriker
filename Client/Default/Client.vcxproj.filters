@@ -211,9 +211,6 @@
     <Filter Include="02.GameObjects\Character\Player\State\BASE">
       <UniqueIdentifier>{53a4a15b-6410-4777-8352-c09deff2360d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Character\Player\State\BASE\IdleState">
-      <UniqueIdentifier>{279f3fd9-01b0-4a58-a61e-0dd349b1cb71}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Character\Player\State\BASE\JumpState">
       <UniqueIdentifier>{d6eaedd5-3cb7-45d5-994a-41c670650541}</UniqueIdentifier>
     </Filter>
@@ -252,6 +249,12 @@
     </Filter>
     <Filter Include="02.GameObjects\Character\Player\State\SKILL\ChidoriState\Ready">
       <UniqueIdentifier>{5e37f687-4f45-4ef6-ae76-dd4e18b20f06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\BASE\IdleState">
+      <UniqueIdentifier>{279f3fd9-01b0-4a58-a61e-0dd349b1cb71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\SKILL\SuperSharkState">
+      <UniqueIdentifier>{e4c85660-daf2-48af-b5f0-979a8049d7d5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -462,14 +465,20 @@
     <ClInclude Include="..\Public\Player_ChidoriAttackState.h">
       <Filter>02.GameObjects\Character\Player\State\SKILL\ChidoriState</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Player_ChidoriReadyState.h">
-      <Filter>02.GameObjects\Character\Player\State\SKILL\ChidoriState\Ready</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Player_ChidoriAerialReadyState.h">
       <Filter>02.GameObjects\Character\Player\State\SKILL\ChidoriState\Ready</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Player_FireBallState.h">
       <Filter>02.GameObjects\Character\Player\State\SKILL\FireBallState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_AerialFireBallState.h">
+      <Filter>02.GameObjects\Character\Player\State\SKILL\FireBallState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_ChidoriReadyState.h">
+      <Filter>02.GameObjects\Character\Player\State\SKILL\ChidoriState\Ready</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_SuperSharkState.h">
+      <Filter>02.GameObjects\Character\Player\State\SKILL\SuperSharkState</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -686,6 +695,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Player_FireBallState.cpp">
       <Filter>02.GameObjects\Character\Player\State\SKILL\FireBallState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_AerialFireBallState.cpp">
+      <Filter>02.GameObjects\Character\Player\State\SKILL\FireBallState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_SuperSharkState.cpp">
+      <Filter>02.GameObjects\Character\Player\State\SKILL\SuperSharkState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

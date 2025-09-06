@@ -63,5 +63,7 @@ CPlayer_ChidoriReadyState* CPlayer_ChidoriReadyState::Create(CPlayer* pPlayer)
 
 void CPlayer_ChidoriReadyState::Free()
 {
+	__super::Free();
+
 	Safe_Release(m_pPlayer);
 }

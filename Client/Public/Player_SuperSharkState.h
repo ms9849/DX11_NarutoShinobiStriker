@@ -7,11 +7,11 @@
 */
 NS_BEGIN(Client)
 
-class CPlayer_FireBallState final : public CPlayerState
+class CPlayer_SuperSharkState final : public CPlayerState
 {
 private:
-	CPlayer_FireBallState(class CPlayer* pPlayer);
-	virtual ~CPlayer_FireBallState() = default;
+	CPlayer_SuperSharkState(class CPlayer* pPlayer);
+	virtual ~CPlayer_SuperSharkState() = default;
 
 public:
 	/* Start */
@@ -24,7 +24,7 @@ public:
 private:
 	class CPlayer* m_pPlayer = { nullptr };
 public:
-	static CPlayer_FireBallState* Create(class CPlayer* pPlayer);
+	static CPlayer_SuperSharkState* Create(class CPlayer* pPlayer);
 	virtual void Free() override;
 };
 
