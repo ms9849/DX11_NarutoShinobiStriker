@@ -15,8 +15,6 @@ class CFace_Player final : public CParts_Player
 public:
 	typedef struct tagFace_Player_Desc : public CPartObject::PARTOBJECT_DESC
 	{
-		const _uint* pParentState = { nullptr };
-		const _float4x4* pSocketMatrix = { nullptr };
 	}FACE_PLAYER_DESC;
 
 private:

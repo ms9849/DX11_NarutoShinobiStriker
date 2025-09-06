@@ -11,6 +11,8 @@
 #include "Player_FrontJumpState.h"
 #include "Player_StepState.h"
 #include "Player_HandAttackState.h"
+#include "Player_SwordAttackState.h"
+#include "Player_ChidoriReadyState.h"
 
 #pragma endregion
 
@@ -34,10 +36,24 @@ CPlayerState* CPlayer_IdleState::Update(_float fTimeDelta)
 	CPlayerState* pNextState = { nullptr };
 
 	/* 맨손 공격.*/
-	if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON)
-  		&& ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
+	if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON))
 	{
-		pNextState = CPlayer_HandAttackState::Create(m_pPlayer);
+		if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
+			pNextState = CPlayer_HandAttackState::Create(m_pPlayer);
+		else if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
+			pNextState = CPlayer_SwordAttackState::Create(m_pPlayer);
+	}
+
+	else if (m_pGameInstance->Key_Down(DIK_1))
+	{
+		//스킬 사용 
+		if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
+			int a = 10;
+			//pNextState = CPlayer_HandAttackState::Create(m_pPlayer);
+		else if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
+		{
+			pNextState = CPlayer_ChidoriReadyState::Create(m_pPlayer);
+		}
 	}
 
 	else if (m_pGameInstance->Key_Down(DIK_W) || 

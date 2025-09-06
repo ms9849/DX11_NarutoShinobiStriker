@@ -7,6 +7,7 @@
 
 #include "Player_LandState.h"
 #include "Player_HandAerialAttackState.h"
+
 #pragma endregion
 
 CPlayer_FrontJumpState::CPlayer_FrontJumpState(CPlayer* pPlayer)
@@ -76,7 +77,12 @@ CPlayerState* CPlayer_FrontJumpState::Update(_float fTimeDelta)
 	}
 	// АјАн
 	else if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON))
-		pNextState = CPlayer_HandAerialAttackState::Create(m_pPlayer, m_fTimeAcc);
+	{
+		if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
+			pNextState = CPlayer_HandAerialAttackState::Create(m_pPlayer, m_fTimeAcc);
+		else if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
+			pNextState = CPlayer_HandAerialAttackState::Create(m_pPlayer, m_fTimeAcc);
+	}
 
 	return pNextState;
 }

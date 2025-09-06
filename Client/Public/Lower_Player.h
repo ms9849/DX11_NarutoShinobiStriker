@@ -15,7 +15,6 @@ class CLower_Player final : public CParts_Player
 public:
 	typedef struct tagLower_Player_Desc : public CPartObject::PARTOBJECT_DESC
 	{
-		const _uint* pParentState = { nullptr };
 	}LOWER_PLAYER_DESC;
 
 private:

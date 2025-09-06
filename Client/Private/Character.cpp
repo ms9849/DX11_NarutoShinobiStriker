@@ -103,16 +103,6 @@ void CCharacter::Change_AttackType()
 
 HRESULT CCharacter::Bind_ShaderResources()
 {
-	/*m_pShaderCom->Bind_Matrix("g_WorldMatrix", );*/
-	//if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
-	//	return E_FAIL;
-
-	//if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", m_pGameInstance->Get_PipeLine_Float4x4(D3DTS::VIEW))))
-	//	return E_FAIL;
-
-	//if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_PipeLine_Float4x4(D3DTS::PROJ))))
-	//	return E_FAIL;
-
 	return S_OK;
 }
 

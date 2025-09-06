@@ -15,7 +15,6 @@ class CUpper_Player final : public CParts_Player
 public:
 	typedef struct tagUpper_Player_Desc : public CPartObject::PARTOBJECT_DESC
 	{
-		const _uint* pParentState = { nullptr };
 	}UPPER_PLAYER_DESC;
 
 private:

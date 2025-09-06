@@ -11,6 +11,8 @@
 #include "Player_RunState.h"
 #include "Player_StepState.h"
 #include "Player_HandAttackState.h"
+#include "Player_SwordAttackState.h"
+#include "Player_ChidoriReadyState.h"
 
 #pragma endregion
 
@@ -40,12 +42,25 @@ CPlayerState* CPlayer_LandState::Update(_float fTimeDelta)
 	}
 
 	/* 맨손 공격.*/
-	else if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON)
-		&& ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
+	else if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON))
 	{
-		pNextState = CPlayer_HandAttackState::Create(m_pPlayer);
+		if(ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
+			pNextState = CPlayer_HandAttackState::Create(m_pPlayer);
+		else if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
+			pNextState = CPlayer_SwordAttackState::Create(m_pPlayer);
 	}
-
+	// 1번스킬 사용
+	else if (m_pGameInstance->Key_Down(DIK_1))
+	{
+		if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
+			int a = 10;
+		//pNextState = CPlayer_HandAttackState::Create(m_pPlayer);
+		else if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
+		{
+			pNextState = CPlayer_ChidoriReadyState::Create(m_pPlayer);
+		}
+	}
+	//점프
 	else if (m_pGameInstance->Key_Down(DIK_SPACE)
 		&& fAnimProgress >= 0.15f)
 	{

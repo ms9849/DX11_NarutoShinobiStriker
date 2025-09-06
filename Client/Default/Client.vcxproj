@@ -166,6 +166,10 @@
     <ClInclude Include="..\Public\Gate.h" />
     <ClInclude Include="..\Public\Head_Player.h" />
     <ClInclude Include="..\Public\MainCamera.h" />
+    <ClInclude Include="..\Public\Player_ChidoriAerialReadyState.h" />
+    <ClInclude Include="..\Public\Player_ChidoriAttackState.h" />
+    <ClInclude Include="..\Public\Player_ChidoriReadyState.h" />
+    <ClInclude Include="..\Public\Player_FireBallState.h" />
     <ClInclude Include="..\Public\Player_FrontJumpState.h" />
     <ClInclude Include="..\Public\Player_HandAerialAttackState.h" />
     <ClInclude Include="..\Public\Player_HandAttackState.h" />
@@ -197,6 +201,8 @@
     <ClInclude Include="..\Public\Player_LandState.h" />
     <ClInclude Include="..\Public\Player_RunState.h" />
     <ClInclude Include="..\Public\Player_StepState.h" />
+    <ClInclude Include="..\Public\Player_SwordAerialAttackState.h" />
+    <ClInclude Include="..\Public\Player_SwordAttackState.h" />
     <ClInclude Include="..\Public\PressAnyButtonUI.h" />
     <ClInclude Include="..\Public\ProgressBarUI.h" />
     <ClInclude Include="..\Public\Props.h" />
@@ -214,6 +220,7 @@
     <ClInclude Include="..\Public\Tree.h" />
     <ClInclude Include="..\Public\TutorialMap.h" />
     <ClInclude Include="..\Public\Upper_Player.h" />
+    <ClInclude Include="..\Public\Weapon_Player.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
@@ -232,6 +239,10 @@
     <ClCompile Include="..\Private\Gate.cpp" />
     <ClCompile Include="..\Private\Head_Player.cpp" />
     <ClCompile Include="..\Private\MainCamera.cpp" />
+    <ClCompile Include="..\Private\Player_ChidoriAerialReadyState.cpp" />
+    <ClCompile Include="..\Private\Player_ChidoriAttackState.cpp" />
+    <ClCompile Include="..\Private\Player_ChidoriReadyState.cpp" />
+    <ClCompile Include="..\Private\Player_FireBallState.cpp" />
     <ClCompile Include="..\Private\Player_FrontJumpState.cpp" />
     <ClCompile Include="..\Private\Player_HandAerialAttackState.cpp" />
     <ClCompile Include="..\Private\Player_HandAttackState.cpp" />
@@ -263,6 +274,8 @@
     <ClCompile Include="..\Private\Player_LandState.cpp" />
     <ClCompile Include="..\Private\Player_RunState.cpp" />
     <ClCompile Include="..\Private\Player_StepState.cpp" />
+    <ClCompile Include="..\Private\Player_SwordAerialAttackState.cpp" />
+    <ClCompile Include="..\Private\Player_SwordAttackState.cpp" />
     <ClCompile Include="..\Private\PressAnyButtonUI.cpp" />
     <ClCompile Include="..\Private\ProgressBarUI.cpp" />
     <ClCompile Include="..\Private\Props.cpp" />
@@ -279,6 +292,7 @@
     <ClCompile Include="..\Private\Tree.cpp" />
     <ClCompile Include="..\Private\TutorialMap.cpp" />
     <ClCompile Include="..\Private\Upper_Player.cpp" />
+    <ClCompile Include="..\Private\Weapon_Player.cpp" />
     <ClCompile Include="Client.cpp" />
   </ItemGroup>
   <ItemGroup>

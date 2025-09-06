@@ -11,6 +11,7 @@
 #include "Face_Player.h"
 #include "Upper_Player.h"
 #include "Lower_Player.h"
+#include "Weapon_Player.h"
 
 #include "PlayerState.h"
 #include "Player_IdleState.h"
@@ -99,8 +100,12 @@ _bool CPlayer::Play_Animation(_float fTimeDelta)
 {
 	_bool isAnimFinished = { false };
 
-	for (auto& Pair : m_PartObjects)
-		isAnimFinished = static_cast<CParts_Player*>(Pair.second)->Play_Animation(fTimeDelta);
+	isAnimFinished = dynamic_cast<CParts_Player*>(Find_PartObject(TEXT("Part_Upper")))->Play_Animation(fTimeDelta);
+
+	dynamic_cast<CParts_Player*>(Find_PartObject(TEXT("Part_Lower")))->Play_Animation(fTimeDelta);
+	dynamic_cast<CParts_Player*>(Find_PartObject(TEXT("Part_Face")))->Play_Animation(fTimeDelta);
+	dynamic_cast<CParts_Player*>(Find_PartObject(TEXT("Part_Head")))->Play_Animation(fTimeDelta);
+	dynamic_cast<CParts_Player*>(Find_PartObject(TEXT("Part_Weapon")))->Play_Animation(fTimeDelta);
 
 	return isAnimFinished;
 }
@@ -194,6 +199,9 @@ HRESULT CPlayer::Ready_PartObjects()
 	CHead_Player::HEAD_PLAYER_DESC HeadDesc{};
 	HeadDesc.pParentTransform = m_pTransformCom;
 
+	CFace_Player::tagFace_Player_Desc FaceDesc{};
+	FaceDesc.pParentTransform = m_pTransformCom;
+
 	/* Part_Upper */
 	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Upper_Player"),
 		TEXT("Part_Upper"), &UpperDesc)))
@@ -209,14 +217,21 @@ HRESULT CPlayer::Ready_PartObjects()
 		TEXT("Part_Head"), &HeadDesc)))
 		return E_FAIL;
 
-	CFace_Player::FACE_PLAYER_DESC FaceDesc{};
-	CUpper_Player* pUpperPlayer = dynamic_cast<CUpper_Player*>(Find_PartObject(TEXT("Part_Upper")));
-	FaceDesc.pParentTransform = m_pTransformCom;
-	FaceDesc.pSocketMatrix = pUpperPlayer->Get_BoneMatrixPtr("Head");
-
 	/* Part_Face */
 	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Face_Player"),
 		TEXT("Part_Face"), &FaceDesc)))
+		return E_FAIL;
+
+	CWeapon_Player::WEAPON_PLAYER_DESC WeaponDesc{};
+	CUpper_Player* pUpperPlayer = dynamic_cast<CUpper_Player*>(Find_PartObject(TEXT("Part_Upper")));
+	WeaponDesc.pParentTransform = m_pTransformCom;
+	WeaponDesc.pAttachMatrix = pUpperPlayer->Get_BoneMatrixPtr("Attach_Sword");
+	WeaponDesc.pHandMatrix = pUpperPlayer->Get_BoneMatrixPtr("R_Hand_Weapon_cnt_tr");
+	WeaponDesc.pUpper_Player = pUpperPlayer; 
+
+	/* Part_Weapon */
+	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Weapon_Player"),
+		TEXT("Part_Weapon"), &WeaponDesc)))
 		return E_FAIL;
 
 	return S_OK;

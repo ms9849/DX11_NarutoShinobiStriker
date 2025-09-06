@@ -84,9 +84,14 @@ CPlayerState* CPlayer_JumpState::Update(_float fTimeDelta)
 		XMStoreFloat4(&PlayerPos, m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::POSITION));
 		m_pPlayer->Get_PlayerTransformPtr()->Set_State(STATE::POSITION, XMVectorSet(PlayerPos.x, 0, PlayerPos.z, 1.f));
 	}
-	// 에어리얼 공격
+	// 공격
 	else if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON))
-		pNextState = CPlayer_HandAerialAttackState::Create(m_pPlayer, m_fTimeAcc);
+	{
+		if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
+			pNextState = CPlayer_HandAerialAttackState::Create(m_pPlayer, m_fTimeAcc);
+		else if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
+			pNextState = CPlayer_HandAerialAttackState::Create(m_pPlayer, m_fTimeAcc);
+	}
 
 	return pNextState;
 }

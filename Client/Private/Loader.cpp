@@ -42,6 +42,7 @@
 #include "Upper_Player.h"
 #include "Face_Player.h"
 #include "Head_Player.h"
+#include "Weapon_Player.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice { pDevice }
@@ -393,6 +394,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_GameObject_Head_Player */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Head_Player"),
 		CHead_Player::Create(m_pDevice, m_pContext, OBJECTID::PLAYER_HEAD))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Weapon_Player */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Weapon_Player"),
+		CWeapon_Player::Create(m_pDevice, m_pContext, OBJECTID::PLAYER_WEAPON))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_SkillSlotUI */

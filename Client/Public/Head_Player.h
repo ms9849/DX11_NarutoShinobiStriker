@@ -15,7 +15,6 @@ class CHead_Player final : public CParts_Player
 public:
 	typedef struct tagHead_Player_Desc : public CPartObject::PARTOBJECT_DESC
 	{
-		const _uint* pParentState = { nullptr };
 	} HEAD_PLAYER_DESC;
 
 private:
