@@ -13,6 +13,8 @@
 #include "Player_HandAttackState.h"
 #include "Player_SwordAttackState.h"
 #include "Player_ChidoriReadyState.h"
+#include "Player_FireBallState.h"
+#include "Player_SuperSharkState.h"
 
 #pragma endregion
 
@@ -58,6 +60,30 @@ CPlayerState* CPlayer_LandState::Update(_float fTimeDelta)
 		else if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
 		{
 			pNextState = CPlayer_ChidoriReadyState::Create(m_pPlayer);
+		}
+	}
+	// 2번스킬 사용
+	else if (m_pGameInstance->Key_Down(DIK_2))
+	{
+		if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
+			int a = 10;
+		//pNextState = CPlayer_HandAttackState::Create(m_pPlayer);
+		else if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
+		{
+			pNextState = CPlayer_FireBallState::Create(m_pPlayer);
+		}
+	}
+	/* 3번 스킬 (필살기) 사용 */
+	else if (m_pGameInstance->Key_Down(DIK_3))
+	{
+		// 근접 타입 
+		if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
+			int a = 10;
+		//pNextState = CPlayer_HandAttackState::Create(m_pPlayer);
+		// 인술 타입 
+		else if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
+		{
+			pNextState = CPlayer_SuperSharkState::Create(m_pPlayer);
 		}
 	}
 	//점프

@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Client_Defines.h"
 #include "PlayerState.h"
 
@@ -7,11 +8,11 @@
 */
 NS_BEGIN(Client)
 
-class CPlayer_FireBallState final : public CPlayerState
+class CPlayer_AerialFireBallState final : public CPlayerState
 {
 private:
-	CPlayer_FireBallState(class CPlayer* pPlayer);
-	virtual ~CPlayer_FireBallState() = default;
+	CPlayer_AerialFireBallState(class CPlayer* pPlayer, _float fTimeAcc);
+	virtual ~CPlayer_AerialFireBallState() = default;
 
 public:
 	/* Start */
@@ -23,8 +24,11 @@ public:
 
 private:
 	class CPlayer* m_pPlayer = { nullptr };
+	_float		   m_fTimeAcc = { 0.f };
+	_float		   m_fMovement = { 0.f };
+	_bool		   m_IsFloat = { false };
 public:
-	static CPlayer_FireBallState* Create(class CPlayer* pPlayer);
+	static CPlayer_AerialFireBallState* Create(class CPlayer* pPlayer, _float fTimeAcc);
 	virtual void Free() override;
 };
 

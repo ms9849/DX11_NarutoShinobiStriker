@@ -38,7 +38,7 @@ CPlayerState* CPlayer_HandAerialAttackState::Update(_float fTimeDelta)
 		m_pGameInstance->Key_Pressing(DIK_D)
 		)
 	{
-		m_pPlayer->Get_PlayerTransformPtr()->Go_Straight(fTimeDelta * 0.2f);
+		m_pPlayer->Get_PlayerTransformPtr()->Go_Straight(fTimeDelta * 0.4f);
 
 		if (m_pGameInstance->Key_Pressing(DIK_D))
 			m_pPlayer->Get_PlayerTransformPtr()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * 0.3f);
@@ -55,7 +55,7 @@ CPlayerState* CPlayer_HandAerialAttackState::Update(_float fTimeDelta)
     }
 
 	// LAND로의 상태 전환 
-	if (XMVectorGetY(m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::POSITION)) < 0.f)
+	if (XMVectorGetY(m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::POSITION)) <= 0.f)
 	{
 		pNextState = CPlayer_LandState::Create(m_pPlayer);
 		_float4 PlayerPos = {};
@@ -66,10 +66,10 @@ CPlayerState* CPlayer_HandAerialAttackState::Update(_float fTimeDelta)
 	//낙하로 넘어가게 한다.
 	else if (true == IsAnimFinished)
 	{
-		pNextState = CPlayer_JumpState::Create(m_pPlayer, 0.55f, CPlayer_JumpState::ANIM_STATE::FALL);
+		pNextState = CPlayer_JumpState::Create(m_pPlayer, 0.5f, CPlayer_JumpState::ANIM_STATE::FALL);
 	}
 
-	_float fMovement = 2.f * fTimeDelta * m_pGameInstance->Calc_Quadratic(-2.f, 2.f, 0.f, fAnimProgress);
+	_float fMovement = 2.f * fTimeDelta * m_pGameInstance->Calc_Linear(-8.f, 4.f, fAnimProgress);
 
 	m_pPlayer->Get_PlayerTransformPtr()->Set_State(STATE::POSITION, m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::POSITION) + XMVectorSet(0.f, fMovement, 0.f, 0.f));
 
