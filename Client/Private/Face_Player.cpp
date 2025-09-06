@@ -26,7 +26,7 @@ HRESULT CFace_Player::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_pSocketMatrix = pDesc->pSocketMatrix;
+	//m_pSocketMatrix = pDesc->pSocketMatrix;
 
 	//m_pTransformCom->Rotation(XMConvertToRadians(180.f), XMConvertToRadians(90.f), 0.f);
 
@@ -39,11 +39,10 @@ void CFace_Player::Priority_Update(_float fTimeDelta)
 
 void CFace_Player::Update(_float fTimeDelta)
 {
-	_matrix		SocketMatrix = XMLoadFloat4x4(m_pSocketMatrix);
+	//_matrix		SocketMatrix = XMLoadFloat4x4(m_pSocketMatrix);
 
-	for (size_t i = 0; i < 3; i++)
-		SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
-
+	//for (size_t i = 0; i < 3; i++)
+	//	SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
 
 	XMStoreFloat4x4(&m_CombinedWorldMatrix,
 		XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()) * XMLoadFloat4x4(m_pParentTransformCom->Get_WorldMatrixPtr()));

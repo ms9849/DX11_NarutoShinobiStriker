@@ -1,0 +1,57 @@
+#pragma once
+
+#include "Client_Defines.h"
+#include "Parts_Player.h"
+
+NS_BEGIN(Engine)
+class CModel;
+class CShader;
+NS_END
+
+NS_BEGIN(Client)
+
+class CWeapon_Player final : public CParts_Player
+{
+public:
+	typedef struct tagWeapon_Player_Desc : public CPartObject::PARTOBJECT_DESC
+	{
+		CParts_Player* pUpper_Player = { nullptr };
+		const _float4x4* pAttachMatrix = { nullptr };
+		const _float4x4* pHandMatrix = { nullptr };
+	} WEAPON_PLAYER_DESC;
+
+private:
+	CWeapon_Player(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
+	CWeapon_Player(const CWeapon_Player& Prototype);
+	virtual ~CWeapon_Player() = default;
+
+public:
+	virtual void	Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate = 1.f, _bool IsBlend = true, _float fBlendRatio = 0.15f) override;
+	virtual _bool	Play_Animation(_float fTimeDelta) override;
+
+public:
+	virtual HRESULT Initialize_Prototype() override;
+	virtual HRESULT Initialize(void* pArg) override;
+	virtual void Priority_Update(_float fTimeDelta) override;
+	virtual void Update(_float fTimeDelta) override;
+	virtual void Late_Update(_float fTimeDelta) override;
+	virtual HRESULT Render() override;
+
+private:
+	_string		m_strCurrentAnimName = {};
+	const _float4x4* m_pAttachMatrix = { nullptr };
+	const _float4x4* m_pHandMatrix = { nullptr };
+	CParts_Player* m_pUpper_Player = { nullptr };
+	_bool IsAttached = { false };
+
+private:
+	HRESULT Ready_Components();
+	HRESULT Bind_ShaderResources();
+
+public:
+	static CWeapon_Player* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
+	virtual CGameObject* Clone(void* pArg) override;
+	virtual void Free() override;
+};
+
+NS_END

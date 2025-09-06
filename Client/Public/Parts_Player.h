@@ -20,8 +20,8 @@ protected:
 public:
 	_float	Get_AnimProgress();
 
-	void	Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate = 1.f, _bool IsBlend = true, _float fBlendRatio = 0.15f);
-	_bool	Play_Animation(_float fTimeDelta);
+	virtual void	Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate = 1.f, _bool IsBlend = true, _float fBlendRatio = 0.15f);
+	virtual _bool	Play_Animation(_float fTimeDelta);
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;

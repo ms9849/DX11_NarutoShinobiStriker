@@ -193,32 +193,8 @@
     <Filter Include="02.GameObjects\Character\Player\State">
       <UniqueIdentifier>{d397b3c9-d69e-4e6f-9147-b1e499ac4f74}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Character\Player\State\IdleState">
-      <UniqueIdentifier>{279f3fd9-01b0-4a58-a61e-0dd349b1cb71}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Character\Player\State\RunState">
-      <UniqueIdentifier>{462f1460-9d45-4a06-b324-43af5eda9dad}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Camera\Main">
       <UniqueIdentifier>{057d0137-73e7-40b5-aa4e-c380d79f02c5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Character\Player\State\JumpState">
-      <UniqueIdentifier>{d6eaedd5-3cb7-45d5-994a-41c670650541}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Character\Player\State\LandState">
-      <UniqueIdentifier>{4dd51abf-7b30-4313-81c8-b26c0c119fe9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Character\Player\State\JumpState\Front">
-      <UniqueIdentifier>{b0efc39b-b8e1-4b88-a35b-f4730b3adf10}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Character\Player\State\JumpState\Vertical">
-      <UniqueIdentifier>{2d8bd7fb-991b-4409-9936-2b795a7d7ad2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Character\Player\State\StepState">
-      <UniqueIdentifier>{30d50919-de9d-48af-a559-b261acf0ae68}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Character\Player\State\HandAttackState">
-      <UniqueIdentifier>{ef9fe663-4c38-43e4-a95f-54c9c27bc996}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\Character\Player\Parts\Head">
       <UniqueIdentifier>{d33c8295-219c-42e1-b74d-d7846ea6f1d2}</UniqueIdentifier>
@@ -226,8 +202,56 @@
     <Filter Include="02.GameObjects\Character\Player\Parts\Face">
       <UniqueIdentifier>{8c0aee0e-7dfa-4d5c-98bc-c68ca23bca82}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Character\Player\State\HandAttackState\HandAerialAttackState">
+    <Filter Include="02.GameObjects\Character\Player\Parts\Weapon">
+      <UniqueIdentifier>{4bb12619-e08d-491b-8e3d-e478c4cfb16a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\SKILL">
+      <UniqueIdentifier>{703616e2-837a-4ffd-9df6-a631bcf32bba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\BASE">
+      <UniqueIdentifier>{53a4a15b-6410-4777-8352-c09deff2360d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\BASE\IdleState">
+      <UniqueIdentifier>{279f3fd9-01b0-4a58-a61e-0dd349b1cb71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\BASE\JumpState">
+      <UniqueIdentifier>{d6eaedd5-3cb7-45d5-994a-41c670650541}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\BASE\JumpState\Front">
+      <UniqueIdentifier>{b0efc39b-b8e1-4b88-a35b-f4730b3adf10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\BASE\JumpState\Vertical">
+      <UniqueIdentifier>{2d8bd7fb-991b-4409-9936-2b795a7d7ad2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\BASE\LandState">
+      <UniqueIdentifier>{4dd51abf-7b30-4313-81c8-b26c0c119fe9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\BASE\HandAttackState">
+      <UniqueIdentifier>{ef9fe663-4c38-43e4-a95f-54c9c27bc996}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\BASE\HandAttackState\HandAerialAttackState">
       <UniqueIdentifier>{b0a2f586-19f9-4785-8748-9c90573dbaa5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\SKILL\ChidoriState">
+      <UniqueIdentifier>{c51402ff-c0df-47ec-afe5-920ecc2d0425}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\BASE\RunState">
+      <UniqueIdentifier>{462f1460-9d45-4a06-b324-43af5eda9dad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\BASE\StepState">
+      <UniqueIdentifier>{30d50919-de9d-48af-a559-b261acf0ae68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\BASE\SwordAttackState">
+      <UniqueIdentifier>{1eb9e147-ce91-4d6e-ae67-189e23ad1986}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\BASE\SwordAttackState\Player_SwordAerialAttackState">
+      <UniqueIdentifier>{9b60fe09-9b99-4374-96b8-4e3ac06f3797}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\SKILL\FireBallState">
+      <UniqueIdentifier>{f55ba831-b028-435e-be7e-af0fd786e440}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\SKILL\ChidoriState\Ready">
+      <UniqueIdentifier>{5e37f687-4f45-4ef6-ae76-dd4e18b20f06}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -394,28 +418,28 @@
       <Filter>02.GameObjects\Character\Player\State</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Player_IdleState.h">
-      <Filter>02.GameObjects\Character\Player\State\IdleState</Filter>
+      <Filter>02.GameObjects\Character\Player\State\BASE\IdleState</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Player_RunState.h">
-      <Filter>02.GameObjects\Character\Player\State\RunState</Filter>
+      <Filter>02.GameObjects\Character\Player\State\BASE\RunState</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\MainCamera.h">
       <Filter>02.GameObjects\Camera\Main</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Player_LandState.h">
-      <Filter>02.GameObjects\Character\Player\State\LandState</Filter>
+      <Filter>02.GameObjects\Character\Player\State\BASE\LandState</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Player_JumpState.h">
-      <Filter>02.GameObjects\Character\Player\State\JumpState\Vertical</Filter>
+      <Filter>02.GameObjects\Character\Player\State\BASE\JumpState\Vertical</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Player_FrontJumpState.h">
-      <Filter>02.GameObjects\Character\Player\State\JumpState\Front</Filter>
+      <Filter>02.GameObjects\Character\Player\State\BASE\JumpState\Front</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Player_StepState.h">
-      <Filter>02.GameObjects\Character\Player\State\StepState</Filter>
+      <Filter>02.GameObjects\Character\Player\State\BASE\StepState</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Player_HandAttackState.h">
-      <Filter>02.GameObjects\Character\Player\State\HandAttackState</Filter>
+      <Filter>02.GameObjects\Character\Player\State\BASE\HandAttackState</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Face_Player.h">
       <Filter>02.GameObjects\Character\Player\Parts\Face</Filter>
@@ -424,7 +448,28 @@
       <Filter>02.GameObjects\Character\Player\Parts\Head</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Player_HandAerialAttackState.h">
-      <Filter>02.GameObjects\Character\Player\State\HandAttackState\HandAerialAttackState</Filter>
+      <Filter>02.GameObjects\Character\Player\State\BASE\HandAttackState\HandAerialAttackState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Weapon_Player.h">
+      <Filter>02.GameObjects\Character\Player\Parts\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_SwordAttackState.h">
+      <Filter>02.GameObjects\Character\Player\State\BASE\SwordAttackState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_SwordAerialAttackState.h">
+      <Filter>02.GameObjects\Character\Player\State\BASE\SwordAttackState\Player_SwordAerialAttackState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_ChidoriAttackState.h">
+      <Filter>02.GameObjects\Character\Player\State\SKILL\ChidoriState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_ChidoriReadyState.h">
+      <Filter>02.GameObjects\Character\Player\State\SKILL\ChidoriState\Ready</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_ChidoriAerialReadyState.h">
+      <Filter>02.GameObjects\Character\Player\State\SKILL\ChidoriState\Ready</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_FireBallState.h">
+      <Filter>02.GameObjects\Character\Player\State\SKILL\FireBallState</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -586,10 +631,10 @@
       <Filter>02.GameObjects\Character\Player\Parts</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Player_IdleState.cpp">
-      <Filter>02.GameObjects\Character\Player\State\IdleState</Filter>
+      <Filter>02.GameObjects\Character\Player\State\BASE\IdleState</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Player_RunState.cpp">
-      <Filter>02.GameObjects\Character\Player\State\RunState</Filter>
+      <Filter>02.GameObjects\Character\Player\State\BASE\RunState</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\PlayerState.cpp">
       <Filter>02.GameObjects\Character\Player\State</Filter>
@@ -598,19 +643,19 @@
       <Filter>02.GameObjects\Camera\Main</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Player_LandState.cpp">
-      <Filter>02.GameObjects\Character\Player\State\LandState</Filter>
+      <Filter>02.GameObjects\Character\Player\State\BASE\LandState</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Player_JumpState.cpp">
-      <Filter>02.GameObjects\Character\Player\State\JumpState\Vertical</Filter>
+      <Filter>02.GameObjects\Character\Player\State\BASE\JumpState\Vertical</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Player_FrontJumpState.cpp">
-      <Filter>02.GameObjects\Character\Player\State\JumpState\Front</Filter>
+      <Filter>02.GameObjects\Character\Player\State\BASE\JumpState\Front</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Player_StepState.cpp">
-      <Filter>02.GameObjects\Character\Player\State\StepState</Filter>
+      <Filter>02.GameObjects\Character\Player\State\BASE\StepState</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Player_HandAttackState.cpp">
-      <Filter>02.GameObjects\Character\Player\State\HandAttackState</Filter>
+      <Filter>02.GameObjects\Character\Player\State\BASE\HandAttackState</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Face_Player.cpp">
       <Filter>02.GameObjects\Character\Player\Parts\Face</Filter>
@@ -619,7 +664,28 @@
       <Filter>02.GameObjects\Character\Player\Parts\Head</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Player_HandAerialAttackState.cpp">
-      <Filter>02.GameObjects\Character\Player\State\HandAttackState\HandAerialAttackState</Filter>
+      <Filter>02.GameObjects\Character\Player\State\BASE\HandAttackState\HandAerialAttackState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Weapon_Player.cpp">
+      <Filter>02.GameObjects\Character\Player\Parts\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_SwordAttackState.cpp">
+      <Filter>02.GameObjects\Character\Player\State\BASE\SwordAttackState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_SwordAerialAttackState.cpp">
+      <Filter>02.GameObjects\Character\Player\State\BASE\SwordAttackState\Player_SwordAerialAttackState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_ChidoriAttackState.cpp">
+      <Filter>02.GameObjects\Character\Player\State\SKILL\ChidoriState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_ChidoriReadyState.cpp">
+      <Filter>02.GameObjects\Character\Player\State\SKILL\ChidoriState\Ready</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_ChidoriAerialReadyState.cpp">
+      <Filter>02.GameObjects\Character\Player\State\SKILL\ChidoriState\Ready</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_FireBallState.cpp">
+      <Filter>02.GameObjects\Character\Player\State\SKILL\FireBallState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
