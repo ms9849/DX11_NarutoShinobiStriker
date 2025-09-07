@@ -46,6 +46,7 @@ public:
 
 	/* 애니메이션이 얼마나 진행됐는지 0 ~ 1 사이 값으로 반환 */
 	_float Get_CurAnimProgress();
+	void   Set_CurAnimProgress(_float fProgress);
 
 	_wstring Get_MeshName(_uint iIdx) const;
 
@@ -56,7 +57,8 @@ public:
 	void Set_AnimIndex(const _char* pAnimName, 
 		_float fAnimationPlayRate = 1.f, 
 		_bool IsBlended = true, 
-		_float fBlendRatio = 0.15f);
+		_float fBlendRatio = 0.15f,
+		_bool IsLoop = false);
 
 public:
 	HRESULT Save_Model_ToBinary(const _char* pModelSavePath);

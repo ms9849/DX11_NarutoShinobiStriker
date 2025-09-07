@@ -78,7 +78,7 @@ void CCharacter::Change_AttackType()
 		case ATTACK_TYPE::MELEE:
 			m_ActivatedSkills[1] = SKILL::RASENGAN;
 			m_ActivatedSkills[2] = SKILL::RASEN_SHURIKEN;
-			m_ActivatedSkills[3] = SKILL::BIG_RASENGAN;
+			m_ActivatedSkills[3] = SKILL::KAMUI;
 			break;
 
 		case ATTACK_TYPE::NINJUTSU:

@@ -25,6 +25,7 @@ public:
 	const _char* Get_Name() const { return m_szName; }
 	/* 현재 Current Position 반환 ( 블렌딩 용 ) */
 	_float Get_CurrentTrackPosition();
+	void   Set_AnimProgress(_float fProgress);
 	/* 애니메이션 진행 척도 반환 */
 	_float Get_AnimProgress();
 

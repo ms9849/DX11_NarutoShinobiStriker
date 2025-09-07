@@ -10,11 +10,17 @@
 #include "Player_IdleState.h"
 #include "Player_JumpState.h"
 #include "Player_FrontJumpState.h"
+
 #include "Player_HandAttackState.h"
 #include "Player_SwordAttackState.h"
+
 #include "Player_ChidoriReadyState.h"
 #include "Player_FireBallState.h"
 #include "Player_SuperSharkState.h"
+
+#include "Player_RasenganReadyState.h"
+#include "Player_RasenShurikenState.h"
+#include "Player_KamuiState.h"
 
 #pragma endregion
 
@@ -67,7 +73,8 @@ CPlayerState* CPlayer_StepState::Update(_float fTimeDelta)
 
 		/* 1번 스킬 사용 */
 		else if (m_pGameInstance->Key_Down(DIK_1)
-			&& nullptr == pNextState)
+			&& nullptr == pNextState
+			&& fAnimProgress >= 0.5f)
 		{
 			//스킬 사용 
 			if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
@@ -81,7 +88,8 @@ CPlayerState* CPlayer_StepState::Update(_float fTimeDelta)
 
 		/* 2번 스킬 사용 */
 		else if (m_pGameInstance->Key_Down(DIK_1)
-			&& nullptr == pNextState)
+			&& nullptr == pNextState
+			&& fAnimProgress >= 0.5f)
 		{
 			//근접 타입
 			if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
@@ -95,7 +103,8 @@ CPlayerState* CPlayer_StepState::Update(_float fTimeDelta)
 		}
 		/* 3번 스킬 (필살기) 사용 */
 		else if (m_pGameInstance->Key_Down(DIK_3)
-			&& nullptr == pNextState)
+			&& nullptr == pNextState
+			&& fAnimProgress >= 0.5f)
 		{
 			// 근접 타입 
 			if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
@@ -141,47 +150,36 @@ CPlayerState* CPlayer_StepState::Update(_float fTimeDelta)
 		}
 
 		/* 1번 스킬 사용 */
-		else if (m_pGameInstance->Key_Down(DIK_1)
-			&& nullptr == pNextState)
-		{
-			//스킬 사용 
-			if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
-				int a = 10;
-			//pNextState = CPlayer_HandAttackState::Create(m_pPlayer);
-			else if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
-			{
-				pNextState = CPlayer_ChidoriReadyState::Create(m_pPlayer);
-			}
-		}
-
-		/* 2번 스킬 사용 */
-		else if (m_pGameInstance->Key_Down(DIK_1)
-			&& nullptr == pNextState)
-		{
-			//근접 타입
-			if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
-				int a = 10;
-			//pNextState = CPlayer_HandAttackState::Create(m_pPlayer);
-			//인술 타입 
-			else if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
-			{
-				pNextState = CPlayer_FireBallState::Create(m_pPlayer);
-			}
-		}
-		/* 3번 스킬 (필살기) 사용 */
-		else if (m_pGameInstance->Key_Down(DIK_3)
-			&& nullptr == pNextState)
+		else if (m_pGameInstance->Key_Down(DIK_1) && fAnimProgress >= 0.5f)
 		{
 			// 근접 타입 
 			if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
-				int a = 10;
-			//pNextState = CPlayer_HandAttackState::Create(m_pPlayer);
-			// 인술 타입 
+				pNextState = CPlayer_RasenganReadyState::Create(m_pPlayer);
+
 			else if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
-			{
-				pNextState = CPlayer_SuperSharkState::Create(m_pPlayer);
-			}
+				pNextState = CPlayer_ChidoriReadyState::Create(m_pPlayer);
 		}
+		/* 2번 스킬 사용 */
+		else if (m_pGameInstance->Key_Down(DIK_2) && fAnimProgress >= 0.5f)
+		{
+			// 근접 타입 
+			if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
+				pNextState = CPlayer_RasenShurikenState::Create(m_pPlayer);
+
+			else if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
+				pNextState = CPlayer_FireBallState::Create(m_pPlayer);
+		}
+		/* 3번 스킬 (필살기) 사용 */
+		else if (m_pGameInstance->Key_Down(DIK_3) && fAnimProgress >= 0.5f)
+		{
+			// 근접 타입 
+			if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
+				pNextState = CPlayer_KamuiState::Create(m_pPlayer);
+
+			else if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
+				pNextState = CPlayer_SuperSharkState::Create(m_pPlayer);
+		}
+
 
 		else if ((m_pGameInstance->Key_Pressing(DIK_W) ||
 			m_pGameInstance->Key_Pressing(DIK_A) ||
@@ -217,47 +215,36 @@ CPlayerState* CPlayer_StepState::Update(_float fTimeDelta)
 		}
 
 		/* 1번 스킬 사용 */
-		else if (m_pGameInstance->Key_Down(DIK_1)
-			&& nullptr == pNextState)
-		{
-			//스킬 사용 
-			if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
-				int a = 10;
-			//pNextState = CPlayer_HandAttackState::Create(m_pPlayer);
-			else if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
-			{
-				pNextState = CPlayer_ChidoriReadyState::Create(m_pPlayer);
-			}
-		}
-
-		/* 2번 스킬 사용 */
-		else if (m_pGameInstance->Key_Down(DIK_1)
-			&& nullptr == pNextState)
-		{
-			//근접 타입
-			if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
-				int a = 10;
-			//pNextState = CPlayer_HandAttackState::Create(m_pPlayer);
-			//인술 타입 
-			else if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
-			{
-				pNextState = CPlayer_FireBallState::Create(m_pPlayer);
-			}
-		}
-		/* 3번 스킬 (필살기) 사용 */
-		else if (m_pGameInstance->Key_Down(DIK_3)
-			&& nullptr == pNextState)
+		else if (m_pGameInstance->Key_Down(DIK_1) && fAnimProgress >= 0.65f)
 		{
 			// 근접 타입 
 			if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
-				int a = 10;
-			//pNextState = CPlayer_HandAttackState::Create(m_pPlayer);
-			// 인술 타입 
+				pNextState = CPlayer_RasenganReadyState::Create(m_pPlayer);
+
 			else if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
-			{
-				pNextState = CPlayer_SuperSharkState::Create(m_pPlayer);
-			}
+				pNextState = CPlayer_ChidoriReadyState::Create(m_pPlayer);
 		}
+		/* 2번 스킬 사용 */
+		else if (m_pGameInstance->Key_Down(DIK_2) && fAnimProgress >= 0.65f)
+		{
+			// 근접 타입 
+			if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
+				pNextState = CPlayer_RasenShurikenState::Create(m_pPlayer);
+
+			else if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
+				pNextState = CPlayer_FireBallState::Create(m_pPlayer);
+		}
+		/* 3번 스킬 (필살기) 사용 */
+		else if (m_pGameInstance->Key_Down(DIK_3) && fAnimProgress >= 0.65f)
+		{
+			// 근접 타입 
+			if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
+				pNextState = CPlayer_KamuiState::Create(m_pPlayer);
+
+			else if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
+				pNextState = CPlayer_SuperSharkState::Create(m_pPlayer);
+		}
+
 
 		else if (m_pGameInstance->Key_Down(DIK_SPACE) && fAnimProgress >= 0.65f)
 			pNextState = CPlayer_JumpState::Create(m_pPlayer);
@@ -285,46 +272,34 @@ CPlayerState* CPlayer_StepState::Update(_float fTimeDelta)
 		}
 
 		/* 1번 스킬 사용 */
-		else if (m_pGameInstance->Key_Down(DIK_1)
-			&& nullptr == pNextState)
-		{
-			//스킬 사용 
-			if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
-				int a = 10;
-			//pNextState = CPlayer_HandAttackState::Create(m_pPlayer);
-			else if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
-			{
-				pNextState = CPlayer_ChidoriReadyState::Create(m_pPlayer);
-			}
-		}
-
-		/* 2번 스킬 사용 */
-		else if (m_pGameInstance->Key_Down(DIK_2)
-			&& nullptr == pNextState)
-		{
-			//근접 타입
-			if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
-				int a = 10;
-			//pNextState = CPlayer_HandAttackState::Create(m_pPlayer);
-			//인술 타입 
-			else if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
-			{
-				pNextState = CPlayer_FireBallState::Create(m_pPlayer);
-			}
-		}
-		/* 3번 스킬 (필살기) 사용 */
-		else if (m_pGameInstance->Key_Down(DIK_3)
-			&& nullptr == pNextState)
+		else if (m_pGameInstance->Key_Down(DIK_1) && fAnimProgress >= 0.35f)
 		{
 			// 근접 타입 
 			if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
-				int a = 10;
-			//pNextState = CPlayer_HandAttackState::Create(m_pPlayer);
-			// 인술 타입 
+				pNextState = CPlayer_RasenganReadyState::Create(m_pPlayer);
+
 			else if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
-			{
+				pNextState = CPlayer_ChidoriReadyState::Create(m_pPlayer);
+		}
+		/* 2번 스킬 사용 */
+		else if (m_pGameInstance->Key_Down(DIK_2) && fAnimProgress >= 0.35f)
+		{
+			// 근접 타입 
+			if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
+				pNextState = CPlayer_RasenShurikenState::Create(m_pPlayer);
+
+			else if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
+				pNextState = CPlayer_FireBallState::Create(m_pPlayer);
+		}
+		/* 3번 스킬 (필살기) 사용 */
+		else if (m_pGameInstance->Key_Down(DIK_3) && fAnimProgress >= 0.35f)
+		{
+			// 근접 타입 
+			if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
+				pNextState = CPlayer_KamuiState::Create(m_pPlayer);
+
+			else if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
 				pNextState = CPlayer_SuperSharkState::Create(m_pPlayer);
-			}
 		}
 
 		else if (m_pGameInstance->Key_Down(DIK_SPACE) && fAnimProgress >= 0.35f)

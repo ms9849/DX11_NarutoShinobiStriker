@@ -12,7 +12,7 @@ CWeapon_Player::CWeapon_Player(const CWeapon_Player& Prototype)
 {
 }
 
-void CWeapon_Player::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _bool IsBlend, _float fBlendRatio)
+void CWeapon_Player::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _bool IsBlend, _float fBlendRatio, _bool IsLoop)
 {
     m_strCurrentAnimName = pAnimName;
 
@@ -57,6 +57,11 @@ _bool CWeapon_Player::Play_Animation(_float fTimeDelta)
         IsAttached = true;
 
     return true;
+}
+
+void CWeapon_Player::Set_AnimProgress(_float fProgress)
+{
+    return;
 }
 
 HRESULT CWeapon_Player::Initialize_Prototype()

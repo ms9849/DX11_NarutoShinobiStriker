@@ -7,6 +7,9 @@
 #pragma region TRANSFER_STATE
 
 #include "Player_IdleState.h"
+#include "Player_RunState.h"
+#include "Player_StepState.h"
+#include "Player_JumpState.h"
 
 #pragma endregion
 
@@ -30,6 +33,39 @@ CPlayerState* CPlayer_FireBallState::Update(_float fTimeDelta)
 
     if (true == IsAnimFinished)
         pNextState = CPlayer_IdleState::Create(m_pPlayer);
+
+    else if ((m_pGameInstance->Key_Down(DIK_W) ||
+        m_pGameInstance->Key_Down(DIK_A) ||
+        m_pGameInstance->Key_Down(DIK_D))
+        && fAnimProgress >= 0.8f)
+        pNextState = CPlayer_RunState::Create(m_pPlayer);
+
+    else if (m_pGameInstance->Key_Down(DIK_SPACE) && fAnimProgress >= 0.8f)
+        pNextState = CPlayer_JumpState::Create(m_pPlayer);
+
+    // ¹é½ºÅÜ
+    else if (m_pGameInstance->Key_Pressing(DIK_S) && fAnimProgress >= 0.8f)
+    {
+        // µ¹´Ù°¡ ½ºÅÜ ¹âÀ¸¸é »óÅÂ º¯°æ
+        if (m_pGameInstance->Key_Down(DIK_LSHIFT))
+            pNextState = CPlayer_StepState::Create(m_pPlayer, CPlayer_StepState::ANIM_STATE::BACK);
+    }
+
+    // ¿ÞÂÊ ½ºÅÜ
+    else if (m_pGameInstance->Key_Pressing(DIK_A) && fAnimProgress >= 0.8f)
+    {
+        // µ¹´Ù°¡ ½ºÅÜ ¹âÀ¸¸é »óÅÂ º¯°æ
+        if (m_pGameInstance->Key_Down(DIK_LSHIFT))
+            pNextState = CPlayer_StepState::Create(m_pPlayer, CPlayer_StepState::ANIM_STATE::LEFT);
+    }
+
+    // ¿À¸¥ÂÊ ½ºÅÜ
+    else if (m_pGameInstance->Key_Pressing(DIK_D) && fAnimProgress >= 0.8f)
+    {
+        // µ¹´Ù°¡ ½ºÅÜ ¹âÀ¸¸é »óÅÂ º¯°æ
+        if (m_pGameInstance->Key_Down(DIK_LSHIFT))
+            pNextState = CPlayer_StepState::Create(m_pPlayer, CPlayer_StepState::ANIM_STATE::RIGHT);
+    }
 
     return pNextState;
 }

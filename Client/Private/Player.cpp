@@ -38,6 +38,14 @@ _float CPlayer::Get_AnimProgress()
 		return pAnimParts->Get_AnimProgress();
 }
 
+void CPlayer::Set_AnimProgress(_float fProgress)
+{
+	for (auto& iter : m_PartObjects)
+	{
+		static_cast<CParts_Player*>(iter.second)->Set_AnimProgress(fProgress);
+	}
+}
+
 
 #pragma region UI_Initialize
 
@@ -66,7 +74,7 @@ void CPlayer::Set_ComboKOPanel(CComboKOPanel* pPanel)
 
 #pragma endregion
 
-void CPlayer::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _bool IsBlend, _float fBlendRatio)
+void CPlayer::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _bool IsBlend, _float fBlendRatio, _bool IsLoop)
 {
 	/*
 	플레이어 애니메이션 바꿔주기. 상하체만 바뀐다.
@@ -74,7 +82,7 @@ void CPlayer::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _
 	*/
 	for (auto& iter : m_PartObjects)
 	{
-		static_cast<CParts_Player*>(iter.second)->Set_AnimIndex(pAnimName, fAnimationPlayRate, IsBlend, fBlendRatio);
+		static_cast<CParts_Player*>(iter.second)->Set_AnimIndex(pAnimName, fAnimationPlayRate, IsBlend, fBlendRatio, IsLoop);
 	}
 }
 

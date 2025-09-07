@@ -40,7 +40,6 @@ CPlayerState* CPlayer_ChidoriAttackState::Update(_float fTimeDelta)
         m_pPlayer->Get_PlayerTransformPtr()->Go_Direction(m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::LOOK), fTimeDelta * 1.f * m_pGameInstance->Calc_Linear(-2.f, 1.f, fAnimProgress));
 
 
-
     if ((m_pGameInstance->Key_Pressing(DIK_A) ||
         m_pGameInstance->Key_Pressing(DIK_D))
         && ANIM_STATE::ATTACK_END != m_eAnimState)
