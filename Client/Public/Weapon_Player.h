@@ -26,9 +26,9 @@ private:
 	virtual ~CWeapon_Player() = default;
 
 public:
-	virtual void	Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate = 1.f, _bool IsBlend = true, _float fBlendRatio = 0.15f) override;
+	virtual void	Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate = 1.f, _bool IsBlend = true, _float fBlendRatio = 0.15f, _bool IsLoop = false) override;
 	virtual _bool	Play_Animation(_float fTimeDelta) override;
-
+	virtual void	Set_AnimProgress(_float fProgress) override;
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;

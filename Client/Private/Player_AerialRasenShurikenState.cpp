@@ -1,4 +1,4 @@
-#include "Player_AerialFireBallState.h"
+#include "Player_AerialRasenShurikenState.h"
 
 #include "Player.h"
 #include "GameInstance.h"
@@ -11,19 +11,19 @@
 
 #pragma endregion
 
-CPlayer_AerialFireBallState::CPlayer_AerialFireBallState(CPlayer* pPlayer, _float fTimeAcc)
-	: m_pPlayer { pPlayer}
+CPlayer_AerialRasenShurikenState::CPlayer_AerialRasenShurikenState(CPlayer* pPlayer, _float fTimeAcc)
+	: m_pPlayer { pPlayer }
 	, m_fTimeAcc { fTimeAcc }
 {
 	Safe_AddRef(m_pPlayer);
 }
 
-void CPlayer_AerialFireBallState::Start(_bool IsBlend)
+void CPlayer_AerialRasenShurikenState::Start(_bool IsBlend)
 {
-	m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Aerial_Fireball_Lv3", 1.75f, true);
+	m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Aerial_TrueRasenShuriken", 1.5f, IsBlend);
 }
 
-CPlayerState* CPlayer_AerialFireBallState::Update(_float fTimeDelta)
+CPlayerState* CPlayer_AerialRasenShurikenState::Update(_float fTimeDelta)
 {
 	CPlayerState* pNextState = { nullptr };
 
@@ -33,21 +33,10 @@ CPlayerState* CPlayer_AerialFireBallState::Update(_float fTimeDelta)
 
 	m_fTimeAcc += fTimeDelta;
 
-	if (fAnimProgress <= 0.4f || fAnimProgress >= 0.5f)
+	if (fAnimProgress < 0.3f)
 	{
 		m_fMovement = (m_fTimeAcc - 0.5 * m_fTimeAcc * m_fTimeAcc * 7.0f * (m_fTimeAcc));
-		m_pPlayer->Get_PlayerTransformPtr()->Set_State(STATE::POSITION, m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fMovement / 5.f, 0.f, 0.f));
-	}
-	else if (fAnimProgress > 0.4f && fAnimProgress < 0.5f)
-	{
-		if (false == m_IsFloat)
-		{
-			m_fTimeAcc = 0.f;
-			m_IsFloat = true;
-		}
-
-		m_fMovement = (m_fTimeAcc - 0.5 * m_fTimeAcc * m_fTimeAcc * 7.0f * (m_fTimeAcc));
-		m_pPlayer->Get_PlayerTransformPtr()->Set_State(STATE::POSITION, m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::POSITION) + XMVectorSet(0.f, fTimeDelta, 0.f, 0.f));
+		m_pPlayer->Get_PlayerTransformPtr()->Set_State(STATE::POSITION, m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::POSITION) + XMVectorSet(0.f, 0.05f * m_fMovement * (0.3f - fAnimProgress), 0.f, 0.f));
 	}
 
 	if (XMVectorGetY(m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::POSITION)) < 0.f)
@@ -58,17 +47,11 @@ CPlayerState* CPlayer_AerialFireBallState::Update(_float fTimeDelta)
 		m_pPlayer->Get_PlayerTransformPtr()->Set_State(STATE::POSITION, XMVectorSet(PlayerPos.x, 0, PlayerPos.z, 1.f));
 	}
 
-	if (false == IsGround)
-	{
-		if (m_pGameInstance->Key_Pressing(DIK_W))
-			m_pPlayer->Get_PlayerTransformPtr()->Go_Straight(fTimeDelta * 0.3f);
-	}
-
 	if (fAnimProgress > 0.8f && XMVectorGetY(m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::POSITION)) > 0.f)
 	{
 		pNextState = CPlayer_JumpState::Create(m_pPlayer, 0.55f, CPlayer_JumpState::ANIM_STATE::FALL);
 	}
-	else if(fAnimProgress > 0.8f && XMVectorGetY(m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::POSITION)) <= 0.f)
+	else if (fAnimProgress > 0.8f && XMVectorGetY(m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::POSITION)) <= 0.f)
 	{
 		_float4 PlayerPos = {};
 		XMStoreFloat4(&PlayerPos, m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::POSITION));
@@ -79,17 +62,17 @@ CPlayerState* CPlayer_AerialFireBallState::Update(_float fTimeDelta)
 	return pNextState;
 }
 
-_bool CPlayer_AerialFireBallState::End()
+_bool CPlayer_AerialRasenShurikenState::End()
 {
 	return true;
 }
 
-CPlayer_AerialFireBallState* CPlayer_AerialFireBallState::Create(CPlayer* pPlayer, _float fTimeAcc)
+CPlayer_AerialRasenShurikenState* CPlayer_AerialRasenShurikenState::Create(CPlayer* pPlayer, _float fTimeAcc)
 {
-	return new CPlayer_AerialFireBallState(pPlayer, fTimeAcc);
+	return new CPlayer_AerialRasenShurikenState(pPlayer, fTimeAcc);
 }
 
-void CPlayer_AerialFireBallState::Free()
+void CPlayer_AerialRasenShurikenState::Free()
 {
 	__super::Free();
 

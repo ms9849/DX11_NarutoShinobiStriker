@@ -241,9 +241,6 @@
     <Filter Include="02.GameObjects\Character\Player\State\BASE\SwordAttackState">
       <UniqueIdentifier>{1eb9e147-ce91-4d6e-ae67-189e23ad1986}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Character\Player\State\BASE\SwordAttackState\Player_SwordAerialAttackState">
-      <UniqueIdentifier>{9b60fe09-9b99-4374-96b8-4e3ac06f3797}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Character\Player\State\SKILL\FireBallState">
       <UniqueIdentifier>{f55ba831-b028-435e-be7e-af0fd786e440}</UniqueIdentifier>
     </Filter>
@@ -255,6 +252,18 @@
     </Filter>
     <Filter Include="02.GameObjects\Character\Player\State\SKILL\SuperSharkState">
       <UniqueIdentifier>{e4c85660-daf2-48af-b5f0-979a8049d7d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\SKILL\RasenganState">
+      <UniqueIdentifier>{c60ba328-56b4-446b-bfa3-4e450efd7639}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\SKILL\RasenShurikentState">
+      <UniqueIdentifier>{bbbd68ba-d518-4acf-bd05-1b61f1dc670a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\SKILL\KamuiState">
+      <UniqueIdentifier>{d3f1f626-74e1-4115-b8aa-b6988da4d8e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\BASE\BeatenState">
+      <UniqueIdentifier>{07e0b415-5245-4335-b742-1ae956678a0e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -459,9 +468,6 @@
     <ClInclude Include="..\Public\Player_SwordAttackState.h">
       <Filter>02.GameObjects\Character\Player\State\BASE\SwordAttackState</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Player_SwordAerialAttackState.h">
-      <Filter>02.GameObjects\Character\Player\State\BASE\SwordAttackState\Player_SwordAerialAttackState</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Player_ChidoriAttackState.h">
       <Filter>02.GameObjects\Character\Player\State\SKILL\ChidoriState</Filter>
     </ClInclude>
@@ -479,6 +485,24 @@
     </ClInclude>
     <ClInclude Include="..\Public\Player_SuperSharkState.h">
       <Filter>02.GameObjects\Character\Player\State\SKILL\SuperSharkState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_RasenganState.h">
+      <Filter>02.GameObjects\Character\Player\State\SKILL\RasenganState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_RasenShurikenState.h">
+      <Filter>02.GameObjects\Character\Player\State\SKILL\RasenShurikentState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_KamuiState.h">
+      <Filter>02.GameObjects\Character\Player\State\SKILL\KamuiState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_RasenganReadyState.h">
+      <Filter>02.GameObjects\Character\Player\State\SKILL\RasenganState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_AerialRasenShurikenState.h">
+      <Filter>02.GameObjects\Character\Player\State\SKILL\RasenShurikentState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_BeatenState.h">
+      <Filter>02.GameObjects\Character\Player\State\BASE\BeatenState</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -681,9 +705,6 @@
     <ClCompile Include="..\Private\Player_SwordAttackState.cpp">
       <Filter>02.GameObjects\Character\Player\State\BASE\SwordAttackState</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Player_SwordAerialAttackState.cpp">
-      <Filter>02.GameObjects\Character\Player\State\BASE\SwordAttackState\Player_SwordAerialAttackState</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Player_ChidoriAttackState.cpp">
       <Filter>02.GameObjects\Character\Player\State\SKILL\ChidoriState</Filter>
     </ClCompile>
@@ -701,6 +722,24 @@
     </ClCompile>
     <ClCompile Include="..\Private\Player_SuperSharkState.cpp">
       <Filter>02.GameObjects\Character\Player\State\SKILL\SuperSharkState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_RasenganState.cpp">
+      <Filter>02.GameObjects\Character\Player\State\SKILL\RasenganState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_RasenShurikenState.cpp">
+      <Filter>02.GameObjects\Character\Player\State\SKILL\RasenShurikentState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_KamuiState.cpp">
+      <Filter>02.GameObjects\Character\Player\State\SKILL\KamuiState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_RasenganReadyState.cpp">
+      <Filter>02.GameObjects\Character\Player\State\SKILL\RasenganState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_AerialRasenShurikenState.cpp">
+      <Filter>02.GameObjects\Character\Player\State\SKILL\RasenShurikentState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_BeatenState.cpp">
+      <Filter>02.GameObjects\Character\Player\State\BASE\BeatenState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

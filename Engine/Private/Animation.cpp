@@ -33,6 +33,11 @@ _float CAnimation::Get_CurrentTrackPosition()
 	return m_fCurrentTrackPosition;
 }
 
+void CAnimation::Set_AnimProgress(_float fProgress)
+{
+	m_fCurrentTrackPosition = fProgress * m_fDuration;
+}
+
 _float CAnimation::Get_AnimProgress()
 {
 	return m_fCurrentTrackPosition / m_fDuration;

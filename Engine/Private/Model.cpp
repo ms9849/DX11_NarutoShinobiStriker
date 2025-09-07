@@ -104,14 +104,14 @@ HRESULT CModel::Load_Model_FromBinary(const _tchar* pBinaryFilePath)
 	return S_OK;
 }
 
-void CModel::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _bool IsBlended, _float fBlendRatio)
+void CModel::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _bool IsBlended, _float fBlendRatio, _bool IsLoop)
 {
 	if (nullptr == pAnimName)
 		return;
 
 	string strAnimName = pAnimName;
 
-	if (strAnimName == m_strCurrentAnimName)
+	if (strAnimName == m_strCurrentAnimName && false == IsLoop)
 		return;
 
 	auto iter = m_Animations.find(strAnimName);
@@ -201,7 +201,18 @@ HRESULT CModel::Save_Model_ToBinary(const _char* pModelSavePath)
 
 _float CModel::Get_CurAnimProgress()
 {
+	if (MODEL::NONANIM == m_eType)
+		return 0.f;
+
 	return m_Animations[m_strCurrentAnimName]->Get_AnimProgress();
+}
+
+void CModel::Set_CurAnimProgress(_float fProgress)
+{
+	if (MODEL::NONANIM == m_eType)
+		return;
+
+	m_Animations[m_strCurrentAnimName]->Set_AnimProgress(fProgress);
 }
 
 _wstring CModel::Get_MeshName(_uint iIdx) const

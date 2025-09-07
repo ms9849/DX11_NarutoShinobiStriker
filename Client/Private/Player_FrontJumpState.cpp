@@ -7,8 +7,11 @@
 
 #include "Player_LandState.h"
 #include "Player_HandAerialAttackState.h"
+
 #include "Player_ChidoriAerialReadyState.h"
 #include "Player_AerialFireBallState.h"
+
+#include "Player_AerialRasenShurikenState.h"
 
 #pragma endregion
 
@@ -88,24 +91,16 @@ CPlayerState* CPlayer_FrontJumpState::Update(_float fTimeDelta)
 	/* 1번 스킬 사용 */
 	else if (m_pGameInstance->Key_Down(DIK_1))
 	{
-		if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
-			int a = 10;
-			/*pNextState = CPlayer_HandAerialAttackState::Create(m_pPlayer, m_fTimeAcc);*/
-		else if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
+		if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
 			pNextState = CPlayer_ChidoriAerialReadyState::Create(m_pPlayer, m_fTimeAcc);
 	}
 	/* 2번 스킬 사용 */
 	else if (m_pGameInstance->Key_Down(DIK_2))
 	{
-		// 근접 타입 
-		if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
-			int a = 10;
-		//pNextState = CPlayer_HandAttackState::Create(m_pPlayer);
-		// 인술 타입 
-		else if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
-		{
+		if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
 			pNextState = CPlayer_AerialFireBallState::Create(m_pPlayer, m_fTimeAcc);
-		}
+		else if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
+			pNextState = CPlayer_AerialRasenShurikenState::Create(m_pPlayer, m_fTimeAcc);
 	}
 
 	return pNextState;
