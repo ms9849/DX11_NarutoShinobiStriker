@@ -265,6 +265,9 @@
     <Filter Include="02.GameObjects\Character\Player\State\BASE\BeatenState">
       <UniqueIdentifier>{07e0b415-5245-4335-b742-1ae956678a0e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\BASE\DuckingState">
+      <UniqueIdentifier>{fc45bd3c-75b2-4d36-bc0b-93ef24ceeaba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -504,6 +507,12 @@
     <ClInclude Include="..\Public\Player_BeatenState.h">
       <Filter>02.GameObjects\Character\Player\State\BASE\BeatenState</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Player_DuckingState.h">
+      <Filter>02.GameObjects\Character\Player\State\BASE\DuckingState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_SuperJumpState.h">
+      <Filter>02.GameObjects\Character\Player\State\BASE\DuckingState</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -740,6 +749,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Player_BeatenState.cpp">
       <Filter>02.GameObjects\Character\Player\State\BASE\BeatenState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_DuckingState.cpp">
+      <Filter>02.GameObjects\Character\Player\State\BASE\DuckingState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_SuperJumpState.cpp">
+      <Filter>02.GameObjects\Character\Player\State\BASE\DuckingState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

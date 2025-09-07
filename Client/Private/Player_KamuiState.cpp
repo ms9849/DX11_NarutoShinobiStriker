@@ -44,5 +44,7 @@ CPlayer_KamuiState* CPlayer_KamuiState::Create(CPlayer* pPlayer)
 
 void CPlayer_KamuiState::Free()
 {
+    __super::Free();
+
     Safe_Release(m_pPlayer);
 }

@@ -25,6 +25,7 @@ CPlayer_JumpState::CPlayer_JumpState(CPlayer* pPlayer, _float fTimeAcc, ANIM_STA
 
 void CPlayer_JumpState::Start(_bool IsBlend)
 {
+
 	if (m_eAnimState == ANIM_STATE::JUMP)
 	{
 		m_pPlayer->Set_AnimIndex("CustomMan_Jump_Vertical", 1.f, IsBlend);
@@ -43,6 +44,9 @@ CPlayerState* CPlayer_JumpState::Update(_float fTimeDelta)
 
 	m_fTimeAcc += fTimeDelta;
 	m_fMovement = (m_fTimeAcc - 0.5 * m_fTimeAcc * m_fTimeAcc * 7.0f * (m_fTimeAcc));
+	if (m_fMovement <= -0.35f)
+		m_fMovement = -0.35f;
+
 	m_pPlayer->Get_PlayerTransformPtr()->Set_State(STATE::POSITION, m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fMovement, 0.f, 0.f));
 
 	CPlayerState* pNextState = { nullptr };

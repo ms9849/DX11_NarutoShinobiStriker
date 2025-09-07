@@ -46,8 +46,8 @@ CPlayerState* CPlayer_RasenganState::Update(_float fTimeDelta)
     // 나선환 차징 -> 달리기 끝났다면
     if (true == IsAnimFinished && ANIM_STATE::ATTACK_START == m_eAnimState)
     {
-        m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Rasengun_Run_Lv1_Loop", 1.2f, false, 0.f);
-        m_pPlayer->Set_AnimProgress(0.084);
+        m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Rasengun_Run_Lv1_Loop", 1.5f, false, 0.f);
+        m_pPlayer->Set_AnimProgress(0.17);
         m_eAnimState = ANIM_STATE::ATTACK;
         m_fTimeAcc = 0.f;
     }
@@ -55,8 +55,8 @@ CPlayerState* CPlayer_RasenganState::Update(_float fTimeDelta)
     // 나선환 달리기 루프 시켜주기. 
     else if (true == IsAnimFinished && m_fTimeAcc < 1.2f && ANIM_STATE::ATTACK == m_eAnimState)
     {
-        m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Rasengun_Run_Lv1_Loop", 1.2f, false, 0.f, true);
-        m_pPlayer->Set_AnimProgress(0.084);
+        m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Rasengun_Run_Lv1_Loop", 1.5f, false, 0.f);
+        //m_pPlayer->Set_AnimProgress(0.05);
     }
 
     // 나선환 RMx 애니메이션 전환. 나중에 맞았는지 체크해야함. 

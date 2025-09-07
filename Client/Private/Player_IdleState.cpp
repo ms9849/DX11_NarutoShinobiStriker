@@ -10,6 +10,9 @@
 #include "Player_JumpState.h"
 #include "Player_FrontJumpState.h"
 #include "Player_StepState.h"
+#include "Player_DuckingState.h"
+
+/* 기본 공격 */
 #include "Player_HandAttackState.h"
 #include "Player_SwordAttackState.h"
 
@@ -43,8 +46,11 @@ CPlayerState* CPlayer_IdleState::Update(_float fTimeDelta)
 
 	CPlayerState* pNextState = { nullptr };
 
+	if (m_pGameInstance->Key_Pressing(DIK_LCONTROL))
+		pNextState = CPlayer_DuckingState::Create(m_pPlayer);
+
 	/* 맨손 공격.*/
-	if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON))
+	else if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON))
 	{
 		if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
 			pNextState = CPlayer_HandAttackState::Create(m_pPlayer);

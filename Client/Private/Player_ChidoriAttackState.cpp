@@ -22,7 +22,7 @@ CPlayer_ChidoriAttackState::CPlayer_ChidoriAttackState(CPlayer* pPlayer)
 
 void CPlayer_ChidoriAttackState::Start(_bool IsBlend)
 {
-    m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Aerial_Chidori_Run_Loop", 5.f, IsBlend);
+    m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Aerial_Chidori_Run_Loop", 2.f, IsBlend);
 }
 
 CPlayerState* CPlayer_ChidoriAttackState::Update(_float fTimeDelta)
@@ -56,7 +56,12 @@ CPlayerState* CPlayer_ChidoriAttackState::Update(_float fTimeDelta)
         m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Chidori_Attack_Lv3_End", 1.f, true);
         m_eAnimState = ANIM_STATE::ATTACK_END;
     }
-    
+    // 나선환 달리기 루프 시켜주기. 
+    else if (true == IsAnimFinished && m_fTimeAcc < 1.0f && ANIM_STATE::ATTACK == m_eAnimState)
+    {
+        m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Aerial_Chidori_Run_Loop", 2.f, false, 0.f, true);
+    }
+
     // IDLE 상태로 돌아가기. 
     if (true == IsAnimFinished && ANIM_STATE::ATTACK_END == m_eAnimState)
     {
