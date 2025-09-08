@@ -187,6 +187,12 @@
     <ClInclude Include="..\Public\Light.h">
       <Filter>01.Utility\08. Lights</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Cell.h">
+      <Filter>01.Utility\03.Components\Navigation\Cell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Navigation.h">
+      <Filter>01.Utility\03.Components\Navigation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -329,6 +335,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Light.cpp">
       <Filter>01.Utility\08. Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Cell.cpp">
+      <Filter>01.Utility\03.Components\Navigation\Cell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Navigation.cpp">
+      <Filter>01.Utility\03.Components\Navigation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -484,6 +496,12 @@
     </Filter>
     <Filter Include="01.Utility\08. Lights\Manager">
       <UniqueIdentifier>{220e56f5-67bb-4b67-bb5f-dd5421e5ae8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Navigation">
+      <UniqueIdentifier>{1c8e7aef-8801-4df6-b857-a2dbec0fe57d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Navigation\Cell">
+      <UniqueIdentifier>{46f9d577-4e03-47c6-b38f-c2ad44dd28de}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

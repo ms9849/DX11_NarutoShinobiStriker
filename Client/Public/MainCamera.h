@@ -29,6 +29,8 @@ public:
 	virtual HRESULT Render() override;
 
 private:
+	_float m_fRotateX = {};
+	_float m_fRotateY = {};
 	class CGameManager* m_pGameManager = { nullptr };
 	class CTransform*	m_pPlayerTransform = { nullptr };
 public:

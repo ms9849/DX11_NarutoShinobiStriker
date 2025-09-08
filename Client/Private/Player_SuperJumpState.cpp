@@ -66,7 +66,7 @@ CPlayerState* CPlayer_SuperJumpState::Update(_float fTimeDelta)
 
 	if (m_fMovement < 0.f && ANIM_STATE::START == m_eAnimState)
 	{
-		m_pPlayer->Set_AnimIndex("CustomMan_Jump_Vertical", 1.f, true, 0.05f);
+		m_pPlayer->Set_AnimIndex("CustomMan_Jump_Vertical", 1.f, true, 0.2f);
 		m_eAnimState = ANIM_STATE::JUMP; 
 	}
 

@@ -5,6 +5,7 @@
 #include "Camera.h"
 #include "Player.h"
 #include "QuestLog.h"
+#include "Enemy.h"
 
 IMPLEMENT_SINGLETON(CGameManager);
 
@@ -44,6 +45,7 @@ void CGameManager::Clear()
 	/* 지울때 레퍼런스 카운트가 0임을 보장하지 않음*/
 	/* 따라서 명시적으로 nullptr 처리 해줘야함 */
 
+	/* 플레이어 지우기 */
 	Safe_Release(m_pPlayer);
 	if (nullptr != m_pPlayer)
 	{
@@ -51,9 +53,11 @@ void CGameManager::Clear()
 		m_pPlayer = nullptr;
 	}
 
+	/* 퀘스트로그 지우기 */
 	Safe_Release(m_pQuestLog);
 	m_pQuestLog = nullptr;
 
+	/* 카메라 지우기 */
 	for (_uint i = 0; i < ENUM_CLASS(LEVEL::END); ++i)
 	{
 		for (auto& pCamera : m_Cameras[i])

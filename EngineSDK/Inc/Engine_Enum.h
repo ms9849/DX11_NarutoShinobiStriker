@@ -17,5 +17,8 @@ namespace Engine
 	enum class MOUSEKEYSTATE { LBUTTON, RBUTTON, WBUTTON, XBUTTON };
 	//W -> Wheel
 	enum class MOUSEMOVESTATE { X, Y, W };
+
+	enum class NAVI_POINT { A, B, C, END };
+	enum class NAVI_LINE { AB, BC, CA, END };
 }
 #endif // Engine_Enum_h__

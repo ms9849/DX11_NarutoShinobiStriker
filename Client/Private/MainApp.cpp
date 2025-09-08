@@ -170,6 +170,12 @@ HRESULT CMainApp::Ready_Prototypes()
 		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Props/Props.fbx", PreTransformMatrix))))
 		return E_FAIL;
 	
+	/* For.Prototype_Component_Model_WhiteJetsu */
+	PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f)) * XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_WhiteJetsu"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Monster/WhiteJetsu/WhiteJetsu.fbx", PreTransformMatrix))))
+		return E_FAIL;
+
 	/* For.Prototype_Component_Model_Fiona */
 	PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_Fiona"),
@@ -208,12 +214,17 @@ HRESULT CMainApp::Ready_Prototypes()
 
 #pragma endregion
 
-	/* For.Prototype_Component_Texture_Fiona */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Fiona"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Fiona/fiona_D.png"), 1))))
-		return E_FAIL;
+	///* For.Prototype_Component_Texture_Fiona */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Fiona"),
+	//	CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Fiona/fiona_D.png"), 1))))
+	//	return E_FAIL;
 
 #pragma region COMPONENT
+
+	/* For.Prototype_Component_Test_Navigation */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Test_Navigation"),
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/DataFiles/Navigation.dat")))))
+		return E_FAIL;
 
 	/* For.Prototype_Component_Pooling*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Pooling"),
