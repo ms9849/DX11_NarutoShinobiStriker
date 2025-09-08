@@ -56,7 +56,7 @@ CComponent* COrthogonal::Clone(void* pArg)
 {
     COrthogonal* pInstance = new COrthogonal(*this);
 
-    if (FAILED(pInstance->Initialize_Prototype()))
+    if (FAILED(pInstance->Initialize()))
     {
         MSG_BOX("Clone Failed : Orthogonal Component!");
         Safe_Release(pInstance);

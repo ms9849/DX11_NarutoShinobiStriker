@@ -43,8 +43,9 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Layer_Effect(TEXT("Layer_Effect"))))
-	//	return E_FAIL;
+	if (FAILED(Ready_Layer_Effect(TEXT("Layer_Effect"))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -182,6 +183,12 @@ HRESULT CLevel_GamePlay::Ready_Layer_Effect(const _wstring& strLayerTag)
 			ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag)))
 			return E_FAIL;
 	}*/
+
+	for (_int i = 0; i < 10; ++i)
+	{
+		m_pGameInstance->Add_GameObject_ToPool(ENUM_CLASS(LEVEL::GAMEPLAY), static_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::GAMEPLAY),
+			TEXT("Prototype_GameObject_Effect_SkillCoolDown"), nullptr)));
+	}
 
 	return S_OK;
 }

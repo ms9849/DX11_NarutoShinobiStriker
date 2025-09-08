@@ -35,6 +35,10 @@ private:
 	_uint				m_iTextureIdx_Skill = {};
 	_uint				m_iSkillNum = {};
 	SKILL				m_eSkill = {};
+
+	_float				m_fPreSkillTimeAcc = { 0.f };
+	_float				m_fSkillTimeAcc = { 0.f };
+	_float				m_fMaxSkillCoolDown = { 0.f };
 private:
 	HRESULT Ready_Components();
 	virtual HRESULT Bind_ShaderResources() override;

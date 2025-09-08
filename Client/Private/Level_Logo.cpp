@@ -78,6 +78,7 @@ HRESULT CLevel_Logo::Ready_Layer_Camera(const _wstring& strLayerTag)
 
 HRESULT CLevel_Logo::Ready_Layer_Dummy(const _wstring& strLayerTag)
 {
+	/* 풀링 컴포넌트 사용법. */
 	for (_int i = 0; i < 100; ++i)
 	{
 		m_pGameInstance->Add_GameObject_ToPool(ENUM_CLASS(LEVEL::LOGO), static_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LOGO),
