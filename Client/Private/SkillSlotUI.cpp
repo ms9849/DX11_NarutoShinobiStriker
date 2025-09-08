@@ -3,6 +3,7 @@
 #include "GameInstance.h"
 #include "GameManager.h"
 #include "Skill_Table.h"
+#include "Player.h"
 
 CSkillSlotUI::CSkillSlotUI(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CUIObject{ pDevice, pContext, ENUM_CLASS(eObjectID) }
@@ -22,6 +23,7 @@ void CSkillSlotUI::Change_Skill(SKILL eSkill)
 {
     /* 여기서 나중에 이펙트 뿌려줄 수 있게 세팅해줘야지. */
     m_iTextureIdx_Skill = ENUM_CLASS(eSkill);
+    m_eSkill = eSkill;
 }
 
 HRESULT CSkillSlotUI::Initialize_Prototype()
@@ -103,6 +105,17 @@ HRESULT CSkillSlotUI::Bind_ShaderResources()
 
     if (FAILED(m_pTextureCom_Skill->Bind_ShaderResource(m_pShaderCom, "g_Texture_Skill", m_iTextureIdx_Skill)))
         return E_FAIL;
+
+    if (m_iSkillNum != ENUM_CLASS(SKILLNUM::SPECIAL))
+    {
+        SKILL_INFO* pInfo = m_pGameManager->Get_PlayerPtr()->Get_Skill_Info(m_eSkill);
+
+        if (FAILED(m_pShaderCom->Bind_RawValue("g_SkillCoolDown", &pInfo->fTimeAcc, sizeof(_float))))
+            return E_FAIL;
+
+        if (FAILED(m_pShaderCom->Bind_RawValue("g_MaxSkillCoolDown", &pInfo->fMaxCoolDown, sizeof(_float))))
+            return E_FAIL;
+    }
 
     return S_OK;
 }

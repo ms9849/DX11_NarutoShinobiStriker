@@ -28,6 +28,7 @@ public:
 	virtual _bool	End() override;
 
 private:
+	CTransform* m_pPlayerTransformCom = { nullptr };
 	CTransform*	m_pTransformCom = { nullptr };
 	CModel*		m_pModelCom = { nullptr };
 

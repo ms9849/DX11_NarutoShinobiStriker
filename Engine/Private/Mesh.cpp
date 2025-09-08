@@ -12,6 +12,7 @@ CMesh::CMesh(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 
 CMesh::CMesh(const CMesh& rhs)
     : CVIBuffer { rhs }
+    , m_pIndices { rhs.m_pIndices }
 {
 }
 
@@ -32,9 +33,9 @@ _bool CMesh::Picking(_fmatrix WolrdMatrixInverse, _float3* pOut)
 
     for (_uint i = 0; i < m_iNumIndices / 3; ++i)
     {
-        iIndex[0] = *((_uint*)(m_StagingData.pData) + iNumIndices++);
-        iIndex[1] = *((_uint*)(m_StagingData.pData) + iNumIndices++);
-        iIndex[2] = *((_uint*)(m_StagingData.pData) + iNumIndices++);
+        iIndex[0] = m_pIndices[iNumIndices++];
+        iIndex[1] = m_pIndices[iNumIndices++];
+        iIndex[2] = m_pIndices[iNumIndices++];
 
         if (true == m_pGameInstance->Picking_InLocalSpace(XMLoadFloat3(&m_pVertexPositions[iIndex[2]]), XMLoadFloat3(&m_pVertexPositions[iIndex[1]]), XMLoadFloat3(&m_pVertexPositions[iIndex[0]]), pOut))
         {
@@ -93,42 +94,26 @@ HRESULT CMesh::Initialize_Prototype(MODEL eType, const class CModel* pModel, con
     IBDesc.CPUAccessFlags = 0;
     IBDesc.MiscFlags = 0;
 
-    _uint* pIndices = new _uint[m_iNumIndices];
-    ZeroMemory(pIndices, sizeof(_uint) * m_iNumIndices);
+    m_pIndices = new _uint[m_iNumIndices];
+    ZeroMemory(m_pIndices, sizeof(_uint) * m_iNumIndices);
 
     _uint iNumIndices = {};
 
     for (_uint i = 0; i < pAIMesh->mNumFaces; ++i)
     {
-        pIndices[iNumIndices++] = pAIMesh->mFaces[i].mIndices[0];
-        pIndices[iNumIndices++] = pAIMesh->mFaces[i].mIndices[1];
-        pIndices[iNumIndices++] = pAIMesh->mFaces[i].mIndices[2];
+        m_pIndices[iNumIndices++] = pAIMesh->mFaces[i].mIndices[0];
+        m_pIndices[iNumIndices++] = pAIMesh->mFaces[i].mIndices[1];
+        m_pIndices[iNumIndices++] = pAIMesh->mFaces[i].mIndices[2];
     }
 
     D3D11_SUBRESOURCE_DATA InitialIBData{};
-    InitialIBData.pSysMem = pIndices;
+    InitialIBData.pSysMem = m_pIndices;
 
     if (FAILED(m_pDevice->CreateBuffer(&IBDesc, &InitialIBData, &m_pIB)))
         return E_FAIL;
     
-    Safe_Delete_Array(pIndices);
+    //Safe_Delete_Array(m_pIndices);
 #pragma endregion
-
-    D3D11_BUFFER_DESC StagingDesc{};
-    m_pIB->GetDesc(&StagingDesc);
-    StagingDesc.Usage = D3D11_USAGE_STAGING;
-    StagingDesc.BindFlags = 0;
-    StagingDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
-    StagingDesc.MiscFlags = 0;
-
-    if (FAILED(m_pDevice->CreateBuffer(&StagingDesc, nullptr, &m_pStagingIB)))
-        return E_FAIL;
-
-    //이거 뺴야된다 무조건.
-    m_pContext->CopyResource(m_pStagingIB, m_pIB);
-
-    if (FAILED(m_pContext->Map(m_pStagingIB, 0, D3D11_MAP_READ, 0, &m_StagingData)))
-        return E_FAIL;
 
     return S_OK;
 }
@@ -149,23 +134,6 @@ HRESULT CMesh::Initialize_Prototype(MODEL eType, const CModel* pModel, HANDLE hH
 
 HRESULT CMesh::Initialize(void* pArg)
 {
-    D3D11_BUFFER_DESC StagingDesc{};
-    m_pIB->GetDesc(&StagingDesc);
-
-    StagingDesc.Usage = D3D11_USAGE_STAGING;
-    StagingDesc.BindFlags = 0;
-    StagingDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
-    StagingDesc.MiscFlags = 0;
-
-    if (FAILED(m_pDevice->CreateBuffer(&StagingDesc, nullptr, &m_pStagingIB)))
-        return E_FAIL;
-
-    m_pContext->CopyResource(m_pStagingIB, m_pIB);
-    D3D11_MAPPED_SUBRESOURCE StagingData{};
-
-    if (FAILED(m_pContext->Map(m_pStagingIB, 0, D3D11_MAP_READ, 0, &StagingData)))
-        return E_FAIL;
-
     return S_OK;
 }
 
@@ -338,8 +306,8 @@ HRESULT CMesh::Load_Mesh_FromBinary(HANDLE hHandle, DWORD* dwByte, MODEL eType)
     IBDesc.CPUAccessFlags = 0;
     IBDesc.MiscFlags = 0;
 
-    _uint* pIndices = new _uint[m_iNumIndices];
-    ZeroMemory(pIndices, sizeof(_uint) * m_iNumIndices);
+    m_pIndices = new _uint[m_iNumIndices];
+    ZeroMemory(m_pIndices, sizeof(_uint) * m_iNumIndices);
 
     _uint iNumIndices = {};
     _uint Indices[3];
@@ -350,34 +318,32 @@ HRESULT CMesh::Load_Mesh_FromBinary(HANDLE hHandle, DWORD* dwByte, MODEL eType)
         if(FAILED(ReadFile(hHandle, &Indices, sizeof(_uint) * 3, dwByte, nullptr)))
             return E_FAIL;
 
-        pIndices[iNumIndices++] = Indices[0];
-        pIndices[iNumIndices++] = Indices[1];
-        pIndices[iNumIndices++] = Indices[2];
+        m_pIndices[iNumIndices++] = Indices[0];
+        m_pIndices[iNumIndices++] = Indices[1];
+        m_pIndices[iNumIndices++] = Indices[2];
     }
 
     D3D11_SUBRESOURCE_DATA InitialIBData{};
-    InitialIBData.pSysMem = pIndices;
+    InitialIBData.pSysMem = m_pIndices;
 
     if (FAILED(m_pDevice->CreateBuffer(&IBDesc, &InitialIBData, &m_pIB)))
         return E_FAIL;
-
-    Safe_Delete_Array(pIndices);
 #pragma endregion
 
-    D3D11_BUFFER_DESC StagingDesc{};
-    m_pIB->GetDesc(&StagingDesc);
-    StagingDesc.Usage = D3D11_USAGE_STAGING;
-    StagingDesc.BindFlags = 0;
-    StagingDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
-    StagingDesc.MiscFlags = 0;
+    //D3D11_BUFFER_DESC StagingDesc{};
+    //m_pIB->GetDesc(&StagingDesc);
+    //StagingDesc.Usage = D3D11_USAGE_STAGING;
+    //StagingDesc.BindFlags = 0;
+    //StagingDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+    //StagingDesc.MiscFlags = 0;
 
-    if (FAILED(m_pDevice->CreateBuffer(&StagingDesc, nullptr, &m_pStagingIB)))
-        return E_FAIL;
+    //if (FAILED(m_pDevice->CreateBuffer(&StagingDesc, nullptr, &m_pStagingIB)))
+    //    return E_FAIL;
 
-    m_pContext->CopyResource(m_pStagingIB, m_pIB);
+    //m_pContext->CopyResource(m_pStagingIB, m_pIB);
 
-    if (FAILED(m_pContext->Map(m_pStagingIB, 0, D3D11_MAP_READ, 0, &m_StagingData)))
-        return E_FAIL;
+    //if (FAILED(m_pContext->Map(m_pStagingIB, 0, D3D11_MAP_READ, 0, &m_StagingData)))
+    //    return E_FAIL;
 
     return S_OK;
 }
@@ -648,5 +614,6 @@ void CMesh::Free()
     __super::Free();
 
     Safe_Delete_Array(m_pBoneMatrices);
-    Safe_Release(m_pStagingIB);
+    if(false == m_isCloned)
+        Safe_Delete_Array(m_pIndices);
 }

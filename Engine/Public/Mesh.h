@@ -40,8 +40,8 @@ private:
 	_float4x4*					m_pBoneMatrices = { nullptr };
 	vector<_float4x4>			m_OffsetMatrices;
 
-	ID3D11Buffer*				m_pStagingIB = {};
-	D3D11_MAPPED_SUBRESOURCE	m_StagingData{};
+	_uint*						m_pIndices = {};
+
 private:
 	HRESULT Ready_VertexBuffer_For_NonAnim_Assimp(const aiMesh* pAIMesh, _fmatrix PreTransformMatrix);
 	HRESULT Ready_VertexBuffer_For_Anim_Assimp(const class CModel* pModel, const aiMesh* pAIMesh);

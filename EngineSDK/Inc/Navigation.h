@@ -2,6 +2,13 @@
 
 #include "Component.h"
 
+/*
+네비게이션 ->
+메쉬나 터레인에 태우는 것보다 비용이 훨씬 싸고 
+충돌 처리보다도 당연히 훨씬 가격이 싼 편이다.
+
+따라서 Cell (삼각형 하나 단위) 를 여러개 담은 네비게이션을 통해 
+*/
 NS_BEGIN(Engine)
 
 class ENGINE_DLL CNavigation final : public CComponent
@@ -10,7 +17,7 @@ public:
 	typedef struct tagNavigaionDesc
 	{
 		_int				iCurrentCellIndex = { -1 };
-	}NAVIGATION_DESC;
+	} NAVIGATION_DESC;
 
 private:
 	CNavigation(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

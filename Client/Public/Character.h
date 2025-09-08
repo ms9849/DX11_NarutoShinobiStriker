@@ -36,20 +36,20 @@ public:
 		return m_eCurAttackType;
 	}
 
-	const SKILL_INFO& Get_Skill_Info(const SKILL& eSkill) {
+	SKILL_INFO* Get_Skill_Info(const SKILL& eSkill) {
 		auto iter = m_Skills.find(eSkill);
-		return iter->second;
+		return &iter->second;
 	}
 
-	SKILL Get_Skill_Slot(_uint iSlotNum) {
-		return m_ActivatedSkills[iSlotNum];
+	SKILL Get_Skill_Slot(SKILLNUM eSlotNum) {
+		return m_ActivatedSkills[ENUM_CLASS(eSlotNum)];
 	}
 
 protected:
 	class CGameManager* m_pGameManager = { nullptr };
-	CModel* m_pModelCom = { nullptr };
-	CShader* m_pShaderCom = { nullptr };
-	_uint		m_iNumMeshes = {};
+	CModel*				m_pModelCom = { nullptr };
+	CShader*			m_pShaderCom = { nullptr };
+	_uint				m_iNumMeshes = {};
 protected:
 	// 스킬에 따라 1,2,3번 스킬이 변경됨
 	// 스킬은 곧 모션(애니메이션)이니까?

@@ -34,9 +34,10 @@ CWhiteJetsuState* CWhiteJetsu_RunState::Update(_float fTimeDelta)
 
     _bool IsAnimFinished = m_pModelCom->Play_Animation(fTimeDelta);
 
-    m_pTransformCom->Chase(m_pPlayerTransformCom->Get_State(STATE::POSITION), fTimeDelta, 2.f);
+    m_pTransformCom->Chase(m_pPlayerTransformCom->Get_State(STATE::POSITION), fTimeDelta, 1.f);
+    m_pTransformCom->LookAt(m_pPlayerTransformCom->Get_State(STATE::POSITION));
 
-    if (2.f >= XMVectorGetX(XMVector3Length(m_pTransformCom->Get_State(STATE::POSITION) - m_pPlayerTransformCom->Get_State(STATE::POSITION))))
+    if (1.f >= XMVectorGetX(XMVector3Length(m_pTransformCom->Get_State(STATE::POSITION) - m_pPlayerTransformCom->Get_State(STATE::POSITION))))
     {
         pNextState = CWhiteJetsu_AttackState::Create(m_pTransformCom, m_pModelCom);
     }
@@ -47,7 +48,7 @@ CWhiteJetsuState* CWhiteJetsu_RunState::Update(_float fTimeDelta)
 
 _bool CWhiteJetsu_RunState::End()
 {
-    return _bool();
+    return true;
 }
 
 CWhiteJetsu_RunState* CWhiteJetsu_RunState::Create(class CTransform* pTransform, class CModel* pModelCom)

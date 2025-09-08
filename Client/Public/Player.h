@@ -46,6 +46,7 @@ public:
 	void	Clear_State();
 	void	Update_State(_float fTimeDelta);
 	_bool	Play_Animation(_float fTimeDelta);
+	_bool	Use_Skill(SKILLNUM eSlotNum);
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
