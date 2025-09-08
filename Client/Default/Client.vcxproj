@@ -161,6 +161,7 @@
     <ClInclude Include="..\Public\CreateCharacterUI.h" />
     <ClInclude Include="..\Public\DecimalUI.h" />
     <ClInclude Include="..\Public\Dummy.h" />
+    <ClInclude Include="..\Public\Enemy.h" />
     <ClInclude Include="..\Public\Face_Player.h" />
     <ClInclude Include="..\Public\GameManager.h" />
     <ClInclude Include="..\Public\Gate.h" />
@@ -230,6 +231,11 @@
     <ClInclude Include="..\Public\TutorialMap.h" />
     <ClInclude Include="..\Public\Upper_Player.h" />
     <ClInclude Include="..\Public\Weapon_Player.h" />
+    <ClInclude Include="..\Public\WhiteJetsu.h" />
+    <ClInclude Include="..\Public\WhiteJetsuState.h" />
+    <ClInclude Include="..\Public\WhiteJetsu_AttackState.h" />
+    <ClInclude Include="..\Public\WhiteJetsu_IdleState.h" />
+    <ClInclude Include="..\Public\WhiteJetsu_RunState.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
@@ -243,6 +249,7 @@
     <ClCompile Include="..\Private\CreateCharacterUI.cpp" />
     <ClCompile Include="..\Private\DecimalUI.cpp" />
     <ClCompile Include="..\Private\Dummy.cpp" />
+    <ClCompile Include="..\Private\Enemy.cpp" />
     <ClCompile Include="..\Private\Face_Player.cpp" />
     <ClCompile Include="..\Private\GameManager.cpp" />
     <ClCompile Include="..\Private\Gate.cpp" />
@@ -311,6 +318,11 @@
     <ClCompile Include="..\Private\TutorialMap.cpp" />
     <ClCompile Include="..\Private\Upper_Player.cpp" />
     <ClCompile Include="..\Private\Weapon_Player.cpp" />
+    <ClCompile Include="..\Private\WhiteJetsu.cpp" />
+    <ClCompile Include="..\Private\WhiteJetsuState.cpp" />
+    <ClCompile Include="..\Private\WhiteJetsu_AttackState.cpp" />
+    <ClCompile Include="..\Private\WhiteJetsu_IdleState.cpp" />
+    <ClCompile Include="..\Private\WhiteJetsu_RunState.cpp" />
     <ClCompile Include="Client.cpp" />
   </ItemGroup>
   <ItemGroup>

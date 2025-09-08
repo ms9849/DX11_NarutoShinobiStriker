@@ -1,6 +1,7 @@
 #include "MainCamera.h"
 
 #include "GameManager.h"
+#include "GameInstance.h"
 
 CMainCamera::CMainCamera(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CCamera { pDevice, pContext, ENUM_CLASS(eObjectID) }
@@ -36,6 +37,13 @@ void CMainCamera::Priority_Update(_float fTimeDelta)
 {
     m_pTransformCom->Set_State(STATE::POSITION, m_pPlayerTransform->Get_State(STATE::POSITION) + XMVectorSet(0.f, 4.f, -4.f, 0.f));
     m_pTransformCom->LookAt(m_pPlayerTransform->Get_State(STATE::POSITION));
+
+    _float fMouseMoveX = m_pGameInstance->Get_MouseMove(MOUSEMOVESTATE::X);
+    _float fMouseMoveY = m_pGameInstance->Get_MouseMove(MOUSEMOVESTATE::Y);
+    /*
+    구를 그리는 듯한 회전
+    */
+    //m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), 360.f * (fMouseMoveX / g_iWinSizeX));
 
     __super::Bind_Matrices();
 }

@@ -40,8 +40,8 @@ HRESULT CLevel_GamePlay::Initialize()
 	if(FAILED(m_pGameManager->Change_Camera(LEVEL::GAMEPLAY, TEXT("Main_Camera"))))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
-	//	return E_FAIL;
+	if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
+		return E_FAIL;
 
 	//if (FAILED(Ready_Layer_Effect(TEXT("Layer_Effect"))))
 	//	return E_FAIL;
@@ -167,13 +167,9 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _wstring& strLayerTag)
 
 HRESULT CLevel_GamePlay::Ready_Layer_Monster(const _wstring& strLayerTag)
 {
-	/*for (size_t i = 0; i < 20; i++)
-	{
-		if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Monster"),
-			ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag)))
-			return E_FAIL;
-	}*/
-
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_WhiteJetsu"),
+		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag)))
+		return E_FAIL;
 
 	return S_OK;
 }

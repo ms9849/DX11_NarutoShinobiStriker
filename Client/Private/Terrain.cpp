@@ -79,6 +79,11 @@ HRESULT CTerrain::Ready_Components()
         TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
         return E_FAIL;
 
+    /* Com_Navigation */
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Test_Navigation"),
+        TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom))))
+        return E_FAIL;
+
     return S_OK;
 }
 
@@ -153,4 +158,5 @@ void CTerrain::Free()
     Safe_Release(m_pVIBufferCom);
     Safe_Release(m_pTextureCom);
     Safe_Release(m_pShaderCom);
+    Safe_Release(m_pNavigationCom);
 }
