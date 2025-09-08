@@ -19,6 +19,8 @@
 #include "ModelSelectButtonUI.h"
 #include "ModelDecideButtonUI.h"
 
+#include "Effect_CoolDown.h"
+
 #include "SkillSlotPanel.h"
 #include "SkillSlotUI.h"
 
@@ -361,6 +363,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	//	return E_FAIL;
 	m_fLoadingProgress += 0.3f;
 	m_strMessage = TEXT("셰이더를(을) 로딩 중 입니다.");
+
+	/* For.Prototype_GameObject_Effect_SkillCoolDown */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Effect_SkillCoolDown"),
+		CEffect_CoolDown::Create(m_pDevice, m_pContext, OBJECTID::EFFECT))))
+		return E_FAIL;
 
 	m_strMessage = TEXT("객체원형를(을) 로딩 중 입니다.");
 	/* For.Prototype_GameObject_Terrain */

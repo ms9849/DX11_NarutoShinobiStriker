@@ -5,6 +5,8 @@
 #include "Skill_Table.h"
 #include "Player.h"
 
+#include "Effect_CoolDown.h"
+
 CSkillSlotUI::CSkillSlotUI(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CUIObject{ pDevice, pContext, ENUM_CLASS(eObjectID) }
     , m_pGameManager { CGameManager::GetInstance() }
@@ -62,6 +64,23 @@ void CSkillSlotUI::Priority_Update(_float fTimeDelta)
 
 void CSkillSlotUI::Update(_float fTimeDelta)
 {
+    SKILL_INFO* pInfo = m_pGameManager->Get_PlayerPtr()->Get_Skill_Info(m_eSkill);
+
+    m_fPreSkillTimeAcc = m_fSkillTimeAcc;
+    m_fSkillTimeAcc = pInfo->fTimeAcc;
+    m_fMaxSkillCoolDown = pInfo->fMaxCoolDown;
+
+    if (ENUM_CLASS(SKILLNUM::SPECIAL) != m_iSkillNum && m_fSkillTimeAcc >= m_fMaxSkillCoolDown && m_fPreSkillTimeAcc <= m_fMaxSkillCoolDown)
+    {
+        CEffect_CoolDown::EFFECT_COOLDOWN_DESC Desc{};
+        _vector vPosition = m_pTransformCom->Get_State(STATE::POSITION);
+
+        Desc.fX = XMVectorGetX(vPosition);
+        Desc.fY = XMVectorGetY(vPosition);
+
+        m_pGameInstance->Add_PoolingObject_ToLayer(TEXT("Effect_SkillCoolDown"), ENUM_CLASS(LEVEL::GAMEPLAY),
+            &Desc, ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Layer_Effect"));
+    }
 }
 
 void CSkillSlotUI::Late_Update(_float fTimeDelta)
@@ -108,12 +127,11 @@ HRESULT CSkillSlotUI::Bind_ShaderResources()
 
     if (m_iSkillNum != ENUM_CLASS(SKILLNUM::SPECIAL))
     {
-        SKILL_INFO* pInfo = m_pGameManager->Get_PlayerPtr()->Get_Skill_Info(m_eSkill);
 
-        if (FAILED(m_pShaderCom->Bind_RawValue("g_SkillCoolDown", &pInfo->fTimeAcc, sizeof(_float))))
+        if (FAILED(m_pShaderCom->Bind_RawValue("g_SkillCoolDown", &m_fSkillTimeAcc, sizeof(_float))))
             return E_FAIL;
 
-        if (FAILED(m_pShaderCom->Bind_RawValue("g_MaxSkillCoolDown", &pInfo->fMaxCoolDown, sizeof(_float))))
+        if (FAILED(m_pShaderCom->Bind_RawValue("g_MaxSkillCoolDown", &m_fMaxSkillCoolDown, sizeof(_float))))
             return E_FAIL;
     }
 

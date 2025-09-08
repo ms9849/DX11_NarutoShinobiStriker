@@ -92,9 +92,9 @@ CPlayerState* CPlayer_FrontJumpState::Update(_float fTimeDelta)
 			pNextState = CPlayer_HandAerialAttackState::Create(m_pPlayer, m_fTimeAcc);
 	}
 	/* 1번 스킬 사용 */
-	else if (m_pGameInstance->Key_Down(DIK_1) && m_pPlayer->Use_Skill(SKILLNUM::SECOND))
+	else if (m_pGameInstance->Key_Down(DIK_1))
 	{
-		if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
+		if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType() && m_pPlayer->Use_Skill(SKILLNUM::SECOND))
 			pNextState = CPlayer_ChidoriAerialReadyState::Create(m_pPlayer, m_fTimeAcc);
 	}
 	/* 2번 스킬 사용 */

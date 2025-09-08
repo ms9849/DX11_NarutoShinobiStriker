@@ -2,6 +2,7 @@
 #include "GameInstance.h"
 #include "Level_Loading.h"
 
+#include "Orthogonal.h"
 #include "Pooling.h"
 #include "Dummy.h"
 
@@ -17,6 +18,8 @@
 #include "Gate.h"
 #include "Tree.h"
 #include "Font.h"
+
+#include "Effect_CoolDown.h"
 
 #include "GameManager.h"
 
@@ -214,10 +217,13 @@ HRESULT CMainApp::Ready_Prototypes()
 
 #pragma endregion
 
-	///* For.Prototype_Component_Texture_Fiona */
-	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Fiona"),
-	//	CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Fiona/fiona_D.png"), 1))))
-	//	return E_FAIL;
+#pragma region TEXTURE
+	/* For.Prototype_Component_Texture_SkillCoolDownEffect */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_SkillCoolDownEffect"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/SkillSlot/SkillCoolDownEffect.png"), 1))))
+		return E_FAIL;
+
+#pragma endregion
 
 #pragma region COMPONENT
 
@@ -229,6 +235,11 @@ HRESULT CMainApp::Ready_Prototypes()
 	/* For.Prototype_Component_Pooling*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Pooling"),
 		CPooling::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Orthogonal */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Orthogonal"),
+		COrthogonal::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Font */

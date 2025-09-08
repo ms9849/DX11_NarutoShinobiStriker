@@ -286,6 +286,9 @@
     <Filter Include="02.GameObjects\Character\Enemy\Boxer">
       <UniqueIdentifier>{4a097cb0-3ef9-484e-a08b-e64a8b1e4e90}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Effect">
+      <UniqueIdentifier>{fd3144ba-221a-4729-9e60-5da79d058cf2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -549,6 +552,9 @@
     <ClInclude Include="..\Public\WhiteJetsu.h">
       <Filter>02.GameObjects\Character\Enemy\Jetsu</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Effect_CoolDown.h">
+      <Filter>02.GameObjects\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -809,6 +815,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\WhiteJetsu.cpp">
       <Filter>02.GameObjects\Character\Enemy\Jetsu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Effect_CoolDown.cpp">
+      <Filter>02.GameObjects\Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
