@@ -27,7 +27,6 @@ namespace Client
 	/* 스킬 정보. 쿨타임과 쿨타임 진행 상황만 담아둔다. */
 	typedef struct tagSkillInfo {
 		SKILL eSkill = {};
-		bool  IsUsable = {};
 
 		float fMaxCoolDown = {};
 		float fTimeAcc = {};
@@ -39,16 +38,16 @@ namespace Client
 	} SKILL_INFO;
 
 	const SKILL_INFO g_SkillTable[static_cast<int>(SKILL::END)] = {
-		{ SKILL::SHADOW_ESCAPE, true, 10.f, 0.f},
-		{ SKILL::RASENGAN,      true, 10.f, 0.f},
-		{ SKILL::RASEN_SHURIKEN,true, 10.f, 0.f},
-		{ SKILL::CHIDORI,       true, 10.f, 0.f},
-		{ SKILL::FIREBALL,      true, 10.f, 0.f},
-		{ SKILL::WOOD_WALL,     true, 10.f, 0.f},
-		{ SKILL::WOOD_HAND,     true, 10.f, 0.f},
-		/* 필살기들. 일단은 이대로 세팅 */
-		{ SKILL::BIG_RASENGAN,  false, 0.f, 0.f, true, 200.f, 0.f },
-		{ SKILL::BIG_SHARK,     false, 0.f, 0.f, true, 200.f, 0.f },
-		{ SKILL::KAMUI,			false, 0.f, 0.f, true, 200.f, 0.f }
+		{ SKILL::SHADOW_ESCAPE, 10.f, 0.f},
+		{ SKILL::RASENGAN, 10.f, 0.f},
+		{ SKILL::RASEN_SHURIKEN, 10.f, 0.f},
+		{ SKILL::CHIDORI, 10.f, 0.f},
+		{ SKILL::FIREBALL, 10.f, 0.f},
+		{ SKILL::WOOD_WALL, 10.f, 0.f},
+		{ SKILL::WOOD_HAND, 10.f, 0.f},
+		/* 필살기들. 일단은 이대세팅 */
+		{ SKILL::BIG_RASENGAN, 0.f, 0.f, true, 200.f, 0.f },
+		{ SKILL::BIG_SHARK, 0.f, 0.f, true, 200.f, 0.f },
+		{ SKILL::KAMUI, 0.f, 0.f, true, 200.f, 0.f }
 	};
 }

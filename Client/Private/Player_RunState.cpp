@@ -114,7 +114,7 @@ CPlayerState* CPlayer_RunState::Update(_float fTimeDelta)
 
 	}
 	/* 1번 스킬 사용 */
-	else if (m_pGameInstance->Key_Down(DIK_1))
+	else if (m_pGameInstance->Key_Down(DIK_1) && m_pPlayer->Use_Skill(SKILLNUM::SECOND))
 	{
 		// 근접 타입 
 		if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
@@ -124,7 +124,7 @@ CPlayerState* CPlayer_RunState::Update(_float fTimeDelta)
 			pNextState = CPlayer_ChidoriReadyState::Create(m_pPlayer);
 	}
 	/* 2번 스킬 사용 */
-	else if (m_pGameInstance->Key_Down(DIK_2))
+	else if (m_pGameInstance->Key_Down(DIK_2) && m_pPlayer->Use_Skill(SKILLNUM::THIRD))
 	{
 		// 근접 타입 
 		if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
@@ -134,7 +134,7 @@ CPlayerState* CPlayer_RunState::Update(_float fTimeDelta)
 			pNextState = CPlayer_FireBallState::Create(m_pPlayer);
 	}
 	/* 3번 스킬 (필살기) 사용 */
-	else if (m_pGameInstance->Key_Down(DIK_3))
+	else if (m_pGameInstance->Key_Down(DIK_3) && m_pPlayer->Use_Skill(SKILLNUM::SPECIAL))
 	{
 		// 근접 타입 
 		if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
@@ -143,7 +143,6 @@ CPlayerState* CPlayer_RunState::Update(_float fTimeDelta)
 		else if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
 			pNextState = CPlayer_SuperSharkState::Create(m_pPlayer);
 	}
-
 
 	// 백스텝
 	if (m_pGameInstance->Key_Pressing(DIK_S))

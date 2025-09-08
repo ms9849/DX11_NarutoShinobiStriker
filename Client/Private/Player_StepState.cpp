@@ -74,7 +74,8 @@ CPlayerState* CPlayer_StepState::Update(_float fTimeDelta)
 		/* 1번 스킬 사용 */
 		else if (m_pGameInstance->Key_Down(DIK_1)
 			&& nullptr == pNextState
-			&& fAnimProgress >= 0.5f)
+			&& fAnimProgress >= 0.5f
+			&& m_pPlayer->Use_Skill(SKILLNUM::SECOND))
 		{
 			//스킬 사용 
 			if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
@@ -89,7 +90,8 @@ CPlayerState* CPlayer_StepState::Update(_float fTimeDelta)
 		/* 2번 스킬 사용 */
 		else if (m_pGameInstance->Key_Down(DIK_1)
 			&& nullptr == pNextState
-			&& fAnimProgress >= 0.5f)
+			&& fAnimProgress >= 0.5f
+			&& m_pPlayer->Use_Skill(SKILLNUM::THIRD))
 		{
 			//근접 타입
 			if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
@@ -104,7 +106,8 @@ CPlayerState* CPlayer_StepState::Update(_float fTimeDelta)
 		/* 3번 스킬 (필살기) 사용 */
 		else if (m_pGameInstance->Key_Down(DIK_3)
 			&& nullptr == pNextState
-			&& fAnimProgress >= 0.5f)
+			&& fAnimProgress >= 0.5f
+			&& m_pPlayer->Use_Skill(SKILLNUM::SPECIAL))
 		{
 			// 근접 타입 
 			if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
@@ -150,7 +153,7 @@ CPlayerState* CPlayer_StepState::Update(_float fTimeDelta)
 		}
 
 		/* 1번 스킬 사용 */
-		else if (m_pGameInstance->Key_Down(DIK_1) && fAnimProgress >= 0.5f)
+		else if (m_pGameInstance->Key_Down(DIK_1) && fAnimProgress >= 0.5f && m_pPlayer->Use_Skill(SKILLNUM::SECOND))
 		{
 			// 근접 타입 
 			if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
@@ -160,7 +163,7 @@ CPlayerState* CPlayer_StepState::Update(_float fTimeDelta)
 				pNextState = CPlayer_ChidoriReadyState::Create(m_pPlayer);
 		}
 		/* 2번 스킬 사용 */
-		else if (m_pGameInstance->Key_Down(DIK_2) && fAnimProgress >= 0.5f)
+		else if (m_pGameInstance->Key_Down(DIK_2) && fAnimProgress >= 0.5f && m_pPlayer->Use_Skill(SKILLNUM::THIRD))
 		{
 			// 근접 타입 
 			if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
@@ -170,7 +173,7 @@ CPlayerState* CPlayer_StepState::Update(_float fTimeDelta)
 				pNextState = CPlayer_FireBallState::Create(m_pPlayer);
 		}
 		/* 3번 스킬 (필살기) 사용 */
-		else if (m_pGameInstance->Key_Down(DIK_3) && fAnimProgress >= 0.5f)
+		else if (m_pGameInstance->Key_Down(DIK_3) && fAnimProgress >= 0.5f && m_pPlayer->Use_Skill(SKILLNUM::SPECIAL))
 		{
 			// 근접 타입 
 			if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
@@ -215,7 +218,7 @@ CPlayerState* CPlayer_StepState::Update(_float fTimeDelta)
 		}
 
 		/* 1번 스킬 사용 */
-		else if (m_pGameInstance->Key_Down(DIK_1) && fAnimProgress >= 0.65f)
+		else if (m_pGameInstance->Key_Down(DIK_1) && fAnimProgress >= 0.65f && m_pPlayer->Use_Skill(SKILLNUM::SECOND))
 		{
 			// 근접 타입 
 			if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
@@ -225,7 +228,7 @@ CPlayerState* CPlayer_StepState::Update(_float fTimeDelta)
 				pNextState = CPlayer_ChidoriReadyState::Create(m_pPlayer);
 		}
 		/* 2번 스킬 사용 */
-		else if (m_pGameInstance->Key_Down(DIK_2) && fAnimProgress >= 0.65f)
+		else if (m_pGameInstance->Key_Down(DIK_2) && fAnimProgress >= 0.65f && m_pPlayer->Use_Skill(SKILLNUM::THIRD))
 		{
 			// 근접 타입 
 			if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
@@ -235,7 +238,7 @@ CPlayerState* CPlayer_StepState::Update(_float fTimeDelta)
 				pNextState = CPlayer_FireBallState::Create(m_pPlayer);
 		}
 		/* 3번 스킬 (필살기) 사용 */
-		else if (m_pGameInstance->Key_Down(DIK_3) && fAnimProgress >= 0.65f)
+		else if (m_pGameInstance->Key_Down(DIK_3) && fAnimProgress >= 0.65f && m_pPlayer->Use_Skill(SKILLNUM::SPECIAL))
 		{
 			// 근접 타입 
 			if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
@@ -272,7 +275,7 @@ CPlayerState* CPlayer_StepState::Update(_float fTimeDelta)
 		}
 
 		/* 1번 스킬 사용 */
-		else if (m_pGameInstance->Key_Down(DIK_1) && fAnimProgress >= 0.35f)
+		else if (m_pGameInstance->Key_Down(DIK_1) && fAnimProgress >= 0.35f && m_pPlayer->Use_Skill(SKILLNUM::SECOND))
 		{
 			// 근접 타입 
 			if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
@@ -282,7 +285,7 @@ CPlayerState* CPlayer_StepState::Update(_float fTimeDelta)
 				pNextState = CPlayer_ChidoriReadyState::Create(m_pPlayer);
 		}
 		/* 2번 스킬 사용 */
-		else if (m_pGameInstance->Key_Down(DIK_2) && fAnimProgress >= 0.35f)
+		else if (m_pGameInstance->Key_Down(DIK_2) && fAnimProgress >= 0.35f && m_pPlayer->Use_Skill(SKILLNUM::THIRD))
 		{
 			// 근접 타입 
 			if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
@@ -292,7 +295,7 @@ CPlayerState* CPlayer_StepState::Update(_float fTimeDelta)
 				pNextState = CPlayer_FireBallState::Create(m_pPlayer);
 		}
 		/* 3번 스킬 (필살기) 사용 */
-		else if (m_pGameInstance->Key_Down(DIK_3) && fAnimProgress >= 0.35f)
+		else if (m_pGameInstance->Key_Down(DIK_3) && fAnimProgress >= 0.35f && m_pPlayer->Use_Skill(SKILLNUM::SPECIAL))
 		{
 			// 근접 타입 
 			if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())

@@ -283,6 +283,9 @@
     <Filter Include="02.GameObjects\Character\Enemy\Jetsu\State\Run">
       <UniqueIdentifier>{38c1c968-546d-45e4-80b5-bddee566d2f4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Character\Enemy\Boxer">
+      <UniqueIdentifier>{4a097cb0-3ef9-484e-a08b-e64a8b1e4e90}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">

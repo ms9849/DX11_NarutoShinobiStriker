@@ -6,6 +6,8 @@ texture2D g_Texture, g_Texture_Skill;
 float   g_Alpha;
 float   g_ProgressRate;
 int     g_iProgressBarTextureNum;
+float   g_MaxSkillCoolDown;
+float   g_SkillCoolDown;
 
 sampler DefaultSampler = sampler_state
 {
@@ -112,13 +114,20 @@ PS_OUT PS_Skill(PS_IN In)
     float fDist = length(In.vTexcoord - vCenter);
     
     /* 스킬 아이콘 그려짐 */
-    if (fDist < 0.4)
+    if (fDist <= 0.4)
     {
         float fScale = 1.2;
         // 중심 0.5 0.5에서 떨어진 거리 구하고, 그만큼 스케일링 해줌.
         float2 vUV = vCenter + (In.vTexcoord - vCenter) * fScale;
 
         Out.vColor = g_Texture_Skill.Sample(DefaultSampler, vUV);
+        
+        if (0.9f - (g_SkillCoolDown / g_MaxSkillCoolDown) * 0.9f >= In.vTexcoord.y)
+        {
+            Out.vColor *= 0.2f;
+            Out.vColor.a = 1.f;
+        }
+
     }
     
     else
@@ -139,7 +148,7 @@ PS_OUT PS_SpecialSkill(PS_IN In)
     
     float fDist = length(vDiff);
     /* 스킬 아이콘 그려짐 */
-    if (fDist < 0.30)
+    if (fDist <= 0.30)
     {
         float fScale = 1.8f;
         // 중심 0.5 0.5에서 떨어진 거리 구하고, 그만큼 스케일링 해줌.

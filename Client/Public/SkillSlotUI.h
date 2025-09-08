@@ -34,7 +34,7 @@ private:
 	CTexture*			m_pTextureCom_Skill = { nullptr };
 	_uint				m_iTextureIdx_Skill = {};
 	_uint				m_iSkillNum = {};
-
+	SKILL				m_eSkill = {};
 private:
 	HRESULT Ready_Components();
 	virtual HRESULT Bind_ShaderResources() override;

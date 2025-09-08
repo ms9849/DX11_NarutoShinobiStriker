@@ -1,8 +1,10 @@
 #include "WhiteJetsu_AttackState.h"
 
 #include "WhiteJetsu.h"
-#include "GameInstance.h"
+#include "Player.h"
 
+#include "GameInstance.h"
+#include "GameManager.h"
 /* 전이 가능한 상태들 */
 
 #pragma region TRANSFER_STATE
@@ -22,6 +24,7 @@ CWhiteJetsu_AttackState::CWhiteJetsu_AttackState(class CTransform* pTransform, c
 void CWhiteJetsu_AttackState::Start(_bool IsBlend)
 {
 	m_pModelCom->Set_AnimIndex("WhiteZetsuCrowdForm_Attack_Punch", 1.f, true);
+	//m_pTransformCom->LookAt(CGameManager::GetInstance()->Get_PlayerPtr()->Get_PlayerTransformPtr()->Get_State(STATE::POSITION));
 }
 
 CWhiteJetsuState* CWhiteJetsu_AttackState::Update(_float fTimeDelta)
