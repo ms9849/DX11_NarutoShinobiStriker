@@ -27,10 +27,29 @@ private:
 public:
 	virtual HRESULT Initialize_Prototype(const _tchar* pNavigationDataFiles);
 	virtual HRESULT Initialize(void* pArg);
+	void Update(_fmatrix WorldMatrix) {
+		XMStoreFloat4x4(&m_WorldMatrix, WorldMatrix);
+	}
+
+	_bool isMove(_fvector vPosition);
+
+#ifdef _DEBUG
+public:
+	HRESULT Render();
+#endif
 
 private:
 	_int							m_iCurrentCellIndex = { -1 };
 	vector<class CCell*>			m_Cells;
+	static _float4x4				m_WorldMatrix;
+
+#ifdef _DEBUG
+private:
+	class CShader* m_pShader = { nullptr };
+#endif
+
+private:
+	void SetUp_Neighbors();
 
 public:
 

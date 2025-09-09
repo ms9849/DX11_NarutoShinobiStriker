@@ -36,7 +36,7 @@ HRESULT CWhiteJetsu::Initialize(void* pArg)
    m_iNumMeshes = m_pModelCom->Get_NumMeshes();
 
     /* 상태 초기화 및 시작. */
-    m_pState = CWhiteJetsu_IdleState::Create(m_pTransformCom, m_pModelCom);
+    m_pState = CWhiteJetsu_IdleState::Create(m_pTransformCom, m_pNavigationCom, m_pModelCom);
     m_pState->Start(true);
 
     return S_OK;
@@ -95,6 +95,15 @@ HRESULT CWhiteJetsu::Ready_Components()
     /* Com_Model */
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_WhiteJetsu"),
         TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
+        return E_FAIL;
+
+    /* Com_Navigation */
+
+    CNavigation::NAVIGATION_DESC Desc;
+    Desc.iCurrentCellIndex = 0;
+
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Test_Navigation"),
+        TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
         return E_FAIL;
 
     return S_OK;
@@ -187,4 +196,5 @@ void CWhiteJetsu::Free()
     Safe_Release(m_pModelCom);
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pState);
+    Safe_Release(m_pNavigationCom);
 }

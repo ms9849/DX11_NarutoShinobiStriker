@@ -86,13 +86,13 @@ PS_OUT PS_ENEMY_HPBAR(PS_IN In)
     PS_OUT Out;
     
     Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
-    
-    if (Out.vColor.r < 0.1 && Out.vColor.g < 0.1 && Out.vColor.b < 0.1)
-        discard;
+   
   
-    else if(Out.vColor.a < 1)
+    if(Out.vColor.a < 1)
         Out.vColor.rgb = 0;
+    
     else
+    
     {
         if (g_CurrentHP / g_MaxHP > In.vTexcoord.x)
         {

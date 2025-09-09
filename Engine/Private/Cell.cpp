@@ -1,7 +1,13 @@
 #include "Cell.h"
 
-CCell::CCell()
+#include "VIBuffer_Cell.h"
+
+CCell::CCell(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+	: m_pDevice{ pDevice }
+	, m_pContext{ pContext }
 {
+	Safe_AddRef(m_pDevice);
+	Safe_AddRef(m_pContext);
 }
 
 /* 셀들의 좌표는 월드 기준으로 잡히는 걸 명심할 것. */
@@ -26,12 +32,74 @@ HRESULT CCell::Initialize(const _float3* vPoints, _uint iIndex)
 
 	m_iIndex = iIndex;
 
+#ifdef _DEBUG
+	m_pVIBuffer = CVIBuffer_Cell::Create(m_pDevice, m_pContext, vPoints);
+	if (nullptr == m_pVIBuffer)
+		return E_FAIL;
+#endif
+
 	return S_OK;
 }
 
-CCell* CCell::Create(const _float3* vPoints, _uint iIndex)
+_bool CCell::isIn(_fvector vPosition, _int* pNeighborIndex)
 {
-	CCell* pInstance = new CCell();
+	for (size_t i = 0; i < ENUM_CLASS(NAVI_LINE::END); i++)
+	{
+		_vector	vDir = XMVector3Normalize(vPosition - XMLoadFloat3(&m_vPoints[i]));
+		_vector vNormal = XMLoadFloat3(&m_vNormals[i]);
+
+		if (0.f < XMVectorGetX(XMVector3Dot(vDir, vNormal)))
+		{
+			*pNeighborIndex = m_NeighborIndices[i];
+			return false;
+		}
+
+	}
+	return true;
+}
+
+_bool CCell::Compare(_fvector vSourPoint, _fvector vDestPoint)
+{
+	if (true == XMVector3Equal(XMLoadFloat3(&m_vPoints[ENUM_CLASS(NAVI_POINT::A)]), vSourPoint))
+	{
+		if (true == XMVector3Equal(XMLoadFloat3(&m_vPoints[ENUM_CLASS(NAVI_POINT::B)]), vDestPoint))
+			return true;
+
+		if (true == XMVector3Equal(XMLoadFloat3(&m_vPoints[ENUM_CLASS(NAVI_POINT::C)]), vDestPoint))
+			return true;
+	}
+	if (true == XMVector3Equal(XMLoadFloat3(&m_vPoints[ENUM_CLASS(NAVI_POINT::B)]), vSourPoint))
+	{
+		if (true == XMVector3Equal(XMLoadFloat3(&m_vPoints[ENUM_CLASS(NAVI_POINT::C)]), vDestPoint))
+			return true;
+
+		if (true == XMVector3Equal(XMLoadFloat3(&m_vPoints[ENUM_CLASS(NAVI_POINT::A)]), vDestPoint))
+			return true;
+	}
+
+	if (true == XMVector3Equal(XMLoadFloat3(&m_vPoints[ENUM_CLASS(NAVI_POINT::C)]), vSourPoint))
+	{
+		if (true == XMVector3Equal(XMLoadFloat3(&m_vPoints[ENUM_CLASS(NAVI_POINT::A)]), vDestPoint))
+			return true;
+
+		if (true == XMVector3Equal(XMLoadFloat3(&m_vPoints[ENUM_CLASS(NAVI_POINT::B)]), vDestPoint))
+			return true;
+	}
+	return false;
+}
+
+HRESULT CCell::Render()
+{
+	m_pVIBuffer->Bind_Resources();
+
+	m_pVIBuffer->Render();
+
+	return S_OK;
+}
+
+CCell* CCell::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _float3* vPoints, _uint iIndex)
+{
+	CCell* pInstance = new CCell(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize(vPoints, iIndex)))
 	{
@@ -45,4 +113,12 @@ CCell* CCell::Create(const _float3* vPoints, _uint iIndex)
 void CCell::Free()
 {
 	__super::Free();
+
+#ifdef _DEBUG
+	Safe_Release(m_pVIBuffer);
+#endif
+
+	Safe_Release(m_pDevice);
+	Safe_Release(m_pContext);
+
 }

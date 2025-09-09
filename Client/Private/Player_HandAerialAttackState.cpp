@@ -66,10 +66,10 @@ CPlayerState* CPlayer_HandAerialAttackState::Update(_float fTimeDelta)
 	//낙하로 넘어가게 한다.
 	else if (true == IsAnimFinished)
 	{
-		pNextState = CPlayer_JumpState::Create(m_pPlayer, 0.5f, CPlayer_JumpState::ANIM_STATE::FALL);
+		pNextState = CPlayer_JumpState::Create(m_pPlayer, 0.57f, CPlayer_JumpState::ANIM_STATE::FALL);
 	}
 
-	_float fMovement = 2.f * fTimeDelta * m_pGameInstance->Calc_Linear(-8.f, 4.f, fAnimProgress);
+	_float fMovement = 0.02f * m_pGameInstance->Calc_Linear(-8.f, 4.f, fAnimProgress);
 
 	m_pPlayer->Get_PlayerTransformPtr()->Set_State(STATE::POSITION, m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::POSITION) + XMVectorSet(0.f, fMovement, 0.f, 0.f));
 

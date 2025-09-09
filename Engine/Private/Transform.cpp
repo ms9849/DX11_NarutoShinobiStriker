@@ -60,7 +60,7 @@ HRESULT CTransform::Bind_ShaderResource(CShader* pShader, const _char* pConstant
 // 결과벡터의 주소 D3DXVec3Normalize(&결과, &누구를);
 // 길이1짜리벡터 XMVector3Normalize(누구를);
 
-void CTransform::Go_Straight(_float fTimeDelta)
+void CTransform::Go_Straight(_float fTimeDelta, class CNavigation* pNavigation)
 {
 	_vector		vPosition = Get_State(STATE::POSITION);
 	_vector		vLook = Get_State(STATE::LOOK);	
@@ -68,47 +68,57 @@ void CTransform::Go_Straight(_float fTimeDelta)
 	/* DX9 때와는 다르게 기존 벡터 원형을 수정하지 않는다. SIMD라고 해도 값으로 넘기는건데 빠른가..? */
 	vPosition += XMVector3Normalize(vLook) * m_fSpeedPerSec * fTimeDelta;
 
-	Set_State(STATE::POSITION, vPosition);
+	if (nullptr == pNavigation ||
+		true == pNavigation->isMove(vPosition))
+		Set_State(STATE::POSITION, vPosition);
 }
 
-void CTransform::Go_Backward(_float fTimeDelta)
+void CTransform::Go_Backward(_float fTimeDelta, class CNavigation* pNavigation)
 {
 	_vector		vPosition = Get_State(STATE::POSITION);
 	_vector		vLook = Get_State(STATE::LOOK);
 
 	vPosition -= XMVector3Normalize(vLook) * m_fSpeedPerSec * fTimeDelta;
 
-	Set_State(STATE::POSITION, vPosition);
+	if (nullptr == pNavigation ||
+		true == pNavigation->isMove(vPosition))
+		Set_State(STATE::POSITION, vPosition);
 }
 
-void CTransform::Go_Left(_float fTimeDelta)
+void CTransform::Go_Left(_float fTimeDelta, class CNavigation* pNavigation)
 {
 	_vector		vPosition = Get_State(STATE::POSITION);
 	_vector		vRight = Get_State(STATE::RIGHT);
 
 	vPosition -= XMVector3Normalize(vRight) * m_fSpeedPerSec * fTimeDelta;
 
-	Set_State(STATE::POSITION, vPosition);
+	if (nullptr == pNavigation ||
+		true == pNavigation->isMove(vPosition))
+		Set_State(STATE::POSITION, vPosition);
 }
 
-void CTransform::Go_Right(_float fTimeDelta)
+void CTransform::Go_Right(_float fTimeDelta, class CNavigation* pNavigation)
 {
 	_vector		vPosition = Get_State(STATE::POSITION);
 	_vector		vRight = Get_State(STATE::RIGHT);
 
 	vPosition += XMVector3Normalize(vRight) * m_fSpeedPerSec * fTimeDelta;
 
-	Set_State(STATE::POSITION, vPosition);
+	if (nullptr == pNavigation ||
+		true == pNavigation->isMove(vPosition))
+		Set_State(STATE::POSITION, vPosition);
 }
 
-void CTransform::Go_Direction(_fvector vDir, _float fTimeDelta)
+void CTransform::Go_Direction(_fvector vDir, _float fTimeDelta, class CNavigation* pNavigation)
 {
 	_vector vPosition = Get_State(STATE::POSITION);
 	
 	/* 방향은 정규화해야지 */
 	vPosition += XMVector3Normalize(vDir) * m_fSpeedPerSec * fTimeDelta;
 
-	Set_State(STATE::POSITION, vPosition);
+	if (nullptr == pNavigation ||
+		true == pNavigation->isMove(vPosition))
+		Set_State(STATE::POSITION, vPosition);
 }
 
 void CTransform::Turn(_fvector vAxis, _float fTimeDelta)
@@ -216,7 +226,7 @@ void CTransform::LookAt_Lerp(_fvector vAt)
 	Set_State(STATE::LOOK, XMVector3Normalize(vLook) * vScale.z);
 }
 
-void CTransform::Chase(_fvector vTargetPos, _float fTimeDelta, _float fLimitDistance)
+void CTransform::Chase(_fvector vTargetPos, _float fTimeDelta, class CNavigation* pNavigation, _float fLimitDistance)
 {
 	_vector		vPosition = Get_State(STATE::POSITION);
 	_vector		vDirection = vTargetPos - vPosition;
@@ -230,7 +240,9 @@ void CTransform::Chase(_fvector vTargetPos, _float fTimeDelta, _float fLimitDist
 	vMove = XMVector3Normalize(vDirection) * m_fSpeedPerSec * fTimeDelta;
 
 	vPosition += vMove;
-	Set_State(STATE::POSITION, vPosition);
+	if (nullptr == pNavigation ||
+		true == pNavigation->isMove(vPosition))
+		Set_State(STATE::POSITION, vPosition);
 }
 
 void CTransform::Chase_Lerp(_fvector vTargetPos, _float fTimeDelta, _float fLimitDistance)

@@ -197,6 +197,16 @@ HRESULT CMainApp::Ready_Prototypes()
 
 #pragma endregion
 
+#pragma region MODEL_BINARY
+
+	/* For.Prototype_Component_Model_TutorialMap */
+	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_TutorialMap"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, TEXT("../Bin/Resources/Models/TutorialMap/TutorialMap.bin"), PreTransformMatrix))))
+		return E_FAIL;
+
+#pragma endregion
+
 #pragma region TEXTURE
 	/* For.Prototype_Component_Texture_SkillCoolDownEffect */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_SkillCoolDownEffect"),

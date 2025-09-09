@@ -37,7 +37,8 @@ private:
 	따로 Release 해줄 메서드를 만들지 않아도 된다.
 	*/
 	class CWhiteJetsuState* m_pState = { nullptr };
-	
+	CNavigation* m_pNavigationCom = { nullptr };
+
 private:
 	HRESULT Ready_Components();
 	HRESULT Bind_ShaderResources();

@@ -38,6 +38,8 @@
 #include "Model.h"
 
 #include "KonohaVillage.h"
+#include "TutorialMap.h"
+
 #include "MainCamera.h"
 
 #include "Lower_Player.h"
@@ -373,6 +375,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_GameObject_Terrain */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Terrain"),
 		CTerrain::Create(m_pDevice, m_pContext, OBJECTID::TERRAIN))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_TutorialMap */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_TutorialMap"),
+		CTutorialMap::Create(m_pDevice, m_pContext, OBJECTID::TUTORIAL_MAP))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_WhiteJetsu */

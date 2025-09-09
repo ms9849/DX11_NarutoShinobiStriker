@@ -107,7 +107,7 @@
       <Filter>01.Utility\03.Components\VIBuffer</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\VIBuffer_Rect.h">
-      <Filter>01.Utility\03.Components\VIBuffer\VIBuffer_Rect</Filter>
+      <Filter>01.Utility\03.Components\VIBuffer\Rect</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\IMGUI_Manager.h">
       <Filter>01.Utility\98. IMGUI\Manager</Filter>
@@ -140,7 +140,7 @@
       <Filter>01.Utility\03.Components\Shader</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\VIBuffer_Terrain.h">
-      <Filter>01.Utility\03.Components\VIBuffer\VIBuffer_Terrain</Filter>
+      <Filter>01.Utility\03.Components\VIBuffer\Terrain</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\PipeLine.h">
       <Filter>01.Utility\06. PipeLine</Filter>
@@ -192,6 +192,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\Navigation.h">
       <Filter>01.Utility\03.Components\Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\VIBuffer_Cell.h">
+      <Filter>01.Utility\03.Components\VIBuffer\Cell</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -259,7 +262,7 @@
       <Filter>01.Utility\03.Components\VIBuffer</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\VIBuffer_Rect.cpp">
-      <Filter>01.Utility\03.Components\VIBuffer\VIBuffer_Rect</Filter>
+      <Filter>01.Utility\03.Components\VIBuffer\Rect</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\IMGUI_Manager.cpp">
       <Filter>01.Utility\98. IMGUI\Manager</Filter>
@@ -289,7 +292,7 @@
       <Filter>01.Utility\98. IMGUI\imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\VIBuffer_Terrain.cpp">
-      <Filter>01.Utility\03.Components\VIBuffer\VIBuffer_Terrain</Filter>
+      <Filter>01.Utility\03.Components\VIBuffer\Terrain</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\PipeLine.cpp">
       <Filter>01.Utility\06. PipeLine</Filter>
@@ -341,6 +344,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Navigation.cpp">
       <Filter>01.Utility\03.Components\Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\VIBuffer_Cell.cpp">
+      <Filter>01.Utility\03.Components\VIBuffer\Cell</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -422,14 +428,8 @@
     <Filter Include="01.Utility\03.Components\VIBuffer">
       <UniqueIdentifier>{9434176d-fed5-4179-9cdb-c6212722cfdf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\03.Components\VIBuffer\VIBuffer_Rect">
-      <UniqueIdentifier>{0323a8ee-49c5-49fa-b804-7c18ba9c7399}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\03.Components\Shader">
       <UniqueIdentifier>{41a9f3c8-e825-4195-a136-b33c5e6a4bfa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Utility\03.Components\VIBuffer\VIBuffer_Terrain">
-      <UniqueIdentifier>{c07508f3-380b-48fb-84e5-1d7de8f19f51}</UniqueIdentifier>
     </Filter>
     <Filter Include="01.Utility\98. IMGUI">
       <UniqueIdentifier>{4fdcf624-1e37-4f36-95b6-6013356287d4}</UniqueIdentifier>
@@ -503,6 +503,18 @@
     <Filter Include="01.Utility\03.Components\Navigation\Cell">
       <UniqueIdentifier>{46f9d577-4e03-47c6-b38f-c2ad44dd28de}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.Components\VIBuffer\Cell">
+      <UniqueIdentifier>{d07b6020-4dca-4ed3-ade8-6bf6424212ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\VIBuffer\Rect">
+      <UniqueIdentifier>{0323a8ee-49c5-49fa-b804-7c18ba9c7399}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\VIBuffer\Terrain">
+      <UniqueIdentifier>{c07508f3-380b-48fb-84e5-1d7de8f19f51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98.ShaderFiles">
+      <UniqueIdentifier>{1ac49f64-b981-4ff6-86ca-be6cd87c65e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Public\FMOD\fmod.cs">
@@ -522,5 +534,10 @@
     <Library Include="..\ThirdPartyLib\fmodL_vc.lib">
       <Filter>01.Utility\96. Sound\FMOD</Filter>
     </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Cell.hlsl">
+      <Filter>98.ShaderFiles</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
