@@ -289,6 +289,9 @@
     <Filter Include="02.GameObjects\Effect">
       <UniqueIdentifier>{fd3144ba-221a-4729-9e60-5da79d058cf2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Character\Enemy\HPBar">
+      <UniqueIdentifier>{3206a7e6-945e-4907-9df7-3067c7739f1f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -555,6 +558,9 @@
     <ClInclude Include="..\Public\Effect_CoolDown.h">
       <Filter>02.GameObjects\Effect</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Enemy_HPBar.h">
+      <Filter>02.GameObjects\Character\Enemy\HPBar</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -818,6 +824,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Effect_CoolDown.cpp">
       <Filter>02.GameObjects\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Enemy_HPBar.cpp">
+      <Filter>02.GameObjects\Character\Enemy\HPBar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

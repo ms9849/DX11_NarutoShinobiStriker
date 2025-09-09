@@ -35,7 +35,7 @@ CPlayerState* CPlayer_AerialFireBallState::Update(_float fTimeDelta)
 
 	if (fAnimProgress <= 0.4f || fAnimProgress >= 0.5f)
 	{
-		m_fMovement = (m_fTimeAcc - 0.5 * m_fTimeAcc * m_fTimeAcc * 7.0f * (m_fTimeAcc));
+		m_fMovement = (m_fTimeAcc - 0.5f * m_fTimeAcc * m_fTimeAcc * 7.0f * (m_fTimeAcc));
 		m_pPlayer->Get_PlayerTransformPtr()->Set_State(STATE::POSITION, m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fMovement / 5.f, 0.f, 0.f));
 	}
 	else if (fAnimProgress > 0.4f && fAnimProgress < 0.5f)
@@ -46,7 +46,7 @@ CPlayerState* CPlayer_AerialFireBallState::Update(_float fTimeDelta)
 			m_IsFloat = true;
 		}
 
-		m_fMovement = (m_fTimeAcc - 0.5 * m_fTimeAcc * m_fTimeAcc * 7.0f * (m_fTimeAcc));
+		m_fMovement = (m_fTimeAcc - 0.5f * m_fTimeAcc * m_fTimeAcc * 7.0f * (m_fTimeAcc));
 		m_pPlayer->Get_PlayerTransformPtr()->Set_State(STATE::POSITION, m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::POSITION) + XMVectorSet(0.f, fTimeDelta, 0.f, 0.f));
 	}
 

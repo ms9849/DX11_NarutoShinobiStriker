@@ -163,6 +163,7 @@
     <ClInclude Include="..\Public\Dummy.h" />
     <ClInclude Include="..\Public\Effect_CoolDown.h" />
     <ClInclude Include="..\Public\Enemy.h" />
+    <ClInclude Include="..\Public\Enemy_HPBar.h" />
     <ClInclude Include="..\Public\Face_Player.h" />
     <ClInclude Include="..\Public\GameManager.h" />
     <ClInclude Include="..\Public\Gate.h" />
@@ -252,6 +253,7 @@
     <ClCompile Include="..\Private\Dummy.cpp" />
     <ClCompile Include="..\Private\Effect_CoolDown.cpp" />
     <ClCompile Include="..\Private\Enemy.cpp" />
+    <ClCompile Include="..\Private\Enemy_HPBar.cpp" />
     <ClCompile Include="..\Private\Face_Player.cpp" />
     <ClCompile Include="..\Private\GameManager.cpp" />
     <ClCompile Include="..\Private\Gate.cpp" />

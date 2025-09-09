@@ -8,6 +8,8 @@ float   g_ProgressRate;
 int     g_iProgressBarTextureNum;
 float   g_MaxSkillCoolDown;
 float   g_SkillCoolDown;
+float   g_CurrentHP;
+float   g_MaxHP;
 
 sampler DefaultSampler = sampler_state
 {
@@ -75,6 +77,33 @@ PS_OUT PS_MASK(PS_IN In)
     
     if (Out.vColor.r < 0.3)
         discard;
+    
+    return Out;
+}
+
+PS_OUT PS_ENEMY_HPBAR(PS_IN In)
+{
+    PS_OUT Out;
+    
+    Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
+    
+    if (Out.vColor.r < 0.1 && Out.vColor.g < 0.1 && Out.vColor.b < 0.1)
+        discard;
+  
+    else if(Out.vColor.a < 1)
+        Out.vColor.rgb = 0;
+    else
+    {
+        if (g_CurrentHP / g_MaxHP > In.vTexcoord.x)
+        {
+            Out.vColor.r = 1;
+            Out.vColor.gb = 0;
+        }
+        else
+            Out.vColor.rgb = 0;
+    }
+    
+    Out.vColor.a = 1;
     
     return Out;
 }
@@ -185,6 +214,12 @@ technique11 DefaultTechnique
     {
         VertexShader = compile vs_5_0 VS_MAIN();
         PixelShader = compile ps_5_0 PS_MASK();
+    }
+
+    pass UI_ENEMYHPBAR
+    {
+        VertexShader = compile vs_5_0 VS_MAIN();
+        PixelShader = compile ps_5_0 PS_ENEMY_HPBAR();
     }
 
     pass UI_ProgressBar

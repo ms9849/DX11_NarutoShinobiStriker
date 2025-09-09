@@ -45,14 +45,14 @@ void CEffect_CoolDown::Update(_float fTimeDelta)
 {
 	m_fTimeAcc += fTimeDelta;
 
-	if (m_fTimeAcc >= 0.5f)
+	if (m_fTimeAcc >= 0.25f)
 	{
 		m_isDead = true;
 		m_fTimeAcc = 0.f;
 		m_pTransformCom->Set_Scale(10.f, 10.f, 1.f);
 	}
 	else
-		m_pTransformCom->Set_Scale(m_fTimeAcc * 200.f + 50.f, m_fTimeAcc * 200.f + 50.f, 1.f);
+		m_pTransformCom->Set_Scale(m_fTimeAcc * 400.f + 50.f, m_fTimeAcc * 400.f + 50.f, 1.f);
 }
 
 void CEffect_CoolDown::Late_Update(_float fTimeDelta)

@@ -25,6 +25,14 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+protected:
+	HRESULT Ready_HPBar();
+
+protected:
+	_float m_fCurrentHP = { 100 };
+	_float m_fMaxHP = { 200 };
+	class CEnemy_HPBar* m_pHPBar = { nullptr };
+
 public:
 	virtual CGameObject* Clone(void* pArg) override = 0;
 	virtual void Free() override = 0;

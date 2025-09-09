@@ -90,26 +90,6 @@ HRESULT CMainApp::Render()
 
 HRESULT CMainApp::Ready_Default_Setting()
 {
-	D3D11_BLEND_DESC Desc = {};
-	 
-	Desc.AlphaToCoverageEnable = false;
-	Desc.IndependentBlendEnable = false;
-	Desc.RenderTarget[0].BlendEnable = true;
-	Desc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA; // 소스 알파 값
-	Desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA; // 대상 알파 값의 역수
-	Desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD; // 더하기 연산
-	Desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE; // 소스 알파 값을 1,
-	Desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO; // 대상 알파 값 0로.
-	Desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD; // 더하기 연산
-	Desc.RenderTarget[0].RenderTargetWriteMask = 0x0f;
-
-	ID3D11BlendState* pBlendState;
-	if(FAILED(m_pDevice->CreateBlendState(&Desc, &pBlendState)))
-		return E_FAIL;
-
-	m_pContext->OMSetBlendState(pBlendState, nullptr, 0xffffffff);
-	Safe_Release(pBlendState); 
-
 	return S_OK;
 }
 
@@ -221,6 +201,11 @@ HRESULT CMainApp::Ready_Prototypes()
 	/* For.Prototype_Component_Texture_SkillCoolDownEffect */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_SkillCoolDownEffect"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/SkillSlot/SkillCoolDownEffect.png"), 1))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_EnemyHPBar */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_EnemyHPBar"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/EnemyHPBar/EnemyHPBar.png"), 1))))
 		return E_FAIL;
 
 #pragma endregion

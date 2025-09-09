@@ -38,8 +38,8 @@ void CMainCamera::Priority_Update(_float fTimeDelta)
     m_pTransformCom->Set_State(STATE::POSITION, m_pPlayerTransform->Get_State(STATE::POSITION) + XMVectorSet(0.f, 4.f, -4.f, 0.f));
     m_pTransformCom->LookAt(m_pPlayerTransform->Get_State(STATE::POSITION));
 
-    _float fMouseMoveX = m_pGameInstance->Get_MouseMove(MOUSEMOVESTATE::X);
-    _float fMouseMoveY = m_pGameInstance->Get_MouseMove(MOUSEMOVESTATE::Y);
+    _float fMouseMoveX = (_float)m_pGameInstance->Get_MouseMove(MOUSEMOVESTATE::X);
+    _float fMouseMoveY = (_float)m_pGameInstance->Get_MouseMove(MOUSEMOVESTATE::Y);
     /*
     구를 그리는 듯한 회전
     */
