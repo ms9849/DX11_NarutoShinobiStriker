@@ -9,6 +9,7 @@
 NS_BEGIN(Engine)
 class CTransform;
 class CModel;
+class CNavigation;
 NS_END
 
 NS_BEGIN(Client)
@@ -16,7 +17,7 @@ NS_BEGIN(Client)
 class CWhiteJetsu_IdleState final : public CWhiteJetsuState
 {
 private:
-	CWhiteJetsu_IdleState(class CTransform* pTransform, class CModel* pModelCom);
+	CWhiteJetsu_IdleState(class CTransform* pTransform, class CNavigation* pNavigation, class CModel* pModelCom);
 	virtual ~CWhiteJetsu_IdleState() = default;
 
 public:
@@ -31,9 +32,10 @@ private:
 	CTransform* m_pPlayerTransformCom = { nullptr };
 	CTransform*	m_pTransformCom = { nullptr };
 	CModel*		m_pModelCom = { nullptr };
+	CNavigation* m_pNavigationCom = { nullptr };
 
 public:
-	static CWhiteJetsu_IdleState* Create(class CTransform* pTransform, class CModel* pModelCom);
+	static CWhiteJetsu_IdleState* Create(class CTransform* pTransform, class CNavigation* pNavigation, class CModel* pModelCom);
 	virtual void Free() override;
 };
 

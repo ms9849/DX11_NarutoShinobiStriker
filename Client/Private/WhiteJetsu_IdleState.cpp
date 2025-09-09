@@ -14,12 +14,14 @@
 
 #pragma endregion
 
-CWhiteJetsu_IdleState::CWhiteJetsu_IdleState(class CTransform* pTransform, class CModel* pModelCom)
+CWhiteJetsu_IdleState::CWhiteJetsu_IdleState(CTransform* pTransform, CNavigation* pNavigation, CModel* pModelCom)
 	: m_pTransformCom { pTransform }
 	, m_pModelCom { pModelCom }
+	, m_pNavigationCom { pNavigation }
 {
 	Safe_AddRef(m_pTransformCom);
 	Safe_AddRef(m_pModelCom);
+	Safe_AddRef(m_pNavigationCom);
 }
 
 void CWhiteJetsu_IdleState::Start(_bool IsBlend)
@@ -38,10 +40,10 @@ CWhiteJetsuState* CWhiteJetsu_IdleState::Update(_float fTimeDelta)
 	_float fDist = XMVectorGetX(XMVector3Length(m_pTransformCom->Get_State(STATE::POSITION) - m_pPlayerTransformCom->Get_State(STATE::POSITION)));
 	
 	if(fDist < 1.f)
-		pNextState = CWhiteJetsu_AttackState::Create(m_pTransformCom, m_pModelCom);
+		pNextState = CWhiteJetsu_AttackState::Create(m_pTransformCom, m_pNavigationCom, m_pModelCom);
 
 	else if (fDist < 30.f)
-		pNextState = CWhiteJetsu_RunState::Create(m_pTransformCom, m_pModelCom);
+		pNextState = CWhiteJetsu_RunState::Create(m_pTransformCom, m_pNavigationCom, m_pModelCom);
 
 
 	return pNextState;
@@ -52,9 +54,9 @@ _bool CWhiteJetsu_IdleState::End()
 	return true;
 }
 
-CWhiteJetsu_IdleState* CWhiteJetsu_IdleState::Create(CTransform* pTransform, CModel* pModelCom)
+CWhiteJetsu_IdleState* CWhiteJetsu_IdleState::Create(CTransform* pTransform, CNavigation* pNavigation, CModel* pModelCom)
 {
-	return new CWhiteJetsu_IdleState(pTransform, pModelCom);
+	return new CWhiteJetsu_IdleState(pTransform, pNavigation, pModelCom);
 }
 
 void CWhiteJetsu_IdleState::Free()
@@ -64,4 +66,5 @@ void CWhiteJetsu_IdleState::Free()
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pPlayerTransformCom);
+	Safe_Release(m_pNavigationCom);
 }

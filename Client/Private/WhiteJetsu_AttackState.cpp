@@ -13,12 +13,14 @@
 
 #pragma endregion
 
-CWhiteJetsu_AttackState::CWhiteJetsu_AttackState(class CTransform* pTransform, class CModel* pModelCom)
+CWhiteJetsu_AttackState::CWhiteJetsu_AttackState(class CTransform* pTransform, class CNavigation* pNavigationCom, class CModel* pModelCom)
 	: m_pTransformCom { pTransform }
 	, m_pModelCom { pModelCom }
+	, m_pNavigationCom { pNavigationCom }
 {
 	Safe_AddRef(m_pTransformCom);
 	Safe_AddRef(m_pModelCom);
+	Safe_AddRef(m_pNavigationCom);
 }
 
 void CWhiteJetsu_AttackState::Start(_bool IsBlend)
@@ -33,7 +35,7 @@ CWhiteJetsuState* CWhiteJetsu_AttackState::Update(_float fTimeDelta)
 	_bool IsAnimFinished = m_pModelCom->Play_Animation(fTimeDelta);
 
 	if (true == IsAnimFinished)
-		pNextState = CWhiteJetsu_IdleState::Create(m_pTransformCom, m_pModelCom);
+		pNextState = CWhiteJetsu_IdleState::Create(m_pTransformCom, m_pNavigationCom, m_pModelCom);
 
 	return pNextState;
 }
@@ -43,9 +45,9 @@ _bool CWhiteJetsu_AttackState::End()
 	return true;
 }
 
-CWhiteJetsu_AttackState* CWhiteJetsu_AttackState::Create(class CTransform* pTransform, class CModel* pModelCom)
+CWhiteJetsu_AttackState* CWhiteJetsu_AttackState::Create(class CTransform* pTransform, class CNavigation* pNavigation, class CModel* pModelCom)
 {
-	return new CWhiteJetsu_AttackState(pTransform, pModelCom);
+	return new CWhiteJetsu_AttackState(pTransform, pNavigation, pModelCom);
 }
 
 void CWhiteJetsu_AttackState::Free()
@@ -54,4 +56,5 @@ void CWhiteJetsu_AttackState::Free()
 
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pModelCom);
+	Safe_Release(m_pNavigationCom);
 }
