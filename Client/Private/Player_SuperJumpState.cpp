@@ -45,7 +45,7 @@ CPlayerState* CPlayer_SuperJumpState::Update(_float fTimeDelta)
 		IsAnimFinished = m_pPlayer->Play_Animation(fTimeDelta);
 
 	m_fTimeAcc += fTimeDelta;
-	m_fMovement = (m_fPower * 1.5f * m_fTimeAcc - 0.5 * m_fTimeAcc * m_fTimeAcc * 7.0f * (m_fTimeAcc));
+	m_fMovement = (m_fPower * 1.5f * m_fTimeAcc - 0.5f * m_fTimeAcc * m_fTimeAcc * 7.0f * (m_fTimeAcc));
 	if (m_fMovement <= -0.5f)
 		m_fMovement = -0.5f;
 

@@ -30,6 +30,9 @@ HRESULT CWhiteJetsu::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
+    if (FAILED(Ready_HPBar()))
+        return E_FAIL;
+
    m_iNumMeshes = m_pModelCom->Get_NumMeshes();
 
     /* 상태 초기화 및 시작. */
@@ -41,16 +44,21 @@ HRESULT CWhiteJetsu::Initialize(void* pArg)
 
 void CWhiteJetsu::Priority_Update(_float fTimeDelta)
 {
+    __super::Priority_Update(fTimeDelta);
 }
 
 void CWhiteJetsu::Update(_float fTimeDelta)
 {
+    __super::Update(fTimeDelta);
+
     /* 스테이트 업데이트. */
     Update_State(fTimeDelta);
 }
 
 void CWhiteJetsu::Late_Update(_float fTimeDelta)
 {
+    __super::Late_Update(fTimeDelta);
+
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 

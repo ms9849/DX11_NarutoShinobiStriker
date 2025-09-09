@@ -26,6 +26,12 @@ void CSkillSlotUI::Change_Skill(SKILL eSkill)
     /* 여기서 나중에 이펙트 뿌려줄 수 있게 세팅해줘야지. */
     m_iTextureIdx_Skill = ENUM_CLASS(eSkill);
     m_eSkill = eSkill;
+
+    SKILL_INFO* pInfo = m_pGameManager->Get_PlayerPtr()->Get_Skill_Info(m_eSkill);
+
+    m_fPreSkillTimeAcc = 0.f;
+    m_fSkillTimeAcc = pInfo->fTimeAcc;
+    m_fMaxSkillCoolDown = pInfo->fMaxCoolDown;
 }
 
 HRESULT CSkillSlotUI::Initialize_Prototype()
