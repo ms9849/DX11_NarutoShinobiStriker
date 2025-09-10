@@ -1,26 +1,24 @@
-#include "WhiteJetsu.h"
+#include "Bird.h"
 
 #include "GameInstance.h"
-#include "GameManager.h"
+#include "Bird_IdleState.h"
 
-#include "WhiteJetsu_IdleState.h"
-
-CWhiteJetsu::CWhiteJetsu(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
+CBird::CBird(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CEnemy { pDevice, pContext, eObjectID }
 {
 }
 
-CWhiteJetsu::CWhiteJetsu(const CWhiteJetsu& rhs)
+CBird::CBird(const CBird& rhs)
     : CEnemy{ rhs }
 {
 }
 
-HRESULT CWhiteJetsu::Initialize_Prototype()
+HRESULT CBird::Initialize_Prototype()
 {
     return S_OK;
 }
 
-HRESULT CWhiteJetsu::Initialize(void* pArg)
+HRESULT CBird::Initialize(void* pArg)
 {
     CGameObject::GAMEOBJECT_DESC	Desc{};
     Desc.fRotationPerSec = XMConvertToRadians(180.0f);
@@ -36,23 +34,20 @@ HRESULT CWhiteJetsu::Initialize(void* pArg)
         return E_FAIL;
 
     m_iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(5.f, 0.f, 5.f, 1.f));
-    /* 상태 초기화 및 시작. */
-    m_pGameManager->Add_TargetTransform(m_pTransformCom);
-
-    m_pState = CWhiteJetsu_IdleState::Create(m_pTransformCom, m_pNavigationCom, m_pModelCom);
+    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(10.f, 0.f, 10.f, 1.f));
+    ///* 상태 초기화 및 시작. */
+    m_pState = CBird_IdleState::Create(m_pTransformCom, m_pNavigationCom, m_pModelCom);
     m_pState->Start(true);
 
     return S_OK;
 }
 
-void CWhiteJetsu::Priority_Update(_float fTimeDelta)
+void CBird::Priority_Update(_float fTimeDelta)
 {
     __super::Priority_Update(fTimeDelta);
 }
 
-void CWhiteJetsu::Update(_float fTimeDelta)
+void CBird::Update(_float fTimeDelta)
 {
     __super::Update(fTimeDelta);
 
@@ -60,14 +55,14 @@ void CWhiteJetsu::Update(_float fTimeDelta)
     Update_State(fTimeDelta);
 }
 
-void CWhiteJetsu::Late_Update(_float fTimeDelta)
+void CBird::Late_Update(_float fTimeDelta)
 {
     __super::Late_Update(fTimeDelta);
 
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 
-HRESULT CWhiteJetsu::Render()
+HRESULT CBird::Render()
 {
     if (FAILED(Bind_ShaderResources()))
         return E_FAIL;
@@ -90,7 +85,7 @@ HRESULT CWhiteJetsu::Render()
     return S_OK;
 }
 
-HRESULT CWhiteJetsu::Ready_Components()
+HRESULT CBird::Ready_Components()
 {
     /* Com_Shader */
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxAnimMesh"),
@@ -98,14 +93,14 @@ HRESULT CWhiteJetsu::Ready_Components()
         return E_FAIL;
 
     /* Com_Model */
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_WhiteJetsu"),
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_Bird"),
         TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
         return E_FAIL;
 
     /* Com_Navigation */
 
     CNavigation::NAVIGATION_DESC Desc;
-    Desc.iCurrentCellIndex = 0;
+    Desc.iCurrentCellIndex = 2;
 
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Test_Navigation"),
         TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
@@ -114,7 +109,7 @@ HRESULT CWhiteJetsu::Ready_Components()
     return S_OK;
 }
 
-HRESULT CWhiteJetsu::Bind_ShaderResources()
+HRESULT CBird::Bind_ShaderResources()
 {
     /*m_pShaderCom->Bind_Matrix("g_WorldMatrix", );*/
     if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
@@ -149,9 +144,9 @@ HRESULT CWhiteJetsu::Bind_ShaderResources()
     return S_OK;
 }
 
-void CWhiteJetsu::Update_State(_float fTimeDelta)
+void CBird::Update_State(_float fTimeDelta)
 {
-    CWhiteJetsuState* pNextState = { nullptr };
+    CBirdState* pNextState = { nullptr };
     pNextState = m_pState->Update(fTimeDelta);
 
     if (nullptr != pNextState)
@@ -168,33 +163,33 @@ void CWhiteJetsu::Update_State(_float fTimeDelta)
     }
 }
 
-CWhiteJetsu* CWhiteJetsu::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
+CBird* CBird::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 {
-    CWhiteJetsu* pInstance = new CWhiteJetsu(pDevice, pContext, eObjectID);
+    CBird* pInstance = new CBird(pDevice, pContext, eObjectID);
 
     if (FAILED(pInstance->Initialize_Prototype()))
     {
-        MSG_BOX("Create Failed : White Jetsu");
+        MSG_BOX("Create Failed : CBird");
         Safe_Release(pInstance);
     }
 
     return pInstance;
 }
 
-CGameObject* CWhiteJetsu::Clone(void* pArg)
+CGameObject* CBird::Clone(void* pArg)
 {
-    CWhiteJetsu* pInstance = new CWhiteJetsu(*this);
+    CBird* pInstance = new CBird(*this);
 
     if (FAILED(pInstance->Initialize(pArg)))
     {
-        MSG_BOX("Clone Failed : White Jetsu");
+        MSG_BOX("Clone Failed : CBird");
         Safe_Release(pInstance);
     }
 
     return pInstance;
 }
 
-void CWhiteJetsu::Free()
+void CBird::Free()
 {
     __super::Free();
 

@@ -100,9 +100,6 @@
     <Filter Include="02.GameObjects\Character\Player">
       <UniqueIdentifier>{39f86bc5-1f38-4606-85c7-c84d7b014e48}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Character\Enemy">
-      <UniqueIdentifier>{34935787-5105-4ed4-aea5-eae298f28013}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Character\Skill">
       <UniqueIdentifier>{3cfbfd6f-0c65-4c0d-addc-22c944de628d}</UniqueIdentifier>
     </Filter>
@@ -268,29 +265,47 @@
     <Filter Include="02.GameObjects\Character\Player\State\BASE\DuckingState">
       <UniqueIdentifier>{fc45bd3c-75b2-4d36-bc0b-93ef24ceeaba}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Character\Enemy\Jetsu">
-      <UniqueIdentifier>{e6ff5d31-87cf-441c-bcbc-049833278571}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Character\Enemy\Jetsu\State">
-      <UniqueIdentifier>{de360d71-d62a-41fc-8aff-88c07c3d3e9f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Character\Enemy\Jetsu\State\Idle">
-      <UniqueIdentifier>{4e1b6ada-b7a9-43bc-a884-2e939f1623e2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Character\Enemy\Jetsu\State\Attack">
-      <UniqueIdentifier>{b3097455-a8d4-45b1-9096-d64d72005e81}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Character\Enemy\Jetsu\State\Run">
-      <UniqueIdentifier>{38c1c968-546d-45e4-80b5-bddee566d2f4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Character\Enemy\Boxer">
-      <UniqueIdentifier>{4a097cb0-3ef9-484e-a08b-e64a8b1e4e90}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Effect">
       <UniqueIdentifier>{fd3144ba-221a-4729-9e60-5da79d058cf2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Character\Enemy\HPBar">
+    <Filter Include="02.GameObjects\Enemy">
+      <UniqueIdentifier>{34935787-5105-4ed4-aea5-eae298f28013}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Jetsu">
+      <UniqueIdentifier>{e6ff5d31-87cf-441c-bcbc-049833278571}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Jetsu\State">
+      <UniqueIdentifier>{de360d71-d62a-41fc-8aff-88c07c3d3e9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Jetsu\State\Idle">
+      <UniqueIdentifier>{4e1b6ada-b7a9-43bc-a884-2e939f1623e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Jetsu\State\Attack">
+      <UniqueIdentifier>{b3097455-a8d4-45b1-9096-d64d72005e81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Jetsu\State\Run">
+      <UniqueIdentifier>{38c1c968-546d-45e4-80b5-bddee566d2f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\HPBar">
       <UniqueIdentifier>{3206a7e6-945e-4907-9df7-3067c7739f1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Bird">
+      <UniqueIdentifier>{a72ef035-7afc-4e5f-84ce-51f2dfa80273}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Bird\State">
+      <UniqueIdentifier>{2ba88135-4be6-40e4-a0ec-ff0f6191db55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Bird\State\Attack">
+      <UniqueIdentifier>{a586552e-af54-4e6a-a96e-421875cfa2ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Bird\State\Idle">
+      <UniqueIdentifier>{2898f63f-4f4e-464c-b95d-bb45576ad7af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Bird\State\Run">
+      <UniqueIdentifier>{4b49e70c-53c0-4a58-89ce-8f1e511abe06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="96. GameManager\Managers">
+      <UniqueIdentifier>{a0ea510a-afe8-4f4a-a807-4d58ae933da1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -538,28 +553,46 @@
       <Filter>02.GameObjects\Character\Player\State\BASE\DuckingState</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\WhiteJetsuState.h">
-      <Filter>02.GameObjects\Character\Enemy\Jetsu\State</Filter>
+      <Filter>02.GameObjects\Enemy\Jetsu\State</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\WhiteJetsu_IdleState.h">
-      <Filter>02.GameObjects\Character\Enemy\Jetsu\State\Idle</Filter>
+      <Filter>02.GameObjects\Enemy\Jetsu\State\Idle</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\WhiteJetsu_AttackState.h">
-      <Filter>02.GameObjects\Character\Enemy\Jetsu\State\Attack</Filter>
+      <Filter>02.GameObjects\Enemy\Jetsu\State\Attack</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\WhiteJetsu_RunState.h">
-      <Filter>02.GameObjects\Character\Enemy\Jetsu\State\Run</Filter>
+      <Filter>02.GameObjects\Enemy\Jetsu\State\Run</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Enemy.h">
-      <Filter>02.GameObjects\Character\Enemy</Filter>
+      <Filter>02.GameObjects\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\WhiteJetsu.h">
-      <Filter>02.GameObjects\Character\Enemy\Jetsu</Filter>
+      <Filter>02.GameObjects\Enemy\Jetsu</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Effect_CoolDown.h">
       <Filter>02.GameObjects\Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Enemy_HPBar.h">
-      <Filter>02.GameObjects\Character\Enemy\HPBar</Filter>
+      <Filter>02.GameObjects\Enemy\HPBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Bird.h">
+      <Filter>02.GameObjects\Enemy\Bird</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\BirdState.h">
+      <Filter>02.GameObjects\Enemy\Bird\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Bird_AttackState.h">
+      <Filter>02.GameObjects\Enemy\Bird\State\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Bird_IdleState.h">
+      <Filter>02.GameObjects\Enemy\Bird\State\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Bird_RunState.h">
+      <Filter>02.GameObjects\Enemy\Bird\State\Run</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Camera_Manager.h">
+      <Filter>96. GameManager\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -805,28 +838,46 @@
       <Filter>02.GameObjects\Character\Player\State\BASE\DuckingState</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\WhiteJetsuState.cpp">
-      <Filter>02.GameObjects\Character\Enemy\Jetsu\State</Filter>
+      <Filter>02.GameObjects\Enemy\Jetsu\State</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\WhiteJetsu_IdleState.cpp">
-      <Filter>02.GameObjects\Character\Enemy\Jetsu\State\Idle</Filter>
+      <Filter>02.GameObjects\Enemy\Jetsu\State\Idle</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\WhiteJetsu_AttackState.cpp">
-      <Filter>02.GameObjects\Character\Enemy\Jetsu\State\Attack</Filter>
+      <Filter>02.GameObjects\Enemy\Jetsu\State\Attack</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\WhiteJetsu_RunState.cpp">
-      <Filter>02.GameObjects\Character\Enemy\Jetsu\State\Run</Filter>
+      <Filter>02.GameObjects\Enemy\Jetsu\State\Run</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Enemy.cpp">
-      <Filter>02.GameObjects\Character\Enemy</Filter>
+      <Filter>02.GameObjects\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\WhiteJetsu.cpp">
-      <Filter>02.GameObjects\Character\Enemy\Jetsu</Filter>
+      <Filter>02.GameObjects\Enemy\Jetsu</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Effect_CoolDown.cpp">
       <Filter>02.GameObjects\Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Enemy_HPBar.cpp">
-      <Filter>02.GameObjects\Character\Enemy\HPBar</Filter>
+      <Filter>02.GameObjects\Enemy\HPBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bird.cpp">
+      <Filter>02.GameObjects\Enemy\Bird</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\BirdState.cpp">
+      <Filter>02.GameObjects\Enemy\Bird\State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bird_IdleState.cpp">
+      <Filter>02.GameObjects\Enemy\Bird\State\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bird_RunState.cpp">
+      <Filter>02.GameObjects\Enemy\Bird\State\Run</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bird_AttackState.cpp">
+      <Filter>02.GameObjects\Enemy\Bird\State\Run</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Camera_Manager.cpp">
+      <Filter>96. GameManager\Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

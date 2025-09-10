@@ -49,6 +49,7 @@
 #include "Weapon_Player.h"
 
 #include "WhiteJetsu.h"
+#include "Bird.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice { pDevice }
@@ -385,6 +386,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_GameObject_WhiteJetsu */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_WhiteJetsu"),
 		CWhiteJetsu::Create(m_pDevice, m_pContext, OBJECTID::WHITEJETSU))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Bird */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Bird"),
+		CBird::Create(m_pDevice, m_pContext, OBJECTID::BIRD))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_TestCamera */

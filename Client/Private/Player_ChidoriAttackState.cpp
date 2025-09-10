@@ -34,10 +34,10 @@ CPlayerState* CPlayer_ChidoriAttackState::Update(_float fTimeDelta)
 
     //치도리 사용중 바라보는 방향으로 날아가기
     if (ANIM_STATE::ATTACK == m_eAnimState && m_fTimeAcc < 1.0f)
-        m_pPlayer->Get_PlayerTransformPtr()->Go_Direction(m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::LOOK), fTimeDelta * 2.f);
+        m_pPlayer->Get_Transform()->Go_Direction(m_pPlayer->Get_Transform()->Get_State(STATE::LOOK), fTimeDelta * 2.f);
 
     else if (ANIM_STATE::ATTACK_END == m_eAnimState && fAnimProgress < 0.5f && false == IsAnimFinished)
-        m_pPlayer->Get_PlayerTransformPtr()->Go_Direction(m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::LOOK), fTimeDelta * 1.f * m_pGameInstance->Calc_Linear(-2.f, 1.f, fAnimProgress));
+        m_pPlayer->Get_Transform()->Go_Direction(m_pPlayer->Get_Transform()->Get_State(STATE::LOOK), fTimeDelta * 1.f * m_pGameInstance->Calc_Linear(-2.f, 1.f, fAnimProgress));
 
 
     if ((m_pGameInstance->Key_Pressing(DIK_A) ||
@@ -45,10 +45,10 @@ CPlayerState* CPlayer_ChidoriAttackState::Update(_float fTimeDelta)
         && ANIM_STATE::ATTACK_END != m_eAnimState)
     {
         if (m_pGameInstance->Key_Pressing(DIK_D))
-            m_pPlayer->Get_PlayerTransformPtr()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * 0.25f);
+            m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * 0.25f);
 
         if (m_pGameInstance->Key_Pressing(DIK_A))
-            m_pPlayer->Get_PlayerTransformPtr()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * -0.25f);
+            m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * -0.25f);
     }
     // 치도리 끝내는 동작 (ATTACK_END로 전환) 
     if (m_fTimeAcc >= 1.0f && ANIM_STATE::ATTACK == m_eAnimState)

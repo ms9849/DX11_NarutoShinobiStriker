@@ -20,6 +20,8 @@ public:
 	void Clear_Resources(_uint iLevelIndex);
 
 #pragma region TOOLS
+	/* 리턴 값은 라디안 */
+	_float  Calc_Dot(_fvector vVector1, _fvector vVector2);
 	/* 일차함수 계산기 */
 	_float  Calc_Linear(_float fLinear, _float fConstant, _float fValue);
 	/* 이차함수 계산기 */

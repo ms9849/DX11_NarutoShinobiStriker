@@ -7,12 +7,16 @@
 
 CEnemy::CEnemy(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CGameObject{  pDevice, pContext, ENUM_CLASS(eObjectID) }
+    , m_pGameManager { CGameManager::GetInstance() }
 {
+    Safe_AddRef(m_pGameManager);
 }
 
 CEnemy::CEnemy(const CEnemy& rhs)
     : CGameObject { rhs }
+    , m_pGameManager{ CGameManager::GetInstance() }
 {
+    Safe_AddRef(m_pGameManager);
 }
 
 HRESULT CEnemy::Initialize_Prototype()
@@ -64,4 +68,5 @@ void CEnemy::Free()
     __super::Free();
 
     Safe_Release(m_pHPBar);
+    Safe_Release(m_pGameManager);
 }

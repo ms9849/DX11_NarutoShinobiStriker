@@ -126,6 +126,23 @@ void CGameInstance::Clear_Resources(_uint iLevelIndex)
 }
 
 #pragma region TOOLS
+_float CGameInstance::Calc_Dot(_fvector vSour, _fvector vDest)
+{
+	_float fDot = XMVectorGetX(XMVector3Dot(XMVector3Normalize(vSour), XMVector3Normalize(vDest)));
+	_float3 vCross = {};
+	XMStoreFloat3(&vCross ,XMVector3Cross(vSour, vDest));
+
+	_float fRadian = acosf(fDot);
+	// 0 ~ 180도 사이.
+	// 180 ~ 360도 사이
+
+	if (vCross.y >= 0)
+		return  fRadian;
+
+	else
+		return XM_2PI - fRadian;
+}
+
 _float CGameInstance::Calc_Linear(_float fLinear, _float fConstant, _float fValue)
 {
 	return fLinear * fValue + fConstant;

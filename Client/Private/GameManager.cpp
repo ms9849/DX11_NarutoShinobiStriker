@@ -2,14 +2,16 @@
 
 #include "GameInstance.h"
 
-#include "Camera.h"
 #include "Player.h"
 #include "QuestLog.h"
 #include "Enemy.h"
 
+#include "Camera_Manager.h"
+
+
 IMPLEMENT_SINGLETON(CGameManager);
 
-CGameManager::CGameManager() 
+CGameManager::CGameManager()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
 {
 	Safe_AddRef(m_pGameInstance);
@@ -17,6 +19,11 @@ CGameManager::CGameManager()
 
 HRESULT CGameManager::Initialize_GameManager()
 {
+	m_pCamera_Manager = CCamera_Manager::Create();
+	if (nullptr == m_pCamera_Manager)
+		return E_FAIL;
+
+
 	return S_OK;
 }
 
@@ -28,22 +35,15 @@ void CGameManager::Release_GameManager()
 		m_pPlayer->Clear_State();
 
 	Safe_Release(m_pPlayer);
-	Safe_Release(m_pQuestLog);
 	Safe_Release(m_pGameInstance);
-
-	for (_uint i = 0; i < ENUM_CLASS(LEVEL::END); ++i)
-	{
-		for (auto& pCamera : m_Cameras[i])
-			Safe_Release(pCamera.second);
-
-		m_Cameras[i].clear();
-	}
+	Safe_Release(m_pCamera_Manager);
 }
 
 void CGameManager::Clear()
 {
 	/* 지울때 레퍼런스 카운트가 0임을 보장하지 않음*/
 	/* 따라서 명시적으로 nullptr 처리 해줘야함 */
+	m_pCamera_Manager->Clear();
 
 	/* 플레이어 지우기 */
 	Safe_Release(m_pPlayer);
@@ -52,21 +52,21 @@ void CGameManager::Clear()
 		m_pPlayer->Clear_State();
 		m_pPlayer = nullptr;
 	}
+}
 
-	/* 퀘스트로그 지우기 */
-	Safe_Release(m_pQuestLog);
-	m_pQuestLog = nullptr;
+CTransform* CGameManager::Get_TargetTransform()
+{
+	return m_pCamera_Manager->Get_TargetTransform();
+}
 
-	/* 카메라 지우기 */
-	for (_uint i = 0; i < ENUM_CLASS(LEVEL::END); ++i)
-	{
-		for (auto& pCamera : m_Cameras[i])
-			Safe_Release(pCamera.second);
+void CGameManager::SetUp_Target()
+{
+	return m_pCamera_Manager->SetUp_Target();
+}
 
-		m_Cameras[i].clear();
-	}
-
-	m_pActivatedCamera = nullptr;
+HRESULT CGameManager::Add_TargetTransform(CTransform* pTransformCom)
+{
+ 	return m_pCamera_Manager->Add_TargetTransform(pTransformCom);
 }
 
 HRESULT CGameManager::Set_PlayerPtr(CPlayer* pPlayer)
@@ -85,19 +85,6 @@ HRESULT CGameManager::Set_PlayerPtr(CPlayer* pPlayer)
 	return S_OK;
 }
 
-HRESULT CGameManager::Set_QuestPtr(CQuestLog* pQuestLog)
-{
-	//인자로 받은 퀘스트가 nullptr 이라면, 
-	// 그리고 이미 퀘스트가 등록되어 있다면.. 근데 퀘스트는 그럴 일 없다.
-	if (nullptr == pQuestLog || nullptr != m_pQuestLog)
-		return E_FAIL;
-
-	m_pQuestLog = pQuestLog;
-	Safe_AddRef(m_pQuestLog);
-
-	return S_OK;
-}
-
 HRESULT CGameManager::Set_NextLevelID(LEVEL eLevelID)
 {
 	m_eNextLevel = eLevelID;
@@ -107,42 +94,12 @@ HRESULT CGameManager::Set_NextLevelID(LEVEL eLevelID)
 
 HRESULT CGameManager::Add_Camera(LEVEL eLevelID, const _wstring& strCameraTag, CCamera* pCamera)
 {
-	/* 이미 카메라가 존재하면 FAIL 반환. */
-	auto iter = m_Cameras[ENUM_CLASS(eLevelID)].find(strCameraTag);
-
-	if (iter != m_Cameras[ENUM_CLASS(eLevelID)].end())
-		return E_FAIL;
-
-	m_Cameras[ENUM_CLASS(eLevelID)].emplace(strCameraTag, pCamera);
-
-	return S_OK;
+    return m_pCamera_Manager->Add_Camera(eLevelID, strCameraTag, pCamera);
 }
 
 HRESULT CGameManager::Change_Camera(LEVEL eLevelID, const _wstring& strCameraTag)
 {
-	/* 태그에 해당하는 카메라가 존재하지 않으면 FAIL 반환. */
-	auto iter = m_Cameras[ENUM_CLASS(eLevelID)].find(strCameraTag);
-	
-	if (m_Cameras[ENUM_CLASS(eLevelID)].end() == iter)
-		return E_FAIL;
-
-	/* 같은 태그로 변경하려고 하면 OK만 반환해주게 된다. */
-	if (m_strActivatedCameraTag == strCameraTag)
-		return S_OK;
-
-	/* 기존 카메라 Set Dead 세팅. 오브젝트 매니저에서 빠져 나오게 된다. */
-	if(nullptr != m_pActivatedCamera)
-		m_pActivatedCamera->Set_Dead(true);
-
-	static_cast<CGameObject*>(iter->second)->Set_Dead(false);
-	m_pGameInstance->Add_Clone_ToLayer(iter->second, ENUM_CLASS(eLevelID), TEXT("Layer_Camera"));
-
-	/* 활성화중인 카메라 교체 */
-	m_strActivatedCameraTag = strCameraTag;
-	m_pActivatedCamera = iter->second;
-	Safe_AddRef(m_pActivatedCamera);
-
-	return S_OK;
+	return m_pCamera_Manager->Change_Camera(eLevelID, strCameraTag);
 }
 
 LEVEL CGameManager::Get_NextLevel()

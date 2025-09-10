@@ -38,6 +38,10 @@ public:
 		m_isDead = bFlag;
 	}
 
+	class CTransform* Get_Transform() {
+		return m_pTransformCom;
+	}
+
 public:
 	_float Get_CamDistance() const;
 	class CComponent* Find_Component(const _wstring& strComponentTag);

@@ -32,6 +32,7 @@ protected:
 	_float m_fCurrentHP = { 100 };
 	_float m_fMaxHP = { 200 };
 	class CEnemy_HPBar* m_pHPBar = { nullptr };
+	class CGameManager* m_pGameManager = { nullptr };
 
 public:
 	virtual CGameObject* Clone(void* pArg) override = 0;

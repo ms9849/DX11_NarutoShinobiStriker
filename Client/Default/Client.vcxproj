@@ -154,7 +154,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\AttackTypePanel.h" />
+    <ClInclude Include="..\Public\Bird.h" />
+    <ClInclude Include="..\Public\BirdState.h" />
+    <ClInclude Include="..\Public\Bird_AttackState.h" />
+    <ClInclude Include="..\Public\Bird_IdleState.h" />
+    <ClInclude Include="..\Public\Bird_RunState.h" />
     <ClInclude Include="..\Public\Button.h" />
+    <ClInclude Include="..\Public\Camera_Manager.h" />
     <ClInclude Include="..\Public\Character.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\ComboKOPanel.h" />
@@ -245,7 +251,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\AttackTypePanel.cpp" />
+    <ClCompile Include="..\Private\Bird.cpp" />
+    <ClCompile Include="..\Private\BirdState.cpp" />
+    <ClCompile Include="..\Private\Bird_AttackState.cpp" />
+    <ClCompile Include="..\Private\Bird_IdleState.cpp" />
+    <ClCompile Include="..\Private\Bird_RunState.cpp" />
     <ClCompile Include="..\Private\Button.cpp" />
+    <ClCompile Include="..\Private\Camera_Manager.cpp" />
     <ClCompile Include="..\Private\Character.cpp" />
     <ClCompile Include="..\Private\ComboKOPanel.cpp" />
     <ClCompile Include="..\Private\CreateCharacterUI.cpp" />

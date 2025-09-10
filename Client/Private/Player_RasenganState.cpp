@@ -37,17 +37,16 @@ CPlayerState* CPlayer_RasenganState::Update(_float fTimeDelta)
         && ANIM_STATE::ATTACK_END != m_eAnimState)
     {
         if (m_pGameInstance->Key_Pressing(DIK_D))
-            m_pPlayer->Get_PlayerTransformPtr()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * 0.25f);
+            m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * 0.25f);
 
         if (m_pGameInstance->Key_Pressing(DIK_A))
-            m_pPlayer->Get_PlayerTransformPtr()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * -0.25f);
+            m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * -0.25f);
     }
 
     // 나선환 차징 -> 달리기 끝났다면
     if (true == IsAnimFinished && ANIM_STATE::ATTACK_START == m_eAnimState)
     {
-        m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Rasengun_Run_Lv1_Loop", 1.5f, false, 0.f);
-        m_pPlayer->Set_AnimProgress(0.17);
+        m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Rasengun_Run_Lv1_Loop", 1.0f, false, 0.f);
         m_eAnimState = ANIM_STATE::ATTACK;
         m_fTimeAcc = 0.f;
     }
@@ -55,8 +54,8 @@ CPlayerState* CPlayer_RasenganState::Update(_float fTimeDelta)
     // 나선환 달리기 루프 시켜주기. 
     else if (true == IsAnimFinished && m_fTimeAcc < 1.2f && ANIM_STATE::ATTACK == m_eAnimState)
     {
-        m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Rasengun_Run_Lv1_Loop", 1.5f, false, 0.f);
-        //m_pPlayer->Set_AnimProgress(0.05);
+        m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Rasengun_Run_Lv1_Loop", 1.0f, false, 0.f);
+        m_pPlayer->Set_AnimProgress(0.084f);
     }
 
     // 나선환 RMx 애니메이션 전환. 나중에 맞았는지 체크해야함. 
@@ -75,13 +74,13 @@ CPlayerState* CPlayer_RasenganState::Update(_float fTimeDelta)
 
     // 나선환 사용중 바라보는 방향으로 날아가기
     if (ANIM_STATE::ATTACK == m_eAnimState)
-        m_pPlayer->Get_PlayerTransformPtr()->Go_Direction(m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::LOOK), fTimeDelta * 1.5f);
+        m_pPlayer->Get_Transform()->Go_Direction(m_pPlayer->Get_Transform()->Get_State(STATE::LOOK), fTimeDelta * 1.5f);
 
     else if (ANIM_STATE::ATTACK_START == m_eAnimState)
-        m_pPlayer->Get_PlayerTransformPtr()->Go_Direction(m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::LOOK), fTimeDelta * m_pGameInstance->Calc_Linear(1.5f, 0.f, fAnimProgress));
+        m_pPlayer->Get_Transform()->Go_Direction(m_pPlayer->Get_Transform()->Get_State(STATE::LOOK), fTimeDelta * m_pGameInstance->Calc_Linear(1.5f, 0.f, fAnimProgress));
 
     else if (false == IsAnimFinished && fAnimProgress < 0.7f && ANIM_STATE::ATTACK_END == m_eAnimState)
-        m_pPlayer->Get_PlayerTransformPtr()->Go_Direction(m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::LOOK), fTimeDelta * m_pGameInstance->Calc_Linear(-1.5f, 1.1f, fAnimProgress));
+        m_pPlayer->Get_Transform()->Go_Direction(m_pPlayer->Get_Transform()->Get_State(STATE::LOOK), fTimeDelta * m_pGameInstance->Calc_Linear(-1.5f, 1.1f, fAnimProgress));
 
 	return pNextState;
 }
