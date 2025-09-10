@@ -199,10 +199,31 @@ void CTransform::Orbit(_fvector vAxisPos, _fvector vAxis, _float fRadian)
 
 void CTransform::LookAt(_fvector vAt)
 {
+	_vector     vPosition = Get_State(STATE::POSITION);
 	_float3		vScale = Get_Scale();
 	_vector		vRight, vUp, vLook;
 
-	vLook = vAt - Get_State(STATE::POSITION);
+	vLook = vAt - vPosition;
+
+	vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
+	vUp = XMVector3Cross(vLook, vRight);
+
+	Set_State(STATE::RIGHT, XMVector3Normalize(vRight) * vScale.x);
+	Set_State(STATE::UP, XMVector3Normalize(vUp) * vScale.y);
+	Set_State(STATE::LOOK, XMVector3Normalize(vLook) * vScale.z);
+}
+
+void CTransform::LookAt_XZ(_fvector vAt)
+{
+	_vector     vPosition = Get_State(STATE::POSITION);
+	_float3		vScale = Get_Scale();
+	_vector		vRight, vUp, vLook;
+
+	vPosition = XMVectorSetY(vPosition, 0.f), 0.f;
+
+	vLook = vAt - vPosition;
+	vLook = XMVectorSetW(XMVectorSetY(vLook, 0.f), 0.f);
+
 	vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
 	vUp = XMVector3Cross(vLook, vRight);
 
@@ -216,8 +237,10 @@ void CTransform::LookAt_Lerp(_fvector vAt)
 	_float3		vScale = Get_Scale();
 
 	_vector		vRight, vUp, vLook;
+	_vector		vTarget = XMVector3Normalize(vAt - Get_State(STATE::POSITION));
+	vTarget = XMVectorSetW(vTarget, 0.f);
 
-	vLook = XMQuaternionSlerp(XMVector3Normalize(Get_State(STATE::LOOK)), XMVector3Normalize(vAt - Get_State(STATE::POSITION)), 0.15f);
+	vLook = XMQuaternionSlerp(XMVector3Normalize(Get_State(STATE::LOOK)), vTarget, 0.15f);
 	vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
 	vUp = XMVector3Cross(vLook, vRight);
 
@@ -245,10 +268,13 @@ void CTransform::Chase(_fvector vTargetPos, _float fTimeDelta, class CNavigation
 		Set_State(STATE::POSITION, vPosition);
 }
 
-void CTransform::Chase_Lerp(_fvector vTargetPos, _float fTimeDelta, _float fLimitDistance)
+void CTransform::Chase_XZ(_fvector vTargetPos, _float fTimeDelta, CNavigation* pNavigation, _float fLimitDistance)
 {
 	_vector		vPosition = Get_State(STATE::POSITION);
 	_vector		vDirection = vTargetPos - vPosition;
+
+	vDirection = XMVectorSetY(vDirection, 0.f);
+
 	_float		fDist = XMVectorGetX(XMVector3Length(vTargetPos - vPosition));
 
 	if (fDist < fLimitDistance)
@@ -256,10 +282,28 @@ void CTransform::Chase_Lerp(_fvector vTargetPos, _float fTimeDelta, _float fLimi
 
 	_vector		vMove;
 
-	vMove = (fDist / fLimitDistance) * 0.5f * XMVector3Normalize(vDirection) * m_fSpeedPerSec * fTimeDelta;
+	vMove = XMVector3Normalize(vDirection) * m_fSpeedPerSec * fTimeDelta;
+	vMove = XMVectorSetY(vMove, 0.f);
 
-	vPosition += vMove;
-	Set_State(STATE::POSITION, vPosition);
+ 	vPosition += vMove;
+	if (nullptr == pNavigation ||
+		true == pNavigation->isMove(vPosition))
+		Set_State(STATE::POSITION, vPosition);
+}
+
+void CTransform::Chase_Lerp(_fvector vTargetPos, _float fTimeDelta, _float fLimitDistance)
+{
+	_vector		vPosition = Get_State(STATE::POSITION);
+	_vector		vDirection = vTargetPos - vPosition;
+	_float		fDist = XMVectorGetX(XMVector3Length(vTargetPos - vPosition));
+
+
+	_vector		vLerp = XMVectorSetW(XMVectorLerp(vPosition, vTargetPos, fTimeDelta * m_fSpeedPerSec), 1.f);
+
+	if (fDist < fLimitDistance)
+		return;
+
+	Set_State(STATE::POSITION, vLerp);
 }
 
 CTransform* CTransform::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

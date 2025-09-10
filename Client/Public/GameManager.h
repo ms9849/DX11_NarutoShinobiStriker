@@ -6,6 +6,7 @@
 NS_BEGIN(Engine)
 class CGameInstance;
 class CCamera;
+class CTransform;
 NS_END
 
 NS_BEGIN(Client)
@@ -24,7 +25,11 @@ NS_BEGIN(Client)
 -> 콜리전 매니저는? 엔진 단에서 적용.
 -> 이펙트는? 어차피 풀링될테니까 풀링 매니저 (게임인스턴스) 에서 꺼내오는게 합당할 것.
 */
+/*
+록온 시스템 -> 시야 내에 있고 (외적 결과 음수인가 양수인가로 판정) & 가장 가까운 몬스터가 록온되어야 할 것
 
+플레이어는 공격할때 록온된 몬스터가 있다면 해당 몬스터를 향한다
+*/
 class CGameManager final : public CBase
 {
 	DECLARE_SINGLETON(CGameManager);
@@ -40,32 +45,28 @@ public:
 
 	LEVEL		Get_NextLevel();
 	HRESULT		Set_PlayerPtr(class CPlayer* pPlayer);
-	HRESULT		Set_QuestPtr(class CQuestLog* pQuestLog);
 	HRESULT		Set_NextLevelID(LEVEL eLevelID);
-
-public:
-	HRESULT		Add_Camera(LEVEL eLevelID, const _wstring& strCameraTag, CCamera* pCamera);
-	HRESULT		Change_Camera(LEVEL eLevelID, const _wstring& strCameraTag);
 
 public:
 	HRESULT		Initialize_GameManager();
 	void		Release_GameManager();
 	void		Clear();
 
-private:
-	/* 카메라는 동적으로 추가되는게 아니라 
-	개발자의 의도에 따라 정적인 갯수만큼 추가 될 것이므로 전부 ENUM CLASS화 한다. */
+#pragma region CAMERA
+	CTransform* Get_TargetTransform();
+	void		SetUp_Target();
+	HRESULT		Add_TargetTransform(CTransform* pTransformCom);
+	HRESULT		Add_Camera(LEVEL eLevelID, const _wstring& strCameraTag, CCamera* pCamera);
+	HRESULT		Change_Camera(LEVEL eLevelID, const _wstring& strCameraTag);
+#pragma endregion
 
-	map<const _wstring, CCamera*> m_Cameras[ENUM_CLASS(LEVEL::END)] = {};
-	CCamera* m_pActivatedCamera = {};
-	_wstring m_strActivatedCameraTag = {};
+private:
+	CGameInstance* m_pGameInstance = { nullptr };
+
+	class CCamera_Manager* m_pCamera_Manager = { nullptr };
 
 	class CPlayer* m_pPlayer = {};
-	class CQuestLog* m_pQuestLog = {};
-
-	CGameInstance* m_pGameInstance = { nullptr };
 	LEVEL			m_eNextLevel = {};
-
 public:
 	virtual void Free() override;
 };

@@ -39,20 +39,20 @@ CPlayerState* CPlayer_FrontJumpState::Update(_float fTimeDelta)
 	if (m_fMovement <= -0.45f)
 		m_fMovement = -0.45f;
 
-	m_pPlayer->Get_PlayerTransformPtr()->Set_State(STATE::POSITION, m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fMovement, 0.f, 0.f));
+	m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fMovement, 0.f, 0.f));
 
 	if (m_pGameInstance->Key_Pressing(DIK_W) ||
 		m_pGameInstance->Key_Pressing(DIK_A) ||
 		m_pGameInstance->Key_Pressing(DIK_D)
 		)
 	{
-		m_pPlayer->Get_PlayerTransformPtr()->Go_Straight(fTimeDelta);
+		m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta);
 
 		if (m_pGameInstance->Key_Pressing(DIK_D))
-			m_pPlayer->Get_PlayerTransformPtr()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * 0.3f);
+			m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * 0.3f);
 
 		if (m_pGameInstance->Key_Pressing(DIK_A))
-			m_pPlayer->Get_PlayerTransformPtr()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * -0.3f);
+			m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * -0.3f);
 	}
 
 
@@ -76,12 +76,12 @@ CPlayerState* CPlayer_FrontJumpState::Update(_float fTimeDelta)
 	}
 
 	// LAND로의 상태 전환 
-	if (XMVectorGetY(m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::POSITION)) < 0.f)
+	if (XMVectorGetY(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION)) < 0.f)
 	{
 		pNextState = CPlayer_LandState::Create(m_pPlayer);
 		_float4 PlayerPos = {};
-		XMStoreFloat4(&PlayerPos, m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::POSITION));
-		m_pPlayer->Get_PlayerTransformPtr()->Set_State(STATE::POSITION, XMVectorSet(PlayerPos.x, 0, PlayerPos.z, 1.f));
+		XMStoreFloat4(&PlayerPos, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
+		m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, XMVectorSet(PlayerPos.x, 0, PlayerPos.z, 1.f));
 	}
 	// 공격
 	else if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON))

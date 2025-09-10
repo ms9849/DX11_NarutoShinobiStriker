@@ -26,8 +26,9 @@ HRESULT CMainCamera::Initialize(void* pArg)
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
+    m_vCameraPos = _float3{ 0.f, 4.f, -4.f };
     m_pPlayerTransform = static_cast<MAIN_CAMERA_DESC*>(pArg)->pPlayerTransform;
-    m_pTransformCom->Set_State(STATE::POSITION, m_pPlayerTransform->Get_State(STATE::POSITION) + XMVectorSet(0.f, 4.f, -4.f, 0.f));
+    m_pTransformCom->Set_State(STATE::POSITION, m_pPlayerTransform->Get_State(STATE::POSITION) + XMVectorSet(m_vCameraPos.x, m_vCameraPos.y, m_vCameraPos.z, 0.f));
     Safe_AddRef(m_pPlayerTransform);
 
     return S_OK;
@@ -35,15 +36,52 @@ HRESULT CMainCamera::Initialize(void* pArg)
 
 void CMainCamera::Priority_Update(_float fTimeDelta)
 {
-    m_pTransformCom->Set_State(STATE::POSITION, m_pPlayerTransform->Get_State(STATE::POSITION) + XMVectorSet(0.f, 4.f, -4.f, 0.f));
-    m_pTransformCom->LookAt(m_pPlayerTransform->Get_State(STATE::POSITION));
 
-    _float fMouseMoveX = (_float)m_pGameInstance->Get_MouseMove(MOUSEMOVESTATE::X);
-    _float fMouseMoveY = (_float)m_pGameInstance->Get_MouseMove(MOUSEMOVESTATE::Y);
-    /*
-    구를 그리는 듯한 회전
-    */
-    //m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), 360.f * (fMouseMoveX / g_iWinSizeX));
+    _float fMouseMoveX = (_float)m_pGameInstance->Get_MouseMove(MOUSEMOVESTATE::X) / g_iWinSizeX;
+    _float fMouseMoveY = (_float)m_pGameInstance->Get_MouseMove(MOUSEMOVESTATE::Y) / g_iWinSizeY;
+
+    // 회전할 벡터와 각도
+    //_vector  StartVector = XMVectorSet(0.f, 3.f, -3.f, 0.f);
+    _vector  StartVector;
+    StartVector = XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::LOOK)) * -4.f;
+    StartVector += XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::UP)) * 3.f;
+    StartVector += XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::RIGHT)) * 1.f;
+
+    /* 스타트 벡터에 따라 다르게 제한이 들어가야 하는데.. */
+    m_fRotateX += XMConvertToRadians(fMouseMoveX * 180.f);
+    m_fRotateX = fmod(m_fRotateX, XM_2PI);
+
+    m_fRotateY += XMConvertToRadians(fMouseMoveY * 180.f);
+    m_fRotateY = fmod(m_fRotateY, XM_2PI);
+
+    // 라디안 제한 ( -90  ~ +90 + 여기에 캐릭터의 Look 벡터까지. )
+    _float fLimit = XMConvertToRadians(89.f);
+    
+    /* Y 라디안 제한 */
+    if (m_fRotateY > fLimit) 
+        m_fRotateY = fLimit;
+
+    if (m_fRotateY < -fLimit) 
+        m_fRotateY = -fLimit;
+
+    ///* X 라디안 제한 */
+    //if (m_fRotateX > fLimit) 
+    //    m_fRotateX = fLimit;
+
+    //if (m_fRotateX < -fLimit) 
+    //    m_fRotateX = -fLimit;
+    
+    _vector		vQuternion = XMQuaternionRotationRollPitchYaw(/*m_fRotateY*/ 0.f, m_fRotateX, 0.f);
+
+    _matrix		RotationMatrix = XMMatrixRotationQuaternion(vQuternion);
+    _vector     vCamPos = XMVector3TransformNormal(StartVector, RotationMatrix);
+
+    _float      fLength = XMVectorGetX(XMVector3Length(vCamPos));
+
+    m_pTransformCom->Chase_Lerp(m_pPlayerTransform->Get_State(STATE::POSITION)+ vCamPos, fTimeDelta, 0.f);
+    m_pTransformCom->LookAt_Lerp(m_pPlayerTransform->Get_State(STATE::POSITION) + XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::LOOK)) * 1.f);
+
+    m_pGameManager->SetUp_Target();
 
     __super::Bind_Matrices();
 }

@@ -27,7 +27,7 @@ CWhiteJetsu_IdleState::CWhiteJetsu_IdleState(CTransform* pTransform, CNavigation
 void CWhiteJetsu_IdleState::Start(_bool IsBlend)
 {
 	m_pModelCom->Set_AnimIndex("WhiteZetsuCrowdForm_Idle_Type02_Loop", 1.f, true);
-	m_pPlayerTransformCom = CGameManager::GetInstance()->Get_PlayerPtr()->Get_PlayerTransformPtr();
+	m_pPlayerTransformCom = CGameManager::GetInstance()->Get_PlayerPtr()->Get_Transform();
 	Safe_AddRef(m_pPlayerTransformCom);
 }
 

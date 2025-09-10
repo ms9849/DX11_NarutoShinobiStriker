@@ -143,7 +143,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const _wstring& strLayerTag)
 	MainCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
 	MainCameraDesc.fSpeedPerSec = 15.f;
 	MainCameraDesc.fRotationPerSec = XMConvertToRadians(90.0f);
-	MainCameraDesc.pPlayerTransform = m_pGameManager->Get_PlayerPtr()->Get_PlayerTransformPtr();
+	MainCameraDesc.pPlayerTransform = m_pGameManager->Get_PlayerPtr()->Get_Transform();
 	/* 카메라는 게임 매니저에 추가하여 관리한다. */
 	if (FAILED(m_pGameManager->Add_Camera(LEVEL::GAMEPLAY, TEXT("Main_Camera"), static_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
 		PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_MainCamera"), &MainCameraDesc)))))
@@ -172,6 +172,10 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _wstring& strLayerTag)
 HRESULT CLevel_GamePlay::Ready_Layer_Monster(const _wstring& strLayerTag)
 {
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_WhiteJetsu"),
+		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag)))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Bird"),
 		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag)))
 		return E_FAIL;
 

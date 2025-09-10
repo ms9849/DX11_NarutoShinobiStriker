@@ -33,14 +33,14 @@ CPlayerState* CPlayer_ChidoriAerialReadyState::Update(_float fTimeDelta)
 
 	m_fTimeAcc += fTimeDelta;
 	m_fMovement = (m_fTimeAcc - 0.5f * m_fTimeAcc * m_fTimeAcc * 7.0f * (m_fTimeAcc));
-	m_pPlayer->Get_PlayerTransformPtr()->Set_State(STATE::POSITION, m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fMovement / 5.f, 0.f, 0.f));
+	m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fMovement / 5.f, 0.f, 0.f));
 
-	if (XMVectorGetY(m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::POSITION)) < 0.f)
+	if (XMVectorGetY(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION)) < 0.f)
 	{
 		IsGround = true;
 		_float4 PlayerPos = {};
-		XMStoreFloat4(&PlayerPos, m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::POSITION));
-		m_pPlayer->Get_PlayerTransformPtr()->Set_State(STATE::POSITION, XMVectorSet(PlayerPos.x, 0, PlayerPos.z, 1.f));
+		XMStoreFloat4(&PlayerPos, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
+		m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, XMVectorSet(PlayerPos.x, 0, PlayerPos.z, 1.f));
 	}
 
 	if ((m_pGameInstance->Key_Pressing(DIK_W) ||
@@ -49,13 +49,13 @@ CPlayerState* CPlayer_ChidoriAerialReadyState::Update(_float fTimeDelta)
 		&& false == IsGround)
 	{
 		if (m_pGameInstance->Key_Pressing(DIK_W))
-			m_pPlayer->Get_PlayerTransformPtr()->Go_Straight(fTimeDelta * 0.3f);
+			m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * 0.3f);
 
 		if (m_pGameInstance->Key_Pressing(DIK_D))
-			m_pPlayer->Get_PlayerTransformPtr()->Go_Right(fTimeDelta * 0.3f);
+			m_pPlayer->Get_Transform()->Go_Right(fTimeDelta * 0.3f);
 
 		if (m_pGameInstance->Key_Pressing(DIK_A))
-			m_pPlayer->Get_PlayerTransformPtr()->Go_Left(fTimeDelta * 0.3f);
+			m_pPlayer->Get_Transform()->Go_Left(fTimeDelta * 0.3f);
 	}
 
 

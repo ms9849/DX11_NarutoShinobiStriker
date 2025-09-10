@@ -20,7 +20,7 @@ CPlayer_SuperJumpState::CPlayer_SuperJumpState(CPlayer* pPlayer, _float fPower)
 
 void CPlayer_SuperJumpState::Start(_bool IsBlend)
 {
-	m_pPlayer->Set_AnimIndex("CustomMan_ChakraJump_Charge_End", 0.5f, false);
+	m_pPlayer->Set_AnimIndex("CustomMan_ChakraJump_Charge_End", 0.6f, false);
 	m_eAnimState = ANIM_STATE::START;
 }
 
@@ -49,8 +49,8 @@ CPlayerState* CPlayer_SuperJumpState::Update(_float fTimeDelta)
 	if (m_fMovement <= -0.5f)
 		m_fMovement = -0.5f;
 
-	m_pPlayer->Get_PlayerTransformPtr()->Set_State(STATE::POSITION, m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fMovement, 0.f, 0.f));
-	m_pPlayer->Get_PlayerTransformPtr()->Go_Straight(fTimeDelta * 2.5f);
+	m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fMovement, 0.f, 0.f));
+	m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * 2.5f);
 
 	if (m_pGameInstance->Key_Pressing(DIK_A) ||
 		m_pGameInstance->Key_Pressing(DIK_D)
@@ -58,10 +58,10 @@ CPlayerState* CPlayer_SuperJumpState::Update(_float fTimeDelta)
 	{
 
 		if (m_pGameInstance->Key_Pressing(DIK_D))
-			m_pPlayer->Get_PlayerTransformPtr()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * 0.3f);
+			m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * 0.3f);
 
 		if (m_pGameInstance->Key_Pressing(DIK_A))
-			m_pPlayer->Get_PlayerTransformPtr()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * -0.3f);
+			m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * -0.3f);
 	}
 
 	if (m_fMovement < 0.f && ANIM_STATE::START == m_eAnimState)
@@ -71,12 +71,12 @@ CPlayerState* CPlayer_SuperJumpState::Update(_float fTimeDelta)
 	}
 
 	// LAND로의 상태 전환 
-	if (XMVectorGetY(m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::POSITION)) < 0.f)
+	if (XMVectorGetY(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION)) < 0.f)
 	{
 		pNextState = CPlayer_LandState::Create(m_pPlayer);
 		_float4 PlayerPos = {};
-		XMStoreFloat4(&PlayerPos, m_pPlayer->Get_PlayerTransformPtr()->Get_State(STATE::POSITION));
-		m_pPlayer->Get_PlayerTransformPtr()->Set_State(STATE::POSITION, XMVectorSet(PlayerPos.x, 0, PlayerPos.z, 1.f));
+		XMStoreFloat4(&PlayerPos, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
+		m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, XMVectorSet(PlayerPos.x, 0, PlayerPos.z, 1.f));
 	}
 
 	return pNextState;

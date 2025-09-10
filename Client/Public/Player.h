@@ -29,10 +29,6 @@ private:
 	virtual ~CPlayer() = default;
 
 public:
-	class CTransform* Get_PlayerTransformPtr() {
-		return m_pTransformCom;
-	}
-
 	_float	Get_AnimProgress();
 	void	Set_AnimProgress(_float fProgress);
 

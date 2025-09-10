@@ -44,7 +44,7 @@ CPlayerState* CPlayer_HandAttackState::Update(_float fTimeDelta)
     _float fAnimProgress = m_pPlayer->Get_AnimProgress();
 
     if (false == IsAnimFinished && fAnimProgress <= 0.7f)
-        m_pPlayer->Get_PlayerTransformPtr()->Go_Straight(fTimeDelta * m_pGameInstance->Calc_Quadratic(-0.89f, 0.48f, 0.11f, fAnimProgress));
+        m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * m_pGameInstance->Calc_Quadratic(-0.89f, 0.48f, 0.11f, fAnimProgress));
 
     if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON) 
         && m_eAnimState == ANIM_STATE::LEFT_PUNCH && fAnimProgress >= 0.5f)

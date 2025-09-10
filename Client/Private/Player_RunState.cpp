@@ -51,7 +51,7 @@ CPlayerState* CPlayer_RunState::Update(_float fTimeDelta)
 		)
 	{
 		// 같은 애니 반복이면 보간 안하게. 
-		m_pPlayer->Get_PlayerTransformPtr()->Go_Straight(fTimeDelta);
+		m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta);
 
 		// 멈추는 중이였다면 보간해서 달리는 애니 나오게 해주기.
 		if (m_eAnimState == ANIM_STATE::RUN_END)
@@ -77,7 +77,7 @@ CPlayerState* CPlayer_RunState::Update(_float fTimeDelta)
 		// 오른쪽으로 돌아 
 		if (m_pGameInstance->Key_Pressing(DIK_D))
 		{
-			m_pPlayer->Get_PlayerTransformPtr()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta);
+			m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta);
 			
 			// 돌다가 스텝 밟으면 상태 변경
 			if (m_pGameInstance->Key_Down(DIK_LSHIFT) && nullptr == pNextState)
@@ -88,7 +88,7 @@ CPlayerState* CPlayer_RunState::Update(_float fTimeDelta)
 		// 왼쪽으로 돌아
 		if (m_pGameInstance->Key_Pressing(DIK_A))
 		{
-			m_pPlayer->Get_PlayerTransformPtr()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * -1.f);
+			m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * -1.f);
 			
 			// 돌다가 스텝 밟으면 상태 변경
 			if (m_pGameInstance->Key_Down(DIK_LSHIFT) && nullptr == pNextState)

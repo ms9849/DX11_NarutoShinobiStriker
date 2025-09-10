@@ -29,10 +29,12 @@ public:
 	virtual HRESULT Render() override;
 
 private:
+	_float3 m_vCameraPos = {};
 	_float m_fRotateX = {};
 	_float m_fRotateY = {};
 	class CGameManager* m_pGameManager = { nullptr };
 	class CTransform*	m_pPlayerTransform = { nullptr };
+
 public:
 	static CMainCamera* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	virtual CGameObject* Clone(void* pArg);

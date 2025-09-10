@@ -26,7 +26,7 @@ CWhiteJetsu_AttackState::CWhiteJetsu_AttackState(class CTransform* pTransform, c
 void CWhiteJetsu_AttackState::Start(_bool IsBlend)
 {
 	m_pModelCom->Set_AnimIndex("WhiteZetsuCrowdForm_Attack_Punch", 1.f, true);
-	//m_pTransformCom->LookAt(CGameManager::GetInstance()->Get_PlayerPtr()->Get_PlayerTransformPtr()->Get_State(STATE::POSITION));
+	m_pTransformCom->LookAt_XZ(CGameManager::GetInstance()->Get_PlayerPtr()->Get_Transform()->Get_State(STATE::POSITION));
 }
 
 CWhiteJetsuState* CWhiteJetsu_AttackState::Update(_float fTimeDelta)
