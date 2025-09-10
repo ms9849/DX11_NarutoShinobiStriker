@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "Parts_Player.h"
+#include "Parts_Character.h"
 
 NS_BEGIN(Engine)
 class CModel;
@@ -10,17 +10,17 @@ NS_END
 
 NS_BEGIN(Client)
 
-class CLower_Player final : public CParts_Player
+class CHead_Character final : public CParts_Character
 {
 public:
-	typedef struct tagLower_Player_Desc : public CPartObject::PARTOBJECT_DESC
+	typedef struct tagHead_Player_Desc : public CHARACTER_PART_DESC
 	{
-	}LOWER_PLAYER_DESC;
+	} HEAD_PLAYER_DESC;
 
 private:
-	CLower_Player(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
-	CLower_Player(const CLower_Player& Prototype);
-	virtual ~CLower_Player() = default;
+	CHead_Character(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
+	CHead_Character(const CHead_Character& Prototype);
+	virtual ~CHead_Character() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -35,7 +35,7 @@ private:
 	HRESULT Bind_ShaderResources();
 
 public:
-	static CLower_Player* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
+	static CHead_Character* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 };

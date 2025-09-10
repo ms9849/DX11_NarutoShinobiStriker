@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "GameObject.h"
+#include "ContainerObject.h"
 
 NS_BEGIN(Engine)
 class CShader;
@@ -10,12 +10,19 @@ NS_END
 
 NS_BEGIN(Client)
 
-class CEnemy abstract : public CGameObject
+class CEnemy abstract : public CContainerObject
 {
 protected:
 	CEnemy(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	CEnemy(const CEnemy& rhs);
 	virtual ~CEnemy() = default;
+
+public:
+	_float	Get_AnimProgress();
+	void	Set_AnimProgress(_float fProgress);
+	void	Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate = 1.f, _bool IsBlend = true, _float fBlendRatio = 0.15f, _bool IsLoop = false);
+
+	_bool	Play_Animation(_float fTimeDelta);
 
 public:
 	virtual HRESULT Initialize_Prototype() override;

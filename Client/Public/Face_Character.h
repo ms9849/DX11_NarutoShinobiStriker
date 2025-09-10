@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "Parts_Player.h"
+#include "Parts_Character.h"
 
 NS_BEGIN(Engine)
 class CModel;
@@ -10,17 +10,17 @@ NS_END
 
 NS_BEGIN(Client)
 
-class CHead_Player final : public CParts_Player
+class CFace_Character final : public CParts_Character
 {
 public:
-	typedef struct tagHead_Player_Desc : public CPartObject::PARTOBJECT_DESC
+	typedef struct tagFace_Player_Desc : public CHARACTER_PART_DESC
 	{
-	} HEAD_PLAYER_DESC;
+	}FACE_PLAYER_DESC;
 
 private:
-	CHead_Player(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
-	CHead_Player(const CHead_Player& Prototype);
-	virtual ~CHead_Player() = default;
+	CFace_Character(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
+	CFace_Character(const CFace_Character& Prototype);
+	virtual ~CFace_Character() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -31,11 +31,14 @@ public:
 	virtual HRESULT Render() override;
 
 private:
+	const _float4x4* m_pSocketMatrix = { nullptr };
+
+private:
 	HRESULT Ready_Components();
 	HRESULT Bind_ShaderResources();
 
 public:
-	static CHead_Player* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
+	static CFace_Character* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 };

@@ -1,23 +1,23 @@
-#include "Head_Player.h"
+#include "Head_Character.h"
 
 #include "GameInstance.h"
 
-CHead_Player::CHead_Player(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
-	: CParts_Player { pDevice, pContext, eObjectID }
+CHead_Character::CHead_Character(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
+	: CParts_Character { pDevice, pContext, eObjectID }
 {
 }
 
-CHead_Player::CHead_Player(const CHead_Player& Prototype)
-	: CParts_Player { Prototype }
+CHead_Character::CHead_Character(const CHead_Character& Prototype)
+	: CParts_Character { Prototype }
 {
 }
 
-HRESULT CHead_Player::Initialize_Prototype()
+HRESULT CHead_Character::Initialize_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CHead_Player::Initialize(void* pArg)
+HRESULT CHead_Character::Initialize(void* pArg)
 {
 	HEAD_PLAYER_DESC* pDesc = static_cast<HEAD_PLAYER_DESC*>(pArg);
 
@@ -30,23 +30,23 @@ HRESULT CHead_Player::Initialize(void* pArg)
 	return S_OK;
 }
 
-void CHead_Player::Priority_Update(_float fTimeDelta)
+void CHead_Character::Priority_Update(_float fTimeDelta)
 {
 }
 
-void CHead_Player::Update(_float fTimeDelta)
+void CHead_Character::Update(_float fTimeDelta)
 {
 	/* 부모 행렬 적용 */
 	XMStoreFloat4x4(&m_CombinedWorldMatrix,
 		XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()) * XMLoadFloat4x4(m_pParentTransformCom->Get_WorldMatrixPtr()));
 }
 
-void CHead_Player::Late_Update(_float fTimeDelta)
+void CHead_Character::Late_Update(_float fTimeDelta)
 {
 	m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 
-HRESULT CHead_Player::Render()
+HRESULT CHead_Character::Render()
 {
 	if (FAILED(Bind_ShaderResources()))
 		return E_FAIL;
@@ -71,10 +71,10 @@ HRESULT CHead_Player::Render()
 	return S_OK;
 }
 
-HRESULT CHead_Player::Ready_Components()
+HRESULT CHead_Character::Ready_Components()
 {
 	/* Com_Model */
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_Head_Player"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), m_strModelName,
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 
@@ -86,7 +86,7 @@ HRESULT CHead_Player::Ready_Components()
 	return S_OK;
 }
 
-HRESULT CHead_Player::Bind_ShaderResources()
+HRESULT CHead_Character::Bind_ShaderResources()
 {
 	/*m_pShaderCom->Bind_Matrix("g_WorldMatrix", );*/
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_CombinedWorldMatrix)))
@@ -121,9 +121,9 @@ HRESULT CHead_Player::Bind_ShaderResources()
 	return S_OK;
 }
 
-CHead_Player* CHead_Player::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
+CHead_Character* CHead_Character::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 {
-	CHead_Player* pInstance = new CHead_Player(pDevice, pContext, eObjectID);
+	CHead_Character* pInstance = new CHead_Character(pDevice, pContext, eObjectID);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
@@ -134,9 +134,9 @@ CHead_Player* CHead_Player::Create(ID3D11Device* pDevice, ID3D11DeviceContext* p
 	return pInstance;
 }
 
-CGameObject* CHead_Player::Clone(void* pArg)
+CGameObject* CHead_Character::Clone(void* pArg)
 {
-	CHead_Player* pInstance = new CHead_Player(*this);
+	CHead_Character* pInstance = new CHead_Character(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
@@ -147,7 +147,7 @@ CGameObject* CHead_Player::Clone(void* pArg)
 	return pInstance;
 }
 
-void CHead_Player::Free()
+void CHead_Character::Free()
 {
 	__super::Free();
 }

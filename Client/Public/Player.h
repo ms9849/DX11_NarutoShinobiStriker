@@ -31,18 +31,17 @@ private:
 public:
 	_float	Get_AnimProgress();
 	void	Set_AnimProgress(_float fProgress);
+	void	Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate = 1.f, _bool IsBlend = true, _float fBlendRatio = 0.15f, _bool IsLoop = false);
 
 public:
 	void	Set_SkillSlotPanel(class CSkillSlotPanel* pPanel);
 	void	Set_AttackTypePanel(class CAttackTypePanel* pPanel);
 	void	Set_ComboKOPanel(class CComboKOPanel* pPanel);
-	void	Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate = 1.f, _bool IsBlend = true, _float fBlendRatio = 0.15f, _bool IsLoop = false);
-
 public:
 	void	Clear_State();
 	void	Update_State(_float fTimeDelta);
 	_bool	Play_Animation(_float fTimeDelta);
-	_bool	Use_Skill(SKILLNUM eSlotNum);
+	_bool	Use_Skill(SKILLNUM eSlotNum); 
 
 public:
 	virtual HRESULT Initialize_Prototype() override;

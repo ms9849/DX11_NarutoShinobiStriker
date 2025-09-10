@@ -42,14 +42,15 @@
 
 #include "MainCamera.h"
 
-#include "Lower_Player.h"
-#include "Upper_Player.h"
-#include "Face_Player.h"
-#include "Head_Player.h"
-#include "Weapon_Player.h"
+#include "Lower_Character.h"
+#include "Upper_Character.h"
+#include "Face_Character.h"
+#include "Head_Character.h"
+#include "Weapon_Character.h"
 
 #include "WhiteJetsu.h"
 #include "Bird.h"
+#include "Boxer.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice { pDevice }
@@ -393,6 +394,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CBird::Create(m_pDevice, m_pContext, OBJECTID::BIRD))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_Boxer */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Boxer"),
+		CBoxer::Create(m_pDevice, m_pContext, OBJECTID::BOXER))))
+		return E_FAIL;
+
 	/* For.Prototype_GameObject_TestCamera */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_TestCamera"),
 		CTestCamera::Create(m_pDevice, m_pContext, OBJECTID::TEST_CAMERA))))
@@ -405,27 +411,27 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 	/* For.Prototype_GameObject_Upper_Player */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Upper_Player"),
-		CUpper_Player::Create(m_pDevice, m_pContext, OBJECTID::PLAYER_UPPER))))
+		CUpper_Character::Create(m_pDevice, m_pContext, OBJECTID::PLAYER_UPPER))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_Lower_Player */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Lower_Player"),
-		CLower_Player::Create(m_pDevice, m_pContext, OBJECTID::PLAYER_LOWER))))
+		CLower_Character::Create(m_pDevice, m_pContext, OBJECTID::PLAYER_LOWER))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_Face_Player */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Face_Player"),
-		CFace_Player::Create(m_pDevice, m_pContext, OBJECTID::PLAYER_FACE))))
+		CFace_Character::Create(m_pDevice, m_pContext, OBJECTID::PLAYER_FACE))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_Head_Player */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Head_Player"),
-		CHead_Player::Create(m_pDevice, m_pContext, OBJECTID::PLAYER_HEAD))))
+		CHead_Character::Create(m_pDevice, m_pContext, OBJECTID::PLAYER_HEAD))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_Weapon_Player */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Weapon_Player"),
-		CWeapon_Player::Create(m_pDevice, m_pContext, OBJECTID::PLAYER_WEAPON))))
+		CWeapon_Character::Create(m_pDevice, m_pContext, OBJECTID::PLAYER_WEAPON))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_SkillSlotUI */

@@ -159,6 +159,7 @@
     <ClInclude Include="..\Public\Bird_AttackState.h" />
     <ClInclude Include="..\Public\Bird_IdleState.h" />
     <ClInclude Include="..\Public\Bird_RunState.h" />
+    <ClInclude Include="..\Public\Boxer.h" />
     <ClInclude Include="..\Public\Button.h" />
     <ClInclude Include="..\Public\Camera_Manager.h" />
     <ClInclude Include="..\Public\Character.h" />
@@ -170,10 +171,10 @@
     <ClInclude Include="..\Public\Effect_CoolDown.h" />
     <ClInclude Include="..\Public\Enemy.h" />
     <ClInclude Include="..\Public\Enemy_HPBar.h" />
-    <ClInclude Include="..\Public\Face_Player.h" />
+    <ClInclude Include="..\Public\Face_Character.h" />
     <ClInclude Include="..\Public\GameManager.h" />
     <ClInclude Include="..\Public\Gate.h" />
-    <ClInclude Include="..\Public\Head_Player.h" />
+    <ClInclude Include="..\Public\Head_Character.h" />
     <ClInclude Include="..\Public\MainCamera.h" />
     <ClInclude Include="..\Public\Player_AerialFireBallState.h" />
     <ClInclude Include="..\Public\Player_AerialRasenShurikenState.h" />
@@ -197,7 +198,7 @@
     <ClInclude Include="..\Public\LoadingBarPanel.h" />
     <ClInclude Include="..\Public\LoadingPanel.h" />
     <ClInclude Include="..\Public\LogoPanel.h" />
-    <ClInclude Include="..\Public\Lower_Player.h" />
+    <ClInclude Include="..\Public\Lower_Character.h" />
     <ClInclude Include="..\Public\MainApp.h" />
     <ClInclude Include="..\Public\Mannequin.h" />
     <ClInclude Include="..\Public\MissionAlertPanel.h" />
@@ -207,7 +208,7 @@
     <ClInclude Include="..\Public\OutfitSelectCamera.h" />
     <ClInclude Include="..\Public\OutfitSelectPanel.h" />
     <ClInclude Include="..\Public\Panel.h" />
-    <ClInclude Include="..\Public\Parts_Player.h" />
+    <ClInclude Include="..\Public\Parts_Character.h" />
     <ClInclude Include="..\Public\Player.h" />
     <ClInclude Include="..\Public\PlayerState.h" />
     <ClInclude Include="..\Public\Player_JumpState.h" />
@@ -237,8 +238,8 @@
     <ClInclude Include="..\Public\TimerPanel.h" />
     <ClInclude Include="..\Public\Tree.h" />
     <ClInclude Include="..\Public\TutorialMap.h" />
-    <ClInclude Include="..\Public\Upper_Player.h" />
-    <ClInclude Include="..\Public\Weapon_Player.h" />
+    <ClInclude Include="..\Public\Upper_Character.h" />
+    <ClInclude Include="..\Public\Weapon_Character.h" />
     <ClInclude Include="..\Public\WhiteJetsu.h" />
     <ClInclude Include="..\Public\WhiteJetsuState.h" />
     <ClInclude Include="..\Public\WhiteJetsu_AttackState.h" />
@@ -256,6 +257,7 @@
     <ClCompile Include="..\Private\Bird_AttackState.cpp" />
     <ClCompile Include="..\Private\Bird_IdleState.cpp" />
     <ClCompile Include="..\Private\Bird_RunState.cpp" />
+    <ClCompile Include="..\Private\Boxer.cpp" />
     <ClCompile Include="..\Private\Button.cpp" />
     <ClCompile Include="..\Private\Camera_Manager.cpp" />
     <ClCompile Include="..\Private\Character.cpp" />
@@ -266,10 +268,10 @@
     <ClCompile Include="..\Private\Effect_CoolDown.cpp" />
     <ClCompile Include="..\Private\Enemy.cpp" />
     <ClCompile Include="..\Private\Enemy_HPBar.cpp" />
-    <ClCompile Include="..\Private\Face_Player.cpp" />
+    <ClCompile Include="..\Private\Face_Character.cpp" />
     <ClCompile Include="..\Private\GameManager.cpp" />
     <ClCompile Include="..\Private\Gate.cpp" />
-    <ClCompile Include="..\Private\Head_Player.cpp" />
+    <ClCompile Include="..\Private\Head_Character.cpp" />
     <ClCompile Include="..\Private\MainCamera.cpp" />
     <ClCompile Include="..\Private\Player_AerialFireBallState.cpp" />
     <ClCompile Include="..\Private\Player_AerialRasenShurikenState.cpp" />
@@ -293,7 +295,7 @@
     <ClCompile Include="..\Private\LoadingBarPanel.cpp" />
     <ClCompile Include="..\Private\LoadingPanel.cpp" />
     <ClCompile Include="..\Private\LogoPanel.cpp" />
-    <ClCompile Include="..\Private\Lower_Player.cpp" />
+    <ClCompile Include="..\Private\Lower_Character.cpp" />
     <ClCompile Include="..\Private\MainApp.cpp" />
     <ClCompile Include="..\Private\Mannequin.cpp" />
     <ClCompile Include="..\Private\MissionAlertPanel.cpp" />
@@ -303,7 +305,7 @@
     <ClCompile Include="..\Private\OutfitSelectCamera.cpp" />
     <ClCompile Include="..\Private\OutfitSelectPanel.cpp" />
     <ClCompile Include="..\Private\Panel.cpp" />
-    <ClCompile Include="..\Private\Parts_Player.cpp" />
+    <ClCompile Include="..\Private\Parts_Character.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\Private\PlayerState.cpp" />
     <ClCompile Include="..\Private\Player_JumpState.cpp" />
@@ -332,8 +334,8 @@
     <ClCompile Include="..\Private\TimerPanel.cpp" />
     <ClCompile Include="..\Private\Tree.cpp" />
     <ClCompile Include="..\Private\TutorialMap.cpp" />
-    <ClCompile Include="..\Private\Upper_Player.cpp" />
-    <ClCompile Include="..\Private\Weapon_Player.cpp" />
+    <ClCompile Include="..\Private\Upper_Character.cpp" />
+    <ClCompile Include="..\Private\Weapon_Character.cpp" />
     <ClCompile Include="..\Private\WhiteJetsu.cpp" />
     <ClCompile Include="..\Private\WhiteJetsuState.cpp" />
     <ClCompile Include="..\Private\WhiteJetsu_AttackState.cpp" />

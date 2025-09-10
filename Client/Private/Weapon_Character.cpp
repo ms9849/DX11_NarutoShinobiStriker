@@ -1,18 +1,18 @@
-#include "Weapon_Player.h"
+#include "Weapon_Character.h"
 
 #include "GameInstance.h"
 
-CWeapon_Player::CWeapon_Player(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
-    : CParts_Player { pDevice, pContext, eObjectID }
+CWeapon_Character::CWeapon_Character(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
+    : CParts_Character { pDevice, pContext, eObjectID }
 {
 }
 
-CWeapon_Player::CWeapon_Player(const CWeapon_Player& Prototype)
-    : CParts_Player { Prototype }
+CWeapon_Character::CWeapon_Character(const CWeapon_Character& Prototype)
+    : CParts_Character { Prototype }
 {
 }
 
-void CWeapon_Player::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _bool IsBlend, _float fBlendRatio, _bool IsLoop)
+void CWeapon_Character::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _bool IsBlend, _float fBlendRatio, _bool IsLoop)
 {
     m_strCurrentAnimName = pAnimName;
 
@@ -33,10 +33,9 @@ void CWeapon_Player::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlay
 
     else
         IsAttached = true;
-
 }
 
-_bool CWeapon_Player::Play_Animation(_float fTimeDelta)
+_bool CWeapon_Character::Play_Animation(_float fTimeDelta)
 {
     //웨폰은 애님 인덱스 따라 뼈 바꿔줘야 한다.
     // -> 애님 정보가 없음. 상체에서 받아올까?
@@ -59,17 +58,17 @@ _bool CWeapon_Player::Play_Animation(_float fTimeDelta)
     return true;
 }
 
-void CWeapon_Player::Set_AnimProgress(_float fProgress)
+void CWeapon_Character::Set_AnimProgress(_float fProgress)
 {
     return;
 }
 
-HRESULT CWeapon_Player::Initialize_Prototype()
+HRESULT CWeapon_Character::Initialize_Prototype()
 {
     return S_OK;
 }
 
-HRESULT CWeapon_Player::Initialize(void* pArg)
+HRESULT CWeapon_Character::Initialize(void* pArg)
 {
     WEAPON_PLAYER_DESC* pDesc = static_cast<WEAPON_PLAYER_DESC*>(pArg);
 
@@ -87,11 +86,11 @@ HRESULT CWeapon_Player::Initialize(void* pArg)
     return S_OK;
 }
 
-void CWeapon_Player::Priority_Update(_float fTimeDelta)
+void CWeapon_Character::Priority_Update(_float fTimeDelta)
 {
 }
 
-void CWeapon_Player::Update(_float fTimeDelta)
+void CWeapon_Character::Update(_float fTimeDelta)
 {
     _matrix		SocketMatrix;
 
@@ -108,12 +107,12 @@ void CWeapon_Player::Update(_float fTimeDelta)
         XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()) * SocketMatrix * XMLoadFloat4x4(m_pParentTransformCom->Get_WorldMatrixPtr()));
 }
 
-void CWeapon_Player::Late_Update(_float fTimeDelta)
+void CWeapon_Character::Late_Update(_float fTimeDelta)
 {
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 
-HRESULT CWeapon_Player::Render()
+HRESULT CWeapon_Character::Render()
 {
     if (FAILED(Bind_ShaderResources()))
         return E_FAIL;
@@ -135,10 +134,10 @@ HRESULT CWeapon_Player::Render()
     return S_OK;
 }
 
-HRESULT CWeapon_Player::Ready_Components()
+HRESULT CWeapon_Character::Ready_Components()
 {
     /* Com_Model */
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_Weapon_Player"),
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), m_strModelName,
         TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
         return E_FAIL;
 
@@ -150,7 +149,7 @@ HRESULT CWeapon_Player::Ready_Components()
     return S_OK;
 }
 
-HRESULT CWeapon_Player::Bind_ShaderResources()
+HRESULT CWeapon_Character::Bind_ShaderResources()
 {
     /*m_pShaderCom->Bind_Matrix("g_WorldMatrix", );*/
     if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_CombinedWorldMatrix)))
@@ -185,9 +184,9 @@ HRESULT CWeapon_Player::Bind_ShaderResources()
     return S_OK;
 }
 
-CWeapon_Player* CWeapon_Player::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
+CWeapon_Character* CWeapon_Character::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 {
-    CWeapon_Player* pInstance = new CWeapon_Player(pDevice, pContext, eObjectID);
+    CWeapon_Character* pInstance = new CWeapon_Character(pDevice, pContext, eObjectID);
 
     if (FAILED(pInstance->Initialize_Prototype()))
     {
@@ -198,9 +197,9 @@ CWeapon_Player* CWeapon_Player::Create(ID3D11Device* pDevice, ID3D11DeviceContex
     return pInstance;
 }
 
-CGameObject* CWeapon_Player::Clone(void* pArg)
+CGameObject* CWeapon_Character::Clone(void* pArg)
 {
-    CWeapon_Player* pInstance = new CWeapon_Player(*this);
+    CWeapon_Character* pInstance = new CWeapon_Character(*this);
 
     if (FAILED(pInstance->Initialize(pArg)))
     {
@@ -211,7 +210,7 @@ CGameObject* CWeapon_Player::Clone(void* pArg)
     return pInstance;
 }
 
-void CWeapon_Player::Free()
+void CWeapon_Character::Free()
 {
     __super::Free();
 
