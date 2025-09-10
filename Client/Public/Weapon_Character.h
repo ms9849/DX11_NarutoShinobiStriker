@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "Parts_Player.h"
+#include "Parts_Character.h"
 
 NS_BEGIN(Engine)
 class CModel;
@@ -10,20 +10,20 @@ NS_END
 
 NS_BEGIN(Client)
 
-class CWeapon_Player final : public CParts_Player
+class CWeapon_Character final : public CParts_Character
 {
 public:
-	typedef struct tagWeapon_Player_Desc : public CPartObject::PARTOBJECT_DESC
+	typedef struct tagWeapon_Player_Desc : public CHARACTER_PART_DESC
 	{
-		CParts_Player* pUpper_Player = { nullptr };
+		CParts_Character* pUpper_Player = { nullptr };
 		const _float4x4* pAttachMatrix = { nullptr };
 		const _float4x4* pHandMatrix = { nullptr };
 	} WEAPON_PLAYER_DESC;
 
 private:
-	CWeapon_Player(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
-	CWeapon_Player(const CWeapon_Player& Prototype);
-	virtual ~CWeapon_Player() = default;
+	CWeapon_Character(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
+	CWeapon_Character(const CWeapon_Character& Prototype);
+	virtual ~CWeapon_Character() = default;
 
 public:
 	virtual void	Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate = 1.f, _bool IsBlend = true, _float fBlendRatio = 0.15f, _bool IsLoop = false) override;
@@ -41,15 +41,15 @@ private:
 	_string		m_strCurrentAnimName = {};
 	const _float4x4* m_pAttachMatrix = { nullptr };
 	const _float4x4* m_pHandMatrix = { nullptr };
-	CParts_Player* m_pUpper_Player = { nullptr };
-	_bool IsAttached = { false };
+	CParts_Character* m_pUpper_Player = { nullptr };
+	_bool IsAttached = { true };
 
 private:
 	HRESULT Ready_Components();
 	HRESULT Bind_ShaderResources();
 
 public:
-	static CWeapon_Player* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
+	static CWeapon_Character* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 };

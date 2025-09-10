@@ -178,29 +178,11 @@
     <Filter Include="02.GameObjects\Map\TutorialMap">
       <UniqueIdentifier>{be3db220-9732-4da8-8bdf-d04af97df2e5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Character\Player\Parts">
-      <UniqueIdentifier>{f147d662-5586-4b75-aba1-4624b3bf91b9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Character\Player\Parts\Upper">
-      <UniqueIdentifier>{4fb66942-45ee-400c-8131-3eceed95e315}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Character\Player\Parts\Lower">
-      <UniqueIdentifier>{995a8e34-3f70-4b67-879a-a7e250884cec}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Character\Player\State">
       <UniqueIdentifier>{d397b3c9-d69e-4e6f-9147-b1e499ac4f74}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\Camera\Main">
       <UniqueIdentifier>{057d0137-73e7-40b5-aa4e-c380d79f02c5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Character\Player\Parts\Head">
-      <UniqueIdentifier>{d33c8295-219c-42e1-b74d-d7846ea6f1d2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Character\Player\Parts\Face">
-      <UniqueIdentifier>{8c0aee0e-7dfa-4d5c-98bc-c68ca23bca82}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Character\Player\Parts\Weapon">
-      <UniqueIdentifier>{4bb12619-e08d-491b-8e3d-e478c4cfb16a}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\Character\Player\State\SKILL">
       <UniqueIdentifier>{703616e2-837a-4ffd-9df6-a631bcf32bba}</UniqueIdentifier>
@@ -306,6 +288,30 @@
     </Filter>
     <Filter Include="96. GameManager\Managers">
       <UniqueIdentifier>{a0ea510a-afe8-4f4a-a807-4d58ae933da1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Boxer">
+      <UniqueIdentifier>{fb08bc9e-1599-48c1-88ee-8d73d9c294ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Boxer\State">
+      <UniqueIdentifier>{eb01dd6c-6f1e-4df9-a755-ffc7db1e801a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Parts">
+      <UniqueIdentifier>{f147d662-5586-4b75-aba1-4624b3bf91b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Parts\Upper">
+      <UniqueIdentifier>{4fb66942-45ee-400c-8131-3eceed95e315}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Parts\Lower">
+      <UniqueIdentifier>{995a8e34-3f70-4b67-879a-a7e250884cec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Parts\Head">
+      <UniqueIdentifier>{d33c8295-219c-42e1-b74d-d7846ea6f1d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Parts\Face">
+      <UniqueIdentifier>{8c0aee0e-7dfa-4d5c-98bc-c68ca23bca82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Parts\Weapon">
+      <UniqueIdentifier>{4bb12619-e08d-491b-8e3d-e478c4cfb16a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -459,14 +465,14 @@
     <ClInclude Include="..\Public\TutorialMap.h">
       <Filter>02.GameObjects\Map\TutorialMap</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Upper_Player.h">
-      <Filter>02.GameObjects\Character\Player\Parts\Upper</Filter>
+    <ClInclude Include="..\Public\Upper_Character.h">
+      <Filter>02.GameObjects\Character\Parts\Upper</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Lower_Player.h">
-      <Filter>02.GameObjects\Character\Player\Parts\Lower</Filter>
+    <ClInclude Include="..\Public\Lower_Character.h">
+      <Filter>02.GameObjects\Character\Parts\Lower</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Parts_Player.h">
-      <Filter>02.GameObjects\Character\Player\Parts</Filter>
+    <ClInclude Include="..\Public\Parts_Character.h">
+      <Filter>02.GameObjects\Character\Parts</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\PlayerState.h">
       <Filter>02.GameObjects\Character\Player\State</Filter>
@@ -495,17 +501,17 @@
     <ClInclude Include="..\Public\Player_HandAttackState.h">
       <Filter>02.GameObjects\Character\Player\State\BASE\HandAttackState</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Face_Player.h">
-      <Filter>02.GameObjects\Character\Player\Parts\Face</Filter>
+    <ClInclude Include="..\Public\Face_Character.h">
+      <Filter>02.GameObjects\Character\Parts\Face</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Head_Player.h">
-      <Filter>02.GameObjects\Character\Player\Parts\Head</Filter>
+    <ClInclude Include="..\Public\Head_Character.h">
+      <Filter>02.GameObjects\Character\Parts\Head</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Player_HandAerialAttackState.h">
       <Filter>02.GameObjects\Character\Player\State\BASE\HandAttackState\HandAerialAttackState</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Weapon_Player.h">
-      <Filter>02.GameObjects\Character\Player\Parts\Weapon</Filter>
+    <ClInclude Include="..\Public\Weapon_Character.h">
+      <Filter>02.GameObjects\Character\Parts\Weapon</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Player_SwordAttackState.h">
       <Filter>02.GameObjects\Character\Player\State\BASE\SwordAttackState</Filter>
@@ -593,6 +599,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\Camera_Manager.h">
       <Filter>96. GameManager\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Boxer.h">
+      <Filter>02.GameObjects\Enemy\Boxer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -744,14 +753,14 @@
     <ClCompile Include="..\Private\TutorialMap.cpp">
       <Filter>02.GameObjects\Map\TutorialMap</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Upper_Player.cpp">
-      <Filter>02.GameObjects\Character\Player\Parts\Upper</Filter>
+    <ClCompile Include="..\Private\Upper_Character.cpp">
+      <Filter>02.GameObjects\Character\Parts\Upper</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Lower_Player.cpp">
-      <Filter>02.GameObjects\Character\Player\Parts\Lower</Filter>
+    <ClCompile Include="..\Private\Lower_Character.cpp">
+      <Filter>02.GameObjects\Character\Parts\Lower</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Parts_Player.cpp">
-      <Filter>02.GameObjects\Character\Player\Parts</Filter>
+    <ClCompile Include="..\Private\Parts_Character.cpp">
+      <Filter>02.GameObjects\Character\Parts</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Player_IdleState.cpp">
       <Filter>02.GameObjects\Character\Player\State\BASE\IdleState</Filter>
@@ -780,17 +789,14 @@
     <ClCompile Include="..\Private\Player_HandAttackState.cpp">
       <Filter>02.GameObjects\Character\Player\State\BASE\HandAttackState</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Face_Player.cpp">
-      <Filter>02.GameObjects\Character\Player\Parts\Face</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Head_Player.cpp">
-      <Filter>02.GameObjects\Character\Player\Parts\Head</Filter>
+    <ClCompile Include="..\Private\Face_Character.cpp">
+      <Filter>02.GameObjects\Character\Parts\Face</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Player_HandAerialAttackState.cpp">
       <Filter>02.GameObjects\Character\Player\State\BASE\HandAttackState\HandAerialAttackState</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Weapon_Player.cpp">
-      <Filter>02.GameObjects\Character\Player\Parts\Weapon</Filter>
+    <ClCompile Include="..\Private\Weapon_Character.cpp">
+      <Filter>02.GameObjects\Character\Parts\Weapon</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Player_SwordAttackState.cpp">
       <Filter>02.GameObjects\Character\Player\State\BASE\SwordAttackState</Filter>
@@ -878,6 +884,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Camera_Manager.cpp">
       <Filter>96. GameManager\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Boxer.cpp">
+      <Filter>02.GameObjects\Enemy\Boxer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Head_Character.cpp">
+      <Filter>02.GameObjects\Character\Parts\Head</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

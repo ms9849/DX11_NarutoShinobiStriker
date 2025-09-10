@@ -7,11 +7,11 @@
 #include "AttackTypePanel.h"
 #include "ComboKOPanel.h"
 
-#include "Head_Player.h"
-#include "Face_Player.h"
-#include "Upper_Player.h"
-#include "Lower_Player.h"
-#include "Weapon_Player.h"
+#include "Head_Character.h"
+#include "Face_Character.h"
+#include "Upper_Character.h"
+#include "Lower_Character.h"
+#include "Weapon_Character.h"
 
 #include "PlayerState.h"
 #include "Player_IdleState.h"
@@ -33,7 +33,7 @@ CPlayer::CPlayer(const CPlayer& rhs)
 _float CPlayer::Get_AnimProgress()
 {
 	/* 애니메이션 Progress 받아오기 */
-	CParts_Player* pAnimParts = dynamic_cast<CParts_Player*>(Find_PartObject(TEXT("Part_Upper")));
+	CParts_Character* pAnimParts = dynamic_cast<CParts_Character*>(Find_PartObject(TEXT("Part_Upper")));
 	if (nullptr != pAnimParts)
 		return pAnimParts->Get_AnimProgress();
 }
@@ -42,7 +42,7 @@ void CPlayer::Set_AnimProgress(_float fProgress)
 {
 	for (auto& iter : m_PartObjects)
 	{
-		static_cast<CParts_Player*>(iter.second)->Set_AnimProgress(fProgress);
+		static_cast<CParts_Character*>(iter.second)->Set_AnimProgress(fProgress);
 	}
 }
 
@@ -81,7 +81,7 @@ void CPlayer::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _
 	*/
 	for (auto& iter : m_PartObjects)
 	{
-		static_cast<CParts_Player*>(iter.second)->Set_AnimIndex(pAnimName, fAnimationPlayRate, IsBlend, fBlendRatio, IsLoop);
+		static_cast<CParts_Character*>(iter.second)->Set_AnimIndex(pAnimName, fAnimationPlayRate, IsBlend, fBlendRatio, IsLoop);
 	}
 }
 
@@ -107,12 +107,12 @@ _bool CPlayer::Play_Animation(_float fTimeDelta)
 {
 	_bool isAnimFinished = { false };
 
-	isAnimFinished = dynamic_cast<CParts_Player*>(Find_PartObject(TEXT("Part_Upper")))->Play_Animation(fTimeDelta);
+	isAnimFinished = dynamic_cast<CParts_Character*>(Find_PartObject(TEXT("Part_Upper")))->Play_Animation(fTimeDelta);
 
-	dynamic_cast<CParts_Player*>(Find_PartObject(TEXT("Part_Lower")))->Play_Animation(fTimeDelta);
-	dynamic_cast<CParts_Player*>(Find_PartObject(TEXT("Part_Face")))->Play_Animation(fTimeDelta);
-	dynamic_cast<CParts_Player*>(Find_PartObject(TEXT("Part_Head")))->Play_Animation(fTimeDelta);
-	dynamic_cast<CParts_Player*>(Find_PartObject(TEXT("Part_Weapon")))->Play_Animation(fTimeDelta);
+	dynamic_cast<CParts_Character*>(Find_PartObject(TEXT("Part_Lower")))->Play_Animation(fTimeDelta);
+	dynamic_cast<CParts_Character*>(Find_PartObject(TEXT("Part_Face")))->Play_Animation(fTimeDelta);
+	dynamic_cast<CParts_Character*>(Find_PartObject(TEXT("Part_Head")))->Play_Animation(fTimeDelta);
+	dynamic_cast<CParts_Character*>(Find_PartObject(TEXT("Part_Weapon")))->Play_Animation(fTimeDelta);
 
 	return isAnimFinished;
 }
@@ -208,9 +208,6 @@ void CPlayer::Late_Update(_float fTimeDelta)
 
 HRESULT CPlayer::Render()
 {
-	if(FAILED(__super::Render()))
-		return E_FAIL;
-
 	return S_OK;
 }
 
@@ -221,17 +218,21 @@ HRESULT CPlayer::Ready_Components()
 
 HRESULT CPlayer::Ready_PartObjects()
 {
-	CUpper_Player::UPPER_PLAYER_DESC UpperDesc{};
+	CUpper_Character::UPPER_PLAYER_DESC UpperDesc{};
 	UpperDesc.pParentTransform = m_pTransformCom;
+	UpperDesc.strModelName = TEXT("Prototype_Component_Model_Upper_Player");
 
-	CLower_Player::LOWER_PLAYER_DESC LowerDesc{};
+	CLower_Character::LOWER_PLAYER_DESC LowerDesc{};
 	LowerDesc.pParentTransform = m_pTransformCom;
+	LowerDesc.strModelName = TEXT("Prototype_Component_Model_Lower_Player");
 
-	CHead_Player::HEAD_PLAYER_DESC HeadDesc{};
+	CHead_Character::HEAD_PLAYER_DESC HeadDesc{};
 	HeadDesc.pParentTransform = m_pTransformCom;
+	HeadDesc.strModelName = TEXT("Prototype_Component_Model_Head_Player");
 
-	CFace_Player::tagFace_Player_Desc FaceDesc{};
+	CFace_Character::tagFace_Player_Desc FaceDesc{};
 	FaceDesc.pParentTransform = m_pTransformCom;
+	FaceDesc.strModelName = TEXT("Prototype_Component_Model_Face_Player");
 
 	/* Part_Upper */
 	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Upper_Player"),
@@ -253,12 +254,13 @@ HRESULT CPlayer::Ready_PartObjects()
 		TEXT("Part_Face"), &FaceDesc)))
 		return E_FAIL;
 
-	CWeapon_Player::WEAPON_PLAYER_DESC WeaponDesc{};
-	CUpper_Player* pUpperPlayer = dynamic_cast<CUpper_Player*>(Find_PartObject(TEXT("Part_Upper")));
+	CWeapon_Character::WEAPON_PLAYER_DESC WeaponDesc{};
+	CUpper_Character* pUpperPlayer = dynamic_cast<CUpper_Character*>(Find_PartObject(TEXT("Part_Upper")));
 	WeaponDesc.pParentTransform = m_pTransformCom;
 	WeaponDesc.pAttachMatrix = pUpperPlayer->Get_BoneMatrixPtr("Attach_Sword");
 	WeaponDesc.pHandMatrix = pUpperPlayer->Get_BoneMatrixPtr("R_Hand_Weapon_cnt_tr");
 	WeaponDesc.pUpper_Player = pUpperPlayer; 
+	WeaponDesc.strModelName = TEXT("Prototype_Component_Model_Weapon_Player");
 
 	/* Part_Weapon */
 	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Weapon_Player"),

@@ -10,12 +10,12 @@ NS_END
 
 NS_BEGIN(Client)
 
-class CParts_Player : public CPartObject
+class CParts_Enemy abstract : public CPartObject
 {
 protected:
-	CParts_Player(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
-	CParts_Player(const CParts_Player& rhs);
-	virtual ~CParts_Player() = default;
+	CParts_Enemy(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
+	CParts_Enemy(const CParts_Enemy& rhs);
+	virtual ~CParts_Enemy() = default;
 
 public:
 	_float	Get_AnimProgress();
@@ -37,7 +37,7 @@ protected:
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;
-	virtual void Free() override;
+	virtual void Free() override = 0;
 };
 
 NS_END

@@ -1,22 +1,22 @@
-#include "Face_Player.h"
+#include "Face_Character.h"
 
 #include "GameInstance.h"
-CFace_Player::CFace_Player(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
-	: CParts_Player { pDevice, pContext, eObjectID }
+CFace_Character::CFace_Character(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
+	: CParts_Character { pDevice, pContext, eObjectID }
 {
 }
 
-CFace_Player::CFace_Player(const CFace_Player& Prototype)
-	: CParts_Player { Prototype }
+CFace_Character::CFace_Character(const CFace_Character& Prototype)
+	: CParts_Character { Prototype }
 {
 }
 
-HRESULT CFace_Player::Initialize_Prototype()
+HRESULT CFace_Character::Initialize_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CFace_Player::Initialize(void* pArg)
+HRESULT CFace_Character::Initialize(void* pArg)
 {
 	FACE_PLAYER_DESC* pDesc = static_cast<FACE_PLAYER_DESC*>(pArg);
 
@@ -33,11 +33,11 @@ HRESULT CFace_Player::Initialize(void* pArg)
 	return S_OK;
 }
 
-void CFace_Player::Priority_Update(_float fTimeDelta)
+void CFace_Character::Priority_Update(_float fTimeDelta)
 {
 }
 
-void CFace_Player::Update(_float fTimeDelta)
+void CFace_Character::Update(_float fTimeDelta)
 {
 	//_matrix		SocketMatrix = XMLoadFloat4x4(m_pSocketMatrix);
 
@@ -48,12 +48,12 @@ void CFace_Player::Update(_float fTimeDelta)
 		XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()) * XMLoadFloat4x4(m_pParentTransformCom->Get_WorldMatrixPtr()));
 }
 
-void CFace_Player::Late_Update(_float fTimeDelta)
+void CFace_Character::Late_Update(_float fTimeDelta)
 {
 	m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 
-HRESULT CFace_Player::Render()
+HRESULT CFace_Character::Render()
 {
 	if (FAILED(Bind_ShaderResources()))
 		return E_FAIL;
@@ -78,10 +78,10 @@ HRESULT CFace_Player::Render()
 	return S_OK;
 }
 
-HRESULT CFace_Player::Ready_Components()
+HRESULT CFace_Character::Ready_Components()
 {
 	/* Com_Model */
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_Face_Player"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), m_strModelName,
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 
@@ -93,7 +93,7 @@ HRESULT CFace_Player::Ready_Components()
 	return S_OK;
 }
 
-HRESULT CFace_Player::Bind_ShaderResources()
+HRESULT CFace_Character::Bind_ShaderResources()
 {
 	/*m_pShaderCom->Bind_Matrix("g_WorldMatrix", );*/
 
@@ -129,9 +129,9 @@ HRESULT CFace_Player::Bind_ShaderResources()
 	return S_OK;
 }
 
-CFace_Player* CFace_Player::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
+CFace_Character* CFace_Character::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 {
-	CFace_Player* pInstance = new CFace_Player(pDevice, pContext, eObjectID);
+	CFace_Character* pInstance = new CFace_Character(pDevice, pContext, eObjectID);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
@@ -142,9 +142,9 @@ CFace_Player* CFace_Player::Create(ID3D11Device* pDevice, ID3D11DeviceContext* p
 	return pInstance;
 }
 
-CGameObject* CFace_Player::Clone(void* pArg)
+CGameObject* CFace_Character::Clone(void* pArg)
 {
-	CFace_Player* pInstance = new CFace_Player(*this);
+	CFace_Character* pInstance = new CFace_Character(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
@@ -155,7 +155,7 @@ CGameObject* CFace_Player::Clone(void* pArg)
 	return pInstance;
 }
 
-void CFace_Player::Free()
+void CFace_Character::Free()
 {
 	__super::Free();
 }
