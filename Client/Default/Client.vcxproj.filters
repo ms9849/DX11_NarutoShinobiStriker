@@ -313,6 +313,9 @@
     <Filter Include="02.GameObjects\Character\Parts\Weapon">
       <UniqueIdentifier>{4bb12619-e08d-491b-8e3d-e478c4cfb16a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Enemy\Boxer\State\Idle">
+      <UniqueIdentifier>{7efdcf7e-cce7-4de5-91ef-05589a4290b4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -603,6 +606,12 @@
     <ClInclude Include="..\Public\Boxer.h">
       <Filter>02.GameObjects\Enemy\Boxer</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\BoxerState.h">
+      <Filter>02.GameObjects\Enemy\Boxer\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Boxer_IdleState.h">
+      <Filter>02.GameObjects\Enemy\Boxer\State\Idle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -890,6 +899,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Head_Character.cpp">
       <Filter>02.GameObjects\Character\Parts\Head</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\BoxerState.cpp">
+      <Filter>02.GameObjects\Enemy\Boxer\State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Boxer_IdleState.cpp">
+      <Filter>02.GameObjects\Enemy\Boxer\State\Idle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
