@@ -149,11 +149,11 @@ HRESULT CLevel_Edit::Ready_Prototypes()
         CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, TEXT("../../Client/Bin/Resources/Models/Fiona/Fiona.bin"), PreTransformMatrix))))
         return E_FAIL;
 
-    //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
-    ///* For.Prototype_Component_Model_KonohaVillage */
-    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_KonohaVillage"),
-    //    CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, TEXT("../../Client/Bin/Resources/Models/KonohaVillage/KonohaVillage.bin"), PreTransformMatrix))))
-    //    return E_FAIL;
+    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    /* For.Prototype_Component_Model_KonohaVillage */
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_KonohaVillage"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, TEXT("../../Client/Bin/Resources/Models/KonohaVillage/KonohaVillage.bin"), PreTransformMatrix))))
+        return E_FAIL;
 
 #pragma endregion
 
@@ -324,6 +324,11 @@ void CLevel_Edit::Scene_Setting()
                 m_IsPickingOn = !m_IsPickingOn;
             }
 
+            if (m_pGameInstance->Key_Down(DIK_EQUALS))
+            {
+                m_IsNavPickingOn = !m_IsNavPickingOn;
+            }
+
             if (m_pGameInstance->Key_Down(DIK_F2))
             {
                 m_IsCameraOn = !m_IsCameraOn;
@@ -331,6 +336,10 @@ void CLevel_Edit::Scene_Setting()
             }
 
             if (ImGui::Checkbox("Picking Activate (Press F1 To Toggle)", &m_IsPickingOn)) {}
+
+
+            if (ImGui::Checkbox("Navigation Activate (Press = To Toggle)", &m_IsNavPickingOn)) {}
+
 
             if (ImGui::Checkbox("Camera Activate (Press F2 To Toggle)", &m_IsCameraOn))
             {
@@ -969,6 +978,43 @@ void CLevel_Edit::ExportAndImport()
 
                 ImGui::EndTabItem();
             }
+            if (ImGui::BeginTabItem("Export Navgiation"))
+            {
+                ImGui::Text("Save Navigations. DONT FORGET TO SAVE Navigation DATAS BEFORE QUIT.");
+
+                ImGui::Dummy(ImVec2(0.0f, 20.0f));
+                ImGui::Text("Input Save File Path: ");
+
+                ImGui::SameLine();
+                ImGui::InputText("##Input_NavPath", m_szNavigationSavePath, IM_ARRAYSIZE(m_szNavigationSavePath));
+
+                ImGui::Text("Input Save Naviation Name: ");
+
+                ImGui::SameLine();
+                ImGui::InputText("##Input_NavName", m_szNavigationFileName, IM_ARRAYSIZE(m_szNavigationFileName));
+
+                if (ImGui::Button("Export Naviations")) {
+                    /* SAVE MAP */
+                    m_MapConverter->Export_MapFiles(m_pGameInstance->ToWstring(m_szNavigationFileName).c_str(), m_pGameInstance->ToWstring(m_szNavigationSavePath).c_str(), LEVEL::EDIT);
+                    ImGui::OpenPopup("EXPORT_MAPS_DONE");
+                }
+
+                if (ImGui::BeginPopupModal("EXPORT_NAVIGATION_DONE", 0, ImGuiWindowFlags_NoResize))
+                {
+                    Align_Center("Export NAVIGATION has Done");
+                    ImGui::Text("Export NAVIGATION has Done");
+
+                    ImGui::Dummy(ImVec2{ 0.f, 10.f });
+
+                    Align_Center("Confirm");
+                    if (ImGui::Button("Confirm"))
+                        ImGui::CloseCurrentPopup();
+                    ImGui::EndPopup();
+                }
+
+                ImGui::EndTabItem();
+            }
+
             if (ImGui::BeginTabItem("Export FBX"))
             {
                 ImGui::Text("Convert FBX Model Files to Custom Binary");

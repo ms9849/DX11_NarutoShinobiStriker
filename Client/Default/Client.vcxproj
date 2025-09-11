@@ -160,6 +160,8 @@
     <ClInclude Include="..\Public\Bird_IdleState.h" />
     <ClInclude Include="..\Public\Bird_RunState.h" />
     <ClInclude Include="..\Public\Boxer.h" />
+    <ClInclude Include="..\Public\BoxerState.h" />
+    <ClInclude Include="..\Public\Boxer_IdleState.h" />
     <ClInclude Include="..\Public\Button.h" />
     <ClInclude Include="..\Public\Camera_Manager.h" />
     <ClInclude Include="..\Public\Character.h" />
@@ -258,6 +260,8 @@
     <ClCompile Include="..\Private\Bird_IdleState.cpp" />
     <ClCompile Include="..\Private\Bird_RunState.cpp" />
     <ClCompile Include="..\Private\Boxer.cpp" />
+    <ClCompile Include="..\Private\BoxerState.cpp" />
+    <ClCompile Include="..\Private\Boxer_IdleState.cpp" />
     <ClCompile Include="..\Private\Button.cpp" />
     <ClCompile Include="..\Private\Camera_Manager.cpp" />
     <ClCompile Include="..\Private\Character.cpp" />

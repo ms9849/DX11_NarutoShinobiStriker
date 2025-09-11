@@ -48,7 +48,7 @@ private:
 	_float					m_fCameraSpeedFactor = {};
 
 	_bool					m_IsPickingOn = { false };
-
+	_bool					m_IsNavPickingOn = { false };
 	_bool					m_IsCameraOn = { true };
 	_float3					m_vScale = { 1.f, 1.f, 1.f };
 	_float3					m_vDegrees = { 0.f, 0.f, 0.f };
@@ -76,6 +76,9 @@ private:
 	_wstring				m_strSelectedMapName = {};
 	_char					m_szMapFileName[MAX_PATH] = {};
 	_char					m_szLoadMapFileName[MAX_PATH] = {};
+
+	_char					m_szNavigationFileName[MAX_PATH] = {};
+	_char					m_szNavigationSavePath[MAX_PATH] = {};
 #pragma endregion
 
 	class CMapConverter*		m_MapConverter = { nullptr };
