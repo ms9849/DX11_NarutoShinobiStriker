@@ -10,6 +10,7 @@
 #include "TutorialMap.h"
 
 #include "Pooling.h"
+#include "NavigationMesh.h"
 
 #include "MapConverter.h"
 #include "Tree.h"
@@ -101,13 +102,6 @@ HRESULT CLevel_Edit::Ready_Prototypes()
 #pragma region MODEL_FBX
     _matrix			PreTransformMatrix = XMMatrixIdentity();
 
-    /* For.Prototype_Component_Model_Test */
-    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Test"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Fiona/MY_Fiona.fbx", PreTransformMatrix))))
-        return E_FAIL;
-    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Fiona"));
-
     /* For.Prototype_Component_Model_Props */
     PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Props"),
@@ -126,6 +120,12 @@ HRESULT CLevel_Edit::Ready_Prototypes()
         CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/TutorialMap/TutorialMap.fbx", PreTransformMatrix))))
         return E_FAIL;
     m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_TutorialMap"));
+
+    /* For.Prototype_Component_Model_NaviMesh_KonohaVillage */
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_NaviMesh_KonohaVillage"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/KonohaVillage/NavMesh_KonohaVillage.fbx", PreTransformMatrix))))
+        return E_FAIL;
+
 
     /* For.Prototype_Component_Model_Tree */
     PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
@@ -162,6 +162,12 @@ HRESULT CLevel_Edit::Ready_Prototypes()
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Pooling"),
         CPooling::Create(m_pDevice, m_pContext))))
         return E_FAIL;
+
+    //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    ///* For.Prototype_Component_NavigationMesh*/
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_NavigationMesh"),
+    //    CNavigationMesh::Create(m_pDevice, m_pContext, "../../Client/Bin/Resources/Models/KonohaVillage/NavMesh_KonohaVillage.fbx", PreTransformMatrix))))
+    //    return E_FAIL;
 
 #pragma endregion
 

@@ -19,6 +19,7 @@
 #include "Tree.h"
 #include "Font.h"
 
+#include "NavigationMesh.h"
 #include "Effect_CoolDown.h"
 
 #include "GameManager.h"
@@ -242,6 +243,13 @@ HRESULT CMainApp::Ready_Prototypes()
 		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, TEXT("../Bin/Resources/Models/TutorialMap/TutorialMap.bin"), PreTransformMatrix))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Model_KonohaVillage */
+	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_KonohaVillage"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, TEXT("../Bin/Resources/Models/KonohaVillage/KonohaVillage.bin"), PreTransformMatrix))))
+		return E_FAIL;
+
+
 #pragma endregion
 
 #pragma region TEXTURE
@@ -257,13 +265,21 @@ HRESULT CMainApp::Ready_Prototypes()
 
 #pragma endregion
 
-#pragma region COMPONENT
+#pragma region NAVIGATION
+	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+	/* For.Prototype_Component_NavigationMesh*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_NavigationMesh"),
+		CNavigationMesh::Create(m_pDevice, m_pContext, "../../Client/Bin/Resources/Models/KonohaVillage/NavMesh_KonohaVillage.fbx", PreTransformMatrix))))
+		return E_FAIL;
 
 	/* For.Prototype_Component_Test_Navigation */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Test_Navigation"),
 		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/DataFiles/Navigation.dat")))))
 		return E_FAIL;
 
+#pragma endregion
+
+#pragma region COMPONENT
 	/* For.Prototype_Component_Pooling*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Pooling"),
 		CPooling::Create(m_pDevice, m_pContext))))
@@ -283,7 +299,6 @@ HRESULT CMainApp::Ready_Prototypes()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
 		CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-
 #pragma endregion
 
 #pragma region SHADER

@@ -2,6 +2,7 @@
 
 #include "GameInstance.h"
 #include "VIBuffer_Terrain.h"
+#include "NavigationMesh.h"
 
 CTerrain::CTerrain(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, Client::OBJECTID eObjectID)
     : CGameObject{ pDevice, pContext, ENUM_CLASS(eObjectID) }
@@ -38,6 +39,7 @@ void CTerrain::Priority_Update(_float fTimeDelta)
 
 void CTerrain::Update(_float fTimeDelta)
 {
+    //m_pNavigationMesh->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
 }
 
 void CTerrain::Late_Update(_float fTimeDelta)
@@ -47,17 +49,21 @@ void CTerrain::Late_Update(_float fTimeDelta)
 
 HRESULT CTerrain::Render()
 {
-    if (FAILED(Bind_ShaderResources()))
-        return E_FAIL;
+    //if (FAILED(Bind_ShaderResources()))
+    //    return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Begin(0)))
-        return E_FAIL;
+    //if (FAILED(m_pShaderCom->Begin(0)))
+    //    return E_FAIL;
 
-    if (FAILED(m_pVIBufferCom->Bind_Resources()))
-        return E_FAIL;
+    //if (FAILED(m_pVIBufferCom->Bind_Resources()))
+    //    return E_FAIL;
 
-    if (FAILED(m_pVIBufferCom->Render()))
-        return E_FAIL;
+    //if (FAILED(m_pVIBufferCom->Render()))
+    //    return E_FAIL;
+   
+#ifdef _DEBUG
+    //m_pNavigationMesh->Render();
+#endif
 
     return S_OK;
 }
@@ -78,6 +84,11 @@ HRESULT CTerrain::Ready_Components()
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Shader_VtxNorTex"),
         TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
         return E_FAIL;
+
+    ///* Com_Navigation */
+    //if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_NavigationMesh"),
+    //    TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationMesh))))
+    //    return E_FAIL;
 
 
     return S_OK;
@@ -134,4 +145,5 @@ void CTerrain::Free()
     Safe_Release(m_pVIBufferCom);
     Safe_Release(m_pTextureCom);
     Safe_Release(m_pShaderCom);
+    Safe_Release(m_pNavigationMesh);
 }

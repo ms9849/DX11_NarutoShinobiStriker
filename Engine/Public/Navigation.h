@@ -11,7 +11,7 @@
 */
 NS_BEGIN(Engine)
 
-class ENGINE_DLL CNavigation final : public CComponent
+class ENGINE_DLL CNavigation : public CComponent
 {
 public:
 	typedef struct tagNavigaionDesc
@@ -19,7 +19,7 @@ public:
 		_int				iCurrentCellIndex = { -1 };
 	} NAVIGATION_DESC;
 
-private:
+protected:
 	CNavigation(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CNavigation(const CNavigation& Prototype);
 	virtual ~CNavigation() = default;
@@ -32,23 +32,23 @@ public:
 	}
 
 	_bool isMove(_fvector vPosition);
-
+	virtual void Compute_Height(class CTransform* pTransform);
 #ifdef _DEBUG
 public:
 	HRESULT Render();
 #endif
 
-private:
+protected:
 	_int							m_iCurrentCellIndex = { -1 };
 	vector<class CCell*>			m_Cells;
 	static _float4x4				m_WorldMatrix;
 
 #ifdef _DEBUG
-private:
+protected:
 	class CShader* m_pShader = { nullptr };
 #endif
 
-private:
+protected:
 	void SetUp_Neighbors();
 
 public:

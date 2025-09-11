@@ -9,6 +9,8 @@
 #include "Lower_Character.h"
 #include "Weapon_Character.h"
 
+#include "Player.h"
+
 CBoxer::CBoxer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 	: CEnemy { pDevice, pContext, eObjectID }
 {
@@ -42,14 +44,14 @@ HRESULT CBoxer::Initialize(void* pArg)
 	if (FAILED(Ready_PartObjects()))
 		return E_FAIL;
 
-	m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(5.f, 0.f, 6.f, 1.f));
+	m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(66.f, 0.f, 5.f, 1.f));
 	m_pGameManager->Add_TargetTransform(m_pTransformCom);
 
 	/* 상태 초기화 및 시작. */
 	//m_pState = CWhiteJetsu_IdleState::Create(m_pTransformCom, m_pNavigationCom, m_pModelCom);
 	//m_pState->Start(true);
 
-	return S_OK;
+	return S_OK ;
 }
 
 void CBoxer::Priority_Update(_float fTimeDelta)
@@ -60,6 +62,11 @@ void CBoxer::Priority_Update(_float fTimeDelta)
 void CBoxer::Update(_float fTimeDelta)
 {
 	Update_State(fTimeDelta);
+
+	m_pTransformCom->Chase_XZ(m_pGameManager->Get_PlayerPtr()->Get_Transform()->Get_State(STATE::POSITION), fTimeDelta, m_pNavigationCom, 1.f);
+	m_pTransformCom->LookAt_XZ(m_pGameManager->Get_PlayerPtr()->Get_Transform()->Get_State(STATE::POSITION));
+
+	m_pNavigationCom->Compute_Height(m_pTransformCom);
 
 	__super::Update(fTimeDelta);
 }
@@ -83,7 +90,7 @@ HRESULT CBoxer::Ready_Components()
 	CNavigation::NAVIGATION_DESC Desc;
 	Desc.iCurrentCellIndex = 1;
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Test_Navigation"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_NavigationMesh"),
 		TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
 		return E_FAIL;
 

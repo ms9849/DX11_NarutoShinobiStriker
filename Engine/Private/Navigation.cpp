@@ -97,6 +97,19 @@ _bool CNavigation::isMove(_fvector vPosition)
 	}
 }
 
+void CNavigation::Compute_Height(CTransform* pTransform)
+{
+	_vector		vLocalPos = XMVector3TransformCoord(pTransform->Get_State(STATE::POSITION), XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix)));
+
+
+	_float		fHeight = m_Cells[m_iCurrentCellIndex]->Compute_Height(vLocalPos);
+
+	vLocalPos = XMVectorSetY(vLocalPos, fHeight);
+
+
+	pTransform->Set_State(STATE::POSITION, XMVector3TransformCoord(vLocalPos, XMLoadFloat4x4(&m_WorldMatrix)));
+}
+
 #ifdef _DEBUG
 
 HRESULT CNavigation::Render()

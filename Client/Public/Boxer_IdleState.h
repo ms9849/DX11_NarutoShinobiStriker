@@ -5,6 +5,12 @@
 /*
 가장 기본적인 IDLE STATE
 */
+NS_BEGIN(Engine)
+class CTransform;
+class CNavigation;
+class CModel;
+NS_END
+
 NS_BEGIN(Client)
 
 class CBoxer_IdleState final : public CBoxerState

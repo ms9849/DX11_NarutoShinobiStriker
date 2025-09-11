@@ -7,6 +7,7 @@ NS_BEGIN(Engine)
 class CVIBuffer_Terrain;
 class CTexture;
 class CShader;
+class CNavigationMesh;
 NS_END
 
 NS_BEGIN(Editor)
@@ -31,7 +32,7 @@ private:
 	CTexture* m_pTextureCom = { nullptr };
 	CVIBuffer_Terrain * m_pVIBufferCom = { nullptr };
 	CShader* m_pShaderCom = { nullptr };
-
+	CNavigationMesh* m_pNavigationMesh = { nullptr };
 private:
 	HRESULT Ready_Components();
 	HRESULT Bind_ShaderResources();
