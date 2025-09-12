@@ -58,6 +58,13 @@ _bool CMesh::Picking(_fmatrix WolrdMatrixInverse, _float3* pOut)
     return false;
 }
 
+_float CMesh::Compute_Height(_fvector vPosition, _fmatrix vWorldMatrix)
+{
+
+
+    return _float();
+}
+
 HRESULT CMesh::Initialize_Prototype(MODEL eType, const class CModel* pModel, const aiMesh* pAIMesh, _fmatrix PreTransformMatrix)
 {
     strcpy_s(m_szName, pAIMesh->mName.data);

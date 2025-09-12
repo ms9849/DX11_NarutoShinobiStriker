@@ -1,5 +1,7 @@
 #include "Boxer_IdleState.h"
 
+#include "GameInstance.h"
+
 CBoxer_IdleState::CBoxer_IdleState(CTransform* pTransform, CNavigation* pNavigation, CModel* pModelCom)
     : m_pTransformCom { pTransform}
     , m_pNavigationCom { pNavigation }
@@ -16,6 +18,7 @@ void CBoxer_IdleState::Start(_bool IsBlend)
 
 CBoxerState* CBoxer_IdleState::Update(_float fTimeDelta)
 {
+
     return nullptr;
 }
 

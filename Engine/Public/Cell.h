@@ -24,6 +24,8 @@ public:
 	_bool isIn(_fvector vPosition, _int* pNeighborIndex);
 
 	_bool Compare(_fvector vSourPoint, _fvector vDestPoint);
+	_float Compute_Height(_fvector vPoint);
+
 #ifdef _DEBUG
 public:
 	HRESULT Render();
@@ -38,6 +40,8 @@ private:
 	ID3D11DeviceContext* m_pContext = { nullptr };
 
 	_int					m_NeighborIndices[ENUM_CLASS(NAVI_LINE::END)] = { -1, -1, -1 };
+
+	_float4					m_vPlane = {};
 
 #ifdef _DEBUG	
 	class CVIBuffer_Cell* m_pVIBuffer = { nullptr };

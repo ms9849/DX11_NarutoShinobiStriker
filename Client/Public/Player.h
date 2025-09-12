@@ -56,6 +56,8 @@ private:
 	class CSkillSlotPanel* m_pSkillSlotPanel = { nullptr };
 	class CAttackTypePanel* m_pAttackTypePanel = { nullptr };
 	class CComboKOPanel* m_pComboKOPanel = { nullptr };
+	CNavigation* m_pNavigationCom = { nullptr };
+
 
 	class CPlayerState* m_pState = { nullptr };
 

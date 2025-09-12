@@ -38,6 +38,10 @@ HRESULT CCell::Initialize(const _float3* vPoints, _uint iIndex)
 		return E_FAIL;
 #endif
 
+	XMStoreFloat4(&m_vPlane,
+		XMPlaneFromPoints(XMLoadFloat3(&m_vPoints[0]), XMLoadFloat3(&m_vPoints[1]), XMLoadFloat3(&m_vPoints[2])));
+
+
 	return S_OK;
 }
 
@@ -86,6 +90,11 @@ _bool CCell::Compare(_fvector vSourPoint, _fvector vDestPoint)
 			return true;
 	}
 	return false;
+}
+
+_float CCell::Compute_Height(_fvector vPoint)
+{
+	return (-m_vPlane.x * XMVectorGetX(vPoint) - m_vPlane.z * XMVectorGetZ(vPoint) - m_vPlane.w) / m_vPlane.y;
 }
 
 HRESULT CCell::Render()

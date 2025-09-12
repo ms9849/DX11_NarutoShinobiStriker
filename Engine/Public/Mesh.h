@@ -4,7 +4,7 @@
 
 NS_BEGIN(Engine)
 
-class ENGINE_DLL CMesh final : public CVIBuffer
+class ENGINE_DLL CMesh : public CVIBuffer
 {
 private:
 	CMesh(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -20,6 +20,7 @@ public:
 
 public:
 	virtual _bool Picking(_fmatrix WolrdMatrixInverse, _float3* pOut);
+	virtual _float Compute_Height(_fvector vPosition, _fmatrix vWorldMatrix);
 
 public:
 	virtual HRESULT Initialize_Prototype(MODEL eType, const class CModel* pModel, const aiMesh* pAIMesh, _fmatrix PreTransformMatrix);
@@ -47,6 +48,7 @@ private:
 	HRESULT Ready_VertexBuffer_For_Anim_Assimp(const class CModel* pModel, const aiMesh* pAIMesh);
 	HRESULT Ready_VertexBuffer_For_NonAnim_Binary(HANDLE hHandle, DWORD* dwByte);
 	HRESULT Ready_VertexBuffer_For_Anim_Binary(HANDLE hHandle, DWORD* dwByte);
+
 public:
 	static CMesh* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, MODEL eType, const class CModel* pModel, const aiMesh* pAIMesh, _fmatrix PreTransformMatrix = XMMatrixIdentity());
 	static CMesh* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, MODEL eType, const class CModel* pModel, HANDLE hHandle, DWORD* dwByte, _fmatrix PreTransformMatrix = XMMatrixIdentity());
