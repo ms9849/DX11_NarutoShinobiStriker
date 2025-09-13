@@ -266,11 +266,11 @@ HRESULT CMainApp::Ready_Prototypes()
 #pragma endregion
 
 #pragma region NAVIGATION
-	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
-	/* For.Prototype_Component_NavigationMesh*/
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_NavigationMesh"),
-		CNavigationMesh::Create(m_pDevice, m_pContext, "../../Client/Bin/Resources/Models/KonohaVillage/NavMesh_KonohaVillage.fbx", PreTransformMatrix))))
-		return E_FAIL;
+	//PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+	///* For.Prototype_Component_NavigationMesh*/
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_NavigationMesh"),
+	//	CNavigationMesh::Create(m_pDevice, m_pContext, "../../Client/Bin/Resources/Models/KonohaVillage/NavMesh_KonohaVillage.fbx", PreTransformMatrix))))
+	//	return E_FAIL;
 
 	/* For.Prototype_Component_Test_Navigation */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Test_Navigation"),

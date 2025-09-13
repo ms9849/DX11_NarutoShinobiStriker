@@ -196,8 +196,8 @@
     <ClInclude Include="..\Public\VIBuffer_Cell.h">
       <Filter>01.Utility\03.Components\VIBuffer\Cell</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\NavigationMesh.h">
-      <Filter>01.Utility\03.Components\Navigation</Filter>
+    <ClInclude Include="..\Public\PhysxManager.h">
+      <Filter>01.Utility\09. Physx</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -351,8 +351,8 @@
     <ClCompile Include="..\Private\VIBuffer_Cell.cpp">
       <Filter>01.Utility\03.Components\VIBuffer\Cell</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\NavigationMesh.cpp">
-      <Filter>01.Utility\03.Components\Navigation</Filter>
+    <ClCompile Include="..\Private\PhysxManager.cpp">
+      <Filter>01.Utility\09. Physx</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -520,6 +520,9 @@
     </Filter>
     <Filter Include="98.ShaderFiles">
       <UniqueIdentifier>{1ac49f64-b981-4ff6-86ca-be6cd87c65e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\09. Physx">
+      <UniqueIdentifier>{9c182b0e-becf-48d4-9791-2bf34e5d513a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

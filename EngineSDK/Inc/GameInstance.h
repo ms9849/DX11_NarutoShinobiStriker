@@ -147,6 +147,9 @@ public:
 	HRESULT Add_Light(const LIGHT_DESC& LightDesc);
 #pragma endregion
 
+#pragma region Physx_Manager
+
+#pragma endregion
 
 private:
 	class CGraphic_Device*			m_pGraphic_Device = { nullptr };
@@ -162,6 +165,7 @@ private:
 	class CInput_Manager*			m_pInput_Manager = { nullptr };
 	class CPooling_Manager*			m_pPooling_Manager = { nullptr };
 	class CLight_Manager*			m_pLight_Manager = { nullptr };
+	class CPhysxManager*			m_pPhysxManager = { nullptr };
 
 	/* 지형 정보 담은 네비게이션 */
 	class CNavigation* m_pNavigation = { nullptr };

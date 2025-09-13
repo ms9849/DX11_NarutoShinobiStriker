@@ -191,7 +191,7 @@ void CPlayer::Update(_float fTimeDelta)
 	for (auto& iter : m_Skills)
 		iter.second.fTimeAcc += fTimeDelta;
 
-	m_pNavigationCom->Compute_Height(m_pTransformCom);
+	//m_pNavigationCom->Compute_Height(m_pTransformCom);
 
 	__super::Update(fTimeDelta);
 }
@@ -218,13 +218,12 @@ HRESULT CPlayer::Render()
 HRESULT CPlayer::Ready_Components()
 {
 	/* Com_Navigation */
+	//CNavigation::NAVIGATION_DESC Desc;
+	//Desc.iCurrentCellIndex = 1;
 
-	CNavigation::NAVIGATION_DESC Desc;
-	Desc.iCurrentCellIndex = 1;
-
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_NavigationMesh"),
-		TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
-		return E_FAIL;
+	//if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_NavigationMesh"),
+	//	TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
+	//	return E_FAIL;
 
 	return S_OK;
 }
