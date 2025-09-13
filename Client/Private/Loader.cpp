@@ -384,10 +384,10 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CTutorialMap::Create(m_pDevice, m_pContext, OBJECTID::TUTORIAL_MAP))))
 		return E_FAIL;
 
-	/* For.Prototype_GameObject_KonohaVillage */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_KonohaVillage"),
-		CKonohaVillage::Create(m_pDevice, m_pContext, OBJECTID::KONOHA_VILLAGE))))
-		return E_FAIL;
+	///* For.Prototype_GameObject_KonohaVillage */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_KonohaVillage"),
+	//	CKonohaVillage::Create(m_pDevice, m_pContext, OBJECTID::KONOHA_VILLAGE))))
+	//	return E_FAIL;
 
 	/* For.Prototype_GameObject_WhiteJetsu */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_WhiteJetsu"),

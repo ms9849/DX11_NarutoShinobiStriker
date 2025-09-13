@@ -13,11 +13,11 @@ NS_END
 
 NS_BEGIN(Client)
 
-class CBoxer_IdleState final : public CBoxerState
+class CBoxer_RunState final : public CBoxerState
 {
 private:
-	CBoxer_IdleState(class CNavigation* pNavigation, class CBoxer* pBoxer);
-	virtual ~CBoxer_IdleState() = default;
+	CBoxer_RunState(class CNavigation* pNavigation, class CBoxer* pBoxer);
+	virtual ~CBoxer_RunState() = default;
 
 public:
 	/* Start */
@@ -33,7 +33,7 @@ private:
 	CNavigation* m_pNavigationCom = { nullptr };
 
 public:
-	static CBoxer_IdleState* Create(class CNavigation* pNavigation, class CBoxer* pBoxer);
+	static CBoxer_RunState* Create(class CNavigation* pNavigation, class CBoxer* pBoxer);
 	virtual void Free() override;
 };
 

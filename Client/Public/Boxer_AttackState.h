@@ -13,11 +13,14 @@ NS_END
 
 NS_BEGIN(Client)
 
-class CBoxer_IdleState final : public CBoxerState
+class CBoxer_AttackState final : public CBoxerState
 {
+public:
+	enum class ANIM_STATE { ATTACK_01, ATTACK_02, ATTACK_03 };
+
 private:
-	CBoxer_IdleState(class CNavigation* pNavigation, class CBoxer* pBoxer);
-	virtual ~CBoxer_IdleState() = default;
+	CBoxer_AttackState(class CNavigation* pNavigation, class CBoxer* pBoxer);
+	virtual ~CBoxer_AttackState() = default;
 
 public:
 	/* Start */
@@ -31,9 +34,9 @@ private:
 	CTransform* m_pPlayerTransformCom = { nullptr };
 	CBoxer* m_pBoxer = { nullptr };
 	CNavigation* m_pNavigationCom = { nullptr };
-
+	ANIM_STATE m_eAnimState = {};
 public:
-	static CBoxer_IdleState* Create(class CNavigation* pNavigation, class CBoxer* pBoxer);
+	static CBoxer_AttackState* Create(class CNavigation* pNavigation, class CBoxer* pBoxer);
 	virtual void Free() override;
 };
 

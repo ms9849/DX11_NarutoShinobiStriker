@@ -316,6 +316,15 @@
     <Filter Include="02.GameObjects\Enemy\Boxer\State\Idle">
       <UniqueIdentifier>{7efdcf7e-cce7-4de5-91ef-05589a4290b4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Enemy\Boxer\State\Run">
+      <UniqueIdentifier>{9835e08b-129c-4920-873c-7e158d29ef32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Boxer\State\Attack">
+      <UniqueIdentifier>{24616a33-3795-4ecf-8faf-ecf52c1faeb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Boxer\State\LeafHurricane">
+      <UniqueIdentifier>{5d4362f9-4272-45a2-a341-e8607b254953}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -612,6 +621,15 @@
     <ClInclude Include="..\Public\Boxer_IdleState.h">
       <Filter>02.GameObjects\Enemy\Boxer\State\Idle</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Boxer_RunState.h">
+      <Filter>02.GameObjects\Enemy\Boxer\State\Run</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Boxer_AttackState.h">
+      <Filter>02.GameObjects\Enemy\Boxer\State\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Boxer_LeafHurricaneState.h">
+      <Filter>02.GameObjects\Enemy\Boxer\State\LeafHurricane</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -905,6 +923,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\Boxer_IdleState.cpp">
       <Filter>02.GameObjects\Enemy\Boxer\State\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Boxer_RunState.cpp">
+      <Filter>02.GameObjects\Enemy\Boxer\State\Run</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Boxer_AttackState.cpp">
+      <Filter>02.GameObjects\Enemy\Boxer\State\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Boxer_LeafHurricaneState.cpp">
+      <Filter>02.GameObjects\Enemy\Boxer\State\LeafHurricane</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

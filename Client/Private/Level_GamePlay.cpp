@@ -265,14 +265,14 @@ HRESULT CLevel_GamePlay::Ready_Layer_StaticObjects(const _wstring& strLayerTag)
 HRESULT CLevel_GamePlay::Ready_Layer_Map(const _wstring& strLayerTag)
 {
 	/* Áß±Þ ½ÃÇè ¿¬½ÀÀå */
-	//if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_TutorialMap"),
-	//	ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag)))
-	//	return E_FAIL;
-
-	/* ³ª¹µÀÙ ¸¶À» */
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_KonohaVillage"),
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_TutorialMap"),
 		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag)))
 		return E_FAIL;
+
+	/* ³ª¹µÀÙ ¸¶À» */
+	//if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_KonohaVillage"),
+	//	ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag)))
+	//	return E_FAIL;
 
 
 	return S_OK;
