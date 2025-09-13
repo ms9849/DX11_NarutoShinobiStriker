@@ -10,6 +10,7 @@
 #include "Weapon_Character.h"
 
 #include "Player.h"
+#include "Boxer_IdleState.h"
 
 CBoxer::CBoxer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 	: CEnemy { pDevice, pContext, eObjectID }
@@ -19,6 +20,41 @@ CBoxer::CBoxer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eO
 CBoxer::CBoxer(const CBoxer& rhs)
 	: CEnemy{ rhs }
 {
+}
+
+_float CBoxer::Get_AnimProgress()
+{
+	return dynamic_cast<CParts_Character*>(Find_PartObject(TEXT("Part_Upper")))->Get_AnimProgress();
+}
+
+void CBoxer::Set_AnimProgress(_float fProgress)
+{
+	for (auto& pPart : m_PartObjects)
+	{
+		dynamic_cast<CParts_Character*>(pPart.second)->Set_AnimProgress(fProgress);
+	}
+}
+
+void CBoxer::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _bool IsBlend, _float fBlendRatio, _bool IsLoop)
+{
+	for (auto& pPart : m_PartObjects)
+	{
+		dynamic_cast<CParts_Character*>(pPart.second)->Set_AnimIndex(pAnimName, fAnimationPlayRate, IsBlend, fBlendRatio, IsLoop);
+	}
+}
+
+_bool CBoxer::Play_Animation(_float fTimeDelta)
+{
+	_bool isAnimFinished = { false };
+
+	isAnimFinished = dynamic_cast<CParts_Character*>(Find_PartObject(TEXT("Part_Upper")))->Play_Animation(fTimeDelta);
+
+	dynamic_cast<CParts_Character*>(Find_PartObject(TEXT("Part_Face")))->Play_Animation(fTimeDelta);
+	dynamic_cast<CParts_Character*>(Find_PartObject(TEXT("Part_Head")))->Play_Animation(fTimeDelta);
+	dynamic_cast<CParts_Character*>(Find_PartObject(TEXT("Part_Weapon_R")))->Play_Animation(fTimeDelta);
+	dynamic_cast<CParts_Character*>(Find_PartObject(TEXT("Part_Weapon_L")))->Play_Animation(fTimeDelta);
+
+	return isAnimFinished;
 }
 
 HRESULT CBoxer::Initialize_Prototype()
@@ -47,8 +83,8 @@ HRESULT CBoxer::Initialize(void* pArg)
 	m_pGameManager->Add_TargetTransform(m_pTransformCom);
 
 	/* 상태 초기화 및 시작. */
-	//m_pState = CWhiteJetsu_IdleState::Create(m_pTransformCom, m_pNavigationCom, m_pModelCom);
-	//m_pState->Start(true);
+	m_pState = CBoxer_IdleState::Create(m_pNavigationCom, this);
+	m_pState->Start(true);
 
 	return S_OK ;
 }
@@ -61,10 +97,7 @@ void CBoxer::Priority_Update(_float fTimeDelta)
 void CBoxer::Update(_float fTimeDelta)
 {
 	Update_State(fTimeDelta);
-
-	m_pTransformCom->Chase_XZ(m_pGameManager->Get_PlayerPtr()->Get_Transform()->Get_State(STATE::POSITION), fTimeDelta, m_pNavigationCom, 1.f);
-	m_pTransformCom->LookAt_XZ(m_pGameManager->Get_PlayerPtr()->Get_Transform()->Get_State(STATE::POSITION));
-
+	Update_SkillCoolDown(fTimeDelta);
 	//m_pNavigationCom->Compute_Height(m_pTransformCom);
 
 	__super::Update(fTimeDelta);
@@ -73,13 +106,30 @@ void CBoxer::Update(_float fTimeDelta)
 void CBoxer::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
-	Set_AnimIndex("CustomMan_Idle_Loop", 1.f, true, 0.1f);
-	Play_Animation(fTimeDelta);
 }
 
 HRESULT CBoxer::Render()
 {
 	return S_OK;
+}
+
+_bool CBoxer::Use_Skill()
+{
+	if (m_fSkillTimeAcc >= m_fMaxSkillCoolDown)
+	{
+		m_fSkillTimeAcc = 0.f;
+		return true;
+	}
+	else
+		return false;
+}
+
+void CBoxer::Update_SkillCoolDown(_float fTimeDelta)
+{
+	m_fSkillTimeAcc += fTimeDelta;
+
+	if (m_fSkillTimeAcc >= m_fMaxSkillCoolDown)
+		m_fSkillTimeAcc = m_fMaxSkillCoolDown;
 }
 
 HRESULT CBoxer::Ready_Components()
@@ -151,20 +201,20 @@ HRESULT CBoxer::Ready_PartObjects()
 
 void CBoxer::Update_State(_float fTimeDelta)
 {
-	//CPlayerState* pNextState = { nullptr };
-	//pNextState = m_pState->Update(fTimeDelta);
+	CBoxerState* pNextState = { nullptr };
+	pNextState = m_pState->Update(fTimeDelta);
 
-	//if (nullptr != pNextState)
-	//{
-	//	_bool IsBlend = m_pState->End();
-	//	//현재 스테이트 날려버려.
-	//	Safe_Release(m_pState);
+	if (nullptr != pNextState)
+	{
+		_bool IsBlend = m_pState->End();
+		//현재 스테이트 날려버림.
+		Safe_Release(m_pState);
 
-	//	//새로운 상태 시작해줘. (내부적으로 플레이어 들게 됨)
-	//	pNextState->Start(IsBlend);
+		//새로운 상태 시작해줌. (내부적으로 복서 들게 됨. 레퍼런스 카운트 증가 안함.)
+		pNextState->Start(IsBlend);
 
-	//	m_pState = pNextState;
-	//}
+		m_pState = pNextState;
+	}
 }
 
 CBoxer* CBoxer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
@@ -197,5 +247,6 @@ void CBoxer::Free()
 {
 	__super::Free();
 
+	Safe_Release(m_pState);
 	Safe_Release(m_pNavigationCom);
 }
