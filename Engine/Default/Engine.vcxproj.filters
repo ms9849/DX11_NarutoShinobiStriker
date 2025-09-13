@@ -199,6 +199,15 @@
     <ClInclude Include="..\Public\PhysxManager.h">
       <Filter>01.Utility\09. Physx</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Collider.h">
+      <Filter>01.Utility\03.Components\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Bounding.h">
+      <Filter>01.Utility\03.Components\Collider\Bounding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Bounding_AABB.h">
+      <Filter>01.Utility\03.Components\Collider\Bounding\AABB</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -353,6 +362,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\PhysxManager.cpp">
       <Filter>01.Utility\09. Physx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Collider.cpp">
+      <Filter>01.Utility\03.Components\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bounding.cpp">
+      <Filter>01.Utility\03.Components\Collider\Bounding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bounding_AABB.cpp">
+      <Filter>01.Utility\03.Components\Collider\Bounding\AABB</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -523,6 +541,21 @@
     </Filter>
     <Filter Include="01.Utility\09. Physx">
       <UniqueIdentifier>{9c182b0e-becf-48d4-9791-2bf34e5d513a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Collider">
+      <UniqueIdentifier>{73ae1cba-4697-4bee-ae91-12a341bbe426}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Collider\Bounding">
+      <UniqueIdentifier>{81af3a88-0bed-43d4-a5b5-8108fae5da4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Collider\Bounding\AABB">
+      <UniqueIdentifier>{0484c9e3-6f96-45a2-a2fa-34bd3749c581}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Collider\Bounding\OBB">
+      <UniqueIdentifier>{15ced516-b38f-4a59-b9b9-ee4b7d1b2489}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Collider\Bounding\SPHERE">
+      <UniqueIdentifier>{efd7e05d-9094-48df-b16c-e2f0a7d205fb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -15,6 +15,26 @@ CWhiteJetsu::CWhiteJetsu(const CWhiteJetsu& rhs)
 {
 }
 
+_float CWhiteJetsu::Get_AnimProgress()
+{
+    return m_pModelCom->Get_CurAnimProgress();
+}
+
+void CWhiteJetsu::Set_AnimProgress(_float fProgress)
+{
+	m_pModelCom->Set_CurAnimProgress(fProgress);
+}
+
+void CWhiteJetsu::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _bool IsBlend, _float fBlendRatio, _bool IsLoop)
+{
+	m_pModelCom->Set_AnimIndex(pAnimName, fAnimationPlayRate, IsBlend, fBlendRatio, IsLoop);
+}
+
+_bool CWhiteJetsu::Play_Animation(_float fTimeDelta)
+{
+	return m_pModelCom->Play_Animation(fTimeDelta);
+}
+
 HRESULT CWhiteJetsu::Initialize_Prototype()
 {
     return S_OK;
@@ -41,7 +61,7 @@ HRESULT CWhiteJetsu::Initialize(void* pArg)
     /* 상태 초기화 및 시작. */
     m_pGameManager->Add_TargetTransform(m_pTransformCom);
 
-    m_pState = CWhiteJetsu_IdleState::Create(m_pTransformCom, m_pNavigationCom, m_pModelCom);
+    m_pState = CWhiteJetsu_IdleState::Create(m_pNavigationCom, this);
     m_pState->Start(true);
 
     return S_OK;
@@ -58,6 +78,8 @@ void CWhiteJetsu::Update(_float fTimeDelta)
 
     /* 스테이트 업데이트. */
     Update_State(fTimeDelta);
+    /* 스킬 쿨타임 업데이트*/
+    Update_SkillCoolDown(fTimeDelta);
 }
 
 void CWhiteJetsu::Late_Update(_float fTimeDelta)
@@ -88,6 +110,25 @@ HRESULT CWhiteJetsu::Render()
     }
 
     return S_OK;
+}
+
+_bool CWhiteJetsu::Use_Skill()
+{
+    if (m_fSkillTimeAcc >= m_fMaxSkillCoolDown)
+    {
+        m_fSkillTimeAcc = 0.f;
+        return true;
+    }
+    else
+        return false;
+}
+
+void CWhiteJetsu::Update_SkillCoolDown(_float fTimeDelta)
+{
+    m_fSkillTimeAcc += fTimeDelta;
+
+    if (m_fSkillTimeAcc >= m_fMaxSkillCoolDown)
+        m_fSkillTimeAcc = m_fMaxSkillCoolDown;
 }
 
 HRESULT CWhiteJetsu::Ready_Components()

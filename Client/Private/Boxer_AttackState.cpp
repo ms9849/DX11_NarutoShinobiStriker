@@ -25,7 +25,7 @@ void CBoxer_AttackState::Start(_bool IsBlend)
 	Safe_AddRef(m_pPlayerTransformCom);
 
 	/* 공격 하면서 플레이어 바라보게 */
-	m_pBoxer->Set_AnimIndex("CustomMan_Attack_Hand_Punch_Left", 2.0f, IsBlend, 0.1f, false);
+	m_pBoxer->Set_AnimIndex("CustomMan_Attack_Hand_Punch_Left", 2.0f, true, 0.1f, false);
 	m_pBoxer->Get_Transform()->LookAt_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION));
 	m_eAnimState = ANIM_STATE::ATTACK_01;
 }

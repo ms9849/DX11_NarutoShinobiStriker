@@ -325,6 +325,15 @@
     <Filter Include="02.GameObjects\Enemy\Boxer\State\LeafHurricane">
       <UniqueIdentifier>{5d4362f9-4272-45a2-a341-e8607b254953}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Enemy\Jetsu\State\Woodhand">
+      <UniqueIdentifier>{799e7c80-550a-45f5-a1ff-eeaa06b76be3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Jetsu\Skill">
+      <UniqueIdentifier>{5dfe555b-5392-41c0-bba8-b48a7272690d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Jetsu\Skill\Part">
+      <UniqueIdentifier>{918e081b-508b-4b73-89e3-7d0d31c45344}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -630,6 +639,15 @@
     <ClInclude Include="..\Public\Boxer_LeafHurricaneState.h">
       <Filter>02.GameObjects\Enemy\Boxer\State\LeafHurricane</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\WhiteJetsu_WoodHandState.h">
+      <Filter>02.GameObjects\Enemy\Jetsu\State\Woodhand</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\WoodHand.h">
+      <Filter>02.GameObjects\Enemy\Jetsu\Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Parts_WoodHand.h">
+      <Filter>02.GameObjects\Enemy\Jetsu\Skill\Part</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -932,6 +950,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\Boxer_LeafHurricaneState.cpp">
       <Filter>02.GameObjects\Enemy\Boxer\State\LeafHurricane</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\WhiteJetsu_WoodHandState.cpp">
+      <Filter>02.GameObjects\Enemy\Jetsu\State\Woodhand</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\WoodHand.cpp">
+      <Filter>02.GameObjects\Enemy\Jetsu\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Parts_WoodHand.cpp">
+      <Filter>02.GameObjects\Enemy\Jetsu\Skill\Part</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

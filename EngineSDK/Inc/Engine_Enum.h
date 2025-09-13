@@ -20,5 +20,7 @@ namespace Engine
 
 	enum class NAVI_POINT { A, B, C, END };
 	enum class NAVI_LINE { AB, BC, CA, END };
+
+	enum class COLLIDER { AABB, OBB, SPHERE, END };
 }
 #endif // Engine_Enum_h__

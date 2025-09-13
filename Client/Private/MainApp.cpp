@@ -19,6 +19,8 @@
 #include "Tree.h"
 #include "Font.h"
 
+#include "Parts_WoodHand.h"
+
 #include "NavigationMesh.h"
 #include "Effect_CoolDown.h"
 
@@ -233,6 +235,19 @@ HRESULT CMainApp::Ready_Prototypes()
 		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Monster/Boxer/Upper_Boxer.fbx", PreTransformMatrix))))
 		return E_FAIL;
 
+	/* ¸ñµÐ ¹Ú¼ö */
+	/* For.Prototype_Component_Model_WoodHand_L */
+	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(270.0f)) * XMMatrixTranslation(-2.65f, 0.f, 0.f);
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_WoodHand_L"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/WoodHand/WoodHand_L.fbx", PreTransformMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_WoodHand_R */
+	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(180.0f)) * XMMatrixTranslation(2.65f, 0.f, 0.f);
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_WoodHand_R"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/WoodHand/WoodHand_R.fbx", PreTransformMatrix))))
+		return E_FAIL;
+
 #pragma endregion
 
 #pragma region MODEL_BINARY
@@ -366,6 +381,16 @@ HRESULT CMainApp::Ready_Prototypes()
 		CProgressBarUI::Create(m_pDevice, m_pContext, OBJECTID::PROGRESSBAR_UI))))
 		return E_FAIL;
 #pragma endregion
+
+#pragma region SKILLS
+	
+	/* For.Prototype_GameObject_Part_WoodHand */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Part_WoodHand"),
+		CParts_WoodHand::Create(m_pDevice, m_pContext, OBJECTID::WOODHAND))))
+		return E_FAIL;
+	
+#pragma endregion
+	
 	return S_OK;
 }
 

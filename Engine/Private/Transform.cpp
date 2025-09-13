@@ -219,7 +219,7 @@ void CTransform::LookAt_XZ(_fvector vAt)
 	_float3		vScale = Get_Scale();
 	_vector		vRight, vUp, vLook;
 
-	vPosition = XMVectorSetY(vPosition, 0.f), 0.f;
+	vPosition = XMVectorSetY(vPosition, 0.f);
 
 	vLook = vAt - vPosition;
 	vLook = XMVectorSetW(XMVectorSetY(vLook, 0.f), 0.f);
