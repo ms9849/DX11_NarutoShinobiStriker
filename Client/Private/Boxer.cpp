@@ -44,7 +44,6 @@ HRESULT CBoxer::Initialize(void* pArg)
 	if (FAILED(Ready_PartObjects()))
 		return E_FAIL;
 
-	m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(66.f, 0.f, 5.f, 1.f));
 	m_pGameManager->Add_TargetTransform(m_pTransformCom);
 
 	/* 상태 초기화 및 시작. */
@@ -66,7 +65,7 @@ void CBoxer::Update(_float fTimeDelta)
 	m_pTransformCom->Chase_XZ(m_pGameManager->Get_PlayerPtr()->Get_Transform()->Get_State(STATE::POSITION), fTimeDelta, m_pNavigationCom, 1.f);
 	m_pTransformCom->LookAt_XZ(m_pGameManager->Get_PlayerPtr()->Get_Transform()->Get_State(STATE::POSITION));
 
-	m_pNavigationCom->Compute_Height(m_pTransformCom);
+	//m_pNavigationCom->Compute_Height(m_pTransformCom);
 
 	__super::Update(fTimeDelta);
 }
@@ -87,12 +86,12 @@ HRESULT CBoxer::Ready_Components()
 {
 	/* Com_Navigation */
 
-	CNavigation::NAVIGATION_DESC Desc;
-	Desc.iCurrentCellIndex = 1;
+	//CNavigation::NAVIGATION_DESC Desc;
+	//Desc.iCurrentCellIndex = 1;
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_NavigationMesh"),
-		TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
-		return E_FAIL;
+	//if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_NavigationMesh"),
+	//	TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
+	//	return E_FAIL;
 
 	return S_OK;
 }
