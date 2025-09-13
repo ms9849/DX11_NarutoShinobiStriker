@@ -37,6 +37,8 @@ namespace Client
 
 		ENEMY_HPBAR,
 		
+		WOODHAND,
+
 		TEST_CAMERA, OUTFITSELECT_CAMERA, MAIN_CAMERA,
 		END 
 	};

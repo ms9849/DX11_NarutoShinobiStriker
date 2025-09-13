@@ -1,20 +1,24 @@
 #pragma once
-
 #include "Client_Defines.h"
 #include "WhiteJetsuState.h"
 
+/*
+가장 기본적인 IDLE STATE
+*/
+
 NS_BEGIN(Engine)
 class CTransform;
+class CModel;
 class CNavigation;
-NS_END 
+NS_END
 
 NS_BEGIN(Client)
 
-class CWhiteJetsu_RunState final : public CWhiteJetsuState
+class CWhiteJetsu_WoodHandState final : public CWhiteJetsuState
 {
 private:
-	CWhiteJetsu_RunState(class CNavigation* pNavigation, class CWhiteJetsu* pJetsu);
-	virtual ~CWhiteJetsu_RunState() = default;
+	CWhiteJetsu_WoodHandState(class CNavigation* pNavigation, class CWhiteJetsu* pJetsu);
+	virtual ~CWhiteJetsu_WoodHandState() = default;
 
 public:
 	/* Start */
@@ -30,7 +34,7 @@ private:
 	class CWhiteJetsu* m_pJetsu = { nullptr };
 
 public:
-	static CWhiteJetsu_RunState* Create(class CNavigation* pNavigation, class CWhiteJetsu* pJetsu);
+	static CWhiteJetsu_WoodHandState* Create(class CNavigation* pNavigation, class CWhiteJetsu* pJetsu);
 	virtual void Free() override;
 };
 

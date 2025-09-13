@@ -14,7 +14,7 @@ NS_BEGIN(Client)
 class CWhiteJetsu_AttackState final : public CWhiteJetsuState
 {
 private:
-	CWhiteJetsu_AttackState(class CTransform* pTransform, class CNavigation* pNavigation, class CModel* pModelCom);
+	CWhiteJetsu_AttackState(class CNavigation* pNavigation, class CWhiteJetsu* pJetsu);
 	virtual ~CWhiteJetsu_AttackState() = default;
 
 public:
@@ -26,12 +26,11 @@ public:
 	_bool	End() override;
 
 private:
-	CTransform* m_pTransformCom = { nullptr };
-	CModel* m_pModelCom = { nullptr };
 	CNavigation* m_pNavigationCom = { nullptr };
+	class CWhiteJetsu* m_pJetsu = { nullptr };
 
 public:
-	static CWhiteJetsu_AttackState* Create(class CTransform* pTransform, class CNavigation* pNavigation, class CModel* pModelCom);
+	static CWhiteJetsu_AttackState* Create(class CNavigation* pNavigation, class CWhiteJetsu* pJetsu);
 	virtual void Free() override;
 };
 

@@ -13,29 +13,26 @@
 
 #pragma endregion
 
-CWhiteJetsu_AttackState::CWhiteJetsu_AttackState(class CTransform* pTransform, class CNavigation* pNavigationCom, class CModel* pModelCom)
-	: m_pTransformCom { pTransform }
-	, m_pModelCom { pModelCom }
+CWhiteJetsu_AttackState::CWhiteJetsu_AttackState(class CNavigation* pNavigationCom, class CWhiteJetsu* pJetsu)
+	: m_pJetsu { pJetsu }
 	, m_pNavigationCom { pNavigationCom }
 {
-	Safe_AddRef(m_pTransformCom);
-	Safe_AddRef(m_pModelCom);
 	Safe_AddRef(m_pNavigationCom);
 }
 
 void CWhiteJetsu_AttackState::Start(_bool IsBlend)
 {
-	m_pModelCom->Set_AnimIndex("WhiteZetsuCrowdForm_Attack_Punch", 1.f, true);
-	m_pTransformCom->LookAt_XZ(CGameManager::GetInstance()->Get_PlayerPtr()->Get_Transform()->Get_State(STATE::POSITION));
+	m_pJetsu->Set_AnimIndex("WhiteZetsuCrowdForm_Attack_Punch", 1.f, true);
+	m_pJetsu->Get_Transform()->LookAt_XZ(CGameManager::GetInstance()->Get_PlayerPtr()->Get_Transform()->Get_State(STATE::POSITION));
 }
 
 CWhiteJetsuState* CWhiteJetsu_AttackState::Update(_float fTimeDelta)
 {
 	CWhiteJetsuState* pNextState = { nullptr };
-	_bool IsAnimFinished = m_pModelCom->Play_Animation(fTimeDelta);
+	_bool IsAnimFinished = m_pJetsu->Play_Animation(fTimeDelta);
 
 	if (true == IsAnimFinished)
-		pNextState = CWhiteJetsu_IdleState::Create(m_pTransformCom, m_pNavigationCom, m_pModelCom);
+		pNextState = CWhiteJetsu_IdleState::Create(m_pNavigationCom, m_pJetsu);
 
 	return pNextState;
 }
@@ -45,16 +42,14 @@ _bool CWhiteJetsu_AttackState::End()
 	return true;
 }
 
-CWhiteJetsu_AttackState* CWhiteJetsu_AttackState::Create(class CTransform* pTransform, class CNavigation* pNavigation, class CModel* pModelCom)
+CWhiteJetsu_AttackState* CWhiteJetsu_AttackState::Create(class CNavigation* pNavigation, class CWhiteJetsu* pJetsu)
 {
-	return new CWhiteJetsu_AttackState(pTransform, pNavigation, pModelCom);
+	return new CWhiteJetsu_AttackState(pNavigation, pJetsu);
 }
 
 void CWhiteJetsu_AttackState::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pTransformCom);
-	Safe_Release(m_pModelCom);
 	Safe_Release(m_pNavigationCom);
 }

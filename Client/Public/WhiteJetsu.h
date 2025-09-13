@@ -18,12 +18,25 @@ private:
 	virtual ~CWhiteJetsu() = default;
 
 public:
+	virtual _float	Get_AnimProgress();
+	virtual void	Set_AnimProgress(_float fProgress);
+	virtual void	Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate = 1.f, _bool IsBlend = true, _float fBlendRatio = 0.15f, _bool IsLoop = false);
+	virtual _bool	Play_Animation(_float fTimeDelta);
+
+
+public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Priority_Update(_float fTimeDelta) override;
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
+
+public:
+	/* 목둔 박수 */
+	/* 스킬을 쓸 수 있는 상태라면 True를 반환하고 상태에서 제어. */
+	_bool Use_Skill();
+	void  Update_SkillCoolDown(_float fTimeDelta);
 
 private:
 	CModel* m_pModelCom = { nullptr };
@@ -38,6 +51,9 @@ private:
 	*/
 	class CWhiteJetsuState* m_pState = { nullptr };
 	CNavigation* m_pNavigationCom = { nullptr };
+
+	_float m_fSkillTimeAcc = { 0.f }; 
+	_float m_fMaxSkillCoolDown = { 0.f };
 
 private:
 	HRESULT Ready_Components();
