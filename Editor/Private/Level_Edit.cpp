@@ -49,9 +49,14 @@ HRESULT CLevel_Edit::Initialize()
     if (FAILED(Ready_Layer_Props(TEXT("Layer_Props"))))
         return E_FAIL;
 
+
     m_pGameInstance->Set_Visible_All_IMGUI(true);
 
     m_MapConverter = CMapConverter::Create(m_pDevice, m_pContext);
+
+	m_pEditorNavigation = CNavigation::Create(m_pDevice, m_pContext, TEXT("../CONVERT/Navi/Navigation_Edit.dat"));
+    if (nullptr == m_pEditorNavigation)
+        return E_FAIL;
 
     return S_OK;
 }
@@ -64,14 +69,20 @@ void CLevel_Edit::Update(_float fTimeDelta)
     if (m_pGameInstance->Key_Down(DIK_F4))
         m_pGameInstance->Set_Visible_All_IMGUI(false);
 
+
+    m_pEditorNavigation->Update(XMMatrixIdentity());
+
     Editor_GUI();
 
+    Edit_NavPoint();
     Move_Props();
 }
 
 HRESULT CLevel_Edit::Render()
 {
     SetWindowText(g_hWnd, TEXT("EDIT LEVEL"));
+
+    m_pEditorNavigation->Render();
 
     return S_OK;
 }
@@ -87,6 +98,41 @@ void CLevel_Edit::Move_Props()
         if (m_pGameInstance->Picking(ENUM_CLASS(LEVEL::EDIT), &vOut))
             m_pSelectedTransform->Set_State(STATE::POSITION, XMVectorSet(vOut.x, vOut.y, vOut.z, 1.f));
     }
+}
+
+void CLevel_Edit::Edit_NavPoint()
+{
+    if (!m_IsNavPickingOn)
+        return;
+
+    if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON))
+    {
+        _float3 vOut = { 0.f, 0.f, 0.f };
+        _float3 vNearPoint = { 0.f, 0.f, 0.f };
+        if (m_pGameInstance->Picking(ENUM_CLASS(LEVEL::EDIT), &vOut))
+        {
+            /* 가까운 포인트가 있다면 가까운 포인트로 세팅*/
+            if (m_pEditorNavigation->IsNearPoint(vOut, 2.f, &vNearPoint))
+                m_vNavPoints[m_iCurrentNavIdx++] = vNearPoint;
+            /* 그게 아니라면 그냥 세팅 */
+            else
+                m_vNavPoints[m_iCurrentNavIdx++] = vOut;
+
+            if (m_iCurrentNavIdx >= ENUM_CLASS(NAVI_POINT::END))
+            {
+                /* 셀 만들어서 던지고 초기화 */
+				m_pEditorNavigation->Create_Cells(
+                    XMVectorSet(m_vNavPoints[0].x, m_vNavPoints[0].y, m_vNavPoints[0].z, 1.f),
+					XMVectorSet(m_vNavPoints[1].x, m_vNavPoints[1].y, m_vNavPoints[1].z, 1.f),
+					XMVectorSet(m_vNavPoints[2].x, m_vNavPoints[2].y, m_vNavPoints[2].z, 1.f));
+                m_iCurrentNavIdx = 0;
+            }
+
+        }
+    }
+    
+    if (m_pGameInstance->Key_Pressing(DIK_LCONTROL) && m_pGameInstance->Key_Down(DIK_Z))
+        m_pEditorNavigation->Delete_FinalCell();
 }
 
 HRESULT CLevel_Edit::Ready_Prototypes()
@@ -203,6 +249,7 @@ HRESULT CLevel_Edit::Ready_Prototypes()
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Shader_VtxAnimMesh"),
         CShader::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/ShaderFiles/Shader_VtxAnimMesh.hlsl"), VTXANIMMESH::Elements, VTXANIMMESH::iNumElements))))
         return E_FAIL;
+
 #pragma endregion
 
 #pragma region OBJECT
@@ -346,6 +393,7 @@ void CLevel_Edit::Scene_Setting()
 
             if (ImGui::Checkbox("Navigation Activate (Press = To Toggle)", &m_IsNavPickingOn)) {}
 
+			ImGui::Text("CURRENT NAV IDX : %d", m_iCurrentNavIdx);
 
             if (ImGui::Checkbox("Camera Activate (Press F2 To Toggle)", &m_IsCameraOn))
             {
@@ -988,21 +1036,9 @@ void CLevel_Edit::ExportAndImport()
             {
                 ImGui::Text("Save Navigations. DONT FORGET TO SAVE Navigation DATAS BEFORE QUIT.");
 
-                ImGui::Dummy(ImVec2(0.0f, 20.0f));
-                ImGui::Text("Input Save File Path: ");
-
-                ImGui::SameLine();
-                ImGui::InputText("##Input_NavPath", m_szNavigationSavePath, IM_ARRAYSIZE(m_szNavigationSavePath));
-
-                ImGui::Text("Input Save Naviation Name: ");
-
-                ImGui::SameLine();
-                ImGui::InputText("##Input_NavName", m_szNavigationFileName, IM_ARRAYSIZE(m_szNavigationFileName));
-
                 if (ImGui::Button("Export Naviations")) {
-                    /* SAVE MAP */
-                    m_MapConverter->Export_MapFiles(m_pGameInstance->ToWstring(m_szNavigationFileName).c_str(), m_pGameInstance->ToWstring(m_szNavigationSavePath).c_str(), LEVEL::EDIT);
-                    ImGui::OpenPopup("EXPORT_MAPS_DONE");
+                    m_pEditorNavigation->Save_NavigationData(TEXT("../CONVERT/Navi/Editor_Navigation.dat"));
+                    ImGui::OpenPopup("EXPORT_NAVIGATION_DONE");
                 }
 
                 if (ImGui::BeginPopupModal("EXPORT_NAVIGATION_DONE", 0, ImGuiWindowFlags_NoResize))
@@ -1095,4 +1131,5 @@ void CLevel_Edit::Free()
 
     Safe_Release(m_pEditCamera);
     Safe_Release(m_MapConverter);
+    Safe_Release(m_pEditorNavigation);
 }
