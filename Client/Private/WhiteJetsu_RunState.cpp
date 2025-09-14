@@ -26,8 +26,6 @@ void CWhiteJetsu_RunState::Start(_bool IsBlend)
     m_pJetsu->Set_AnimIndex("WhiteZetsuCrowdForm_Run_Loop");
     m_pPlayerTransformCom = CGameManager::GetInstance()->Get_PlayerPtr()->Get_Transform();
     Safe_AddRef(m_pPlayerTransformCom);
-
-
 }
 
 CWhiteJetsuState* CWhiteJetsu_RunState::Update(_float fTimeDelta)

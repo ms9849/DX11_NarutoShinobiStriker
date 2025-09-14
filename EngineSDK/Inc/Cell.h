@@ -6,11 +6,17 @@ NS_BEGIN(Engine)
 
 class CCell : public CBase
 {
+public:
+	enum class CELLTYPE { TYPE_GROUND, TYPE_WALL };
 private:
 	CCell(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual ~CCell() = default;
 
 public:
+	_uint Get_Type() {
+		return m_iCellType;
+	}
+
 	_vector Get_Point(NAVI_POINT ePoint) {
 		return XMLoadFloat3(&m_vPoints[ENUM_CLASS(ePoint)]);
 	}
@@ -21,7 +27,7 @@ public:
 
 public:
 	HRESULT Initialize(const _float3* vPoints, _uint iIndex);
-	_bool isIn(_fvector vPosition, _int* pNeighborIndex);
+	_bool isIn(_fvector vPosition, _int* pNeighborIndex, _float3* pSlidingVector);
 
 	_bool Compare(_fvector vSourPoint, _fvector vDestPoint);
 	_float Compute_Height(_fvector vPoint);
@@ -32,6 +38,7 @@ public:
 #endif
 
 private:
+	_uint					m_iCellType = { 0 };
 	_uint					m_iIndex = {};
 	_float3					m_vPoints[ENUM_CLASS(NAVI_POINT::END)] = {};
 	_float3					m_vNormals[ENUM_CLASS(NAVI_LINE::END)] = {};

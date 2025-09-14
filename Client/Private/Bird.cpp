@@ -34,7 +34,7 @@ HRESULT CBird::Initialize(void* pArg)
         return E_FAIL;
 
     m_iNumMeshes = m_pModelCom->Get_NumMeshes();
-    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(10.f, 0.f, 10.f, 1.f));
+    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(5.f, 0.f, 5.f, 1.f));
     ///* 상태 초기화 및 시작. */
     m_pState = CBird_IdleState::Create(m_pTransformCom, m_pNavigationCom, m_pModelCom);
     m_pState->Start(true);
@@ -100,7 +100,7 @@ HRESULT CBird::Ready_Components()
     /* Com_Navigation */
 
     CNavigation::NAVIGATION_DESC Desc;
-    Desc.iCurrentCellIndex = 2;
+    Desc.iCurrentCellIndex = 0;
 
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Test_Navigation"),
         TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))

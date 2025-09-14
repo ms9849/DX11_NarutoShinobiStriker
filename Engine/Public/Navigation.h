@@ -25,13 +25,16 @@ protected:
 	virtual ~CNavigation() = default;
 
 public:
+	void Save_NavigationData(const _tchar* pFilePath);
+
+public:
 	virtual HRESULT Initialize_Prototype(const _tchar* pNavigationDataFiles);
 	virtual HRESULT Initialize(void* pArg);
 	void Update(_fmatrix WorldMatrix) {
 		XMStoreFloat4x4(&m_WorldMatrix, WorldMatrix);
 	}
 
-	_bool isMove(_fvector vPosition);
+	_bool isMove(_fvector vPosition, _float3* pSlidingVector = nullptr);
 	virtual void Compute_Height(class CTransform* pTransform);
 #ifdef _DEBUG
 public:

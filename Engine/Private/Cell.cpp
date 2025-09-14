@@ -20,11 +20,11 @@ HRESULT CCell::Initialize(const _float3* vPoints, _uint iIndex)
 
 	/* 포인트 A B C를 이용하여 선분 AB, BC, CA 저장 */
 	XMStoreFloat3(&vLines[ENUM_CLASS(NAVI_LINE::AB)],
-		XMLoadFloat3(&m_vPoints[ENUM_CLASS(NAVI_POINT::B)]) - XMLoadFloat3(&m_vPoints[ENUM_CLASS(NAVI_POINT::A)]));
+		XMVector3Normalize(XMLoadFloat3(&m_vPoints[ENUM_CLASS(NAVI_POINT::B)]) - XMLoadFloat3(&m_vPoints[ENUM_CLASS(NAVI_POINT::A)])));
 	XMStoreFloat3(&vLines[ENUM_CLASS(NAVI_LINE::BC)],
-		XMLoadFloat3(&m_vPoints[ENUM_CLASS(NAVI_POINT::C)]) - XMLoadFloat3(&m_vPoints[ENUM_CLASS(NAVI_POINT::B)]));
+		XMVector3Normalize(XMLoadFloat3(&m_vPoints[ENUM_CLASS(NAVI_POINT::C)]) - XMLoadFloat3(&m_vPoints[ENUM_CLASS(NAVI_POINT::B)])));
 	XMStoreFloat3(&vLines[ENUM_CLASS(NAVI_LINE::CA)],
-		XMLoadFloat3(&m_vPoints[ENUM_CLASS(NAVI_POINT::A)]) - XMLoadFloat3(&m_vPoints[ENUM_CLASS(NAVI_POINT::C)]));
+		XMVector3Normalize(XMLoadFloat3(&m_vPoints[ENUM_CLASS(NAVI_POINT::A)]) - XMLoadFloat3(&m_vPoints[ENUM_CLASS(NAVI_POINT::C)])));
 
 	/* 포인트 A B C*/
 	for (_uint i = 0; i < ENUM_CLASS(NAVI_LINE::END); ++i)
@@ -41,19 +41,28 @@ HRESULT CCell::Initialize(const _float3* vPoints, _uint iIndex)
 	XMStoreFloat4(&m_vPlane,
 		XMPlaneFromPoints(XMLoadFloat3(&m_vPoints[0]), XMLoadFloat3(&m_vPoints[1]), XMLoadFloat3(&m_vPoints[2])));
 
-
 	return S_OK;
 }
 
-_bool CCell::isIn(_fvector vPosition, _int* pNeighborIndex)
+_bool CCell::isIn(_fvector vPosition, _int* pNeighborIndex, _float3* pSlidingVector)
 {
 	for (size_t i = 0; i < ENUM_CLASS(NAVI_LINE::END); i++)
 	{
+		/* 시작점 -> 객체의 위치로 향하는 벡터와 */
 		_vector	vDir = XMVector3Normalize(vPosition - XMLoadFloat3(&m_vPoints[i]));
+		/* 선분의 법선 벡터를 */
 		_vector vNormal = XMLoadFloat3(&m_vNormals[i]);
 
+		/* 내적해서 결과값 ( cos 함수의 결과) 0보다 크다면, */
+		/* 0 ~ 90도, 270 ~ 360도 사이, 즉 셀을 벗어났다고 판정한다.*/
+		/* 먼저 걸린 녀석을 방향으로 삼아도 될 것 같음. */
 		if (0.f < XMVectorGetX(XMVector3Dot(vDir, vNormal)))
 		{
+			_vector vSliding = vDir - XMVectorGetX(XMVector3Dot(vDir, vNormal)) * vNormal;
+				
+			if (nullptr != pSlidingVector)
+				XMStoreFloat3(pSlidingVector, vSliding);
+			
 			*pNeighborIndex = m_NeighborIndices[i];
 			return false;
 		}

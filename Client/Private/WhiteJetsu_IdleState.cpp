@@ -19,6 +19,7 @@ CWhiteJetsu_IdleState::CWhiteJetsu_IdleState(CNavigation* pNavigation, CWhiteJet
 	: m_pJetsu{ pJetsu }
 	, m_pNavigationCom{ pNavigation }
 {
+	Safe_AddRef(m_pNavigationCom);
 }
 
 void CWhiteJetsu_IdleState::Start(_bool IsBlend)

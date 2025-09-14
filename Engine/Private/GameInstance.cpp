@@ -75,9 +75,9 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	if (nullptr == m_pIMGUI_Manager)
 		return E_FAIL;
 
-	//m_pPhysxManager = CPhysxManager::Create();
-	//if (nullptr == m_pPhysxManager)
-	//	return E_FAIL;
+	m_pPhysxManager = CPhysxManager::Create();
+	if (nullptr == m_pPhysxManager)
+		return E_FAIL;
 
 	return S_OK;
 }
