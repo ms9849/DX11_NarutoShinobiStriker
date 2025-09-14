@@ -39,6 +39,8 @@ namespace Client
 		
 		WOODHAND,
 
+		SKYBOX,
+
 		TEST_CAMERA, OUTFITSELECT_CAMERA, MAIN_CAMERA,
 		END 
 	};

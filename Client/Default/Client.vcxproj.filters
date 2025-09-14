@@ -334,6 +334,9 @@
     <Filter Include="02.GameObjects\Enemy\Jetsu\Skill\Part">
       <UniqueIdentifier>{918e081b-508b-4b73-89e3-7d0d31c45344}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\SkyBox">
+      <UniqueIdentifier>{a51f9c92-5103-4bca-92ee-7fb3cb8bb86a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -648,6 +651,9 @@
     <ClInclude Include="..\Public\Parts_WoodHand.h">
       <Filter>02.GameObjects\Enemy\Jetsu\Skill\Part</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\SkyBox.h">
+      <Filter>02.GameObjects\SkyBox</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -960,6 +966,9 @@
     <ClCompile Include="..\Private\Parts_WoodHand.cpp">
       <Filter>02.GameObjects\Enemy\Jetsu\Skill\Part</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\SkyBox.cpp">
+      <Filter>02.GameObjects\SkyBox</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPosTex.hlsl">
@@ -972,6 +981,9 @@
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxAnimMesh.hlsl">
+      <Filter>97. ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader_VtxMesh_NonLight.hlsl">
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

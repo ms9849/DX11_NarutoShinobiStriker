@@ -53,6 +53,8 @@
 #include "Boxer.h"
 #include "WoodHand.h"
 
+#include "SkyBox.h"
+
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice { pDevice }
 	, m_pContext { pContext }
@@ -375,6 +377,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 		return E_FAIL;
 
 	m_strMessage = TEXT("객체원형를(을) 로딩 중 입니다.");
+	/* For.Prototype_GameObject_SkyBox */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_SkyBox"),
+		CSkyBox::Create(m_pDevice, m_pContext, OBJECTID::SKYBOX))))
+
+		return E_FAIL;
 	/* For.Prototype_GameObject_Terrain */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Terrain"),
 		CTerrain::Create(m_pDevice, m_pContext, OBJECTID::TERRAIN))))
