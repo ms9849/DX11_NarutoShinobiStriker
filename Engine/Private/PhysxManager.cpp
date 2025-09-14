@@ -40,10 +40,11 @@ HRESULT CPhysxManager::Initialize()
     /*
     Å×½ºÆ®
     */
-
 	m_pTestMaterial = m_PxPhysx->createMaterial(1.0f, 1.0f, 1.0f);
 	physx::PxRigidStatic* groundPlane = PxCreatePlane(*m_PxPhysx, physx::PxPlane(0, 1, 0, 0), *m_pTestMaterial);
 	m_PxScene->addActor(*groundPlane);
+
+    Transport->release();
 
     return S_OK;
 }
@@ -78,10 +79,18 @@ void CPhysxManager::Free()
 
     PxCloseExtensions();
     
-    if (m_PxScene)      m_PxScene->release();
-    if (m_PxDispatcher) m_PxDispatcher->release();
-    if (m_PxPhysx)      m_PxPhysx->release();
-    if (m_Pvd)          m_Pvd->release();
-    if (m_PxFoundation) m_PxFoundation->release();
+    if (nullptr != m_PxScene)      
+        m_PxScene->release();
 
+    if (nullptr != m_PxDispatcher)
+        m_PxDispatcher->release();
+
+    if (nullptr != m_PxPhysx)
+        m_PxPhysx->release();
+
+    if (nullptr != m_Pvd)
+        m_Pvd->release();
+
+    if (nullptr != m_PxFoundation)
+        m_PxFoundation->release();
 }

@@ -148,9 +148,6 @@
     <ClInclude Include="..\Public\Camera.h">
       <Filter>01.Utility\02.GameObjects\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Input_Manager.h">
-      <Filter>01.Utility\97. Input\Key</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Mesh.h">
       <Filter>01.Utility\03.Components\Model\Mesh</Filter>
     </ClInclude>
@@ -207,6 +204,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\Bounding_AABB.h">
       <Filter>01.Utility\03.Components\Collider\Bounding\AABB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Input_Manager.h">
+      <Filter>01.Utility\97. Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -312,9 +312,6 @@
     <ClCompile Include="..\Private\Camera.cpp">
       <Filter>01.Utility\02.GameObjects\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Input_Manager.cpp">
-      <Filter>01.Utility\97. Input\Key</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Mesh.cpp">
       <Filter>01.Utility\03.Components\Model\Mesh</Filter>
     </ClCompile>
@@ -371,6 +368,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Bounding_AABB.cpp">
       <Filter>01.Utility\03.Components\Collider\Bounding\AABB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Input_Manager.cpp">
+      <Filter>01.Utility\97. Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -481,9 +481,6 @@
     </Filter>
     <Filter Include="01.Utility\97. Input">
       <UniqueIdentifier>{f30a041c-6b74-4939-a07a-6912eba02b53}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Utility\97. Input\Key">
-      <UniqueIdentifier>{e9569967-ad3f-4805-8a3d-1562d4830f60}</UniqueIdentifier>
     </Filter>
     <Filter Include="01.Utility\03.Components\Model">
       <UniqueIdentifier>{a38764fb-2a37-4c7b-8bad-45163f660b98}</UniqueIdentifier>

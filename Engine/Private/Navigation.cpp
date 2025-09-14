@@ -26,6 +26,26 @@ CNavigation::CNavigation(const CNavigation& Prototype)
 #endif
 }
 
+void CNavigation::Save_NavigationData(const _tchar* pFilePath)
+{
+	HANDLE		hFile = CreateFile(pFilePath, GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+	if (0 == hFile)
+		return;
+	_ulong		dwByte = { };
+	
+	for (auto& pCell : m_Cells)
+	{
+		_float3		vPoints[ENUM_CLASS(NAVI_POINT::END)] = {};
+		XMStoreFloat3(&vPoints[ENUM_CLASS(NAVI_POINT::A)], pCell->Get_Point(NAVI_POINT::A));
+		XMStoreFloat3(&vPoints[ENUM_CLASS(NAVI_POINT::B)], pCell->Get_Point(NAVI_POINT::B));
+		XMStoreFloat3(&vPoints[ENUM_CLASS(NAVI_POINT::C)], pCell->Get_Point(NAVI_POINT::C));
+
+		WriteFile(hFile, vPoints, sizeof(_float3) * ENUM_CLASS(NAVI_POINT::END), &dwByte, nullptr);
+	}
+
+	CloseHandle(hFile);
+}
+
 HRESULT CNavigation::Initialize_Prototype(const _tchar* pNavigationDataFiles)
 {
 	_ulong		dwByte = { };
@@ -72,28 +92,43 @@ HRESULT CNavigation::Initialize(void* pArg)
 	return S_OK;
 }
 
-_bool CNavigation::isMove(_fvector vPosition)
+_bool CNavigation::isMove(_fvector vPosition, _float3* pSlidingVector)
 {
 	_vector		vLocalPos = XMVector3TransformCoord(vPosition, XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix)));
 
 	_int		iNeighborIndex = { -1 };
 
-	_bool		isIn = m_Cells[m_iCurrentCellIndex]->isIn(vLocalPos, &iNeighborIndex);
-
+	_bool		isIn = m_Cells[m_iCurrentCellIndex]->isIn(vLocalPos, &iNeighborIndex, pSlidingVector);
+	
+	/* 안에 있다면 True를 반환 */
 	if (true == isIn)
 	{
 		return true;
 	}
 	else
 	{
-		/* 나간 방향에 이웃이 있냐? */
+		/* 나간 방향에 이웃이 있있다면? */
 		if (-1 != iNeighborIndex)
 		{
+			while (true)
+			{
+				/* 없으면 false 반환 */
+				if (-1 == iNeighborIndex)
+					return false;
+				/* 이웃이 있으면, 그 이웃으로 가서 다시 체크 */
+				if (true == m_Cells[iNeighborIndex]->isIn(vLocalPos, &iNeighborIndex, pSlidingVector))
+					break;
+			}
+
+
 			m_iCurrentCellIndex = iNeighborIndex;
 			return true;
 		}
+		/* 여기서 슬라이딩 벡터를 계산해야 한다. */
 		else
+		{
 			return false;
+		}
 	}
 }
 
@@ -114,15 +149,34 @@ void CNavigation::Compute_Height(CTransform* pTransform)
 
 HRESULT CNavigation::Render()
 {
-	if (FAILED(m_pShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
-		return E_FAIL;
-
 	if (FAILED(m_pShader->Bind_Matrix("g_ViewMatrix", m_pGameInstance->Get_PipeLine_Float4x4(D3DTS::VIEW))))
 		return E_FAIL;
 	if (FAILED(m_pShader->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_PipeLine_Float4x4(D3DTS::PROJ))))
 		return E_FAIL;
 
+	_float4		vColor = { };
+	_float4x4	WorldMatrix = m_WorldMatrix;
+
+	if (-1 == m_iCurrentCellIndex)
+		vColor = _float4(0.f, 1.f, 0.f, 1.f);
+	else
+	{
+		WorldMatrix._42 += 0.05f;
+		vColor = _float4(1.f, 0.f, 0.f, 1.f);
+	}
+
+	if (FAILED(m_pShader->Bind_Matrix("g_WorldMatrix", &WorldMatrix)))
+		return E_FAIL;
+
+	if (FAILED(m_pShader->Bind_RawValue("g_vColor", &vColor, sizeof(_float4))))
+		return E_FAIL;
+
 	m_pShader->Begin(0);
+
+	if (-1 != m_iCurrentCellIndex)
+	{
+		return m_Cells[m_iCurrentCellIndex]->Render();
+	}
 
 	for (auto& pCell : m_Cells)
 		pCell->Render();

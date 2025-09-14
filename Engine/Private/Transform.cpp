@@ -57,9 +57,6 @@ HRESULT CTransform::Bind_ShaderResource(CShader* pShader, const _char* pConstant
 	return pShader->Bind_Matrix(pConstantName, &m_WorldMatrix);
 }
 
-// 결과벡터의 주소 D3DXVec3Normalize(&결과, &누구를);
-// 길이1짜리벡터 XMVector3Normalize(누구를);
-
 void CTransform::Go_Straight(_float fTimeDelta, class CNavigation* pNavigation)
 {
 	_vector		vPosition = Get_State(STATE::POSITION);
@@ -68,9 +65,14 @@ void CTransform::Go_Straight(_float fTimeDelta, class CNavigation* pNavigation)
 	/* DX9 때와는 다르게 기존 벡터 원형을 수정하지 않는다. SIMD라고 해도 값으로 넘기는건데 빠른가..? */
 	vPosition += XMVector3Normalize(vLook) * m_fSpeedPerSec * fTimeDelta;
 
+	_float3 vSliding = {};
+
 	if (nullptr == pNavigation ||
-		true == pNavigation->isMove(vPosition))
+		true == pNavigation->isMove(vPosition, &vSliding))
 		Set_State(STATE::POSITION, vPosition);
+
+	else
+		Set_State(STATE::POSITION, Get_State(STATE::POSITION) + XMLoadFloat3(&vSliding));
 }
 
 void CTransform::Go_Backward(_float fTimeDelta, class CNavigation* pNavigation)
@@ -80,9 +82,14 @@ void CTransform::Go_Backward(_float fTimeDelta, class CNavigation* pNavigation)
 
 	vPosition -= XMVector3Normalize(vLook) * m_fSpeedPerSec * fTimeDelta;
 
+	_float3 vSliding = {};
+
 	if (nullptr == pNavigation ||
-		true == pNavigation->isMove(vPosition))
+		true == pNavigation->isMove(vPosition, &vSliding))
 		Set_State(STATE::POSITION, vPosition);
+
+	else
+		Set_State(STATE::POSITION, Get_State(STATE::POSITION) + XMLoadFloat3(&vSliding));
 }
 
 void CTransform::Go_Left(_float fTimeDelta, class CNavigation* pNavigation)
@@ -92,9 +99,14 @@ void CTransform::Go_Left(_float fTimeDelta, class CNavigation* pNavigation)
 
 	vPosition -= XMVector3Normalize(vRight) * m_fSpeedPerSec * fTimeDelta;
 
+	_float3 vSliding = {};
+
 	if (nullptr == pNavigation ||
-		true == pNavigation->isMove(vPosition))
+		true == pNavigation->isMove(vPosition, &vSliding))
 		Set_State(STATE::POSITION, vPosition);
+
+	else
+		Set_State(STATE::POSITION, Get_State(STATE::POSITION) + XMLoadFloat3(&vSliding));
 }
 
 void CTransform::Go_Right(_float fTimeDelta, class CNavigation* pNavigation)
@@ -104,9 +116,14 @@ void CTransform::Go_Right(_float fTimeDelta, class CNavigation* pNavigation)
 
 	vPosition += XMVector3Normalize(vRight) * m_fSpeedPerSec * fTimeDelta;
 
+	_float3 vSliding = {};
+
 	if (nullptr == pNavigation ||
-		true == pNavigation->isMove(vPosition))
+		true == pNavigation->isMove(vPosition, &vSliding))
 		Set_State(STATE::POSITION, vPosition);
+
+	else
+		Set_State(STATE::POSITION, Get_State(STATE::POSITION) + XMLoadFloat3(&vSliding));
 }
 
 void CTransform::Go_Direction(_fvector vDir, _float fTimeDelta, class CNavigation* pNavigation)
@@ -116,9 +133,14 @@ void CTransform::Go_Direction(_fvector vDir, _float fTimeDelta, class CNavigatio
 	/* 방향은 정규화해야지 */
 	vPosition += XMVector3Normalize(vDir) * m_fSpeedPerSec * fTimeDelta;
 
+	_float3 vSliding = {};
+
 	if (nullptr == pNavigation ||
-		true == pNavigation->isMove(vPosition))
+		true == pNavigation->isMove(vPosition, &vSliding))
 		Set_State(STATE::POSITION, vPosition);
+
+	else
+		Set_State(STATE::POSITION, Get_State(STATE::POSITION) + XMLoadFloat3(&vSliding));
 }
 
 void CTransform::Turn(_fvector vAxis, _float fTimeDelta)
@@ -262,10 +284,16 @@ void CTransform::Chase(_fvector vTargetPos, _float fTimeDelta, class CNavigation
 
 	vMove = XMVector3Normalize(vDirection) * m_fSpeedPerSec * fTimeDelta;
 
+
+	_float3 vSliding = {};
+
 	vPosition += vMove;
 	if (nullptr == pNavigation ||
-		true == pNavigation->isMove(vPosition))
+		true == pNavigation->isMove(vPosition, &vSliding))
 		Set_State(STATE::POSITION, vPosition);
+
+	else
+		Set_State(STATE::POSITION, Get_State(STATE::POSITION) + XMLoadFloat3(&vSliding));
 }
 
 void CTransform::Chase_XZ(_fvector vTargetPos, _float fTimeDelta, CNavigation* pNavigation, _float fLimitDistance)
@@ -282,13 +310,18 @@ void CTransform::Chase_XZ(_fvector vTargetPos, _float fTimeDelta, CNavigation* p
 
 	_vector		vMove;
 
+	_float3 vSliding = {};
+	
 	vMove = XMVector3Normalize(vDirection) * m_fSpeedPerSec * fTimeDelta;
 	vMove = XMVectorSetY(vMove, 0.f);
 
  	vPosition += vMove;
 	if (nullptr == pNavigation ||
-		true == pNavigation->isMove(vPosition))
+		true == pNavigation->isMove(vPosition, &vSliding))
 		Set_State(STATE::POSITION, vPosition);
+
+	else if(true == pNavigation->isMove(Get_State(STATE::POSITION) + 0.5f * fTimeDelta * m_fSpeedPerSec * (XMLoadFloat3(&vSliding)), nullptr))
+		Set_State(STATE::POSITION, Get_State(STATE::POSITION) + 0.5f * fTimeDelta * m_fSpeedPerSec * (XMLoadFloat3(&vSliding)));
 }
 
 void CTransform::Chase_Lerp(_fvector vTargetPos, _float fTimeDelta, _float fLimitDistance)
