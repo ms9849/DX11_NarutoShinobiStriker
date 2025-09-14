@@ -43,7 +43,7 @@ CWhiteJetsuState* CWhiteJetsu_WoodHandState::Update(_float fTimeDelta)
 		Desc.fSpeedPerSec = 10.f;
 
 		 XMStoreFloat3(&Desc.vTargetPos, m_pPlayerTransformCom->Get_State(STATE::POSITION));
-		 Desc.vTargetPos.y = XMVectorGetY(m_pJetsu->Get_Transform()->Get_State(STATE::POSITION));
+		 Desc.vTargetPos.y = XMVectorGetY(m_pJetsu->Get_Transform()->Get_State(STATE::POSITION) - XMVectorSet(0.f, 1.f, 0.f, 0.f));
 
 		 XMStoreFloat3(&Desc.vJetsuPos, m_pJetsu->Get_Transform()->Get_State(STATE::POSITION));
 
