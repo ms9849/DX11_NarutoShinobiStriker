@@ -5,6 +5,7 @@
 
 NS_BEGIN(Engine)
 class CModel;
+class CNavigation;
 NS_END
 
 NS_BEGIN(Editor)

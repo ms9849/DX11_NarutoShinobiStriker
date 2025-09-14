@@ -10,8 +10,6 @@ CCell::CCell(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	Safe_AddRef(m_pContext);
 }
 
-/* 셀들의 좌표는 월드 기준으로 잡히는 걸 명심할 것. */
-
 HRESULT CCell::Initialize(const _float3* vPoints, _uint iIndex)
 {
 	memcpy(m_vPoints, vPoints, sizeof(_float3) * ENUM_CLASS(NAVI_POINT::END));
@@ -59,7 +57,7 @@ _bool CCell::isIn(_fvector vPosition, _int* pNeighborIndex, _float3* pSlidingVec
 		if (0.f < XMVectorGetX(XMVector3Dot(vDir, vNormal)))
 		{
 			_vector vSliding = vDir - XMVectorGetX(XMVector3Dot(vDir, vNormal)) * vNormal;
-				
+
 			if (nullptr != pSlidingVector)
 				XMStoreFloat3(pSlidingVector, vSliding);
 			

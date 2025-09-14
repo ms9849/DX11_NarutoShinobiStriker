@@ -6,6 +6,8 @@
 NS_BEGIN(Engine)
 class CGameObject;
 class CTransform;
+class CNavigation;
+class CCell;
 NS_END
 
 NS_BEGIN(Editor)
@@ -21,6 +23,7 @@ public:
 	virtual void Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 	void	Move_Props();
+	void	Edit_NavPoint();
 public:
 	HRESULT Ready_Prototypes();
 	/* 이 레벨에서 쓰기위한 객체들을 생성한다. */
@@ -81,7 +84,11 @@ private:
 	_char					m_szNavigationSavePath[MAX_PATH] = {};
 #pragma endregion
 
-	class CMapConverter*		m_MapConverter = { nullptr };
+	CNavigation*			m_pEditorNavigation = { nullptr };
+	class CMapConverter*	m_MapConverter = { nullptr };
+	_float3 				m_vNavPoints[ENUM_CLASS(NAVI_POINT::END)];
+	_uint					m_iCurrentNavIdx = { 0 };
+
 public:
 	static CLevel_Edit* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID);
 	virtual void Free() override;

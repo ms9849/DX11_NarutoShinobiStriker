@@ -25,7 +25,10 @@ protected:
 	virtual ~CNavigation() = default;
 
 public:
+	void Delete_FinalCell();
+	_bool IsNearPoint(_float3 vPoint, _float fDistance, _float3* vNearPoint);
 	void Save_NavigationData(const _tchar* pFilePath);
+	void Create_Cells(_vector vPointA, _vector vPointB, _vector vPointC);
 
 public:
 	virtual HRESULT Initialize_Prototype(const _tchar* pNavigationDataFiles);

@@ -4,7 +4,7 @@
 #include "Shader.h"
 #include "GameInstance.h"
 
-_float4x4 CNavigation::m_WorldMatrix = { };
+_float4x4 CNavigation::m_WorldMatrix = {};
 
 CNavigation::CNavigation(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CComponent { pDevice, pContext }
@@ -26,6 +26,37 @@ CNavigation::CNavigation(const CNavigation& Prototype)
 #endif
 }
 
+void CNavigation::Delete_FinalCell()
+{
+	if (m_Cells.empty())
+		return;
+
+	CCell* pCell = m_Cells.back();
+	Safe_Release(pCell);
+
+	m_Cells.pop_back();
+}
+
+_bool CNavigation::IsNearPoint(_float3 vPoint, _float fDistance, _float3* vNearPoint)
+{
+	for (auto& pCell : m_Cells)
+	{
+		for(_uint i=0; i<ENUM_CLASS(NAVI_POINT::END); ++i)
+		{
+			_vector vDiff = XMLoadFloat3(&vPoint) - pCell->Get_Point((NAVI_POINT)(i));
+			_float fLength = XMVectorGetX(XMVector3Length(vDiff));
+
+			if (fLength < fDistance)
+			{
+				XMStoreFloat3(vNearPoint, pCell->Get_Point((NAVI_POINT)(i)));
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 void CNavigation::Save_NavigationData(const _tchar* pFilePath)
 {
 	HANDLE		hFile = CreateFile(pFilePath, GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
@@ -44,6 +75,33 @@ void CNavigation::Save_NavigationData(const _tchar* pFilePath)
 	}
 
 	CloseHandle(hFile);
+}
+
+void CNavigation::Create_Cells(_vector vPointA, _vector vPointB, _vector vPointC)
+{
+	_float3 vPoints[ENUM_CLASS(NAVI_POINT::END)] = {};
+	_float3 vFinalPointA;
+	_float3 vFinalPointB;
+	_float3 vFinalPointC;
+
+	XMStoreFloat3(&vFinalPointA, vPointA);
+	XMStoreFloat3(&vFinalPointB, vPointB);
+	XMStoreFloat3(&vFinalPointC, vPointC);
+
+	vPoints[0] = vFinalPointA;
+	vPoints[1] = vFinalPointB;
+	vPoints[2] = vFinalPointC;
+
+	_vector vCross = XMVector3Cross(vPointB - vPointA, vPointC - vPointA);
+
+	if (0 > XMVectorGetY(vCross)) {
+		swap(vPoints[1], vPoints[2]);
+	}
+
+	CCell* pCell = CCell::Create(m_pDevice, m_pContext, vPoints, (_uint)m_Cells.size());
+
+	m_Cells.push_back(pCell);
+
 }
 
 HRESULT CNavigation::Initialize_Prototype(const _tchar* pNavigationDataFiles)
@@ -99,36 +157,43 @@ _bool CNavigation::isMove(_fvector vPosition, _float3* pSlidingVector)
 	_int		iNeighborIndex = { -1 };
 
 	_bool		isIn = m_Cells[m_iCurrentCellIndex]->isIn(vLocalPos, &iNeighborIndex, pSlidingVector);
-	
+	if (nullptr != pSlidingVector)
+		XMVector3TransformNormal(XMLoadFloat3(pSlidingVector), XMLoadFloat4x4(&m_WorldMatrix));
+
 	/* 안에 있다면 True를 반환 */
 	if (true == isIn)
 	{
 		return true;
 	}
+	
 	else
 	{
 		/* 나간 방향에 이웃이 있있다면? */
 		if (-1 != iNeighborIndex)
 		{
-			while (true)
+			_int iCount = { 0 };
+			while (iCount <= 15)
 			{
 				/* 없으면 false 반환 */
 				if (-1 == iNeighborIndex)
 					return false;
 				/* 이웃이 있으면, 그 이웃으로 가서 다시 체크 */
 				if (true == m_Cells[iNeighborIndex]->isIn(vLocalPos, &iNeighborIndex, pSlidingVector))
-					break;
-			}
+				{
+					if (nullptr != pSlidingVector)
+						XMVector3TransformNormal(XMLoadFloat3(pSlidingVector), XMLoadFloat4x4(&m_WorldMatrix));
 
+					break;
+				}
+				iCount++;
+			}
 
 			m_iCurrentCellIndex = iNeighborIndex;
 			return true;
 		}
 		/* 여기서 슬라이딩 벡터를 계산해야 한다. */
 		else
-		{
 			return false;
-		}
 	}
 }
 
@@ -136,11 +201,9 @@ void CNavigation::Compute_Height(CTransform* pTransform)
 {
 	_vector		vLocalPos = XMVector3TransformCoord(pTransform->Get_State(STATE::POSITION), XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix)));
 
-
 	_float		fHeight = m_Cells[m_iCurrentCellIndex]->Compute_Height(vLocalPos);
 
 	vLocalPos = XMVectorSetY(vLocalPos, fHeight);
-
 
 	pTransform->Set_State(STATE::POSITION, XMVector3TransformCoord(vLocalPos, XMLoadFloat4x4(&m_WorldMatrix)));
 }
@@ -156,9 +219,13 @@ HRESULT CNavigation::Render()
 
 	_float4		vColor = { };
 	_float4x4	WorldMatrix = m_WorldMatrix;
+	
 
 	if (-1 == m_iCurrentCellIndex)
+	{
+		WorldMatrix._42 += 0.03f;
 		vColor = _float4(0.f, 1.f, 0.f, 1.f);
+	}
 	else
 	{
 		WorldMatrix._42 += 0.05f;

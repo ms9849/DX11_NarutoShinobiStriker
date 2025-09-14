@@ -289,7 +289,7 @@ HRESULT CMainApp::Ready_Prototypes()
 #pragma region NAVIGATION
 	/* For.Prototype_Component_Test_Navigation */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Test_Navigation"),
-		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/DataFiles/Navigation.dat")))))
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/DataFiles/Editor_Navigation.dat")))))
 		return E_FAIL;
 
 #pragma endregion
