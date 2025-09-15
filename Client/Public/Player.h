@@ -19,6 +19,11 @@ CCharacter ->
 CPlayer ÀÇ °èÃþ±¸Á¶
 */
 
+NS_BEGIN(Engine)
+class CNavigation;
+class CCollider;
+NS_END 
+
 NS_BEGIN(Client)
 
 class CPlayer final : public CCharacter
@@ -52,21 +57,22 @@ public:
 	virtual HRESULT Render() override;
 
 private:
-	class CGameManager* m_pGameManager = { nullptr };
-	class CSkillSlotPanel* m_pSkillSlotPanel = { nullptr };
+	class CGameManager*		m_pGameManager = { nullptr };
+	class CSkillSlotPanel*	m_pSkillSlotPanel = { nullptr };
 	class CAttackTypePanel* m_pAttackTypePanel = { nullptr };
-	class CComboKOPanel* m_pComboKOPanel = { nullptr };
-	CNavigation* m_pNavigationCom = { nullptr };
+	class CComboKOPanel*	m_pComboKOPanel = { nullptr };
 
+	CNavigation*			m_pNavigationCom = { nullptr };
+	CCollider*				m_pColliderCom = { nullptr };
 
-	class CPlayerState* m_pState = { nullptr };
+	class CPlayerState*		m_pState = { nullptr };
 
-	_uint m_iComboCount = { 0 };
-	_uint  m_iMaxComboCount = { 99 };
+	_uint					m_iComboCount = { 0 };
+	_uint					m_iMaxComboCount = { 99 };
 
-	_float m_fComboTimeAcc = { 0 };
-	_bool m_bEnemyHit = { false };
-	_bool m_bEnemyKO = { false };
+	_float					m_fComboTimeAcc = { 0 };
+	_bool					m_bEnemyHit = { false };
+	_bool					m_bEnemyKO = { false };
 
 private:
 	HRESULT Ready_Components();

@@ -53,6 +53,8 @@ void CBird::Update(_float fTimeDelta)
 
     /* 스테이트 업데이트. */
     Update_State(fTimeDelta);
+
+	m_pColliderCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
 }
 
 void CBird::Late_Update(_float fTimeDelta)
@@ -82,6 +84,10 @@ HRESULT CBird::Render()
             return E_FAIL;
     }
 
+#ifdef _DEBUG
+    m_pColliderCom->Render();
+#endif
+
     return S_OK;
 }
 
@@ -105,6 +111,16 @@ HRESULT CBird::Ready_Components()
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Test_Navigation"),
         TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
         return E_FAIL;
+
+    CBounding_Sphere::BOUNDING_SPHERE_DESC ColliderDesc{};
+
+    ColliderDesc.fRadius = 0.7f;
+    ColliderDesc.vCenter = _float3{ 0.f, 0.7f, 0.f };
+
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_Sphere"),
+        TEXT("Com_Collider_Sphere"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
+        return E_FAIL;
+
 
     return S_OK;
 }
@@ -197,4 +213,5 @@ void CBird::Free()
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pState);
     Safe_Release(m_pNavigationCom);
+    Safe_Release(m_pColliderCom);
 }

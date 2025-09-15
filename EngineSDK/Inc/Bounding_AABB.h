@@ -17,9 +17,21 @@ private:
 	virtual ~CBounding_AABB() = default;
 
 public:
-	HRESULT Initialize(const void* pDesc);
+	BoundingBox* Get_Desc() const {
+		return m_pDesc;
+	}
 
+public:
+	HRESULT Initialize(const void* pDesc);
+	virtual void Update(_fmatrix WorldMatrix) override;
+	virtual _bool Intersect(COLLIDER eType, class CBounding* pTarget) override;
+
+#ifdef _DEBUG
+	/* 색상과 미리 만들어진 정점 & 인덱스 정보를 가져와서 세팅. */
+	virtual HRESULT Render(PrimitiveBatch<VertexPositionColor>* pBatch, _fvector vColor) override;
+#endif
 private:
+	BoundingBox* m_pOriginalDesc = { nullptr };
 	BoundingBox* m_pDesc = { nullptr };
 
 public:

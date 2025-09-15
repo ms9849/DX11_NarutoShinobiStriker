@@ -194,6 +194,8 @@ void CPlayer::Update(_float fTimeDelta)
 	//m_pNavigationCom->Compute_Height(m_pTransformCom);
 
 	__super::Update(fTimeDelta);
+
+	m_pColliderCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
@@ -205,13 +207,19 @@ void CPlayer::Late_Update(_float fTimeDelta)
 		Change_Skills();
 	}
 
-	m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
-
 	__super::Late_Update(fTimeDelta);
+
+	m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 
 HRESULT CPlayer::Render()
 {
+#ifdef _DEBUG
+
+	m_pColliderCom->Render();
+
+#endif
+
 	return S_OK;
 }
 
@@ -225,6 +233,18 @@ HRESULT CPlayer::Ready_Components()
 	//	TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
 	//	return E_FAIL;
 
+	/* Com_Collider */
+
+	CBounding_Sphere::BOUNDING_SPHERE_DESC ColliderDesc{};
+
+	ColliderDesc.fRadius = 0.7f;
+	ColliderDesc.vCenter = _float3{ 0.f, 0.7f, 0.f };
+	ColliderDesc.isActive = false;
+
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_Sphere"),
+		TEXT("Com_Collider_Sphere"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
+		return E_FAIL;
+	
 	return S_OK;
 }
 
@@ -391,5 +411,6 @@ void CPlayer::Free()
 	Safe_Release(m_pAttackTypePanel);
 	Safe_Release(m_pComboKOPanel);
 
+	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pNavigationCom);
 }

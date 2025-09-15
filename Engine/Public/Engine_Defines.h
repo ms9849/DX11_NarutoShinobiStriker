@@ -8,6 +8,16 @@
 #include "DirectXTK/DDSTextureLoader.h"
 #include "DirectXTK/WICTextureLoader.h"
 #include "FX11/d3dx11effect.h"
+
+/* 충돌체를 그리기 위해 추가한 헤더.*/
+
+/* 미리 정의된 정점 & 인덱스 데이터를 추가 */
+#include "DirectXTK/PrimitiveBatch.h"
+/* 미리 정의된 쉐이더 */
+#include "DirectXTK/Effects.h"
+/* 미리 정의된 정점 타입*/
+#include "DirectXTK/VertexTypes.h"
+
 /* 폰트 헤더 */
 #include "DirectXTK/SpriteFont.h"
 #include "DirectXTK/SpriteBatch.h"

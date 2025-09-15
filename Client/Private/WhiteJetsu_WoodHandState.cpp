@@ -29,6 +29,8 @@ void CWhiteJetsu_WoodHandState::Start(_bool IsBlend)
 	m_pJetsu->Set_AnimIndex("WhiteZetsuCrowdForm_etc_Action_Type04", 1.f, true);
 
 	m_pPlayerTransformCom = CGameManager::GetInstance()->Get_PlayerPtr()->Get_Transform();
+
+	m_pJetsu->Get_Transform()->LookAt_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION));
 	Safe_AddRef(m_pPlayerTransformCom);
 }
 

@@ -7,6 +7,7 @@ NS_BEGIN(Engine)
 class CShader;
 class CModel;
 class CNavigation;
+class CCollider;
 NS_END
 
 NS_BEGIN(Client)
@@ -41,6 +42,8 @@ private:
 	/* 추후 상태 추가해야함*/
 	//class CWhiteJetsuState* m_pState = { nullptr };
 	CNavigation* m_pNavigationCom = { nullptr };
+	CCollider*	 m_pColliderCom = { nullptr };
+
 	class CBoxerState* m_pState = { nullptr };
 
 	_float		m_fSkillTimeAcc = { 0.f };

@@ -320,6 +320,9 @@ void CTransform::Chase_XZ(_fvector vTargetPos, _float fTimeDelta, CNavigation* p
 		true == pNavigation->isMove(vPosition, &vSliding))
 		Set_State(STATE::POSITION, vPosition);
 
+	/* 멀어지는데도 계속 쫓아옴 */
+	/* 방법 1. 플레이어가 네비메시를 벗어나지 않던가 */
+	/* 방법 2. 슬라이딩 이후의 거리를 한번 더 비교해서 이동할지 말지 선택 */
 	else if(true == pNavigation->isMove(Get_State(STATE::POSITION) + 0.5f * fTimeDelta * m_fSpeedPerSec * (XMLoadFloat3(&vSliding)), nullptr))
 		Set_State(STATE::POSITION, Get_State(STATE::POSITION) + 0.5f * fTimeDelta * m_fSpeedPerSec * (XMLoadFloat3(&vSliding)));
 }

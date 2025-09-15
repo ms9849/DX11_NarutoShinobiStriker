@@ -80,6 +80,8 @@ void CWhiteJetsu::Update(_float fTimeDelta)
     Update_State(fTimeDelta);
     /* 스킬 쿨타임 업데이트*/
     Update_SkillCoolDown(fTimeDelta);
+
+	m_pColliderCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
 }
 
 void CWhiteJetsu::Late_Update(_float fTimeDelta)
@@ -108,6 +110,10 @@ HRESULT CWhiteJetsu::Render()
         if (FAILED(m_pModelCom->Render(i)))
             return E_FAIL;
     }
+
+#ifdef _DEBUG
+    m_pColliderCom->Render();
+#endif
 
     return S_OK;
 }
@@ -150,6 +156,15 @@ HRESULT CWhiteJetsu::Ready_Components()
 
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Test_Navigation"),
         TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
+        return E_FAIL;
+
+    CBounding_Sphere::BOUNDING_SPHERE_DESC ColliderDesc{};
+
+    ColliderDesc.fRadius = 0.7f;
+    ColliderDesc.vCenter = _float3{ 0.f, 0.7f, 0.f };
+
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_Sphere"),
+        TEXT("Com_Collider_Sphere"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
         return E_FAIL;
 
     return S_OK;
@@ -243,4 +258,5 @@ void CWhiteJetsu::Free()
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pState);
     Safe_Release(m_pNavigationCom);
+    Safe_Release(m_pColliderCom);
 }
