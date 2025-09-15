@@ -34,21 +34,6 @@ public:
 	_float Lerp_Float(_float fSource, _float fDest, _float fLerpRate);
 #pragma endregion
 
-#pragma region NAVIGATION
-public:
-	void Set_Navigation(class CNavigation* pNavigationCom) {
-		if(nullptr != m_pNavigation)
-			Safe_Release(m_pNavigation);
-
-		m_pNavigation = pNavigationCom;
-		Safe_AddRef(m_pNavigation);
-	}
-
-	class CNavigation* Get_Navigation() {
-		return m_pNavigation;
-	}
-#pragma endregion
-
 #pragma region GRAPHIC_DEVICE
 public:
 	void Render_Begin(const _float4* pClearColor);
@@ -167,8 +152,6 @@ private:
 	class CLight_Manager*			m_pLight_Manager = { nullptr };
 	class CPhysxManager*			m_pPhysxManager = { nullptr };
 
-	/* 지형 정보 담은 네비게이션 */
-	class CNavigation* m_pNavigation = { nullptr };
 public:
 	void Release_Engine();
 	virtual void Free() override;

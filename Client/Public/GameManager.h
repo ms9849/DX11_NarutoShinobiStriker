@@ -29,7 +29,10 @@ NS_BEGIN(Client)
 록온 시스템 -> 시야 내에 있고 (외적 결과 음수인가 양수인가로 판정) & 가장 가까운 몬스터가 록온되어야 할 것
 
 플레이어는 공격할때 록온된 몬스터가 있다면 해당 몬스터를 향한다
+
+몬스터의 트랜스폼은 게임 매니저가 들고있게?
 */
+
 class CGameManager final : public CBase
 {
 	DECLARE_SINGLETON(CGameManager);
@@ -60,16 +63,21 @@ public:
 	HRESULT		Change_Camera(LEVEL eLevelID, const _wstring& strCameraTag);
 #pragma endregion
 
+#pragma region MONSTER_TRANSFORM
+#pragma endregion
+
 private:
 	CGameInstance* m_pGameInstance = { nullptr };
 
 	class CCamera_Manager* m_pCamera_Manager = { nullptr };
 
 	class CPlayer* m_pPlayer = {};
+	vector<class CTransform*> m_MonsterTransforms = {};
+	
 	LEVEL			m_eNextLevel = {};
+
 public:
 	virtual void Free() override;
 };
 
 NS_END
-

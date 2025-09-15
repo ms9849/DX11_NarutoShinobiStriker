@@ -506,7 +506,6 @@ void CGameInstance::Release_Engine()
 {
 	DestroyInstance();
 
-	Safe_Release(m_pNavigation);
 	Safe_Release(m_pIMGUI_Manager);
 	Safe_Release(m_pTimer_Manager);
 	Safe_Release(m_pRenderer);

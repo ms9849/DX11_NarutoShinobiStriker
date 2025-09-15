@@ -6,6 +6,7 @@
 NS_BEGIN(Engine)
 class CShader;
 class CModel;
+class CCollider;
 NS_END
 
 NS_BEGIN(Client)
@@ -36,8 +37,9 @@ private:
 	플레이어랑은 다르게 어딘가에서 참조되고 있지 않으니까..
 	따로 Release 해줄 메서드를 만들지 않아도 된다.
 	*/
-	class CBirdState* m_pState = { nullptr };
-	CNavigation* m_pNavigationCom = { nullptr };
+	class CBirdState*	m_pState = { nullptr };
+	CNavigation*		m_pNavigationCom = { nullptr };
+	CCollider*			m_pColliderCom = { nullptr };
 
 private:
 	HRESULT Ready_Components();

@@ -6,6 +6,7 @@
 NS_BEGIN(Engine)
 class CShader;
 class CModel;
+class CCollider;
 NS_END 
 
 NS_BEGIN(Client)
@@ -41,6 +42,7 @@ public:
 private:
 	CModel* m_pModelCom = { nullptr };
 	CShader* m_pShaderCom = { nullptr };
+	CCollider* m_pColliderCom = { nullptr };
 
 	_uint m_iNumMeshes = {};
 

@@ -10,6 +10,7 @@
 #include "Orthogonal.h"
 #include "Font.h"
 #include "Navigation.h"
+#include "Collider.h"
 
 /* 1. 객체들의 원형을 레벨별로 보관한다. */
 /* 1. 컴포넌트들의 원형을 레벨별로 보관한다. */

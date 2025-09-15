@@ -26,9 +26,6 @@ HRESULT CTerrain::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
-
-    m_pGameInstance->Add_GameObject_ToPicking(ENUM_CLASS(LEVEL::GAMEPLAY), this, m_pVIBufferCom);
-
     return S_OK;
 }
 
@@ -88,7 +85,6 @@ HRESULT CTerrain::Ready_Components()
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Test_Navigation"),
         TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom))))
         return E_FAIL;
-    m_pGameInstance->Set_Navigation(m_pNavigationCom);
 
     return S_OK;
 }
