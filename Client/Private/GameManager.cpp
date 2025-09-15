@@ -7,7 +7,7 @@
 #include "Enemy.h"
 
 #include "Camera_Manager.h"
-
+#include "Collision_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameManager);
 
@@ -23,6 +23,9 @@ HRESULT CGameManager::Initialize_GameManager()
 	if (nullptr == m_pCamera_Manager)
 		return E_FAIL;
 
+	m_pCollision_Manager = CCollision_Manager::Create();
+	if (nullptr == m_pCollision_Manager)
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -37,13 +40,18 @@ void CGameManager::Release_GameManager()
 	Safe_Release(m_pPlayer);
 	Safe_Release(m_pGameInstance);
 	Safe_Release(m_pCamera_Manager);
+	Safe_Release(m_pCollision_Manager);
 }
 
 void CGameManager::Clear()
 {
+
+	m_pCamera_Manager->Clear();
+	m_pCollision_Manager->Clear();
+
+
 	/* 지울때 레퍼런스 카운트가 0임을 보장하지 않음*/
 	/* 따라서 명시적으로 nullptr 처리 해줘야함 */
-	m_pCamera_Manager->Clear();
 
 	/* 플레이어 지우기 */
 	Safe_Release(m_pPlayer);
@@ -100,6 +108,21 @@ HRESULT CGameManager::Add_Camera(LEVEL eLevelID, const _wstring& strCameraTag, C
 HRESULT CGameManager::Change_Camera(LEVEL eLevelID, const _wstring& strCameraTag)
 {
 	return m_pCamera_Manager->Change_Camera(eLevelID, strCameraTag);
+}
+
+void CGameManager::Add_Collider_ToCollision(const _wstring& strColliderTag, CCollider* pCollider)
+{
+	m_pCollision_Manager->Add_Collider_ToCollision(strColliderTag, pCollider);
+}
+
+void CGameManager::Add_Object_ToCollision(const _wstring& strObjectTag, CGameObject* pObject)
+{
+	m_pCollision_Manager->Add_Object_ToCollision(strObjectTag, pObject);
+}
+
+void CGameManager::Check_Collision(const _wstring strColliderTag, const _wstring strObjectTag, COLLISION_ID eCollisionID)
+{
+	m_pCollision_Manager->Check_Collision(strColliderTag, strObjectTag, eCollisionID);
 }
 
 LEVEL CGameManager::Get_NextLevel()

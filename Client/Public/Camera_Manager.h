@@ -11,7 +11,7 @@ NS_END
 
 NS_BEGIN(Client)
 
-class CCamera_Manager : public CBase
+class CCamera_Manager final : public CBase
 {
 private:
 	CCamera_Manager();

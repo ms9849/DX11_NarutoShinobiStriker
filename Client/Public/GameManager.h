@@ -7,6 +7,8 @@ NS_BEGIN(Engine)
 class CGameInstance;
 class CCamera;
 class CTransform;
+class CGameObject;
+class CCollider;
 NS_END
 
 NS_BEGIN(Client)
@@ -63,17 +65,24 @@ public:
 	HRESULT		Change_Camera(LEVEL eLevelID, const _wstring& strCameraTag);
 #pragma endregion
 
-#pragma region MONSTER_TRANSFORM
+#pragma region COLLISION 
+	/* 플레이어의 기본공격(검,주먹), 몬스터의 스킬 등, 콜라이더만 필요한 녀석들 */
+	void Add_Collider_ToCollision(const _wstring& strColliderTag, CCollider* pCollider);
+	void Add_Object_ToCollision(const _wstring& strObjectTag, CGameObject* pObject);
+
+	/* Level의 업데이트에서 수행 */
+	void Check_Collision(const _wstring strColliderTag, const _wstring strObjectTag, COLLISION_ID eCollisionID);
+
 #pragma endregion
 
 private:
 	CGameInstance* m_pGameInstance = { nullptr };
 
 	class CCamera_Manager* m_pCamera_Manager = { nullptr };
+	class CCollision_Manager* m_pCollision_Manager = { nullptr };
+
 
 	class CPlayer* m_pPlayer = {};
-	vector<class CTransform*> m_MonsterTransforms = {};
-	
 	LEVEL			m_eNextLevel = {};
 
 public:

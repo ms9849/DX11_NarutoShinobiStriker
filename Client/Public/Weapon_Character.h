@@ -6,6 +6,7 @@
 NS_BEGIN(Engine)
 class CModel;
 class CShader;
+class CCollider;
 NS_END
 
 NS_BEGIN(Client)
@@ -13,11 +14,14 @@ NS_BEGIN(Client)
 class CWeapon_Character final : public CParts_Character
 {
 public:
+	enum class WEAPON_TYPE { SWORD, GLOVE };
 	typedef struct tagWeapon_Player_Desc : public CHARACTER_PART_DESC
 	{
 		CParts_Character* pUpper_Player = { nullptr };
 		const _float4x4* pAttachMatrix = { nullptr };
 		const _float4x4* pHandMatrix = { nullptr };
+		WEAPON_TYPE      eType = {};
+
 	} WEAPON_PLAYER_DESC;
 
 private:
@@ -43,6 +47,9 @@ private:
 	const _float4x4* m_pHandMatrix = { nullptr };
 	CParts_Character* m_pUpper_Player = { nullptr };
 	_bool IsAttached = { true };
+	WEAPON_TYPE m_eType = {};
+
+	CCollider* m_pColliderCom = { nullptr };
 
 private:
 	HRESULT Ready_Components();

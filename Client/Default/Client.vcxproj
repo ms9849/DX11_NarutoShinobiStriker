@@ -169,6 +169,7 @@
     <ClInclude Include="..\Public\Camera_Manager.h" />
     <ClInclude Include="..\Public\Character.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
+    <ClInclude Include="..\Public\Collision_Manager.h" />
     <ClInclude Include="..\Public\ComboKOPanel.h" />
     <ClInclude Include="..\Public\CreateCharacterUI.h" />
     <ClInclude Include="..\Public\DecimalUI.h" />
@@ -275,6 +276,7 @@
     <ClCompile Include="..\Private\Button.cpp" />
     <ClCompile Include="..\Private\Camera_Manager.cpp" />
     <ClCompile Include="..\Private\Character.cpp" />
+    <ClCompile Include="..\Private\Collision_Manager.cpp" />
     <ClCompile Include="..\Private\ComboKOPanel.cpp" />
     <ClCompile Include="..\Private\CreateCharacterUI.cpp" />
     <ClCompile Include="..\Private\DecimalUI.cpp" />
