@@ -206,6 +206,7 @@ HRESULT CBoxer::Ready_PartObjects()
 
 	WeaponDesc.pAttachMatrix = pUpperPlayer->Get_BoneMatrixPtr("RightHand");
 	WeaponDesc.strModelName = TEXT("Prototype_Component_Model_Weapon_Boxer_R");
+	WeaponDesc.eType = CWeapon_Character::WEAPON_TYPE::GLOVE;
 
 	/* Part_Weapon_L */
 	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Weapon_Player"),

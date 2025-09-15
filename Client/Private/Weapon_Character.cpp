@@ -81,7 +81,22 @@ HRESULT CWeapon_Character::Initialize(void* pArg)
     m_pAttachMatrix = pDesc->pAttachMatrix;
     m_pHandMatrix = pDesc->pHandMatrix;
     m_pUpper_Player = pDesc->pUpper_Player;
+    m_eType = pDesc->eType;
+
     Safe_AddRef(m_pUpper_Player);
+
+
+    switch (m_eType)
+    {
+    case WEAPON_TYPE::SWORD:
+        
+        break;
+
+    case WEAPON_TYPE::GLOVE:
+        
+        break;
+    }
+
 
     return S_OK;
 }
@@ -105,6 +120,9 @@ void CWeapon_Character::Update(_float fTimeDelta)
     /* 부모 행렬 적용 */
     XMStoreFloat4x4(&m_CombinedWorldMatrix,
         XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()) * SocketMatrix * XMLoadFloat4x4(m_pParentTransformCom->Get_WorldMatrixPtr()));
+
+    /* 컴바인드 매트릭스 던져주면서 자연스럽게 크기도 따라가게 됨. */
+    m_pColliderCom->Update(XMLoadFloat4x4(&m_CombinedWorldMatrix));
 }
 
 void CWeapon_Character::Late_Update(_float fTimeDelta)
@@ -131,6 +149,10 @@ HRESULT CWeapon_Character::Render()
             return E_FAIL;
     }
 
+#ifdef _DEBUG
+    m_pColliderCom->Render();
+#endif
+
     return S_OK;
 }
 
@@ -145,6 +167,17 @@ HRESULT CWeapon_Character::Ready_Components()
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxMesh"),
         TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
         return E_FAIL;
+
+    /* Com_Collider_OBB */
+    CBounding_OBB::BOUNDING_OBB_DESC		OBBDesc{};
+
+    OBBDesc.vSize = _float3(0.5f, 1.2f, 0.5f);
+    OBBDesc.vCenter = _float3(0.f, OBBDesc.vSize.y * -0.5f, 0.f);
+    OBBDesc.vAngles = _float3(0.f, 0.f/*XMConvertToRadians(45.0f)*/, 0.f);
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_OBB"),
+        TEXT("Com_Collider_OBB"), reinterpret_cast<CComponent**>(&m_pColliderCom), &OBBDesc)))
+        return E_FAIL;
+
 
     return S_OK;
 }
@@ -215,4 +248,5 @@ void CWeapon_Character::Free()
     __super::Free();
 
     Safe_Release(m_pUpper_Player);
+    Safe_Release(m_pColliderCom);
 }

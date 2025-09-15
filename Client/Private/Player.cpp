@@ -34,8 +34,8 @@ _float CPlayer::Get_AnimProgress()
 {
 	/* 애니메이션 Progress 받아오기 */
 	CParts_Character* pAnimParts = dynamic_cast<CParts_Character*>(Find_PartObject(TEXT("Part_Upper")));
-	if (nullptr != pAnimParts)
-		return pAnimParts->Get_AnimProgress();
+
+	return pAnimParts->Get_AnimProgress();
 }
 
 void CPlayer::Set_AnimProgress(_float fProgress)
@@ -293,7 +293,7 @@ HRESULT CPlayer::Ready_PartObjects()
 	WeaponDesc.pHandMatrix = pUpperPlayer->Get_BoneMatrixPtr("R_Hand_Weapon_cnt_tr");
 	WeaponDesc.pUpper_Player = pUpperPlayer; 
 	WeaponDesc.strModelName = TEXT("Prototype_Component_Model_Weapon_Player");
-
+	WeaponDesc.eType = CWeapon_Character::WEAPON_TYPE::SWORD;
 	/* Part_Weapon */
 	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Weapon_Player"),
 		TEXT("Part_Weapon"), &WeaponDesc)))

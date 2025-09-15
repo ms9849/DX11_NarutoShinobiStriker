@@ -337,6 +337,12 @@
     <Filter Include="02.GameObjects\SkyBox">
       <UniqueIdentifier>{a51f9c92-5103-4bca-92ee-7fb3cb8bb86a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="96. GameManager\Managers\Camera">
+      <UniqueIdentifier>{ea52a134-9003-4d75-bbbb-2070dd27f466}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="96. GameManager\Managers\Collision">
+      <UniqueIdentifier>{6231534f-860c-4b61-b216-8673d3633fca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -621,9 +627,6 @@
     <ClInclude Include="..\Public\Bird_RunState.h">
       <Filter>02.GameObjects\Enemy\Bird\State\Run</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Camera_Manager.h">
-      <Filter>96. GameManager\Managers</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Boxer.h">
       <Filter>02.GameObjects\Enemy\Boxer</Filter>
     </ClInclude>
@@ -653,6 +656,12 @@
     </ClInclude>
     <ClInclude Include="..\Public\SkyBox.h">
       <Filter>02.GameObjects\SkyBox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Camera_Manager.h">
+      <Filter>96. GameManager\Managers\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Collision_Manager.h">
+      <Filter>96. GameManager\Managers\Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -933,9 +942,6 @@
     <ClCompile Include="..\Private\Bird_AttackState.cpp">
       <Filter>02.GameObjects\Enemy\Bird\State\Run</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Camera_Manager.cpp">
-      <Filter>96. GameManager\Managers</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Boxer.cpp">
       <Filter>02.GameObjects\Enemy\Boxer</Filter>
     </ClCompile>
@@ -968,6 +974,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\SkyBox.cpp">
       <Filter>02.GameObjects\SkyBox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Camera_Manager.cpp">
+      <Filter>96. GameManager\Managers\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Collision_Manager.cpp">
+      <Filter>96. GameManager\Managers\Collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
