@@ -85,6 +85,16 @@ void CPlayer::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _
 	}
 }
 
+void CPlayer::Set_Collider_Active(const _wstring& strColliderTag, _bool bFlag)
+{
+	static_cast<CCollider*>(Find_Component(strColliderTag))->Set_Active(bFlag);
+}
+
+CCollider* CPlayer::Get_Collider(const _wstring& strColliderTag)
+{
+	return static_cast<CCollider*>(Find_Component(strColliderTag));
+}
+
 void CPlayer::Update_State(_float fTimeDelta)
 {
 	CPlayerState* pNextState = { nullptr };
@@ -233,6 +243,11 @@ HRESULT CPlayer::Render()
 #endif
 
 	return S_OK;
+}
+
+void CPlayer::OnCollision(COLLIDER_HANDLE_ID eHandleID)
+{
+	/* 플레이어 충돌로직 처리 */
 }
 
 HRESULT CPlayer::Ready_Components()

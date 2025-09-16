@@ -73,13 +73,6 @@ HRESULT CEnemy_HPBar::Render()
 	if (FAILED(m_pShaderCom->Begin(ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_ENEMYHPBAR))))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_CurrentHP", &m_fCurrentHp, sizeof(_float))))
-		return E_FAIL;
-
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_MaxHP", &m_fMaxHp, sizeof(_float))))
-		return E_FAIL;
-
-
 	if(FAILED(m_pVIBufferCom->Bind_Resources()))
 		return E_FAIL;
 
@@ -115,6 +108,12 @@ HRESULT CEnemy_HPBar::Bind_ShaderResources()
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_PipeLine_Float4x4(D3DTS::PROJ))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_CurrentHP", &m_fCurrentHp, sizeof(_float))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_MaxHP", &m_fMaxHp, sizeof(_float))))
 		return E_FAIL;
 
 	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))

@@ -18,6 +18,8 @@ protected:
 	virtual ~CEnemy() = default;
 
 public:
+	virtual _wstring	Get_CurrentAnim();
+	virtual void	Set_Invincible(_float fInvincibleTime);
 	virtual _float	Get_AnimProgress();
 	virtual void	Set_AnimProgress(_float fProgress);
 	virtual void	Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate = 1.f, _bool IsBlend = true, _float fBlendRatio = 0.15f, _bool IsLoop = false);
@@ -32,12 +34,14 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	virtual void OnCollision();
+	virtual void OnCollision(COLLIDER_HANDLE_ID eHandleID);
 
 protected:
 	HRESULT Ready_HPBar();
 
 protected:
+	_bool  m_IsInvincible = { false };
+	_float m_fInvincibleTime = { 0.f };
 	_float m_fCurrentHP = { 100 };
 	_float m_fMaxHP = { 200 };
 	class CEnemy_HPBar* m_pHPBar = { nullptr };

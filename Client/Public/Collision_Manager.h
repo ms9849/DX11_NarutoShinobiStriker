@@ -24,21 +24,22 @@ private:
 	virtual ~CCollision_Manager() = default;
 
 public:
+	void Update();
 	/* 플레이어의 기본공격(검,주먹), 몬스터의 스킬 등, 콜라이더만 필요한 녀석들 */
-	void Add_Collider_ToCollision(const _wstring& strColliderTag, class CCollider* pCollider);
-	void Add_Object_ToCollision(const _wstring& strObjectTag, class CGameObject* pObject);
+	void Add_Collider_ToCollision(const _wstring& strColliderTag, COLLIDER_HANDLE_ID eHandleID, class CCollider* pCollider);
+	void Add_Object_ToCollision(const _wstring& strObjectTag, CGameObject* pGameObject, CCollider* pCollider);
 
 	/* Level의 업데이트에서 수행 */
 	/* 어떤 충돌체에 충돌했냐에 따라 다른 로직을 보내야 한다. */
 	/* COLLISION_DESC를 만들기 ..*/
-	void Check_Collision(const _wstring strColliderTag, const _wstring strObjectTag);
+	void Check_Collision(const _wstring strColliderTag, const _wstring strObjectTag, COLLISION_TYPE eColType);
 
 public:
 	void Clear();
 
 private:
-	map<_wstring, vector<CCollider*>>		m_Colliders = {};
-	map<_wstring, vector<CGameObject*>>		m_CollisionObjects = {};
+	map<_wstring, vector<pair<COLLIDER_HANDLE_ID, CCollider*>>>	m_Colliders = {};
+	map<_wstring, vector<pair<CGameObject*, CCollider*>>>		m_CollisionObjects = {};
 
 public:
 	static CCollision_Manager* Create();

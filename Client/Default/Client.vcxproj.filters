@@ -343,6 +343,9 @@
     <Filter Include="96. GameManager\Managers\Collision">
       <UniqueIdentifier>{6231534f-860c-4b61-b216-8673d3633fca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Enemy\Jetsu\State\Beaten">
+      <UniqueIdentifier>{538be42e-6d74-4c91-a3ff-38bbca8556ac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -663,6 +666,9 @@
     <ClInclude Include="..\Public\Collision_Manager.h">
       <Filter>96. GameManager\Managers\Collision</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\WhiteJetsu_BeatenState.h">
+      <Filter>02.GameObjects\Enemy\Jetsu\State\Beaten</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -980,6 +986,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Collision_Manager.cpp">
       <Filter>96. GameManager\Managers\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\WhiteJetsu_BeatenState.cpp">
+      <Filter>02.GameObjects\Enemy\Jetsu\State\Beaten</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

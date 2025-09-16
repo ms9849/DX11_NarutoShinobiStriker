@@ -4,6 +4,7 @@
 #include "GameManager.h"
 
 #include "WhiteJetsu_IdleState.h"
+#include "WhiteJetsu_BeatenState.h"
 
 CWhiteJetsu::CWhiteJetsu(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CEnemy { pDevice, pContext, eObjectID }
@@ -13,6 +14,11 @@ CWhiteJetsu::CWhiteJetsu(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, O
 CWhiteJetsu::CWhiteJetsu(const CWhiteJetsu& rhs)
     : CEnemy{ rhs }
 {
+}
+
+_wstring CWhiteJetsu::Get_CurrentAnim()
+{
+    return m_pModelCom->Get_CurrentAnim();
 }
 
 _float CWhiteJetsu::Get_AnimProgress()
@@ -35,12 +41,29 @@ _bool CWhiteJetsu::Play_Animation(_float fTimeDelta)
 	return m_pModelCom->Play_Animation(fTimeDelta);
 }
 
-void CWhiteJetsu::OnCollision()
+void CWhiteJetsu::OnCollision(COLLIDER_HANDLE_ID eHandleID)
 {
-    m_fCurrentHP -= 3.f;
+    if (true == m_IsInvincible)
+        return;
 
-    if (m_fCurrentHP < 0.f)
-        m_fCurrentHP = 0.f;
+    if (COLLIDER_HANDLE_ID::PLAYER_HAND_ATTACK == eHandleID)
+    {
+        m_fCurrentHP -= 3.f;
+
+        if (m_fCurrentHP < 0.f)
+            m_fCurrentHP = m_fMaxHP;
+
+        Set_Invincible(0.8f);
+
+        /* 내일 Change_State 함수로 만들어둘 것. */
+        _bool IsBlend = m_pState->End();
+        Safe_Release(m_pState);
+
+        /* 밀려나는 방향과 Ratio 세팅 가능하게 할 것 */
+        CWhiteJetsuState* pNextState = CWhiteJetsu_BeatenState::Create(m_pNavigationCom, this);
+        pNextState->Start(true);
+        m_pState = pNextState;
+    }
 }
 
 HRESULT CWhiteJetsu::Initialize_Prototype()
@@ -96,8 +119,8 @@ void CWhiteJetsu::Late_Update(_float fTimeDelta)
 {
     __super::Late_Update(fTimeDelta);
 
-    /* 제츠를 다른 충돌할 콜라이더에 등록*/
-    m_pGameManager->Add_Object_ToCollision(strMonsterCollisionTag, this);
+    /* 제츠의 몸통 콜라이더를 콜리전 매니저에 등록*/
+    m_pGameManager->Add_Object_ToCollision(TEXT("Monster_Body"), this, m_pColliderCom);
 
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }

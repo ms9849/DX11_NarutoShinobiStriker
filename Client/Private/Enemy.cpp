@@ -19,6 +19,20 @@ CEnemy::CEnemy(const CEnemy& rhs)
     Safe_AddRef(m_pGameManager);
 }
 
+_wstring CEnemy::Get_CurrentAnim()
+{
+    /* 애니메이션 이름 받아오기 */
+    CParts_Character* pAnimParts = dynamic_cast<CParts_Character*>(Find_PartObject(TEXT("Part_Upper")));
+    if (nullptr != pAnimParts)
+        return pAnimParts->Get_CurrentAnim();
+}
+
+void CEnemy::Set_Invincible(_float fInvincibleTime)
+{
+    m_fInvincibleTime = fInvincibleTime;
+    m_IsInvincible = true;
+}
+
 _float CEnemy::Get_AnimProgress()
 {
     /* 애니메이션 Progress 받아오기 */
@@ -96,12 +110,25 @@ void CEnemy::Late_Update(_float fTimeDelta)
     m_pHPBar->Set_HP(m_fCurrentHP, m_fMaxHP);
     m_pHPBar->Late_Update(fTimeDelta);
 
+    m_fInvincibleTime -= fTimeDelta;
+
+    if (m_fInvincibleTime < 0.f)
+    {
+        m_fInvincibleTime = 0.f;
+        m_IsInvincible = false;
+    }
+
     __super::Late_Update(fTimeDelta);
 }
 
 HRESULT CEnemy::Render()
 {
     return S_OK;
+}
+
+/* 추후 순수 가상함수로 작성할 것. */
+void CEnemy::OnCollision(COLLIDER_HANDLE_ID eHandleID)
+{
 }
 
 HRESULT CEnemy::Ready_HPBar()
@@ -114,11 +141,6 @@ HRESULT CEnemy::Ready_HPBar()
     m_pHPBar->Initialize(&Desc);
 
     return S_OK;
-}
-
-CGameObject* CEnemy::Clone(void* pArg)
-{
-    return nullptr;
 }
 
 void CEnemy::Free()

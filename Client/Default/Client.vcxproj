@@ -250,6 +250,7 @@
     <ClInclude Include="..\Public\WhiteJetsu.h" />
     <ClInclude Include="..\Public\WhiteJetsuState.h" />
     <ClInclude Include="..\Public\WhiteJetsu_AttackState.h" />
+    <ClInclude Include="..\Public\WhiteJetsu_BeatenState.h" />
     <ClInclude Include="..\Public\WhiteJetsu_IdleState.h" />
     <ClInclude Include="..\Public\WhiteJetsu_RunState.h" />
     <ClInclude Include="..\Public\WhiteJetsu_WoodHandState.h" />
@@ -356,6 +357,7 @@
     <ClCompile Include="..\Private\WhiteJetsu.cpp" />
     <ClCompile Include="..\Private\WhiteJetsuState.cpp" />
     <ClCompile Include="..\Private\WhiteJetsu_AttackState.cpp" />
+    <ClCompile Include="..\Private\WhiteJetsu_BeatenState.cpp" />
     <ClCompile Include="..\Private\WhiteJetsu_IdleState.cpp" />
     <ClCompile Include="..\Private\WhiteJetsu_RunState.cpp" />
     <ClCompile Include="..\Private\WhiteJetsu_WoodHandState.cpp" />
