@@ -19,6 +19,7 @@ CPlayer_ChidoriAerialReadyState::CPlayer_ChidoriAerialReadyState(CPlayer* pPlaye
 
 void CPlayer_ChidoriAerialReadyState::Start(_bool IsBlend)
 {
+	m_pPlayer->Set_Ground(false);
 	m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Aerial_Chidori_Charge_Lv1", 1.f, true);
 	m_eAnimState = ANIM_STATE::CHARGE_1;
 }
@@ -35,12 +36,15 @@ CPlayerState* CPlayer_ChidoriAerialReadyState::Update(_float fTimeDelta)
 	m_fMovement = (m_fTimeAcc - 0.5f * m_fTimeAcc * m_fTimeAcc * 7.0f * (m_fTimeAcc));
 	m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fMovement / 5.f, 0.f, 0.f));
 
-	if (XMVectorGetY(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION)) < 0.f)
+
+	_float fHeight = m_pPlayer->Get_Navigation()->Get_CellHeight(m_pPlayer->Get_Transform());
+	if (XMVectorGetY(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION)) < fHeight)
 	{
 		IsGround = true;
 		_float4 PlayerPos = {};
 		XMStoreFloat4(&PlayerPos, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
-		m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, XMVectorSet(PlayerPos.x, 0, PlayerPos.z, 1.f));
+
+		m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, XMVectorSet(PlayerPos.x, fHeight, PlayerPos.z, 1.f));
 	}
 
 	if ((m_pGameInstance->Key_Pressing(DIK_W) ||
@@ -83,6 +87,8 @@ CPlayerState* CPlayer_ChidoriAerialReadyState::Update(_float fTimeDelta)
 
 _bool CPlayer_ChidoriAerialReadyState::End()
 {
+	m_pPlayer->Set_Ground(true);
+
 	return true;
 }
 

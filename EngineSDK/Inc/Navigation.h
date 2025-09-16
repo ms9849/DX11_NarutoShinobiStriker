@@ -37,7 +37,8 @@ public:
 		XMStoreFloat4x4(&m_WorldMatrix, WorldMatrix);
 	}
 
-	_bool isMove(_fvector vPosition, _float3* pSlidingVector = nullptr);
+	_float Get_CellHeight(class CTransform* pTransform);
+	_bool isMove(_fvector vPosition,_float3* pSlidingVector = nullptr);
 	virtual void Compute_Height(class CTransform* pTransform);
 #ifdef _DEBUG
 public:
@@ -51,7 +52,7 @@ protected:
 
 #ifdef _DEBUG
 protected:
-	class CShader* m_pShader = { nullptr };
+	class CShader*					m_pShader = { nullptr };
 #endif
 
 protected:

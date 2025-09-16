@@ -31,6 +31,9 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+public:
+	virtual void OnCollision();
+
 protected:
 	HRESULT Ready_HPBar();
 

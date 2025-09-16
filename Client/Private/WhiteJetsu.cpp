@@ -35,6 +35,14 @@ _bool CWhiteJetsu::Play_Animation(_float fTimeDelta)
 	return m_pModelCom->Play_Animation(fTimeDelta);
 }
 
+void CWhiteJetsu::OnCollision()
+{
+    m_fCurrentHP -= 3.f;
+
+    if (m_fCurrentHP < 0.f)
+        m_fCurrentHP = 0.f;
+}
+
 HRESULT CWhiteJetsu::Initialize_Prototype()
 {
     return S_OK;
@@ -87,6 +95,9 @@ void CWhiteJetsu::Update(_float fTimeDelta)
 void CWhiteJetsu::Late_Update(_float fTimeDelta)
 {
     __super::Late_Update(fTimeDelta);
+
+    /* 제츠를 다른 충돌할 콜라이더에 등록*/
+    m_pGameManager->Add_Object_ToCollision(strMonsterCollisionTag, this);
 
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
@@ -164,7 +175,7 @@ HRESULT CWhiteJetsu::Ready_Components()
     ColliderDesc.vCenter = _float3{ 0.f, 0.7f, 0.f };
 
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_Sphere"),
-        TEXT("Com_Collider_Sphere"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
+        TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
         return E_FAIL;
 
     return S_OK;

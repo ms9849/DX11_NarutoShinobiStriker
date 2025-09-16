@@ -63,7 +63,8 @@ void CTransform::Go_Straight(_float fTimeDelta, class CNavigation* pNavigation)
 	_vector		vLook = Get_State(STATE::LOOK);	
 
 	/* DX9 때와는 다르게 기존 벡터 원형을 수정하지 않는다. SIMD라고 해도 값으로 넘기는건데 빠른가..? */
-	vPosition += XMVector3Normalize(vLook) * m_fSpeedPerSec * fTimeDelta;
+	_vector		vDirection = XMVector3Normalize(vLook) * m_fSpeedPerSec * fTimeDelta;
+	vPosition += vDirection;
 
 	_float3 vSliding = {};
 
@@ -71,8 +72,8 @@ void CTransform::Go_Straight(_float fTimeDelta, class CNavigation* pNavigation)
 		true == pNavigation->isMove(vPosition, &vSliding))
 		Set_State(STATE::POSITION, vPosition);
 
-	else
-		Set_State(STATE::POSITION, Get_State(STATE::POSITION) + XMLoadFloat3(&vSliding));
+	else if (true == pNavigation->isMove(Get_State(STATE::POSITION) + fTimeDelta * m_fSpeedPerSec * XMVector3Normalize((XMLoadFloat3(&vSliding))), nullptr))
+		Set_State(STATE::POSITION, Get_State(STATE::POSITION) + fTimeDelta * m_fSpeedPerSec * XMVector3Normalize(XMLoadFloat3(&vSliding)));
 }
 
 void CTransform::Go_Backward(_float fTimeDelta, class CNavigation* pNavigation)
@@ -80,7 +81,9 @@ void CTransform::Go_Backward(_float fTimeDelta, class CNavigation* pNavigation)
 	_vector		vPosition = Get_State(STATE::POSITION);
 	_vector		vLook = Get_State(STATE::LOOK);
 
-	vPosition -= XMVector3Normalize(vLook) * m_fSpeedPerSec * fTimeDelta;
+	_vector		vDirection = -1.f * XMVector3Normalize(vLook) * m_fSpeedPerSec * fTimeDelta;
+
+	vPosition += vDirection;
 
 	_float3 vSliding = {};
 
@@ -88,8 +91,8 @@ void CTransform::Go_Backward(_float fTimeDelta, class CNavigation* pNavigation)
 		true == pNavigation->isMove(vPosition, &vSliding))
 		Set_State(STATE::POSITION, vPosition);
 
-	else
-		Set_State(STATE::POSITION, Get_State(STATE::POSITION) + XMLoadFloat3(&vSliding));
+	else if (true == pNavigation->isMove(Get_State(STATE::POSITION) + fTimeDelta * m_fSpeedPerSec * XMVector3Normalize(XMLoadFloat3(&vSliding)), nullptr))
+		Set_State(STATE::POSITION, Get_State(STATE::POSITION) + fTimeDelta * m_fSpeedPerSec * XMVector3Normalize(XMLoadFloat3(&vSliding)));
 }
 
 void CTransform::Go_Left(_float fTimeDelta, class CNavigation* pNavigation)
@@ -97,7 +100,8 @@ void CTransform::Go_Left(_float fTimeDelta, class CNavigation* pNavigation)
 	_vector		vPosition = Get_State(STATE::POSITION);
 	_vector		vRight = Get_State(STATE::RIGHT);
 
-	vPosition -= XMVector3Normalize(vRight) * m_fSpeedPerSec * fTimeDelta;
+	_vector		vDirection = -1.f * XMVector3Normalize(vRight) * m_fSpeedPerSec * fTimeDelta;
+	vPosition += vDirection;
 
 	_float3 vSliding = {};
 
@@ -105,8 +109,8 @@ void CTransform::Go_Left(_float fTimeDelta, class CNavigation* pNavigation)
 		true == pNavigation->isMove(vPosition, &vSliding))
 		Set_State(STATE::POSITION, vPosition);
 
-	else
-		Set_State(STATE::POSITION, Get_State(STATE::POSITION) + XMLoadFloat3(&vSliding));
+	else if (true == pNavigation->isMove(Get_State(STATE::POSITION) + fTimeDelta * m_fSpeedPerSec * (XMLoadFloat3(&vSliding)), nullptr))
+		Set_State(STATE::POSITION, Get_State(STATE::POSITION) +  fTimeDelta * m_fSpeedPerSec * (XMLoadFloat3(&vSliding)));
 }
 
 void CTransform::Go_Right(_float fTimeDelta, class CNavigation* pNavigation)
@@ -114,7 +118,8 @@ void CTransform::Go_Right(_float fTimeDelta, class CNavigation* pNavigation)
 	_vector		vPosition = Get_State(STATE::POSITION);
 	_vector		vRight = Get_State(STATE::RIGHT);
 
-	vPosition += XMVector3Normalize(vRight) * m_fSpeedPerSec * fTimeDelta;
+	_vector		vDirection = XMVector3Normalize(vRight) * m_fSpeedPerSec * fTimeDelta;
+	vPosition += vDirection;
 
 	_float3 vSliding = {};
 
@@ -122,8 +127,8 @@ void CTransform::Go_Right(_float fTimeDelta, class CNavigation* pNavigation)
 		true == pNavigation->isMove(vPosition, &vSliding))
 		Set_State(STATE::POSITION, vPosition);
 
-	else
-		Set_State(STATE::POSITION, Get_State(STATE::POSITION) + XMLoadFloat3(&vSliding));
+	else if (true == pNavigation->isMove(Get_State(STATE::POSITION) + fTimeDelta * m_fSpeedPerSec * XMVector3Normalize(XMLoadFloat3(&vSliding)), nullptr))
+		Set_State(STATE::POSITION, Get_State(STATE::POSITION) + fTimeDelta * m_fSpeedPerSec * XMVector3Normalize(XMLoadFloat3(&vSliding)));
 }
 
 void CTransform::Go_Direction(_fvector vDir, _float fTimeDelta, class CNavigation* pNavigation)
@@ -131,7 +136,8 @@ void CTransform::Go_Direction(_fvector vDir, _float fTimeDelta, class CNavigatio
 	_vector vPosition = Get_State(STATE::POSITION);
 	
 	/* 방향은 정규화해야지 */
-	vPosition += XMVector3Normalize(vDir) * m_fSpeedPerSec * fTimeDelta;
+	_vector vDirection = XMVector3Normalize(vDir) * m_fSpeedPerSec * fTimeDelta;
+	vPosition += vDirection; 
 
 	_float3 vSliding = {};
 
@@ -139,8 +145,8 @@ void CTransform::Go_Direction(_fvector vDir, _float fTimeDelta, class CNavigatio
 		true == pNavigation->isMove(vPosition, &vSliding))
 		Set_State(STATE::POSITION, vPosition);
 
-	else
-		Set_State(STATE::POSITION, Get_State(STATE::POSITION) + XMLoadFloat3(&vSliding));
+	else if (true == pNavigation->isMove(Get_State(STATE::POSITION) + fTimeDelta * m_fSpeedPerSec * (XMLoadFloat3(&vSliding)), nullptr))
+		Set_State(STATE::POSITION, Get_State(STATE::POSITION) +  fTimeDelta * m_fSpeedPerSec * (XMLoadFloat3(&vSliding)));
 }
 
 void CTransform::Turn(_fvector vAxis, _float fTimeDelta)
@@ -292,8 +298,8 @@ void CTransform::Chase(_fvector vTargetPos, _float fTimeDelta, class CNavigation
 		true == pNavigation->isMove(vPosition, &vSliding))
 		Set_State(STATE::POSITION, vPosition);
 
-	else
-		Set_State(STATE::POSITION, Get_State(STATE::POSITION) + XMLoadFloat3(&vSliding));
+	else if (true == pNavigation->isMove(Get_State(STATE::POSITION) +  fTimeDelta * m_fSpeedPerSec * XMVector3Normalize(XMLoadFloat3(&vSliding)), nullptr))
+		Set_State(STATE::POSITION, Get_State(STATE::POSITION) +  fTimeDelta * m_fSpeedPerSec * XMVector3Normalize(XMLoadFloat3(&vSliding)));
 }
 
 void CTransform::Chase_XZ(_fvector vTargetPos, _float fTimeDelta, CNavigation* pNavigation, _float fLimitDistance)
@@ -323,8 +329,8 @@ void CTransform::Chase_XZ(_fvector vTargetPos, _float fTimeDelta, CNavigation* p
 	/* 멀어지는데도 계속 쫓아옴 */
 	/* 방법 1. 플레이어가 네비메시를 벗어나지 않던가 */
 	/* 방법 2. 슬라이딩 이후의 거리를 한번 더 비교해서 이동할지 말지 선택 */
-	else if(true == pNavigation->isMove(Get_State(STATE::POSITION) + 0.5f * fTimeDelta * m_fSpeedPerSec * (XMLoadFloat3(&vSliding)), nullptr))
-		Set_State(STATE::POSITION, Get_State(STATE::POSITION) + 0.5f * fTimeDelta * m_fSpeedPerSec * (XMLoadFloat3(&vSliding)));
+	else if(true == pNavigation->isMove(Get_State(STATE::POSITION) + fTimeDelta * m_fSpeedPerSec * XMVector3Normalize(XMLoadFloat3(&vSliding)), nullptr))
+		Set_State(STATE::POSITION, Get_State(STATE::POSITION) + fTimeDelta * m_fSpeedPerSec * XMVector3Normalize(XMLoadFloat3(&vSliding)));
 }
 
 void CTransform::Chase_Lerp(_fvector vTargetPos, _float fTimeDelta, _float fLimitDistance)

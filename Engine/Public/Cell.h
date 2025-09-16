@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 
 #include "Base.h"
 
@@ -31,7 +31,6 @@ public:
 
 	_bool Compare(_fvector vSourPoint, _fvector vDestPoint);
 	_float Compute_Height(_fvector vPoint);
-
 #ifdef _DEBUG
 public:
 	HRESULT Render();
@@ -43,8 +42,8 @@ private:
 	_float3					m_vPoints[ENUM_CLASS(NAVI_POINT::END)] = {};
 	_float3					m_vNormals[ENUM_CLASS(NAVI_LINE::END)] = {};
 
-	ID3D11Device* m_pDevice = { nullptr };
-	ID3D11DeviceContext* m_pContext = { nullptr };
+	ID3D11Device*			m_pDevice = { nullptr };
+	ID3D11DeviceContext*	m_pContext = { nullptr };
 
 	_int					m_NeighborIndices[ENUM_CLASS(NAVI_LINE::END)] = { -1, -1, -1 };
 

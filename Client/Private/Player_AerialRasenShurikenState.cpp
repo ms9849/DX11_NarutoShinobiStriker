@@ -20,6 +20,7 @@ CPlayer_AerialRasenShurikenState::CPlayer_AerialRasenShurikenState(CPlayer* pPla
 
 void CPlayer_AerialRasenShurikenState::Start(_bool IsBlend)
 {
+	m_pPlayer->Set_Ground(false);
 	m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Aerial_TrueRasenShuriken", 1.5f, IsBlend);
 }
 
@@ -39,12 +40,13 @@ CPlayerState* CPlayer_AerialRasenShurikenState::Update(_float fTimeDelta)
 		m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION) + XMVectorSet(0.f, 0.05f * m_fMovement * (0.3f - fAnimProgress), 0.f, 0.f));
 	}
 
-	if (XMVectorGetY(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION)) < 0.f)
+	_float fHeight = m_pPlayer->Get_Navigation()->Get_CellHeight(m_pPlayer->Get_Transform());
+	if (XMVectorGetY(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION)) < fHeight)
 	{
 		IsGround = true;
 		_float4 PlayerPos = {};
 		XMStoreFloat4(&PlayerPos, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
-		m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, XMVectorSet(PlayerPos.x, 0, PlayerPos.z, 1.f));
+		m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, XMVectorSet(PlayerPos.x, fHeight, PlayerPos.z, 1.f));
 	}
 
 	if (fAnimProgress > 0.8f && XMVectorGetY(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION)) > 0.f)
@@ -64,6 +66,8 @@ CPlayerState* CPlayer_AerialRasenShurikenState::Update(_float fTimeDelta)
 
 _bool CPlayer_AerialRasenShurikenState::End()
 {
+	m_pPlayer->Set_Ground(true);
+
 	return true;
 }
 

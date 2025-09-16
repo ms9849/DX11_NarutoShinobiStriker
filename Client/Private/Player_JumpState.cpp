@@ -25,6 +25,7 @@ CPlayer_JumpState::CPlayer_JumpState(CPlayer* pPlayer, _float fTimeAcc, ANIM_STA
 
 void CPlayer_JumpState::Start(_bool IsBlend)
 {
+	m_pPlayer->Set_Ground(false);
 
 	if (m_eAnimState == ANIM_STATE::JUMP)
 	{
@@ -56,7 +57,8 @@ CPlayerState* CPlayer_JumpState::Update(_float fTimeDelta)
 		m_pGameInstance->Key_Pressing(DIK_D)
 		)
 	{
-		m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * 0.2f);
+		m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * 0.2f,
+			m_pPlayer->Get_Navigation());
 
 		if (m_pGameInstance->Key_Pressing(DIK_D))
 			m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * 0.3f);
@@ -85,12 +87,14 @@ CPlayerState* CPlayer_JumpState::Update(_float fTimeDelta)
 	}
 
 	// LAND로의 상태 전환 
-	if (XMVectorGetY(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION)) < 0.f)
+	_float fHeight = m_pPlayer->Get_Navigation()->Get_CellHeight(m_pPlayer->Get_Transform());
+
+	if (XMVectorGetY(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION)) < fHeight)
 	{
 		pNextState = CPlayer_LandState::Create(m_pPlayer);
 		_float4 PlayerPos = {};
 		XMStoreFloat4(&PlayerPos, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
-		m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, XMVectorSet(PlayerPos.x, 0, PlayerPos.z, 1.f));
+		m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, XMVectorSet(PlayerPos.x, fHeight, PlayerPos.z, 1.f));
 	}
 	// 공격
 	else if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON))
@@ -121,6 +125,8 @@ CPlayerState* CPlayer_JumpState::Update(_float fTimeDelta)
 
 _bool CPlayer_JumpState::End()
 {
+	m_pPlayer->Set_Ground(true);
+
 	return true;
 }
 

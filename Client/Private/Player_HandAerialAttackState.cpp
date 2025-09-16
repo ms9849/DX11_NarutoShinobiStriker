@@ -22,6 +22,7 @@ CPlayer_HandAerialAttackState::CPlayer_HandAerialAttackState(CPlayer* pPlayer, _
 
 void CPlayer_HandAerialAttackState::Start(_bool IsBlend)
 {
+	m_pPlayer->Set_Ground(false);
 	m_pPlayer->Set_AnimIndex("CustomMan_Attack_Aerial_cmb01", 1.5f, IsBlend);
 	m_eAnimState = ANIM_STATE::ATTACK_01;
 }
@@ -38,7 +39,8 @@ CPlayerState* CPlayer_HandAerialAttackState::Update(_float fTimeDelta)
 		m_pGameInstance->Key_Pressing(DIK_D)
 		)
 	{
-		m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * 0.4f);
+		m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * 0.4f, 
+			m_pPlayer->Get_Navigation());
 
 		if (m_pGameInstance->Key_Pressing(DIK_D))
 			m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * 0.3f);
@@ -55,12 +57,14 @@ CPlayerState* CPlayer_HandAerialAttackState::Update(_float fTimeDelta)
     }
 
 	// LAND로의 상태 전환 
-	if (XMVectorGetY(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION)) <= 0.f)
+	_float fHeight = m_pPlayer->Get_Navigation()->Get_CellHeight(m_pPlayer->Get_Transform());
+
+	if (XMVectorGetY(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION)) <= fHeight)
 	{
 		pNextState = CPlayer_LandState::Create(m_pPlayer);
 		_float4 PlayerPos = {};
 		XMStoreFloat4(&PlayerPos, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
-		m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, XMVectorSet(PlayerPos.x, 0, PlayerPos.z, 1.f));
+		m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, XMVectorSet(PlayerPos.x, fHeight, PlayerPos.z, 1.f));
 	}
 
 	//낙하로 넘어가게 한다.
@@ -79,6 +83,8 @@ CPlayerState* CPlayer_HandAerialAttackState::Update(_float fTimeDelta)
 
 _bool CPlayer_HandAerialAttackState::End()
 {
+	m_pPlayer->Set_Ground(true);
+
 	return true;
 }
 

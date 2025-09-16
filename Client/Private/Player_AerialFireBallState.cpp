@@ -20,6 +20,7 @@ CPlayer_AerialFireBallState::CPlayer_AerialFireBallState(CPlayer* pPlayer, _floa
 
 void CPlayer_AerialFireBallState::Start(_bool IsBlend)
 {
+	m_pPlayer->Set_Ground(false);
 	m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Aerial_Fireball_Lv3", 1.75f, true);
 }
 
@@ -50,18 +51,19 @@ CPlayerState* CPlayer_AerialFireBallState::Update(_float fTimeDelta)
 		m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION) + XMVectorSet(0.f, fTimeDelta, 0.f, 0.f));
 	}
 
-	if (XMVectorGetY(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION)) < 0.f)
+	_float fHeight = m_pPlayer->Get_Navigation()->Get_CellHeight(m_pPlayer->Get_Transform());
+	if (XMVectorGetY(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION)) < fHeight)
 	{
 		IsGround = true;
 		_float4 PlayerPos = {};
 		XMStoreFloat4(&PlayerPos, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
-		m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, XMVectorSet(PlayerPos.x, 0, PlayerPos.z, 1.f));
+		m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, XMVectorSet(PlayerPos.x, fHeight, PlayerPos.z, 1.f));
 	}
 
 	if (false == IsGround)
 	{
 		if (m_pGameInstance->Key_Pressing(DIK_W))
-			m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * 0.3f);
+			m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * 0.3f, m_pPlayer->Get_Navigation());
 	}
 
 	if (fAnimProgress > 0.8f && XMVectorGetY(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION)) > 0.f)
@@ -81,6 +83,8 @@ CPlayerState* CPlayer_AerialFireBallState::Update(_float fTimeDelta)
 
 _bool CPlayer_AerialFireBallState::End()
 {
+	m_pPlayer->Set_Ground(true);
+
 	return true;
 }
 

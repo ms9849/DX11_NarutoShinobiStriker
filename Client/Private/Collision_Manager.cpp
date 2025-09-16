@@ -39,11 +39,35 @@ void CCollision_Manager::Add_Object_ToCollision(const _wstring& strLayerTag, CGa
         iter->second.push_back(pGameObject);
 }
 
-void CCollision_Manager::Check_Collision(const _wstring strColliderTag, const _wstring strObjectTag, COLLISION_ID eCollisionID)
+void CCollision_Manager::Check_Collision(const _wstring strColliderTag, const _wstring strObjectTag)
 {
     /* 콜리전 아이디 따라 캐스팅 다르게 해줄것. */
     /* Player, Enemy 단으로 나누면 된다. */
     /* 로직은 내일 충돌 마무리 된 뒤에 설정할 것 */
+    auto Colliders = m_Colliders.find(strColliderTag);
+    if (m_Colliders.end() == Colliders)
+        return;
+
+    auto CollisionObjects = m_CollisionObjects.find(strObjectTag);
+    if (m_CollisionObjects.end() == CollisionObjects)
+        return;
+
+    vector<CCollider*> vColliders = Colliders->second;
+    vector<CGameObject*> vCollisionObjects = CollisionObjects->second;
+
+    for (auto& pCollider : vColliders)
+    {
+
+        for (auto& pCollisionObject : vCollisionObjects)
+        {
+            CCollider* pObjectCollider = static_cast<CCollider*>(pCollisionObject->Find_Component(TEXT("Com_Collider")));
+
+            if(true == pObjectCollider->InterSect(pCollider));
+            {
+                pCollisionObject->OnCollision();
+            }
+        }
+    }
 
 }
 

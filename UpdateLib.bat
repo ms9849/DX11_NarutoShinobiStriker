@@ -6,5 +6,5 @@ xcopy			/y		.\Engine\Bin\Engine.dll				.\Client\Bin\
 xcopy			/y		.\Engine\Bin\Engine.dll				.\Editor\Bin\
 xcopy			/y		.\Engine\Bin\Engine.lib				.\EngineSDK\Lib\
 xcopy			/y		.\Engine\Bin\Engine.lib				.\EngineSDK\Lib\
-xcopy			/y		.\Engine\Bin\ShaderFiles\Shader_Cell.hlsl	.\Client\Bin\ShaderFiles\
-xcopy			/y		.\Engine\Bin\ShaderFiles\Shader_Cell.hlsl	.\Editor\Bin\ShaderFiles\
+xcopy			/y		.\Engine\Bin\ShaderFiles\*.* 		.\Client\Bin\ShaderFiles\
+xcopy			/y		.\Engine\Bin\ShaderFiles\*.*		.\Editor\Bin\ShaderFiles\
