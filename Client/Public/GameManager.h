@@ -67,11 +67,12 @@ public:
 
 #pragma region COLLISION 
 	/* 플레이어의 기본공격(검,주먹), 몬스터의 스킬 등, 콜라이더만 필요한 녀석들 */
-	void Add_Collider_ToCollision(const _wstring& strColliderTag, CCollider* pCollider);
-	void Add_Object_ToCollision(const _wstring& strObjectTag, CGameObject* pObject);
+	void Add_Collider_ToCollision(const _wstring& strColliderTag, COLLIDER_HANDLE_ID eHandleID, class CCollider* pCollider);
+	void Add_Object_ToCollision(const _wstring& strObjectTag, CGameObject* pGameObject, CCollider* pCollider);
 
+	void Update_Collision();
 	/* Level의 업데이트에서 수행 */
-	void Check_Collision(const _wstring strColliderTag, const _wstring strObjectTag, COLLISION_ID eCollisionID);
+	void Check_Collision(const _wstring strColliderTag, const _wstring strObjectTag, COLLISION_TYPE eColType);
 
 #pragma endregion
 

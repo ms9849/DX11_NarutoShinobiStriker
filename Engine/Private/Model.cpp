@@ -220,6 +220,11 @@ _wstring CModel::Get_MeshName(_uint iIdx) const
 	return m_Meshes[iIdx]->Get_Name();
 }
 
+_wstring CModel::Get_CurrentAnim()
+{
+	return m_pGameInstance->ToWstring(m_strCurrentAnimName); 
+}
+
 const _float4x4* CModel::Get_BoneMatrixPtr(const _char* pBoneName) const
 {
 	auto	iter = find_if(m_Bones.begin(), m_Bones.end(), [&](CBone* pBone)->_bool

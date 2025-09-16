@@ -23,6 +23,7 @@ public:
 	/* End */
 	virtual _bool	End() override;
 
+	void Update_Collider(_float fAnimProgress);
 private:
 	class CPlayer* m_pPlayer = { nullptr };
 	ANIM_STATE m_eAnimState = {};

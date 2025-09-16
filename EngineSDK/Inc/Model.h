@@ -49,6 +49,7 @@ public:
 	void   Set_CurAnimProgress(_float fProgress);
 
 	_wstring Get_MeshName(_uint iIdx) const;
+	_wstring Get_CurrentAnim(); 
 
 	const _float4x4* Get_BoneMatrixPtr(const _char* pBoneName) const;
 	_int Get_BoneIndex(const _char* pBoneName) const;

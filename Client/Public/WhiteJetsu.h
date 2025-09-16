@@ -19,13 +19,14 @@ private:
 	virtual ~CWhiteJetsu() = default;
 
 public:
+	virtual _wstring Get_CurrentAnim() override;
 	virtual _float	Get_AnimProgress();
 	virtual void	Set_AnimProgress(_float fProgress);
 	virtual void	Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate = 1.f, _bool IsBlend = true, _float fBlendRatio = 0.15f, _bool IsLoop = false);
 	virtual _bool	Play_Animation(_float fTimeDelta);
 
 public:
-	virtual void OnCollision();
+	virtual void OnCollision(COLLIDER_HANDLE_ID eHandleID) override;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;

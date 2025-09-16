@@ -110,19 +110,24 @@ HRESULT CGameManager::Change_Camera(LEVEL eLevelID, const _wstring& strCameraTag
 	return m_pCamera_Manager->Change_Camera(eLevelID, strCameraTag);
 }
 
-void CGameManager::Add_Collider_ToCollision(const _wstring& strColliderTag, CCollider* pCollider)
+void CGameManager::Add_Collider_ToCollision(const _wstring& strColliderTag, COLLIDER_HANDLE_ID eHandleID, CCollider* pCollider)
 {
-	m_pCollision_Manager->Add_Collider_ToCollision(strColliderTag, pCollider);
+	m_pCollision_Manager->Add_Collider_ToCollision(strColliderTag, eHandleID, pCollider);
 }
 
-void CGameManager::Add_Object_ToCollision(const _wstring& strObjectTag, CGameObject* pObject)
+void CGameManager::Add_Object_ToCollision(const _wstring& strObjectTag, CGameObject* pGameObject, CCollider* pCollider)
 {
-	m_pCollision_Manager->Add_Object_ToCollision(strObjectTag, pObject);
+	m_pCollision_Manager->Add_Object_ToCollision(strObjectTag, pGameObject, pCollider);
 }
 
-void CGameManager::Check_Collision(const _wstring strColliderTag, const _wstring strObjectTag, COLLISION_ID eCollisionID)
+void CGameManager::Update_Collision()
 {
-	m_pCollision_Manager->Check_Collision(strColliderTag, strObjectTag, eCollisionID);
+	m_pCollision_Manager->Update();
+}
+
+void CGameManager::Check_Collision(const _wstring strColliderTag, const _wstring strObjectTag, COLLISION_TYPE eColType)
+{
+	m_pCollision_Manager->Check_Collision(strColliderTag, strObjectTag, eColType);
 }
 
 LEVEL CGameManager::Get_NextLevel()

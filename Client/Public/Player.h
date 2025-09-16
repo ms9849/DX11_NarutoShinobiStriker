@@ -39,11 +39,15 @@ public:
 	void	Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate = 1.f, _bool IsBlend = true, _float fBlendRatio = 0.15f, _bool IsLoop = false);
 	void	Set_Ground(_bool bFlag) { m_isGround = bFlag; }
 
+	void	   Set_Collider_Active(const _wstring& strColliderTag, _bool bFlag);
+	CCollider* Get_Collider(const _wstring& strColliderTag);
+	CNavigation* Get_Navigation() { return m_pNavigationCom; }
+
 public:
-	CNavigation* Get_Navigation() { return m_pNavigationCom;  }
 	void	Set_SkillSlotPanel(class CSkillSlotPanel* pPanel);
 	void	Set_AttackTypePanel(class CAttackTypePanel* pPanel);
 	void	Set_ComboKOPanel(class CComboKOPanel* pPanel);
+
 public:
 	void	Clear_State();
 	void	Update_State(_float fTimeDelta);
@@ -59,7 +63,7 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	void OnCollision();
+	void OnCollision(COLLIDER_HANDLE_ID eHandleID);
 
 private:
 	class CGameManager*		m_pGameManager = { nullptr };

@@ -75,6 +75,11 @@ void CLevel_GamePlay::Update(_float fTimeDelta)
 		m_pGameInstance->Set_Visible_IMGUI(false, ENUM_CLASS(IMGUI_VISIBLE::GAMEINFO));
 		m_pGameInstance->Set_Visible_IMGUI(false, ENUM_CLASS(IMGUI_VISIBLE::OBJECT_INSPECTOR));
 	}
+
+	m_pGameManager->Check_Collision(TEXT("Player_Attack"), TEXT("Monster_Body"), COLLISION_TYPE::MONSTER);
+
+
+	m_pGameManager->Update_Collision();
 }
 
 HRESULT CLevel_GamePlay::Render()

@@ -51,7 +51,7 @@ _bool CCell::isIn(_fvector vPosition, _int* pNeighborIndex, _float3* pSlidingVec
 		/* 선분의 법선 벡터를 */
 		_vector vNormal = XMLoadFloat3(&m_vNormals[i]);
 
-		/* 내적해서 결과값 ( cos 함수의 결과) 0보다 크다면, */
+		/* 내적해서 결과값 (cos 함수의 결과) 0보다 크다면, */
 		/* 0 ~ 90도, 270 ~ 360도 사이, 즉 셀을 벗어났다고 판정한다.*/
 		if (0.f < XMVectorGetX(XMVector3Dot(vDir, vNormal)))
 		{

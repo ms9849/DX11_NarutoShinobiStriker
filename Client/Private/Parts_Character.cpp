@@ -22,6 +22,11 @@ void CParts_Character::Set_AnimProgress(_float fProgress)
 	m_pModelCom->Set_CurAnimProgress(fProgress);
 }
 
+_wstring CParts_Character::Get_CurrentAnim()
+{
+	return m_pModelCom->Get_CurrentAnim();
+}
+
 void CParts_Character::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _bool IsBlend, _float fBlendRatio, _bool IsLoop)
 {
 	/* 추후 문자열로 수정해야 함. */

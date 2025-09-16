@@ -2,6 +2,7 @@
 
 #include "Player.h"
 #include "GameInstance.h"
+#include "GameManager.h"
 
 /* 전이 가능한 상태들 */
 #pragma region TRANSFER_STATE
@@ -42,6 +43,8 @@ CPlayerState* CPlayer_HandAttackState::Update(_float fTimeDelta)
 
     _bool IsAnimFinished = m_pPlayer->Play_Animation(fTimeDelta);
     _float fAnimProgress = m_pPlayer->Get_AnimProgress();
+
+    Update_Collider(fAnimProgress);
 
     if (false == IsAnimFinished && fAnimProgress <= 0.7f)
         m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * m_pGameInstance->Calc_Quadratic(-0.89f, 0.48f, 0.11f, fAnimProgress),
@@ -123,7 +126,20 @@ CPlayerState* CPlayer_HandAttackState::Update(_float fTimeDelta)
 
 _bool CPlayer_HandAttackState::End()
 {
+    m_pPlayer->Set_Collider_Active(TEXT("Com_Collider_HandAttack"), false);
+
     return true;
+}
+
+void CPlayer_HandAttackState::Update_Collider(_float fAnimProgress)
+{
+    if(fAnimProgress >= 0.3f && fAnimProgress <= 0.8f)
+        m_pPlayer->Set_Collider_Active(TEXT("Com_Collider_HandAttack"), true);
+    else 
+        m_pPlayer->Set_Collider_Active(TEXT("Com_Collider_HandAttack"), false);
+
+    CGameManager::GetInstance()->Add_Collider_ToCollision(TEXT("Player_Attack"), COLLIDER_HANDLE_ID::PLAYER_HAND_ATTACK, 
+        m_pPlayer->Get_Collider(TEXT("Com_Collider_HandAttack")));
 }
 
 CPlayer_HandAttackState* CPlayer_HandAttackState::Create(CPlayer* pPlayer)
