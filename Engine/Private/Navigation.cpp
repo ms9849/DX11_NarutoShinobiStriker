@@ -150,6 +150,16 @@ HRESULT CNavigation::Initialize(void* pArg)
 	return S_OK;
 }
 
+/* 현재 위치의 높이를 계산해주는 함수. Compuhte Height처럼 보정까지 해주지 않는다. */
+_float CNavigation::Get_CellHeight(CTransform* pTransform)
+{
+	_vector		vLocalPos = XMVector3TransformCoord(pTransform->Get_State(STATE::POSITION), XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix)));
+
+	_float		fHeight = m_Cells[m_iCurrentCellIndex]->Compute_Height(vLocalPos);
+
+	return fHeight;
+}
+
 _bool CNavigation::isMove(_fvector vPosition, _float3* pSlidingVector)
 {
 	_vector		vLocalPos = XMVector3TransformCoord(vPosition, XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix)));
@@ -297,7 +307,7 @@ CComponent* CNavigation::Clone(void* pArg)
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Create Failed : Navigation");
+		MSG_BOX("Clone Failed : Navigation");
 		Safe_Release(pInstance);
 	}
 

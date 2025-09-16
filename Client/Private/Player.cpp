@@ -170,7 +170,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 	m_pState = CPlayer_IdleState::Create(this);
 	m_pState->Start(true);
 
-	m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(66.f, 0.f, 5.f, 1.f));
+	m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(0.f, 0.f, -5.f, 1.f));
 
 	return S_OK;
 }
@@ -184,6 +184,12 @@ void CPlayer::Update(_float fTimeDelta)
 {
 	/* 스테이트 업데이트. */
 	Update_State(fTimeDelta);
+	/* 네비메쉬 높이 업데이트 */
+
+	if(true == m_isGround)
+		m_pNavigationCom->Compute_Height(m_pTransformCom);
+
+	
 	Key_Input(fTimeDelta);
 	ComboKO_System(fTimeDelta);
 
@@ -191,11 +197,16 @@ void CPlayer::Update(_float fTimeDelta)
 	for (auto& iter : m_Skills)
 		iter.second.fTimeAcc += fTimeDelta;
 
-	//m_pNavigationCom->Compute_Height(m_pTransformCom);
-
 	__super::Update(fTimeDelta);
 
 	m_pColliderCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
+
+	_matrix PlayerMatrix = XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr());
+	_vector PlayerTranslation = m_pTransformCom->Get_State(STATE::POSITION);
+	PlayerTranslation += m_pTransformCom->Get_State(STATE::LOOK) * 0.8f;
+	PlayerMatrix.r[3] = PlayerTranslation;
+
+	m_pHandAttackColliderCom->Update(PlayerMatrix);
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
@@ -217,6 +228,7 @@ HRESULT CPlayer::Render()
 #ifdef _DEBUG
 
 	m_pColliderCom->Render();
+	m_pHandAttackColliderCom->Render();
 
 #endif
 
@@ -226,12 +238,12 @@ HRESULT CPlayer::Render()
 HRESULT CPlayer::Ready_Components()
 {
 	/* Com_Navigation */
-	//CNavigation::NAVIGATION_DESC Desc;
-	//Desc.iCurrentCellIndex = 1;
+	CNavigation::NAVIGATION_DESC Desc;
+	Desc.iCurrentCellIndex = 0;
 
-	//if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_NavigationMesh"),
-	//	TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
-	//	return E_FAIL;
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Test_Navigation"),
+		TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
+		return E_FAIL;
 
 	/* Com_Collider */
 
@@ -242,9 +254,14 @@ HRESULT CPlayer::Ready_Components()
 	ColliderDesc.isActive = false;
 
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_Sphere"),
-		TEXT("Com_Collider_Sphere"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
+		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
 	
+	ColliderDesc.isActive = true;
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_Sphere"),
+		TEXT("Com_Collider_HandAttack"), reinterpret_cast<CComponent**>(&m_pHandAttackColliderCom), &ColliderDesc)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -412,5 +429,6 @@ void CPlayer::Free()
 	Safe_Release(m_pComboKOPanel);
 
 	Safe_Release(m_pColliderCom);
+	Safe_Release(m_pHandAttackColliderCom);
 	Safe_Release(m_pNavigationCom);
 }

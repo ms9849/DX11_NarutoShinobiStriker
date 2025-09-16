@@ -95,26 +95,6 @@ void CRenderer::Render_Blend()
 
 void CRenderer::Render_UI()
 {
-	D3D11_BLEND_DESC Desc = {};
-
-	Desc.AlphaToCoverageEnable = false;
-	Desc.IndependentBlendEnable = false;
-	Desc.RenderTarget[0].BlendEnable = true;
-	Desc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA; // 소스 알파 값
-	Desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA; // 대상 알파 값의 역수
-	Desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD; // 더하기 연산
-	Desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE; // 소스 알파 값을 1,
-	Desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO; // 대상 알파 값 0로.
-	Desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD; // 더하기 연산
-	Desc.RenderTarget[0].RenderTargetWriteMask = 0x0f;
-
-	ID3D11BlendState* pBlendState;
-	if (FAILED(m_pDevice->CreateBlendState(&Desc, &pBlendState)))
-		return;
-
-	m_pContext->OMSetBlendState(pBlendState, nullptr, 0xffffffff);
-	Safe_Release(pBlendState);
-
 
 	m_RenderObjects[ENUM_CLASS(RENDER::UI)].sort([](CGameObject* pSour, CGameObject* pDest)->_bool
 		{
@@ -130,37 +110,10 @@ void CRenderer::Render_UI()
 	}
 
 	m_RenderObjects[ENUM_CLASS(RENDER::UI)].clear();
-
-	Desc = {};
-
-	Desc.AlphaToCoverageEnable = false;
-	Desc.IndependentBlendEnable = false;
-	Desc.RenderTarget[0].BlendEnable = false;
-	Desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-
-	if (FAILED(m_pDevice->CreateBlendState(&Desc, &pBlendState)))
-		return;
-
-	m_pContext->OMSetBlendState(pBlendState, nullptr, 0xffffffff);
-	Safe_Release(pBlendState);
 }
 
 void CRenderer::Render_Font()
 {
-
-	/* 블렌딩 / 스텐실뎁스 / 래스터라이즈 스테이트 저장해야됨 */
-	ID3D11BlendState*		 pPreBlendState = {};
-	_float					 PreBlendFactor[4] = {};
-	_uint					 PreBlendSampleMask = {};
-	m_pContext->OMGetBlendState(&pPreBlendState, PreBlendFactor, &PreBlendSampleMask);
-
-	ID3D11DepthStencilState* pPreDepthStencilState = {};
-	_uint					 PreDepthStencilRef = {};
-	m_pContext->OMGetDepthStencilState(&pPreDepthStencilState, &PreDepthStencilRef);
-
-	ID3D11RasterizerState*	 pPreRasterizeState = {};
-	m_pContext->RSGetState(&pPreRasterizeState);
-
 	for (auto& pFont : m_Fonts)
 	{
 		if (nullptr != pFont)
@@ -168,15 +121,6 @@ void CRenderer::Render_Font()
 
 		Safe_Release(pFont);
 	}
-
-	m_pContext->OMSetBlendState(pPreBlendState, PreBlendFactor, PreBlendSampleMask);
-	Safe_Release(pPreBlendState);
-
-	m_pContext->OMSetDepthStencilState(pPreDepthStencilState, PreDepthStencilRef);
-	Safe_Release(pPreDepthStencilState);
-
-	m_pContext->RSSetState(pPreRasterizeState);
-	Safe_Release(pPreRasterizeState);
 
 	m_Fonts.clear();
 }
@@ -212,6 +156,6 @@ void CRenderer::Free()
 
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);
-
+	
 
 }

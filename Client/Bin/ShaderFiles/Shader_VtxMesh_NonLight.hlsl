@@ -1,15 +1,8 @@
+#include "Engine_Shader_Defines.hlsli"
 
 matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 
-texture2D g_Texture, g_Texture_Skill;
-
-float g_Alpha;
-float g_ProgressRate;
-int g_iProgressBarTextureNum;
-float g_MaxSkillCoolDown;
-float g_SkillCoolDown;
-float g_CurrentHP;
-float g_MaxHP;
+texture2D g_Texture;
 
 sampler DefaultSampler = sampler_state
 {
@@ -69,11 +62,14 @@ PS_OUT PS_MAIN(PS_IN In)
     return Out;
 }
 
-
 technique11 DefaultTechnique
 {
     pass Default
     {
+        SetRasterizerState(RS_Cull_Front);
+        SetDepthStencilState(DSS_None, 0);
+        SetBlendState(BS_None, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
         VertexShader = compile vs_5_0 VS_MAIN();
         PixelShader = compile ps_5_0 PS_MAIN();
     }

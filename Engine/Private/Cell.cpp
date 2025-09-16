@@ -53,19 +53,19 @@ _bool CCell::isIn(_fvector vPosition, _int* pNeighborIndex, _float3* pSlidingVec
 
 		/* 내적해서 결과값 ( cos 함수의 결과) 0보다 크다면, */
 		/* 0 ~ 90도, 270 ~ 360도 사이, 즉 셀을 벗어났다고 판정한다.*/
-		/* 먼저 걸린 녀석을 방향으로 삼아도 될 것 같음. */
 		if (0.f < XMVectorGetX(XMVector3Dot(vDir, vNormal)))
 		{
-			_vector vSliding = vDir - XMVectorGetX(XMVector3Dot(vDir, vNormal)) * vNormal;
-
 			if (nullptr != pSlidingVector)
+			{
+				_vector vSliding = vDir - XMVectorGetX(XMVector3Dot(vDir, vNormal)) * vNormal;
 				XMStoreFloat3(pSlidingVector, vSliding);
+			}
 			
 			*pNeighborIndex = m_NeighborIndices[i];
 			return false;
 		}
-
 	}
+
 	return true;
 }
 

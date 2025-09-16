@@ -27,22 +27,6 @@ HRESULT CSkyBox::Initialize(void* pArg)
 
 	m_iNumMeshes = m_pModelCom->Get_NumMeshes();
 
-	D3D11_RASTERIZER_DESC RasterizeDesc = {};
-	RasterizeDesc.FillMode = D3D11_FILL_SOLID;
-	RasterizeDesc.CullMode = D3D11_CULL_NONE;
-	RasterizeDesc.FrontCounterClockwise = FALSE;
-	RasterizeDesc.DepthClipEnable = TRUE;
-
-	m_pDevice->CreateRasterizerState(&RasterizeDesc, &m_pSkyBoxRasterizeState);
-
-	D3D11_DEPTH_STENCIL_DESC DepthStencilDesc = {};
-	DepthStencilDesc.DepthEnable = TRUE;
-	DepthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO; // 깊이 버퍼에 쓰기 금지
-	DepthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
-
-	m_pDevice->CreateDepthStencilState(&DepthStencilDesc, &m_pSkyBoxDepthStencilState);
-
-
 	return S_OK;
 }
 
@@ -64,12 +48,6 @@ void CSkyBox::Late_Update(_float fTimeDelta)
 
 HRESULT CSkyBox::Render()
 {
-	m_pContext->RSGetState(&m_pOldRasterizeState);
-	m_pContext->RSSetState(m_pSkyBoxRasterizeState);
-
-	m_pContext->OMGetDepthStencilState(&m_pOldDepthStencilState, &m_iOldStencilRef);
-	m_pContext->OMSetDepthStencilState(m_pSkyBoxDepthStencilState, 0);
-
 	if (FAILED(Bind_ShaderResources()))
 		return E_FAIL;
 
@@ -84,9 +62,6 @@ HRESULT CSkyBox::Render()
 		if (FAILED(m_pModelCom->Render(i)))
 			return E_FAIL;
 	}
-
-	m_pContext->RSSetState(m_pOldRasterizeState);
-	m_pContext->OMSetDepthStencilState(m_pOldDepthStencilState, m_iOldStencilRef);
 
 	return S_OK;
 }
@@ -152,6 +127,4 @@ void CSkyBox::Free()
 
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pSkyBoxRasterizeState);
-	Safe_Release(m_pSkyBoxDepthStencilState);
 }

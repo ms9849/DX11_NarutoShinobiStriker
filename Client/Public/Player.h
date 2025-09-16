@@ -37,8 +37,10 @@ public:
 	_float	Get_AnimProgress();
 	void	Set_AnimProgress(_float fProgress);
 	void	Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate = 1.f, _bool IsBlend = true, _float fBlendRatio = 0.15f, _bool IsLoop = false);
+	void	Set_Ground(_bool bFlag) { m_isGround = bFlag; }
 
 public:
+	CNavigation* Get_Navigation() { return m_pNavigationCom;  }
 	void	Set_SkillSlotPanel(class CSkillSlotPanel* pPanel);
 	void	Set_AttackTypePanel(class CAttackTypePanel* pPanel);
 	void	Set_ComboKOPanel(class CComboKOPanel* pPanel);
@@ -56,6 +58,9 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+public:
+	void OnCollision();
+
 private:
 	class CGameManager*		m_pGameManager = { nullptr };
 	class CSkillSlotPanel*	m_pSkillSlotPanel = { nullptr };
@@ -64,6 +69,7 @@ private:
 
 	CNavigation*			m_pNavigationCom = { nullptr };
 	CCollider*				m_pColliderCom = { nullptr };
+	CCollider*				m_pHandAttackColliderCom = { nullptr };
 
 	class CPlayerState*		m_pState = { nullptr };
 
@@ -73,6 +79,7 @@ private:
 	_float					m_fComboTimeAcc = { 0 };
 	_bool					m_bEnemyHit = { false };
 	_bool					m_bEnemyKO = { false };
+	_bool					m_isGround = { true };
 
 private:
 	HRESULT Ready_Components();

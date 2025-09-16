@@ -200,10 +200,10 @@
       <Filter>01.Utility\03.Components\Collider</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Bounding.h">
-      <Filter>01.Utility\03.Components\Collider\Bounding</Filter>
+      <Filter>01.Utility\03.Components\Bounding</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Bounding_AABB.h">
-      <Filter>01.Utility\03.Components\Collider\Bounding\AABB</Filter>
+      <Filter>01.Utility\03.Components\Bounding\AABB</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Input_Manager.h">
       <Filter>01.Utility\97. Input</Filter>
@@ -212,10 +212,10 @@
       <Filter>01.Utility\03.Components\Collider\DebugDraw</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Bounding_OBB.h">
-      <Filter>01.Utility\03.Components\Collider\Bounding\OBB</Filter>
+      <Filter>01.Utility\03.Components\Bounding\OBB</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Bounding_Sphere.h">
-      <Filter>01.Utility\03.Components\Collider\Bounding\SPHERE</Filter>
+      <Filter>01.Utility\03.Components\Bounding\SPHERE</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -373,10 +373,10 @@
       <Filter>01.Utility\03.Components\Collider</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Bounding.cpp">
-      <Filter>01.Utility\03.Components\Collider\Bounding</Filter>
+      <Filter>01.Utility\03.Components\Bounding</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Bounding_AABB.cpp">
-      <Filter>01.Utility\03.Components\Collider\Bounding\AABB</Filter>
+      <Filter>01.Utility\03.Components\Bounding\AABB</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Input_Manager.cpp">
       <Filter>01.Utility\97. Input</Filter>
@@ -385,10 +385,10 @@
       <Filter>01.Utility\03.Components\Collider\DebugDraw</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Bounding_OBB.cpp">
-      <Filter>01.Utility\03.Components\Collider\Bounding\OBB</Filter>
+      <Filter>01.Utility\03.Components\Bounding\OBB</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Bounding_Sphere.cpp">
-      <Filter>01.Utility\03.Components\Collider\Bounding\SPHERE</Filter>
+      <Filter>01.Utility\03.Components\Bounding\SPHERE</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -560,20 +560,20 @@
     <Filter Include="01.Utility\03.Components\Collider">
       <UniqueIdentifier>{73ae1cba-4697-4bee-ae91-12a341bbe426}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\03.Components\Collider\Bounding">
-      <UniqueIdentifier>{81af3a88-0bed-43d4-a5b5-8108fae5da4c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Utility\03.Components\Collider\Bounding\AABB">
-      <UniqueIdentifier>{0484c9e3-6f96-45a2-a2fa-34bd3749c581}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Utility\03.Components\Collider\Bounding\OBB">
-      <UniqueIdentifier>{15ced516-b38f-4a59-b9b9-ee4b7d1b2489}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Utility\03.Components\Collider\Bounding\SPHERE">
-      <UniqueIdentifier>{efd7e05d-9094-48df-b16c-e2f0a7d205fb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\03.Components\Collider\DebugDraw">
       <UniqueIdentifier>{7d346682-ea95-4094-b642-36e8609e6feb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Bounding">
+      <UniqueIdentifier>{81af3a88-0bed-43d4-a5b5-8108fae5da4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Bounding\AABB">
+      <UniqueIdentifier>{0484c9e3-6f96-45a2-a2fa-34bd3749c581}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Bounding\OBB">
+      <UniqueIdentifier>{15ced516-b38f-4a59-b9b9-ee4b7d1b2489}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Bounding\SPHERE">
+      <UniqueIdentifier>{efd7e05d-9094-48df-b16c-e2f0a7d205fb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -585,6 +585,9 @@
     </None>
     <None Include="..\Public\FMOD\fmod_errors.cs">
       <Filter>01.Utility\96. Sound\FMOD</Filter>
+    </None>
+    <None Include="..\Bin\ShaderFiles\Engine_Shader_Defines.hlsli">
+      <Filter>98.ShaderFiles</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

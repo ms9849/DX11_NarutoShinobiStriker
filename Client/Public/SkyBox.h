@@ -30,13 +30,6 @@ private:
 	CModel* m_pModelCom = { nullptr };
 	_uint		m_iNumMeshes = {};
 
-	ID3D11RasterizerState* m_pOldRasterizeState = { nullptr };
-	ID3D11RasterizerState* m_pSkyBoxRasterizeState = { nullptr };
-
-	ID3D11DepthStencilState* m_pOldDepthStencilState = { nullptr };
-	_uint					 m_iOldStencilRef = {};
-	ID3D11DepthStencilState* m_pSkyBoxDepthStencilState = { nullptr };
-
 private:
 	HRESULT Ready_Components();
 	HRESULT Bind_ShaderResources();
