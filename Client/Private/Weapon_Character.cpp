@@ -12,24 +12,35 @@ CWeapon_Character::CWeapon_Character(const CWeapon_Character& Prototype)
 {
 }
 
+void CWeapon_Character::Set_Collider_Active(_bool bFlag)
+{
+    m_pColliderCom->Set_Active(bFlag);
+}
+
 void CWeapon_Character::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _bool IsBlend, _float fBlendRatio, _bool IsLoop)
 {
     m_strCurrentAnimName = pAnimName;
 
     //웨폰은 애님 인덱스 따라 뼈 바꿔줘야 한다.
-// -> 애님 정보가 없음. 상체에서 받아올까?
+    // -> 애님 정보가 없음. 상체에서 받아올까?
     if (0 == m_strCurrentAnimName.compare("CustomMan_Attack_SnakeSword_cmb_01")
         && m_pUpper_Player->Get_AnimProgress() >= 0.1f
         && m_pUpper_Player->Get_AnimProgress() <= 0.75f)
+    {
         IsAttached = false;
+    }
 
     else if (0 == m_strCurrentAnimName.compare("CustomMan_Attack_SnakeSword_cmb_02")
         && m_pUpper_Player->Get_AnimProgress() <= 0.8f)
+    {
         IsAttached = false;
+    }
 
     else if (0 == m_strCurrentAnimName.compare("CustomMan_Attack_SnakeSword_cmb_03")
         && m_pUpper_Player->Get_AnimProgress() <= 0.75f)
+    {
         IsAttached = false;
+    }
 
     else
         IsAttached = true;
@@ -40,7 +51,7 @@ _bool CWeapon_Character::Play_Animation(_float fTimeDelta)
     //웨폰은 애님 인덱스 따라 뼈 바꿔줘야 한다.
     // -> 애님 정보가 없음. 상체에서 받아올까?
     if (0 == m_strCurrentAnimName.compare("CustomMan_Attack_SnakeSword_cmb_01")
-        && m_pUpper_Player->Get_AnimProgress() >= 0.1f 
+        && m_pUpper_Player->Get_AnimProgress() >= 0.1f
         && m_pUpper_Player->Get_AnimProgress() <= 0.75f)
         IsAttached = false;
 
@@ -72,6 +83,8 @@ HRESULT CWeapon_Character::Initialize(void* pArg)
 {
     WEAPON_PLAYER_DESC* pDesc = static_cast<WEAPON_PLAYER_DESC*>(pArg);
 
+    m_eType = pDesc->eType;
+
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
@@ -81,22 +94,8 @@ HRESULT CWeapon_Character::Initialize(void* pArg)
     m_pAttachMatrix = pDesc->pAttachMatrix;
     m_pHandMatrix = pDesc->pHandMatrix;
     m_pUpper_Player = pDesc->pUpper_Player;
-    m_eType = pDesc->eType;
 
     Safe_AddRef(m_pUpper_Player);
-
-
-    switch (m_eType)
-    {
-    case WEAPON_TYPE::SWORD:
-        
-        break;
-
-    case WEAPON_TYPE::GLOVE:
-        
-        break;
-    }
-
 
     return S_OK;
 }
@@ -168,16 +167,30 @@ HRESULT CWeapon_Character::Ready_Components()
         TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
         return E_FAIL;
 
-    /* Com_Collider_OBB */
-    CBounding_OBB::BOUNDING_OBB_DESC		OBBDesc{};
+    if (WEAPON_TYPE::SWORD == m_eType)
+    {
+        CBounding_OBB::BOUNDING_OBB_DESC		OBBDesc{};
 
-    OBBDesc.vSize = _float3(0.5f, 1.2f, 0.5f);
-    OBBDesc.vCenter = _float3(0.f, OBBDesc.vSize.y * -0.5f, 0.f);
-    OBBDesc.vAngles = _float3(0.f, 0.f/*XMConvertToRadians(45.0f)*/, 0.f);
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_OBB"),
-        TEXT("Com_Collider_OBB"), reinterpret_cast<CComponent**>(&m_pColliderCom), &OBBDesc)))
-        return E_FAIL;
+        OBBDesc.vSize = _float3(0.5f, 1.2f, 0.5f);
+        OBBDesc.vCenter = _float3(0.f, OBBDesc.vSize.y * -0.5f, 0.f);
+        OBBDesc.vAngles = _float3(0.f, 0.f/*XMConvertToRadians(45.0f)*/, 0.f);
+        if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_OBB"),
+            TEXT("Com_Collider_OBB"), reinterpret_cast<CComponent**>(&m_pColliderCom), &OBBDesc)))
+            return E_FAIL;
 
+    }
+
+    else if(WEAPON_TYPE::GLOVE == m_eType)
+    {
+        CBounding_OBB::BOUNDING_OBB_DESC		OBBDesc{};
+
+        OBBDesc.vSize = _float3(0.3f, 0.3f, 0.3f);
+        OBBDesc.vCenter = _float3(0.f, OBBDesc.vSize.y * -0.5f, 0.f);
+        OBBDesc.vAngles = _float3(0.f, 0.f/*XMConvertToRadians(45.0f)*/, 0.f);
+        if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_OBB"),
+            TEXT("Com_Collider_OBB"), reinterpret_cast<CComponent**>(&m_pColliderCom), &OBBDesc)))
+            return E_FAIL;
+    }
 
     return S_OK;
 }

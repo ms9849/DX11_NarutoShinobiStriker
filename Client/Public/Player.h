@@ -34,6 +34,8 @@ private:
 	virtual ~CPlayer() = default;
 
 public:
+	CCollider*	Get_WeaponCollider();
+	void	Set_WeaponCollider_Active(_bool bFlag);
 	_float	Get_AnimProgress();
 	void	Set_AnimProgress(_float fProgress);
 	void	Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate = 1.f, _bool IsBlend = true, _float fBlendRatio = 0.15f, _bool IsLoop = false);

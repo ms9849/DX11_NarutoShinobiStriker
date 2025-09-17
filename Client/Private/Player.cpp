@@ -30,6 +30,17 @@ CPlayer::CPlayer(const CPlayer& rhs)
 	Safe_AddRef(m_pGameManager);
 }
 
+CCollider* CPlayer::Get_WeaponCollider()
+{
+	return dynamic_cast<CWeapon_Character*>(Find_PartObject(TEXT("Part_Weapon")))->Get_Collider();
+}
+
+void CPlayer::Set_WeaponCollider_Active(_bool bFlag)
+{
+	CWeapon_Character* pWeapon = dynamic_cast<CWeapon_Character*>(Find_PartObject(TEXT("Part_Weapon")));
+	pWeapon->Set_Collider_Active(bFlag);
+}
+
 _float CPlayer::Get_AnimProgress()
 {
 	/* 애니메이션 Progress 받아오기 */

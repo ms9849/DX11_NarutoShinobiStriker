@@ -27,7 +27,8 @@ public:
 
 public:
 	virtual void OnCollision(COLLIDER_HANDLE_ID eHandleID) override;
-
+	
+	void Change_State(class CWhiteJetsuState* pNextState); 
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;

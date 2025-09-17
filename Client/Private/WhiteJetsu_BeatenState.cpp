@@ -13,11 +13,13 @@
 
 #pragma endregion
 
-CWhiteJetsu_BeatenState::CWhiteJetsu_BeatenState(CNavigation* pNavigation, CWhiteJetsu* pJetsu)
+CWhiteJetsu_BeatenState::CWhiteJetsu_BeatenState(CNavigation* pNavigation, CWhiteJetsu* pJetsu, _vector vDirection)
 	: m_pJetsu{ pJetsu }
 	, m_pNavigationCom{ pNavigation }
 {
 	Safe_AddRef(m_pNavigationCom);
+	XMStoreFloat3(&m_vDirection, vDirection);
+	m_vDirection.y = 0.f;
 }
 
 void CWhiteJetsu_BeatenState::Start(_bool IsBlend)
@@ -31,6 +33,9 @@ void CWhiteJetsu_BeatenState::Start(_bool IsBlend)
 
 	m_pPlayerTransformCom = CGameManager::GetInstance()->Get_PlayerPtr()->Get_Transform();
 	Safe_AddRef(m_pPlayerTransformCom);
+
+	/* 맞을때 플레이어 바라보게 */
+	m_pJetsu->Get_Transform()->LookAt_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION));
 }
 
 CWhiteJetsuState* CWhiteJetsu_BeatenState::Update(_float fTimeDelta)
@@ -41,7 +46,7 @@ CWhiteJetsuState* CWhiteJetsu_BeatenState::Update(_float fTimeDelta)
 
 	/* 임시 코드. 방향 받아와서 처리해야 한다.*/
 	if (false == IsAnimFinished && fAnimProgress <= 0.7f)
-		m_pJetsu->Get_Transform()->Go_Backward(fTimeDelta * m_pGameInstance->Calc_Quadratic(-0.89f, 0.48f, 0.11f, fAnimProgress),
+		m_pJetsu->Get_Transform()->Go_Direction(XMLoadFloat3(&m_vDirection), fTimeDelta * m_pGameInstance->Calc_Quadratic(-0.89f, 0.48f, 0.11f, fAnimProgress),
 			m_pNavigationCom);
 
 	if (true == IsAnimFinished)
@@ -57,9 +62,9 @@ _bool CWhiteJetsu_BeatenState::End()
 	return true;
 }
 
-CWhiteJetsu_BeatenState* CWhiteJetsu_BeatenState::Create(CNavigation* pNavigation, CWhiteJetsu* pJetsu)
+CWhiteJetsu_BeatenState* CWhiteJetsu_BeatenState::Create(CNavigation* pNavigation, CWhiteJetsu* pJetsu, _vector vDirection)
 {
-	return new CWhiteJetsu_BeatenState(pNavigation, pJetsu);
+	return new CWhiteJetsu_BeatenState(pNavigation, pJetsu, vDirection);
 }
 
 void CWhiteJetsu_BeatenState::Free()

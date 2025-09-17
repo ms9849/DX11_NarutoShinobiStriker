@@ -2,7 +2,7 @@
 
 #include "Player.h"
 #include "GameInstance.h"
-
+#include "GameManager.h"
 /* 전이 가능한 상태들 */
 #pragma region TRANSFER_STATE
 
@@ -22,6 +22,7 @@ CPlayer_SwordAttackState::CPlayer_SwordAttackState(CPlayer* pPlayer)
 
 void CPlayer_SwordAttackState::Start(_bool IsBlend)
 {
+    m_IsOnCollider = false;
     m_pPlayer->Set_AnimIndex("CustomMan_Attack_SnakeSword_cmb_01", 2.f, true );
     m_eAnimState = ANIM_STATE::ATTACK_01;
 }
@@ -32,13 +33,14 @@ CPlayerState* CPlayer_SwordAttackState::Update(_float fTimeDelta)
 
     _bool IsAnimFinished = m_pPlayer->Play_Animation(fTimeDelta);
     _float fAnimProgress = m_pPlayer->Get_AnimProgress();
+    Update_Collider(fAnimProgress);
 
     if (false == IsAnimFinished && fAnimProgress <= 0.5f && ANIM_STATE::ATTACK_01 == m_eAnimState)
-        m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * m_pGameInstance->Calc_Linear(-1.4f, 0.7f, fAnimProgress),
+        m_pPlayer->Get_Transform()->Go_Straight(0.5f * fTimeDelta * m_pGameInstance->Calc_Linear(-1.4f, 0.7f, fAnimProgress),
             m_pPlayer->Get_Navigation());
 
     else  if (false == IsAnimFinished && fAnimProgress <= 0.3f && ANIM_STATE::ATTACK_02 == m_eAnimState)
-        m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * m_pGameInstance->Calc_Linear(-2.3f, 0.7f, fAnimProgress),
+        m_pPlayer->Get_Transform()->Go_Straight(0.5f *  fTimeDelta * m_pGameInstance->Calc_Linear(-2.3f, 0.7f, fAnimProgress),
             m_pPlayer->Get_Navigation());
 
     else if (false == IsAnimFinished && fAnimProgress <= 0.35f && fAnimProgress >= 0.25f && ANIM_STATE::ATTACK_03 == m_eAnimState)
@@ -49,6 +51,7 @@ CPlayerState* CPlayer_SwordAttackState::Update(_float fTimeDelta)
     if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON)
         && m_eAnimState == ANIM_STATE::ATTACK_01 && fAnimProgress >= 0.5f)
     {
+        m_IsOnCollider = false;
         m_pPlayer->Set_AnimIndex("CustomMan_Attack_SnakeSword_cmb_02", 2.f, true);
         m_eAnimState = ANIM_STATE::ATTACK_02;
     }
@@ -56,6 +59,7 @@ CPlayerState* CPlayer_SwordAttackState::Update(_float fTimeDelta)
     else if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON)
         && m_eAnimState == ANIM_STATE::ATTACK_02 && fAnimProgress >= 0.5f)
     {
+        m_IsOnCollider = false;
         m_pPlayer->Set_AnimIndex("CustomMan_Attack_SnakeSword_cmb_03", 2.f, true);
         m_eAnimState = ANIM_STATE::ATTACK_03;
     }
@@ -92,13 +96,48 @@ CPlayerState* CPlayer_SwordAttackState::Update(_float fTimeDelta)
             pNextState = CPlayer_StepState::Create(m_pPlayer, CPlayer_StepState::ANIM_STATE::LEFT);
     }
 
-
     return pNextState;
 }
 
 _bool CPlayer_SwordAttackState::End()
 {
+    m_pPlayer->Set_WeaponCollider_Active(false);
+
     return true;
+}
+
+void CPlayer_SwordAttackState::Update_Collider(_float fAnimProgress)
+{
+    /* 콜라이더 온/오프 */
+    if (ANIM_STATE::ATTACK_03 != m_eAnimState
+        && (fAnimProgress >= 0.8f || fAnimProgress <= 0.05f))
+        m_pPlayer->Set_WeaponCollider_Active(false);
+
+    /* 마지막 공격이라면 다른 조건 줘서 콜라이더 끄기 */
+    else if (ANIM_STATE::ATTACK_03 == m_eAnimState
+        && (fAnimProgress >= 0.6f || fAnimProgress <= 0.25f))
+        m_pPlayer->Set_WeaponCollider_Active(false);
+
+    /* 만약 콜라이더가 켜질수 있는 상태라면 */
+    else if (m_IsOnCollider == false)
+    {
+        /* 콜라이더 켜주기 */
+        m_pPlayer->Set_WeaponCollider_Active(true);
+        m_IsOnCollider = true;
+    }
+
+    /* 콜라이더 세팅 */
+
+    if (ANIM_STATE::ATTACK_03 == m_eAnimState)
+    {
+        CGameManager::GetInstance()->Add_Collider_ToCollision(TEXT("Player_Attack"), COLLIDER_HANDLE_ID::PLAYER_SWORD_ATTACK_FINAL,
+            m_pPlayer->Get_WeaponCollider());
+    }
+    else if(ANIM_STATE::ATTACK_03 != m_eAnimState)
+    {
+        CGameManager::GetInstance()->Add_Collider_ToCollision(TEXT("Player_Attack"), COLLIDER_HANDLE_ID::PLAYER_SWORD_ATTACK,
+            m_pPlayer->Get_WeaponCollider());
+    }
 }
 
 CPlayer_SwordAttackState* CPlayer_SwordAttackState::Create(CPlayer* pPlayer)

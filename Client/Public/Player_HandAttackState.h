@@ -25,8 +25,10 @@ public:
 
 	void Update_Collider(_float fAnimProgress);
 private:
-	class CPlayer* m_pPlayer = { nullptr };
-	ANIM_STATE m_eAnimState = {};
+	class CPlayer*	m_pPlayer = { nullptr };
+	ANIM_STATE		m_eAnimState = {};
+	_bool			m_IsOnCollider = { false };
+
 
 public:
 	static CPlayer_HandAttackState* Create(class CPlayer* pPlayer);
