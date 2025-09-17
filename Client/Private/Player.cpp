@@ -30,6 +30,11 @@ CPlayer::CPlayer(const CPlayer& rhs)
 	Safe_AddRef(m_pGameManager);
 }
 
+const _float4x4* CPlayer::Get_BoneMatrix(const _wstring strPartTag, const _char* pBoneName)
+{
+	return static_cast<CParts_Character*>(Find_PartObject(strPartTag))->Get_BoneMatrixPtr(pBoneName);
+}
+
 CCollider* CPlayer::Get_WeaponCollider()
 {
 	return dynamic_cast<CWeapon_Character*>(Find_PartObject(TEXT("Part_Weapon")))->Get_Collider();

@@ -12,6 +12,11 @@ CParts_Character::CParts_Character(const CParts_Character& rhs)
 {
 }
 
+const _float4x4* CParts_Character::Get_BoneMatrixPtr(const _char* pBoneName)
+{
+	return m_pModelCom->Get_BoneMatrixPtr(pBoneName);
+}
+
 _float CParts_Character::Get_AnimProgress()
 {
 	return m_pModelCom->Get_CurAnimProgress();

@@ -1,0 +1,228 @@
+#include "RasenShuriken.h"
+
+#include "GameInstance.h"
+#include "GameManager.h"
+#include "Player.h"
+
+
+CRasenShuriken::CRasenShuriken(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
+    : CSkill { pDevice, pContext, eObjectID }
+{
+}
+
+CRasenShuriken::CRasenShuriken(const CRasenShuriken& rhs)
+    : CSkill { rhs }
+{
+}
+
+void CRasenShuriken::Throw()
+{
+    m_isInHand = false;
+    m_isThrowing = true;
+    m_pTransformCom->Set_WorldMatrix(XMLoadFloat4x4(&m_CombinedWorldMatrix));
+ 
+}
+
+HRESULT CRasenShuriken::Initialize_Prototype()
+{
+    return S_OK;
+}
+
+HRESULT CRasenShuriken::Initialize(void* pArg)
+{
+    if (FAILED(__super::Initialize(pArg)))
+        return E_FAIL;
+
+    if (FAILED(Ready_Components()))
+        return E_FAIL;
+
+
+    RASENSHURIKEN_DESC* pDesc = static_cast<RASENSHURIKEN_DESC*>(pArg);
+
+    m_vDirection = pDesc->vDir;
+    m_pSocketMatrix = pDesc->pSocketMatrix;
+
+    return S_OK;
+}
+
+void CRasenShuriken::Priority_Update(_float fTimeDelta)
+{
+}
+
+void CRasenShuriken::Update(_float fTimeDelta)
+{
+    if(false == m_isInHand && true == m_isThrowing)
+        m_fTimeAcc += fTimeDelta;
+
+    if (false == m_isInHand && true == m_isThrowing && m_fTimeAcc >= 1.f)
+        m_isDead = true;
+    /* 추후 폭발로직에 맞춰 이펙트 수정해야 함. */
+
+    if (false == m_isInHand && true == m_isThrowing)
+    {
+        /* 던지는 도중에는 정해진 방향으로 날아가기. */
+        /* 갑자기 사라지는 현상 체크할 것 */
+        m_pTransformCom->Set_State(STATE::POSITION, m_pTransformCom->Get_State(STATE::POSITION) +
+           fTimeDelta * m_fSpeed *  XMLoadFloat3(&m_vDirection));
+    }
+
+    /* 나선 수리검이 폭발하는 조건 2개 */
+    if (true == m_isHit && true == m_isThrowing)
+    {
+        m_isHit = false;
+        m_isThrowing = false;
+        m_fLifeTime = 3.f;
+        m_fTimeAcc = 0.f;
+        m_pTransformCom->Set_Scale(5.f, 5.f, 5.f);
+    }
+
+    if (m_fTimeAcc >= m_fLifeTime && true == m_isThrowing)
+    {
+        m_isThrowing = false;
+        m_fLifeTime = 3.f;
+        m_fTimeAcc = 0.f;
+        m_pTransformCom->Set_Scale(5.f, 5.f, 5.f);
+    }
+
+    if (true == m_isInHand)
+    {
+        /* 부모 행렬 적용 */
+        XMStoreFloat4x4(&m_CombinedWorldMatrix,
+            XMLoadFloat4x4(m_pSocketMatrix) * XMLoadFloat4x4(CGameManager::GetInstance()->Get_PlayerPtr()->Get_Transform()->Get_WorldMatrixPtr()));
+
+        /* 컴바인드 매트릭스 던져주면서 자연스럽게 크기도 따라가게 됨. */
+        m_pColliderCom->Update(XMLoadFloat4x4(&m_CombinedWorldMatrix));
+    }
+    else
+    {
+        /* 현재 매트릭스 던져주기 */
+        m_pColliderCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
+    }
+}
+
+void CRasenShuriken::Late_Update(_float fTimeDelta)
+{
+    /* 던지거나 폭발중이라면 충돌가능. */
+    if (false == m_isInHand)
+    {
+        CGameManager::GetInstance()->Add_Collider_ToCollision(TEXT("Player_Skill"),
+            COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENSHURIKEN, m_pColliderCom);
+    }
+
+    m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+}
+
+HRESULT CRasenShuriken::Render()
+{
+    //if (FAILED(Bind_ShaderResources()))
+    //    return E_FAIL;
+
+    //_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+    //for (size_t i = 0; i < iNumMeshes; i++)
+    //{
+    //    if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", aiTextureType_DIFFUSE, 0)))
+    //        return E_FAIL;
+
+    //    if (FAILED(m_pShaderCom->Begin(0)))
+    //        return E_FAIL;
+
+    //    if (FAILED(m_pModelCom->Render(i)))
+    //        return E_FAIL;
+    //}
+
+#ifdef _DEBUG
+    m_pColliderCom->Render();
+#endif
+
+    return S_OK;
+}
+
+HRESULT CRasenShuriken::Ready_Components()
+{
+    ///* Com_Model */
+    //if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototoype_Component_Model_Rasengan"),
+    //    TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
+    //    return E_FAIL;
+
+    /* Com_Shader */
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxMesh"),
+        TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
+        return E_FAIL;
+
+    CBounding_Sphere::BOUNDING_SPHERE_DESC		SphereDesc{};
+
+    SphereDesc.vCenter = { 0.f, 0.f, 0.f };
+    SphereDesc.fRadius = 0.5f;
+
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_Sphere"),
+        TEXT("Com_Collider_OBB"), reinterpret_cast<CComponent**>(&m_pColliderCom), &SphereDesc)))
+        return E_FAIL;
+
+    return S_OK;
+}
+
+HRESULT CRasenShuriken::Bind_ShaderResources()
+{
+    /*m_pShaderCom->Bind_Matrix("g_WorldMatrix", );*/
+    if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", m_pGameInstance->Get_PipeLine_Float4x4(D3DTS::VIEW))))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_PipeLine_Float4x4(D3DTS::PROJ))))
+        return E_FAIL;
+
+    const LIGHT_DESC* pLightDesc = m_pGameInstance->Get_LightDesc(0);
+    if (nullptr == pLightDesc)
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDir", &pLightDesc->vDirection, sizeof(_float4))))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDiffuse", &pLightDesc->vDiffuse, sizeof(_float4))))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightAmbient", &pLightDesc->vAmbient, sizeof(_float4))))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightSpecular", &pLightDesc->vSpecular, sizeof(_float4))))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", m_pGameInstance->Get_CamState(STATE::POSITION), sizeof(_float4))))
+        return E_FAIL;
+
+    return S_OK;
+}
+
+CRasenShuriken* CRasenShuriken::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
+{
+    CRasenShuriken* pInstance = new CRasenShuriken(pDevice, pContext, eObjectID);
+
+    if (FAILED(pInstance->Initialize_Prototype()))
+    {
+        MSG_BOX("Create Failed : CRasenShuriken");
+        Safe_Release(pInstance);
+    }
+
+    return pInstance;
+}
+
+CGameObject* CRasenShuriken::Clone(void* pArg)
+{
+    CRasenShuriken* pInstance = new CRasenShuriken(*this);
+
+    if (FAILED(pInstance->Initialize(pArg)))
+    {
+        MSG_BOX("Clone Failed : CRasenShuriken");
+        Safe_Release(pInstance);
+    }
+
+    return pInstance;
+}
+
+void CRasenShuriken::Free()
+{
+    __super::Free();
+}

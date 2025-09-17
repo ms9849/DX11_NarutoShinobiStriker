@@ -76,8 +76,10 @@ void CLevel_GamePlay::Update(_float fTimeDelta)
 		m_pGameInstance->Set_Visible_IMGUI(false, ENUM_CLASS(IMGUI_VISIBLE::OBJECT_INSPECTOR));
 	}
 
+#pragma region COLLISION
 	m_pGameManager->Check_Collision(TEXT("Player_Attack"), TEXT("Monster_Body"), COLLISION_TYPE::MONSTER);
-
+	m_pGameManager->Check_Collision(TEXT("Player_Skill"), TEXT("Monster_Body"), COLLISION_TYPE::MONSTER);
+#pragma endregion
 
 	m_pGameManager->Update_Collision();
 }

@@ -94,6 +94,17 @@ void CWhiteJetsu::OnCollision(COLLIDER_HANDLE_ID eHandleID)
         CWhiteJetsuState* pNextState = CWhiteJetsu_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection);
         Change_State(pNextState);
     }
+
+    else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENGAN == eHandleID)
+    {
+        m_fCurrentHP -= 15.f;
+
+        if (m_fCurrentHP < 0.f)
+            m_fCurrentHP = m_fMaxHP;
+
+        CWhiteJetsuState* pNextState = CWhiteJetsu_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection);
+        Change_State(pNextState);
+    }
     //Set_Invincible(0.05f);
 }
 

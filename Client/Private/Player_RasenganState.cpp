@@ -1,7 +1,9 @@
 #include "Player_RasenganState.h"
 
 #include "Player.h"
+#include "Rasengan.h"
 #include "GameInstance.h"
+#include "GameManager.h"
 
 /* 전이 가능한 상태들 */
 #pragma region TRANSFER_STATE
@@ -19,7 +21,7 @@ CPlayer_RasenganState::CPlayer_RasenganState(CPlayer* pPlayer)
 
 void CPlayer_RasenganState::Start(_bool IsBlend)
 {
-	m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Rasengun_Charge_Lv2toLv3_Conect_toRun", 1.0f, true);
+	m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Rasengun_Charge_Lv2toLv3_Conect_toRun", 1.5f, true);
 	m_eAnimState = ANIM_STATE::ATTACK_START;
 }
 
@@ -46,7 +48,16 @@ CPlayerState* CPlayer_RasenganState::Update(_float fTimeDelta)
     // 나선환 차징 -> 달리기 끝났다면
     if (true == IsAnimFinished && ANIM_STATE::ATTACK_START == m_eAnimState)
     {
-        m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Rasengun_Run_Lv1_Loop", 1.0f, false, 0.f);
+        CRasengan::RASENGAN_DESC Desc;
+        Desc.pSocketMatrix = m_pPlayer->Get_BoneMatrix(TEXT("Part_Upper"), "RightHandMiddle1");
+
+        m_pRasengan = static_cast<CRasengan*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC),
+            TEXT("Prototype_GameObject_Rasengan"), &Desc)); 
+
+        m_pGameInstance->Add_Clone_ToLayer(m_pRasengan, m_pGameInstance->Get_LevelID(), TEXT("Layer_Skill"));
+        Safe_AddRef(m_pRasengan);
+
+        m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Rasengun_Run_Lv1_Loop", 1.5f, false, 0.f);
         m_eAnimState = ANIM_STATE::ATTACK;
         m_fTimeAcc = 0.f;
     }
@@ -54,12 +65,12 @@ CPlayerState* CPlayer_RasenganState::Update(_float fTimeDelta)
     // 나선환 달리기 루프 시켜주기. 
     else if (true == IsAnimFinished && m_fTimeAcc < 1.2f && ANIM_STATE::ATTACK == m_eAnimState)
     {
-        m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Rasengun_Run_Lv1_Loop", 1.0f, false, 0.f);
+        m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Rasengun_Run_Lv1_Loop", 1.5f, false, 0.f);
         m_pPlayer->Set_AnimProgress(0.084f);
     }
 
     // 나선환 RMx 애니메이션 전환. 나중에 맞았는지 체크해야함. 
-    else if (m_fTimeAcc >= 1.2f && ANIM_STATE::ATTACK == m_eAnimState)
+    else if  (ANIM_STATE::ATTACK == m_eAnimState && (false == m_pRasengan->IsColliderActive() || m_fTimeAcc >= 1.2f))
     {
         m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Rasengun_Attack_Lv1_End", 1.f, false);
         m_eAnimState = ANIM_STATE::ATTACK_END;
@@ -103,4 +114,5 @@ void CPlayer_RasenganState::Free()
 	__super::Free();
 
 	Safe_Release(m_pPlayer);
+    Safe_Release(m_pRasengan);
 }

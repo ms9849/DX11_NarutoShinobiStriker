@@ -25,6 +25,7 @@ public:
 	virtual _bool	End() override;
 
 private:
+	class CRasengan* m_pRasengan = { nullptr };
 	class CPlayer* m_pPlayer = { nullptr };
 	ANIM_STATE	   m_eAnimState = {};
 	_float		   m_fTimeAcc = { 0.f };

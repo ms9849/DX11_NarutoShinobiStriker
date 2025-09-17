@@ -232,7 +232,10 @@
     <ClInclude Include="..\Public\ProgressBarUI.h" />
     <ClInclude Include="..\Public\Props.h" />
     <ClInclude Include="..\Public\QuestLog.h" />
+    <ClInclude Include="..\Public\Rasengan.h" />
+    <ClInclude Include="..\Public\RasenShuriken.h" />
     <ClInclude Include="..\Public\RotationIconUI.h" />
+    <ClInclude Include="..\Public\Skill.h" />
     <ClInclude Include="..\Public\SkillSlotUI.h" />
     <ClInclude Include="..\Public\SkillSlotPanel.h" />
     <ClInclude Include="..\Public\Skill_Table.h" />
@@ -341,7 +344,10 @@
     <ClCompile Include="..\Private\ProgressBarUI.cpp" />
     <ClCompile Include="..\Private\Props.cpp" />
     <ClCompile Include="..\Private\QuestLog.cpp" />
+    <ClCompile Include="..\Private\Rasengan.cpp" />
+    <ClCompile Include="..\Private\RasenShuriken.cpp" />
     <ClCompile Include="..\Private\RotationIconUI.cpp" />
+    <ClCompile Include="..\Private\Skill.cpp" />
     <ClCompile Include="..\Private\SkillSlotUI.cpp" />
     <ClCompile Include="..\Private\SkillSlotPanel.cpp" />
     <ClCompile Include="..\Private\SkyBox.cpp" />
