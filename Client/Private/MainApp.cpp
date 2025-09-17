@@ -20,6 +20,8 @@
 #include "Font.h"
 
 #include "Parts_WoodHand.h"
+#include "Rasengan.h"
+#include "RasenShuriken.h"
 
 #include "NavigationMesh.h"
 #include "Effect_CoolDown.h"
@@ -27,6 +29,7 @@
 #include "Collider.h"
 
 #include "GameManager.h"
+
 
 /* 테스트 브랜치용 주석 */
 CMainApp::CMainApp()	
@@ -411,6 +414,15 @@ HRESULT CMainApp::Ready_Prototypes()
 		CParts_WoodHand::Create(m_pDevice, m_pContext, OBJECTID::WOODHAND))))
 		return E_FAIL;
 	
+	/* For.Prototype_GameObject_Rasengan */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Rasengan"),
+		CRasengan::Create(m_pDevice, m_pContext, OBJECTID::RASENGAN))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_RasenganShuriken */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_RasenShuriken"),
+		CRasenShuriken::Create(m_pDevice, m_pContext, OBJECTID::RASENSHURIKEN))))
+		return E_FAIL;
 #pragma endregion
 	
 	return S_OK;

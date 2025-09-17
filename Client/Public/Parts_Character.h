@@ -23,6 +23,7 @@ protected:
 	virtual ~CParts_Character() = default;
 
 public:
+	const	_float4x4*	Get_BoneMatrixPtr(const _char* pBoneName);
 	_float				Get_AnimProgress();
 	virtual void		Set_AnimProgress(_float fProgress);
 	virtual _wstring	Get_CurrentAnim();

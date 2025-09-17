@@ -38,6 +38,10 @@ public:
 		return &m_WorldMatrix;
 	}
 
+	void Set_WorldMatrix(_fmatrix WorldMatrix) {
+		XMStoreFloat4x4(&m_WorldMatrix, WorldMatrix);
+	}
+
 public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg);
@@ -73,6 +77,9 @@ public:
 	void Chase_XZ(_fvector vTargetPos, _float fTimeDelta, class CNavigation* pNavigation = nullptr, _float fLimitDistance = 0.f);
 
 	void Chase_Lerp(_fvector vTargetPos, _float fTimeDelta, _float fLimitDistance = 0.f);
+	
+	/* 부모 행렬 곱하는 함수 */
+	void Mul_Parent(_fmatrix pParentMatrixPtr);
 
 private:
 	_float				m_fSpeedPerSec = {};

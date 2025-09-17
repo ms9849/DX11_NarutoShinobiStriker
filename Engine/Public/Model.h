@@ -78,26 +78,26 @@ public:
 
 private:
 
-	const aiScene*			m_pAIScene = { nullptr };
-	Assimp::Importer		m_Importer;
+	const aiScene*				m_pAIScene = { nullptr };
+	Assimp::Importer			m_Importer;
 
 private:
-	_uint					m_iNumMeshes = {};
+	_uint						m_iNumMeshes = {};
 
-	vector<_wstring>		m_MeshNames = {};
-	vector<class CMesh*>	m_Meshes;
+	vector<_wstring>			m_MeshNames = {};
+	vector<class CMesh*>		m_Meshes;
 
 
-	_uint					m_iNumMaterials = {};
-	vector<class CMaterial*> m_Materials;
+	_uint						m_iNumMaterials = {};
+	vector<class CMaterial*>	m_Materials;
 
-	MODEL					m_eType = {};
-	_float4x4				m_PreTransformMatrix = {};
-	_bool					m_isBinary = { false };
-	_char					m_szModelName[MAX_PATH];
+	MODEL						m_eType = {};
+	_float4x4					m_PreTransformMatrix = {};
+	_bool						m_isBinary = { false };
+	_char						m_szModelName[MAX_PATH];
 
-	_uint					m_iNumBones;
-	vector<class CBone*>	m_Bones;
+	_uint						m_iNumBones;
+	vector<class CBone*>		m_Bones;
 
 	/* 
 	현재 애니메이션 인덱스. 

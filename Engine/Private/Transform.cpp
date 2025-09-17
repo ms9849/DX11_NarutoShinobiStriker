@@ -348,6 +348,11 @@ void CTransform::Chase_Lerp(_fvector vTargetPos, _float fTimeDelta, _float fLimi
 	Set_State(STATE::POSITION, vLerp);
 }
 
+void CTransform::Mul_Parent(_fmatrix pParentMatrixPtr)
+{
+	XMStoreFloat4x4(&m_WorldMatrix, XMMatrixMultiply(XMLoadFloat4x4(&m_WorldMatrix), pParentMatrixPtr));
+}
+
 CTransform* CTransform::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CTransform* pInstance = new CTransform(pDevice, pContext);

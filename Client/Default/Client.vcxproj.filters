@@ -349,6 +349,15 @@
     <Filter Include="02.GameObjects\Enemy\Jetsu\State\Beaten\Blast">
       <UniqueIdentifier>{e9c16a6e-43c4-411a-b0f7-b89065a88884}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Character\Player\Skills">
+      <UniqueIdentifier>{f9de02e3-299a-48d4-ba2d-b915b998d667}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\Skills\Rasengan">
+      <UniqueIdentifier>{38586899-a0d1-4ab5-b8fc-7ff57a54faee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\Skills\RasenShuriken">
+      <UniqueIdentifier>{192749a4-5c75-461f-8287-47497d93040d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -675,6 +684,15 @@
     <ClInclude Include="..\Public\WhiteJetsu_BeatenBlastedState.h">
       <Filter>02.GameObjects\Enemy\Jetsu\State\Beaten\Blast</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Rasengan.h">
+      <Filter>02.GameObjects\Character\Player\Skills\Rasengan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Skill.h">
+      <Filter>02.GameObjects\Character\Player\Skills</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\RasenShuriken.h">
+      <Filter>02.GameObjects\Character\Player\Skills\RasenShuriken</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -998,6 +1016,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\WhiteJetsu_BeatenBlastedState.cpp">
       <Filter>02.GameObjects\Enemy\Jetsu\State\Beaten\Blast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Rasengan.cpp">
+      <Filter>02.GameObjects\Character\Player\Skills\Rasengan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Skill.cpp">
+      <Filter>02.GameObjects\Character\Player\Skills</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\RasenShuriken.cpp">
+      <Filter>02.GameObjects\Character\Player\Skills\RasenShuriken</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

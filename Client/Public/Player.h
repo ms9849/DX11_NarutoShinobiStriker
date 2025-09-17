@@ -34,6 +34,7 @@ private:
 	virtual ~CPlayer() = default;
 
 public:
+	const _float4x4* Get_BoneMatrix(const _wstring strPartTag, const _char* pBoneName);
 	CCollider*	Get_WeaponCollider();
 	void	Set_WeaponCollider_Active(_bool bFlag);
 	_float	Get_AnimProgress();
