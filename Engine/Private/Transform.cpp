@@ -145,8 +145,8 @@ void CTransform::Go_Direction(_fvector vDir, _float fTimeDelta, class CNavigatio
 		true == pNavigation->isMove(vPosition, &vSliding))
 		Set_State(STATE::POSITION, vPosition);
 
-	else if (true == pNavigation->isMove(Get_State(STATE::POSITION) + fTimeDelta * m_fSpeedPerSec * (XMLoadFloat3(&vSliding)), nullptr))
-		Set_State(STATE::POSITION, Get_State(STATE::POSITION) +  fTimeDelta * m_fSpeedPerSec * (XMLoadFloat3(&vSliding)));
+	else if (true == pNavigation->isMove(Get_State(STATE::POSITION) + fTimeDelta * m_fSpeedPerSec * XMVector3Normalize(XMLoadFloat3(&vSliding)), nullptr))
+		Set_State(STATE::POSITION, Get_State(STATE::POSITION) +  fTimeDelta * m_fSpeedPerSec * XMVector3Normalize(XMLoadFloat3(&vSliding)));
 }
 
 void CTransform::Turn(_fvector vAxis, _float fTimeDelta)

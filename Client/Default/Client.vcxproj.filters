@@ -346,6 +346,9 @@
     <Filter Include="02.GameObjects\Enemy\Jetsu\State\Beaten">
       <UniqueIdentifier>{538be42e-6d74-4c91-a3ff-38bbca8556ac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Enemy\Jetsu\State\Beaten\Blast">
+      <UniqueIdentifier>{e9c16a6e-43c4-411a-b0f7-b89065a88884}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -669,6 +672,9 @@
     <ClInclude Include="..\Public\WhiteJetsu_BeatenState.h">
       <Filter>02.GameObjects\Enemy\Jetsu\State\Beaten</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\WhiteJetsu_BeatenBlastedState.h">
+      <Filter>02.GameObjects\Enemy\Jetsu\State\Beaten\Blast</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -989,6 +995,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\WhiteJetsu_BeatenState.cpp">
       <Filter>02.GameObjects\Enemy\Jetsu\State\Beaten</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\WhiteJetsu_BeatenBlastedState.cpp">
+      <Filter>02.GameObjects\Enemy\Jetsu\State\Beaten\Blast</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

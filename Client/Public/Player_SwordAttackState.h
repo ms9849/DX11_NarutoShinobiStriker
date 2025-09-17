@@ -24,10 +24,11 @@ public:
 	/* End */
 	virtual _bool	End() override;
 
+	void Update_Collider(_float fAnimProgress);
 private:
-	class CPlayer* m_pPlayer = { nullptr };
-	ANIM_STATE m_eAnimState = {};
-
+	class CPlayer*	m_pPlayer = { nullptr };
+	ANIM_STATE		m_eAnimState = {};
+	_bool			m_IsOnCollider = { false };
 public:
 	static CPlayer_SwordAttackState* Create(class CPlayer* pPlayer);
 	virtual void Free() override;

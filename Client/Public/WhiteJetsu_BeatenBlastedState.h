@@ -14,11 +14,11 @@ NS_END
 
 NS_BEGIN(Client)
 
-class CWhiteJetsu_BeatenState final : public CWhiteJetsuState
+class CWhiteJetsu_BeatenBlastedState final : public CWhiteJetsuState
 {
 private:
-	CWhiteJetsu_BeatenState(class CNavigation* pNavigation, class CWhiteJetsu* pJetsu, _vector vDirection);
-	virtual ~CWhiteJetsu_BeatenState() = default;
+	CWhiteJetsu_BeatenBlastedState(class CNavigation* pNavigation, class CWhiteJetsu* pJetsu, _vector vDirection);
+	virtual ~CWhiteJetsu_BeatenBlastedState() = default;
 
 public:
 	/* Start */
@@ -35,7 +35,7 @@ private:
 	_float3		m_vDirection = {};
 
 public:
-	static CWhiteJetsu_BeatenState* Create(class CNavigation* pNavigation, class CWhiteJetsu* pJetsu, _vector vDirection);
+	static CWhiteJetsu_BeatenBlastedState* Create(class CNavigation* pNavigation, class CWhiteJetsu* pJetsu, _vector vDirection);
 	virtual void Free() override;
 };
 
