@@ -83,7 +83,12 @@ void CCollision_Manager::Check_Collision(const _wstring strColliderTag, const _w
             {
                 /* 충돌한 콜라이더도 처리해야함 */
                 /* 추후 나선 수리검 & 카무이 & 대교탄같은건 냅둬야함 */
-                pCollider.second->Set_Active(false);
+                if(pCollider.first != COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_KAMUI &&
+                    pCollider.first != COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENSHURIKEN_EXPLODE && 
+                    pCollider.first != COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_BIGSHARK)
+
+                    pCollider.second->Set_Active(false);
+
 
                 /* 미리 Client_Defines에 선언해둔 태그에 따라 알맞는 콜리전 선언. */
                 if(COLLISION_TYPE::MONSTER == eColType)

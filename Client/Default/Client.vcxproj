@@ -154,6 +154,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\AttackTypePanel.h" />
+    <ClInclude Include="..\Public\BigShark.h" />
     <ClInclude Include="..\Public\Bird.h" />
     <ClInclude Include="..\Public\BirdState.h" />
     <ClInclude Include="..\Public\Bird_AttackState.h" />
@@ -168,6 +169,7 @@
     <ClInclude Include="..\Public\Button.h" />
     <ClInclude Include="..\Public\Camera_Manager.h" />
     <ClInclude Include="..\Public\Character.h" />
+    <ClInclude Include="..\Public\Chidori.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\Collision_Manager.h" />
     <ClInclude Include="..\Public\ComboKOPanel.h" />
@@ -178,9 +180,11 @@
     <ClInclude Include="..\Public\Enemy.h" />
     <ClInclude Include="..\Public\Enemy_HPBar.h" />
     <ClInclude Include="..\Public\Face_Character.h" />
+    <ClInclude Include="..\Public\FireBall.h" />
     <ClInclude Include="..\Public\GameManager.h" />
     <ClInclude Include="..\Public\Gate.h" />
     <ClInclude Include="..\Public\Head_Character.h" />
+    <ClInclude Include="..\Public\Kamui.h" />
     <ClInclude Include="..\Public\MainCamera.h" />
     <ClInclude Include="..\Public\Player_AerialFireBallState.h" />
     <ClInclude Include="..\Public\Player_AerialRasenShurikenState.h" />
@@ -226,7 +230,7 @@
     <ClInclude Include="..\Public\Player_RunState.h" />
     <ClInclude Include="..\Public\Player_StepState.h" />
     <ClInclude Include="..\Public\Player_SuperJumpState.h" />
-    <ClInclude Include="..\Public\Player_SuperSharkState.h" />
+    <ClInclude Include="..\Public\Player_BigSharkState.h" />
     <ClInclude Include="..\Public\Player_SwordAttackState.h" />
     <ClInclude Include="..\Public\PressAnyButtonUI.h" />
     <ClInclude Include="..\Public\ProgressBarUI.h" />
@@ -267,6 +271,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\AttackTypePanel.cpp" />
+    <ClCompile Include="..\Private\BigShark.cpp" />
     <ClCompile Include="..\Private\Bird.cpp" />
     <ClCompile Include="..\Private\BirdState.cpp" />
     <ClCompile Include="..\Private\Bird_AttackState.cpp" />
@@ -281,6 +286,7 @@
     <ClCompile Include="..\Private\Button.cpp" />
     <ClCompile Include="..\Private\Camera_Manager.cpp" />
     <ClCompile Include="..\Private\Character.cpp" />
+    <ClCompile Include="..\Private\Chidori.cpp" />
     <ClCompile Include="..\Private\Collision_Manager.cpp" />
     <ClCompile Include="..\Private\ComboKOPanel.cpp" />
     <ClCompile Include="..\Private\CreateCharacterUI.cpp" />
@@ -290,9 +296,11 @@
     <ClCompile Include="..\Private\Enemy.cpp" />
     <ClCompile Include="..\Private\Enemy_HPBar.cpp" />
     <ClCompile Include="..\Private\Face_Character.cpp" />
+    <ClCompile Include="..\Private\FireBall.cpp" />
     <ClCompile Include="..\Private\GameManager.cpp" />
     <ClCompile Include="..\Private\Gate.cpp" />
     <ClCompile Include="..\Private\Head_Character.cpp" />
+    <ClCompile Include="..\Private\Kamui.cpp" />
     <ClCompile Include="..\Private\MainCamera.cpp" />
     <ClCompile Include="..\Private\Player_AerialFireBallState.cpp" />
     <ClCompile Include="..\Private\Player_AerialRasenShurikenState.cpp" />
@@ -338,7 +346,7 @@
     <ClCompile Include="..\Private\Player_RunState.cpp" />
     <ClCompile Include="..\Private\Player_StepState.cpp" />
     <ClCompile Include="..\Private\Player_SuperJumpState.cpp" />
-    <ClCompile Include="..\Private\Player_SuperSharkState.cpp" />
+    <ClCompile Include="..\Private\Player_BigSharkState.cpp" />
     <ClCompile Include="..\Private\Player_SwordAttackState.cpp" />
     <ClCompile Include="..\Private\PressAnyButtonUI.cpp" />
     <ClCompile Include="..\Private\ProgressBarUI.cpp" />

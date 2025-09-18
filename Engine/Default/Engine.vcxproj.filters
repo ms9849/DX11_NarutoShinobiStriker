@@ -200,10 +200,10 @@
       <Filter>01.Utility\03.Components\Collider</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Bounding.h">
-      <Filter>01.Utility\03.Components\Bounding</Filter>
+      <Filter>01.Utility\03.Components\Collider\Bounding</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Bounding_AABB.h">
-      <Filter>01.Utility\03.Components\Bounding\AABB</Filter>
+      <Filter>01.Utility\03.Components\Collider\Bounding\AABB</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Input_Manager.h">
       <Filter>01.Utility\97. Input</Filter>
@@ -212,10 +212,16 @@
       <Filter>01.Utility\03.Components\Collider\DebugDraw</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Bounding_OBB.h">
-      <Filter>01.Utility\03.Components\Bounding\OBB</Filter>
+      <Filter>01.Utility\03.Components\Collider\Bounding\OBB</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Bounding_Sphere.h">
-      <Filter>01.Utility\03.Components\Bounding\SPHERE</Filter>
+      <Filter>01.Utility\03.Components\Collider\Bounding\SPHERE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\VIBuffer_Instance.h">
+      <Filter>01.Utility\03.Components\VIBuffer\Instance</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\VIBuffer_Rect_Instance.h">
+      <Filter>01.Utility\03.Components\VIBuffer\Instance\Rect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -373,10 +379,10 @@
       <Filter>01.Utility\03.Components\Collider</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Bounding.cpp">
-      <Filter>01.Utility\03.Components\Bounding</Filter>
+      <Filter>01.Utility\03.Components\Collider\Bounding</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Bounding_AABB.cpp">
-      <Filter>01.Utility\03.Components\Bounding\AABB</Filter>
+      <Filter>01.Utility\03.Components\Collider\Bounding\AABB</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Input_Manager.cpp">
       <Filter>01.Utility\97. Input</Filter>
@@ -385,10 +391,16 @@
       <Filter>01.Utility\03.Components\Collider\DebugDraw</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Bounding_OBB.cpp">
-      <Filter>01.Utility\03.Components\Bounding\OBB</Filter>
+      <Filter>01.Utility\03.Components\Collider\Bounding\OBB</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Bounding_Sphere.cpp">
-      <Filter>01.Utility\03.Components\Bounding\SPHERE</Filter>
+      <Filter>01.Utility\03.Components\Collider\Bounding\SPHERE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\VIBuffer_Instance.cpp">
+      <Filter>01.Utility\03.Components\VIBuffer\Instance</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\VIBuffer_Rect_Instance.cpp">
+      <Filter>01.Utility\03.Components\VIBuffer\Instance\Rect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -563,17 +575,32 @@
     <Filter Include="01.Utility\03.Components\Collider\DebugDraw">
       <UniqueIdentifier>{7d346682-ea95-4094-b642-36e8609e6feb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\03.Components\Bounding">
+    <Filter Include="01.Utility\03.Components\Collider\Bounding">
       <UniqueIdentifier>{81af3a88-0bed-43d4-a5b5-8108fae5da4c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\03.Components\Bounding\AABB">
+    <Filter Include="01.Utility\03.Components\Collider\Bounding\AABB">
       <UniqueIdentifier>{0484c9e3-6f96-45a2-a2fa-34bd3749c581}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\03.Components\Bounding\OBB">
+    <Filter Include="01.Utility\03.Components\Collider\Bounding\OBB">
       <UniqueIdentifier>{15ced516-b38f-4a59-b9b9-ee4b7d1b2489}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\03.Components\Bounding\SPHERE">
+    <Filter Include="01.Utility\03.Components\Collider\Bounding\SPHERE">
       <UniqueIdentifier>{efd7e05d-9094-48df-b16c-e2f0a7d205fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\VIBuffer\Instance">
+      <UniqueIdentifier>{7957c3a9-2c69-46e3-be02-db7993d720d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\VIBuffer\Instance\Cube">
+      <UniqueIdentifier>{6e1d8e86-f516-4d7e-bbbe-bfbdcd1e6cf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\VIBuffer\Instance\Model">
+      <UniqueIdentifier>{dd8f1de4-8de2-42a0-ae1d-617249130e87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\VIBuffer\Instance\Point">
+      <UniqueIdentifier>{2dd25330-3f7d-4225-8711-08c120e64014}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\VIBuffer\Instance\Rect">
+      <UniqueIdentifier>{a648e988-77c6-47e2-a2bc-31cf6a6e80b2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

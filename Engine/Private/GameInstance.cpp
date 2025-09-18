@@ -109,6 +109,7 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 
 	/* IMGUI 업데이트 */
 	m_pIMGUI_Manager->Update(fTimeDelta);
+
 }
 
 HRESULT CGameInstance::Draw()

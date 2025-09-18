@@ -2,7 +2,9 @@
 
 #include "Player.h"
 #include "GameInstance.h"
+#include "GameManager.h"
 
+#include "Kamui.h"
 /* 전이 가능한 상태들 */
 #pragma region TRANSFER_STATE
 
@@ -25,6 +27,20 @@ CPlayerState* CPlayer_KamuiState::Update(_float fTimeDelta)
 {
     CPlayerState* pNextState = { nullptr };
     _bool IsAnimFinished = m_pPlayer->Play_Animation(fTimeDelta);
+    _float fAnimProgress = m_pPlayer->Get_AnimProgress();
+
+    if (fAnimProgress >= 0.8f && false == m_isKamuiThrow)
+    {
+        CKamui::KAMUI_DESC Desc;
+
+        XMStoreFloat3(&Desc.vPosition, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
+        XMStoreFloat3(&Desc.vLook, m_pPlayer->Get_Transform()->Get_State(STATE::LOOK));
+
+        m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Kamui"),
+            m_pGameInstance->Get_LevelID(), TEXT("Layer_Skill"), &Desc);
+
+        m_isKamuiThrow = true;
+    }
 
     if (true == IsAnimFinished)
         pNextState = CPlayer_IdleState::Create(m_pPlayer);

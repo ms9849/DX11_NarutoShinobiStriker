@@ -17,7 +17,7 @@ NS_BEGIN(Client)
 class CWhiteJetsu_BeatenState final : public CWhiteJetsuState
 {
 private:
-	CWhiteJetsu_BeatenState(class CNavigation* pNavigation, class CWhiteJetsu* pJetsu, _vector vDirection);
+	CWhiteJetsu_BeatenState(class CNavigation* pNavigation, class CWhiteJetsu* pJetsu, _vector vDirection, _float fRatio = 1.f);
 	virtual ~CWhiteJetsu_BeatenState() = default;
 
 public:
@@ -33,9 +33,10 @@ private:
 	CNavigation* m_pNavigationCom = { nullptr };
 	class CWhiteJetsu* m_pJetsu = { nullptr };
 	_float3		m_vDirection = {};
+	_float		m_fRatio = { 1.f };
 
 public:
-	static CWhiteJetsu_BeatenState* Create(class CNavigation* pNavigation, class CWhiteJetsu* pJetsu, _vector vDirection);
+	static CWhiteJetsu_BeatenState* Create(class CNavigation* pNavigation, class CWhiteJetsu* pJetsu, _vector vDirection, _float fRatio = 1.f);
 	virtual void Free() override;
 };
 

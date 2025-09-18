@@ -229,9 +229,6 @@
     <Filter Include="02.GameObjects\Character\Player\State\BASE\IdleState">
       <UniqueIdentifier>{279f3fd9-01b0-4a58-a61e-0dd349b1cb71}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Character\Player\State\SKILL\SuperSharkState">
-      <UniqueIdentifier>{e4c85660-daf2-48af-b5f0-979a8049d7d5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Character\Player\State\SKILL\RasenganState">
       <UniqueIdentifier>{c60ba328-56b4-446b-bfa3-4e450efd7639}</UniqueIdentifier>
     </Filter>
@@ -357,6 +354,21 @@
     </Filter>
     <Filter Include="02.GameObjects\Character\Player\Skills\RasenShuriken">
       <UniqueIdentifier>{192749a4-5c75-461f-8287-47497d93040d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\Skills\Kamui">
+      <UniqueIdentifier>{37479a06-8498-4ce1-bf4a-bbc84273507c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\Skills\FireBall">
+      <UniqueIdentifier>{866d2bbc-6db4-4964-b51f-3800bcf1576a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\Skills\BigShark">
+      <UniqueIdentifier>{88db4649-0065-4c83-a608-d73c7b04947b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\SKILL\BigSharkState">
+      <UniqueIdentifier>{e4c85660-daf2-48af-b5f0-979a8049d7d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\Skills\Chidori">
+      <UniqueIdentifier>{abc23ad8-dc36-4b53-9e63-d010f6057a4f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -576,8 +588,8 @@
     <ClInclude Include="..\Public\Player_ChidoriReadyState.h">
       <Filter>02.GameObjects\Character\Player\State\SKILL\ChidoriState\Ready</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Player_SuperSharkState.h">
-      <Filter>02.GameObjects\Character\Player\State\SKILL\SuperSharkState</Filter>
+    <ClInclude Include="..\Public\Player_BigSharkState.h">
+      <Filter>02.GameObjects\Character\Player\State\SKILL\BigSharkState</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Player_RasenganState.h">
       <Filter>02.GameObjects\Character\Player\State\SKILL\RasenganState</Filter>
@@ -692,6 +704,18 @@
     </ClInclude>
     <ClInclude Include="..\Public\RasenShuriken.h">
       <Filter>02.GameObjects\Character\Player\Skills\RasenShuriken</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Kamui.h">
+      <Filter>02.GameObjects\Character\Player\Skills\Kamui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\FireBall.h">
+      <Filter>02.GameObjects\Character\Player\Skills\FireBall</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\BigShark.h">
+      <Filter>02.GameObjects\Character\Player\Skills\BigShark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Chidori.h">
+      <Filter>02.GameObjects\Character\Player\Skills\Chidori</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -906,8 +930,8 @@
     <ClCompile Include="..\Private\Player_AerialFireBallState.cpp">
       <Filter>02.GameObjects\Character\Player\State\SKILL\FireBallState</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Player_SuperSharkState.cpp">
-      <Filter>02.GameObjects\Character\Player\State\SKILL\SuperSharkState</Filter>
+    <ClCompile Include="..\Private\Player_BigSharkState.cpp">
+      <Filter>02.GameObjects\Character\Player\State\SKILL\BigSharkState</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Player_RasenganState.cpp">
       <Filter>02.GameObjects\Character\Player\State\SKILL\RasenganState</Filter>
@@ -1025,6 +1049,18 @@
     </ClCompile>
     <ClCompile Include="..\Private\RasenShuriken.cpp">
       <Filter>02.GameObjects\Character\Player\Skills\RasenShuriken</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Kamui.cpp">
+      <Filter>02.GameObjects\Character\Player\Skills\Kamui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\FireBall.cpp">
+      <Filter>02.GameObjects\Character\Player\Skills\FireBall</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\BigShark.cpp">
+      <Filter>02.GameObjects\Character\Player\Skills\BigShark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Chidori.cpp">
+      <Filter>02.GameObjects\Character\Player\Skills\Chidori</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "GameInstance.h"
 
+#include "FireBall.h"
 /* 전이 가능한 상태들 */
 #pragma region TRANSFER_STATE
 
@@ -30,6 +31,20 @@ CPlayerState* CPlayer_FireBallState::Update(_float fTimeDelta)
 
     _bool IsAnimFinished = m_pPlayer->Play_Animation(fTimeDelta);
     _float fAnimProgress = m_pPlayer->Get_AnimProgress();
+
+    if (false == m_isFireballThrow && fAnimProgress >= 0.7f)
+    {
+        CFireBall::FIREBALL_DESC Desc;
+
+        XMStoreFloat3(&Desc.vPosition, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
+        XMStoreFloat3(&Desc.vLook, m_pPlayer->Get_Transform()->Get_State(STATE::LOOK));
+        Desc.fSpeedPerSec = 15.f;
+
+        m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_FireBall"),
+            m_pGameInstance->Get_LevelID(), TEXT("Layer_Skill"), &Desc);
+
+        m_isFireballThrow = true;
+    }
 
     if (true == IsAnimFinished)
         pNextState = CPlayer_IdleState::Create(m_pPlayer);

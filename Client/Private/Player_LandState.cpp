@@ -15,7 +15,7 @@
 
 #include "Player_ChidoriReadyState.h"
 #include "Player_FireBallState.h"
-#include "Player_SuperSharkState.h"
+#include "Player_BigSharkState.h"
 
 #include "Player_RasenganReadyState.h"
 #include "Player_RasenShurikenState.h"
@@ -84,7 +84,7 @@ CPlayerState* CPlayer_LandState::Update(_float fTimeDelta)
 			pNextState = CPlayer_KamuiState::Create(m_pPlayer);
 
 		else if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
-			pNextState = CPlayer_SuperSharkState::Create(m_pPlayer);
+			pNextState = CPlayer_BigSharkState::Create(m_pPlayer);
 	}
 
 	//มกวม
