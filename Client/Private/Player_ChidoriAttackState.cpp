@@ -3,6 +3,8 @@
 #include "Player.h"
 #include "GameInstance.h"
 
+#include "Chidori.h"
+
 /* 전이 가능한 상태들 */
 #pragma region TRANSFER_STATE
 
@@ -23,6 +25,18 @@ CPlayer_ChidoriAttackState::CPlayer_ChidoriAttackState(CPlayer* pPlayer)
 void CPlayer_ChidoriAttackState::Start(_bool IsBlend)
 {
     m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Aerial_Chidori_Run_Loop", 2.f, IsBlend);
+
+    CChidori::CHIDORI_DESC Desc;
+    Desc.pSocketMatrix = m_pPlayer->Get_BoneMatrix(TEXT("Part_Upper"), "RightHandMiddle1");
+
+    m_pChidori = static_cast<CChidori*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC),
+        TEXT("Prototype_GameObject_Chidori"), &Desc));
+
+    m_pGameInstance->Add_Clone_ToLayer(m_pChidori, m_pGameInstance->Get_LevelID(), TEXT("Layer_Skill"));
+    Safe_AddRef(m_pChidori);
+
+    m_eAnimState = ANIM_STATE::ATTACK;
+    m_fTimeAcc = 0.f;
 }
 
 CPlayerState* CPlayer_ChidoriAttackState::Update(_float fTimeDelta)
@@ -53,12 +67,12 @@ CPlayerState* CPlayer_ChidoriAttackState::Update(_float fTimeDelta)
             m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * -0.25f);
     }
     // 치도리 끝내는 동작 (ATTACK_END로 전환) 
-    if (m_fTimeAcc >= 1.0f && ANIM_STATE::ATTACK == m_eAnimState)
+    if (ANIM_STATE::ATTACK == m_eAnimState && (false == m_pChidori->IsColliderActive() || m_fTimeAcc >= 1.0f))
     {
         m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Chidori_Attack_Lv3_End", 1.f, true);
         m_eAnimState = ANIM_STATE::ATTACK_END;
     }
-    // 나선환 달리기 루프 시켜주기. 
+    // 치도리 달리기 루프 시켜주기. 
     else if (true == IsAnimFinished && m_fTimeAcc < 1.0f && ANIM_STATE::ATTACK == m_eAnimState)
     {
         m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Aerial_Chidori_Run_Loop", 2.f, false, 0.f, true);
@@ -89,4 +103,5 @@ void CPlayer_ChidoriAttackState::Free()
     __super::Free();
 
     Safe_Release(m_pPlayer);
+    Safe_Release(m_pChidori);
 }

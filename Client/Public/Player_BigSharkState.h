@@ -7,11 +7,11 @@
 */
 NS_BEGIN(Client)
 
-class CPlayer_SuperSharkState final : public CPlayerState
+class CPlayer_BigSharkState final : public CPlayerState
 {
 private:
-	CPlayer_SuperSharkState(class CPlayer* pPlayer);
-	virtual ~CPlayer_SuperSharkState() = default;
+	CPlayer_BigSharkState(class CPlayer* pPlayer);
+	virtual ~CPlayer_BigSharkState() = default;
 
 public:
 	/* Start */
@@ -23,8 +23,9 @@ public:
 
 private:
 	class CPlayer* m_pPlayer = { nullptr };
+	_bool	m_isBigSharkThrow = { false };
 public:
-	static CPlayer_SuperSharkState* Create(class CPlayer* pPlayer);
+	static CPlayer_BigSharkState* Create(class CPlayer* pPlayer);
 	virtual void Free() override;
 };
 

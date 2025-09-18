@@ -25,6 +25,8 @@ private:
 	class CPlayer* m_pPlayer = { nullptr };
 	ANIM_STATE	   m_eAnimState = {};
 	_float		   m_fTimeAcc = { 0.f };
+	class CChidori* m_pChidori = { nullptr };
+
 public:
 	static CPlayer_ChidoriAttackState* Create(class CPlayer* pPlayer);
 	virtual void Free() override;

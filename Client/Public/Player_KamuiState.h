@@ -23,6 +23,7 @@ public:
 
 private:
 	class CPlayer* m_pPlayer = { nullptr };
+	_bool		   m_isKamuiThrow = { false };
 public:
 	static CPlayer_KamuiState* Create(class CPlayer* pPlayer);
 	virtual void Free() override;

@@ -43,16 +43,16 @@ CPlayerState* CPlayer_RasenShurikenState::Update(_float fTimeDelta)
     _bool IsAnimFinished = m_pPlayer->Play_Animation(fTimeDelta);
     _float fAnimProgress = m_pPlayer->Get_AnimProgress();
 
-    if (false == m_isShurikenThrow && fAnimProgress >= 0.5f)
+    if (fAnimProgress >= 0.7f && false == m_isShurikenThrow)
     {
-        /* 수리검 던지고*/
-        //Prototype_GameObject_RasenShuriken;
-        m_isShurikenThrow = false;
         m_pRasenShuriken->Throw();
+        m_isShurikenThrow = true;
     }
 
     if (true == IsAnimFinished)
+    {
         pNextState = CPlayer_IdleState::Create(m_pPlayer);
+    }
 
     return pNextState;
 }

@@ -80,7 +80,7 @@ void CWhiteJetsu::OnCollision(COLLIDER_HANDLE_ID eHandleID)
         if (m_fCurrentHP < 0.f)
             m_fCurrentHP = m_fMaxHP;
 
-        CWhiteJetsuState* pNextState = CWhiteJetsu_BeatenState::Create(m_pNavigationCom, this, vDirection);
+        CWhiteJetsuState* pNextState = CWhiteJetsu_BeatenState::Create(m_pNavigationCom, this, vDirection, 1.5f);
         Change_State(pNextState);
     }
 
@@ -95,7 +95,9 @@ void CWhiteJetsu::OnCollision(COLLIDER_HANDLE_ID eHandleID)
         Change_State(pNextState);
     }
 
-    else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENGAN == eHandleID)
+    else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENGAN == eHandleID ||
+        COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_FIREBALL == eHandleID || 
+        COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_CHIDORI == eHandleID)
     {
         m_fCurrentHP -= 15.f;
 
@@ -105,17 +107,64 @@ void CWhiteJetsu::OnCollision(COLLIDER_HANDLE_ID eHandleID)
         CWhiteJetsuState* pNextState = CWhiteJetsu_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection);
         Change_State(pNextState);
     }
-    //Set_Invincible(0.05f);
+
+    else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENSHURIKEN == eHandleID ||
+        COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENSHURIKEN_EXPLODE == eHandleID)
+    {
+        m_fCurrentHP -= 1.f;
+
+        if (m_fCurrentHP < 0.f)
+            m_fCurrentHP = m_fMaxHP;
+
+        CWhiteJetsuState* pNextState = CWhiteJetsu_BeatenState::Create(m_pNavigationCom, this, vDirection, 0.f);
+        Change_State(pNextState, false);
+    }
+
+    else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_KAMUI == eHandleID)
+    {
+        m_fCurrentHP -= 1.f;
+
+        if (m_fCurrentHP < 0.f)
+            m_fCurrentHP = m_fMaxHP;
+
+        CWhiteJetsuState* pNextState = CWhiteJetsu_BeatenState::Create(m_pNavigationCom, this, vDirection, 0.f);
+        Change_State(pNextState, false);
+    }
+
+    else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_KAMUI_END == eHandleID ||
+                COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENSHURIKEN_END == eHandleID)
+    {
+        m_fCurrentHP -= 5.f;
+
+        if (m_fCurrentHP < 0.f)
+            m_fCurrentHP = m_fMaxHP;
+
+        CWhiteJetsuState* pNextState = CWhiteJetsu_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection);
+        Change_State(pNextState, false);
+    }
+
+    else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_BIGSHARK == eHandleID)
+    {
+        m_fCurrentHP -= 15.f;
+
+        if (m_fCurrentHP < 0.f)
+            m_fCurrentHP = m_fMaxHP;
+
+        CWhiteJetsuState* pNextState = CWhiteJetsu_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection);
+        Change_State(pNextState, false);
+
+        Set_Invincible(1.f);
+    }
 }
 
-void CWhiteJetsu::Change_State(CWhiteJetsuState* pNextState)
+void CWhiteJetsu::Change_State(CWhiteJetsuState* pNextState, _bool bBlend)
 {
     /* 내일 Change_State 함수로 만들어둘 것. */
     _bool IsBlend = m_pState->End();
     Safe_Release(m_pState);
 
     /* 밀려나는 방향과 Ratio 세팅 가능하게 할 것 */
-    pNextState->Start(true);
+    pNextState->Start(bBlend);
     m_pState = pNextState;
 
 }

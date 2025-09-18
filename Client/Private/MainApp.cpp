@@ -19,9 +19,17 @@
 #include "Tree.h"
 #include "Font.h"
 
+#pragma region Skill
+
 #include "Parts_WoodHand.h"
 #include "Rasengan.h"
 #include "RasenShuriken.h"
+#include "Kamui.h"
+#include "FireBall.h"
+#include "BigShark.h"
+#include "Chidori.h"
+
+#pragma endregion
 
 #include "NavigationMesh.h"
 #include "Effect_CoolDown.h"
@@ -29,7 +37,6 @@
 #include "Collider.h"
 
 #include "GameManager.h"
-
 
 /* 테스트 브랜치용 주석 */
 CMainApp::CMainApp()	
@@ -423,6 +430,27 @@ HRESULT CMainApp::Ready_Prototypes()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_RasenShuriken"),
 		CRasenShuriken::Create(m_pDevice, m_pContext, OBJECTID::RASENSHURIKEN))))
 		return E_FAIL;
+
+	/* For.Prototype_GameObject_Kamui */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Kamui"),
+		CKamui::Create(m_pDevice, m_pContext, OBJECTID::KAMUI))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_FireBall */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_FireBall"),
+		CFireBall::Create(m_pDevice, m_pContext, OBJECTID::FIREBALL))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_BigShark */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_BigShark"),
+		CBigShark::Create(m_pDevice, m_pContext, OBJECTID::BIGSHARK))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Chidori */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Chidori"),
+		CChidori::Create(m_pDevice, m_pContext, OBJECTID::CHIDORI))))
+		return E_FAIL;
+
 #pragma endregion
 	
 	return S_OK;

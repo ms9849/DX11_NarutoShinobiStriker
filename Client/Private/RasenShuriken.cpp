@@ -20,7 +20,7 @@ void CRasenShuriken::Throw()
     m_isInHand = false;
     m_isThrowing = true;
     m_pTransformCom->Set_WorldMatrix(XMLoadFloat4x4(&m_CombinedWorldMatrix));
- 
+    m_pTransformCom->Set_Scale(5.f, 5.f, 5.f);
 }
 
 HRESULT CRasenShuriken::Initialize_Prototype()
@@ -51,14 +51,24 @@ void CRasenShuriken::Priority_Update(_float fTimeDelta)
 
 void CRasenShuriken::Update(_float fTimeDelta)
 {
-    if(false == m_isInHand && true == m_isThrowing)
+    if (true == m_isFinal)
+        m_isDead = true;
+
+    if (false == m_pColliderCom->Get_Active() && true == m_isThrowing)
+    {
+        m_isHit = true;
+    }
+
+    /* 던진 상태라면 시간 쌓기 */
+    if(false == m_isInHand)
         m_fTimeAcc += fTimeDelta;
 
-    if (false == m_isInHand && true == m_isThrowing && m_fTimeAcc >= 1.f)
-        m_isDead = true;
-    /* 추후 폭발로직에 맞춰 이펙트 수정해야 함. */
+    /* 던진 상태라면 시간 체크해서 사라지게 하기. */
+    if (false == m_isInHand  && m_fTimeAcc >= m_fLifeTime)
+        m_isFinal = true;
 
-    if (false == m_isInHand && true == m_isThrowing)
+    /* 추후 폭발로직에 맞춰 이펙트 수정해야 함. */
+    if (false == m_isHit && false == m_isInHand && true == m_isThrowing)
     {
         /* 던지는 도중에는 정해진 방향으로 날아가기. */
         /* 갑자기 사라지는 현상 체크할 것 */
@@ -66,22 +76,18 @@ void CRasenShuriken::Update(_float fTimeDelta)
            fTimeDelta * m_fSpeed *  XMLoadFloat3(&m_vDirection));
     }
 
+    if (false == m_isInHand && false == m_isThrowing)
+    {
+        m_fAttackCoolDown += fTimeDelta;
+    }
+
     /* 나선 수리검이 폭발하는 조건 2개 */
     if (true == m_isHit && true == m_isThrowing)
     {
         m_isHit = false;
         m_isThrowing = false;
-        m_fLifeTime = 3.f;
+        m_fLifeTime = 1.5f;
         m_fTimeAcc = 0.f;
-        m_pTransformCom->Set_Scale(5.f, 5.f, 5.f);
-    }
-
-    if (m_fTimeAcc >= m_fLifeTime && true == m_isThrowing)
-    {
-        m_isThrowing = false;
-        m_fLifeTime = 3.f;
-        m_fTimeAcc = 0.f;
-        m_pTransformCom->Set_Scale(5.f, 5.f, 5.f);
     }
 
     if (true == m_isInHand)
@@ -103,10 +109,24 @@ void CRasenShuriken::Update(_float fTimeDelta)
 void CRasenShuriken::Late_Update(_float fTimeDelta)
 {
     /* 던지거나 폭발중이라면 충돌가능. */
-    if (false == m_isInHand)
+    if (false == m_isInHand && true == m_isThrowing)
     {
         CGameManager::GetInstance()->Add_Collider_ToCollision(TEXT("Player_Skill"),
             COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENSHURIKEN, m_pColliderCom);
+    }
+
+    else if (false == m_isInHand && false == m_isThrowing && m_fAttackCoolDown >= m_fAttackMaxCoolDown)
+    {
+        m_fAttackCoolDown = 0.f;
+        m_pColliderCom->Set_Active(true);
+        CGameManager::GetInstance()->Add_Collider_ToCollision(TEXT("Player_Skill"),
+            COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENSHURIKEN_EXPLODE, m_pColliderCom);
+    }
+    else if (false == m_isInHand && false == m_isThrowing && true == m_isFinal)
+    {
+        m_pColliderCom->Set_Active(true);
+        CGameManager::GetInstance()->Add_Collider_ToCollision(TEXT("Player_Skill"),
+            COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENSHURIKEN_END, m_pColliderCom);
     }
 
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
