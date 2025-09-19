@@ -43,7 +43,7 @@ BlendState BS_None
 BlendState BS_AlphaBlend
 {
     BlendEnable[0] = true;
-   //BlendEnable[1] = true;
+    BlendEnable[1] = true;
 
     SrcBlend = Src_Alpha;
     DestBlend = Inv_Src_Alpha;

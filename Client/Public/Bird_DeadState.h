@@ -11,11 +11,11 @@ NS_END
 
 NS_BEGIN(Client)
 
-class CBird_AttackState final : public CBirdState
+class CBird_DeadState final : public CBirdState
 {
 private:
-	CBird_AttackState(class CNavigation* pNavigation, class CBird* pBird);
-	virtual ~CBird_AttackState() = default;
+	CBird_DeadState(class CNavigation* pNavigation, class CBird* pBird);
+	virtual ~CBird_DeadState() = default;
 
 public:
 	/* Start */
@@ -29,9 +29,10 @@ private:
 	CTransform* m_pPlayerTransformCom = { nullptr };
 	class CBird* m_pBird = { nullptr };
 	CNavigation* m_pNavigationCom = { nullptr };
+	_float m_fTimeAcc = { 0.f };
 
 public:
-	static CBird_AttackState* Create(class CNavigation* pNavigation, class CBird* pBird);
+	static CBird_DeadState* Create(class CNavigation* pNavigation, class CBird* pBird);
 	virtual void Free() override;
 };
 

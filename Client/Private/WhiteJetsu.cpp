@@ -6,6 +6,7 @@
 #include "WhiteJetsu_IdleState.h"
 #include "WhiteJetsu_BeatenState.h"
 #include "WhiteJetsu_BeatenBlastedState.h"
+#include "WhiteJetsu_DeadState.h"
 
 #include "Player.h"
 
@@ -44,11 +45,23 @@ _bool CWhiteJetsu::Play_Animation(_float fTimeDelta)
 	return m_pModelCom->Play_Animation(fTimeDelta);
 }
 
+void CWhiteJetsu::Set_Collider_Active(const _wstring& strColliderTag, _bool bFlag)
+{
+    static_cast<CCollider*>(Find_Component(strColliderTag))->Set_Active(bFlag);
+}
+
+CCollider* CWhiteJetsu::Get_Collider(const _wstring& strColliderTag)
+{
+    return static_cast<CCollider*>(Find_Component(strColliderTag));
+}
+
 void CWhiteJetsu::OnCollision(COLLIDER_HANDLE_ID eHandleID)
 {
-    if (true == m_IsInvincible)
+    if (true == m_IsInvincible || true == m_isPlayingDeadAnim)
         return;
     
+    CWhiteJetsuState* pNextState = { nullptr };
+
     _vector vDirection = m_pTransformCom->Get_State(STATE::POSITION) -
         CGameManager::GetInstance()->Get_PlayerPtr()->Get_Transform()->Get_State(STATE::POSITION);
 
@@ -56,43 +69,27 @@ void CWhiteJetsu::OnCollision(COLLIDER_HANDLE_ID eHandleID)
     {
         m_fCurrentHP -= 1.f;
 
-        if (m_fCurrentHP < 0.f)
-            m_fCurrentHP = m_fMaxHP;
-
-        CWhiteJetsuState* pNextState = CWhiteJetsu_BeatenState::Create(m_pNavigationCom, this, vDirection);
-        Change_State(pNextState);
+        pNextState = CWhiteJetsu_BeatenState::Create(m_pNavigationCom, this, vDirection);
     }
     else if (COLLIDER_HANDLE_ID::PLAYER_HAND_ATTACK_FINAL == eHandleID)
     {
         m_fCurrentHP -= 3.f;
 
-        if (m_fCurrentHP < 0.f)
-            m_fCurrentHP = m_fMaxHP;
-
-        CWhiteJetsuState* pNextState = CWhiteJetsu_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection);
-        Change_State(pNextState);
+        pNextState = CWhiteJetsu_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection);
     }
 
     else if (COLLIDER_HANDLE_ID::PLAYER_SWORD_ATTACK== eHandleID)
     {
         m_fCurrentHP -= 3.f;
 
-        if (m_fCurrentHP < 0.f)
-            m_fCurrentHP = m_fMaxHP;
-
-        CWhiteJetsuState* pNextState = CWhiteJetsu_BeatenState::Create(m_pNavigationCom, this, vDirection, 1.5f);
-        Change_State(pNextState);
+        pNextState = CWhiteJetsu_BeatenState::Create(m_pNavigationCom, this, vDirection, 1.5f);
     }
 
     else if (COLLIDER_HANDLE_ID::PLAYER_SWORD_ATTACK_FINAL == eHandleID)
     {
         m_fCurrentHP -= 3.f;
 
-        if (m_fCurrentHP < 0.f)
-            m_fCurrentHP = m_fMaxHP;
-
-        CWhiteJetsuState* pNextState = CWhiteJetsu_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection);
-        Change_State(pNextState);
+        pNextState = CWhiteJetsu_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection);
     }
 
     else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENGAN == eHandleID ||
@@ -101,11 +98,7 @@ void CWhiteJetsu::OnCollision(COLLIDER_HANDLE_ID eHandleID)
     {
         m_fCurrentHP -= 15.f;
 
-        if (m_fCurrentHP < 0.f)
-            m_fCurrentHP = m_fMaxHP;
-
-        CWhiteJetsuState* pNextState = CWhiteJetsu_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection);
-        Change_State(pNextState);
+        pNextState = CWhiteJetsu_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection);
     }
 
     else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENSHURIKEN == eHandleID ||
@@ -113,22 +106,14 @@ void CWhiteJetsu::OnCollision(COLLIDER_HANDLE_ID eHandleID)
     {
         m_fCurrentHP -= 1.f;
 
-        if (m_fCurrentHP < 0.f)
-            m_fCurrentHP = m_fMaxHP;
-
-        CWhiteJetsuState* pNextState = CWhiteJetsu_BeatenState::Create(m_pNavigationCom, this, vDirection, 0.f);
-        Change_State(pNextState, false);
+        pNextState = CWhiteJetsu_BeatenState::Create(m_pNavigationCom, this, vDirection, 0.f);
     }
 
     else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_KAMUI == eHandleID)
     {
         m_fCurrentHP -= 1.f;
 
-        if (m_fCurrentHP < 0.f)
-            m_fCurrentHP = m_fMaxHP;
-
-        CWhiteJetsuState* pNextState = CWhiteJetsu_BeatenState::Create(m_pNavigationCom, this, vDirection, 0.f);
-        Change_State(pNextState, false);
+        pNextState = CWhiteJetsu_BeatenState::Create(m_pNavigationCom, this, vDirection, 0.f);
     }
 
     else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_KAMUI_END == eHandleID ||
@@ -136,34 +121,32 @@ void CWhiteJetsu::OnCollision(COLLIDER_HANDLE_ID eHandleID)
     {
         m_fCurrentHP -= 5.f;
 
-        if (m_fCurrentHP < 0.f)
-            m_fCurrentHP = m_fMaxHP;
-
-        CWhiteJetsuState* pNextState = CWhiteJetsu_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection);
-        Change_State(pNextState, false);
+        pNextState = CWhiteJetsu_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection);
     }
 
     else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_BIGSHARK == eHandleID)
     {
         m_fCurrentHP -= 15.f;
 
-        if (m_fCurrentHP < 0.f)
-            m_fCurrentHP = m_fMaxHP;
-
-        CWhiteJetsuState* pNextState = CWhiteJetsu_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection);
-        Change_State(pNextState, false);
-
+        pNextState = CWhiteJetsu_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection);
         Set_Invincible(1.f);
     }
+
+    if (m_fCurrentHP <= 0.f && false == m_isPlayingDeadAnim)
+    {
+        m_isPlayingDeadAnim = true;
+        Safe_Release(pNextState);
+        pNextState = CWhiteJetsu_DeadState::Create(m_pNavigationCom, this);
+    }
+
+    Change_State(pNextState, false);
 }
 
 void CWhiteJetsu::Change_State(CWhiteJetsuState* pNextState, _bool bBlend)
 {
-    /* 내일 Change_State 함수로 만들어둘 것. */
     _bool IsBlend = m_pState->End();
     Safe_Release(m_pState);
 
-    /* 밀려나는 방향과 Ratio 세팅 가능하게 할 것 */
     pNextState->Start(bBlend);
     m_pState = pNextState;
 
@@ -215,7 +198,15 @@ void CWhiteJetsu::Update(_float fTimeDelta)
     /* 스킬 쿨타임 업데이트*/
     Update_SkillCoolDown(fTimeDelta);
 
+    _matrix PlayerMatrix = XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr());
+    _vector PlayerTranslation = m_pTransformCom->Get_State(STATE::POSITION);
+    PlayerTranslation += m_pTransformCom->Get_State(STATE::LOOK) * 0.8f;
+    PlayerMatrix.r[3] = PlayerTranslation;
+
+    m_pHandAttackColliderCom->Update(PlayerMatrix);
+
 	m_pColliderCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
+
 }
 
 void CWhiteJetsu::Late_Update(_float fTimeDelta)
@@ -224,6 +215,7 @@ void CWhiteJetsu::Late_Update(_float fTimeDelta)
 
     /* 제츠의 몸통 콜라이더를 콜리전 매니저에 등록*/
     m_pGameManager->Add_Object_ToCollision(TEXT("Monster_Body"), this, m_pColliderCom);
+    m_pGameManager->Add_Collider_ToCollision(TEXT("Monster_Attack"), COLLIDER_HANDLE_ID::ENEMY_JETSU_ATTACK, m_pHandAttackColliderCom);
 
     m_pNavigationCom->Compute_Height(m_pTransformCom);
 
@@ -252,6 +244,7 @@ HRESULT CWhiteJetsu::Render()
 
 #ifdef _DEBUG
     m_pColliderCom->Render();
+    m_pHandAttackColliderCom->Render();
 #endif
 
     return S_OK;
@@ -305,6 +298,13 @@ HRESULT CWhiteJetsu::Ready_Components()
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_Sphere"),
         TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
         return E_FAIL;
+
+    ColliderDesc.isActive = false;
+
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_Sphere"),
+        TEXT("Com_Collider_HandAttack"), reinterpret_cast<CComponent**>(&m_pHandAttackColliderCom), &ColliderDesc)))
+        return E_FAIL;
+
 
     return S_OK;
 }
@@ -398,4 +398,5 @@ void CWhiteJetsu::Free()
     Safe_Release(m_pState);
     Safe_Release(m_pNavigationCom);
     Safe_Release(m_pColliderCom);
+    Safe_Release(m_pHandAttackColliderCom);
 }

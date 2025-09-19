@@ -10,7 +10,7 @@ NS_BEGIN(Client)
 class CPlayer_BeatenState final : public CPlayerState
 {
 private:
-	CPlayer_BeatenState(class CPlayer* pPlayer);
+	CPlayer_BeatenState(class CPlayer* pPlayer, _vector vDir, _float fRatio);
 	virtual ~CPlayer_BeatenState() = default;
 
 public:
@@ -23,8 +23,10 @@ public:
 
 private:
 	class CPlayer* m_pPlayer = { nullptr };
+	_float3 m_vDirection = {};
+	_float  m_fRatio = {};
 public:
-	static CPlayer_BeatenState* Create(class CPlayer* pPlayer);
+	static CPlayer_BeatenState* Create(class CPlayer* pPlayer, _vector vDir, _float fRatio);
 	virtual void Free() override;
 };
 

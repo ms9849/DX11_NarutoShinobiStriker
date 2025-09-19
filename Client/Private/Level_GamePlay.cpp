@@ -79,6 +79,8 @@ void CLevel_GamePlay::Update(_float fTimeDelta)
 #pragma region COLLISION
 	m_pGameManager->Check_Collision(TEXT("Player_Attack"), TEXT("Monster_Body"), COLLISION_TYPE::MONSTER);
 	m_pGameManager->Check_Collision(TEXT("Player_Skill"), TEXT("Monster_Body"), COLLISION_TYPE::MONSTER);
+	m_pGameManager->Check_Collision(TEXT("Monster_Attack"), TEXT("Player_Body"), COLLISION_TYPE::PLAYER);
+	m_pGameManager->Check_Collision(TEXT("Monster_Skill"), TEXT("Player_Body"), COLLISION_TYPE::PLAYER);
 #pragma endregion
 
 	m_pGameManager->Update_Collision();
@@ -165,14 +167,10 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const _wstring& strLayerTag)
 
 HRESULT CLevel_GamePlay::Ready_Layer_Player(const _wstring& strLayerTag)
 {
-	CGameObject::GAMEOBJECT_DESC Desc;
-	Desc.fSpeedPerSec = 5.f;
-	Desc.fRotationPerSec = XMConvertToRadians(180.f);
-
 	for (size_t i = 0; i < 1; i++)
 	{
 		if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Player"),
-			ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
+			ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag, nullptr)))
 			return E_FAIL;
 	}
 	
@@ -211,6 +209,11 @@ HRESULT CLevel_GamePlay::Ready_Layer_Effect(const _wstring& strLayerTag)
 		m_pGameInstance->Add_GameObject_ToPool(ENUM_CLASS(LEVEL::GAMEPLAY), static_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::GAMEPLAY),
 			TEXT("Prototype_GameObject_Effect_SkillCoolDown"), nullptr)));
 	}
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Snow"),
+		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag)))
+		return E_FAIL;
+
 
 	return S_OK;
 }

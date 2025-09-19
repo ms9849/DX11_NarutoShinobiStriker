@@ -14,7 +14,7 @@ NS_BEGIN(Client)
 class CBird_RunState final : public CBirdState
 {
 private:
-	CBird_RunState(class CTransform* pTransform, class CNavigation* pNavigation, class CModel* pModelCom);
+	CBird_RunState(class CNavigation* pNavigation, class CBird* pBird);
 	virtual ~CBird_RunState() = default;
 
 public:
@@ -27,12 +27,11 @@ public:
 
 private:
 	CTransform* m_pPlayerTransformCom = { nullptr };
-	CTransform* m_pTransformCom = { nullptr };
-	CModel* m_pModelCom = { nullptr };
+	class CBird* m_pBird = { nullptr };
 	CNavigation* m_pNavigationCom = { nullptr };
 
 public:
-	static CBird_RunState* Create(class CTransform* pTransform, class CNavigation* pNavigation, class CModel* pModelCom);
+	static CBird_RunState* Create(class CNavigation* pNavigation, class CBird* pBird);
 	virtual void Free() override;
 };
 

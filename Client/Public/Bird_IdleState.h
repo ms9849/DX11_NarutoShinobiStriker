@@ -14,7 +14,7 @@ NS_BEGIN(Client)
 class CBird_IdleState final : public CBirdState
 {
 private:
-	CBird_IdleState(class CTransform* pTransform, class CNavigation* pNavigation, class CModel* pModelCom);
+	CBird_IdleState(class CNavigation* pNavigation, class CBird* pBird);
 	virtual ~CBird_IdleState() = default;
 
 public:
@@ -27,12 +27,11 @@ public:
 
 private:
 	CTransform* m_pPlayerTransformCom = { nullptr };
-	CTransform* m_pTransformCom = { nullptr };
-	CModel* m_pModelCom = { nullptr };
+	class CBird* m_pBird = { nullptr };
 	CNavigation* m_pNavigationCom = { nullptr };
 	_float m_fTimeAcc = { 0.f };
 public:
-	static CBird_IdleState* Create(class CTransform* pTransform, class CNavigation* pNavigation, class CModel* pModelCom);
+	static CBird_IdleState* Create(class CNavigation* pNavigation, class CBird* pBird);
 	virtual void Free() override;
 };
 

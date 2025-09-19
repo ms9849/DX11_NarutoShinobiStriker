@@ -18,6 +18,11 @@ private:
 	virtual ~CBounding_Sphere() = default;
 
 public:
+	virtual _float3 Get_Pos() override {
+		return m_pDesc->Center;
+	}
+
+public:
 	BoundingSphere* Get_Desc() const {
 		return m_pDesc;
 	}

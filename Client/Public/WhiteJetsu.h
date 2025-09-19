@@ -25,6 +25,9 @@ public:
 	virtual void	Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate = 1.f, _bool IsBlend = true, _float fBlendRatio = 0.15f, _bool IsLoop = false);
 	virtual _bool	Play_Animation(_float fTimeDelta);
 
+	void	   Set_Collider_Active(const _wstring& strColliderTag, _bool bFlag);
+	CCollider* Get_Collider(const _wstring& strColliderTag);
+
 public:
 	virtual void OnCollision(COLLIDER_HANDLE_ID eHandleID) override;
 	
@@ -47,7 +50,9 @@ private:
 	CModel* m_pModelCom = { nullptr };
 	CShader* m_pShaderCom = { nullptr };
 	CCollider* m_pColliderCom = { nullptr };
+	CCollider* m_pHandAttackColliderCom = { nullptr };
 
+	_bool m_isPlayingDeadAnim = { false };
 	_uint m_iNumMeshes = {};
 
 	/* 제츠 전용 상태 */

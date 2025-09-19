@@ -1,7 +1,10 @@
 #pragma once
-
 #include "Client_Defines.h"
 #include "BirdState.h"
+
+/*
+가장 기본적인 IDLE STATE
+*/
 
 NS_BEGIN(Engine)
 class CTransform;
@@ -11,11 +14,11 @@ NS_END
 
 NS_BEGIN(Client)
 
-class CBird_AttackState final : public CBirdState
+class CBird_BeatenBlastedState final : public CBirdState
 {
 private:
-	CBird_AttackState(class CNavigation* pNavigation, class CBird* pBird);
-	virtual ~CBird_AttackState() = default;
+	CBird_BeatenBlastedState(class CNavigation* pNavigation, class CBird* pBird, _vector vDirection, _float fRatio = 1.f);
+	virtual ~CBird_BeatenBlastedState() = default;
 
 public:
 	/* Start */
@@ -27,11 +30,12 @@ public:
 
 private:
 	CTransform* m_pPlayerTransformCom = { nullptr };
-	class CBird* m_pBird = { nullptr };
 	CNavigation* m_pNavigationCom = { nullptr };
+	class CBird* m_pBird = { nullptr };
+	_float3		m_vDirection = {};
 
 public:
-	static CBird_AttackState* Create(class CNavigation* pNavigation, class CBird* pBird);
+	static CBird_BeatenBlastedState* Create(class CNavigation* pNavigation, class CBird* pBird, _vector vDirection, _float fRatio = 1.f);
 	virtual void Free() override;
 };
 

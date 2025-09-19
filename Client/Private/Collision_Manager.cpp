@@ -85,7 +85,8 @@ void CCollision_Manager::Check_Collision(const _wstring strColliderTag, const _w
                 /* 추후 나선 수리검 & 카무이 & 대교탄같은건 냅둬야함 */
                 if(pCollider.first != COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_KAMUI &&
                     pCollider.first != COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENSHURIKEN_EXPLODE && 
-                    pCollider.first != COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_BIGSHARK)
+                    pCollider.first != COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_BIGSHARK && 
+                    pCollider.first != COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_KAMUI_END)
 
                     pCollider.second->Set_Active(false);
 
@@ -94,7 +95,7 @@ void CCollision_Manager::Check_Collision(const _wstring strColliderTag, const _w
                 if(COLLISION_TYPE::MONSTER == eColType)
                     static_cast<CEnemy*>(pCollisionObject.first)->OnCollision(pCollider.first);
                 else if(COLLISION_TYPE::PLAYER == eColType)
-                    static_cast<CPlayer*>(pCollisionObject.first)->OnCollision(pCollider.first);
+                    static_cast<CPlayer*>(pCollisionObject.first)->OnCollision(pCollider.first, pCollider.second->Get_Pos());
             }
         }
     }

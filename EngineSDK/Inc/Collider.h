@@ -25,6 +25,7 @@ public:
 
 	/* 활성화 되어있는지에 따라 콜리전 매니저에서의 충돌도 제어할 수 있게 한다. */
 public:
+	_float3 Get_Pos() { return m_pBounding->Get_Pos(); }
 	_bool Get_Active() { return m_pBounding->Get_Active();  }
 	void Set_Active(_bool bFlag) { m_pBounding->Set_Active(bFlag); }
 	

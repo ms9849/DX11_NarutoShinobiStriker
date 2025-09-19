@@ -370,6 +370,27 @@
     <Filter Include="02.GameObjects\Character\Player\Skills\Chidori">
       <UniqueIdentifier>{abc23ad8-dc36-4b53-9e63-d010f6057a4f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Enemy\Jetsu\State\Dead">
+      <UniqueIdentifier>{09d2a421-ab43-4840-ab1e-eebaebebe7f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Particle">
+      <UniqueIdentifier>{40d4ad0c-68d9-4df2-81e0-7aa4e5219f50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Particle\Snow">
+      <UniqueIdentifier>{5e4bb9d6-69a7-4284-9d12-f3bbec472f21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Bird\State\Beaten">
+      <UniqueIdentifier>{ceee3e9a-e290-447b-be60-b3ef5946ae53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Bird\State\Beaten\Blast">
+      <UniqueIdentifier>{17e51163-d86c-4f52-ac36-d76e7e3657d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Bird\State\Dead">
+      <UniqueIdentifier>{28b90545-7c64-4cef-9401-e0aef8667eee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\BASE\BeatenState\Blast">
+      <UniqueIdentifier>{6af502c3-f612-46db-9b8f-e12a0bf5f1d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -717,6 +738,24 @@
     <ClInclude Include="..\Public\Chidori.h">
       <Filter>02.GameObjects\Character\Player\Skills\Chidori</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\WhiteJetsu_DeadState.h">
+      <Filter>02.GameObjects\Enemy\Jetsu\State\Dead</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Snow.h">
+      <Filter>02.GameObjects\Particle\Snow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Bird_BeatenState.h">
+      <Filter>02.GameObjects\Enemy\Bird\State\Beaten</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Bird_BeatenBlastedState.h">
+      <Filter>02.GameObjects\Enemy\Bird\State\Beaten\Blast</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Bird_DeadState.h">
+      <Filter>02.GameObjects\Enemy\Bird\State\Dead</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_BeatenBlastedState.h">
+      <Filter>02.GameObjects\Character\Player\State\BASE\BeatenState\Blast</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -993,9 +1032,6 @@
     <ClCompile Include="..\Private\Bird_RunState.cpp">
       <Filter>02.GameObjects\Enemy\Bird\State\Run</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Bird_AttackState.cpp">
-      <Filter>02.GameObjects\Enemy\Bird\State\Run</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Boxer.cpp">
       <Filter>02.GameObjects\Enemy\Boxer</Filter>
     </ClCompile>
@@ -1062,6 +1098,27 @@
     <ClCompile Include="..\Private\Chidori.cpp">
       <Filter>02.GameObjects\Character\Player\Skills\Chidori</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\WhiteJetsu_DeadState.cpp">
+      <Filter>02.GameObjects\Enemy\Jetsu\State\Dead</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Snow.cpp">
+      <Filter>02.GameObjects\Particle\Snow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bird_AttackState.cpp">
+      <Filter>02.GameObjects\Enemy\Bird\State\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bird_BeatenState.cpp">
+      <Filter>02.GameObjects\Enemy\Bird\State\Beaten</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bird_BeatenBlastedState.cpp">
+      <Filter>02.GameObjects\Enemy\Bird\State\Beaten\Blast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bird_DeadState.cpp">
+      <Filter>02.GameObjects\Enemy\Bird\State\Dead</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_BeatenBlastedState.cpp">
+      <Filter>02.GameObjects\Character\Player\State\BASE\BeatenState\Blast</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPosTex.hlsl">
@@ -1080,6 +1137,9 @@
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Cell.hlsl">
+      <Filter>97. ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxRectParticle.hlsl">
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

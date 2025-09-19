@@ -32,6 +32,8 @@ protected:
 	virtual ~CBounding() = default;
 
 public:
+	virtual _float3 Get_Pos() = 0;
+public:
 	HRESULT Initialize();
 	virtual void Update(_fmatrix WorldMatrix) = 0;
 	virtual _bool Intersect(COLLIDER eType, class CBounding* pTarget) = 0;
@@ -45,7 +47,7 @@ protected:
 	ID3D11Device*			m_pDevice = { nullptr };
 	ID3D11DeviceContext*	m_pContext = { nullptr };
 	_bool					m_isActive = { true };
-
+	_float4x4				m_WorldMatrix = {};
 public:
 	virtual void Free();
 };

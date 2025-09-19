@@ -45,7 +45,7 @@ CPlayerState* CPlayer_HandAttackState::Update(_float fTimeDelta)
     _float fAnimProgress = m_pPlayer->Get_AnimProgress();
     Update_Collider(fAnimProgress);
 
-    if (false == IsAnimFinished && fAnimProgress <= 0.7f)
+    if (false == IsAnimFinished && fAnimProgress <= 0.6f)
         m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * m_pGameInstance->Calc_Quadratic(-0.89f, 0.48f, 0.11f, fAnimProgress),
             m_pPlayer->Get_Navigation());
 
