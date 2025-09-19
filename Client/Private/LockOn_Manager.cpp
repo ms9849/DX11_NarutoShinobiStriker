@@ -3,8 +3,9 @@
 #include "GameInstance.h"
 
 CLockOn_Manager::CLockOn_Manager()
+    : m_pGameInstance{ CGameInstance::GetInstance() }
 {
-
+    Safe_AddRef(m_pGameInstance);
 }
 
 void CLockOn_Manager::Reset_AttackTime()
@@ -22,11 +23,11 @@ void CLockOn_Manager::Update(_float fTimeDelta)
     m_fAttackTimeAcc += fTimeDelta;
 }
 
-void CLockOn_Manager::Calc_Target()
+CTransform* CLockOn_Manager::Calc_Target()
 {
     /* 만약 m_fAttackTime 이내에 공격한 적이 있었다면 리턴*/
     if (m_fAttackTimeAcc <= m_fAttackTime)
-        return;
+        return nullptr;
 
     /* 현재 레벨의 모든 몬스터 순회 */
     _int iNumTargets = m_pGameInstance->Get_LayerSize(m_pGameInstance->Get_LevelID(), TEXT("Layer_Monster"));
@@ -49,7 +50,7 @@ void CLockOn_Manager::Calc_Target()
         }
     }
 
-    m_pLockOnTransform = pNearestTransform;
+    return pNearestTransform;
 }
 
 CLockOn_Manager* CLockOn_Manager::Create()
@@ -68,4 +69,6 @@ CLockOn_Manager* CLockOn_Manager::Create()
 void CLockOn_Manager::Free()
 {
     __super::Free();
+
+    Safe_Release(m_pGameInstance);
 }
