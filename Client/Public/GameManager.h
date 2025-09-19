@@ -76,12 +76,16 @@ public:
 
 #pragma endregion
 
+#pragma region LockOn
+
+#pragma endregion
+
 private:
 	CGameInstance* m_pGameInstance = { nullptr };
 
 	class CCamera_Manager* m_pCamera_Manager = { nullptr };
 	class CCollision_Manager* m_pCollision_Manager = { nullptr };
-
+	class CLockOn_Manager* m_pLockOn_Manager = { nullptr };
 
 	class CPlayer* m_pPlayer = {};
 	LEVEL			m_eNextLevel = {};

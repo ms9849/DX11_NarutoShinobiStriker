@@ -7,6 +7,7 @@
 #include "Enemy.h"
 
 #include "Camera_Manager.h"
+#include "LockOn_Manager.h"
 #include "Collision_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameManager);
@@ -27,6 +28,11 @@ HRESULT CGameManager::Initialize_GameManager()
 	if (nullptr == m_pCollision_Manager)
 		return E_FAIL;
 
+	m_pLockOn_Manager = CLockOn_Manager::Create();
+	if (nullptr == m_pLockOn_Manager)
+		return E_FAIL;
+
+
 	return S_OK;
 }
 
@@ -41,11 +47,11 @@ void CGameManager::Release_GameManager()
 	Safe_Release(m_pGameInstance);
 	Safe_Release(m_pCamera_Manager);
 	Safe_Release(m_pCollision_Manager);
+	Safe_Release(m_pLockOn_Manager);
 }
 
 void CGameManager::Clear()
 {
-
 	m_pCamera_Manager->Clear();
 	m_pCollision_Manager->Clear();
 
