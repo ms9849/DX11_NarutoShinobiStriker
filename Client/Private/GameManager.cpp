@@ -136,6 +136,16 @@ void CGameManager::Check_Collision(const _wstring strColliderTag, const _wstring
 	m_pCollision_Manager->Check_Collision(strColliderTag, strObjectTag, eColType);
 }
 
+void CGameManager::Update_LockOnManager(_float fTimeDelta)
+{
+	m_pLockOn_Manager->Update(fTimeDelta);
+}
+
+CTransform* CGameManager::Calc_Target()
+{
+	return m_pLockOn_Manager->Calc_Target();
+}
+
 LEVEL CGameManager::Get_NextLevel()
 {
 	if (m_pGameInstance->Get_LevelID() != ENUM_CLASS(LEVEL::LOADING))

@@ -37,17 +37,17 @@ private:
 
 public:
 	void	Reset_AttackTime();
+
 public:
 	HRESULT Initialize();
 	void	Update(_float fTimeDelta);
-	void	Calc_Target();
+	CTransform*	Calc_Target();
 
 private:
 	CGameInstance* m_pGameInstance = { nullptr };
-	CTransform* m_pLockOnTransform = { nullptr };
 	
 	_float		m_fAttackTime = { 3.f };
-	_float		m_fAttackTimeAcc = { 0.f };
+	_float		m_fAttackTimeAcc = { 3.1f };
 
 public:
 	static CLockOn_Manager* Create();

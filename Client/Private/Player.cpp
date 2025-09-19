@@ -217,6 +217,8 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
 void CPlayer::Update(_float fTimeDelta)
 {
+	m_pGameManager->Update_LockOnManager(fTimeDelta);
+
 	/* 스테이트 업데이트. */
 	Update_State(fTimeDelta);
 	/* 네비메쉬 높이 업데이트 */

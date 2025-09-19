@@ -77,7 +77,8 @@ public:
 #pragma endregion
 
 #pragma region LockOn
-
+	void		Update_LockOnManager(_float fTimeDelta);
+	CTransform*	Calc_Target();
 #pragma endregion
 
 private:
