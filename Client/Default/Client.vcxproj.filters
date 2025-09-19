@@ -391,6 +391,9 @@
     <Filter Include="02.GameObjects\Character\Player\State\BASE\BeatenState\Blast">
       <UniqueIdentifier>{6af502c3-f612-46db-9b8f-e12a0bf5f1d3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="96. GameManager\Managers\LockOn">
+      <UniqueIdentifier>{6982d729-9605-4bee-b538-e17e61a4d72c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -756,6 +759,9 @@
     <ClInclude Include="..\Public\Player_BeatenBlastedState.h">
       <Filter>02.GameObjects\Character\Player\State\BASE\BeatenState\Blast</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\LockOn_Manager.h">
+      <Filter>96. GameManager\Managers\LockOn</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1118,6 +1124,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Player_BeatenBlastedState.cpp">
       <Filter>02.GameObjects\Character\Player\State\BASE\BeatenState\Blast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\LockOn_Manager.cpp">
+      <Filter>96. GameManager\Managers\LockOn</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
