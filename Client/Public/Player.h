@@ -37,6 +37,7 @@ public:
 	const _float4x4* Get_BoneMatrix(const _wstring strPartTag, const _char* pBoneName);
 	CCollider*	Get_WeaponCollider();
 	void	Set_WeaponCollider_Active(_bool bFlag);
+	_wstring Get_CurrentAnim();
 	_float	Get_AnimProgress();
 	void	Set_AnimProgress(_float fProgress);
 	void	Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate = 1.f, _bool IsBlend = true, _float fBlendRatio = 0.15f, _bool IsLoop = false);
@@ -66,8 +67,8 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	void OnCollision(COLLIDER_HANDLE_ID eHandleID);
-
+	void OnCollision(COLLIDER_HANDLE_ID eHandleID, _float3 vColliderPos);
+	void Change_State(class CPlayerState* pNextState, _bool bBlend);
 private:
 	class CGameManager*		m_pGameManager = { nullptr };
 	class CSkillSlotPanel*	m_pSkillSlotPanel = { nullptr };
@@ -87,6 +88,7 @@ private:
 	_bool					m_bEnemyHit = { false };
 	_bool					m_bEnemyKO = { false };
 	_bool					m_isGround = { true };
+	_bool					m_isInvincible = { false };
 
 private:
 	HRESULT Ready_Components();

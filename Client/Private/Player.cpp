@@ -15,6 +15,8 @@
 
 #include "PlayerState.h"
 #include "Player_IdleState.h"
+#include "Player_BeatenState.h"
+#include "Player_BeatenBlastedState.h"
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 	: CCharacter { pDevice, pContext, eObjectID }
@@ -44,6 +46,13 @@ void CPlayer::Set_WeaponCollider_Active(_bool bFlag)
 {
 	CWeapon_Character* pWeapon = dynamic_cast<CWeapon_Character*>(Find_PartObject(TEXT("Part_Weapon")));
 	pWeapon->Set_Collider_Active(bFlag);
+}
+
+_wstring CPlayer::Get_CurrentAnim()
+{
+	CParts_Character* pAnimParts = dynamic_cast<CParts_Character*>(Find_PartObject(TEXT("Part_Upper")));
+
+	return pAnimParts->Get_CurrentAnim();
 }
 
 _float CPlayer::Get_AnimProgress()
@@ -172,7 +181,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 {
 	CGameObject::GAMEOBJECT_DESC	Desc{};
 	Desc.fRotationPerSec = XMConvertToRadians(180.0f);
-	Desc.fSpeedPerSec = 10.f;
+	Desc.fSpeedPerSec = 8.5f;
 
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
@@ -246,6 +255,8 @@ void CPlayer::Late_Update(_float fTimeDelta)
 
 	__super::Late_Update(fTimeDelta);
 
+	m_pGameManager->Add_Object_ToCollision(TEXT("Player_Body"), this, m_pColliderCom);
+
 	m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 
@@ -261,9 +272,38 @@ HRESULT CPlayer::Render()
 	return S_OK;
 }
 
-void CPlayer::OnCollision(COLLIDER_HANDLE_ID eHandleID)
+void CPlayer::OnCollision(COLLIDER_HANDLE_ID eHandleID, _float3 vColliderPos)
 {
 	/* 플레이어 충돌로직 처리 */
+	if (true == m_isInvincible)
+		return;
+
+	CPlayerState* pNextState = { nullptr };
+
+	_vector vDirection = m_pTransformCom->Get_State(STATE::POSITION) - XMLoadFloat3(&vColliderPos);
+
+	if (COLLIDER_HANDLE_ID::ENEMY_BIRD_ATTACK == eHandleID ||
+		COLLIDER_HANDLE_ID::ENEMY_JETSU_ATTACK == eHandleID)
+	{
+		pNextState = CPlayer_BeatenState::Create(this, vDirection, 1.f);
+	}
+	else if (COLLIDER_HANDLE_ID::ENEMY_JETSU_WOODHAND == eHandleID)
+	{
+		//pNextState = CPlayer_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection);
+	}
+
+
+	/* 플레이어 죽는 상태 X */
+	Change_State(pNextState, false);
+}
+
+void CPlayer::Change_State(CPlayerState* pNextState, _bool bBlend)
+{
+	_bool IsBlend = m_pState->End();
+	Safe_Release(m_pState);
+
+	pNextState->Start(bBlend);
+	m_pState = pNextState;
 }
 
 HRESULT CPlayer::Ready_Components()
@@ -282,13 +322,13 @@ HRESULT CPlayer::Ready_Components()
 
 	ColliderDesc.fRadius = 0.7f;
 	ColliderDesc.vCenter = _float3{ 0.f, 0.7f, 0.f };
-	ColliderDesc.isActive = false;
+	ColliderDesc.isActive = true;
 
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_Sphere"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
 	
-	ColliderDesc.isActive = true;
+	ColliderDesc.isActive = false;
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_Sphere"),
 		TEXT("Com_Collider_HandAttack"), reinterpret_cast<CComponent**>(&m_pHandAttackColliderCom), &ColliderDesc)))
 		return E_FAIL;

@@ -33,6 +33,7 @@
 
 #include "NavigationMesh.h"
 #include "Effect_CoolDown.h"
+#include "Snow.h"
 
 #include "Collider.h"
 
@@ -296,6 +297,11 @@ HRESULT CMainApp::Ready_Prototypes()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/EnemyHPBar/EnemyHPBar.png"), 1))))
 		return E_FAIL;
 
+
+	/* For.Prototype_Component_Texture_Snow */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Snow"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Snow/Snow.png"), 1))))
+		return E_FAIL;
 #pragma endregion
 
 #pragma region NAVIGATION
@@ -327,6 +333,23 @@ HRESULT CMainApp::Ready_Prototypes()
 		CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+
+	/* For.Prototype_Component_VIBuffer_Particle_Snow */
+	CVIBuffer_Rect_Instance::RECT_INSTANCE_DESC		SnowDesc{};
+
+	SnowDesc.iNumInstance = 3000;
+	SnowDesc.vCenter = _float3(64.0f, 20.f, 64.0f);
+	SnowDesc.vRange = _float3(128.f, 2.f, 128.f);
+	SnowDesc.vSize = _float2(0.2f, 0.6f);
+	SnowDesc.vLifeTime = _float2(3.f, 7.f);
+	SnowDesc.vSpeed = _float2(2.f, 5.f);
+	SnowDesc.isLoop = true;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_VIBuffer_Particle_Snow"),
+		CVIBuffer_Rect_Instance::Create(m_pDevice, m_pContext, &SnowDesc))))
+		return E_FAIL;
+
+
 	/* For.Prototype_Component_Collider_Sphere */ 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_Sphere"),
 		CCollider::Create(m_pDevice, m_pContext, COLLIDER::SPHERE))))
@@ -341,6 +364,7 @@ HRESULT CMainApp::Ready_Prototypes()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_AABB"),
 		CCollider::Create(m_pDevice, m_pContext, COLLIDER::AABB))))
 		return E_FAIL;
+
 #pragma endregion
 
 #pragma region SHADER
@@ -368,6 +392,11 @@ HRESULT CMainApp::Ready_Prototypes()
 	/* For.Prototype_Component_Shader_VtxAnimMesh */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxAnimMesh"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxAnimMesh.hlsl"), VTXANIMMESH::Elements, VTXANIMMESH::iNumElements))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Shader_VtxRectParticle */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxRectParticle"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxRectParticle.hlsl"), VTX_POSTEX_INSTANCE_PARTICLE::Elements, VTX_POSTEX_INSTANCE_PARTICLE::iNumElements))))
 		return E_FAIL;
 
 #pragma endregion
@@ -453,6 +482,12 @@ HRESULT CMainApp::Ready_Prototypes()
 
 #pragma endregion
 	
+#pragma region PARTICLE 
+	/* For.Prototype_GameObject_Snow */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Snow"),
+		CSnow::Create(m_pDevice, m_pContext, OBJECTID::SNOW))))
+		return E_FAIL;
+#pragma endregion
 	return S_OK;
 }
 

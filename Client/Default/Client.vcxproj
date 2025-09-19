@@ -158,6 +158,9 @@
     <ClInclude Include="..\Public\Bird.h" />
     <ClInclude Include="..\Public\BirdState.h" />
     <ClInclude Include="..\Public\Bird_AttackState.h" />
+    <ClInclude Include="..\Public\Bird_BeatenBlastedState.h" />
+    <ClInclude Include="..\Public\Bird_BeatenState.h" />
+    <ClInclude Include="..\Public\Bird_DeadState.h" />
     <ClInclude Include="..\Public\Bird_IdleState.h" />
     <ClInclude Include="..\Public\Bird_RunState.h" />
     <ClInclude Include="..\Public\Boxer.h" />
@@ -188,6 +191,7 @@
     <ClInclude Include="..\Public\MainCamera.h" />
     <ClInclude Include="..\Public\Player_AerialFireBallState.h" />
     <ClInclude Include="..\Public\Player_AerialRasenShurikenState.h" />
+    <ClInclude Include="..\Public\Player_BeatenBlastedState.h" />
     <ClInclude Include="..\Public\Player_BeatenState.h" />
     <ClInclude Include="..\Public\Player_ChidoriAerialReadyState.h" />
     <ClInclude Include="..\Public\Player_ChidoriAttackState.h" />
@@ -244,6 +248,7 @@
     <ClInclude Include="..\Public\SkillSlotPanel.h" />
     <ClInclude Include="..\Public\Skill_Table.h" />
     <ClInclude Include="..\Public\SkyBox.h" />
+    <ClInclude Include="..\Public\Snow.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\TestButton.h" />
     <ClInclude Include="..\Public\TestCamera.h" />
@@ -259,6 +264,7 @@
     <ClInclude Include="..\Public\WhiteJetsu_AttackState.h" />
     <ClInclude Include="..\Public\WhiteJetsu_BeatenBlastedState.h" />
     <ClInclude Include="..\Public\WhiteJetsu_BeatenState.h" />
+    <ClInclude Include="..\Public\WhiteJetsu_DeadState.h" />
     <ClInclude Include="..\Public\WhiteJetsu_IdleState.h" />
     <ClInclude Include="..\Public\WhiteJetsu_RunState.h" />
     <ClInclude Include="..\Public\WhiteJetsu_WoodHandState.h" />
@@ -275,6 +281,9 @@
     <ClCompile Include="..\Private\Bird.cpp" />
     <ClCompile Include="..\Private\BirdState.cpp" />
     <ClCompile Include="..\Private\Bird_AttackState.cpp" />
+    <ClCompile Include="..\Private\Bird_BeatenBlastedState.cpp" />
+    <ClCompile Include="..\Private\Bird_BeatenState.cpp" />
+    <ClCompile Include="..\Private\Bird_DeadState.cpp" />
     <ClCompile Include="..\Private\Bird_IdleState.cpp" />
     <ClCompile Include="..\Private\Bird_RunState.cpp" />
     <ClCompile Include="..\Private\Boxer.cpp" />
@@ -304,6 +313,7 @@
     <ClCompile Include="..\Private\MainCamera.cpp" />
     <ClCompile Include="..\Private\Player_AerialFireBallState.cpp" />
     <ClCompile Include="..\Private\Player_AerialRasenShurikenState.cpp" />
+    <ClCompile Include="..\Private\Player_BeatenBlastedState.cpp" />
     <ClCompile Include="..\Private\Player_BeatenState.cpp" />
     <ClCompile Include="..\Private\Player_ChidoriAerialReadyState.cpp" />
     <ClCompile Include="..\Private\Player_ChidoriAttackState.cpp" />
@@ -359,6 +369,7 @@
     <ClCompile Include="..\Private\SkillSlotUI.cpp" />
     <ClCompile Include="..\Private\SkillSlotPanel.cpp" />
     <ClCompile Include="..\Private\SkyBox.cpp" />
+    <ClCompile Include="..\Private\Snow.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\TestButton.cpp" />
     <ClCompile Include="..\Private\TestCamera.cpp" />
@@ -374,6 +385,7 @@
     <ClCompile Include="..\Private\WhiteJetsu_AttackState.cpp" />
     <ClCompile Include="..\Private\WhiteJetsu_BeatenBlastedState.cpp" />
     <ClCompile Include="..\Private\WhiteJetsu_BeatenState.cpp" />
+    <ClCompile Include="..\Private\WhiteJetsu_DeadState.cpp" />
     <ClCompile Include="..\Private\WhiteJetsu_IdleState.cpp" />
     <ClCompile Include="..\Private\WhiteJetsu_RunState.cpp" />
     <ClCompile Include="..\Private\WhiteJetsu_WoodHandState.cpp" />
@@ -395,6 +407,7 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxMesh_NonLight.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxNorTex.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPosTex.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxRectParticle.hlsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -14,19 +14,16 @@
 
 #pragma endregion
 
-CBird_IdleState::CBird_IdleState(CTransform* pTransform, CNavigation* pNavigation, CModel* pModelCom)
-    : m_pTransformCom { pTransform }
-    , m_pNavigationCom { pNavigation }
-    , m_pModelCom { pModelCom}
+CBird_IdleState::CBird_IdleState(class CNavigation* pNavigation, class CBird* pBird)
+    : m_pNavigationCom { pNavigation }
+    , m_pBird { pBird }
 {
-    Safe_AddRef(m_pTransformCom);
     Safe_AddRef(m_pNavigationCom);
-    Safe_AddRef(m_pModelCom);
 }
 
 void CBird_IdleState::Start(_bool IsBlend)
 {
-    m_pModelCom->Set_AnimIndex("TenTailsCloneLoser02_Idle_Type02_Loop", 1.f, IsBlend);
+    m_pBird->Set_AnimIndex("TenTailsCloneLoser02_Idle_Type02_Loop", 1.f, IsBlend);
     m_pPlayerTransformCom = CGameManager::GetInstance()->Get_PlayerPtr()->Get_Transform();
     Safe_AddRef(m_pPlayerTransformCom);
 }
@@ -34,17 +31,17 @@ void CBird_IdleState::Start(_bool IsBlend)
 CBirdState* CBird_IdleState::Update(_float fTimeDelta)
 {
     CBirdState* pNextState = { nullptr };
-    m_pModelCom->Play_Animation(fTimeDelta);
+    m_pBird->Play_Animation(fTimeDelta);
 
-    _float fDist = XMVectorGetX(XMVector3Length(m_pTransformCom->Get_State(STATE::POSITION) - m_pPlayerTransformCom->Get_State(STATE::POSITION)));
+    _float fDist = XMVectorGetX(XMVector3Length(m_pBird->Get_Transform()->Get_State(STATE::POSITION) - m_pPlayerTransformCom->Get_State(STATE::POSITION)));
     m_fTimeAcc += fTimeDelta;
 
     /* 새는 원거리 공격 가능하니까. */
-    if (fDist < 10.f && 1.5f <= m_fTimeAcc)
-        pNextState = CBird_AttackState::Create(m_pTransformCom, m_pNavigationCom, m_pModelCom);
+    if (fDist < 5.f && 1.5f <= m_fTimeAcc)
+        pNextState = CBird_AttackState::Create(m_pNavigationCom, m_pBird);
 
     else if (fDist < 15.f && 1.5f <= m_fTimeAcc)
-        pNextState = CBird_RunState::Create(m_pTransformCom, m_pNavigationCom, m_pModelCom);
+        pNextState = CBird_RunState::Create(m_pNavigationCom, m_pBird);
 
     return pNextState;
 }
@@ -54,17 +51,15 @@ _bool CBird_IdleState::End()
     return true;
 }
 
-CBird_IdleState* CBird_IdleState::Create(CTransform* pTransform, CNavigation* pNavigation, CModel* pModelCom)
+CBird_IdleState* CBird_IdleState::Create(class CNavigation* pNavigation, class CBird* pBird)
 {
-    return new CBird_IdleState(pTransform, pNavigation, pModelCom);
+    return new CBird_IdleState(pNavigation, pBird);
 }
 
 void CBird_IdleState::Free()
 {
     __super::Free();
 
-    Safe_Release(m_pModelCom);
     Safe_Release(m_pNavigationCom);
-    Safe_Release(m_pTransformCom);
     Safe_Release(m_pPlayerTransformCom);
 }

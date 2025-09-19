@@ -53,7 +53,7 @@ void CBigShark::Update(_float fTimeDelta)
 void CBigShark::Late_Update(_float fTimeDelta)
 {
 	CGameManager::GetInstance()->Add_Collider_ToCollision(TEXT("Player_Skill"),
-		COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_FIREBALL, m_pColliderCom);
+		COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_BIGSHARK, m_pColliderCom);
 
 	m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }

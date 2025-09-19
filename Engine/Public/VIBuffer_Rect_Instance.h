@@ -10,6 +10,9 @@ public:
 	typedef struct tagRectInstanceDEsc final : public CVIBuffer_Instance::INSTANCE_DESC
 	{
 		_float2 vLifeTime;
+		_float2			vSpeed;
+		/* 만약 look가 true라면 계속 반복해서 수행. */
+		_bool			isLoop;
 	} RECT_INSTANCE_DESC;
 
 private:
@@ -21,9 +24,14 @@ public:
 	virtual HRESULT Initialize_Prototype(const INSTANCE_DESC* pInstanceDesc) override;
 	virtual HRESULT Initialize(void* pArg) override;
 
+public:
+	void Drop(_float fTimeDelta);
+
 private:
 	VTX_INSTANCE_PARTICLE* m_pInstanceVertices = { nullptr };
 
+	_float* m_pSpeeds = { nullptr };
+	_bool	m_isLoop = { false };
 public:
 	static CVIBuffer_Rect_Instance* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const INSTANCE_DESC* pInstanceDesc);
 	virtual CComponent* Clone(void* pArg) override;

@@ -17,6 +17,11 @@ private:
 	virtual ~CBounding_AABB() = default;
 
 public:
+	virtual _float3 Get_Pos() override {
+		return m_pDesc->Center;
+	}
+
+public:
 	BoundingBox* Get_Desc() const {
 		return m_pDesc;
 	}
