@@ -1,6 +1,7 @@
 #include "LockOn_Manager.h"
 
 #include "GameInstance.h"
+#include "GameManager.h"
 
 CLockOn_Manager::CLockOn_Manager()
     : m_pGameInstance{ CGameInstance::GetInstance() }
@@ -23,7 +24,8 @@ void CLockOn_Manager::Update(_float fTimeDelta)
     m_fAttackTimeAcc += fTimeDelta;
 }
 
-CTransform* CLockOn_Manager::Calc_Target()
+/* 입력한 포지션값으로부터 가장 가까운 몬스터의 트랜스폼을 반환한다. */
+CTransform* CLockOn_Manager::Calc_Target(_fvector vPos)
 {
     /* 만약 m_fAttackTime 이내에 공격한 적이 있었다면 리턴*/
     if (m_fAttackTimeAcc <= m_fAttackTime)
@@ -34,13 +36,15 @@ CTransform* CLockOn_Manager::Calc_Target()
 
     _float      fDist, fMinDist = { FLT_MAX };
     CTransform* pNearestTransform = {};
-    _float4     vCamPosition = *m_pGameInstance->Get_CamState(STATE::POSITION);
+    _float4     vPosition;
+
+    XMStoreFloat4(&vPosition, vPos);
 
     for (_int i = 0; i < iNumTargets; ++i)
     {
         CTransform* pSourTransform = m_pGameInstance->Get_GameObject(m_pGameInstance->Get_LevelID(), TEXT("Layer_Monster"), i)->Get_Transform();
     
-        fDist = XMVectorGetX(XMVector4Length(XMLoadFloat4(&vCamPosition) - pSourTransform->Get_State(STATE::POSITION)));
+        fDist = XMVectorGetX(XMVector4Length(XMLoadFloat4(&vPosition) - pSourTransform->Get_State(STATE::POSITION)));
 
         /* 가장 가까운 거리의 트랜스폼을 찾아낸다. */
         if (fDist < fMinDist)

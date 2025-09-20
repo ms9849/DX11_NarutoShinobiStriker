@@ -5,6 +5,7 @@
 
 #include "GameInstance.h"
 #include "GameManager.h"
+#include "BirdThrowObject.h"
 
 /* 전이 가능한 상태들 */
 #pragma region TRANSFER_STATE
@@ -34,6 +35,23 @@ CBirdState* CBird_AttackState::Update(_float fTimeDelta)
 {
     CBirdState* pNextState = { nullptr };
     _bool IsAnimFinished = m_pBird->Play_Animation(fTimeDelta);
+    _float fAnimProgress = m_pBird->Get_AnimProgress();
+
+
+    if (0.8 <= fAnimProgress && false == m_isThrow)
+    {
+        CBirdThrowObject::BIRD_THROW_DESC Desc;
+
+        XMStoreFloat3(&Desc.vPosition, m_pBird->Get_Transform()->Get_State(STATE::POSITION));
+        XMStoreFloat3(&Desc.vDirection, m_pBird->Get_Transform()->Get_State(STATE::LOOK));
+        Desc.fSpeedPerSec = 10.f;
+
+
+        m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_BirdThrow"),
+            ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Layer_Skill"), &Desc);
+    
+        m_isThrow = true;
+    }
 
     if (true == IsAnimFinished)
         pNextState = CBird_IdleState::Create(m_pNavigationCom, m_pBird);

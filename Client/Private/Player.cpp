@@ -240,7 +240,7 @@ void CPlayer::Update(_float fTimeDelta)
 
 	_matrix PlayerMatrix = XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr());
 	_vector PlayerTranslation = m_pTransformCom->Get_State(STATE::POSITION);
-	PlayerTranslation += m_pTransformCom->Get_State(STATE::LOOK) * 0.8f;
+	PlayerTranslation += m_pTransformCom->Get_State(STATE::LOOK) * 0.5f;
 	PlayerMatrix.r[3] = PlayerTranslation;
 
 	m_pHandAttackColliderCom->Update(PlayerMatrix);
@@ -284,14 +284,16 @@ void CPlayer::OnCollision(COLLIDER_HANDLE_ID eHandleID, _float3 vColliderPos)
 
 	_vector vDirection = m_pTransformCom->Get_State(STATE::POSITION) - XMLoadFloat3(&vColliderPos);
 
-	if (COLLIDER_HANDLE_ID::ENEMY_BIRD_ATTACK == eHandleID ||
+	m_pTransformCom->LookAt_XZ(XMLoadFloat3(&vColliderPos));
+
+	if (COLLIDER_HANDLE_ID::ENEMY_BIRD_THROW == eHandleID ||
 		COLLIDER_HANDLE_ID::ENEMY_JETSU_ATTACK == eHandleID)
 	{
 		pNextState = CPlayer_BeatenState::Create(this, vDirection, 1.f);
 	}
 	else if (COLLIDER_HANDLE_ID::ENEMY_JETSU_WOODHAND == eHandleID)
 	{
-		//pNextState = CPlayer_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection);
+		pNextState = CPlayer_BeatenBlastedState::Create(this, vDirection, 1.f);
 	}
 
 

@@ -9,6 +9,7 @@
 #include "Camera_Manager.h"
 #include "LockOn_Manager.h"
 #include "Collision_Manager.h"
+#include "UI_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameManager);
 
@@ -32,6 +33,9 @@ HRESULT CGameManager::Initialize_GameManager()
 	if (nullptr == m_pLockOn_Manager)
 		return E_FAIL;
 
+	m_pUI_Manager = CUI_Manager::Create();
+	if (nullptr == m_pUI_Manager)
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -48,6 +52,7 @@ void CGameManager::Release_GameManager()
 	Safe_Release(m_pCamera_Manager);
 	Safe_Release(m_pCollision_Manager);
 	Safe_Release(m_pLockOn_Manager);
+	Safe_Release(m_pUI_Manager);
 }
 
 void CGameManager::Clear()
@@ -141,9 +146,24 @@ void CGameManager::Update_LockOnManager(_float fTimeDelta)
 	m_pLockOn_Manager->Update(fTimeDelta);
 }
 
-CTransform* CGameManager::Calc_Target()
+CTransform* CGameManager::Calc_Target(_fvector vPosition)
 {
-	return m_pLockOn_Manager->Calc_Target();
+	return m_pLockOn_Manager->Calc_Target(vPosition);
+}
+
+void CGameManager::Set_Dialog_Text(const _wstring& strDialogText)
+{
+	m_pUI_Manager->Set_Dialog_Text(strDialogText);
+}
+
+void CGameManager::Set_Dialog_Visible(_bool bFlag)
+{
+	m_pUI_Manager->Set_Dialog_Visible(bFlag);
+}
+
+void CGameManager::Add_Dialog(CDialogUI* pDialogUI)
+{
+	m_pUI_Manager->Add_Dialog(pDialogUI);
 }
 
 LEVEL CGameManager::Get_NextLevel()

@@ -7,12 +7,16 @@
 
 CWoodHand::CWoodHand(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CContainerObject { pDevice, pContext, ENUM_CLASS(eObjectID) }
+    , m_pGameManager { CGameManager::GetInstance() }
 {
+    Safe_AddRef(m_pGameManager);
 }
 
 CWoodHand::CWoodHand(const CWoodHand& rhs)
     : CContainerObject{ rhs }
+    , m_pGameManager{ CGameManager::GetInstance() }
 {
+    Safe_AddRef(m_pGameManager);
 }
 
 void CWoodHand::Attack()
@@ -25,6 +29,11 @@ void CWoodHand::Attack()
 	}
 }
 
+_float CWoodHand::Get_AnimProgress()
+{
+    return static_cast<CModel*>(Find_PartObject(TEXT("Part_Hand_R"))->Find_Component(TEXT("Com_Model")))->Get_CurAnimProgress();
+}
+
 HRESULT CWoodHand::Initialize_Prototype()
 {
     return S_OK;
@@ -33,6 +42,9 @@ HRESULT CWoodHand::Initialize_Prototype()
 HRESULT CWoodHand::Initialize(void* pArg)
 {
     if (FAILED(__super::Initialize(pArg)))
+        return E_FAIL;
+
+    if (FAILED(Ready_Components()))
         return E_FAIL;
 
 	WOODHAND_DESC* pDesc = static_cast<WOODHAND_DESC*>(pArg);
@@ -84,20 +96,48 @@ void CWoodHand::Update(_float fTimeDelta)
         if (m_fTimeAcc >= 3.f)
             m_isDead = true;
     }
+
+    if (false == m_isAttackOn && true == m_IsMoveFinished && (0.55f <= Get_AnimProgress()))
+    {
+        m_pColliderCom->Set_Active(true);
+        m_isAttackOn = true;
+    }
+
+
+    m_pColliderCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
 }
 
 void CWoodHand::Late_Update(_float fTimeDelta)
 {
     __super::Late_Update(fTimeDelta);
+
+    m_pGameManager->Add_Collider_ToCollision(TEXT("Monster_Skill"), COLLIDER_HANDLE_ID::ENEMY_JETSU_WOODHAND, m_pColliderCom);
+
+
+    m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 
 HRESULT CWoodHand::Render()
 {
+#ifdef _DEBUG
+    m_pColliderCom->Render();
+#endif
+
     return S_OK;
 }
 
 HRESULT CWoodHand::Ready_Components()
 {
+    CBounding_Sphere::BOUNDING_SPHERE_DESC ColliderDesc{};
+
+    ColliderDesc.fRadius = 3.f;
+    ColliderDesc.vCenter = _float3{ 0.f, 1.5f, 0.f };
+    ColliderDesc.isActive = false;
+
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_Sphere"),
+        TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
+        return E_FAIL;
+
     return S_OK;
 }
 
@@ -152,4 +192,7 @@ CGameObject* CWoodHand::Clone(void* pArg)
 void CWoodHand::Free()
 {
     __super::Free();
+
+    Safe_Release(m_pColliderCom);
+    Safe_Release(m_pGameManager);
 }

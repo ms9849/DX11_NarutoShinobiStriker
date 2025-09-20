@@ -36,7 +36,7 @@ CPlayer_HandAttackState::CPlayer_HandAttackState(CPlayer* pPlayer)
 void CPlayer_HandAttackState::Start(_bool IsBlend)
 {
     m_pPlayer->Set_AnimIndex("CustomMan_Attack_Hand_Punch_Left", 2.5f, true);
-    m_pPlayer->Get_Transform()->LookAt_XZ(m_pGameManager->Calc_Target()->Get_State(STATE::POSITION));
+    m_pPlayer->Get_Transform()->LookAt_XZ(m_pGameManager->Calc_Target(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION))->Get_State(STATE::POSITION));
     m_eAnimState = ANIM_STATE::LEFT_PUNCH;
 }
 
@@ -48,15 +48,18 @@ CPlayerState* CPlayer_HandAttackState::Update(_float fTimeDelta)
     _float fAnimProgress = m_pPlayer->Get_AnimProgress();
     Update_Collider(fAnimProgress);
 
-    if (false == IsAnimFinished && fAnimProgress <= 0.6f)
-        m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * m_pGameInstance->Calc_Quadratic(-0.89f, 0.48f, 0.11f, fAnimProgress),
+    if (m_eAnimState == ANIM_STATE::BACK_KICK && fAnimProgress >= 0.8f)
+        m_pGameManager->Change_Camera(LEVEL::GAMEPLAY, TEXT("Main_Camera"));
+
+    if (false == IsAnimFinished && fAnimProgress <= 0.4f)
+        m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * m_pGameInstance->Calc_Quadratic(-5.f, 2.f, 0.f, fAnimProgress),
             m_pPlayer->Get_Navigation());
 
     if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON) 
         && m_eAnimState == ANIM_STATE::LEFT_PUNCH && fAnimProgress >= 0.5f)
     {
         m_pPlayer->Set_AnimIndex("CustomMan_Attack_Hand_StraightPunch", 5.f, true);
-        m_pPlayer->Get_Transform()->LookAt_XZ(m_pGameManager->Calc_Target()->Get_State(STATE::POSITION));
+        m_pPlayer->Get_Transform()->LookAt_XZ(m_pGameManager->Calc_Target(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION))->Get_State(STATE::POSITION));
         m_IsOnCollider = false;
         m_eAnimState = ANIM_STATE::STRAIGHT_PUNCH;
     }
@@ -64,35 +67,27 @@ CPlayerState* CPlayer_HandAttackState::Update(_float fTimeDelta)
     else if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON)
         && m_eAnimState == ANIM_STATE::STRAIGHT_PUNCH && fAnimProgress >= 0.5f)
     {
-        m_pPlayer->Set_AnimIndex("CustomMan_Attack_Hand_KneeKickUp", 3.f, false);
-        m_pPlayer->Get_Transform()->LookAt_XZ(m_pGameManager->Calc_Target()->Get_State(STATE::POSITION));
+        m_pPlayer->Set_AnimIndex("CustomMan_Attack_ChakraBoots_A_cmb_01", 1.25f, false);
+        m_pPlayer->Get_Transform()->LookAt_XZ(m_pGameManager->Calc_Target(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION))->Get_State(STATE::POSITION));
         m_IsOnCollider = false;
-        m_eAnimState = ANIM_STATE::KNEE_KICK;
+        m_eAnimState = ANIM_STATE::KICK;
     }
 
     else if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON)
-        && m_eAnimState == ANIM_STATE::KNEE_KICK && fAnimProgress >= 0.5f)
+        && m_eAnimState == ANIM_STATE::KICK && fAnimProgress >= 0.5f)
     {
-        m_pPlayer->Set_AnimIndex("CustomMan_Attack_Hand_JackCut", 2.5f, false);
-        m_pPlayer->Get_Transform()->LookAt_XZ(m_pGameManager->Calc_Target()->Get_State(STATE::POSITION));
+        m_pGameManager->Change_Camera(LEVEL::GAMEPLAY, TEXT("Action_Camera"));
+        m_pPlayer->Set_AnimIndex("CustomMan_Attack_Hand_BackKick", 1.75f, false);
+        m_pPlayer->Get_Transform()->LookAt_XZ(m_pGameManager->Calc_Target(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION))->Get_State(STATE::POSITION));
         m_IsOnCollider = false;
-        m_eAnimState = ANIM_STATE::JACK_CUT;
+        m_eAnimState = ANIM_STATE::BACK_KICK;
     }
 
     else if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON)
-        && m_eAnimState == ANIM_STATE::JACK_CUT && fAnimProgress >= 0.5f)
-    {
-        m_pPlayer->Set_AnimIndex("CustomMan_Attack_Hand_DragonKick", 3.f, true);
-        m_pPlayer->Get_Transform()->LookAt_XZ(m_pGameManager->Calc_Target()->Get_State(STATE::POSITION));
-        m_IsOnCollider = false;
-        m_eAnimState = ANIM_STATE::DRAGON_KICK;
-    }
-
-    else if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON)
-        && m_eAnimState == ANIM_STATE::DRAGON_KICK && fAnimProgress >= 0.8f)
+        && m_eAnimState == ANIM_STATE::BACK_KICK && fAnimProgress >= 0.8f)
     {
         m_pPlayer->Set_AnimIndex("CustomMan_Attack_Hand_Punch_Left", 2.5f, true);
-        m_pPlayer->Get_Transform()->LookAt_XZ(m_pGameManager->Calc_Target()->Get_State(STATE::POSITION));
+        m_pPlayer->Get_Transform()->LookAt_XZ(m_pGameManager->Calc_Target(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION))->Get_State(STATE::POSITION));
         m_IsOnCollider = false;
         m_eAnimState = ANIM_STATE::LEFT_PUNCH;
     }
@@ -139,23 +134,24 @@ _bool CPlayer_HandAttackState::End()
 {
     m_pPlayer->Set_Collider_Active(TEXT("Com_Collider_HandAttack"), false);
 
+    m_pGameManager->Change_Camera(LEVEL::GAMEPLAY, TEXT("Main_Camera"));
     return true;
 }
 
 void CPlayer_HandAttackState::Update_Collider(_float fAnimProgress)
 {
     /* 콜라이더 온/오프 */
-    if(ANIM_STATE::DRAGON_KICK != m_eAnimState &&
+    if(ANIM_STATE::BACK_KICK != m_eAnimState &&
         ANIM_STATE::STRAIGHT_PUNCH != m_eAnimState &&
-        fAnimProgress >= 0.8f)
+        fAnimProgress <= 0.2f)
              m_pPlayer->Set_Collider_Active(TEXT("Com_Collider_HandAttack"), false);
 
     else if(ANIM_STATE::STRAIGHT_PUNCH == m_eAnimState &&
-        fAnimProgress >= 0.7f)
+        fAnimProgress <= 0.3f)
         m_pPlayer->Set_Collider_Active(TEXT("Com_Collider_HandAttack"), false);
 
-    else if (ANIM_STATE::DRAGON_KICK == m_eAnimState
-        && fAnimProgress <= 0.3f)
+    else if (ANIM_STATE::BACK_KICK == m_eAnimState &&
+        fAnimProgress <= 0.3f)
         m_pPlayer->Set_Collider_Active(TEXT("Com_Collider_HandAttack"), false);
 
     else if (m_IsOnCollider == false)
@@ -165,7 +161,7 @@ void CPlayer_HandAttackState::Update_Collider(_float fAnimProgress)
     }
 
     /* 콜라이더 세팅 */
-    if (ANIM_STATE::DRAGON_KICK == m_eAnimState)
+    if (ANIM_STATE::BACK_KICK == m_eAnimState)
     {
         CGameManager::GetInstance()->Add_Collider_ToCollision(TEXT("Player_Attack"), COLLIDER_HANDLE_ID::PLAYER_HAND_ATTACK_FINAL,
             m_pPlayer->Get_Collider(TEXT("Com_Collider_HandAttack")));

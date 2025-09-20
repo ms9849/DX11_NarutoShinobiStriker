@@ -23,6 +23,7 @@
 
 #include "SkillSlotPanel.h"
 #include "SkillSlotUI.h"
+#include "DialogUI.h"
 
 #include "TimerPanel.h"
 #include "DecimalUI.h"
@@ -41,6 +42,8 @@
 #include "TutorialMap.h"
 
 #include "MainCamera.h"
+#include "ActionCamera.h"
+#include "SkillActionCamera.h"
 
 #include "Lower_Character.h"
 #include "Upper_Character.h"
@@ -427,6 +430,16 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CMainCamera::Create(m_pDevice, m_pContext, OBJECTID::MAIN_CAMERA))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_ActionCamera */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_ActionCamera"),
+		CActionCamera::Create(m_pDevice, m_pContext, OBJECTID::ACTION_CAEMRA))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_SkillActionCamera */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_SkillActionCamera"),
+		CSkillActionCamera::Create(m_pDevice, m_pContext, OBJECTID::SKILL_ACTION_CAMERA))))
+		return E_FAIL;
+
 	/* For.Prototype_GameObject_Upper_Player */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Upper_Player"),
 		CUpper_Character::Create(m_pDevice, m_pContext, OBJECTID::PLAYER_UPPER))))
@@ -495,6 +508,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_GameObject_KOUI */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_KOUI"),
 		CKOUI::Create(m_pDevice, m_pContext, OBJECTID::KO_UI))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_DialogUI */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_DialogUI"),
+		CDialogUI::Create(m_pDevice, m_pContext, OBJECTID::DIALOG_UI))))
 		return E_FAIL;
 
 	m_strMessage = TEXT("로딩이 완료되었습니다..");

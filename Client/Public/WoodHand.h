@@ -5,6 +5,9 @@
 #include "Client_Defines.h"
 #include "ContainerObject.h"
 
+NS_BEGIN(Engine)
+class CCollider;
+NS_END 
 
 NS_BEGIN(Client)
 
@@ -24,6 +27,7 @@ private:
 
 public:
 	void Attack();
+	_float Get_AnimProgress();
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
@@ -33,10 +37,14 @@ public:
 	virtual HRESULT Render() override;
 
 private:
+	class CGameManager* m_pGameManager = { nullptr };
+	CCollider*  m_pColliderCom = { nullptr };
 	_float3		m_vTargetPos = { };
 	_bool		m_IsMoveFinished = { false };
 	_bool 		m_IsAttackFinished = { false };
 	_float		m_fTimeAcc = { 0.f };
+	_bool		m_isAttackOn = { false };
+
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_Childs();

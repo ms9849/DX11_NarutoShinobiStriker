@@ -394,6 +394,27 @@
     <Filter Include="96. GameManager\Managers\LockOn">
       <UniqueIdentifier>{6982d729-9605-4bee-b538-e17e61a4d72c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Enemy\Bird\BirdThrow">
+      <UniqueIdentifier>{a0a34d1f-8c3f-4819-86b8-e5c8b6405700}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Camera\Action">
+      <UniqueIdentifier>{4a594dd5-1fc1-438c-b853-2e5376119786}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Camera\SkillAction">
+      <UniqueIdentifier>{f57ef861-1dcb-4b93-a0ca-3117abde05c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Boss">
+      <UniqueIdentifier>{a85843b1-ca13-4153-bb49-e1ae9a0586f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\NPC">
+      <UniqueIdentifier>{0bbc84b4-31a9-40ef-8e75-214c08d5d91e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Dialog">
+      <UniqueIdentifier>{daf52770-1cf2-4e3a-81af-061d6ef3f75c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="96. GameManager\Managers\UI">
+      <UniqueIdentifier>{b7d192e0-6f9e-4fef-a6bf-bf0e65591aaa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -762,6 +783,24 @@
     <ClInclude Include="..\Public\LockOn_Manager.h">
       <Filter>96. GameManager\Managers\LockOn</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\BirdThrowObject.h">
+      <Filter>02.GameObjects\Enemy\Bird\BirdThrow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ActionCamera.h">
+      <Filter>02.GameObjects\Camera\Action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SkillActionCamera.h">
+      <Filter>02.GameObjects\Camera\SkillAction</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\NPC_KaKashi.h">
+      <Filter>02.GameObjects\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\DialogUI.h">
+      <Filter>02.GameObjects\UI\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UI_Manager.h">
+      <Filter>96. GameManager\Managers\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1127,6 +1166,24 @@
     </ClCompile>
     <ClCompile Include="..\Private\LockOn_Manager.cpp">
       <Filter>96. GameManager\Managers\LockOn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\BirdThrowObject.cpp">
+      <Filter>02.GameObjects\Enemy\Bird\BirdThrow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ActionCamera.cpp">
+      <Filter>02.GameObjects\Camera\Action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SkillActionCamera.cpp">
+      <Filter>02.GameObjects\Camera\SkillAction</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\NPC_KaKashi.cpp">
+      <Filter>02.GameObjects\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\DialogUI.cpp">
+      <Filter>02.GameObjects\UI\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UI_Manager.cpp">
+      <Filter>96. GameManager\Managers\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

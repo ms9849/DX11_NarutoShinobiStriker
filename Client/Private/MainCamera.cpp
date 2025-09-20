@@ -41,7 +41,7 @@ void CMainCamera::Priority_Update(_float fTimeDelta)
     _float fMouseMoveY = (_float)m_pGameInstance->Get_MouseMove(MOUSEMOVESTATE::Y) / g_iWinSizeY;
 
     // 회전할 벡터와 각도
-    _vector  StartVector = XMVectorSet(1.f, 3.f, -4.f, 0.f);
+    _vector  StartVector = XMVectorSet(1.f, 2.5f, -3.f, 0.f);
 
     /* 플레이어 기준으로 누적된 위치에 세팅*/
     //    _vector  StartVector;

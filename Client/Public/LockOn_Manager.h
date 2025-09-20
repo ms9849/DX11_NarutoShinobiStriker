@@ -41,7 +41,7 @@ public:
 public:
 	HRESULT Initialize();
 	void	Update(_float fTimeDelta);
-	CTransform*	Calc_Target();
+	CTransform*	Calc_Target(_fvector vPosition);
 
 private:
 	CGameInstance* m_pGameInstance = { nullptr };

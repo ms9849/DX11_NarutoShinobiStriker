@@ -22,6 +22,7 @@ public:
 	virtual _bool	End() override;
 
 private:
+	class CGameManager* m_pGameManager = { nullptr };
 	class CPlayer* m_pPlayer = { nullptr };
 	_bool		   m_isKamuiThrow = { false };
 public:
