@@ -41,11 +41,13 @@ void CMainCamera::Priority_Update(_float fTimeDelta)
     _float fMouseMoveY = (_float)m_pGameInstance->Get_MouseMove(MOUSEMOVESTATE::Y) / g_iWinSizeY;
 
     // 회전할 벡터와 각도
-    //_vector  StartVector = XMVectorSet(0.f, 3.f, -3.f, 0.f);
-    _vector  StartVector;
-    StartVector = XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::LOOK)) * -4.f;
-    StartVector += XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::UP)) * 3.f;
-    StartVector += XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::RIGHT)) * 1.f;
+    _vector  StartVector = XMVectorSet(1.f, 3.f, -4.f, 0.f);
+
+    /* 플레이어 기준으로 누적된 위치에 세팅*/
+    //    _vector  StartVector;
+    //StartVector = XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::LOOK)) * -4.f;
+    //StartVector += XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::UP)) * 3.f;
+    //StartVector += XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::RIGHT)) * 1.f;
 
     /* 스타트 벡터에 따라 다르게 제한이 들어가야 하는데.. */
     m_fRotateX += XMConvertToRadians(fMouseMoveX * 180.f);
