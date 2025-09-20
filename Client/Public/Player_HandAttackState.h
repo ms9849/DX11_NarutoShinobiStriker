@@ -10,7 +10,7 @@ NS_BEGIN(Client)
 class CPlayer_HandAttackState final : public CPlayerState
 {
 public:
-	enum class ANIM_STATE{ LEFT_PUNCH, STRAIGHT_PUNCH, KNEE_KICK, JACK_CUT, DRAGON_KICK };
+	enum class ANIM_STATE{ LEFT_PUNCH, STRAIGHT_PUNCH, KICK, BACK_KICK };
 private:
 	CPlayer_HandAttackState(class CPlayer* pPlayer);
 	virtual ~CPlayer_HandAttackState() = default;

@@ -167,24 +167,33 @@ HRESULT CLevel_Edit::Ready_Prototypes()
         return E_FAIL;
     m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_TutorialMap"));
 
-    /* For.Prototype_Component_Model_NaviMesh_KonohaVillage */
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_NaviMesh_KonohaVillage"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/KonohaVillage/NavMesh_KonohaVillage.fbx", PreTransformMatrix))))
-        return E_FAIL;
-
-
     /* For.Prototype_Component_Model_Tree */
     PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Tree"),
         CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/Tree/Tree.fbx", PreTransformMatrix))))
         return E_FAIL;
+    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Tree"));
 
     /* For.Prototype_Component_Model_Gate */
     PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Gate"),
         CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/Gate/Gate.fbx", PreTransformMatrix))))
         return E_FAIL;
+    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Gate"));
 
+    /* For.Prototype_Component_Model_WhiteJetsu */
+    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_WhiteJetsu"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Monster/WhiteJetsu/WhiteJetsu.fbx", PreTransformMatrix))))
+        return E_FAIL;
+    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_WhiteJetsu"));
+
+    /* For.Prototype_Component_Model_Bird */
+    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Bird"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Monster/Bird/Bird.fbx", PreTransformMatrix))))
+        return E_FAIL;
+    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Bird"));
 #pragma endregion
 
 #pragma region MODEL_BINARY

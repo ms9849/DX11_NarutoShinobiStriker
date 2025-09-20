@@ -153,10 +153,12 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Public\ActionCamera.h" />
     <ClInclude Include="..\Public\AttackTypePanel.h" />
     <ClInclude Include="..\Public\BigShark.h" />
     <ClInclude Include="..\Public\Bird.h" />
     <ClInclude Include="..\Public\BirdState.h" />
+    <ClInclude Include="..\Public\BirdThrowObject.h" />
     <ClInclude Include="..\Public\Bird_AttackState.h" />
     <ClInclude Include="..\Public\Bird_BeatenBlastedState.h" />
     <ClInclude Include="..\Public\Bird_BeatenState.h" />
@@ -178,6 +180,7 @@
     <ClInclude Include="..\Public\ComboKOPanel.h" />
     <ClInclude Include="..\Public\CreateCharacterUI.h" />
     <ClInclude Include="..\Public\DecimalUI.h" />
+    <ClInclude Include="..\Public\DialogUI.h" />
     <ClInclude Include="..\Public\Dummy.h" />
     <ClInclude Include="..\Public\Effect_CoolDown.h" />
     <ClInclude Include="..\Public\Enemy.h" />
@@ -190,6 +193,7 @@
     <ClInclude Include="..\Public\Kamui.h" />
     <ClInclude Include="..\Public\LockOn_Manager.h" />
     <ClInclude Include="..\Public\MainCamera.h" />
+    <ClInclude Include="..\Public\NPC_KaKashi.h" />
     <ClInclude Include="..\Public\Player_AerialFireBallState.h" />
     <ClInclude Include="..\Public\Player_AerialRasenShurikenState.h" />
     <ClInclude Include="..\Public\Player_BeatenBlastedState.h" />
@@ -245,6 +249,7 @@
     <ClInclude Include="..\Public\RasenShuriken.h" />
     <ClInclude Include="..\Public\RotationIconUI.h" />
     <ClInclude Include="..\Public\Skill.h" />
+    <ClInclude Include="..\Public\SkillActionCamera.h" />
     <ClInclude Include="..\Public\SkillSlotUI.h" />
     <ClInclude Include="..\Public\SkillSlotPanel.h" />
     <ClInclude Include="..\Public\Skill_Table.h" />
@@ -258,6 +263,7 @@
     <ClInclude Include="..\Public\TimerPanel.h" />
     <ClInclude Include="..\Public\Tree.h" />
     <ClInclude Include="..\Public\TutorialMap.h" />
+    <ClInclude Include="..\Public\UI_Manager.h" />
     <ClInclude Include="..\Public\Upper_Character.h" />
     <ClInclude Include="..\Public\Weapon_Character.h" />
     <ClInclude Include="..\Public\WhiteJetsu.h" />
@@ -277,10 +283,12 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Private\ActionCamera.cpp" />
     <ClCompile Include="..\Private\AttackTypePanel.cpp" />
     <ClCompile Include="..\Private\BigShark.cpp" />
     <ClCompile Include="..\Private\Bird.cpp" />
     <ClCompile Include="..\Private\BirdState.cpp" />
+    <ClCompile Include="..\Private\BirdThrowObject.cpp" />
     <ClCompile Include="..\Private\Bird_AttackState.cpp" />
     <ClCompile Include="..\Private\Bird_BeatenBlastedState.cpp" />
     <ClCompile Include="..\Private\Bird_BeatenState.cpp" />
@@ -301,6 +309,7 @@
     <ClCompile Include="..\Private\ComboKOPanel.cpp" />
     <ClCompile Include="..\Private\CreateCharacterUI.cpp" />
     <ClCompile Include="..\Private\DecimalUI.cpp" />
+    <ClCompile Include="..\Private\DialogUI.cpp" />
     <ClCompile Include="..\Private\Dummy.cpp" />
     <ClCompile Include="..\Private\Effect_CoolDown.cpp" />
     <ClCompile Include="..\Private\Enemy.cpp" />
@@ -313,6 +322,7 @@
     <ClCompile Include="..\Private\Kamui.cpp" />
     <ClCompile Include="..\Private\LockOn_Manager.cpp" />
     <ClCompile Include="..\Private\MainCamera.cpp" />
+    <ClCompile Include="..\Private\NPC_KaKashi.cpp" />
     <ClCompile Include="..\Private\Player_AerialFireBallState.cpp" />
     <ClCompile Include="..\Private\Player_AerialRasenShurikenState.cpp" />
     <ClCompile Include="..\Private\Player_BeatenBlastedState.cpp" />
@@ -368,6 +378,7 @@
     <ClCompile Include="..\Private\RasenShuriken.cpp" />
     <ClCompile Include="..\Private\RotationIconUI.cpp" />
     <ClCompile Include="..\Private\Skill.cpp" />
+    <ClCompile Include="..\Private\SkillActionCamera.cpp" />
     <ClCompile Include="..\Private\SkillSlotUI.cpp" />
     <ClCompile Include="..\Private\SkillSlotPanel.cpp" />
     <ClCompile Include="..\Private\SkyBox.cpp" />
@@ -380,6 +391,7 @@
     <ClCompile Include="..\Private\TimerPanel.cpp" />
     <ClCompile Include="..\Private\Tree.cpp" />
     <ClCompile Include="..\Private\TutorialMap.cpp" />
+    <ClCompile Include="..\Private\UI_Manager.cpp" />
     <ClCompile Include="..\Private\Upper_Character.cpp" />
     <ClCompile Include="..\Private\Weapon_Character.cpp" />
     <ClCompile Include="..\Private\WhiteJetsu.cpp" />

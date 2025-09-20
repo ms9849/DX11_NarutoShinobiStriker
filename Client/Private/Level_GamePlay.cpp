@@ -4,11 +4,15 @@
 
 #include "MainCamera.h"
 #include "TestCamera.h"
+#include "ActionCamera.h"
+#include "SkillActionCamera.h"
+
 #include "TimerPanel.h"
 
 #include "GameManager.h"
 #include "Player.h"
 #include "Props.h"
+#include "DialogUI.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID)
 	: CLevel { pDevice, pContext, ENUM_CLASS(eLevelID)}
@@ -162,6 +166,39 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const _wstring& strLayerTag)
 		PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_MainCamera"), &MainCameraDesc)))))
 		return E_FAIL;
 
+
+	CActionCamera::ACTION_CAMERA_DESC		ActionCameraDesc{};
+	ActionCameraDesc.fFovy = XMConvertToRadians(60.0f);
+	ActionCameraDesc.fNear = 0.1f;
+	ActionCameraDesc.fFar = 1000.f;
+	ActionCameraDesc.vEye = _float4(0.f, 30.f, -30.f, 1.f);
+	ActionCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
+	ActionCameraDesc.fSpeedPerSec = 15.f;
+	ActionCameraDesc.fRotationPerSec = XMConvertToRadians(90.0f);
+	ActionCameraDesc.pPlayerTransform = m_pGameManager->Get_PlayerPtr()->Get_Transform();
+
+	/* 카메라는 게임 매니저에 추가하여 관리한다. */
+	if (FAILED(m_pGameManager->Add_Camera(LEVEL::GAMEPLAY, TEXT("Action_Camera"), static_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
+		PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_ActionCamera"), &ActionCameraDesc)))))
+		return E_FAIL;
+
+	CSkillActionCamera::SKILL_ACTION_CAMERA_DESC SkillActionCameraDesc{};
+	SkillActionCameraDesc.fFovy = XMConvertToRadians(60.0f);
+	SkillActionCameraDesc.fNear = 0.1f;
+	SkillActionCameraDesc.fFar = 1000.f;
+	SkillActionCameraDesc.vEye = _float4(0.f, 30.f, -30.f, 1.f);
+	SkillActionCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
+	SkillActionCameraDesc.fSpeedPerSec = 15.f;
+	SkillActionCameraDesc.fRotationPerSec = XMConvertToRadians(90.0f);
+	SkillActionCameraDesc.pPlayerTransform = m_pGameManager->Get_PlayerPtr()->Get_Transform();
+	SkillActionCameraDesc.eSkillType = SKILL::KAMUI;
+
+	/* 카메라는 게임 매니저에 추가하여 관리한다. */
+	if (FAILED(m_pGameManager->Add_Camera(LEVEL::GAMEPLAY, TEXT("Kamui_Action_Camera"), static_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
+		PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_SkillActionCamera"), &SkillActionCameraDesc)))))
+		return E_FAIL;
+
+
 	return S_OK;
 }
 
@@ -184,13 +221,13 @@ HRESULT CLevel_GamePlay::Ready_Layer_Monster(const _wstring& strLayerTag)
 		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag)))
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Bird"),
-		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag)))
-		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Bird"),
+	//	ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag)))
+	//	return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Boxer"),
-		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag)))
-		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Boxer"),
+	//	ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag)))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -249,6 +286,15 @@ HRESULT CLevel_GamePlay::Ready_Layer_UI(const _wstring& strLayerTag)
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_ComboKOPanel"),
 		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
 		return E_FAIL;
+
+	Desc = CUIObject::CreateDesc(g_iWinSizeX / 2.f, g_iWinSizeY / 2.f, 0.05f, 800.f, 200.f, 0, 0.f);
+
+	CDialogUI* pDialog = static_cast<CDialogUI*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::GAMEPLAY), 
+		TEXT("Prototype_GameObject_DialogUI"), &Desc));
+
+	m_pGameManager->Add_Dialog(pDialog);
+
+	m_pGameInstance->Add_Clone_ToLayer(pDialog, ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag);
 
 	return S_OK;
 }

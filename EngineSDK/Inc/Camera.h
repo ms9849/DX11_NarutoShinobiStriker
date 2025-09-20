@@ -26,6 +26,7 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+	virtual void OnChange() {};
 protected:
 	_float							m_fFovy = {};
 	_float							m_fAspect = {};

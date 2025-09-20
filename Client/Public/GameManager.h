@@ -78,7 +78,13 @@ public:
 
 #pragma region LockOn
 	void		Update_LockOnManager(_float fTimeDelta);
-	CTransform*	Calc_Target();
+	CTransform*	Calc_Target(_fvector vPosition);
+#pragma endregion
+
+#pragma region UI
+	void Set_Dialog_Text(const _wstring& strDialogText);
+	void Set_Dialog_Visible(_bool bFlag);
+	void Add_Dialog(class CDialogUI* pDialogUI);
 #pragma endregion
 
 private:
@@ -87,6 +93,7 @@ private:
 	class CCamera_Manager* m_pCamera_Manager = { nullptr };
 	class CCollision_Manager* m_pCollision_Manager = { nullptr };
 	class CLockOn_Manager* m_pLockOn_Manager = { nullptr };
+	class CUI_Manager* m_pUI_Manager = { nullptr };
 
 	class CPlayer* m_pPlayer = {};
 	LEVEL			m_eNextLevel = {};

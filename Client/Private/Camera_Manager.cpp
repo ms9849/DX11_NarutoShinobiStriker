@@ -56,6 +56,7 @@ HRESULT CCamera_Manager::Change_Camera(LEVEL eLevelID, const _wstring& strCamera
 		m_pActivatedCamera->Set_Dead(true);
 
 	static_cast<CGameObject*>(iter->second)->Set_Dead(false);
+	static_cast<CCamera*>(iter->second)->OnChange();
 	m_pGameInstance->Add_Clone_ToLayer(iter->second, ENUM_CLASS(eLevelID), TEXT("Layer_Camera"));
 
 	/* 활성화중인 카메라 교체 */

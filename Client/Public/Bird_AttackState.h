@@ -29,7 +29,7 @@ private:
 	CTransform* m_pPlayerTransformCom = { nullptr };
 	class CBird* m_pBird = { nullptr };
 	CNavigation* m_pNavigationCom = { nullptr };
-
+	_bool		 m_isThrow = { false };
 public:
 	static CBird_AttackState* Create(class CNavigation* pNavigation, class CBird* pBird);
 	virtual void Free() override;

@@ -14,12 +14,15 @@
 
 CPlayer_KamuiState::CPlayer_KamuiState(CPlayer* pPlayer)
     : m_pPlayer { pPlayer }
+    , m_pGameManager { CGameManager::GetInstance() }
 {
     Safe_AddRef(m_pPlayer);
+    Safe_AddRef(m_pGameManager);
 }
 
 void CPlayer_KamuiState::Start(_bool IsBlend)
 {
+    m_pGameManager->Change_Camera(LEVEL::GAMEPLAY, TEXT("Kamui_Action_Camera"));
     m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_KamuiKakashi", 1.5f, true);
 }
 
@@ -50,6 +53,8 @@ CPlayerState* CPlayer_KamuiState::Update(_float fTimeDelta)
 
 _bool CPlayer_KamuiState::End()
 {
+    m_pGameManager->Change_Camera(LEVEL::GAMEPLAY, TEXT("Main_Camera"));
+
     return true;
 }
 
@@ -63,4 +68,5 @@ void CPlayer_KamuiState::Free()
     __super::Free();
 
     Safe_Release(m_pPlayer);
+    Safe_Release(m_pGameManager);
 }
