@@ -30,10 +30,14 @@ HRESULT CNPC_KaKashi::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+	NPC_KAKASHI_DESC* pDesc = static_cast<NPC_KAKASHI_DESC*>(pArg);
+	m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetW(XMLoadFloat3(&pDesc->vPosition), 1.f));
+
 	m_iNumMeshes = m_pModelCom->Get_NumMeshes();
 
 	m_pModelCom->Set_AnimIndex("Kakashi_etc_Tutorial_Loop", 1.f, false);
 	m_eAnimState = ANIM_STATE::ANIM_IDLE;
+
 
 	return S_OK;
 }
@@ -44,13 +48,13 @@ void CNPC_KaKashi::Priority_Update(_float fTimeDelta)
 
 void CNPC_KaKashi::Update(_float fTimeDelta)
 {
-	if (ANIM_STATE::ANIM_GREET == m_eAnimState)
+	_bool isAnimFinished = m_pModelCom->Play_Animation(fTimeDelta);
+
+	if (ANIM_STATE::ANIM_GREET == m_eAnimState && true == isAnimFinished)
 	{
 		m_pModelCom->Set_AnimIndex("Kakashi_etc_Tutorial_Loop", 1.f, false);
 		m_eAnimState = ANIM_STATE::ANIM_IDLE;
 	}
-
-	m_pModelCom->Play_Animation(fTimeDelta);
 }
 
 void CNPC_KaKashi::Late_Update(_float fTimeDelta)
@@ -65,7 +69,7 @@ HRESULT CNPC_KaKashi::Render()
 
 	for (_uint i = 0; i < m_iNumMeshes; ++i)
 	{
-		if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_Texture", aiTextureType_DIFFUSE, 0)))
+		if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", aiTextureType_DIFFUSE, 0)))
 			return E_FAIL;
 
 		if (FAILED(m_pShaderCom->Begin(0)))
@@ -151,7 +155,7 @@ CGameObject* CNPC_KaKashi::Clone(void* pArg)
 {
 	CNPC_KaKashi* pInstance = new CNPC_KaKashi(*this);
 
-	if (FAILED(pInstance->Initialize_Prototype()))
+	if (FAILED(pInstance->Initialize(pArg)))
 	{
 		MSG_BOX("Clone Failed : Kakashi");
 		Safe_Release(pInstance);
