@@ -106,8 +106,6 @@ HRESULT CComboKOPanel::Initialize(void* pArg)
 	if (FAILED(Ready_KO()))
 		return E_FAIL;
 
-	m_pGameManager->Get_PlayerPtr()->Set_ComboKOPanel(this);
-
 	return S_OK;
 }
 

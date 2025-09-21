@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
+#include "Skill_Table.h"
 #include "Base.h"
 
 NS_BEGIN(Engine)
@@ -39,14 +40,30 @@ public:
 	HRESULT Initialize();
 
 public:
+	void Set_Dialog(class CDialogUI* pDialogUI);
+	void Set_SkillSlotPanel(class CSkillSlotPanel* pSkillSlotPanel);
+	void Set_AttackTypePanel(class CAttackTypePanel* pAttackTypePanel);
+	void Set_ComboKoPanel(class CComboKOPanel* pComboKOPanel);
+
+public:
 	void Set_Dialog_Text(const _wstring& strDialogText);
 	void Set_Dialog_Visible(_bool bFlag);
-	void Add_Dialog(class CDialogUI* pDialogUI);
+
+	void Update_Combo(_uint iComboCount);
+	void PopUp_KO();
+
+	void Change_Skill(_uint iIdx, SKILL eSkill);
+	void Change_AttackType(ATTACK_TYPE eAttackType);
+public:
+
 
 private:
 	CGameInstance* m_pGameInstance = { nullptr };
 
 	class CDialogUI* m_pDialogUI;
+	class CSkillSlotPanel* m_pSkillSlotPanel = { nullptr };
+	class CAttackTypePanel* m_pAttackTypePanel = { nullptr };
+	class CComboKOPanel* m_pComboKOPanel = { nullptr };
 
 public:
 	static CUI_Manager* Create();

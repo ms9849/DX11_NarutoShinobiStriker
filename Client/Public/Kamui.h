@@ -34,7 +34,7 @@ private:
 	/* ¸â¹ö º¯¼öµé */
 	_float			 m_fLifeTime = { 2.0f };
 	_float			 m_fTimeAcc = { 0.f };
-	_float			 m_isFinal = { false };
+	_bool			 m_isFinal = { false };
 	_float			 m_fAttackCoolDown = { 0.f };
 	_float			 m_fAttackMaxCoolDown = { 0.15f };
 private:

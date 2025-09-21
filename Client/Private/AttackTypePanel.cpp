@@ -59,8 +59,6 @@ HRESULT CAttackTypePanel::Initialize(void* pArg)
     if (FAILED(Ready_Texts()))
         return E_FAIL;
 
-    m_pGameManager->Get_PlayerPtr()->Set_AttackTypePanel(this);
-
     return S_OK;
 }
 

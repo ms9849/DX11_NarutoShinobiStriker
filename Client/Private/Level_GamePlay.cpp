@@ -8,11 +8,14 @@
 #include "SkillActionCamera.h"
 
 #include "TimerPanel.h"
+#include "SkillSlotPanel.h"
+#include "AttackTypePanel.h"
+#include "ComboKOPanel.h"
+#include "DialogUI.h"
 
 #include "GameManager.h"
 #include "Player.h"
 #include "Props.h"
-#include "DialogUI.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID)
 	: CLevel { pDevice, pContext, ENUM_CLASS(eLevelID)}
@@ -269,17 +272,17 @@ HRESULT CLevel_GamePlay::Ready_Layer_UI(const _wstring& strLayerTag)
 		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
 		return E_FAIL;
 
+	m_pGameManager->Set_SkillSlotPanel(static_cast<CSkillSlotPanel*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag, m_pGameInstance->Get_LayerSize(ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag) - 1)));
+
+
 	Desc = CUIObject::CreateDesc(g_iWinSizeX / 2.f + 450, g_iWinSizeY / 2.f + 220, 0.40f, 250, 30, 0, 0.f);
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_AttackTypePanel"),
 		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
 		return E_FAIL;
 
-	Desc = CUIObject::CreateDesc(g_iWinSizeX / 2.f, g_iWinSizeY / 2.f - 240, 0.30f, g_iWinSizeX - 250, 50, 0, 0.f);
+	m_pGameManager->Set_AttackTypePanel(static_cast<CAttackTypePanel*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag, m_pGameInstance->Get_LayerSize(ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag) - 1)));
 
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_MissionAlertPanel"),
-		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
-		return E_FAIL;
 
 	Desc = CUIObject::CreateDesc(g_iWinSizeX / 2.f + 430.f, g_iWinSizeY / 2.f + 20.f, 0.30f, 300, 100, 0, 30.f);
 
@@ -287,14 +290,25 @@ HRESULT CLevel_GamePlay::Ready_Layer_UI(const _wstring& strLayerTag)
 		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
 		return E_FAIL;
 
+	m_pGameManager->Set_ComboKoPanel(static_cast<CComboKOPanel*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag, m_pGameInstance->Get_LayerSize(ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag) - 1)));
+
+	Desc = CUIObject::CreateDesc(g_iWinSizeX / 2.f, g_iWinSizeY / 2.f - 240, 0.30f, g_iWinSizeX - 250, 50, 0, 0.f);
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_MissionAlertPanel"),
+		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
+		return E_FAIL;
+
+	/* 이 부분 내일 고칠 것 */
 	Desc = CUIObject::CreateDesc(g_iWinSizeX / 2.f, g_iWinSizeY / 2.f, 0.05f, 800.f, 200.f, 0, 0.f);
 
-	CDialogUI* pDialog = static_cast<CDialogUI*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::GAMEPLAY), 
-		TEXT("Prototype_GameObject_DialogUI"), &Desc));
 
-	m_pGameManager->Add_Dialog(pDialog);
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_DialogUI"),
+		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
+		return E_FAIL;
 
-	m_pGameInstance->Add_Clone_ToLayer(pDialog, ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag);
+	m_pGameManager->Set_Dialog(static_cast<CDialogUI*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag, m_pGameInstance->Get_LayerSize(ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag) - 1)));
+
+	m_pGameManager->Get_PlayerPtr()->Change_Skills();
 
 	return S_OK;
 }

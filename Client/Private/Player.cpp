@@ -71,33 +71,6 @@ void CPlayer::Set_AnimProgress(_float fProgress)
 	}
 }
 
-#pragma region UI_Initialize
-
-void CPlayer::Set_SkillSlotPanel(CSkillSlotPanel* pPanel)
-{
-	m_pSkillSlotPanel = pPanel;
-	Safe_AddRef(m_pSkillSlotPanel);
-
-	for (_uint i = ENUM_CLASS(SKILLNUM::SECOND); i < ENUM_CLASS(SKILLNUM::END); ++i)
-		m_pSkillSlotPanel->Change_Skill(i, m_ActivatedSkills[i]);
-}
-
-void CPlayer::Set_AttackTypePanel(CAttackTypePanel* pPanel)
-{
-	m_pAttackTypePanel = pPanel;
-	Safe_AddRef(m_pAttackTypePanel);
-
-	m_pAttackTypePanel->Change_AttackType(m_eCurAttackType);
-}
-
-void CPlayer::Set_ComboKOPanel(CComboKOPanel* pPanel)
-{
-	m_pComboKOPanel = pPanel;
-	Safe_AddRef(m_pComboKOPanel);
-}
-
-#pragma endregion
-
 void CPlayer::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _bool IsBlend, _float fBlendRatio, _bool IsLoop)
 {
 	/*
@@ -426,7 +399,7 @@ void CPlayer::ComboKO_System(_float fTimeDelta)
 	/* KO 시스템 */
 	if (m_bEnemyKO)
 	{
-		m_pComboKOPanel->PopUp_KO();
+		m_pGameManager->PopUp_KO();
 		m_bEnemyKO = false;
 	}
 
@@ -445,20 +418,17 @@ void CPlayer::ComboKO_System(_float fTimeDelta)
 		m_fComboTimeAcc = 0.f;
 	}
 
-	m_pComboKOPanel->Update_Combo(m_iComboCount);
+	m_pGameManager->Update_Combo(m_iComboCount);
 	m_bEnemyHit = false;
 }
 
 void CPlayer::Change_Skills()
 {
-	if (m_pSkillSlotPanel == nullptr || m_pAttackTypePanel == nullptr)
-		return;
-
 	/* 첫 번째 스킬은 그림자 분신이니까 교체 안함. */
 	for (_uint i = ENUM_CLASS(SKILLNUM::SECOND); i < ENUM_CLASS(SKILLNUM::END); ++i)
-		m_pSkillSlotPanel->Change_Skill(i, m_ActivatedSkills[i]);
+		m_pGameManager->Change_Skill(i, m_ActivatedSkills[i]);
 
-	m_pAttackTypePanel->Change_AttackType(m_eCurAttackType);
+	m_pGameManager->Change_AttackType(m_eCurAttackType);
 }
 
 void CPlayer::Clear_State()
@@ -499,9 +469,6 @@ void CPlayer::Free()
 
 	Safe_Release(m_pState);
 	Safe_Release(m_pGameManager);
-	Safe_Release(m_pSkillSlotPanel);
-	Safe_Release(m_pAttackTypePanel);
-	Safe_Release(m_pComboKOPanel);
 
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pHandAttackColliderCom);
