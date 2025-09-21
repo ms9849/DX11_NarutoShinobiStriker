@@ -41,12 +41,13 @@ public:
 	_float	Get_AnimProgress();
 	void	Set_AnimProgress(_float fProgress);
 	void	Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate = 1.f, _bool IsBlend = true, _float fBlendRatio = 0.15f, _bool IsLoop = false);
-	void	Set_Ground(_bool bFlag) { m_isGround = bFlag; }
+	void	Set_Ground(_bool bFlag) { m_IsGround = bFlag; }
 
 	void	   Set_Collider_Active(const _wstring& strColliderTag, _bool bFlag);
 	CCollider* Get_Collider(const _wstring& strColliderTag);
 	CNavigation* Get_Navigation() { return m_pNavigationCom; }
 
+	void	Set_Visible(_bool bFlag) { m_IsVisible = bFlag; }
 public:
 	void	Clear_State();
 	void	Update_State(_float fTimeDelta);
@@ -65,6 +66,7 @@ public:
 public:
 	void OnCollision(COLLIDER_HANDLE_ID eHandleID, _float3 vColliderPos);
 	void Change_State(class CPlayerState* pNextState, _bool bBlend);
+
 private:
 	class CGameManager*		m_pGameManager = { nullptr };
 
@@ -80,8 +82,9 @@ private:
 	_float					m_fComboTimeAcc = { 0 };
 	_bool					m_bEnemyHit = { false };
 	_bool					m_bEnemyKO = { false };
-	_bool					m_isGround = { true };
-	_bool					m_isInvincible = { false };
+	_bool					m_IsGround = { true };
+	_bool					m_IsInvincible = { false };
+	_bool					m_IsVisible = { true };
 
 private:
 	HRESULT Ready_Components();

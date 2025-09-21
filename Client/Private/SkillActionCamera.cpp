@@ -1,5 +1,7 @@
 #include "SkillActionCamera.h"
 
+#include "GameInstance.h"
+
 CSkillActionCamera::CSkillActionCamera(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CCamera { pDevice, pContext, ENUM_CLASS(eObjectID) }
 {

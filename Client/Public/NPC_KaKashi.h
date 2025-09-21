@@ -16,7 +16,6 @@ class CNPC_KaKashi : public CGameObject
 public:
 	enum class ANIM_STATE { ANIM_IDLE, ANIM_GREET };
 
-
 	typedef struct tagNPCKaKashiDesc {
 		_float3 vPosition;
 	} NPC_KAKASHI_DESC;
@@ -36,12 +35,24 @@ public:
 
 public:
 	void Start_Dialog();
+	void End_Dialog();
+	void Check_Talkable();
+	void Talk();
+
 private:
+	vector<_wstring> m_DialogTexts = {};
+
 	class CGameManager* m_pGameManager = { nullptr };
+	CTransform* m_pPlayerTransform = { nullptr };
 	CShader*	m_pShaderCom = { nullptr };
 	CModel*		m_pModelCom = { nullptr };
 	_uint		m_iNumMeshes = {};
 	ANIM_STATE	m_eAnimState = {};
+
+	_bool		m_isTalkable = { false };
+	_bool		m_isTalking = { false };
+	_int		m_iCurrentDialog = {};
+	_int		m_iDialogSize = { 0 };
 
 private:
 	HRESULT Ready_Components();

@@ -44,6 +44,7 @@
 #include "MainCamera.h"
 #include "ActionCamera.h"
 #include "SkillActionCamera.h"
+#include "NPCTalkCamera.h"
 
 #include "Lower_Character.h"
 #include "Upper_Character.h"
@@ -427,6 +428,7 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CTestCamera::Create(m_pDevice, m_pContext, OBJECTID::TEST_CAMERA))))
 		return E_FAIL;
 
+#pragma region CAMERA
 	/* For.Prototype_GameObject_MainCamera */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_MainCamera"),
 		CMainCamera::Create(m_pDevice, m_pContext, OBJECTID::MAIN_CAMERA))))
@@ -441,6 +443,16 @@ HRESULT CLoader::Loading_For_GamePlay()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_SkillActionCamera"),
 		CSkillActionCamera::Create(m_pDevice, m_pContext, OBJECTID::SKILL_ACTION_CAMERA))))
 		return E_FAIL;
+
+	/* For.Prototype_GameObject_NPCTalkCamera */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_NPCTalkCamera"),
+		CNPCTalkCamera::Create(m_pDevice, m_pContext, OBJECTID::NPC_TALK_CAMERA))))
+		return E_FAIL;
+
+
+#pragma endregion
+
+#pragma region PLAYER
 
 	/* For.Prototype_GameObject_Upper_Player */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Upper_Player"),
@@ -466,6 +478,10 @@ HRESULT CLoader::Loading_For_GamePlay()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Weapon_Player"),
 		CWeapon_Character::Create(m_pDevice, m_pContext, OBJECTID::PLAYER_WEAPON))))
 		return E_FAIL;
+
+#pragma endregion
+
+#pragma region UI
 
 	/* For.Prototype_GameObject_SkillSlotUI */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_SkillSlotUI"),
@@ -516,6 +532,8 @@ HRESULT CLoader::Loading_For_GamePlay()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_DialogUI"),
 		CDialogUI::Create(m_pDevice, m_pContext, OBJECTID::DIALOG_UI))))
 		return E_FAIL;
+
+#pragma endregion
 
 	//Prototype_GameObject_NPC_Kakashi
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_NPC_Kakashi"),

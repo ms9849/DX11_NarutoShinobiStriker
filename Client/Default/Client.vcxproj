@@ -193,6 +193,7 @@
     <ClInclude Include="..\Public\Kamui.h" />
     <ClInclude Include="..\Public\LockOn_Manager.h" />
     <ClInclude Include="..\Public\MainCamera.h" />
+    <ClInclude Include="..\Public\NPCTalkCamera.h" />
     <ClInclude Include="..\Public\NPC_KaKashi.h" />
     <ClInclude Include="..\Public\Player_AerialFireBallState.h" />
     <ClInclude Include="..\Public\Player_AerialRasenShurikenState.h" />
@@ -322,6 +323,7 @@
     <ClCompile Include="..\Private\Kamui.cpp" />
     <ClCompile Include="..\Private\LockOn_Manager.cpp" />
     <ClCompile Include="..\Private\MainCamera.cpp" />
+    <ClCompile Include="..\Private\NPCTalkCamera.cpp" />
     <ClCompile Include="..\Private\NPC_KaKashi.cpp" />
     <ClCompile Include="..\Private\Player_AerialFireBallState.cpp" />
     <ClCompile Include="..\Private\Player_AerialRasenShurikenState.cpp" />

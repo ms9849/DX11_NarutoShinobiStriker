@@ -6,6 +6,7 @@
 #include "TestCamera.h"
 #include "ActionCamera.h"
 #include "SkillActionCamera.h"
+#include "NPCTalkCamera.h"
 
 #include "TimerPanel.h"
 #include "SkillSlotPanel.h"
@@ -36,14 +37,14 @@ HRESULT CLevel_GamePlay::Initialize()
 
 	if (FAILED(Ready_Layer_StaticObjects(TEXT("Layer_StaticObjects"))))
 		return E_FAIL;
-	
-	if (FAILED(Ready_Layer_NPC(TEXT("Layer_NPC"))))
-		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
+		return E_FAIL;
+
+	if (FAILED(Ready_Layer_NPC(TEXT("Layer_NPC"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
@@ -57,8 +58,6 @@ HRESULT CLevel_GamePlay::Initialize()
 
 	if (FAILED(Ready_Layer_Map(TEXT("Layer_Map"))))
 		return E_FAIL;
-
-
 
 	if (FAILED(m_pGameManager->Change_Camera(LEVEL::GAMEPLAY, TEXT("Main_Camera"))))
 		return E_FAIL;
@@ -210,6 +209,20 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const _wstring& strLayerTag)
 		PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_SkillActionCamera"), &SkillActionCameraDesc)))))
 		return E_FAIL;
 
+	CNPCTalkCamera::NPC_TALK_CAMERA_DESC NPCCameraDesc{};
+	NPCCameraDesc.fFovy = XMConvertToRadians(60.0f);
+	NPCCameraDesc.fNear = 0.1f;
+	NPCCameraDesc.fFar = 1000.f;
+	NPCCameraDesc.vEye = _float4(0.f, 30.f, -30.f, 1.f);
+	NPCCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
+	NPCCameraDesc.fSpeedPerSec = 15.f;
+	NPCCameraDesc.fRotationPerSec = XMConvertToRadians(90.0f);
+	NPCCameraDesc.pTargetTransform = static_cast<CTransform*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Layer_NPC"), Engine::g_strTransformTag, 0));
+
+	/* 카메라는 게임 매니저에 추가하여 관리한다. */
+	if (FAILED(m_pGameManager->Add_Camera(LEVEL::GAMEPLAY, TEXT("NPC_Talk_Caemra"), static_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
+		PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_NPCTalkCamera"), &NPCCameraDesc)))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -229,9 +242,9 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _wstring& strLayerTag)
 
 HRESULT CLevel_GamePlay::Ready_Layer_Monster(const _wstring& strLayerTag)
 {
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_WhiteJetsu"),
-		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag)))
-		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_WhiteJetsu"),
+	//	ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag)))
+	//	return E_FAIL;
 
 	//if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Bird"),
 	//	ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag)))

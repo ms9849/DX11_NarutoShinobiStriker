@@ -2,6 +2,7 @@
 
 #include "GameInstance.h"
 #include "GameManager.h"
+#include "Player.h"
 
 CNPC_KaKashi::CNPC_KaKashi(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 	: CGameObject { pDevice, pContext, ENUM_CLASS(eObjectID) }
@@ -30,29 +31,42 @@ HRESULT CNPC_KaKashi::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+	m_pPlayerTransform = m_pGameManager->Get_PlayerPtr()->Get_Transform();
+	Safe_AddRef(m_pPlayerTransform);
+
 	NPC_KAKASHI_DESC* pDesc = static_cast<NPC_KAKASHI_DESC*>(pArg);
 	m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetW(XMLoadFloat3(&pDesc->vPosition), 1.f));
 
 	m_iNumMeshes = m_pModelCom->Get_NumMeshes();
 
-	m_pModelCom->Set_AnimIndex("Kakashi_etc_Tutorial_Loop", 1.f, false);
+	m_pModelCom->Set_AnimIndex("Kakashi_etc_Tutorial_Loop", 1.f, true, 0.05f);
 	m_eAnimState = ANIM_STATE::ANIM_IDLE;
 
+	m_DialogTexts.push_back(TEXT("피곤해 귀찮아 짜증나"));
+	m_DialogTexts.push_back(TEXT("코딩하기 싫다"));
+	m_DialogTexts.push_back(TEXT("너무 배고파"));
+	m_DialogTexts.push_back(TEXT("누워서 자고 싶다"));
+	m_DialogTexts.push_back(TEXT("졸작 팀장은 한재훈 김누리 김찬빈"));
+
+	m_iDialogSize = (_uint)m_DialogTexts.size();
 
 	return S_OK;
 }
 
 void CNPC_KaKashi::Priority_Update(_float fTimeDelta)
 {
+	Talk();
 }
 
 void CNPC_KaKashi::Update(_float fTimeDelta)
 {
+	Check_Talkable();
+
 	_bool isAnimFinished = m_pModelCom->Play_Animation(fTimeDelta);
 
 	if (ANIM_STATE::ANIM_GREET == m_eAnimState && true == isAnimFinished)
 	{
-		m_pModelCom->Set_AnimIndex("Kakashi_etc_Tutorial_Loop", 1.f, false);
+		m_pModelCom->Set_AnimIndex("Kakashi_etc_Tutorial_Loop", 1.f, true, 0.05f);
 		m_eAnimState = ANIM_STATE::ANIM_IDLE;
 	}
 }
@@ -69,6 +83,9 @@ HRESULT CNPC_KaKashi::Render()
 
 	for (_uint i = 0; i < m_iNumMeshes; ++i)
 	{
+		if (FAILED(m_pModelCom->Bind_BoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
+			return E_FAIL;
+
 		if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", aiTextureType_DIFFUSE, 0)))
 			return E_FAIL;
 
@@ -86,7 +103,60 @@ void CNPC_KaKashi::Start_Dialog()
 {
 	/* 카메라도 NPC 전용으로 교체할 것. */
 	m_pModelCom->Set_AnimIndex("KakashiNext_Reaction3", 1.f, true);
+	m_pGameManager->Change_Camera(static_cast<LEVEL>(m_pGameInstance->Get_LevelID()), TEXT("NPC_Talk_Caemra"));
+	m_pGameManager->Get_PlayerPtr()->Set_Visible(false);
 	m_eAnimState = ANIM_STATE::ANIM_GREET;
+	m_pGameManager->Set_Talking(true);
+}
+
+void CNPC_KaKashi::End_Dialog()
+{
+	m_pGameManager->Change_Camera(static_cast<LEVEL>(m_pGameInstance->Get_LevelID()), TEXT("Main_Camera"));
+	m_pGameManager->Set_Dialog_Visible(false);
+	m_pGameManager->Get_PlayerPtr()->Set_Visible(true);
+	m_isTalking = false;
+	m_iCurrentDialog = 0;
+	m_pGameManager->Set_Talking(false);
+}
+
+void CNPC_KaKashi::Check_Talkable()
+{
+	_vector vPlayerPos = m_pPlayerTransform->Get_State(STATE::POSITION);
+	_float fDist = XMVectorGetX(XMVector3Length(vPlayerPos - m_pTransformCom->Get_State(STATE::POSITION)));
+
+	/* 이미 대화중이여도 대화를 하면 안됨. */
+	if (fDist <= 1.5f && false == m_isTalking)
+		m_isTalkable = true;
+
+	else
+		m_isTalkable = false;
+}
+
+void CNPC_KaKashi::Talk()
+{
+	/* F를 눌러서 대화 */
+	if(m_pGameInstance->Key_Down(DIK_F) && false == m_isTalking)
+	{ 
+		m_isTalking = true;
+		m_iCurrentDialog = 0;
+
+		Start_Dialog();
+		m_pGameManager->Set_Dialog_Visible(true);
+		m_pGameManager->Set_Dialog_Text(m_DialogTexts[m_iCurrentDialog]);
+	}
+
+	/* 이미 대화중이라면 */
+	else if (m_pGameInstance->Key_Down(DIK_F) && true == m_isTalking)
+	{
+		/* 대화 종료 */
+		if (m_iCurrentDialog >= m_iDialogSize - 1)
+			End_Dialog();
+		else
+		{
+			m_iCurrentDialog++;
+			m_pGameManager->Set_Dialog_Text(m_DialogTexts[m_iCurrentDialog]);
+		}
+	}
 }
 
 HRESULT CNPC_KaKashi::Ready_Components()
@@ -170,4 +240,5 @@ void CNPC_KaKashi::Free()
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pGameManager);
+	Safe_Release(m_pPlayerTransform);
 }

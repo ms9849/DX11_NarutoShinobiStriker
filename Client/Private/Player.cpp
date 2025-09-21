@@ -193,10 +193,12 @@ void CPlayer::Update(_float fTimeDelta)
 	m_pGameManager->Update_LockOnManager(fTimeDelta);
 
 	/* 스테이트 업데이트. */
-	Update_State(fTimeDelta);
+	if(false == m_pGameManager->IsTalking())
+		Update_State(fTimeDelta);
+
 	/* 네비메쉬 높이 업데이트 */
 
-	if(true == m_isGround)
+	if(true == m_IsGround)
 		m_pNavigationCom->Compute_Height(m_pTransformCom);
 
 	
@@ -228,10 +230,12 @@ void CPlayer::Late_Update(_float fTimeDelta)
 		Change_Skills();
 	}
 
+	if (false == m_IsVisible)
+		return;
+
 	__super::Late_Update(fTimeDelta);
 
 	m_pGameManager->Add_Object_ToCollision(TEXT("Player_Body"), this, m_pColliderCom);
-
 	m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 
@@ -250,7 +254,7 @@ HRESULT CPlayer::Render()
 void CPlayer::OnCollision(COLLIDER_HANDLE_ID eHandleID, _float3 vColliderPos)
 {
 	/* 플레이어 충돌로직 처리 */
-	if (true == m_isInvincible)
+	if (true == m_IsInvincible || true == m_pGameManager->IsTalking())
 		return;
 
 	CPlayerState* pNextState = { nullptr };
