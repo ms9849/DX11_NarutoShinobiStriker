@@ -151,6 +151,26 @@ CTransform* CGameManager::Calc_Target(_fvector vPosition)
 	return m_pLockOn_Manager->Calc_Target(vPosition);
 }
 
+void CGameManager::Set_Dialog(CDialogUI* pDialogUI)
+{
+	m_pUI_Manager->Set_Dialog(pDialogUI);
+}
+
+void CGameManager::Set_SkillSlotPanel(CSkillSlotPanel* pSkillSlotPanel)
+{
+	m_pUI_Manager->Set_SkillSlotPanel(pSkillSlotPanel);
+}
+
+void CGameManager::Set_AttackTypePanel(CAttackTypePanel* pAttackTypePanel)
+{
+	m_pUI_Manager->Set_AttackTypePanel(pAttackTypePanel);
+}
+
+void CGameManager::Set_ComboKoPanel(CComboKOPanel* pComboKOPanel)
+{
+	m_pUI_Manager->Set_ComboKoPanel(pComboKOPanel);
+}
+
 void CGameManager::Set_Dialog_Text(const _wstring& strDialogText)
 {
 	m_pUI_Manager->Set_Dialog_Text(strDialogText);
@@ -161,9 +181,24 @@ void CGameManager::Set_Dialog_Visible(_bool bFlag)
 	m_pUI_Manager->Set_Dialog_Visible(bFlag);
 }
 
-void CGameManager::Add_Dialog(CDialogUI* pDialogUI)
+void CGameManager::Update_Combo(_uint iComboCount)
 {
-	m_pUI_Manager->Add_Dialog(pDialogUI);
+	m_pUI_Manager->Update_Combo(iComboCount);
+}
+
+void CGameManager::PopUp_KO()
+{
+	m_pUI_Manager->PopUp_KO();
+}
+
+void CGameManager::Change_Skill(_uint iIdx, SKILL eSkill)
+{
+	m_pUI_Manager->Change_Skill(iIdx, eSkill);
+}
+
+void CGameManager::Change_AttackType(ATTACK_TYPE eAttackType)
+{
+	m_pUI_Manager->Change_AttackType(eAttackType);
 }
 
 LEVEL CGameManager::Get_NextLevel()

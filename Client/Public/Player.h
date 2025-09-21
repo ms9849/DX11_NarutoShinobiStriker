@@ -48,15 +48,11 @@ public:
 	CNavigation* Get_Navigation() { return m_pNavigationCom; }
 
 public:
-	void	Set_SkillSlotPanel(class CSkillSlotPanel* pPanel);
-	void	Set_AttackTypePanel(class CAttackTypePanel* pPanel);
-	void	Set_ComboKOPanel(class CComboKOPanel* pPanel);
-
-public:
 	void	Clear_State();
 	void	Update_State(_float fTimeDelta);
 	_bool	Play_Animation(_float fTimeDelta);
 	_bool	Use_Skill(SKILLNUM eSlotNum); 
+	void	Change_Skills();
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -71,9 +67,6 @@ public:
 	void Change_State(class CPlayerState* pNextState, _bool bBlend);
 private:
 	class CGameManager*		m_pGameManager = { nullptr };
-	class CSkillSlotPanel*	m_pSkillSlotPanel = { nullptr };
-	class CAttackTypePanel* m_pAttackTypePanel = { nullptr };
-	class CComboKOPanel*	m_pComboKOPanel = { nullptr };
 
 	CNavigation*			m_pNavigationCom = { nullptr };
 	CCollider*				m_pColliderCom = { nullptr };
@@ -97,7 +90,6 @@ private:
 private:
 	void Key_Input(_float fTimeDelta);
 	void ComboKO_System(_float fTimeDelta);
-	void Change_Skills();
 
 public:
 	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);

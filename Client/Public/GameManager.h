@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
+#include "Skill_Table.h"
 #include "Base.h"
 
 NS_BEGIN(Engine)
@@ -82,9 +83,20 @@ public:
 #pragma endregion
 
 #pragma region UI
+	void Set_Dialog(class CDialogUI* pDialogUI);
+	void Set_SkillSlotPanel(class CSkillSlotPanel* pSkillSlotPanel);
+	void Set_AttackTypePanel(class CAttackTypePanel* pAttackTypePanel);
+	void Set_ComboKoPanel(class CComboKOPanel* pComboKOPanel);
+
 	void Set_Dialog_Text(const _wstring& strDialogText);
 	void Set_Dialog_Visible(_bool bFlag);
-	void Add_Dialog(class CDialogUI* pDialogUI);
+
+	void Update_Combo(_uint iComboCount);
+	void PopUp_KO();
+
+	void Change_Skill(_uint iIdx, SKILL eSkill);
+	void Change_AttackType(ATTACK_TYPE eAttackType);
+
 #pragma endregion
 
 private:

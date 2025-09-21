@@ -34,8 +34,6 @@ HRESULT CSkillSlotPanel::Initialize(void* pArg)
 	if (FAILED(Ready_ProgressBar()))
 		return E_FAIL;
 
-	m_pGameManager->Get_PlayerPtr()->Set_SkillSlotPanel(this);
-
 	return S_OK;
 }
 
