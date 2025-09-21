@@ -13,6 +13,8 @@
 #include "ComboKOPanel.h"
 #include "DialogUI.h"
 
+#include "NPC_KaKashi.h"
+
 #include "GameManager.h"
 #include "Player.h"
 #include "Props.h"
@@ -32,7 +34,10 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
 		return E_FAIL;
 
-	if(FAILED(Ready_Layer_StaticObjects(TEXT("Layer_StaticObjects"))))
+	if (FAILED(Ready_Layer_StaticObjects(TEXT("Layer_StaticObjects"))))
+		return E_FAIL;
+	
+	if (FAILED(Ready_Layer_NPC(TEXT("Layer_NPC"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
@@ -44,9 +49,6 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
 		return E_FAIL;
 
-	if(FAILED(m_pGameManager->Change_Camera(LEVEL::GAMEPLAY, TEXT("Main_Camera"))))
-		return E_FAIL;
-
 	if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
 		return E_FAIL;
 
@@ -55,6 +57,13 @@ HRESULT CLevel_GamePlay::Initialize()
 
 	if (FAILED(Ready_Layer_Map(TEXT("Layer_Map"))))
 		return E_FAIL;
+
+
+
+	if (FAILED(m_pGameManager->Change_Camera(LEVEL::GAMEPLAY, TEXT("Main_Camera"))))
+		return E_FAIL;
+
+	m_pGameManager->Get_PlayerPtr()->Change_Skills();
 
 	return S_OK;
 }
@@ -308,8 +317,6 @@ HRESULT CLevel_GamePlay::Ready_Layer_UI(const _wstring& strLayerTag)
 
 	m_pGameManager->Set_Dialog(static_cast<CDialogUI*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag, m_pGameInstance->Get_LayerSize(ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag) - 1)));
 
-	m_pGameManager->Get_PlayerPtr()->Change_Skills();
-
 	return S_OK;
 }
 
@@ -324,7 +331,6 @@ HRESULT CLevel_GamePlay::Ready_Layer_StaticObjects(const _wstring& strLayerTag)
 	//	ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag, &PropDesc)))
 	//	return E_FAIL;
 
-
 	//if(FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Gate"),
 	//	ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag)))
 	//	return E_FAIL;
@@ -332,6 +338,19 @@ HRESULT CLevel_GamePlay::Ready_Layer_StaticObjects(const _wstring& strLayerTag)
 	//if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Tree"),
 	//	ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag)))
 	//	return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CLevel_GamePlay::Ready_Layer_NPC(const _wstring& strLayerTag)
+{
+	/* Ä«Ä«½Ã */
+	CNPC_KaKashi::NPC_KAKASHI_DESC Desc;
+	Desc.vPosition = { 0.f, 0.f, 4.f };
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_NPC_Kakashi"),
+		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
+		return E_FAIL;
 
 	return S_OK;
 }

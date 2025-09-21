@@ -15,6 +15,12 @@ class CNPC_KaKashi : public CGameObject
 {
 public:
 	enum class ANIM_STATE { ANIM_IDLE, ANIM_GREET };
+
+
+	typedef struct tagNPCKaKashiDesc {
+		_float3 vPosition;
+	} NPC_KAKASHI_DESC;
+
 private:
 	CNPC_KaKashi(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	CNPC_KaKashi(const CNPC_KaKashi& rhs);

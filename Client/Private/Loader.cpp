@@ -56,6 +56,8 @@
 #include "Boxer.h"
 #include "WoodHand.h"
 
+#include "NPC_KaKashi.h"
+
 #include "SkyBox.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -383,8 +385,8 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_GameObject_SkyBox */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_SkyBox"),
 		CSkyBox::Create(m_pDevice, m_pContext, OBJECTID::SKYBOX))))
-
 		return E_FAIL;
+
 	/* For.Prototype_GameObject_Terrain */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Terrain"),
 		CTerrain::Create(m_pDevice, m_pContext, OBJECTID::TERRAIN))))
@@ -513,6 +515,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_GameObject_DialogUI */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_DialogUI"),
 		CDialogUI::Create(m_pDevice, m_pContext, OBJECTID::DIALOG_UI))))
+		return E_FAIL;
+
+	//Prototype_GameObject_NPC_Kakashi
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_NPC_Kakashi"),
+		CNPC_KaKashi::Create(m_pDevice, m_pContext, OBJECTID::NPC_KAKASHI))))
 		return E_FAIL;
 
 	m_strMessage = TEXT("로딩이 완료되었습니다..");
