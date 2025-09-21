@@ -31,6 +31,7 @@ HRESULT CDialogUI::Initialize(void* pArg)
         return E_FAIL;
 
     m_strFontText = TEXT("코딩하기싫다아아아아");
+    m_IsVisible = false;
 
     return S_OK;
 }
@@ -45,6 +46,9 @@ void CDialogUI::Update(_float fTimeDelta)
 
 void CDialogUI::Late_Update(_float fTimeDelta)
 {
+    if (false == m_IsVisible)
+        return;
+
     m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
     
     /* 폰트 추가 */

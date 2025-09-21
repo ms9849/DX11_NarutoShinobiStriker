@@ -25,8 +25,6 @@ NS_BEGIN(Client)
 
 다양한 게임 내의 흐름을 컨트롤하는데 쓰이는 매니저가 될 것이다.
 
--> 콜리전 매니저는? 엔진 단에서 적용.
--> 이펙트는? 어차피 풀링될테니까 풀링 매니저 (게임인스턴스) 에서 꺼내오는게 합당할 것.
 */
 /*
 록온 시스템 -> 시야 내에 있고 (외적 결과 음수인가 양수인가로 판정) & 가장 가까운 몬스터가 록온되어야 할 것
@@ -57,6 +55,11 @@ public:
 	HRESULT		Initialize_GameManager();
 	void		Release_GameManager();
 	void		Clear();
+
+#pragma region FLOW
+	void  Set_Talking(_bool bFlag) { m_IsTalking = bFlag; }
+	_bool IsTalking() { return m_IsTalking; }
+#pragma endregion
 
 #pragma region CAMERA
 	CTransform* Get_TargetTransform();
@@ -107,7 +110,9 @@ private:
 	class CLockOn_Manager* m_pLockOn_Manager = { nullptr };
 	class CUI_Manager* m_pUI_Manager = { nullptr };
 
-	class CPlayer* m_pPlayer = {};
+	/* 게임 매니저 단에서 직접 관리할 변수들 */
+	class CPlayer*  m_pPlayer = {};
+	_bool			m_IsTalking = { false };
 	LEVEL			m_eNextLevel = {};
 
 public:

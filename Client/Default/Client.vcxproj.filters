@@ -415,6 +415,12 @@
     <Filter Include="96. GameManager\Managers\UI">
       <UniqueIdentifier>{b7d192e0-6f9e-4fef-a6bf-bf0e65591aaa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\NPC\Dialog">
+      <UniqueIdentifier>{696bbb2e-d5ec-4d66-8331-41ae5002cd05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Camera\NPCTalk">
+      <UniqueIdentifier>{a580c1aa-d8cf-4701-bf79-73216c5ba796}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -801,6 +807,9 @@
     <ClInclude Include="..\Public\UI_Manager.h">
       <Filter>96. GameManager\Managers\UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\NPCTalkCamera.h">
+      <Filter>02.GameObjects\Camera\NPCTalk</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1184,6 +1193,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\UI_Manager.cpp">
       <Filter>96. GameManager\Managers\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\NPCTalkCamera.cpp">
+      <Filter>02.GameObjects\Camera\NPCTalk</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
