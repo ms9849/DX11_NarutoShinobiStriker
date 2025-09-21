@@ -33,9 +33,9 @@ HRESULT CNPCTalkCamera::Initialize(void* pArg)
 void CNPCTalkCamera::Priority_Update(_float fTimeDelta)
 {
     m_pTransformCom->Set_State(STATE::POSITION
-        , m_pTargetTransform->Get_State(STATE::POSITION) + m_pTargetTransform->Get_State(STATE::LOOK) * 1.3f + m_pTargetTransform->Get_State(STATE::RIGHT) * 0.4f + XMVectorSet(0.f, 1.4f, 0.f, 0.f));
+        , m_pTargetTransform->Get_State(STATE::POSITION) + m_pTargetTransform->Get_State(STATE::LOOK) * 1.4f + m_pTargetTransform->Get_State(STATE::RIGHT) * 0.3f + XMVectorSet(0.f, 1.35f, 0.f, 0.f));
 
-    m_pTransformCom->LookAt(m_pTargetTransform->Get_State(STATE::POSITION) + m_pTargetTransform->Get_State(STATE::RIGHT) * 0.6f + XMVectorSet(0.f, 1.5f, 0.f, 0.f));
+    m_pTransformCom->LookAt(m_pTargetTransform->Get_State(STATE::POSITION) + m_pTargetTransform->Get_State(STATE::RIGHT) * 0.55f + XMVectorSet(0.f, 1.4f, 0.f, 0.f));
 
     __super::Bind_Matrices();
 }
