@@ -215,7 +215,7 @@ void CPlayer::Update(_float fTimeDelta)
 
 	_matrix PlayerMatrix = XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr());
 	_vector PlayerTranslation = m_pTransformCom->Get_State(STATE::POSITION);
-	PlayerTranslation += m_pTransformCom->Get_State(STATE::LOOK) * 0.5f;
+	PlayerTranslation += m_pTransformCom->Get_State(STATE::LOOK) * 0.4f;
 	PlayerMatrix.r[3] = PlayerTranslation;
 
 	m_pHandAttackColliderCom->Update(PlayerMatrix);
@@ -236,6 +236,7 @@ void CPlayer::Late_Update(_float fTimeDelta)
 	__super::Late_Update(fTimeDelta);
 
 	m_pGameManager->Add_Object_ToCollision(TEXT("Player_Body"), this, m_pColliderCom);
+	m_pGameManager->Add_Collider_ToCollision(TEXT("Player_Body"), COLLIDER_HANDLE_ID::PLAYER_BODY, m_pColliderCom);
 	m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 

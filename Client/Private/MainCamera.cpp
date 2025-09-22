@@ -36,7 +36,6 @@ HRESULT CMainCamera::Initialize(void* pArg)
 
 void CMainCamera::Priority_Update(_float fTimeDelta)
 {
-
     _float fMouseMoveX = (_float)m_pGameInstance->Get_MouseMove(MOUSEMOVESTATE::X) / g_iWinSizeX;
     _float fMouseMoveY = (_float)m_pGameInstance->Get_MouseMove(MOUSEMOVESTATE::Y) / g_iWinSizeY;
 
@@ -58,12 +57,12 @@ void CMainCamera::Priority_Update(_float fTimeDelta)
 
     // 라디안 제한 ( -90  ~ +90 + 여기에 캐릭터의 Look 벡터까지. )
     _float fLimit = XMConvertToRadians(89.f);
-    
+
     /* Y 라디안 제한 */
-    if (m_fRotateY > fLimit) 
+    if (m_fRotateY > fLimit)
         m_fRotateY = fLimit;
 
-    if (m_fRotateY < -fLimit) 
+    if (m_fRotateY < -fLimit)
         m_fRotateY = -fLimit;
 
     ///* X 라디안 제한 */
@@ -72,7 +71,7 @@ void CMainCamera::Priority_Update(_float fTimeDelta)
 
     //if (m_fRotateX < -fLimit) 
     //    m_fRotateX = -fLimit;
-    
+
     _vector		vQuternion = XMQuaternionRotationRollPitchYaw(/*m_fRotateY*/ 0.f, m_fRotateX, 0.f);
 
     _matrix		RotationMatrix = XMMatrixRotationQuaternion(vQuternion);
@@ -80,10 +79,8 @@ void CMainCamera::Priority_Update(_float fTimeDelta)
 
     _float      fLength = XMVectorGetX(XMVector3Length(vCamPos));
 
-    m_pTransformCom->Chase_Lerp(m_pPlayerTransform->Get_State(STATE::POSITION)+ vCamPos, fTimeDelta, 0.f);
+    m_pTransformCom->Chase_Lerp(m_pPlayerTransform->Get_State(STATE::POSITION) + vCamPos, fTimeDelta * 2.0f, 0.f);
     m_pTransformCom->LookAt_Lerp(m_pPlayerTransform->Get_State(STATE::POSITION) + XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::LOOK)) * 1.f);
-
-    m_pGameManager->SetUp_Target();
 
     __super::Bind_Matrices();
 }
@@ -99,6 +96,12 @@ void CMainCamera::Late_Update(_float fTimeDelta)
 HRESULT CMainCamera::Render()
 {
     return S_OK;
+}
+
+void CMainCamera::OnChange(const _float4x4* pWorldMatrix)
+{
+    if (nullptr != pWorldMatrix)
+        m_pTransformCom->Set_WorldMatrix(XMLoadFloat4x4(pWorldMatrix));
 }
 
 CMainCamera* CMainCamera::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)

@@ -18,6 +18,7 @@
 #include "Gate.h"
 #include "Tree.h"
 #include "Font.h"
+#include "MonsterSpawner.h"
 
 #pragma region Skill
 
@@ -32,9 +33,9 @@
 
 #pragma endregion
 
-#include "NavigationMesh.h"
 #include "Effect_CoolDown.h"
 #include "Snow.h"
+#include "Explosion.h"
 
 #include "Collider.h"
 
@@ -145,6 +146,11 @@ HRESULT CMainApp::Ready_Prototypes()
 	/* For.Prototype_GameObject_Tree */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Tree"),
 		CTree::Create(m_pDevice, m_pContext, OBJECTID::TREE))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_MonsterSpawner*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_MonsterSpawner"),
+		CMonsterSpawner::Create(m_pDevice, m_pContext, OBJECTID::MONSTER_SPAWNER))))
 		return E_FAIL;
 
 #pragma endregion
@@ -346,7 +352,6 @@ HRESULT CMainApp::Ready_Prototypes()
 		CFont::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Fonts/MyFont_Large.spritefont")))))
 		return E_FAIL;
 
-
 	/* For.Prototype_Component_VIBuffer_Rect */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
 		CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
@@ -368,6 +373,22 @@ HRESULT CMainApp::Ready_Prototypes()
 		CVIBuffer_Rect_Instance::Create(m_pDevice, m_pContext, &SnowDesc))))
 		return E_FAIL;
 
+
+	/* For.Prototype_Component_VIBuffer_Particle_Explosion */
+	CVIBuffer_Point_Instance::POINT_INSTANCE_DESC		ExplosionDesc{};
+
+	ExplosionDesc.iNumInstance = 300;
+	ExplosionDesc.vCenter = _float3(0.0f, 0.f, 0.0f);
+	ExplosionDesc.vPivot = _float3(0.f, 0.f, 0.f);
+	ExplosionDesc.vRange = _float3(2.f, 2.f, 2.f);
+	ExplosionDesc.vSize = _float2(0.2f, 0.6f);
+	ExplosionDesc.vLifeTime = _float2(3.f, 7.f);
+	ExplosionDesc.vSpeed = _float2(2.f, 5.f);
+	ExplosionDesc.isLoop = true;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_VIBuffer_Particle_Explosion"),
+		CVIBuffer_Point_Instance::Create(m_pDevice, m_pContext, &ExplosionDesc))))
+		return E_FAIL;
 
 	/* For.Prototype_Component_Collider_Sphere */ 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_Sphere"),
@@ -416,6 +437,11 @@ HRESULT CMainApp::Ready_Prototypes()
 	/* For.Prototype_Component_Shader_VtxRectParticle */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxRectParticle"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxRectParticle.hlsl"), VTX_POSTEX_INSTANCE_PARTICLE::Elements, VTX_POSTEX_INSTANCE_PARTICLE::iNumElements))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Shader_VtxPointParticle */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxPointParticle"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxPointParticle.hlsl"), VTX_POS_INSTANCE_PARTICLE::Elements, VTX_POS_INSTANCE_PARTICLE::iNumElements))))
 		return E_FAIL;
 
 #pragma endregion
@@ -510,6 +536,11 @@ HRESULT CMainApp::Ready_Prototypes()
 	/* For.Prototype_GameObject_Snow */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Snow"),
 		CSnow::Create(m_pDevice, m_pContext, OBJECTID::SNOW))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Explosion */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Explosion"),
+		CExplosion::Create(m_pDevice, m_pContext, OBJECTID::EXPLOSION))))
 		return E_FAIL;
 #pragma endregion
 	return S_OK;

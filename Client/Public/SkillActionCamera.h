@@ -31,12 +31,17 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	virtual void OnChange() override;
+	virtual void OnChange(const _float4x4* pWorldMatrix);
 
 private:
 	_float	m_fKamuiCamSpeedRatio = { 1.f };
 	_float  m_fKamuiCamTimeAcc = { 0.f };
 	_float  m_fMaxKamuiCamTimeAcc = { 0.15f };
+
+	_float  m_fFireBallCamSpeedRatio = { 0.3f };
+	_float  m_fZoomTimeAcc = { 0.f };
+	_float  m_fMaxZoomTimeAcc = { 0.4f };
+	_bool   m_IsZoom = { false };
 
 	SKILL   m_eSkillType = {};
 	_float3 m_vCameraPos = {};

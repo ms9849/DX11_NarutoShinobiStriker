@@ -73,6 +73,11 @@ void CGameManager::Clear()
 	}
 }
 
+_wstring CGameManager::Get_CameraName()
+{
+	return m_pCamera_Manager->Get_CameraName();
+}
+
 CTransform* CGameManager::Get_TargetTransform()
 {
 	return m_pCamera_Manager->Get_TargetTransform();
@@ -116,9 +121,9 @@ HRESULT CGameManager::Add_Camera(LEVEL eLevelID, const _wstring& strCameraTag, C
     return m_pCamera_Manager->Add_Camera(eLevelID, strCameraTag, pCamera);
 }
 
-HRESULT CGameManager::Change_Camera(LEVEL eLevelID, const _wstring& strCameraTag)
+HRESULT CGameManager::Change_Camera(LEVEL eLevelID, const _wstring& strCameraTag,  const _float4x4* pWorldMatrix)
 {
-	return m_pCamera_Manager->Change_Camera(eLevelID, strCameraTag);
+	return m_pCamera_Manager->Change_Camera(eLevelID, strCameraTag, pWorldMatrix);
 }
 
 void CGameManager::Add_Collider_ToCollision(const _wstring& strColliderTag, COLLIDER_HANDLE_ID eHandleID, CCollider* pCollider)

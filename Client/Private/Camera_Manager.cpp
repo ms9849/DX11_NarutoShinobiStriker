@@ -18,6 +18,11 @@ void CCamera_Manager::SetUp_Target()
 
 }
 
+_wstring CCamera_Manager::Get_CameraName()
+{
+	return m_strActivatedCameraTag;
+}
+
 HRESULT CCamera_Manager::Add_TargetTransform(CTransform* pTransformCom)
 {
 	m_Targets.push_back(pTransformCom);
@@ -39,7 +44,7 @@ HRESULT CCamera_Manager::Add_Camera(LEVEL eLevelID, const _wstring& strCameraTag
 	return S_OK;
 }
 
-HRESULT CCamera_Manager::Change_Camera(LEVEL eLevelID, const _wstring& strCameraTag)
+HRESULT CCamera_Manager::Change_Camera(LEVEL eLevelID, const _wstring& strCameraTag, const _float4x4* pWorldMatrix)
 {
 	/* 태그에 해당하는 카메라가 존재하지 않으면 FAIL 반환. */
 	auto iter = m_Cameras[ENUM_CLASS(eLevelID)].find(strCameraTag);
@@ -56,7 +61,7 @@ HRESULT CCamera_Manager::Change_Camera(LEVEL eLevelID, const _wstring& strCamera
 		m_pActivatedCamera->Set_Dead(true);
 
 	static_cast<CGameObject*>(iter->second)->Set_Dead(false);
-	static_cast<CCamera*>(iter->second)->OnChange();
+	static_cast<CCamera*>(iter->second)->OnChange(pWorldMatrix);
 	m_pGameInstance->Add_Clone_ToLayer(iter->second, ENUM_CLASS(eLevelID), TEXT("Layer_Camera"));
 
 	/* 활성화중인 카메라 교체 */

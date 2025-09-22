@@ -35,11 +35,11 @@ CWhiteJetsuState* CWhiteJetsu_AttackState::Update(_float fTimeDelta)
 	if(false == m_isColliderOn && fAnimProgress > 0.35f)
 		Update_Collider();
 
-	if (true == IsAnimFinished)
-	{
-		pNextState = CWhiteJetsu_IdleState::Create(m_pNavigationCom, m_pJetsu);
+	if(fAnimProgress >= 0.8f)
 		m_pJetsu->Set_Collider_Active(TEXT("Com_Collider_HandAttack"), false);
-	}
+
+	if (true == IsAnimFinished)
+		pNextState = CWhiteJetsu_IdleState::Create(m_pNavigationCom, m_pJetsu);
 
 	return pNextState;
 }

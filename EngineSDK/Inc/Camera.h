@@ -26,7 +26,7 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
-	virtual void OnChange() {};
+	virtual void OnChange(const _float4x4* pWorldMatrix = nullptr) {};
 protected:
 	_float							m_fFovy = {};
 	_float							m_fAspect = {};

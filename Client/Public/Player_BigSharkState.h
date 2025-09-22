@@ -22,8 +22,11 @@ public:
 	virtual _bool	End() override;
 
 private:
-	class CPlayer* m_pPlayer = { nullptr };
-	_bool	m_isBigSharkThrow = { false };
+	class CGameManager* m_pGameManager = { nullptr };
+	class CPlayer*		m_pPlayer = { nullptr };
+	_bool				m_IsBigSharkThrow = { false };
+	_bool				m_IsCamChanged = { false };
+
 public:
 	static CPlayer_BigSharkState* Create(class CPlayer* pPlayer);
 	virtual void Free() override;

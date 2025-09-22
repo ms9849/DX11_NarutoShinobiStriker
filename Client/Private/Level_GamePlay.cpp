@@ -16,6 +16,8 @@
 
 #include "NPC_KaKashi.h"
 
+#include "MonsterSpawner.h"
+
 #include "GameManager.h"
 #include "Player.h"
 #include "Props.h"
@@ -59,6 +61,10 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Map(TEXT("Layer_Map"))))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_Spawner(TEXT("Layer_Spawner"))))
+		return E_FAIL;
+
+
 	if (FAILED(m_pGameManager->Change_Camera(LEVEL::GAMEPLAY, TEXT("Main_Camera"))))
 		return E_FAIL;
 
@@ -96,6 +102,7 @@ void CLevel_GamePlay::Update(_float fTimeDelta)
 	m_pGameManager->Check_Collision(TEXT("Player_Skill"), TEXT("Monster_Body"), COLLISION_TYPE::MONSTER);
 	m_pGameManager->Check_Collision(TEXT("Monster_Attack"), TEXT("Player_Body"), COLLISION_TYPE::PLAYER);
 	m_pGameManager->Check_Collision(TEXT("Monster_Skill"), TEXT("Player_Body"), COLLISION_TYPE::PLAYER);
+	m_pGameManager->Check_Collision(TEXT("Player_Body"), TEXT("TriggerBox"), COLLISION_TYPE::TRIGGER);
 #pragma endregion
 
 	m_pGameManager->Update_Collision();
@@ -193,6 +200,21 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const _wstring& strLayerTag)
 		PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_ActionCamera"), &ActionCameraDesc)))))
 		return E_FAIL;
 
+	CNPCTalkCamera::NPC_TALK_CAMERA_DESC NPCCameraDesc{};
+	NPCCameraDesc.fFovy = XMConvertToRadians(60.0f);
+	NPCCameraDesc.fNear = 0.1f;
+	NPCCameraDesc.fFar = 1000.f;
+	NPCCameraDesc.vEye = _float4(0.f, 30.f, -30.f, 1.f);
+	NPCCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
+	NPCCameraDesc.fSpeedPerSec = 15.f;
+	NPCCameraDesc.fRotationPerSec = XMConvertToRadians(90.0f);
+	NPCCameraDesc.pTargetTransform = static_cast<CTransform*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Layer_NPC"), Engine::g_strTransformTag, 0));
+
+	/* 카메라는 게임 매니저에 추가하여 관리한다. */
+	if (FAILED(m_pGameManager->Add_Camera(LEVEL::GAMEPLAY, TEXT("NPC_Talk_Caemra"), static_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
+		PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_NPCTalkCamera"), &NPCCameraDesc)))))
+		return E_FAIL;
+
 	CSkillActionCamera::SKILL_ACTION_CAMERA_DESC SkillActionCameraDesc{};
 	SkillActionCameraDesc.fFovy = XMConvertToRadians(60.0f);
 	SkillActionCameraDesc.fNear = 0.1f;
@@ -209,19 +231,18 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const _wstring& strLayerTag)
 		PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_SkillActionCamera"), &SkillActionCameraDesc)))))
 		return E_FAIL;
 
-	CNPCTalkCamera::NPC_TALK_CAMERA_DESC NPCCameraDesc{};
-	NPCCameraDesc.fFovy = XMConvertToRadians(60.0f);
-	NPCCameraDesc.fNear = 0.1f;
-	NPCCameraDesc.fFar = 1000.f;
-	NPCCameraDesc.vEye = _float4(0.f, 30.f, -30.f, 1.f);
-	NPCCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
-	NPCCameraDesc.fSpeedPerSec = 15.f;
-	NPCCameraDesc.fRotationPerSec = XMConvertToRadians(90.0f);
-	NPCCameraDesc.pTargetTransform = static_cast<CTransform*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Layer_NPC"), Engine::g_strTransformTag, 0));
+	SkillActionCameraDesc.eSkillType = SKILL::FIREBALL;
 
 	/* 카메라는 게임 매니저에 추가하여 관리한다. */
-	if (FAILED(m_pGameManager->Add_Camera(LEVEL::GAMEPLAY, TEXT("NPC_Talk_Caemra"), static_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
-		PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_NPCTalkCamera"), &NPCCameraDesc)))))
+	if (FAILED(m_pGameManager->Add_Camera(LEVEL::GAMEPLAY, TEXT("FireBall_Action_Camera"), static_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
+		PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_SkillActionCamera"), &SkillActionCameraDesc)))))
+		return E_FAIL;
+
+	SkillActionCameraDesc.eSkillType = SKILL::BIG_SHARK;
+
+	/* 카메라는 게임 매니저에 추가하여 관리한다. */
+	if (FAILED(m_pGameManager->Add_Camera(LEVEL::GAMEPLAY, TEXT("BigShark_Action_Camera"), static_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
+		PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_SkillActionCamera"), &SkillActionCameraDesc)))))
 		return E_FAIL;
 
 	return S_OK;
@@ -236,15 +257,14 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _wstring& strLayerTag)
 			return E_FAIL;
 	}
 	
-
 	return S_OK;
 }
 
 HRESULT CLevel_GamePlay::Ready_Layer_Monster(const _wstring& strLayerTag)
 {
-	//if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_WhiteJetsu"),
-	//	ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag)))
-	//	return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_WhiteJetsu"),
+		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag)))
+		return E_FAIL;
 
 	//if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Bird"),
 	//	ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag)))
@@ -273,6 +293,10 @@ HRESULT CLevel_GamePlay::Ready_Layer_Effect(const _wstring& strLayerTag)
 	}
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Snow"),
+		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag)))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Explosion"),
 		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag)))
 		return E_FAIL;
 
@@ -322,7 +346,6 @@ HRESULT CLevel_GamePlay::Ready_Layer_UI(const _wstring& strLayerTag)
 
 	/* 이 부분 내일 고칠 것 */
 	Desc = CUIObject::CreateDesc(g_iWinSizeX / 2.f, g_iWinSizeY / 2.f, 0.05f, 800.f, 200.f, 0, 0.f);
-
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_DialogUI"),
 		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
@@ -380,6 +403,22 @@ HRESULT CLevel_GamePlay::Ready_Layer_Map(const _wstring& strLayerTag)
 	//	ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag)))
 	//	return E_FAIL;
 
+
+	return S_OK;
+}
+
+HRESULT CLevel_GamePlay::Ready_Layer_Spawner(const _wstring& strLayerTag)
+{
+	CMonsterSpawner::MONSTER_SPAWNER_DESC Desc;
+	Desc.eSpawnerType = CMonsterSpawner::SPAWNER_TYPE::TUTORIAL_01;
+	Desc.fRadius = 5.f;
+	Desc.vCenter = _float3(0.f, 0.f, 0.f);
+	Desc.vPosition = _float3(0.f, 0.f, 15.f);
+
+	/* 테스트용. 추후 제거할 것 */
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_MonsterSpawner"),
+		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
+		return E_FAIL;
 
 	return S_OK;
 }
