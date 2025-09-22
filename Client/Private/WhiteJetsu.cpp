@@ -69,7 +69,7 @@ void CWhiteJetsu::OnCollision(COLLIDER_HANDLE_ID eHandleID)
     {
         m_fCurrentHP -= 1.f;
 
-        pNextState = CWhiteJetsu_BeatenState::Create(m_pNavigationCom, this, vDirection);
+        pNextState = CWhiteJetsu_BeatenState::Create(m_pNavigationCom, this, vDirection, 1.4f);
     }
     else if (COLLIDER_HANDLE_ID::PLAYER_HAND_ATTACK_FINAL == eHandleID)
     {
@@ -82,7 +82,7 @@ void CWhiteJetsu::OnCollision(COLLIDER_HANDLE_ID eHandleID)
     {
         m_fCurrentHP -= 3.f;
 
-        pNextState = CWhiteJetsu_BeatenState::Create(m_pNavigationCom, this, vDirection, 1.5f);
+        pNextState = CWhiteJetsu_BeatenState::Create(m_pNavigationCom, this, vDirection, 1.75f);
     }
 
     else if (COLLIDER_HANDLE_ID::PLAYER_SWORD_ATTACK_FINAL == eHandleID)
@@ -200,7 +200,7 @@ void CWhiteJetsu::Update(_float fTimeDelta)
 
     _matrix PlayerMatrix = XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr());
     _vector PlayerTranslation = m_pTransformCom->Get_State(STATE::POSITION);
-    PlayerTranslation += m_pTransformCom->Get_State(STATE::LOOK) * 0.8f;
+    PlayerTranslation += m_pTransformCom->Get_State(STATE::LOOK) * 0.4f;
     PlayerMatrix.r[3] = PlayerTranslation;
 
     m_pHandAttackColliderCom->Update(PlayerMatrix);

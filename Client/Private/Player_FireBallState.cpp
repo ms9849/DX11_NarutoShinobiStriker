@@ -3,6 +3,8 @@
 #include "Player.h"
 #include "GameInstance.h"
 
+#include "GameManager.h"
+
 #include "FireBall.h"
 /* 전이 가능한 상태들 */
 #pragma region TRANSFER_STATE
@@ -16,12 +18,15 @@
 
 CPlayer_FireBallState::CPlayer_FireBallState(CPlayer* pPlayer)
     : m_pPlayer { pPlayer }
+    , m_pGameManager { CGameManager::GetInstance() }
 {
     Safe_AddRef(m_pPlayer);
+    Safe_AddRef(m_pGameManager);
 }
 
 void CPlayer_FireBallState::Start(_bool IsBlend)
 {
+    m_pGameManager->Change_Camera(LEVEL::GAMEPLAY, TEXT("FireBall_Action_Camera"), m_pGameInstance->Get_PipeLine_InverseFloat4x4(D3DTS::VIEW));
     m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Fireball_Lv3", 1.75f, true);
 }
 
@@ -98,5 +103,7 @@ CPlayer_FireBallState* CPlayer_FireBallState::Create(CPlayer* pPlayer)
 void CPlayer_FireBallState::Free()
 {
     __super::Free();
+
     Safe_Release(m_pPlayer);
+    Safe_Release(m_pGameManager);
 }

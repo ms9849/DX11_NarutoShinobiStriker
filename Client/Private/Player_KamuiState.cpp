@@ -24,6 +24,7 @@ void CPlayer_KamuiState::Start(_bool IsBlend)
 {
     m_pGameManager->Change_Camera(LEVEL::GAMEPLAY, TEXT("Kamui_Action_Camera"));
     m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_KamuiKakashi", 1.5f, true);
+    m_pPlayer->Set_Invincible(true);
 }
 
 CPlayerState* CPlayer_KamuiState::Update(_float fTimeDelta)
@@ -43,6 +44,8 @@ CPlayerState* CPlayer_KamuiState::Update(_float fTimeDelta)
             m_pGameInstance->Get_LevelID(), TEXT("Layer_Skill"), &Desc);
 
         m_isKamuiThrow = true;
+        m_pGameManager->Change_Camera(LEVEL::GAMEPLAY, TEXT("Main_Camera"));
+
     }
 
     if (true == IsAnimFinished)
@@ -53,7 +56,7 @@ CPlayerState* CPlayer_KamuiState::Update(_float fTimeDelta)
 
 _bool CPlayer_KamuiState::End()
 {
-    m_pGameManager->Change_Camera(LEVEL::GAMEPLAY, TEXT("Main_Camera"));
+    m_pPlayer->Set_Invincible(false);
 
     return true;
 }

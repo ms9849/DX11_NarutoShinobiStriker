@@ -27,6 +27,7 @@ private:
 	HRESULT Ready_Layer_StaticObjects(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_NPC(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_Map(const _wstring& strLayerTag);
+	HRESULT Ready_Layer_Spawner(const _wstring& strLayerTag);
 
 private:
 	class CGameManager* m_pGameManager = { nullptr };

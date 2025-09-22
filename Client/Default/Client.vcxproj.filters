@@ -421,6 +421,15 @@
     <Filter Include="02.GameObjects\Camera\NPCTalk">
       <UniqueIdentifier>{a580c1aa-d8cf-4701-bf79-73216c5ba796}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Particle\Explosion">
+      <UniqueIdentifier>{a64d9e11-17c5-4744-abf8-c20df6937be1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\TriggerBox">
+      <UniqueIdentifier>{98d79f22-f49c-4fbb-b649-07ca91dc0c2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\TriggerBox\MonsterSpawner">
+      <UniqueIdentifier>{02a59ba2-6cb6-44fa-bf58-ba50241009d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -810,6 +819,15 @@
     <ClInclude Include="..\Public\NPCTalkCamera.h">
       <Filter>02.GameObjects\Camera\NPCTalk</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Explosion.h">
+      <Filter>02.GameObjects\Particle\Explosion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\TriggerBox.h">
+      <Filter>02.GameObjects\TriggerBox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\MonsterSpawner.h">
+      <Filter>02.GameObjects\TriggerBox\MonsterSpawner</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1197,6 +1215,15 @@
     <ClCompile Include="..\Private\NPCTalkCamera.cpp">
       <Filter>02.GameObjects\Camera\NPCTalk</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Explosion.cpp">
+      <Filter>02.GameObjects\Particle\Explosion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TriggerBox.cpp">
+      <Filter>02.GameObjects\TriggerBox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\MonsterSpawner.cpp">
+      <Filter>02.GameObjects\TriggerBox\MonsterSpawner</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPosTex.hlsl">
@@ -1218,6 +1245,9 @@
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxRectParticle.hlsl">
+      <Filter>97. ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPointParticle.hlsl">
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

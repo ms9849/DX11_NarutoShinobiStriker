@@ -32,8 +32,10 @@ public:
 
 private:
 	class CGameManager* m_pGameManager = { nullptr };
-	class CTransform* m_pTargetTransform = { nullptr };
-	_float3 m_vCameraPos = {};
+	class CTransform*	m_pTargetTransform = { nullptr };
+	_float3				m_vCameraPos = {};
+	_float				m_fZoomTimeAcc = { 0.f };
+	_float				m_fMaxZoomTimeAcc = { 1.f };
 
 public:
 	static CNPCTalkCamera* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);

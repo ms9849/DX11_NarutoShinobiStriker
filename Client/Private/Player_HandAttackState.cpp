@@ -58,8 +58,11 @@ CPlayerState* CPlayer_HandAttackState::Update(_float fTimeDelta)
     if (m_eAnimState == ANIM_STATE::BACK_KICK && fAnimProgress >= 0.8f)
         m_pGameManager->Change_Camera(LEVEL::GAMEPLAY, TEXT("Main_Camera"));
 
-    if (false == IsAnimFinished && fAnimProgress <= 0.4f)
-        m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * m_pGameInstance->Calc_Quadratic(-5.f, 2.f, 0.f, fAnimProgress),
+    if (false == IsAnimFinished && fAnimProgress <= 0.4f && ANIM_STATE::BACK_KICK != m_eAnimState)
+        m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * m_pGameInstance->Calc_Quadratic(-10.f, 4.f, 0.f, fAnimProgress),
+            m_pPlayer->Get_Navigation());
+    else if(false == IsAnimFinished && fAnimProgress <= 0.3f && ANIM_STATE::BACK_KICK == m_eAnimState)
+        m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * m_pGameInstance->Calc_Quadratic(-10.f, 4.f, 0.f, fAnimProgress),
             m_pPlayer->Get_Navigation());
 
     if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON) 

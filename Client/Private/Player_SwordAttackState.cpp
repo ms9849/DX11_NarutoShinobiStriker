@@ -16,12 +16,19 @@
 
 CPlayer_SwordAttackState::CPlayer_SwordAttackState(CPlayer* pPlayer)
     : m_pPlayer { pPlayer }
+    , m_pGameManager { CGameManager::GetInstance() }
 {
     Safe_AddRef(m_pPlayer);
+    Safe_AddRef(m_pGameManager);
 }
 
 void CPlayer_SwordAttackState::Start(_bool IsBlend)
 {
+    CTransform* pTargetTransform = m_pGameManager->Calc_Target(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
+
+    if (nullptr != pTargetTransform)
+        m_pPlayer->Get_Transform()->LookAt_XZ(pTargetTransform->Get_State(STATE::POSITION));
+
     m_IsOnCollider = false;
     m_pPlayer->Set_AnimIndex("CustomMan_Attack_SnakeSword_cmb_01", 2.f, true );
     m_eAnimState = ANIM_STATE::ATTACK_01;
@@ -29,6 +36,8 @@ void CPlayer_SwordAttackState::Start(_bool IsBlend)
 
 CPlayerState* CPlayer_SwordAttackState::Update(_float fTimeDelta)
 {
+    CTransform* pTargetTransform = m_pGameManager->Calc_Target(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
+
     CPlayerState* pNextState = { nullptr };
 
     _bool IsAnimFinished = m_pPlayer->Play_Animation(fTimeDelta);
@@ -36,16 +45,32 @@ CPlayerState* CPlayer_SwordAttackState::Update(_float fTimeDelta)
     Update_Collider(fAnimProgress);
 
     if (false == IsAnimFinished && fAnimProgress <= 0.5f && ANIM_STATE::ATTACK_01 == m_eAnimState)
+    {
+        if (nullptr != pTargetTransform)
+            m_pPlayer->Get_Transform()->LookAt_XZ(pTargetTransform->Get_State(STATE::POSITION));
+
         m_pPlayer->Get_Transform()->Go_Straight(0.5f * fTimeDelta * m_pGameInstance->Calc_Linear(-1.4f, 0.7f, fAnimProgress),
             m_pPlayer->Get_Navigation());
 
+    }
+
     else  if (false == IsAnimFinished && fAnimProgress <= 0.3f && ANIM_STATE::ATTACK_02 == m_eAnimState)
-        m_pPlayer->Get_Transform()->Go_Straight(0.5f *  fTimeDelta * m_pGameInstance->Calc_Linear(-2.3f, 0.7f, fAnimProgress),
+    {
+        if (nullptr != pTargetTransform)
+            m_pPlayer->Get_Transform()->LookAt_XZ(pTargetTransform->Get_State(STATE::POSITION));
+
+        m_pPlayer->Get_Transform()->Go_Straight(0.5f * fTimeDelta * m_pGameInstance->Calc_Linear(-2.3f, 0.7f, fAnimProgress),
             m_pPlayer->Get_Navigation());
+    }
 
     else if (false == IsAnimFinished && fAnimProgress <= 0.35f && fAnimProgress >= 0.25f && ANIM_STATE::ATTACK_03 == m_eAnimState)
+    {
+        if (nullptr != pTargetTransform)
+            m_pPlayer->Get_Transform()->LookAt_XZ(pTargetTransform->Get_State(STATE::POSITION));
+
         m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * m_pGameInstance->Calc_Linear(-4.f, 1.4f, fAnimProgress),
             m_pPlayer->Get_Navigation());
+    }
 
 
     if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON)
@@ -150,4 +175,5 @@ void CPlayer_SwordAttackState::Free()
     __super::Free();
 
     Safe_Release(m_pPlayer);
+    Safe_Release(m_pGameManager);
 }

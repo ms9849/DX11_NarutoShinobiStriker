@@ -62,11 +62,12 @@ public:
 #pragma endregion
 
 #pragma region CAMERA
+	_wstring    Get_CameraName();
 	CTransform* Get_TargetTransform();
 	void		SetUp_Target();
 	HRESULT		Add_TargetTransform(CTransform* pTransformCom);
 	HRESULT		Add_Camera(LEVEL eLevelID, const _wstring& strCameraTag, CCamera* pCamera);
-	HRESULT		Change_Camera(LEVEL eLevelID, const _wstring& strCameraTag);
+	HRESULT		Change_Camera(LEVEL eLevelID, const _wstring& strCameraTag, const _float4x4* pWorldMatrix = nullptr);
 #pragma endregion
 
 #pragma region COLLISION 

@@ -28,6 +28,9 @@ public:
 	virtual void	Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+public:
+	virtual void OnChange(const _float4x4* pWorldMatrix) override;
+
 private:
 	_float3 m_vCameraPos = {};
 	_float m_fRotateX = {};

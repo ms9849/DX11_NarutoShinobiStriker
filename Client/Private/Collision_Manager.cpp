@@ -5,6 +5,7 @@
 
 #include "Enemy.h"
 #include "Player.h"
+#include "TriggerBox.h"
 
 CCollision_Manager::CCollision_Manager()
 {
@@ -92,10 +93,12 @@ void CCollision_Manager::Check_Collision(const _wstring strColliderTag, const _w
 
 
                 /* 미리 Client_Defines에 선언해둔 태그에 따라 알맞는 콜리전 선언. */
-                if(COLLISION_TYPE::MONSTER == eColType)
+                if (COLLISION_TYPE::MONSTER == eColType)
                     static_cast<CEnemy*>(pCollisionObject.first)->OnCollision(pCollider.first);
-                else if(COLLISION_TYPE::PLAYER == eColType)
+                else if (COLLISION_TYPE::PLAYER == eColType)
                     static_cast<CPlayer*>(pCollisionObject.first)->OnCollision(pCollider.first, pCollider.second->Get_Pos());
+                else if (COLLISION_TYPE::TRIGGER == eColType)
+                    static_cast<CTriggerBox*>(pCollisionObject.first)->OnCollision();
             }
         }
     }
