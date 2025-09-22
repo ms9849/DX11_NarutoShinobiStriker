@@ -20,6 +20,7 @@ private:
 
 public:
 	void Change_Skill(SKILL eSkill);
+	void Set_Visible(_bool bFlag);
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -39,6 +40,8 @@ private:
 	_float				m_fPreSkillTimeAcc = { 0.f };
 	_float				m_fSkillTimeAcc = { 0.f };
 	_float				m_fMaxSkillCoolDown = { 0.f };
+	_bool				m_IsVisible = { true };
+
 private:
 	HRESULT Ready_Components();
 	virtual HRESULT Bind_ShaderResources() override;

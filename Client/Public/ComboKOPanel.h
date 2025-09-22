@@ -32,8 +32,9 @@ private:
 	virtual ~CComboKOPanel() = default;
 
 public:
-	void Update_Combo(_uint iComboCount);
 	void PopUp_KO();
+	void Active_Combo();
+	void Active_KO();
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -44,19 +45,23 @@ public:
 	virtual HRESULT Render() override;
 
 private:
-	_float m_fScale = { 1.f };
-	_uint m_iComboCount = { 0 };
-	_float m_fComboTimeAcc = { 0.f };
+	_uint	m_iPreComboCount = { 0 };
+	_uint	m_iComboCount = { 0 };
+	_uint	m_iMaxComboCount = { 99 };
 
-	_bool m_IsEnemyKO = { false };
-	_float m_fEnemyKOTimeAcc = { 0.f };
+	_float	m_fComboTimeAcc = { 0 };
+	_bool	m_IsEnemyHit = { false };
+	_bool	m_IsEnemyKO = { false };
 
-	_bool m_bVisible = { false };
-	_float m_fMaxScale = { 1.5f };
+	_float	m_fScale = { 1.f };
+
+	_bool	m_bVisible = { false };
+	_float	m_fMaxScale = { 1.5f };
+
 	/* 페이드 인*/
-	_bool  m_bFadeIn = { false };
-	_float m_fFadeInTimeAcc = { 0.f };
-	_float m_fFadeInMaxTimeAcc = { 0.2f };
+	_bool	m_bFadeIn = { false };
+	_float	m_fFadeInTimeAcc = { 0.f };
+	_float	m_fFadeInMaxTimeAcc = { 0.2f };
 
 	/* 페이드 아웃 */
 	_bool  m_bFadeOut = { false };
@@ -72,6 +77,8 @@ private:
 private:
 	void	Play_Animation_FadeIn(_float fTimeDelta);
 	void	Play_Animation_FadeOut(_float fTimeDelta);
+	void	ComboKO_System(_float fTimeDelta);
+	void	Update_Combo();
 
 public:
 	static CComboKOPanel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);

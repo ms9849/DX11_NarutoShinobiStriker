@@ -95,11 +95,14 @@ public:
 	void Set_Dialog_Text(const _wstring& strDialogText);
 	void Set_Dialog_Visible(_bool bFlag);
 
-	void Update_Combo(_uint iComboCount);
-	void PopUp_KO();
+	void Active_Combo();
+	void Active_KO();
 
 	void Change_Skill(_uint iIdx, SKILL eSkill);
+	void Set_SkillSlot_Visible(_bool bFlag);
+
 	void Change_AttackType(ATTACK_TYPE eAttackType);
+	void Set_AttackType_Visible(_bool bFlag);
 
 #pragma endregion
 

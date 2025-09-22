@@ -20,24 +20,36 @@ HRESULT CUI_Manager::Initialize()
 
 void CUI_Manager::Set_Dialog(CDialogUI* pDialogUI)
 {
+	if (nullptr != m_pDialogUI)
+		Safe_Release(m_pDialogUI);
+
 	m_pDialogUI = pDialogUI;
 	Safe_AddRef(m_pDialogUI);
 }
 
 void CUI_Manager::Set_SkillSlotPanel(CSkillSlotPanel* pSkillSlotPanel)
 {
+	if (nullptr != m_pSkillSlotPanel)
+		Safe_Release(m_pSkillSlotPanel);
+
 	m_pSkillSlotPanel = pSkillSlotPanel;
 	Safe_AddRef(m_pSkillSlotPanel);
 }
 
 void CUI_Manager::Set_AttackTypePanel(CAttackTypePanel* pAttackTypePanel)
 {
+	if (nullptr != m_pAttackTypePanel)
+		Safe_Release(m_pAttackTypePanel);
+
 	m_pAttackTypePanel = pAttackTypePanel;
 	Safe_AddRef(m_pAttackTypePanel);
 }
 
 void CUI_Manager::Set_ComboKoPanel(CComboKOPanel* pComboKOPanel)
 {
+	if (nullptr != m_pComboKOPanel)
+		Safe_Release(m_pComboKOPanel);
+
 	m_pComboKOPanel = pComboKOPanel;
 	Safe_AddRef(m_pComboKOPanel);
 }
@@ -52,14 +64,14 @@ void CUI_Manager::Set_Dialog_Visible(_bool bFlag)
 	m_pDialogUI->Set_Visible(bFlag);
 }
 
-void CUI_Manager::Update_Combo(_uint iComboCount)
+void CUI_Manager::Active_Combo()
 {
-	m_pComboKOPanel->Update_Combo(iComboCount);
+	m_pComboKOPanel->Active_Combo();
 }
 
-void CUI_Manager::PopUp_KO()
+void CUI_Manager::Active_KO()
 {
-	m_pComboKOPanel->PopUp_KO();
+	m_pComboKOPanel->Active_KO();
 }
 
 void CUI_Manager::Change_Skill(_uint iIdx, SKILL eSkill)
@@ -67,9 +79,19 @@ void CUI_Manager::Change_Skill(_uint iIdx, SKILL eSkill)
 	m_pSkillSlotPanel->Change_Skill(iIdx, eSkill);
 }
 
+void CUI_Manager::Set_SkillSlot_Visible(_bool bFlag)
+{
+	m_pSkillSlotPanel->Set_SkillSlot_Visible(bFlag);
+}
+
 void CUI_Manager::Change_AttackType(ATTACK_TYPE eAttackType)
 {
 	m_pAttackTypePanel->Change_AttackType(eAttackType);
+}
+
+void CUI_Manager::Set_AttackType_Visible(_bool bFlag)
+{
+	m_pAttackTypePanel->Set_AttackType_Visible(bFlag);
 }
 
 CUI_Manager* CUI_Manager::Create()

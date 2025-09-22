@@ -25,6 +25,7 @@ public:
 	virtual _bool	End() override;
 
 private:
+	class CGameManager* m_pGameManager = { nullptr };
 	CTransform* m_pPlayerTransformCom = { nullptr };
 	CNavigation* m_pNavigationCom = { nullptr };
 	class CWhiteJetsu* m_pJetsu = { nullptr };

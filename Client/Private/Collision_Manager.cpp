@@ -7,8 +7,12 @@
 #include "Player.h"
 #include "TriggerBox.h"
 
+#include "GameManager.h"
+
 CCollision_Manager::CCollision_Manager()
+    : m_pGameManager { CGameManager::GetInstance() }
 {
+    Safe_AddRef(m_pGameManager);
 }
 
 void CCollision_Manager::Update()
@@ -87,8 +91,8 @@ void CCollision_Manager::Check_Collision(const _wstring strColliderTag, const _w
                 if(pCollider.first != COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_KAMUI &&
                     pCollider.first != COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENSHURIKEN_EXPLODE && 
                     pCollider.first != COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_BIGSHARK && 
-                    pCollider.first != COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_KAMUI_END)
-
+                    pCollider.first != COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_KAMUI_END &&
+                    pCollider.first != COLLIDER_HANDLE_ID::PLAYER_BODY)
                     pCollider.second->Set_Active(false);
 
 
@@ -163,4 +167,6 @@ void CCollision_Manager::Free()
     }
 
     m_CollisionObjects.clear();
+
+    Safe_Release(m_pGameManager);
 }

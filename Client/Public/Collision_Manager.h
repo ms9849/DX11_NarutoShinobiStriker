@@ -41,6 +41,8 @@ private:
 	map<_wstring, vector<pair<COLLIDER_HANDLE_ID, CCollider*>>>	m_Colliders = {};
 	map<_wstring, vector<pair<CGameObject*, CCollider*>>>		m_CollisionObjects = {};
 
+	class CGameManager* m_pGameManager = { nullptr };
+
 public:
 	static CCollision_Manager* Create();
 	virtual void Free() override;

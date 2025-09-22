@@ -52,6 +52,8 @@ void CBird::OnCollision(COLLIDER_HANDLE_ID eHandleID)
 
     CBirdState* pNextState = { nullptr };
 
+    m_pGameManager->Active_Combo();
+
     _vector vDirection = m_pTransformCom->Get_State(STATE::POSITION) -
         CGameManager::GetInstance()->Get_PlayerPtr()->Get_Transform()->Get_State(STATE::POSITION);
 

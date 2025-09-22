@@ -43,6 +43,9 @@ void CProgressBarUI::Update(_float fTimeDelta)
 
 void CProgressBarUI::Late_Update(_float fTimeDelta)
 {
+	if (false == m_IsVisible)
+		return;
+
 	m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
 }
 
@@ -66,6 +69,11 @@ void CProgressBarUI::Set_Progress(_float fProgress)
 void CProgressBarUI::Set_MaxProgress(_float fMaxProgress)
 {
 	m_fMaxProgress = fMaxProgress;
+}
+
+void CProgressBarUI::Set_Visible(_bool bFlag)
+{
+	m_IsVisible = bFlag;
 }
 
 HRESULT CProgressBarUI::Ready_Components()

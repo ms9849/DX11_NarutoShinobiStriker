@@ -17,13 +17,14 @@ CComboKOPanel::CComboKOPanel(const CComboKOPanel& rhs)
 {
 }
 
-void CComboKOPanel::Update_Combo(_uint iComboCount)
+
+void CComboKOPanel::Update_Combo()
 {
 	/* 콤보가 갱신될때, */
 	/* 콤보가 증가한다면 */
 
 	/* 콤보 1일 때.*/
-	if (m_iComboCount != iComboCount && iComboCount == 1)
+	if (m_iComboCount != m_iPreComboCount && m_iComboCount == 1)
 	{
 		m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT);
 		m_bFadeIn = true;
@@ -37,10 +38,10 @@ void CComboKOPanel::Update_Combo(_uint iComboCount)
 	}
 
 	/* 콤보 2 이상일 때, (Decimal도 여기서 제어 )*/
-	else if (m_iComboCount != iComboCount && iComboCount > 1)
+	else if (m_iComboCount != m_iPreComboCount && m_iComboCount > 1)
 	{
 		/* Hit, Hits 처음 나올때만 Fade In 재생 시켜준다.*/ 
-		if (iComboCount <= 2)
+		if (m_iComboCount <= 2)
 		{
 			m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT);
 			m_bFadeIn = true;
@@ -55,36 +56,51 @@ void CComboKOPanel::Update_Combo(_uint iComboCount)
 		m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(m_fX - g_iWinSizeX / 2.f + 50.f, -1.f * (m_fY - g_iWinSizeY / 2.f) + 25.f, m_fZ, 1.f));
 
 
-		if (iComboCount >= 10)
+		if (m_iComboCount >= 10)
 		{
 			static_cast<CDecimalUI*>(m_Childs[0])->Start_FadeIn();
-			static_cast<CDecimalUI*>(m_Childs[0])->Set_CurrentIdx(iComboCount / 10);
+			static_cast<CDecimalUI*>(m_Childs[0])->Set_CurrentIdx(m_iComboCount / 10);
 		}
 
 		static_cast<CDecimalUI*>(m_Childs[1])->Start_FadeIn();
-		static_cast<CDecimalUI*>(m_Childs[1])->Set_CurrentIdx(iComboCount % 10);
+		static_cast<CDecimalUI*>(m_Childs[1])->Set_CurrentIdx(m_iComboCount % 10);
 	}
 
 	/* 콤보가 초기화된다면 */
-	else if (m_iComboCount != iComboCount && iComboCount == 0)
+	else if (m_iComboCount != m_iPreComboCount && m_iComboCount == 0)
 	{
 		m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT);
 		m_bFadeOut = true;
 		m_bVisible = true;
 
-		if (m_iComboCount >= 2)
+		if (m_iPreComboCount >= 10)
 		{
 			for (_uint i = 0; i < 2; ++i)
 				static_cast<CDecimalUI*>(m_Childs[i])->Start_FadeOut();
 		}
+
+		else if (m_iPreComboCount >= 2)
+		{
+			static_cast<CDecimalUI*>(m_Childs[1])->Start_FadeOut();
+		}
 	}
 
-	m_iComboCount = iComboCount;
+	m_iPreComboCount = m_iComboCount;
 }
 
 void CComboKOPanel::PopUp_KO()
 {
 	static_cast<CKOUI*>(m_Childs[2])->Start_FadeIn();
+}
+
+void CComboKOPanel::Active_Combo()
+{
+	m_IsEnemyHit = true;
+}
+
+void CComboKOPanel::Active_KO()
+{
+	m_IsEnemyKO = true;
 }
 
 HRESULT CComboKOPanel::Initialize_Prototype()
@@ -115,6 +131,8 @@ void CComboKOPanel::Priority_Update(_float fTimeDelta)
 
 void CComboKOPanel::Update(_float fTimeDelta)
 {
+	ComboKO_System(fTimeDelta);
+
 	if (m_bFadeIn)
 		Play_Animation_FadeIn(fTimeDelta);
 
@@ -206,6 +224,36 @@ HRESULT CComboKOPanel::Ready_KO()
 	Safe_AddRef(pKOUI);
 
 	return S_OK;
+}
+
+void CComboKOPanel::ComboKO_System(_float fTimeDelta)
+{
+	m_fComboTimeAcc += fTimeDelta;
+
+	/* KO 시스템 */
+	if (true == m_IsEnemyKO)
+	{
+		PopUp_KO();
+		m_IsEnemyKO = false;
+	}
+
+	/* 콤보 시스템 */
+	if (true == m_IsEnemyHit)
+	{
+		if (m_iComboCount < m_iMaxComboCount)
+			m_iComboCount++;
+		m_fComboTimeAcc = 0.f;
+	}
+
+	/* 콤보 초기화 */
+	if (m_iComboCount >= 1 && m_fComboTimeAcc >= 5.f)
+	{
+		m_iComboCount = 0;
+		m_fComboTimeAcc = 0.f;
+	}
+
+	Update_Combo();
+	m_IsEnemyHit = false;
 }
 
 HRESULT CComboKOPanel::Bind_ShaderResources()
