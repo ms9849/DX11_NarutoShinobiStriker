@@ -107,6 +107,9 @@ void CNPC_KaKashi::Start_Dialog()
 	m_pGameManager->Get_PlayerPtr()->Set_Visible(false);
 	m_eAnimState = ANIM_STATE::ANIM_GREET;
 	m_pGameManager->Set_Talking(true);
+
+	m_pGameManager->Set_AttackType_Visible(false);
+	m_pGameManager->Set_SkillSlot_Visible(false);
 }
 
 void CNPC_KaKashi::End_Dialog()
@@ -117,6 +120,9 @@ void CNPC_KaKashi::End_Dialog()
 	m_isTalking = false;
 	m_iCurrentDialog = 0;
 	m_pGameManager->Set_Talking(false);
+
+	m_pGameManager->Set_AttackType_Visible(true);
+	m_pGameManager->Set_SkillSlot_Visible(true);
 }
 
 void CNPC_KaKashi::Check_Talkable()

@@ -74,6 +74,9 @@ void CAttackTypePanel::Update(_float fTimeDelta)
 
 void CAttackTypePanel::Late_Update(_float fTimeDelta)
 {
+    if (false == m_IsVisible)
+        return;
+
     m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
 
     /* 폰트 추가 */
@@ -95,6 +98,11 @@ HRESULT CAttackTypePanel::Render()
         return E_FAIL;
 
     return S_OK;
+}
+
+void CAttackTypePanel::Set_AttackType_Visible(_bool bFlag)
+{
+    m_IsVisible = bFlag;
 }
 
 HRESULT CAttackTypePanel::Bind_ShaderResources()

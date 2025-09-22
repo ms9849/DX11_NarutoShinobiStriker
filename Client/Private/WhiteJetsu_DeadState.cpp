@@ -14,12 +14,14 @@
 CWhiteJetsu_DeadState::CWhiteJetsu_DeadState(CNavigation* pNavigation, CWhiteJetsu* pJetsu)
 	: m_pJetsu { pJetsu } 
 	, m_pNavigationCom { pNavigation }
+	, m_pGameManager { CGameManager::GetInstance() }
 {
 	Safe_AddRef(m_pNavigationCom);
 }
 
 void CWhiteJetsu_DeadState::Start(_bool IsBlend)
 {
+	m_pGameManager->Active_KO();
 	m_pJetsu->Set_AnimIndex("WhiteZetsuCrowdForm_Dying_Type01", 1.5f, true);
 }
 
@@ -50,4 +52,5 @@ void CWhiteJetsu_DeadState::Free()
 	__super::Free();
 
 	Safe_Release(m_pNavigationCom);
+	Safe_Release(m_pGameManager);
 }

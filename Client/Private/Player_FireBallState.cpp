@@ -42,7 +42,19 @@ CPlayerState* CPlayer_FireBallState::Update(_float fTimeDelta)
         CFireBall::FIREBALL_DESC Desc;
 
         XMStoreFloat3(&Desc.vPosition, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
-        XMStoreFloat3(&Desc.vLook, m_pPlayer->Get_Transform()->Get_State(STATE::LOOK));
+
+        CTransform* pTargetTransform = m_pGameManager->Calc_Target(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
+
+        _vector vPosition = {};
+
+        /* 타겟이 없을때만 플레이어가 바라보는 방향으로 날아가게끔 한다. */
+        if (nullptr == pTargetTransform)
+            vPosition = m_pPlayer->Get_Transform()->Get_State(STATE::LOOK);
+        /* 타겟이 있다면 타겟 방향으로 날아가게끔 한다. */
+        else
+            vPosition =  pTargetTransform->Get_State(STATE::POSITION) - m_pPlayer->Get_Transform()->Get_State(STATE::POSITION);
+
+        XMStoreFloat3(&Desc.vLook, vPosition);
         Desc.fSpeedPerSec = 15.f;
 
         m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_FireBall"),

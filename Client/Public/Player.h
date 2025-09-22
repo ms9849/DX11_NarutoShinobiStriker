@@ -77,12 +77,6 @@ private:
 
 	class CPlayerState*		m_pState = { nullptr };
 
-	_uint					m_iComboCount = { 0 };
-	_uint					m_iMaxComboCount = { 99 };
-
-	_float					m_fComboTimeAcc = { 0 };
-	_bool					m_bEnemyHit = { false };
-	_bool					m_bEnemyKO = { false };
 	_bool					m_IsGround = { true };
 	_bool					m_IsInvincible = { false };
 	_bool					m_IsVisible = { true };
@@ -93,7 +87,6 @@ private:
 
 private:
 	void Key_Input(_float fTimeDelta);
-	void ComboKO_System(_float fTimeDelta);
 
 public:
 	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);

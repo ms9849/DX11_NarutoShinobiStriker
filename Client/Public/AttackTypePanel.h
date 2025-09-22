@@ -28,6 +28,9 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+public:
+	void Set_AttackType_Visible(_bool bFlag);
+
 private:
 	/* 애니메이션 재생 및 플레이 끝남을 확인하기 위함 .*/
 	_bool m_bTriggered = { false };
@@ -37,6 +40,8 @@ private:
 
 	CFont* m_pFontCom = { nullptr };
 	_wstring m_strFontText = {};
+	_bool   m_IsVisible = { true };
+
 private:
 	virtual HRESULT Bind_ShaderResources() override;
 	HRESULT Ready_Components();

@@ -15,8 +15,10 @@
 
 CPlayer_RasenganState::CPlayer_RasenganState(CPlayer* pPlayer)
 	: m_pPlayer { pPlayer }
+    , m_pGameManager { CGameManager::GetInstance() }
 {
 	Safe_AddRef(m_pPlayer);
+    Safe_AddRef(m_pGameManager);
 }
 
 void CPlayer_RasenganState::Start(_bool IsBlend)
@@ -33,8 +35,17 @@ CPlayerState* CPlayer_RasenganState::Update(_float fTimeDelta)
 
     m_fTimeAcc += fTimeDelta;
 
-    // 대가리 회전
-    if ((m_pGameInstance->Key_Pressing(DIK_A) ||
+    // 추적
+    CTransform* pTargetTransform = m_pGameManager->Calc_Target(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
+
+    if (nullptr != pTargetTransform && ANIM_STATE::ATTACK_END != m_eAnimState)
+    {
+        _vector vTargetPosition = pTargetTransform->Get_State(STATE::POSITION);
+        m_pPlayer->Get_Transform()->LookAt_Lerp(vTargetPosition);
+    }
+
+    // 머리 회전
+    else if ((m_pGameInstance->Key_Pressing(DIK_A) ||
         m_pGameInstance->Key_Pressing(DIK_D))
         && ANIM_STATE::ATTACK_END != m_eAnimState)
     {
@@ -115,4 +126,5 @@ void CPlayer_RasenganState::Free()
 
 	Safe_Release(m_pPlayer);
     Safe_Release(m_pRasengan);
+    Safe_Release(m_pGameManager);
 }

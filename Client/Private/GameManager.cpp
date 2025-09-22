@@ -186,14 +186,14 @@ void CGameManager::Set_Dialog_Visible(_bool bFlag)
 	m_pUI_Manager->Set_Dialog_Visible(bFlag);
 }
 
-void CGameManager::Update_Combo(_uint iComboCount)
+void CGameManager::Active_Combo()
 {
-	m_pUI_Manager->Update_Combo(iComboCount);
+	m_pUI_Manager->Active_Combo();
 }
 
-void CGameManager::PopUp_KO()
+void CGameManager::Active_KO()
 {
-	m_pUI_Manager->PopUp_KO();
+	m_pUI_Manager->Active_KO();
 }
 
 void CGameManager::Change_Skill(_uint iIdx, SKILL eSkill)
@@ -201,9 +201,19 @@ void CGameManager::Change_Skill(_uint iIdx, SKILL eSkill)
 	m_pUI_Manager->Change_Skill(iIdx, eSkill);
 }
 
+void CGameManager::Set_SkillSlot_Visible(_bool bFlag)
+{
+	m_pUI_Manager->Set_SkillSlot_Visible(bFlag); 
+}
+
 void CGameManager::Change_AttackType(ATTACK_TYPE eAttackType)
 {
 	m_pUI_Manager->Change_AttackType(eAttackType);
+}
+
+void CGameManager::Set_AttackType_Visible(_bool bFlag)
+{
+	m_pUI_Manager->Set_AttackType_Visible(bFlag);
 }
 
 LEVEL CGameManager::Get_NextLevel()

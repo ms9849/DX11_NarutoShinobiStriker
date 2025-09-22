@@ -54,6 +54,16 @@ HRESULT CSkillSlotPanel::Render()
 	return S_OK;
 }
 
+void CSkillSlotPanel::Set_SkillSlot_Visible(_bool bFlag)
+{
+	for (_uint i = 0; i < 4; ++i)
+	{
+		static_cast<CSkillSlotUI*>(m_Childs[i])->Set_Visible(bFlag);
+	}
+
+	static_cast<CProgressBarUI*>(m_Childs[4])->Set_Visible(bFlag);
+}
+
 void CSkillSlotPanel::Set_SpecialSkillProgress(_float fProgress)
 {
 	static_cast<CProgressBarUI*>(m_Childs[4])->Set_Progress(fProgress);

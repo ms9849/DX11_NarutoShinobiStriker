@@ -203,7 +203,6 @@ void CPlayer::Update(_float fTimeDelta)
 
 	
 	Key_Input(fTimeDelta);
-	ComboKO_System(fTimeDelta);
 
 	/* 쿨타임 계산 */
 	for (auto& iter : m_Skills)
@@ -382,49 +381,19 @@ void CPlayer::Key_Input(_float fTimeDelta)
 			m_eCurAttackType = ATTACK_TYPE::MELEE;
 	}
 
-	if (m_pGameInstance->Key_Down(DIK_7))
-	{
-		/* 콤보 시스템에서 초기화해줌.*/
-		/* 로직은 묶였지만 아직 bool 타입 못 묶음..*/
-		m_bEnemyHit = true;
-	}
+	//if (m_pGameInstance->Key_Down(DIK_7))
+	//{
+	//	/* 콤보 시스템에서 초기화해줌.*/
+	//	/* 로직은 묶였지만 아직 bool 타입 못 묶음..*/
+	//	m_IsEnemyHit = true;
+	//}
 
-	if (m_pGameInstance->Key_Down(DIK_8))
-	{
-		/* 콤보 시스템에서 초기화해줌.*/
-		/* 로직은 묶였지만 아직 bool 타입 못 묶음..*/
-		m_bEnemyKO = true;
-	}
-}
-
-void CPlayer::ComboKO_System(_float fTimeDelta)
-{
-	m_fComboTimeAcc += fTimeDelta;
-
-	/* KO 시스템 */
-	if (m_bEnemyKO)
-	{
-		m_pGameManager->PopUp_KO();
-		m_bEnemyKO = false;
-	}
-
-	/* 콤보 시스템 */
-	if (m_bEnemyHit)
-	{
-		if(m_iComboCount < m_iMaxComboCount)
-			m_iComboCount++;
-		m_fComboTimeAcc = 0.f;
-	}
-
-	/* 콤보 초기화 */
-	if (m_iComboCount >= 1 && m_fComboTimeAcc >= 2.f)
-	{
-		m_iComboCount = 0;
-		m_fComboTimeAcc = 0.f;
-	}
-
-	m_pGameManager->Update_Combo(m_iComboCount);
-	m_bEnemyHit = false;
+	//if (m_pGameInstance->Key_Down(DIK_8))
+	//{
+	//	/* 콤보 시스템에서 초기화해줌.*/
+	//	/* 로직은 묶였지만 아직 bool 타입 못 묶음..*/
+	//	m_IsEnemyKO = true;
+	//}
 }
 
 void CPlayer::Change_Skills()

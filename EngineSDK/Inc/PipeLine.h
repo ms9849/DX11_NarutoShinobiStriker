@@ -26,6 +26,7 @@ public:
 	_matrix Get_PipeLine_InverseMatrix(D3DTS eState);
 
 	const _float4* Get_CamState(STATE eState);
+
 private:
 	_float4x4	m_PipeLine_Matrices[ENUM_CLASS(D3DTS::END)];
 	_float4x4	m_PipeLine_InverseMatrices[ENUM_CLASS(D3DTS::END)];

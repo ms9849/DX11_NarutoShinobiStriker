@@ -29,7 +29,7 @@ public:
 public:
 	void Set_Progress(_float fProgress);
 	void Set_MaxProgress(_float fMaxProgress);
-
+	void Set_Visible(_bool bFlag);
 private:
 	/* 프로그레스 어떻게 받아오지?.. */
 	_float m_fProgress = { 0.f };
@@ -38,6 +38,7 @@ private:
 
 	_float3 m_vOriginPos = {};
 	_float m_fMaxSize = {};
+	_bool  m_IsVisible = { true };
 
 private:
 	HRESULT Ready_Components();

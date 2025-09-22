@@ -34,6 +34,11 @@ void CSkillSlotUI::Change_Skill(SKILL eSkill)
     m_fMaxSkillCoolDown = pInfo->fMaxCoolDown;
 }
 
+void CSkillSlotUI::Set_Visible(_bool bFlag)
+{
+    m_IsVisible = bFlag;
+}
+
 HRESULT CSkillSlotUI::Initialize_Prototype()
 {
     return S_OK;
@@ -91,6 +96,9 @@ void CSkillSlotUI::Update(_float fTimeDelta)
 
 void CSkillSlotUI::Late_Update(_float fTimeDelta)
 {
+    if (false == m_IsVisible)
+        return;
+
     m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
 }
 

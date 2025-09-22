@@ -60,6 +60,8 @@ void CWhiteJetsu::OnCollision(COLLIDER_HANDLE_ID eHandleID)
     if (true == m_IsInvincible || true == m_isPlayingDeadAnim)
         return;
     
+    m_pGameManager->Active_Combo();
+
     CWhiteJetsuState* pNextState = { nullptr };
 
     _vector vDirection = m_pTransformCom->Get_State(STATE::POSITION) -

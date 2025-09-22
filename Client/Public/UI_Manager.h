@@ -49,18 +49,21 @@ public:
 	void Set_Dialog_Text(const _wstring& strDialogText);
 	void Set_Dialog_Visible(_bool bFlag);
 
-	void Update_Combo(_uint iComboCount);
-	void PopUp_KO();
+	void Active_Combo();
+	void Active_KO();
 
 	void Change_Skill(_uint iIdx, SKILL eSkill);
+	void Set_SkillSlot_Visible(_bool bFlag);
+
 	void Change_AttackType(ATTACK_TYPE eAttackType);
+	void Set_AttackType_Visible(_bool bFlag);
 public:
 
 
 private:
 	CGameInstance* m_pGameInstance = { nullptr };
 
-	class CDialogUI* m_pDialogUI;
+	class CDialogUI* m_pDialogUI = { nullptr };
 	class CSkillSlotPanel* m_pSkillSlotPanel = { nullptr };
 	class CAttackTypePanel* m_pAttackTypePanel = { nullptr };
 	class CComboKOPanel* m_pComboKOPanel = { nullptr };

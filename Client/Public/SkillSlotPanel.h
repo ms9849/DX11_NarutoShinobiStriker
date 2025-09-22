@@ -22,6 +22,7 @@ public:
 	virtual HRESULT Render() override;
 
 public:
+	void Set_SkillSlot_Visible(_bool bFlag);
 	void Set_SpecialSkillProgress(_float fProgress);
 	void Set_MaxSpecialSkillProgress(_float fMaxProgress);
 	void Change_Skill(_uint iSkillIdx, SKILL eSkill);

@@ -2,6 +2,7 @@
 
 #include "Player.h"
 #include "GameInstance.h"
+#include "GameManager.h"
 
 #include "Chidori.h"
 
@@ -18,8 +19,10 @@
 
 CPlayer_ChidoriAttackState::CPlayer_ChidoriAttackState(CPlayer* pPlayer)
     : m_pPlayer { pPlayer }
+    , m_pGameManager { CGameManager::GetInstance() }
 {
     Safe_AddRef(m_pPlayer);
+    Safe_AddRef(m_pGameManager);
 }
 
 void CPlayer_ChidoriAttackState::Start(_bool IsBlend)
@@ -55,8 +58,15 @@ CPlayerState* CPlayer_ChidoriAttackState::Update(_float fTimeDelta)
         m_pPlayer->Get_Transform()->Go_Direction(m_pPlayer->Get_Transform()->Get_State(STATE::LOOK), fTimeDelta * 1.f * m_pGameInstance->Calc_Linear(-2.f, 1.f, fAnimProgress),
             m_pPlayer->Get_Navigation());
 
+    // ÃßÀû
+    CTransform* pTargetTransform = m_pGameManager->Calc_Target(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
 
-    if ((m_pGameInstance->Key_Pressing(DIK_A) ||
+    if (nullptr != pTargetTransform && ANIM_STATE::ATTACK_END != m_eAnimState)
+    {
+        _vector vTargetPosition = pTargetTransform->Get_State(STATE::POSITION);
+        m_pPlayer->Get_Transform()->LookAt_Lerp(vTargetPosition);
+    }
+    else if ((m_pGameInstance->Key_Pressing(DIK_A) ||
         m_pGameInstance->Key_Pressing(DIK_D))
         && ANIM_STATE::ATTACK_END != m_eAnimState)
     {
@@ -104,4 +114,5 @@ void CPlayer_ChidoriAttackState::Free()
 
     Safe_Release(m_pPlayer);
     Safe_Release(m_pChidori);
+    Safe_Release(m_pGameManager);
 }

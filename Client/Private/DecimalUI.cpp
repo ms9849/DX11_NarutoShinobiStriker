@@ -51,7 +51,7 @@ void CDecimalUI::Update(_float fTimeDelta)
 
 void CDecimalUI::Late_Update(_float fTimeDelta)
 {
-	if(m_bVisible)
+	if(true == m_bVisible)
  		m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
 }
 
