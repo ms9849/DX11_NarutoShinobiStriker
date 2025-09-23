@@ -25,12 +25,11 @@ public:
 	/* End */
 	_bool	End() override;
 
-	void	Update_Collider();
+	void	Update_Collider(_float fAnimProgress);
 private:
 	CNavigation* m_pNavigationCom = { nullptr };
 	class CWhiteJetsu* m_pJetsu = { nullptr };
-	_bool		 m_isColliderOn = { false };
-
+	_bool m_IsColliderOn = { false };
 public:
 	static CWhiteJetsu_AttackState* Create(class CNavigation* pNavigation, class CWhiteJetsu* pJetsu);
 	virtual void Free() override;

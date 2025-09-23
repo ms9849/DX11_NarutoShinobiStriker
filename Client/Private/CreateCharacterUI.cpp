@@ -25,7 +25,7 @@ HRESULT CCreateCharacterUI::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
-    m_bTriggered = true;
+    m_IsTriggered = true;
     m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT);
 
     return S_OK;
@@ -37,7 +37,7 @@ void CCreateCharacterUI::Priority_Update(_float fTimeDelta)
 
 void CCreateCharacterUI::Update(_float fTimeDelta)
 {
-    if (m_bTriggered)
+    if (m_IsTriggered)
         Play_Animation_FadeIn(fTimeDelta);
 }
 
@@ -67,7 +67,7 @@ void CCreateCharacterUI::Play_Animation_FadeIn(_float fTimeDelta)
     {
         m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(m_fX - g_iWinSizeX / 2.f, -1.f * (m_fY - g_iWinSizeY / 2.f), m_fZ, 1.f));
         m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI);
-        m_bTriggered = false;
+        m_IsTriggered = false;
         m_fTimeAcc = 0.f;
     }
 }

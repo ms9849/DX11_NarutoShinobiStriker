@@ -43,6 +43,9 @@ private:
 	_float  m_fMaxZoomTimeAcc = { 0.4f };
 	_bool   m_IsZoom = { false };
 
+	_float  m_fChidoriCamTimeAcc = { 0.f };
+	_float  m_fMaxChidoriCamTimeAcc = { 1.f };
+
 	SKILL   m_eSkillType = {};
 	_float3 m_vCameraPos = {};
 	class CGameManager* m_pGameManager = { nullptr };

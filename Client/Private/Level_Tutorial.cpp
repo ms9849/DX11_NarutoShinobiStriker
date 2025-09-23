@@ -15,6 +15,8 @@
 #include "AttackTypePanel.h"
 #include "ComboKOPanel.h"
 #include "DialogUI.h"
+#include "MissionAlertPanel.h"
+#include "WinPanel.h"
 
 #include "NPC_KaKashi.h"
 
@@ -107,6 +109,7 @@ void CLevel_Tutorial::Update(_float fTimeDelta)
 	if (TRIGGER_TYPE::TUTORIAL_SPAWNER_01 == m_pGameManager->Get_CurrentTrigger()
 		&& (0 == m_pGameInstance->Get_LayerSize(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_Monster"))))
 	{
+		m_pGameManager->WinPanel_Start_FadeIn();
 		m_fTimeAcc += fTimeDelta;
 
 		if (m_fTimeAcc >= 5.f)
@@ -124,7 +127,7 @@ void CLevel_Tutorial::Update(_float fTimeDelta)
 
 HRESULT CLevel_Tutorial::Render()
 {
-	SetWindowText(g_hWnd, TEXT("게임 플레이 레벨"));
+	SetWindowText(g_hWnd, TEXT("튜토리얼"));
 	return S_OK;
 }
 
@@ -157,9 +160,6 @@ HRESULT CLevel_Tutorial::Ready_Layer_BackGround(const _wstring& strLayerTag)
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_SkyBox"),
 		ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag)))
 		return E_FAIL;
-	//CGameObject* pTerrain = static_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Terrain")));
-	//m_pGameInstance->Add_GameObject_ToPicking(pTerrain, ENUM_CLASS(LEVEL::TUTORIAL));
-	//m_pGameInstance->Add_Clone_ToLayer(pTerrain, ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag);
 
 	return S_OK;
 
@@ -256,6 +256,13 @@ HRESULT CLevel_Tutorial::Ready_Layer_Camera(const _wstring& strLayerTag)
 
 	/* 카메라는 게임 매니저에 추가하여 관리한다. */
 	if (FAILED(m_pGameManager->Add_Camera(LEVEL::TUTORIAL, TEXT("BigShark_Action_Camera"), static_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
+		PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_SkillActionCamera"), &SkillActionCameraDesc)))))
+		return E_FAIL;
+
+	SkillActionCameraDesc.eSkillType = SKILL::CHIDORI;
+
+	/* 카메라는 게임 매니저에 추가하여 관리한다. */
+	if (FAILED(m_pGameManager->Add_Camera(LEVEL::TUTORIAL, TEXT("Chidori_Action_Camera"), static_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
 		PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_SkillActionCamera"), &SkillActionCameraDesc)))))
 		return E_FAIL;
 
@@ -358,6 +365,8 @@ HRESULT CLevel_Tutorial::Ready_Layer_UI(const _wstring& strLayerTag)
 		ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag, &Desc)))
 		return E_FAIL;
 
+	m_pGameManager->Set_MissionAlertPanel(static_cast<CMissionAlertPanel*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag, m_pGameInstance->Get_LayerSize(ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag) - 1)));
+
 	Desc = CUIObject::CreateDesc(g_iWinSizeX / 2.f, g_iWinSizeY / 2.f + 150.f, 0.05f, 800.f, 200.f, 0, 0.f);
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_DialogUI"),
@@ -366,15 +375,24 @@ HRESULT CLevel_Tutorial::Ready_Layer_UI(const _wstring& strLayerTag)
 
 	m_pGameManager->Set_Dialog(static_cast<CDialogUI*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag, m_pGameInstance->Get_LayerSize(ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag) - 1)));
 
+	Desc = CUIObject::CreateDesc(g_iWinSizeX / 2.f, g_iWinSizeY / 2.f - 110.f, 0.01f, g_iWinSizeX * 0.8f, g_iWinSizeY / 3.5f, 0, 0.f);
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_WinPanel"),
+		ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag, &Desc)))
+		return E_FAIL;
+
+	m_pGameManager->Set_WinPanel(static_cast<CWinPanel*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag, m_pGameInstance->Get_LayerSize(ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag) - 1)));
+
+
 	return S_OK;
 }
 
 HRESULT CLevel_Tutorial::Ready_Layer_StaticObjects(const _wstring& strLayerTag)
 {
 	/* 스태틱 오브젝트들 추가. */
-	CProps::PROP_DESC PropDesc;
-	PropDesc.iMeshIdx = 0;
-	PropDesc.iShaderPassIdx = 0;
+	//CProps::PROP_DESC PropDesc;
+	//PropDesc.iMeshIdx = 0;
+	//PropDesc.iShaderPassIdx = 0;
 
 	//if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Props"),
 	//	ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag, &PropDesc)))
@@ -426,7 +444,7 @@ CLevel_Tutorial* CLevel_Tutorial::Create(ID3D11Device* pDevice, ID3D11DeviceCont
 
 	if (FAILED(pInstance->Initialize()))
 	{
-		MSG_BOX("Failed to Created : CLevel_GamePlay");
+		MSG_BOX("Failed to Created : CLevel_Tutorial");
 		Safe_Release(pInstance);
 	}
 

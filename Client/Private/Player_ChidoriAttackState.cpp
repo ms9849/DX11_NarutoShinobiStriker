@@ -27,6 +27,7 @@ CPlayer_ChidoriAttackState::CPlayer_ChidoriAttackState(CPlayer* pPlayer)
 
 void CPlayer_ChidoriAttackState::Start(_bool IsBlend)
 {
+    m_pPlayer->Set_Invincible(true);
     m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Aerial_Chidori_Run_Loop", 2.f, IsBlend);
 
     CChidori::CHIDORI_DESC Desc;
@@ -100,6 +101,7 @@ CPlayerState* CPlayer_ChidoriAttackState::Update(_float fTimeDelta)
 
 _bool CPlayer_ChidoriAttackState::End()
 {
+    m_pPlayer->Set_Invincible(false);
     return true;
 }
 

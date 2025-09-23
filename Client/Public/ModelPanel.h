@@ -81,8 +81,8 @@ private:
 	_int m_iDecideButtonNum = { 0 };
 	SELECT_TYPE m_eSelectType = { SELECT_TYPE::PARTS };
 
-	_bool m_bFadeOut = { false };
-	_bool m_bFadeIn = { false };
+	_bool m_IsFadeOut = { false };
+	_bool m_IsFadeIn = { false };
 	_bool m_bChangeSelectType = { false };
 	_bool m_bBackToParts = { false };
 

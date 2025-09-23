@@ -7,6 +7,7 @@
 #include "Level_Logo.h"
 #include "Level_OutfitSelect.h"
 #include "Level_Tutorial.h"
+#include "Level_KonohaVillage.h"
 #include "LoadingBarPanel.h"
 
 CLevel_Loading::CLevel_Loading(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID)
@@ -48,6 +49,9 @@ void CLevel_Loading::Update(_float fTimeDelta)
 			break;
 		case LEVEL::TUTORIAL:
 			pNewLevel = CLevel_Tutorial::Create(m_pDevice, m_pContext, m_eNextLevelID);
+			break;
+		case LEVEL::KONOHA_VILLAGE:
+			pNewLevel = CLevel_KonohaVillage::Create(m_pDevice, m_pContext, m_eNextLevelID);
 			break;
 		}
 

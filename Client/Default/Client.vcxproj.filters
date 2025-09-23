@@ -22,9 +22,6 @@
     <Filter Include="01.Levels\Logo">
       <UniqueIdentifier>{b684fa80-8a44-48d3-8763-79acbba3a849}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Levels\GamePlay">
-      <UniqueIdentifier>{490444ba-eab1-44cf-9259-6b16f02e8e25}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects">
       <UniqueIdentifier>{6822825a-d704-42c1-aab4-274a2e135da0}</UniqueIdentifier>
     </Filter>
@@ -436,6 +433,15 @@
     <Filter Include="96. GameManager\Managers\Trigger">
       <UniqueIdentifier>{23d8103a-da99-4687-b014-5a2eb14e0a68}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Enemy\Jetsu\State\Beaten\Electric">
+      <UniqueIdentifier>{dfd713ef-41cb-448f-adc6-5218be126816}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Panel\GAMEPLAY\WinPanel">
+      <UniqueIdentifier>{c796cc45-1149-40bb-88ff-2d20336197b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\Tutorial">
+      <UniqueIdentifier>{490444ba-eab1-44cf-9259-6b16f02e8e25}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -460,7 +466,7 @@
       <Filter>01.Levels\Loading</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_Tutorial.h">
-      <Filter>01.Levels\GamePlay</Filter>
+      <Filter>01.Levels\Tutorial</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Loader.h">
       <Filter>01.Levels\Loading\Loader</Filter>
@@ -840,6 +846,12 @@
     <ClInclude Include="..\Public\Trigger_Manager.h">
       <Filter>96. GameManager\Managers\Trigger</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\WhiteJetsu_ElectricShockState.h">
+      <Filter>02.GameObjects\Enemy\Jetsu\State\Beaten\Electric</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\WinPanel.h">
+      <Filter>02.GameObjects\UI\Panel\GAMEPLAY\WinPanel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -868,7 +880,7 @@
       <Filter>01.Levels\Loading</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_Tutorial.cpp">
-      <Filter>01.Levels\GamePlay</Filter>
+      <Filter>01.Levels\Tutorial</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Loader.cpp">
       <Filter>01.Levels\Loading\Loader</Filter>
@@ -1241,6 +1253,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Trigger_Manager.cpp">
       <Filter>96. GameManager\Managers\Trigger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\WhiteJetsu_ElectricShockState.cpp">
+      <Filter>02.GameObjects\Enemy\Jetsu\State\Beaten\Electric</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\WinPanel.cpp">
+      <Filter>02.GameObjects\UI\Panel\GAMEPLAY\WinPanel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

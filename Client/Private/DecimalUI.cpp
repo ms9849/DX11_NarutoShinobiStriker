@@ -42,16 +42,16 @@ void CDecimalUI::Priority_Update(_float fTimeDelta)
 
 void CDecimalUI::Update(_float fTimeDelta)
 {
-	if (m_bFadeIn)
+	if (m_IsFadeIn)
 		Play_Animation_FadeIn(fTimeDelta);
 
-	if (m_bFadeOut)
+	if (m_IsFadeOut)
 		Play_Animation_FadeOut(fTimeDelta);
 }
 
 void CDecimalUI::Late_Update(_float fTimeDelta)
 {
-	if(true == m_bVisible)
+	if(true == m_IsVisible)
  		m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
 }
 
@@ -63,19 +63,19 @@ HRESULT CDecimalUI::Render()
 	return S_OK;
 }
 
-void CDecimalUI::Start_FadeIn()
+void CDecimalUI::AlertPanel_Start_FadeIn()
 {
-	m_bVisible = true;
+	m_IsVisible = true;
 	m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT);
-	m_bFadeIn = true;
+	m_IsFadeIn = true;
 	m_fFadeInTimeAcc = 0.f;
 }
 
 void CDecimalUI::Start_FadeOut()
 {
-	m_bVisible = true;
+	m_IsVisible = true;
 	m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT);
-	m_bFadeOut = true;
+	m_IsFadeOut = true;
 	m_fFadeOutTimeAcc = 0.f;
 }
 
@@ -101,13 +101,13 @@ HRESULT CDecimalUI::Bind_ShaderResources()
 	if (FAILED(__super::Bind_ShaderResources()))
 		return E_FAIL;
 
-	if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_bFadeIn)
+	if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_IsFadeIn)
 	{
 		_float fAlphaValue = m_fFadeInTimeAcc / m_fFadeInMaxTimeAcc;
 		m_pShaderCom->Bind_RawValue("g_Alpha", &fAlphaValue, sizeof(_float));
 	}
 
-	else if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_bFadeOut)
+	else if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_IsFadeOut)
 	{
 		_float fAlphaValue = 1 - (m_fFadeOutTimeAcc / m_fFadeOutMaxTimeAcc);
 		m_pShaderCom->Bind_RawValue("g_Alpha", &fAlphaValue, sizeof(_float));
@@ -130,7 +130,7 @@ void CDecimalUI::Play_Animation_FadeIn(_float fTimeDelta)
 	{
 		m_pTransformCom->Set_Scale(m_fSizeX, m_fSizeY, m_fZ);
 		m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI);
-		m_bFadeIn = false;
+		m_IsFadeIn = false;
 		m_fFadeInTimeAcc = 0.f;
 	}
 }
@@ -149,8 +149,8 @@ void CDecimalUI::Play_Animation_FadeOut(_float fTimeDelta)
 	{
 		m_pTransformCom->Set_Scale(m_fSizeX , m_fSizeY, m_fZ);
 		m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI);
-		m_bFadeOut = false;
-		m_bVisible = false;
+		m_IsFadeOut = false;
+		m_IsVisible = false;
 		m_fFadeOutTimeAcc = 0.f;
 	}
 }

@@ -181,6 +181,16 @@ void CGameManager::Set_ComboKoPanel(CComboKOPanel* pComboKOPanel)
 	m_pUI_Manager->Set_ComboKoPanel(pComboKOPanel);
 }
 
+void CGameManager::Set_MissionAlertPanel(CMissionAlertPanel* pMissionAlertPanel)
+{
+	m_pUI_Manager->Set_MissionAlertPanel(pMissionAlertPanel);
+}
+
+void CGameManager::Set_WinPanel(CWinPanel* pWinPanel)
+{
+	m_pUI_Manager->Set_WinPanel(pWinPanel);
+}
+
 void CGameManager::Set_Dialog_Text(const _wstring& strDialogText)
 {
 	m_pUI_Manager->Set_Dialog_Text(strDialogText);
@@ -219,6 +229,16 @@ void CGameManager::Change_AttackType(ATTACK_TYPE eAttackType)
 void CGameManager::Set_AttackType_Visible(_bool bFlag)
 {
 	m_pUI_Manager->Set_AttackType_Visible(bFlag);
+}
+
+void CGameManager::AlertPanel_Start_FadeIn(const _wstring& strMissionText)
+{
+	m_pUI_Manager->AlertPanel_Start_FadeIn(strMissionText);
+}
+
+void CGameManager::WinPanel_Start_FadeIn()
+{
+	m_pUI_Manager->WinPanel_Start_FadeIn();
 }
 
 HRESULT CGameManager::OnTrigger(TRIGGER_TYPE eTriggerType)

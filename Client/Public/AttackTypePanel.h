@@ -33,7 +33,7 @@ public:
 
 private:
 	/* 애니메이션 재생 및 플레이 끝남을 확인하기 위함 .*/
-	_bool m_bTriggered = { false };
+	_bool m_IsTriggered = { false };
 	_float m_fTimeAcc = { 0.f };
 	_float m_fMaxTimeAcc = { 0.5f };
 	_float m_fAnimationDist = { 30.f };

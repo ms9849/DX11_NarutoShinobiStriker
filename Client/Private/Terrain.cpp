@@ -1,16 +1,21 @@
 #include "Terrain.h"
 
 #include "GameInstance.h"
+#include "GameManager.h"
 #include "VIBuffer_Terrain.h"
 
 CTerrain::CTerrain(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CGameObject{ pDevice, pContext, ENUM_CLASS(eObjectID) }
+    , m_pGameManager { CGameManager::GetInstance() }
 {
+    Safe_AddRef(m_pGameManager);
 }
 
 CTerrain::CTerrain(const CTerrain& Prototype)
     : CGameObject { Prototype }
+    , m_pGameManager{ CGameManager::GetInstance() }
 {
+    Safe_AddRef(m_pGameManager);
 }
 
 HRESULT CTerrain::Initialize_Prototype()
@@ -67,12 +72,12 @@ HRESULT CTerrain::Render()
 HRESULT CTerrain::Ready_Components()
 {
     /* Com_VIBuffer */
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_Component_VIBuffer_Terrain"),
+    if (FAILED(__super::Add_Component(ENUM_CLASS(m_pGameManager->Get_NextLevel()), TEXT("Prototype_Component_VIBuffer_Terrain"),
         TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
         return E_FAIL;
 
     /* Com_Texture */
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_Component_Texture_Terrain"),
+    if (FAILED(__super::Add_Component(ENUM_CLASS(m_pGameManager->Get_NextLevel()), TEXT("Prototype_Component_Texture_Terrain"),
         TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
         return E_FAIL;
 
@@ -161,4 +166,5 @@ void CTerrain::Free()
     Safe_Release(m_pTextureCom);
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pNavigationCom);
+    Safe_Release(m_pGameManager);
 }

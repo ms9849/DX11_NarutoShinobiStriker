@@ -38,7 +38,7 @@ void CAttackTypePanel::Change_AttackType(ATTACK_TYPE eAttackType)
     }
 
     m_fTimeAcc = 0.f;
-    m_bTriggered = true;
+    m_IsTriggered = true;
     m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT);
     m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet((m_fX - g_iWinSizeX / 2.f - m_fAnimationDist * (1 - m_fTimeAcc / m_fMaxTimeAcc)), -1.f * (m_fY - g_iWinSizeY / 2.f), m_fZ, 1.f));
 }
@@ -68,7 +68,7 @@ void CAttackTypePanel::Priority_Update(_float fTimeDelta)
 
 void CAttackTypePanel::Update(_float fTimeDelta)
 {
-    if(m_bTriggered)
+    if(m_IsTriggered)
         Play_Animation_FadeIn(fTimeDelta);
 }
 
@@ -83,7 +83,7 @@ void CAttackTypePanel::Late_Update(_float fTimeDelta)
     _float4 vPosition = m_pTransformCom->Get_State_Float4(STATE::POSITION);
     _float fAlpha = 1.f;
 
-    if (m_bTriggered)
+    if (m_IsTriggered)
         fAlpha = m_fTimeAcc / m_fMaxTimeAcc;
 
     m_pFontCom->Bind_Resources(m_strFontText.c_str(), _float2{vPosition.x, vPosition.y}, true,
@@ -158,7 +158,7 @@ void CAttackTypePanel::Play_Animation_FadeIn(_float fTimeDelta)
     {
         m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(m_fX - g_iWinSizeX / 2.f, -1.f * (m_fY - g_iWinSizeY / 2.f), m_fZ, 1.f));
         m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI);
-        m_bTriggered = false;
+        m_IsTriggered = false;
         m_fTimeAcc = 0.f;
     }
 }

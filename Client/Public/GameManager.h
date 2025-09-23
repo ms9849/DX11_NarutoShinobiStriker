@@ -91,6 +91,8 @@ public:
 	void Set_SkillSlotPanel(class CSkillSlotPanel* pSkillSlotPanel);
 	void Set_AttackTypePanel(class CAttackTypePanel* pAttackTypePanel);
 	void Set_ComboKoPanel(class CComboKOPanel* pComboKOPanel);
+	void Set_MissionAlertPanel(class CMissionAlertPanel* pMissionAlertPanel);
+	void Set_WinPanel(class CWinPanel* pWinPanel);
 
 	void Set_Dialog_Text(const _wstring& strDialogText);
 	void Set_Dialog_Visible(_bool bFlag);
@@ -104,6 +106,9 @@ public:
 	void Change_AttackType(ATTACK_TYPE eAttackType);
 	void Set_AttackType_Visible(_bool bFlag);
 
+	void AlertPanel_Start_FadeIn(const _wstring& strMissionText);
+
+	void WinPanel_Start_FadeIn();
 #pragma endregion
 
 #pragma region FLOW

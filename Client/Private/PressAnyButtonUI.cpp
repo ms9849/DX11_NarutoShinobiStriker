@@ -35,9 +35,9 @@ void CPressAnyButtonUI::Priority_Update(_float fTimeDelta)
 void CPressAnyButtonUI::Update(_float fTimeDelta)
 {
     if (m_pGameInstance->Key_Down(DIK_SPACE))
-        m_bTriggered = true;
+        m_IsTriggered = true;
 
-    if (m_bTriggered)
+    if (m_IsTriggered)
         Play_Animation_FadeOut(fTimeDelta);
 }
 

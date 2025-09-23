@@ -127,7 +127,11 @@ void CBird::OnCollision(COLLIDER_HANDLE_ID eHandleID)
     if (m_fCurrentHP <= 0.f && false == m_isPlayingDeadAnim)
     {
         m_isPlayingDeadAnim = true;
-        Safe_Release(pNextState);
+        if (nullptr != pNextState)
+        {
+            pNextState->End();
+            Safe_Release(pNextState);
+        }
         pNextState = CBird_DeadState::Create(m_pNavigationCom, this);
     }
 

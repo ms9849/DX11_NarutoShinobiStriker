@@ -21,7 +21,7 @@ public:
 	virtual HRESULT Render() override;
 
 private:
-	_bool m_bTriggered = { false };
+	_bool m_IsTriggered = { false };
 	_float m_fAnimationDist = { 10.f };
 	_float m_fTimeAcc = { 0.f };
 	_float m_fMaxTimeAcc = { 0.5f };
