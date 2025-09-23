@@ -49,8 +49,8 @@ CWhiteJetsuState* CWhiteJetsu_WoodHandState::Update(_float fTimeDelta)
 
 		 XMStoreFloat3(&Desc.vJetsuPos, m_pJetsu->Get_Transform()->Get_State(STATE::POSITION));
 
-		m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_WoodHand"), 
-			ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Layer_Skills"), &Desc);
+		m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_WoodHand"), 
+			ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_Skills"), &Desc);
 
 		_float fDist = XMVectorGetX(XMVector3Length(m_pJetsu->Get_Transform()->Get_State(STATE::POSITION) - m_pPlayerTransformCom->Get_State(STATE::POSITION)));
 

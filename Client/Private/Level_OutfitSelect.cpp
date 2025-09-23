@@ -63,7 +63,7 @@ void CLevel_OutfitSelect::Update(_float fTimeDelta)
     {
         m_pGameManager->Clear();
 
-        if (FAILED(m_pGameInstance->Change_Level(CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL::LOADING, LEVEL::GAMEPLAY))))
+        if (FAILED(m_pGameInstance->Change_Level(CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL::LOADING, LEVEL::TUTORIAL))))
             return;
     }
 }

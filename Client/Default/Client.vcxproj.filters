@@ -430,6 +430,12 @@
     <Filter Include="02.GameObjects\TriggerBox\MonsterSpawner">
       <UniqueIdentifier>{02a59ba2-6cb6-44fa-bf58-ba50241009d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Levels\KonohaVillage">
+      <UniqueIdentifier>{5cee9527-7ba2-40a6-9161-2f18dd816302}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="96. GameManager\Managers\Trigger">
+      <UniqueIdentifier>{23d8103a-da99-4687-b014-5a2eb14e0a68}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -453,7 +459,7 @@
     <ClInclude Include="..\Public\Level_Loading.h">
       <Filter>01.Levels\Loading</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Level_GamePlay.h">
+    <ClInclude Include="..\Public\Level_Tutorial.h">
       <Filter>01.Levels\GamePlay</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Loader.h">
@@ -828,6 +834,12 @@
     <ClInclude Include="..\Public\MonsterSpawner.h">
       <Filter>02.GameObjects\TriggerBox\MonsterSpawner</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Level_KonohaVillage.h">
+      <Filter>01.Levels\KonohaVillage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Trigger_Manager.h">
+      <Filter>96. GameManager\Managers\Trigger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -855,7 +867,7 @@
     <ClCompile Include="..\Private\Level_Loading.cpp">
       <Filter>01.Levels\Loading</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Level_GamePlay.cpp">
+    <ClCompile Include="..\Private\Level_Tutorial.cpp">
       <Filter>01.Levels\GamePlay</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Loader.cpp">
@@ -1223,6 +1235,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\MonsterSpawner.cpp">
       <Filter>02.GameObjects\TriggerBox\MonsterSpawner</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_KonohaVillage.cpp">
+      <Filter>01.Levels\KonohaVillage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Trigger_Manager.cpp">
+      <Filter>96. GameManager\Managers\Trigger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

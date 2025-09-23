@@ -28,6 +28,7 @@ public:
 	virtual HRESULT Render() override;
 
 public:
+	void Set_NameText(const _wstring& strText) { m_strNameFontText = strText; }
 	void Set_Text(const _wstring& strText) { m_strFontText = strText; }
 	void Set_Visible(_bool bFlag) { m_IsVisible = bFlag; }
 
@@ -35,8 +36,10 @@ private:
 	class CGameManager* m_pGameManager = { nullptr };
 	_bool	 m_IsVisible = { false };
 	CFont*	 m_pFontCom = {};
+	CFont*	 m_pNameFontCom = {};
 	_uint	 m_iNumMeshes = {};
 	_wstring m_strFontText = {};
+	_wstring m_strNameFontText = {};
 
 private:
 	HRESULT Ready_Components();

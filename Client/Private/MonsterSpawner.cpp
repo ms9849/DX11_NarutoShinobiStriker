@@ -23,8 +23,6 @@ HRESULT CMonsterSpawner::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_eSpawnerType = static_cast<MONSTER_SPAWNER_DESC*>(pArg)->eSpawnerType;
-
 	return S_OK;
 }
 
@@ -53,13 +51,10 @@ HRESULT CMonsterSpawner::Render()
 
 void CMonsterSpawner::OnCollision()
 {
-	/* 여기서 제츠 소환 로직. */
-	if (SPAWNER_TYPE::TUTORIAL_01 == m_eSpawnerType)
-	{
-		m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_WhiteJetsu"),
-			ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Layer_Monster"));
-	}
+	/* 자신의 트리거 타입 넘겨주기. */
+	m_pGameManager->OnTrigger(m_eTriggerType);
 
+	m_pColliderCom->Set_Active(false);
 	m_isDead = true;
 }
 

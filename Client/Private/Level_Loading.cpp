@@ -6,7 +6,7 @@
 
 #include "Level_Logo.h"
 #include "Level_OutfitSelect.h"
-#include "Level_GamePlay.h"
+#include "Level_Tutorial.h"
 #include "LoadingBarPanel.h"
 
 CLevel_Loading::CLevel_Loading(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID)
@@ -46,8 +46,8 @@ void CLevel_Loading::Update(_float fTimeDelta)
 		case LEVEL::OUTFITSELECT:
 			pNewLevel = CLevel_OutfitSelect::Create(m_pDevice, m_pContext, m_eNextLevelID);
 			break;
-		case LEVEL::GAMEPLAY:
-			pNewLevel = CLevel_GamePlay::Create(m_pDevice, m_pContext, m_eNextLevelID);
+		case LEVEL::TUTORIAL:
+			pNewLevel = CLevel_Tutorial::Create(m_pDevice, m_pContext, m_eNextLevelID);
 			break;
 		}
 

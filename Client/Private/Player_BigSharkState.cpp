@@ -24,7 +24,7 @@ CPlayer_BigSharkState::CPlayer_BigSharkState(CPlayer* pPlayer)
 void CPlayer_BigSharkState::Start(_bool IsBlend)
 {
 	m_pPlayer->Set_Invincible(true);
-	m_pGameManager->Change_Camera(LEVEL::GAMEPLAY, TEXT("BigShark_Action_Camera"), m_pGameInstance->Get_PipeLine_InverseFloat4x4(D3DTS::VIEW));
+	m_pGameManager->Change_Camera(LEVEL::TUTORIAL, TEXT("BigShark_Action_Camera"), m_pGameInstance->Get_PipeLine_InverseFloat4x4(D3DTS::VIEW));
 	m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_SuperSharkBomb", 1.5f, IsBlend, 0.1f);
 }
 
@@ -36,7 +36,7 @@ CPlayerState* CPlayer_BigSharkState::Update(_float fTimeDelta)
 
 	if (fAnimProgress > 0.65f && false == m_IsCamChanged)
 	{
-		m_pGameManager->Change_Camera(LEVEL::GAMEPLAY, TEXT("Main_Camera"));
+		m_pGameManager->Change_Camera(LEVEL::TUTORIAL, TEXT("Main_Camera"));
 		m_IsCamChanged = true;
 	}
 

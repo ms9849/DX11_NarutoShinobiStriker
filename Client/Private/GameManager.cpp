@@ -10,6 +10,7 @@
 #include "LockOn_Manager.h"
 #include "Collision_Manager.h"
 #include "UI_Manager.h"
+#include "Trigger_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameManager);
 
@@ -37,6 +38,10 @@ HRESULT CGameManager::Initialize_GameManager()
 	if (nullptr == m_pUI_Manager)
 		return E_FAIL;
 
+	m_pTrigger_Manager = CTrigger_Manager::Create();
+	if (nullptr == m_pTrigger_Manager)
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -53,13 +58,13 @@ void CGameManager::Release_GameManager()
 	Safe_Release(m_pCollision_Manager);
 	Safe_Release(m_pLockOn_Manager);
 	Safe_Release(m_pUI_Manager);
+	Safe_Release(m_pTrigger_Manager);
 }
 
 void CGameManager::Clear()
 {
 	m_pCamera_Manager->Clear();
 	m_pCollision_Manager->Clear();
-
 
 	/* 지울때 레퍼런스 카운트가 0임을 보장하지 않음*/
 	/* 따라서 명시적으로 nullptr 처리 해줘야함 */
@@ -214,6 +219,16 @@ void CGameManager::Change_AttackType(ATTACK_TYPE eAttackType)
 void CGameManager::Set_AttackType_Visible(_bool bFlag)
 {
 	m_pUI_Manager->Set_AttackType_Visible(bFlag);
+}
+
+HRESULT CGameManager::OnTrigger(TRIGGER_TYPE eTriggerType)
+{
+	return m_pTrigger_Manager->OnTrigger(eTriggerType);
+}
+
+TRIGGER_TYPE CGameManager::Get_CurrentTrigger()
+{
+	return m_pTrigger_Manager->Get_CurrentTrigger();
 }
 
 LEVEL CGameManager::Get_NextLevel()

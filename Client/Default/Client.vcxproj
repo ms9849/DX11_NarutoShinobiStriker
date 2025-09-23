@@ -188,10 +188,12 @@
     <ClInclude Include="..\Public\Explosion.h" />
     <ClInclude Include="..\Public\Face_Character.h" />
     <ClInclude Include="..\Public\FireBall.h" />
+    <ClInclude Include="..\Public\Trigger_Manager.h" />
     <ClInclude Include="..\Public\GameManager.h" />
     <ClInclude Include="..\Public\Gate.h" />
     <ClInclude Include="..\Public\Head_Character.h" />
     <ClInclude Include="..\Public\Kamui.h" />
+    <ClInclude Include="..\Public\Level_KonohaVillage.h" />
     <ClInclude Include="..\Public\LockOn_Manager.h" />
     <ClInclude Include="..\Public\MainCamera.h" />
     <ClInclude Include="..\Public\MonsterSpawner.h" />
@@ -212,7 +214,7 @@
     <ClInclude Include="..\Public\Player_IdleState.h" />
     <ClInclude Include="..\Public\KonohaVillage.h" />
     <ClInclude Include="..\Public\KOUI.h" />
-    <ClInclude Include="..\Public\Level_GamePlay.h" />
+    <ClInclude Include="..\Public\Level_Tutorial.h" />
     <ClInclude Include="..\Public\Level_Loading.h" />
     <ClInclude Include="..\Public\Level_Logo.h" />
     <ClInclude Include="..\Public\Level_OutfitSelect.h" />
@@ -321,10 +323,12 @@
     <ClCompile Include="..\Private\Explosion.cpp" />
     <ClCompile Include="..\Private\Face_Character.cpp" />
     <ClCompile Include="..\Private\FireBall.cpp" />
+    <ClCompile Include="..\Private\Trigger_Manager.cpp" />
     <ClCompile Include="..\Private\GameManager.cpp" />
     <ClCompile Include="..\Private\Gate.cpp" />
     <ClCompile Include="..\Private\Head_Character.cpp" />
     <ClCompile Include="..\Private\Kamui.cpp" />
+    <ClCompile Include="..\Private\Level_KonohaVillage.cpp" />
     <ClCompile Include="..\Private\LockOn_Manager.cpp" />
     <ClCompile Include="..\Private\MainCamera.cpp" />
     <ClCompile Include="..\Private\MonsterSpawner.cpp" />
@@ -345,7 +349,7 @@
     <ClCompile Include="..\Private\Player_IdleState.cpp" />
     <ClCompile Include="..\Private\KonohaVillage.cpp" />
     <ClCompile Include="..\Private\KOUI.cpp" />
-    <ClCompile Include="..\Private\Level_GamePlay.cpp" />
+    <ClCompile Include="..\Private\Level_Tutorial.cpp" />
     <ClCompile Include="..\Private\Level_Loading.cpp" />
     <ClCompile Include="..\Private\Level_Logo.cpp" />
     <ClCompile Include="..\Private\Level_OutfitSelect.cpp" />

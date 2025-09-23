@@ -17,6 +17,7 @@ public:
 		_float3 vPosition;
 		_float3 vCenter;
 		_float  fRadius;
+		TRIGGER_TYPE eTriggerType = {};
 	} TRIGGER_BOX_DESC;
 
 protected:
@@ -38,9 +39,10 @@ public:
 
 protected:
 	/* 트리거박스는 기본적으로 콜라이더 & 사이즈 들고있게 */
-	CCollider* m_pColliderCom = { nullptr };
-	_float3    m_vColliderCenter = {};
-	_float	   m_fColliderRadius = {};
+	CCollider*		m_pColliderCom = { nullptr };
+	_float3			m_vColliderCenter = {};
+	_float			m_fColliderRadius = {};
+	TRIGGER_TYPE	m_eTriggerType = {};
 
 public:
 	virtual CGameObject* Clone(void* pArg) override = 0;

@@ -42,13 +42,19 @@ HRESULT CNPC_KaKashi::Initialize(void* pArg)
 	m_pModelCom->Set_AnimIndex("Kakashi_etc_Tutorial_Loop", 1.f, true, 0.05f);
 	m_eAnimState = ANIM_STATE::ANIM_IDLE;
 
-	m_DialogTexts.push_back(TEXT("피곤해 귀찮아 짜증나"));
-	m_DialogTexts.push_back(TEXT("코딩하기 싫다"));
-	m_DialogTexts.push_back(TEXT("너무 배고파"));
-	m_DialogTexts.push_back(TEXT("누워서 자고 싶다"));
+	m_DialogTexts.push_back(TEXT("반갑다 하급닌자. 이 훈련장은 처음이지?"));
+	m_DialogTexts.push_back(TEXT("본격적인 임무에 앞서 연습을 위한 훈련장이야"));
+	m_DialogTexts.push_back(TEXT("저 앞에 보이는 푸른 원 안으로 들어가면 시작할 수 있어"));
+	m_DialogTexts.push_back(TEXT("그럼 건투를 빈다"));
 	m_DialogTexts.push_back(TEXT("졸작 팀장은 한재훈 김누리 김찬빈"));
 
 	m_iDialogSize = (_uint)m_DialogTexts.size();
+
+	if (LEVEL::TUTORIAL == m_pGameManager->Get_NextLevel())
+	{
+		m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(5.3f, 0.031f, -45.82f, 1.f));
+		m_pTransformCom->Rotation(0.f, 135.f, 0.f);
+	}
 
 	return S_OK;
 }
@@ -110,6 +116,7 @@ void CNPC_KaKashi::Start_Dialog()
 
 	m_pGameManager->Set_AttackType_Visible(false);
 	m_pGameManager->Set_SkillSlot_Visible(false);
+	m_pGameManager->OnTrigger(TRIGGER_TYPE::TUTORIAL_KAKASHI_TALK);
 }
 
 void CNPC_KaKashi::End_Dialog()

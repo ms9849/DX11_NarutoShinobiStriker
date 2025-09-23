@@ -56,7 +56,7 @@ void CSkillActionCamera::Priority_Update(_float fTimeDelta)
         {
             m_fZoomTimeAcc = 0.f;
             m_IsZoom = false;
-            m_pGameManager->Change_Camera(LEVEL::GAMEPLAY, TEXT("Main_Camera"), m_pGameInstance->Get_PipeLine_InverseFloat4x4(D3DTS::VIEW));
+            m_pGameManager->Change_Camera(LEVEL::TUTORIAL, TEXT("Main_Camera"), m_pGameInstance->Get_PipeLine_InverseFloat4x4(D3DTS::VIEW));
         }
     }
 
