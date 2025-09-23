@@ -29,6 +29,7 @@ public:
 
 
 private:
+	class CGameManager* m_pGameManager = { nullptr };
 	CTexture*			m_pTextureCom = { nullptr };
 	CVIBuffer_Terrain * m_pVIBufferCom = { nullptr };
 	CShader*			m_pShaderCom = { nullptr };

@@ -39,14 +39,14 @@ void CKOUI::Priority_Update(_float fTimeDelta)
 
 void CKOUI::Update(_float fTimeDelta)
 {
-	if (m_bFadeIn)
+	if (m_IsFadeIn)
 		Play_Animation_FadeIn(fTimeDelta);
 
-	if (m_bFadeOut)
+	if (m_IsFadeOut)
 		Play_Animation_FadeOut(fTimeDelta);
 
 	/* 페이드 인 이후, 2초가 지나면 페이드 아웃 수행 */
-	if (m_bTriggered)
+	if (m_IsTriggered)
 	{
 		m_fTimeAcc += fTimeDelta;
 
@@ -60,7 +60,7 @@ void CKOUI::Update(_float fTimeDelta)
 
 void CKOUI::Late_Update(_float fTimeDelta)
 {
-	if (m_bVisible)
+	if (m_IsVisible)
 		m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
 }
 
@@ -72,22 +72,22 @@ HRESULT CKOUI::Render()
 	return S_OK;
 }
 
-void CKOUI::Start_FadeIn()
+void CKOUI::AlertPanel_Start_FadeIn()
 {
-	m_bVisible = true;
+	m_IsVisible = true;
 	m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT);
-	m_bFadeIn = true;
+	m_IsFadeIn = true;
 	m_fFadeInTimeAcc = 0.f;
 
-	m_bTriggered = true;
+	m_IsTriggered = true;
 	m_fTimeAcc = 0.f;
 }
 
 void CKOUI::Start_FadeOut()
 {
-	m_bVisible = true;
+	m_IsVisible = true;
 	m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT);
-	m_bFadeOut = true;
+	m_IsFadeOut = true;
 	m_fFadeOutTimeAcc = 0.f;
 }
 
@@ -113,13 +113,13 @@ HRESULT CKOUI::Bind_ShaderResources()
 	if (FAILED(__super::Bind_ShaderResources()))
 		return E_FAIL;
 
-	if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_bFadeIn)
+	if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_IsFadeIn)
 	{
 		_float fAlphaValue = m_fFadeInTimeAcc / m_fFadeInMaxTimeAcc;
 		m_pShaderCom->Bind_RawValue("g_Alpha", &fAlphaValue, sizeof(_float));
 	}
 
-	else if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_bFadeOut)
+	else if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_IsFadeOut)
 	{
 		_float fAlphaValue = 1 - (m_fFadeOutTimeAcc / m_fFadeOutMaxTimeAcc);
 		m_pShaderCom->Bind_RawValue("g_Alpha", &fAlphaValue, sizeof(_float));
@@ -142,7 +142,7 @@ void CKOUI::Play_Animation_FadeIn(_float fTimeDelta)
 	{
 		m_pTransformCom->Set_Scale(m_fSizeX, m_fSizeY, m_fZ);
 		m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI);
-		m_bFadeIn = false;
+		m_IsFadeIn = false;
 		m_fFadeInTimeAcc = 0.f;
 	}
 }
@@ -161,9 +161,9 @@ void CKOUI::Play_Animation_FadeOut(_float fTimeDelta)
 	{
 		m_pTransformCom->Set_Scale(m_fSizeX, m_fSizeY, m_fZ);
 		m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI);
-		m_bFadeOut = false;
-		m_bVisible = false;
-		m_bTriggered = false;
+		m_IsFadeOut = false;
+		m_IsVisible = false;
+		m_IsTriggered = false;
 		m_fFadeOutTimeAcc = 0.f;
 	}
 }

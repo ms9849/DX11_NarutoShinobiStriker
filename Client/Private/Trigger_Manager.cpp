@@ -36,6 +36,7 @@ HRESULT CTrigger_Manager::OnTrigger(TRIGGER_TYPE eTriggerType)
             ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_Monster"))))
             return E_FAIL;
 
+        m_pGameManager->AlertPanel_Start_FadeIn(TEXT("적을 쓰러뜨려라!"));
         m_IsTriggerActivated[ENUM_CLASS(TRIGGER_TYPE::TUTORIAL_SPAWNER_01)] = true;
     }
 
@@ -45,7 +46,6 @@ HRESULT CTrigger_Manager::OnTrigger(TRIGGER_TYPE eTriggerType)
 
         m_IsTriggerActivated[ENUM_CLASS(TRIGGER_TYPE::TUTORIAL_CLEAR)] = true;
     }
-
     m_eCurrentTrigger = eTriggerType;
 
     return S_OK;

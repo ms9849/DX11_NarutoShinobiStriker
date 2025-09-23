@@ -31,7 +31,7 @@ public:
 	}
 
 	void Set_Visible(_bool bFlag) {
-		m_bVisible = bFlag;
+		m_IsVisible = bFlag;
 	}
 
 public:
@@ -43,22 +43,22 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	void Start_FadeIn();
+	void AlertPanel_Start_FadeIn();
 	void Start_FadeOut();
 
 private:
 	class CGameManager* m_pGameManager = { nullptr };
 	DECIMAL_TYPE m_eDecimalType = {};
-	_bool m_bVisible = { true };
+	_bool m_IsVisible = { true };
 
 	_float m_fMaxScale = { 1.5f };
 	/* 페이드 인*/
-	_bool  m_bFadeIn = { false };
+	_bool  m_IsFadeIn = { false };
 	_float m_fFadeInTimeAcc = { 0.f };
 	_float m_fFadeInMaxTimeAcc = { 0.2f };
 
 	/* 페이드 아웃 */
-	_bool  m_bFadeOut = { false };
+	_bool  m_IsFadeOut = { false };
 	_float m_fFadeOutTimeAcc = { 0.f };
 	_float m_fFadeOutMaxTimeAcc = { 0.2f };
 

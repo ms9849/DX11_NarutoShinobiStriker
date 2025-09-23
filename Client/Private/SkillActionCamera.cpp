@@ -56,10 +56,21 @@ void CSkillActionCamera::Priority_Update(_float fTimeDelta)
         {
             m_fZoomTimeAcc = 0.f;
             m_IsZoom = false;
-            m_pGameManager->Change_Camera(LEVEL::TUTORIAL, TEXT("Main_Camera"), m_pGameInstance->Get_PipeLine_InverseFloat4x4(D3DTS::VIEW));
+            m_pGameManager->Change_Camera(static_cast<LEVEL>(m_pGameInstance->Get_LevelID()), TEXT("Main_Camera"), m_pGameInstance->Get_PipeLine_InverseFloat4x4(D3DTS::VIEW));
         }
     }
-
+    else if (SKILL::CHIDORI == m_eSkillType)
+    {
+        m_fChidoriCamTimeAcc += fTimeDelta;
+        m_pTransformCom->Set_State(STATE::POSITION, m_pPlayerTransform->Get_State(STATE::POSITION) + 2.f * m_pPlayerTransform->Get_State(STATE::LOOK) + XMVectorSet(0.f, 1.0f, 0.f, 0.f));
+        m_pTransformCom->LookAt(m_pPlayerTransform->Get_State(STATE::POSITION) + XMVectorSet(0.f, 1.0f, 0.f, 0.f));
+    
+        if (m_fMaxChidoriCamTimeAcc <= m_fChidoriCamTimeAcc)
+        {
+            m_fChidoriCamTimeAcc = 0.f;
+            m_pGameManager->Change_Camera(static_cast<LEVEL>(m_pGameInstance->Get_LevelID()), TEXT("Main_Camera"), m_pGameInstance->Get_PipeLine_InverseFloat4x4(D3DTS::VIEW));
+        }
+    }
     __super::Bind_Matrices();
 }
 
@@ -99,6 +110,11 @@ void CSkillActionCamera::OnChange(const _float4x4* pWorldMatrix)
         m_pTransformCom->LookAt(m_pPlayerTransform->Get_State(STATE::POSITION) + XMVectorSet(0.f, 1.2f, 0.f, 0.f));
     }
 
+    else if (SKILL::CHIDORI == m_eSkillType)
+    {
+        m_pTransformCom->Set_State(STATE::POSITION, m_pPlayerTransform->Get_State(STATE::POSITION) + 2.f * m_pPlayerTransform->Get_State(STATE::LOOK) + XMVectorSet(0.f, 1.0f, 0.f, 0.f));
+        m_pTransformCom->LookAt(m_pPlayerTransform->Get_State(STATE::POSITION) + XMVectorSet(0.f, 1.0f, 0.f, 0.f));
+    }
 }
 
 CSkillActionCamera* CSkillActionCamera::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)

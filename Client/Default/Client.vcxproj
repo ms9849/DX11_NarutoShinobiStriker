@@ -278,9 +278,11 @@
     <ClInclude Include="..\Public\WhiteJetsu_BeatenBlastedState.h" />
     <ClInclude Include="..\Public\WhiteJetsu_BeatenState.h" />
     <ClInclude Include="..\Public\WhiteJetsu_DeadState.h" />
+    <ClInclude Include="..\Public\WhiteJetsu_ElectricShockState.h" />
     <ClInclude Include="..\Public\WhiteJetsu_IdleState.h" />
     <ClInclude Include="..\Public\WhiteJetsu_RunState.h" />
     <ClInclude Include="..\Public\WhiteJetsu_WoodHandState.h" />
+    <ClInclude Include="..\Public\WinPanel.h" />
     <ClInclude Include="..\Public\WoodHand.h" />
     <ClInclude Include="..\Public\Parts_WoodHand.h" />
     <ClInclude Include="Client.h" />
@@ -412,9 +414,11 @@
     <ClCompile Include="..\Private\WhiteJetsu_BeatenBlastedState.cpp" />
     <ClCompile Include="..\Private\WhiteJetsu_BeatenState.cpp" />
     <ClCompile Include="..\Private\WhiteJetsu_DeadState.cpp" />
+    <ClCompile Include="..\Private\WhiteJetsu_ElectricShockState.cpp" />
     <ClCompile Include="..\Private\WhiteJetsu_IdleState.cpp" />
     <ClCompile Include="..\Private\WhiteJetsu_RunState.cpp" />
     <ClCompile Include="..\Private\WhiteJetsu_WoodHandState.cpp" />
+    <ClCompile Include="..\Private\WinPanel.cpp" />
     <ClCompile Include="..\Private\WoodHand.cpp" />
     <ClCompile Include="..\Private\Parts_WoodHand.cpp" />
     <ClCompile Include="Client.cpp" />

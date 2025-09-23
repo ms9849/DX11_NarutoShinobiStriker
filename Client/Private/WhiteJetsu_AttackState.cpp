@@ -32,11 +32,7 @@ CWhiteJetsuState* CWhiteJetsu_AttackState::Update(_float fTimeDelta)
 	_bool IsAnimFinished = m_pJetsu->Play_Animation(fTimeDelta);
 	_float fAnimProgress = m_pJetsu->Get_AnimProgress();
 
-	if(false == m_isColliderOn && fAnimProgress > 0.35f)
-		Update_Collider();
-
-	if(fAnimProgress >= 0.8f)
-		m_pJetsu->Set_Collider_Active(TEXT("Com_Collider_HandAttack"), false);
+	Update_Collider(fAnimProgress);
 
 	if (true == IsAnimFinished)
 		pNextState = CWhiteJetsu_IdleState::Create(m_pNavigationCom, m_pJetsu);
@@ -49,10 +45,16 @@ _bool CWhiteJetsu_AttackState::End()
 	return true;
 }
 
-void CWhiteJetsu_AttackState::Update_Collider()
+void CWhiteJetsu_AttackState::Update_Collider(_float fAnimProgress)
 {
-	m_pJetsu->Set_Collider_Active(TEXT("Com_Collider_HandAttack"), true);
-	m_isColliderOn = true;
+	if ((false == m_IsColliderOn) && fAnimProgress > 0.35f && fAnimProgress <= 0.7f)
+	{
+		m_pJetsu->Set_Collider_Active(TEXT("Com_Collider_HandAttack"), true);
+		m_IsColliderOn = true;
+	}
+	else
+		m_pJetsu->Set_Collider_Active(TEXT("Com_Collider_HandAttack"), false);
+
 }
 
 CWhiteJetsu_AttackState* CWhiteJetsu_AttackState::Create(class CNavigation* pNavigation, class CWhiteJetsu* pJetsu)

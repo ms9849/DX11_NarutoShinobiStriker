@@ -9,15 +9,15 @@ NS_END
 
 NS_BEGIN(Client)
 
-class CMissionAlertPanel final : public CPanel
+class CWinPanel final : public CPanel
 {
 private:
-	CMissionAlertPanel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
-	CMissionAlertPanel(const CMissionAlertPanel& rhs);
-	virtual ~CMissionAlertPanel() = default;
+	CWinPanel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
+	CWinPanel(const CWinPanel& rhs);
+	virtual ~CWinPanel() = default;
 
 public:
-	void AlertPanel_Start_FadeIn(const _wstring& strMissionText);
+	void WinPanel_Start_FadeIn();
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -28,32 +28,21 @@ public:
 	virtual HRESULT Render() override;
 
 private:
-	_wstring m_strMissionText = {};
-	_float m_fAnimationDist = 20.f;
-
+	_float m_fMaxScale = { 1.5f };
 	_bool  m_IsFadeIn = { false };
 	_float m_fFadeInTimeAcc = { 0.f };
 	_float m_fFadeInMaxTimeAcc = { 0.3f };
 
-	_bool  m_IsTriggered = { false };
-	_bool  m_IsFadeOut = { false };
-	_float m_fFadeOutTimeAcc = { 0.f };
-	_float m_fFadeOutMaxTimeAcc = { 0.3f };
-
-	/* Fade IN 끝난뒤, 수명 체크용 */
-	_float m_fTimeAcc = 0.f;
-	_float m_fLifeTime = 4.f;
 	_bool  m_IsVisible = { false };
+	_bool  m_IsFadeInFinished = { false };
 
-	CFont* m_pFontCom = { nullptr };
 private:
 	HRESULT Ready_Components();
 	virtual HRESULT Bind_ShaderResources() override;
 	void	Play_Animation_FadeIn(_float fTimeDelta);
-	void	Play_Animation_FadeOut(_float fTimeDelta);
 
 public:
-	static CMissionAlertPanel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
+	static CWinPanel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 };

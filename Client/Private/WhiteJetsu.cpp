@@ -6,6 +6,7 @@
 #include "WhiteJetsu_IdleState.h"
 #include "WhiteJetsu_BeatenState.h"
 #include "WhiteJetsu_BeatenBlastedState.h"
+#include "WhiteJetsu_ElectricShockState.h"
 #include "WhiteJetsu_DeadState.h"
 
 #include "Player.h"
@@ -95,8 +96,7 @@ void CWhiteJetsu::OnCollision(COLLIDER_HANDLE_ID eHandleID)
     }
 
     else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENGAN == eHandleID ||
-        COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_FIREBALL == eHandleID || 
-        COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_CHIDORI == eHandleID)
+        COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_FIREBALL == eHandleID)
     {
         m_fCurrentHP -= 15.f;
 
@@ -134,10 +134,24 @@ void CWhiteJetsu::OnCollision(COLLIDER_HANDLE_ID eHandleID)
         Set_Invincible(1.f);
     }
 
+    else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_CHIDORI == eHandleID)
+    {
+        m_pGameManager->Change_Camera(static_cast<LEVEL>(m_pGameInstance->Get_LevelID()), 
+            TEXT("Chidori_Action_Camera"), nullptr);
+
+        m_fCurrentHP -= 15.f;
+        pNextState = CWhiteJetsu_ElectricShockState::Create(m_pNavigationCom, this);
+        Set_Invincible(1.f);
+    }
+
     if (m_fCurrentHP <= 0.f && false == m_isPlayingDeadAnim)
     {
         m_isPlayingDeadAnim = true;
-        Safe_Release(pNextState);
+        if (nullptr != pNextState)
+        {
+            pNextState->End();
+            Safe_Release(pNextState);
+        }
         pNextState = CWhiteJetsu_DeadState::Create(m_pNavigationCom, this);
     }
 
@@ -163,7 +177,7 @@ HRESULT CWhiteJetsu::Initialize(void* pArg)
 {
     CGameObject::GAMEOBJECT_DESC	Desc{};
     Desc.fRotationPerSec = XMConvertToRadians(180.0f);
-    Desc.fSpeedPerSec = 10.f;
+    Desc.fSpeedPerSec = 7.5f;
 
     if (FAILED(__super::Initialize(&Desc)))
         return E_FAIL;
@@ -215,7 +229,7 @@ void CWhiteJetsu::Late_Update(_float fTimeDelta)
 {
     __super::Late_Update(fTimeDelta);
 
-    /* 제츠의 몸통 콜라이더를 콜리전 매니저에 등록*/
+    /* 제츠의 몸통 콜라이더를 콜리전 매니저에 등록 */
     m_pGameManager->Add_Object_ToCollision(TEXT("Monster_Body"), this, m_pColliderCom);
     m_pGameManager->Add_Collider_ToCollision(TEXT("Monster_Attack"), COLLIDER_HANDLE_ID::ENEMY_JETSU_ATTACK, m_pHandAttackColliderCom);
 

@@ -144,7 +144,7 @@ HRESULT CVIBuffer_Point_Instance::Bind_Resources()
 
 HRESULT CVIBuffer_Point_Instance::Render()
 {
-	m_pContext->DrawInstanced(m_iNumIndexPerInstance, m_iNumInstance, 0, 0);
+	m_pContext->DrawInstanced(1, m_iNumInstance, 0, 0);
 
 	return S_OK;
 }

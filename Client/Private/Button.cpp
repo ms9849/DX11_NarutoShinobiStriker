@@ -39,10 +39,10 @@ void CButton::Priority_Update(_float fTimeDelta)
 
 void CButton::Update(_float fTimeDelta)
 {
-	if (m_bFadeOut && (m_fReserveTime < m_fTimeAcc))
+	if (m_IsFadeOut && (m_fReserveTime < m_fTimeAcc))
 		Play_Animation_FadeOut(fTimeDelta);
 
-	if (m_bFadeIn && (m_fReserveTime < m_fTimeAcc))
+	if (m_IsFadeIn && (m_fReserveTime < m_fTimeAcc))
 		Play_Animation_FadeIn(fTimeDelta);
 
 	m_fTimeAcc += fTimeDelta;
@@ -54,7 +54,7 @@ void CButton::Late_Update(_float fTimeDelta)
 
 HRESULT CButton::Render()
 {
-	if (false == m_bVisible)
+	if (false == m_IsVisible)
 		return S_OK;
 
 	if (FAILED(__super::Render()))
@@ -74,13 +74,13 @@ HRESULT CButton::Bind_ShaderResources()
 			return E_FAIL;
 	}
 
-	if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_bFadeOut)
+	if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_IsFadeOut)
 	{
 		_float fAlphaValue = 1 - (m_fFadeOutTimeAcc / m_fFadeOutMaxTimeAcc);
 		m_pShaderCom->Bind_RawValue("g_Alpha", &fAlphaValue, sizeof(_float));
 	}
 
-	else if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_bFadeIn)
+	else if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_IsFadeIn)
 	{
 		_float fAlphaValue = m_fFadeInTimeAcc / m_fFadeInMaxTimeAcc;
 		m_pShaderCom->Bind_RawValue("g_Alpha", &fAlphaValue, sizeof(_float));
@@ -113,8 +113,8 @@ void CButton::Trigger_FadeIn(_float fReserveTime)
 	m_fTimeAcc = 0.f;
 
 	m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT);
-	m_bVisible = true;
-	m_bFadeIn = true;
+	m_IsVisible = true;
+	m_IsFadeIn = true;
 }
 
 void CButton::Trigger_FadeOut(_float fReserveTime)
@@ -123,7 +123,7 @@ void CButton::Trigger_FadeOut(_float fReserveTime)
 	m_fTimeAcc = 0.f;
 
 	m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT);
-	m_bFadeOut = true;
+	m_IsFadeOut = true;
 }
 
 void CButton::Play_Animation_FadeOut(_float fTimeDelta)
@@ -141,8 +141,8 @@ void CButton::Play_Animation_FadeOut(_float fTimeDelta)
 	{
 		m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(m_fX - g_iWinSizeX / 2.f, -1.f * (m_fY - g_iWinSizeY / 2.f), m_fZ, 1.f));
 		m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI);
-		m_bFadeOut = false;
-		m_bVisible = false;
+		m_IsFadeOut = false;
+		m_IsVisible = false;
 		m_fFadeOutTimeAcc = 0.f;
 		m_fTimeAcc = 0.f;
 	}
@@ -163,7 +163,7 @@ void CButton::Play_Animation_FadeIn(_float fTimeDelta)
 	{
 		m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(m_fX - g_iWinSizeX / 2.f, -1.f * (m_fY - g_iWinSizeY / 2.f), m_fZ, 1.f));
 		m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI);
-		m_bFadeIn = false;
+		m_IsFadeIn = false;
 		m_fFadeInTimeAcc = 0.f;
 		m_fTimeAcc = 0.f;
 	}

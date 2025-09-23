@@ -55,16 +55,16 @@ private:
 
 	_float	m_fScale = { 1.f };
 
-	_bool	m_bVisible = { false };
+	_bool	m_IsVisible = { false };
 	_float	m_fMaxScale = { 1.5f };
 
 	/* 페이드 인*/
-	_bool	m_bFadeIn = { false };
+	_bool	m_IsFadeIn = { false };
 	_float	m_fFadeInTimeAcc = { 0.f };
 	_float	m_fFadeInMaxTimeAcc = { 0.2f };
 
 	/* 페이드 아웃 */
-	_bool  m_bFadeOut = { false };
+	_bool  m_IsFadeOut = { false };
 	_float m_fFadeOutTimeAcc = { 0.f };
 	_float m_fFadeOutMaxTimeAcc = { 0.2f };
 

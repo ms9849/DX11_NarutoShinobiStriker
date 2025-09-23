@@ -68,7 +68,7 @@ void CChidori::Update(_float fTimeDelta)
 void CChidori::Late_Update(_float fTimeDelta)
 {
 	CGameManager::GetInstance()->Add_Collider_ToCollision(TEXT("Player_Skill"),
-		COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENGAN, m_pColliderCom);
+		COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_CHIDORI, m_pColliderCom);
 
 	m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }

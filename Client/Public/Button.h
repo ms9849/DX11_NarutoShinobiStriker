@@ -24,11 +24,11 @@ public:
 	}
 
 	void Set_Visible(_bool bFlag) {
-		m_bVisible = bFlag;
+		m_IsVisible = bFlag;
 	}
 
 	_bool IsPlaying() {
-		return m_bFadeIn || m_bFadeOut;
+		return m_IsFadeIn || m_IsFadeOut;
 	}
 
 public:
@@ -51,7 +51,7 @@ public:
 
 protected:
 	RECT m_rcButton = {};
-	_bool m_bVisible = { true };
+	_bool m_IsVisible = { true };
 
 	_float m_fReserveTime = { 0.f };
 	_float m_fTimeAcc = { 0.f };
@@ -59,11 +59,11 @@ protected:
 	_float m_fAnimationDist = { 50.f };
 	_float m_fFadeOutTimeAcc = { 0.f };
 	_float m_fFadeOutMaxTimeAcc = { 0.5f };
-	_bool  m_bFadeOut = { false };
+	_bool  m_IsFadeOut = { false };
 
 	_float m_fFadeInTimeAcc = { 0.f };
 	_float m_fFadeInMaxTimeAcc = { 0.5f };
-	_bool  m_bFadeIn = { false };
+	_bool  m_IsFadeIn = { false };
 
 	_bool  m_bShowNormal = { false };
 protected:

@@ -48,10 +48,10 @@ void CModelPanel::Priority_Update(_float fTimeDelta)
 
 void CModelPanel::Update(_float fTimeDelta)
 {
-    if (m_bFadeIn)
+    if (m_IsFadeIn)
         Play_Animation_FadeIn(fTimeDelta);
 
-    if (m_bFadeOut)
+    if (m_IsFadeOut)
         Play_Animation_FadeOut(fTimeDelta);
 
     Key_Input();
@@ -86,7 +86,7 @@ void CModelPanel::Play_Animation_FadeIn(_float fTimeDelta)
     {
         m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(m_fX - g_iWinSizeX / 2.f, -1.f * (m_fY - g_iWinSizeY / 2.f), m_fZ, 1.f));
         m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI);
-        m_bFadeIn = false;
+        m_IsFadeIn = false;
         m_fFadeInTimeAcc = 0.f;
 
         if (m_bChangeSelectType)
@@ -122,12 +122,12 @@ void CModelPanel::Play_Animation_FadeOut(_float fTimeDelta)
         static_cast<CButton*>(m_Childs[m_iMaxActivateNum - 1])->IsPlaying() == false)
     {
         m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(m_fX - g_iWinSizeX / 2.f, -1.f * (m_fY - g_iWinSizeY / 2.f), m_fZ, 1.f));
-        m_bFadeOut = false;
+        m_IsFadeOut = false;
         m_fFadeOutTimeAcc = 0.f;
         //m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI);
 
         /* FadeOut 끝났으면 바로 FadeIn 켜버리기 */
-        m_bFadeIn = true;
+        m_IsFadeIn = true;
 
         if (true == m_bChangeSelectType)
         {
@@ -223,7 +223,7 @@ void CModelPanel::Back_ToParts()
 void CModelPanel::Key_Input()
 {
     /* 애니메이션 재생중이면 키 입력 안받게 할 것. 변수 생긴다..*/
-    if (true == m_bFadeIn || true == m_bFadeOut)
+    if (true == m_IsFadeIn || true == m_IsFadeOut)
         return;
 
     if (m_pGameInstance->Key_Down(DIK_DOWN))
@@ -238,12 +238,12 @@ void CModelPanel::Key_Input()
 
     if (m_pGameInstance->Key_Down(DIK_SPACE) && m_iFocusedNum != m_iDecideButtonNum)
     {
-        if (m_iFocusedNum < 0 || m_bFadeIn || m_bFadeOut)
+        if (m_iFocusedNum < 0 || m_IsFadeIn || m_IsFadeOut)
             return;
 
         if (SELECT_TYPE::PARTS == m_eSelectType)
         {
-            m_bFadeOut = true;
+            m_IsFadeOut = true;
             m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT);
 
             for (_int i = 0; i < m_iMaxActivateNum; ++i)
@@ -265,10 +265,10 @@ void CModelPanel::Key_Input()
 
     if (m_pGameInstance->Key_Down(DIK_ESCAPE))
     {
-        if (m_eSelectType == SELECT_TYPE::PARTS || m_bFadeIn || m_bFadeOut)
+        if (m_eSelectType == SELECT_TYPE::PARTS || m_IsFadeIn || m_IsFadeOut)
             return;
 
-        m_bFadeOut = true;
+        m_IsFadeOut = true;
         m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT);
 
         for (_int i = 0; i < m_iMaxActivateNum; ++i)
@@ -316,13 +316,13 @@ HRESULT CModelPanel::Bind_ShaderResources()
     if (FAILED(__super::Bind_ShaderResources()))
         return E_FAIL;
 
-    if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_bFadeIn)
+    if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_IsFadeIn)
     {
         _float fAlphaValue = m_fFadeInTimeAcc / m_fFadeInMaxTimeAcc;
         m_pShaderCom->Bind_RawValue("g_Alpha", &fAlphaValue, sizeof(_float));
     }
 
-    if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_bFadeOut)
+    if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_IsFadeOut)
     {
         _float fAlphaValue = 1 - (m_fFadeOutTimeAcc / m_fFadeOutMaxTimeAcc);
         m_pShaderCom->Bind_RawValue("g_Alpha", &fAlphaValue, sizeof(_float));

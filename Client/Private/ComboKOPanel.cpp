@@ -27,8 +27,8 @@ void CComboKOPanel::Update_Combo()
 	if (m_iComboCount != m_iPreComboCount && m_iComboCount == 1)
 	{
 		m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT);
-		m_bFadeIn = true;
-		m_bVisible = true;
+		m_IsFadeIn = true;
+		m_IsVisible = true;
 
 		m_fScale = 1.f;
 		m_iTextureIdx = 0;
@@ -44,8 +44,8 @@ void CComboKOPanel::Update_Combo()
 		if (m_iComboCount <= 2)
 		{
 			m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT);
-			m_bFadeIn = true;
-			m_bVisible = true;
+			m_IsFadeIn = true;
+			m_IsVisible = true;
 		}
 
 		m_fScale = 0.7f;
@@ -58,11 +58,11 @@ void CComboKOPanel::Update_Combo()
 
 		if (m_iComboCount >= 10)
 		{
-			static_cast<CDecimalUI*>(m_Childs[0])->Start_FadeIn();
+			static_cast<CDecimalUI*>(m_Childs[0])->AlertPanel_Start_FadeIn();
 			static_cast<CDecimalUI*>(m_Childs[0])->Set_CurrentIdx(m_iComboCount / 10);
 		}
 
-		static_cast<CDecimalUI*>(m_Childs[1])->Start_FadeIn();
+		static_cast<CDecimalUI*>(m_Childs[1])->AlertPanel_Start_FadeIn();
 		static_cast<CDecimalUI*>(m_Childs[1])->Set_CurrentIdx(m_iComboCount % 10);
 	}
 
@@ -70,8 +70,8 @@ void CComboKOPanel::Update_Combo()
 	else if (m_iComboCount != m_iPreComboCount && m_iComboCount == 0)
 	{
 		m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT);
-		m_bFadeOut = true;
-		m_bVisible = true;
+		m_IsFadeOut = true;
+		m_IsVisible = true;
 
 		if (m_iPreComboCount >= 10)
 		{
@@ -90,7 +90,7 @@ void CComboKOPanel::Update_Combo()
 
 void CComboKOPanel::PopUp_KO()
 {
-	static_cast<CKOUI*>(m_Childs[2])->Start_FadeIn();
+	static_cast<CKOUI*>(m_Childs[2])->AlertPanel_Start_FadeIn();
 }
 
 void CComboKOPanel::Active_Combo()
@@ -133,16 +133,16 @@ void CComboKOPanel::Update(_float fTimeDelta)
 {
 	ComboKO_System(fTimeDelta);
 
-	if (m_bFadeIn)
+	if (m_IsFadeIn)
 		Play_Animation_FadeIn(fTimeDelta);
 
-	if (m_bFadeOut)
+	if (m_IsFadeOut)
 		Play_Animation_FadeOut(fTimeDelta);
 }
 
 void CComboKOPanel::Late_Update(_float fTimeDelta)
 {
-	if(m_bVisible)
+	if(m_IsVisible)
 		m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
 }
 
@@ -261,13 +261,13 @@ HRESULT CComboKOPanel::Bind_ShaderResources()
 	if (FAILED(__super::Bind_ShaderResources()))
 		return E_FAIL;
 
-	if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_bFadeIn)
+	if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_IsFadeIn)
 	{
 		_float fAlphaValue = m_fFadeInTimeAcc / m_fFadeInMaxTimeAcc;
 		m_pShaderCom->Bind_RawValue("g_Alpha", &fAlphaValue, sizeof(_float));
 	}
 
-	else if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_bFadeOut)
+	else if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_IsFadeOut)
 	{
 		_float fAlphaValue = 1 - (m_fFadeOutTimeAcc / m_fFadeOutMaxTimeAcc);
 		m_pShaderCom->Bind_RawValue("g_Alpha", &fAlphaValue, sizeof(_float));
@@ -290,7 +290,7 @@ void CComboKOPanel::Play_Animation_FadeIn(_float fTimeDelta)
 	{
 		m_pTransformCom->Set_Scale(m_fSizeX * m_fScale, m_fSizeY * m_fScale, m_fZ);
 		m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI);
-		m_bFadeIn = false;
+		m_IsFadeIn = false;
 		m_fFadeInTimeAcc = 0.f;
 	}
 }
@@ -309,8 +309,8 @@ void CComboKOPanel::Play_Animation_FadeOut(_float fTimeDelta)
 	{
 		m_pTransformCom->Set_Scale(m_fSizeX * m_fScale, m_fSizeY * m_fScale, m_fZ);
 		m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI);
-		m_bFadeOut = false;
-		m_bVisible = false;
+		m_IsFadeOut = false;
+		m_IsVisible = false;
 		m_fFadeOutTimeAcc = 0.f;
 	}
 }

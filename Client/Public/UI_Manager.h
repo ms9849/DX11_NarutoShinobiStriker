@@ -44,6 +44,8 @@ public:
 	void Set_SkillSlotPanel(class CSkillSlotPanel* pSkillSlotPanel);
 	void Set_AttackTypePanel(class CAttackTypePanel* pAttackTypePanel);
 	void Set_ComboKoPanel(class CComboKOPanel* pComboKOPanel);
+	void Set_MissionAlertPanel(class CMissionAlertPanel* pMissionAlertPanel);
+	void Set_WinPanel(class CWinPanel* pWinPanel);
 
 public:
 	void Set_Dialog_Text(const _wstring& strDialogText);
@@ -57,8 +59,9 @@ public:
 
 	void Change_AttackType(ATTACK_TYPE eAttackType);
 	void Set_AttackType_Visible(_bool bFlag);
-public:
 
+	void AlertPanel_Start_FadeIn(const _wstring& strMissionText);
+	void WinPanel_Start_FadeIn();
 
 private:
 	CGameInstance* m_pGameInstance = { nullptr };
@@ -67,6 +70,8 @@ private:
 	class CSkillSlotPanel* m_pSkillSlotPanel = { nullptr };
 	class CAttackTypePanel* m_pAttackTypePanel = { nullptr };
 	class CComboKOPanel* m_pComboKOPanel = { nullptr };
+	class CMissionAlertPanel* m_pMissionAlertPanel = { nullptr };
+	class CWinPanel* m_pWinPanel = { nullptr };
 
 public:
 	static CUI_Manager* Create();

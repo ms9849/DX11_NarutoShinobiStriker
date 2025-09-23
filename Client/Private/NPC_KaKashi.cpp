@@ -148,7 +148,7 @@ void CNPC_KaKashi::Check_Talkable()
 void CNPC_KaKashi::Talk()
 {
 	/* F를 눌러서 대화 */
-	if(m_pGameInstance->Key_Down(DIK_F) && false == m_isTalking)
+	if(m_pGameInstance->Key_Down(DIK_F) && false == m_isTalking && true == m_isTalkable)
 	{ 
 		m_isTalking = true;
 		m_iCurrentDialog = 0;
