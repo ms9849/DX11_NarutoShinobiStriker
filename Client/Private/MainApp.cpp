@@ -29,7 +29,7 @@
 #include "FireBall.h"
 #include "BigShark.h"
 #include "Chidori.h"
-#include "BirdThrowObject.h"
+#include "Kunai.h"
 
 #pragma endregion
 
@@ -518,9 +518,9 @@ HRESULT CMainApp::Ready_Prototypes()
 		CChidori::Create(m_pDevice, m_pContext, OBJECTID::CHIDORI))))
 		return E_FAIL;
 
-	/* For.Prototype_GameObject_BirdThrow*/
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_BirdThrow"),
-		CBirdThrowObject::Create(m_pDevice, m_pContext, OBJECTID::BIRDTHROW))))
+	/* For.Prototype_GameObject_Kunai */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Kunai"),
+		CKunai::Create(m_pDevice, m_pContext, OBJECTID::KUNAI))))
 		return E_FAIL;
 
 #pragma endregion

@@ -11,7 +11,7 @@ NS_END
 
 NS_BEGIN(Client)
 
-class CBirdThrowObject : public CGameObject
+class CKunai : public CGameObject
 {
 public:
 	typedef struct tagBirdThrowObject : public GAMEOBJECT_DESC {
@@ -21,9 +21,9 @@ public:
 	} BIRD_THROW_DESC;
 
 private:
-	CBirdThrowObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
-	CBirdThrowObject(const CBirdThrowObject& rhs);
-	virtual ~CBirdThrowObject() = default;
+	CKunai(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
+	CKunai(const CKunai& rhs);
+	virtual ~CKunai() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -45,8 +45,8 @@ private:
 	HRESULT Bind_ShaderResources();
 
 public:
-	static CBirdThrowObject* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
-	virtual CBirdThrowObject* Clone(void* pArg);
+	static CKunai* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
+	virtual CKunai* Clone(void* pArg);
 	virtual void Free() override;
 };
 

@@ -11,7 +11,8 @@
 
 #include "Bird_IdleState.h"
 #include "Bird_AttackState.h"
-
+#include "Bird_WalkState.h"
+  
 #pragma endregion
 
 CBird_RunState::CBird_RunState(CNavigation* pNavigation, CBird* pBird)
@@ -33,14 +34,19 @@ CBirdState* CBird_RunState::Update(_float fTimeDelta)
     CBirdState* pNextState = { nullptr };
 
     _bool IsAnimFinished = m_pBird->Play_Animation(fTimeDelta);
+    _float fDist = XMVectorGetX(XMVector3Length(m_pBird->Get_Transform()->Get_State(STATE::POSITION) - m_pPlayerTransformCom->Get_State(STATE::POSITION)));
 
-    if (5.f >= XMVectorGetX(XMVector3Length(m_pBird->Get_Transform()->Get_State(STATE::POSITION) - m_pPlayerTransformCom->Get_State(STATE::POSITION))))
+    if (fDist <= 10.f && true == m_pBird->Use_Skill())
     {
         pNextState = CBird_AttackState::Create(m_pNavigationCom, m_pBird);
     }
+    else if (fDist <= 10.f && false == m_pBird->Use_Skill())
+    {
+        pNextState = CBird_WalkState::Create(m_pNavigationCom, m_pBird);
+    }
     else
     {
-        m_pBird->Get_Transform()->Chase_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION), fTimeDelta, m_pNavigationCom, 1.f);
+        m_pBird->Get_Transform()->Chase_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION), fTimeDelta, m_pNavigationCom, 3.f);
         m_pBird->Get_Transform()->LookAt_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION));
     }
 

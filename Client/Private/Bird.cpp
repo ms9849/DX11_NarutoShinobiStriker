@@ -10,6 +10,7 @@
 #include "Bird_BeatenState.h"
 #include "Bird_DeadState.h"
 
+
 CBird::CBird(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CEnemy { pDevice, pContext, eObjectID }
 {
@@ -85,8 +86,7 @@ void CBird::OnCollision(COLLIDER_HANDLE_ID eHandleID)
     }
 
     else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENGAN == eHandleID ||
-        COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_FIREBALL == eHandleID ||
-        COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_CHIDORI == eHandleID)
+        COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_FIREBALL == eHandleID)
     {
         m_fCurrentHP -= 15.f;
 
@@ -123,6 +123,16 @@ void CBird::OnCollision(COLLIDER_HANDLE_ID eHandleID)
         pNextState = CBird_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection);
         Set_Invincible(1.f);
     }
+    /* 새 감전 상태 추가해야 함. */
+    //else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_CHIDORI == eHandleID)
+    //{
+    //    m_pGameManager->Change_Camera(static_cast<LEVEL>(m_pGameInstance->Get_LevelID()),
+    //        TEXT("Chidori_Action_Camera"), nullptr);
+
+    //    m_fCurrentHP -= 15.f;
+    //    pNextState = ::Create(m_pNavigationCom, this);
+    //    Set_Invincible(1.f);
+    //}
 
     if (m_fCurrentHP <= 0.f && false == m_isPlayingDeadAnim)
     {
@@ -147,6 +157,25 @@ void CBird::Change_State(CBirdState* pNextState, _bool bBlend)
     m_pState = pNextState;
 }
 
+_bool CBird::Use_Skill()
+{
+    if (m_fSkillTimeAcc >= m_fMaxSkillCoolDown)
+    {
+        m_fSkillTimeAcc = 0.f;
+        return true;
+    }
+    else
+        return false;
+}
+
+void CBird::Update_SkillCoolDown(_float fTimeDelta)
+{
+    m_fSkillTimeAcc += fTimeDelta;
+
+    if (m_fSkillTimeAcc >= m_fMaxSkillCoolDown)
+        m_fSkillTimeAcc = m_fMaxSkillCoolDown;
+}
+
 HRESULT CBird::Initialize_Prototype()
 {
     return S_OK;
@@ -168,7 +197,7 @@ HRESULT CBird::Initialize(void* pArg)
         return E_FAIL;
 
     m_iNumMeshes = m_pModelCom->Get_NumMeshes();
-    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(5.f, 0.f, 5.f, 1.f));
+    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(1.f, 0.f, 3.f, 1.f));
     ///* 상태 초기화 및 시작. */
     m_pState = CBird_IdleState::Create(m_pNavigationCom, this);
     m_pState->Start(true);
@@ -187,6 +216,8 @@ void CBird::Update(_float fTimeDelta)
 
     /* 스테이트 업데이트. */
     Update_State(fTimeDelta);
+    /* 스킬 쿨타임 업데이트*/
+    Update_SkillCoolDown(fTimeDelta);
 
 	m_pColliderCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
 }
