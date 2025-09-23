@@ -48,7 +48,7 @@ CBirdState* CBird_AttackState::Update(_float fTimeDelta)
 
 
         m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_BirdThrow"),
-            ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Layer_Skill"), &Desc);
+            ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_Skill"), &Desc);
     
         m_isThrow = true;
     }

@@ -89,8 +89,8 @@ void CSkillSlotUI::Update(_float fTimeDelta)
         Desc.fX = XMVectorGetX(vPosition);
         Desc.fY = XMVectorGetY(vPosition);
 
-        m_pGameInstance->Add_PoolingObject_ToLayer(TEXT("Effect_SkillCoolDown"), ENUM_CLASS(LEVEL::GAMEPLAY),
-            &Desc, ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Layer_Effect"));
+        m_pGameInstance->Add_PoolingObject_ToLayer(TEXT("Effect_SkillCoolDown"), ENUM_CLASS(LEVEL::TUTORIAL),
+            &Desc, ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_Effect"));
     }
 }
 

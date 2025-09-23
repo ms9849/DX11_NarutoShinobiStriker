@@ -5,11 +5,11 @@
 
 NS_BEGIN(Client)
 
-class CLevel_GamePlay final : public CLevel
+class CLevel_Tutorial final : public CLevel
 {
 private:
-	CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID);
-	virtual ~CLevel_GamePlay() = default;
+	CLevel_Tutorial(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID);
+	virtual ~CLevel_Tutorial() = default;
 
 public:
 	virtual HRESULT Initialize() override;
@@ -27,13 +27,12 @@ private:
 	HRESULT Ready_Layer_StaticObjects(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_NPC(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_Map(const _wstring& strLayerTag);
-	HRESULT Ready_Layer_Spawner(const _wstring& strLayerTag);
 
 private:
 	class CGameManager* m_pGameManager = { nullptr };
-
+	_float				m_fTimeAcc = { 0.f };
 public:
-	static CLevel_GamePlay* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID);
+	static CLevel_Tutorial* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID);
 	virtual void Free() override;
 };
 

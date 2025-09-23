@@ -59,7 +59,7 @@ HRESULT CFont::Initialize(void* pArg)
     return S_OK;
 }
 
-HRESULT CFont::Bind_Resources(const _tchar* pText, const _float2& vPosition, _float fScale, _fvector vColor, _float fRotation, const _float2& vOrigin)
+HRESULT CFont::Bind_Resources(const _tchar* pText, const _float2& vPosition, _bool IsAlign, _float fScale, _fvector vColor, _float fRotation, const _float2& vOrigin)
 {
     m_pText = pText;
     m_fScale = fScale;
@@ -70,7 +70,11 @@ HRESULT CFont::Bind_Resources(const _tchar* pText, const _float2& vPosition, _fl
 
     XMStoreFloat2(&vTextSize, vDest);
 
-    m_vPosition = _float2{ m_fWinSizeX / 2.f + vPosition.x - vTextSize.x / 2.f, m_fWinSizeY / 2.f - vPosition.y - vTextSize.y / 2.f } ;
+    if(true == IsAlign)
+        m_vPosition = _float2(m_fWinSizeX / 2.f + vPosition.x - vTextSize.x / 2.f, m_fWinSizeY / 2.f - vPosition.y - vTextSize.y / 2.f );
+
+    else
+        m_vPosition = _float2(m_fWinSizeX / 2.f + vPosition.x, m_fWinSizeY / 2.f - vPosition.y);
 
     m_vColor = vColor;
     m_fRotation = fRotation;

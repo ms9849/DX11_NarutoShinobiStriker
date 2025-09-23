@@ -74,7 +74,7 @@ void CMissionAlertPanel::Late_Update(_float fTimeDelta)
     else if (m_bFadeOut)
         fAlpha = 1 - (m_fFadeOutTimeAcc / m_fFadeOutMaxTimeAcc);
 
-    m_pFontCom->Bind_Resources(TEXT("적을 쓰러뜨려라!"), _float2{vPosition.x, vPosition.y}, 
+    m_pFontCom->Bind_Resources(TEXT("적을 쓰러뜨려라!"), _float2{vPosition.x, vPosition.y}, true,
         1.f, XMVectorSet(1.f, 1.f, 1.f, fAlpha));
 
     m_pGameInstance->Add_Font(m_pFontCom);

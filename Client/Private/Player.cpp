@@ -178,7 +178,11 @@ HRESULT CPlayer::Initialize(void* pArg)
 	m_pState = CPlayer_IdleState::Create(this);
 	m_pState->Start(true);
 
-	m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(0.f, 0.f, -5.f, 1.f));
+	if (LEVEL::TUTORIAL == m_pGameManager->Get_NextLevel())
+	{
+		m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(0.3f, 0.031f, -51.82f, 1.f));
+	}
+
 
 	return S_OK;
 }
@@ -336,22 +340,22 @@ HRESULT CPlayer::Ready_PartObjects()
 	FaceDesc.strModelName = TEXT("Prototype_Component_Model_Face_Player");
 
 	/* Part_Upper */
-	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Upper_Player"),
+	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Upper_Player"),
 		TEXT("Part_Upper"), &UpperDesc)))
 		return E_FAIL;
 
 	/* Part_Lower */
-	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Lower_Player"),
+	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Lower_Player"),
 		TEXT("Part_Lower"), &LowerDesc)))
 		return E_FAIL;
 
 	/* Part_Head */
-	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Head_Player"),
+	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Head_Player"),
 		TEXT("Part_Head"), &HeadDesc)))
 		return E_FAIL;
 
 	/* Part_Face */
-	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Face_Player"),
+	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Face_Player"),
 		TEXT("Part_Face"), &FaceDesc)))
 		return E_FAIL;
 
@@ -364,7 +368,7 @@ HRESULT CPlayer::Ready_PartObjects()
 	WeaponDesc.strModelName = TEXT("Prototype_Component_Model_Weapon_Player");
 	WeaponDesc.eType = CWeapon_Character::WEAPON_TYPE::SWORD;
 	/* Part_Weapon */
-	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Weapon_Player"),
+	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Weapon_Player"),
 		TEXT("Part_Weapon"), &WeaponDesc)))
 		return E_FAIL;
 

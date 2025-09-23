@@ -8,7 +8,7 @@ namespace Client
 	const unsigned int			g_iWinSizeX = 1280;
 	const unsigned int			g_iWinSizeY = 720;
 
-	enum class LEVEL { STATIC, LOADING, LOGO, OUTFITSELECT, GAMEPLAY, END };
+	enum class LEVEL { STATIC, LOADING, LOGO, OUTFITSELECT, TUTORIAL, KONOHA_VILLAGE, END };
 	/*
 	OBJECT ID? -> Abstract 계층이 아닌, 실제 구현되는 객체들만 가지게 될 ID.
 	모든 객체는 고유한 ID를 가지게 된다.
@@ -118,6 +118,12 @@ namespace Client
 		ENEMY_BOXER_ATTACK,
 		ENEMY_BOXER_LEAFHURRICANE,
 		END
+	};
+
+	/* 일단은 튜토리얼과 관련된 로직만. */
+	enum class TRIGGER_TYPE { 
+		TUTORIAL_KAKASHI_TALK, TUTORIAL_SPAWNER_01, TUTORIAL_CLEAR, 
+		END 
 	};
 
 }

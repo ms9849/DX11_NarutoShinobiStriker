@@ -106,6 +106,11 @@ public:
 
 #pragma endregion
 
+#pragma region FLOW
+	HRESULT	OnTrigger(TRIGGER_TYPE eTriggerType);
+	TRIGGER_TYPE Get_CurrentTrigger();
+
+#pragma endregion
 private:
 	CGameInstance* m_pGameInstance = { nullptr };
 
@@ -113,6 +118,7 @@ private:
 	class CCollision_Manager* m_pCollision_Manager = { nullptr };
 	class CLockOn_Manager* m_pLockOn_Manager = { nullptr };
 	class CUI_Manager* m_pUI_Manager = { nullptr };
+	class CTrigger_Manager* m_pTrigger_Manager = { nullptr };
 
 	/* 게임 매니저 단에서 직접 관리할 변수들 */
 	class CPlayer*  m_pPlayer = {};

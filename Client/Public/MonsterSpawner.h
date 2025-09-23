@@ -7,13 +7,6 @@ NS_BEGIN(Client)
 
 class CMonsterSpawner final : public CTriggerBox
 {
-public:
-	enum class SPAWNER_TYPE { TUTORIAL_01 };
-
-	typedef struct tagMonsterSpanwerDesc : public TRIGGER_BOX_DESC {
-		SPAWNER_TYPE eSpawnerType = {};
-	} MONSTER_SPAWNER_DESC;
-
 private:
 	CMonsterSpawner(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	CMonsterSpawner();
@@ -33,7 +26,6 @@ public:
 
 private:
 	class CGameManager* m_pGameManager = { nullptr };
-	SPAWNER_TYPE m_eSpawnerType = {};
 
 private:
 	HRESULT Ready_Components();

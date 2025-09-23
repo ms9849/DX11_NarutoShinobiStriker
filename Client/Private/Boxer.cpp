@@ -178,17 +178,17 @@ HRESULT CBoxer::Ready_PartObjects()
 	FaceDesc.strModelName = TEXT("Prototype_Component_Model_Face_Boxer");
 
 	/* Part_Upper */
-	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Upper_Player"),
+	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Upper_Player"),
 		TEXT("Part_Upper"), &UpperDesc)))
 		return E_FAIL;
 
 	/* Part_Head */
-	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Head_Player"),
+	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Head_Player"),
 		TEXT("Part_Head"), &HeadDesc)))
 		return E_FAIL;
 
 	/* Part_Face */
-	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Face_Player"),
+	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Face_Player"),
 		TEXT("Part_Face"), &FaceDesc)))
 		return E_FAIL;
 
@@ -200,7 +200,7 @@ HRESULT CBoxer::Ready_PartObjects()
 	WeaponDesc.strModelName = TEXT("Prototype_Component_Model_Weapon_Boxer_L");
 	WeaponDesc.eType = CWeapon_Character::WEAPON_TYPE::GLOVE;
 	/* Part_Weapon_R */
-	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Weapon_Player"),
+	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Weapon_Player"),
 		TEXT("Part_Weapon_L"), &WeaponDesc)))
 		return E_FAIL;
 
@@ -209,7 +209,7 @@ HRESULT CBoxer::Ready_PartObjects()
 	WeaponDesc.eType = CWeapon_Character::WEAPON_TYPE::GLOVE;
 
 	/* Part_Weapon_L */
-	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Weapon_Player"),
+	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Weapon_Player"),
 		TEXT("Part_Weapon_R"), &WeaponDesc)))
 		return E_FAIL;
 

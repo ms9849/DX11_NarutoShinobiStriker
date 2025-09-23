@@ -26,7 +26,7 @@ HRESULT CTriggerBox::Initialize(void* pArg)
 	
 	m_vColliderCenter = pDesc->vCenter;
 	m_fColliderRadius = pDesc->fRadius;
-
+	m_eTriggerType = pDesc->eTriggerType;
 	m_pTransformCom->Set_State(STATE::POSITION, XMLoadFloat3(&pDesc->vPosition));
 
 	return S_OK;

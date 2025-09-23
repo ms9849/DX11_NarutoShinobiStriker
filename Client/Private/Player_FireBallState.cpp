@@ -26,7 +26,7 @@ CPlayer_FireBallState::CPlayer_FireBallState(CPlayer* pPlayer)
 
 void CPlayer_FireBallState::Start(_bool IsBlend)
 {
-    m_pGameManager->Change_Camera(LEVEL::GAMEPLAY, TEXT("FireBall_Action_Camera"), m_pGameInstance->Get_PipeLine_InverseFloat4x4(D3DTS::VIEW));
+    m_pGameManager->Change_Camera(LEVEL::TUTORIAL, TEXT("FireBall_Action_Camera"), m_pGameInstance->Get_PipeLine_InverseFloat4x4(D3DTS::VIEW));
     m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Fireball_Lv3", 1.75f, true);
 }
 

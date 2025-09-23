@@ -14,7 +14,7 @@ private:
 public:
 	HRESULT Initialize_Prototype(const _tchar* pFontFilePath);
 	HRESULT Initialize(void* pArg);
-	HRESULT Bind_Resources(const _tchar* pText, const _float2& vPosition,
+	HRESULT Bind_Resources(const _tchar* pText, const _float2& vPosition, _bool IsAlign = false,
 		_float fScale = 1.f, _fvector vColor = XMVectorSet(1.f, 1.f, 1.f, 1.f), _float fRotation = 0.f,
 		const _float2& vOrigin = _float2(0.f, 0.f));
 
