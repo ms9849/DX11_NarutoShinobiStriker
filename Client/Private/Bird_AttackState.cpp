@@ -5,7 +5,7 @@
 
 #include "GameInstance.h"
 #include "GameManager.h"
-#include "BirdThrowObject.h"
+#include "Kunai.h"
 
 /* 전이 가능한 상태들 */
 #pragma region TRANSFER_STATE
@@ -38,16 +38,16 @@ CBirdState* CBird_AttackState::Update(_float fTimeDelta)
     _float fAnimProgress = m_pBird->Get_AnimProgress();
 
 
-    if (0.8 <= fAnimProgress && false == m_isThrow)
+    if (0.6 <= fAnimProgress && false == m_isThrow)
     {
-        CBirdThrowObject::BIRD_THROW_DESC Desc;
+        CKunai::BIRD_THROW_DESC Desc;
 
         XMStoreFloat3(&Desc.vPosition, m_pBird->Get_Transform()->Get_State(STATE::POSITION));
         XMStoreFloat3(&Desc.vDirection, m_pBird->Get_Transform()->Get_State(STATE::LOOK));
         Desc.fSpeedPerSec = 10.f;
 
 
-        m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_BirdThrow"),
+        m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Kunai"),
             ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_Skill"), &Desc);
     
         m_isThrow = true;

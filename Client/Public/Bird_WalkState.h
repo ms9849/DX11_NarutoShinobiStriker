@@ -11,11 +11,11 @@ NS_END
 
 NS_BEGIN(Client)
 
-class CBird_IdleState final : public CBirdState
+class CBird_WalkState final : public CBirdState
 {
 private:
-	CBird_IdleState(class CNavigation* pNavigation, class CBird* pBird);
-	virtual ~CBird_IdleState() = default;
+	CBird_WalkState(class CNavigation* pNavigation, class CBird* pBird);
+	virtual ~CBird_WalkState() = default;
 
 public:
 	/* Start */
@@ -31,7 +31,7 @@ private:
 	CNavigation* m_pNavigationCom = { nullptr };
 
 public:
-	static CBird_IdleState* Create(class CNavigation* pNavigation, class CBird* pBird);
+	static CBird_WalkState* Create(class CNavigation* pNavigation, class CBird* pBird);
 	virtual void Free() override;
 };
 

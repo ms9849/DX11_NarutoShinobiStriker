@@ -72,7 +72,7 @@ void CWhiteJetsu::OnCollision(COLLIDER_HANDLE_ID eHandleID)
     {
         m_fCurrentHP -= 1.f;
 
-        pNextState = CWhiteJetsu_BeatenState::Create(m_pNavigationCom, this, vDirection, 1.4f);
+        pNextState = CWhiteJetsu_BeatenState::Create(m_pNavigationCom, this, vDirection, 1.5f);
     }
     else if (COLLIDER_HANDLE_ID::PLAYER_HAND_ATTACK_FINAL == eHandleID)
     {
@@ -190,7 +190,7 @@ HRESULT CWhiteJetsu::Initialize(void* pArg)
 
     m_iNumMeshes = m_pModelCom->Get_NumMeshes();
 
-    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(5.f, 0.f, 5.f, 1.f));
+    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(7.f, 0.f, 3.f, 1.f));
     /* 상태 초기화 및 시작. */
     m_pGameManager->Add_TargetTransform(m_pTransformCom);
 

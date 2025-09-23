@@ -64,7 +64,7 @@ private:
 	CNavigation* m_pNavigationCom = { nullptr };
 
 	_float m_fSkillTimeAcc = { 0.f }; 
-	_float m_fMaxSkillCoolDown = { 10.f };
+	_float m_fMaxSkillCoolDown = { 7.5f };
 
 private:
 	HRESULT Ready_Components();

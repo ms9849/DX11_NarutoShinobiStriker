@@ -1,28 +1,28 @@
-#include "BirdThrowObject.h"
+#include "Kunai.h"
 
 #include "GameInstance.h"
 #include "GameManager.h"
 
-CBirdThrowObject::CBirdThrowObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
+CKunai::CKunai(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CGameObject { pDevice, pContext, ENUM_CLASS(eObjectID) }
     , m_pGameManager { CGameManager::GetInstance() }
 {
     Safe_AddRef(m_pGameManager);
 }
 
-CBirdThrowObject::CBirdThrowObject(const CBirdThrowObject& rhs)
+CKunai::CKunai(const CKunai& rhs)
     : CGameObject { rhs }
     , m_pGameManager{ CGameManager::GetInstance() }
 {
         Safe_AddRef(m_pGameManager);
 }
 
-HRESULT CBirdThrowObject::Initialize_Prototype()
+HRESULT CKunai::Initialize_Prototype()
 {
     return S_OK;
 }
 
-HRESULT CBirdThrowObject::Initialize(void* pArg)
+HRESULT CKunai::Initialize(void* pArg)
 {
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
@@ -43,11 +43,11 @@ HRESULT CBirdThrowObject::Initialize(void* pArg)
     return S_OK;
 }
 
-void CBirdThrowObject::Priority_Update(_float fTimeDelta)
+void CKunai::Priority_Update(_float fTimeDelta)
 {
 }
 
-void CBirdThrowObject::Update(_float fTimeDelta)
+void CKunai::Update(_float fTimeDelta)
 {
     if (false == m_pColliderCom->Get_Active())
         m_isDead = true;
@@ -57,14 +57,14 @@ void CBirdThrowObject::Update(_float fTimeDelta)
     m_pColliderCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
 }
 
-void CBirdThrowObject::Late_Update(_float fTimeDelta)
+void CKunai::Late_Update(_float fTimeDelta)
 {
     m_pGameManager->Add_Collider_ToCollision(TEXT("Monster_Attack"), COLLIDER_HANDLE_ID::ENEMY_BIRD_THROW, m_pColliderCom);
 
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 
-HRESULT CBirdThrowObject::Render()
+HRESULT CKunai::Render()
 {
     //if (FAILED(Bind_ShaderResources()))
     //    return E_FAIL;
@@ -91,7 +91,7 @@ HRESULT CBirdThrowObject::Render()
     return S_OK;
 }
 
-HRESULT CBirdThrowObject::Ready_Components()
+HRESULT CKunai::Ready_Components()
 {
     ///* Com_Shader */
     //if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxMesh"),
@@ -115,7 +115,7 @@ HRESULT CBirdThrowObject::Ready_Components()
     return S_OK;
 }
 
-HRESULT CBirdThrowObject::Bind_ShaderResources()
+HRESULT CKunai::Bind_ShaderResources()
 {
     /*m_pShaderCom->Bind_Matrix("g_WorldMatrix", );*/
     if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
@@ -150,9 +150,9 @@ HRESULT CBirdThrowObject::Bind_ShaderResources()
     return S_OK;
 }
 
-CBirdThrowObject* CBirdThrowObject::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
+CKunai* CKunai::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 {
-    CBirdThrowObject* pInstance = new CBirdThrowObject(pDevice, pContext, eObjectID);
+    CKunai* pInstance = new CKunai(pDevice, pContext, eObjectID);
 
     if (FAILED(pInstance->Initialize_Prototype()))
     {
@@ -163,9 +163,9 @@ CBirdThrowObject* CBirdThrowObject::Create(ID3D11Device* pDevice, ID3D11DeviceCo
     return pInstance;
 }
 
-CBirdThrowObject* CBirdThrowObject::Clone(void* pArg)
+CKunai* CKunai::Clone(void* pArg)
 {
-    CBirdThrowObject* pInstance = new CBirdThrowObject(*this);
+    CKunai* pInstance = new CKunai(*this);
 
     if (FAILED(pInstance->Initialize(pArg)))
     {
@@ -176,7 +176,7 @@ CBirdThrowObject* CBirdThrowObject::Clone(void* pArg)
     return pInstance;
 }
 
-void CBirdThrowObject::Free()
+void CKunai::Free()
 {
     __super::Free();
 

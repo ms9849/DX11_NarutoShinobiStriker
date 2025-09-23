@@ -158,7 +158,9 @@
     <ClInclude Include="..\Public\BigShark.h" />
     <ClInclude Include="..\Public\Bird.h" />
     <ClInclude Include="..\Public\BirdState.h" />
-    <ClInclude Include="..\Public\BirdThrowObject.h" />
+    <ClInclude Include="..\Public\Bird_ElectricShockState.h" />
+    <ClInclude Include="..\Public\Bird_WalkState.h" />
+    <ClInclude Include="..\Public\Kunai.h" />
     <ClInclude Include="..\Public\Bird_AttackState.h" />
     <ClInclude Include="..\Public\Bird_BeatenBlastedState.h" />
     <ClInclude Include="..\Public\Bird_BeatenState.h" />
@@ -296,7 +298,9 @@
     <ClCompile Include="..\Private\BigShark.cpp" />
     <ClCompile Include="..\Private\Bird.cpp" />
     <ClCompile Include="..\Private\BirdState.cpp" />
-    <ClCompile Include="..\Private\BirdThrowObject.cpp" />
+    <ClCompile Include="..\Private\Bird_ElectricShockState.cpp" />
+    <ClCompile Include="..\Private\Bird_WalkState.cpp" />
+    <ClCompile Include="..\Private\Kunai.cpp" />
     <ClCompile Include="..\Private\Bird_AttackState.cpp" />
     <ClCompile Include="..\Private\Bird_BeatenBlastedState.cpp" />
     <ClCompile Include="..\Private\Bird_BeatenState.cpp" />

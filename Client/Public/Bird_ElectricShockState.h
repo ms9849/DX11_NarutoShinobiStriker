@@ -1,7 +1,10 @@
 #pragma once
-
 #include "Client_Defines.h"
 #include "BirdState.h"
+
+/*
+가장 기본적인 IDLE STATE
+*/
 
 NS_BEGIN(Engine)
 class CTransform;
@@ -11,11 +14,11 @@ NS_END
 
 NS_BEGIN(Client)
 
-class CBird_IdleState final : public CBirdState
+class CBird_ElectricShockState final : public CBirdState
 {
 private:
-	CBird_IdleState(class CNavigation* pNavigation, class CBird* pBird);
-	virtual ~CBird_IdleState() = default;
+	CBird_ElectricShockState(class CNavigation* pNavigation, class CBird* pBird, _vector vDirection, _float fRatio = 1.f);
+	virtual ~CBird_ElectricShockState() = default;
 
 public:
 	/* Start */
@@ -27,11 +30,12 @@ public:
 
 private:
 	CTransform* m_pPlayerTransformCom = { nullptr };
-	class CBird* m_pBird = { nullptr };
 	CNavigation* m_pNavigationCom = { nullptr };
+	class CBird* m_pBird = { nullptr };
+	_float3		m_vDirection = {};
 
 public:
-	static CBird_IdleState* Create(class CNavigation* pNavigation, class CBird* pBird);
+	static CBird_ElectricShockState* Create(class CNavigation* pNavigation, class CBird* pBird, _vector vDirection, _float fRatio = 1.f);
 	virtual void Free() override;
 };
 

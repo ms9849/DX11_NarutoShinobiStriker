@@ -37,17 +37,19 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+public:
+	_bool Use_Skill();
+	void  Update_SkillCoolDown(_float fTimeDelta);
+
 private:
 	CModel* m_pModelCom = { nullptr };
 	CShader* m_pShaderCom = { nullptr };
 
 	_uint m_iNumMeshes = {};
 
-	/* 제츠 전용 상태 */
-	/*
-	플레이어랑은 다르게 어딘가에서 참조되고 있지 않으니까..
-	따로 Release 해줄 메서드를 만들지 않아도 된다.
-	*/
+	_float m_fSkillTimeAcc = { 0.f };
+	_float m_fMaxSkillCoolDown = { 4.f };
+
 	_bool m_isPlayingDeadAnim = { false };
 
 	class CBirdState*	m_pState = { nullptr };

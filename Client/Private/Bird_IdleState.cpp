@@ -11,6 +11,7 @@
 
 #include "Bird_AttackState.h"
 #include "Bird_RunState.h"
+#include "Bird_WalkState.h"
 
 #pragma endregion
 
@@ -25,6 +26,12 @@ void CBird_IdleState::Start(_bool IsBlend)
 {
     m_pBird->Set_AnimIndex("TenTailsCloneLoser02_Idle_Type02_Loop", 1.f, IsBlend);
     m_pPlayerTransformCom = CGameManager::GetInstance()->Get_PlayerPtr()->Get_Transform();
+
+    _float fDist = XMVectorGetX(XMVector3Length(m_pBird->Get_Transform()->Get_State(STATE::POSITION) - m_pPlayerTransformCom->Get_State(STATE::POSITION)));
+    /* 플레이어 쳐다보게 */
+    if (fDist < 25.f)
+        m_pBird->Get_Transform()->LookAt_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION));
+
     Safe_AddRef(m_pPlayerTransformCom);
 }
 
@@ -34,13 +41,15 @@ CBirdState* CBird_IdleState::Update(_float fTimeDelta)
     m_pBird->Play_Animation(fTimeDelta);
 
     _float fDist = XMVectorGetX(XMVector3Length(m_pBird->Get_Transform()->Get_State(STATE::POSITION) - m_pPlayerTransformCom->Get_State(STATE::POSITION)));
-    m_fTimeAcc += fTimeDelta;
 
     /* 새는 원거리 공격 가능하니까. */
-    if (fDist < 5.f && 1.5f <= m_fTimeAcc)
+    if (fDist <= 10.f && true == m_pBird->Use_Skill())
         pNextState = CBird_AttackState::Create(m_pNavigationCom, m_pBird);
 
-    else if (fDist < 15.f && 1.5f <= m_fTimeAcc)
+    else if (fDist <= 10.f)
+        pNextState = CBird_WalkState::Create(m_pNavigationCom, m_pBird);
+
+    else if (fDist <= 20.f)
         pNextState = CBird_RunState::Create(m_pNavigationCom, m_pBird);
 
     return pNextState;

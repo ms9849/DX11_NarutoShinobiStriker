@@ -391,9 +391,6 @@
     <Filter Include="96. GameManager\Managers\LockOn">
       <UniqueIdentifier>{6982d729-9605-4bee-b538-e17e61a4d72c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Enemy\Bird\BirdThrow">
-      <UniqueIdentifier>{a0a34d1f-8c3f-4819-86b8-e5c8b6405700}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Camera\Action">
       <UniqueIdentifier>{4a594dd5-1fc1-438c-b853-2e5376119786}</UniqueIdentifier>
     </Filter>
@@ -441,6 +438,15 @@
     </Filter>
     <Filter Include="01.Levels\Tutorial">
       <UniqueIdentifier>{490444ba-eab1-44cf-9259-6b16f02e8e25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Kunai">
+      <UniqueIdentifier>{a0a34d1f-8c3f-4819-86b8-e5c8b6405700}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Bird\State\Walk">
+      <UniqueIdentifier>{92fc3722-5364-48b1-b619-ee03d85dbe3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Bird\State\Beaten\Electric">
+      <UniqueIdentifier>{1293bfc7-4581-46e1-b676-0584f3a1fe59}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -810,8 +816,8 @@
     <ClInclude Include="..\Public\LockOn_Manager.h">
       <Filter>96. GameManager\Managers\LockOn</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\BirdThrowObject.h">
-      <Filter>02.GameObjects\Enemy\Bird\BirdThrow</Filter>
+    <ClInclude Include="..\Public\Kunai.h">
+      <Filter>02.GameObjects\Kunai</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\ActionCamera.h">
       <Filter>02.GameObjects\Camera\Action</Filter>
@@ -846,11 +852,17 @@
     <ClInclude Include="..\Public\Trigger_Manager.h">
       <Filter>96. GameManager\Managers\Trigger</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\WinPanel.h">
+      <Filter>02.GameObjects\UI\Panel\GAMEPLAY\WinPanel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Bird_WalkState.h">
+      <Filter>02.GameObjects\Enemy\Bird\State\Walk</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\WhiteJetsu_ElectricShockState.h">
       <Filter>02.GameObjects\Enemy\Jetsu\State\Beaten\Electric</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\WinPanel.h">
-      <Filter>02.GameObjects\UI\Panel\GAMEPLAY\WinPanel</Filter>
+    <ClInclude Include="..\Public\Bird_ElectricShockState.h">
+      <Filter>02.GameObjects\Enemy\Bird\State\Beaten\Electric</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1218,8 +1230,8 @@
     <ClCompile Include="..\Private\LockOn_Manager.cpp">
       <Filter>96. GameManager\Managers\LockOn</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\BirdThrowObject.cpp">
-      <Filter>02.GameObjects\Enemy\Bird\BirdThrow</Filter>
+    <ClCompile Include="..\Private\Kunai.cpp">
+      <Filter>02.GameObjects\Kunai</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\ActionCamera.cpp">
       <Filter>02.GameObjects\Camera\Action</Filter>
@@ -1259,6 +1271,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\WinPanel.cpp">
       <Filter>02.GameObjects\UI\Panel\GAMEPLAY\WinPanel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bird_WalkState.cpp">
+      <Filter>02.GameObjects\Enemy\Bird\State\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bird_ElectricShockState.cpp">
+      <Filter>02.GameObjects\Enemy\Bird\State\Beaten\Electric</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
