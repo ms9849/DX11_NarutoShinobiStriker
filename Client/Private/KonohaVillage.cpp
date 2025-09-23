@@ -35,6 +35,7 @@ void CKonohaVillage::Priority_Update(_float fTimeDelta)
 
 void CKonohaVillage::Update(_float fTimeDelta)
 {
+	m_pNavigationCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
 }
 
 void CKonohaVillage::Late_Update(_float fTimeDelta)
@@ -59,6 +60,10 @@ HRESULT CKonohaVillage::Render()
 			return E_FAIL;
 	}
 
+#ifdef _DEBUG
+	m_pNavigationCom->Render();
+#endif
+
 	return S_OK;
 }
 HRESULT CKonohaVillage::Ready_Components()
@@ -71,6 +76,11 @@ HRESULT CKonohaVillage::Ready_Components()
 	/* Com_Model */
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_Component_Model_KonohaVillage"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
+		return E_FAIL;
+
+	/* Com_Navigation */
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Navigation_KonohaVillage"),
+		TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom))))
 		return E_FAIL;
 
 	return S_OK;
@@ -144,4 +154,5 @@ void CKonohaVillage::Free()
 
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);
+	Safe_Release(m_pNavigationCom);
 }

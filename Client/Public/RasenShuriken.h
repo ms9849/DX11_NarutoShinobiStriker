@@ -13,7 +13,7 @@ NS_BEGIN(Client)
 class CRasenShuriken final : public CSkill
 {
 public:
-	typedef struct tagRasenShurikenDesc {
+	typedef struct tagRasenShurikenDesc : public GAMEOBJECT_DESC {
 		_float3 vDir;
 		const _float4x4* pSocketMatrix;
 	} RASENSHURIKEN_DESC;

@@ -90,6 +90,7 @@ void CCamera_Manager::Clear()
 	}
 
 	m_pActivatedCamera = nullptr;
+	m_strActivatedCameraTag = TEXT("");
 }
 
 CCamera_Manager* CCamera_Manager::Create()

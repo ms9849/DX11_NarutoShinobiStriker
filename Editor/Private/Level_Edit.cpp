@@ -204,12 +204,18 @@ HRESULT CLevel_Edit::Ready_Prototypes()
         CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, TEXT("../../Client/Bin/Resources/Models/Fiona/Fiona.bin"), PreTransformMatrix))))
         return E_FAIL;
 
+
     PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
     /* For.Prototype_Component_Model_KonohaVillage */
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_KonohaVillage"),
         CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, TEXT("../../Client/Bin/Resources/Models/KonohaVillage/KonohaVillage.bin"), PreTransformMatrix))))
         return E_FAIL;
-
+    //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    ///* For.Prototype_Component_Model_KonohaVillage */
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_KonohaVillage"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/KonohaVillage/KonohaVillage.fbx", PreTransformMatrix))))
+    //    return E_FAIL;
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_KonohaVillage"));
 #pragma endregion
 
 #pragma region COMPONENT

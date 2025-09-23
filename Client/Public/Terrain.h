@@ -33,7 +33,6 @@ private:
 	CTexture*			m_pTextureCom = { nullptr };
 	CVIBuffer_Terrain * m_pVIBufferCom = { nullptr };
 	CShader*			m_pShaderCom = { nullptr };
-	CNavigation*		m_pNavigationCom = { nullptr };
 
 private:
 	HRESULT Ready_Components();

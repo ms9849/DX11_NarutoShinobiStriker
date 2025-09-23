@@ -164,9 +164,6 @@ HRESULT CPlayer::Initialize(void* pArg)
 
 	//m_iNumMeshes = m_pModelCom->Get_NumMeshes();
 
-	/* 게임 매니저에 현재 플레이어 정보 세팅. 레벨 변경되도 안전할거니까.. */
-	m_pGameManager->Set_PlayerPtr(this);
-
 	/* 플레이어는 모든 스킬을 사용할 수 있다. */
 	for (_uint i = 0; i < ENUM_CLASS(SKILL::END); ++i)
 		m_Skills.emplace(static_cast<SKILL>(i), g_SkillTable[i]);
@@ -181,8 +178,16 @@ HRESULT CPlayer::Initialize(void* pArg)
 	if (LEVEL::TUTORIAL == m_pGameManager->Get_NextLevel())
 	{
 		m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(0.3f, 0.031f, -51.82f, 1.f));
+		/* 게임 매니저에 현재 플레이어 정보 세팅. 레벨 변경되도 안전할거니까.. */
+		m_pGameManager->Set_PlayerPtr(this);
 	}
 
+	else if (LEVEL::KONOHA_VILLAGE == m_pGameManager->Get_NextLevel())
+	{
+		m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(-101.82f, 22.24f, -91.05f, 1.f));
+		/* 게임 매니저에 현재 플레이어 정보 세팅. 레벨 변경되도 안전할거니까.. */
+		m_pGameManager->Set_PlayerPtr(this);
+	}
 
 	return S_OK;
 }
@@ -297,10 +302,18 @@ HRESULT CPlayer::Ready_Components()
 	CNavigation::NAVIGATION_DESC Desc;
 	Desc.iCurrentCellIndex = 0;
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Test_Navigation"),
-		TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
-		return E_FAIL;
-
+	if (LEVEL::TUTORIAL == m_pGameManager->Get_NextLevel())
+	{
+		if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Navigation_Tutorial"),
+			TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
+			return E_FAIL;
+	}
+	else if (LEVEL::KONOHA_VILLAGE == m_pGameManager->Get_NextLevel())
+	{
+		if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Navigation_KonohaVillage"),
+			TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
+			return E_FAIL;
+	}
 	/* Com_Collider */
 
 	CBounding_Sphere::BOUNDING_SPHERE_DESC ColliderDesc{};

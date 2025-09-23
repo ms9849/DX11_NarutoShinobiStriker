@@ -6,6 +6,7 @@
 
 #include "Player.h"
 #include "Bird_IdleState.h"
+#include "Bird_ElectricShockState.h"
 #include "Bird_BeatenBlastedState.h"
 #include "Bird_BeatenState.h"
 #include "Bird_DeadState.h"
@@ -62,7 +63,7 @@ void CBird::OnCollision(COLLIDER_HANDLE_ID eHandleID)
     {
         m_fCurrentHP -= 1.f;
 
-        pNextState = CBird_BeatenState::Create(m_pNavigationCom, this, vDirection);
+        pNextState = CBird_BeatenState::Create(m_pNavigationCom, this, vDirection, 1.0f);
     }
     else if (COLLIDER_HANDLE_ID::PLAYER_HAND_ATTACK_FINAL == eHandleID)
     {
@@ -123,16 +124,15 @@ void CBird::OnCollision(COLLIDER_HANDLE_ID eHandleID)
         pNextState = CBird_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection);
         Set_Invincible(1.f);
     }
-    /* 새 감전 상태 추가해야 함. */
-    //else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_CHIDORI == eHandleID)
-    //{
-    //    m_pGameManager->Change_Camera(static_cast<LEVEL>(m_pGameInstance->Get_LevelID()),
-    //        TEXT("Chidori_Action_Camera"), nullptr);
+    else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_CHIDORI == eHandleID)
+    {
+        m_pGameManager->Change_Camera(static_cast<LEVEL>(m_pGameInstance->Get_LevelID()),
+            TEXT("Chidori_Action_Camera"), nullptr);
 
-    //    m_fCurrentHP -= 15.f;
-    //    pNextState = ::Create(m_pNavigationCom, this);
-    //    Set_Invincible(1.f);
-    //}
+        m_fCurrentHP -= 15.f;
+        pNextState = CBird_ElectricShockState::Create(m_pNavigationCom, this);
+        Set_Invincible(1.f);
+    }
 
     if (m_fCurrentHP <= 0.f && false == m_isPlayingDeadAnim)
     {
@@ -272,13 +272,21 @@ HRESULT CBird::Ready_Components()
         return E_FAIL;
 
     /* Com_Navigation */
-
     CNavigation::NAVIGATION_DESC Desc;
     Desc.iCurrentCellIndex = 0;
 
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Test_Navigation"),
-        TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
-        return E_FAIL;
+    if (LEVEL::TUTORIAL == m_pGameManager->Get_NextLevel())
+    {
+        if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Navigation_Tutorial"),
+            TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
+            return E_FAIL;
+    }
+    else if (LEVEL::KONOHA_VILLAGE == m_pGameManager->Get_NextLevel())
+    {
+        if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Navigation_KonohaVillage"),
+            TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
+            return E_FAIL;
+    }
 
     CBounding_Sphere::BOUNDING_SPHERE_DESC ColliderDesc{};
 

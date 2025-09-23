@@ -253,9 +253,6 @@ TRIGGER_TYPE CGameManager::Get_CurrentTrigger()
 
 LEVEL CGameManager::Get_NextLevel()
 {
-	if (m_pGameInstance->Get_LevelID() != ENUM_CLASS(LEVEL::LOADING))
-		return LEVEL::END;
-
 	return m_eNextLevel;
 }
 

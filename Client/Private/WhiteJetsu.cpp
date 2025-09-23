@@ -299,12 +299,22 @@ HRESULT CWhiteJetsu::Ready_Components()
 
     /* Com_Navigation */
 
+    /* Com_Navigation */
     CNavigation::NAVIGATION_DESC Desc;
     Desc.iCurrentCellIndex = 0;
 
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Test_Navigation"),
-        TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
-        return E_FAIL;
+    if (LEVEL::TUTORIAL == m_pGameManager->Get_NextLevel())
+    {
+        if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Navigation_Tutorial"),
+            TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
+            return E_FAIL;
+    }
+    else if (LEVEL::KONOHA_VILLAGE == m_pGameManager->Get_NextLevel())
+    {
+        if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Navigation_KonohaVillage"),
+            TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
+            return E_FAIL;
+    }
 
     CBounding_Sphere::BOUNDING_SPHERE_DESC ColliderDesc{};
 

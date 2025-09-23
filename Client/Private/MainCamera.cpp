@@ -82,6 +82,18 @@ void CMainCamera::Priority_Update(_float fTimeDelta)
     m_pTransformCom->Chase_Lerp(m_pPlayerTransform->Get_State(STATE::POSITION) + vCamPos, fTimeDelta * 2.0f, 0.f);
     m_pTransformCom->LookAt_Lerp(m_pPlayerTransform->Get_State(STATE::POSITION) + XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::LOOK)) * 1.f);
 
+    // 클라이언트 영역 크기 얻기
+    RECT rcClient;
+    GetClientRect(g_hWnd, &rcClient);
+
+    _int clientCenterX = (rcClient.right - rcClient.left) / 2;
+    _int clientCenterY = (rcClient.bottom - rcClient.top) / 2;
+
+    // 클라이언트 좌표 → 스크린 좌표로 변환
+    POINT pt = { clientCenterX, clientCenterY };
+    ClientToScreen(g_hWnd, &pt);
+    SetCursorPos(pt.x, pt.y);
+
     __super::Bind_Matrices();
 }
 

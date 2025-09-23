@@ -17,7 +17,7 @@ NS_BEGIN(Client)
 class CBird_ElectricShockState final : public CBirdState
 {
 private:
-	CBird_ElectricShockState(class CNavigation* pNavigation, class CBird* pBird, _vector vDirection, _float fRatio = 1.f);
+	CBird_ElectricShockState(class CNavigation* pNavigation, class CBird* pBird);
 	virtual ~CBird_ElectricShockState() = default;
 
 public:
@@ -29,13 +29,15 @@ public:
 	virtual _bool	End() override;
 
 private:
+	class CGameManager* m_pGameManager = { nullptr };
 	CTransform* m_pPlayerTransformCom = { nullptr };
 	CNavigation* m_pNavigationCom = { nullptr };
 	class CBird* m_pBird = { nullptr };
-	_float3		m_vDirection = {};
+	_float				m_fTimeAcc = { 0.f };
+	_float				m_fMaxTimeAcc = { 2.5f };
 
 public:
-	static CBird_ElectricShockState* Create(class CNavigation* pNavigation, class CBird* pBird, _vector vDirection, _float fRatio = 1.f);
+	static CBird_ElectricShockState* Create(class CNavigation* pNavigation, class CBird* pBird);
 	virtual void Free() override;
 };
 

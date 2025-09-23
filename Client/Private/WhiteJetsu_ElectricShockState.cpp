@@ -24,7 +24,6 @@ CWhiteJetsu_ElectricShockState::CWhiteJetsu_ElectricShockState(CNavigation* pNav
 
 void CWhiteJetsu_ElectricShockState::Start(_bool IsBlend)
 {
-    /* Beaten보다 훨씬 멀리 날아가야 함 */
     m_pJetsu->Set_AnimIndex("WhiteZetsuCrowdForm_Beaten_ElectricShock_Loop", 2.f, true);
 }
 

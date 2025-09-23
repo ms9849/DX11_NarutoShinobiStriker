@@ -27,6 +27,7 @@ void CPlayer_RasenShurikenState::Start(_bool IsBlend)
     m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_TrueRasenShuriken", 1.2f);
 
     CRasenShuriken::RASENSHURIKEN_DESC Desc;
+    Desc.fSpeedPerSec = 10.f;
     Desc.pSocketMatrix = m_pPlayer->Get_BoneMatrix(TEXT("Part_Upper"), "RightHandMiddle1");
     XMStoreFloat3(&Desc.vDir, m_pPlayer->Get_Transform()->Get_State(STATE::LOOK));
 

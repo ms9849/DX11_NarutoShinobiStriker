@@ -40,17 +40,17 @@ CBirdState* CBird_WalkState::Update(_float fTimeDelta)
         pNextState = CBird_AttackState::Create(m_pNavigationCom, m_pBird);
     }
 
-    else if(fDist >= 5.f)
+    else if(fDist >= 7.5f)
     {
         m_pBird->Get_Transform()->Go_Right(fTimeDelta * 0.1f, m_pNavigationCom);
         m_pBird->Get_Transform()->Chase(m_pPlayerTransformCom->Get_State(STATE::POSITION), fTimeDelta * 0.02f, nullptr, fDist);
         m_pBird->Get_Transform()->LookAt_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION));
     }
-    else if (fDist <= 3.f)
+    else if (fDist <= 7.5f)
     {
         m_pBird->Get_Transform()->LookAt_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION));
         m_pBird->Get_Transform()->Go_Right(fTimeDelta * 0.1f, m_pNavigationCom);
-        m_pBird->Get_Transform()->Go_Backward(fTimeDelta * 0.05f, m_pNavigationCom);
+        m_pBird->Get_Transform()->Go_Backward(fTimeDelta * 0.1f, m_pNavigationCom);
     }
 
     return pNextState;

@@ -56,7 +56,7 @@ CPlayerState* CPlayer_HandAttackState::Update(_float fTimeDelta)
     Update_Collider(fAnimProgress);
 
     if (m_eAnimState == ANIM_STATE::BACK_KICK && fAnimProgress >= 0.8f)
-        m_pGameManager->Change_Camera(LEVEL::TUTORIAL, TEXT("Main_Camera"));
+        m_pGameManager->Change_Camera(static_cast<LEVEL>(m_pGameInstance->Get_LevelID()), TEXT("Main_Camera"));
 
     if (false == IsAnimFinished && fAnimProgress <= 0.4f && ANIM_STATE::BACK_KICK != m_eAnimState)
         m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * m_pGameInstance->Calc_Quadratic(-10.f, 4.f, 0.f, fAnimProgress),
@@ -92,7 +92,7 @@ CPlayerState* CPlayer_HandAttackState::Update(_float fTimeDelta)
     else if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON)
         && m_eAnimState == ANIM_STATE::KICK && fAnimProgress >= 0.5f)
     {
-        m_pGameManager->Change_Camera(LEVEL::TUTORIAL, TEXT("Action_Camera"));
+        m_pGameManager->Change_Camera(static_cast<LEVEL>(m_pGameInstance->Get_LevelID()), TEXT("Action_Camera"));
         m_pPlayer->Set_AnimIndex("CustomMan_Attack_Hand_BackKick", 1.75f, false);
 
         if (nullptr != pTargetTransform)
@@ -156,7 +156,7 @@ _bool CPlayer_HandAttackState::End()
 {
     m_pPlayer->Set_Collider_Active(TEXT("Com_Collider_HandAttack"), false);
 
-    m_pGameManager->Change_Camera(LEVEL::TUTORIAL, TEXT("Main_Camera"));
+    m_pGameManager->Change_Camera(static_cast<LEVEL>(m_pGameInstance->Get_LevelID()), TEXT("Main_Camera"));
     return true;
 }
 

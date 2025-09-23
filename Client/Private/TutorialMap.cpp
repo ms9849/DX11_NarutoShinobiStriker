@@ -36,6 +36,7 @@ void CTutorialMap::Priority_Update(_float fTimeDelta)
 
 void CTutorialMap::Update(_float fTimeDelta)
 {
+	m_pNavigationCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
 }
 
 void CTutorialMap::Late_Update(_float fTimeDelta)
@@ -60,6 +61,10 @@ HRESULT CTutorialMap::Render()
 			return E_FAIL;
 	}
 
+#ifdef _DEBUG
+	m_pNavigationCom->Render();
+#endif
+
 	return S_OK;
 }
 
@@ -73,6 +78,11 @@ HRESULT CTutorialMap::Ready_Components()
 	/* Com_Model */
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_TutorialMap"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
+		return E_FAIL;
+
+	/* Com_Navigation */
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Navigation_Tutorial"),
+		TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom))))
 		return E_FAIL;
 
 	return S_OK;
@@ -144,5 +154,6 @@ void CTutorialMap::Free()
 	__super::Free();
 
 	Safe_Release(m_pShaderCom);
+	Safe_Release(m_pNavigationCom);
 	Safe_Release(m_pModelCom);
 }
