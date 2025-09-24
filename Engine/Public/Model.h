@@ -54,6 +54,9 @@ public:
 	const _float4x4* Get_BoneMatrixPtr(const _char* pBoneName) const;
 	_int Get_BoneIndex(const _char* pBoneName) const;
 
+	_int Get_MeshNum() { return m_iNumMeshes; }
+	class CMesh* Get_Mesh(_int iIdx) { return m_Meshes[iIdx]; }
+
 public:
 	void Set_AnimIndex(const _char* pAnimName, 
 		_float fAnimationPlayRate = 1.f, 

@@ -12,6 +12,10 @@ private:
 	virtual ~CMesh() = default;
 
 public:
+	_uint* Get_Indices() const {
+		return m_pIndices;
+	}
+
 	_uint Get_MaterialIndex() const {
 		return m_iMaterialIndex;
 	}

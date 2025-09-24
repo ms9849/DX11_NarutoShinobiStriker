@@ -187,6 +187,8 @@ HRESULT CPlayer::Initialize(void* pArg)
 		m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(-101.82f, 22.24f, -91.05f, 1.f));
 		/* 게임 매니저에 현재 플레이어 정보 세팅. 레벨 변경되도 안전할거니까.. */
 		m_pGameManager->Set_PlayerPtr(this);
+
+		m_pGameInstance->Add_GameObject_ToPhysx(this);
 	}
 
 	return S_OK;

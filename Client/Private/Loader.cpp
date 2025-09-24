@@ -793,6 +793,11 @@ HRESULT CLoader::Loading_For_KonohaVillage()
 		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, TEXT("../Bin/Resources/Models/KonohaVillage/KonohaVillage.bin"), PreTransformMatrix))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Model_COL_KonohaVillage */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_Component_Model_COL_KonohaVillage"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/KonohaVillage/COL_KonohaVillage.fbx", PreTransformMatrix))))
+		return E_FAIL;
+
 	m_strMessage = TEXT("로딩이 완료되었습니다..");
 	Sleep(500);
 	m_isFinished = true;

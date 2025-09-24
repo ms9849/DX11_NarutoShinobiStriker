@@ -25,9 +25,11 @@ public:
 	HRESULT Render();
 
 private:
+	CModel* m_pColModelCom = { nullptr };
 	CModel* m_pModelCom = { nullptr };
 	CShader* m_pShaderCom = { nullptr };
 	_uint  m_iNumMeshes = {};
+	_uint  m_iNumColMeshes = {};
 	CNavigation* m_pNavigationCom = { nullptr };
 
 private:
