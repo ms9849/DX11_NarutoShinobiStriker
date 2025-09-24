@@ -133,7 +133,10 @@ public:
 #pragma endregion
 
 #pragma region Physx_Manager
+	void Add_GameObject_ToPhysx(class CGameObject* pGameObject);
+	void Add_Geometry_ToPhysx(class CGameObject* pGameObject, class CModel* pModel);
 
+	void Check_GeometryCollision(_float fTimeDelta);
 #pragma endregion
 
 private:

@@ -116,6 +116,11 @@ void CLevel_Tutorial::Update(_float fTimeDelta)
 			m_pGameManager->OnTrigger(TRIGGER_TYPE::TUTORIAL_CLEAR);
 	}
 
+	if (m_pGameInstance->Key_Down(DIK_F8))
+	{
+		m_pGameInstance->Request_LevelChange();
+	}
+
 	if (m_pGameInstance->IsLevelChangeRequested())
 	{
 		m_pGameManager->Clear();

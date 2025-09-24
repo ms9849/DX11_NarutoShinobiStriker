@@ -101,6 +101,8 @@ void CLevel_KonohaVillage::Update(_float fTimeDelta)
 #pragma endregion
 
 	m_pGameManager->Update_Collision();
+
+	m_pGameInstance->Check_GeometryCollision(fTimeDelta);
 }
 
 HRESULT CLevel_KonohaVillage::Render()

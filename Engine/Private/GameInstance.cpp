@@ -503,6 +503,22 @@ HRESULT CGameInstance::Add_Light(const LIGHT_DESC& LightDesc)
 
 #pragma endregion
 
+#pragma region Physx_MANAGER 
+void CGameInstance::Add_GameObject_ToPhysx(class CGameObject* pGameObject)
+{
+	m_pPhysxManager->Add_GameObject_ToPhysx(pGameObject);
+}
+void CGameInstance::Add_Geometry_ToPhysx(class CGameObject* pGameObject, class CModel* pModel)
+{
+	m_pPhysxManager->Add_Geometry_ToPhysx(pGameObject, pModel);
+}
+
+void CGameInstance::Check_GeometryCollision(_float fTimeDelta)
+{
+	m_pPhysxManager->Check_GeometryCollision(fTimeDelta);
+}
+
+#pragma endregion
 void CGameInstance::Release_Engine()
 {
 	DestroyInstance();
