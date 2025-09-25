@@ -136,7 +136,10 @@ public:
 	void Add_GameObject_ToPhysx(class CGameObject* pGameObject);
 	void Add_Geometry_ToPhysx(class CGameObject* pGameObject, class CModel* pModel);
 
-	void Check_GeometryCollision(_float fTimeDelta);
+	void Check_GeometryCollision();
+	_bool Check_GameObject_GeometryCollision(class CGameObject* pGameObject);
+	_bool Check_GeometryPicking();
+	_bool Check_GameObject_GeometryPicking(class CGameObject* pGameObject);
 #pragma endregion
 
 private:

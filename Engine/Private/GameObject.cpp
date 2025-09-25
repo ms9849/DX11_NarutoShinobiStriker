@@ -17,7 +17,7 @@ CGameObject::CGameObject(const CGameObject& Prototype)
 	: m_pDevice{ Prototype.m_pDevice }
 	, m_pContext{ Prototype.m_pContext }
 	, m_pGameInstance{ Prototype.m_pGameInstance }
-	, m_isDead { Prototype.m_isDead }
+	, m_IsDead { Prototype.m_IsDead }
 	, m_iObjectID { Prototype.m_iObjectID }
 {
 	Safe_AddRef(m_pGameInstance);

@@ -52,7 +52,7 @@ void CRasenShuriken::Priority_Update(_float fTimeDelta)
 void CRasenShuriken::Update(_float fTimeDelta)
 {
     if (true == m_isFinal)
-        m_isDead = true;
+        m_IsDead = true;
 
     if (false == m_pColliderCom->Get_Active() && true == m_isThrowing)
     {

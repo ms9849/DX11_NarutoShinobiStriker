@@ -40,7 +40,7 @@ CPlayerState* CPlayer_HandAerialAttackState::Update(_float fTimeDelta)
 		)
 	{
 		m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * 0.4f, 
-			m_pPlayer->Get_Navigation());
+			nullptr);
 
 		if (m_pGameInstance->Key_Pressing(DIK_D))
 			m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * 0.3f);
@@ -57,14 +57,13 @@ CPlayerState* CPlayer_HandAerialAttackState::Update(_float fTimeDelta)
     }
 
 	// LAND로의 상태 전환 
-	_float fHeight = m_pPlayer->Get_Navigation()->Get_CellHeight(m_pPlayer->Get_Transform());
+	_bool  IsGround = m_pGameInstance->Check_GameObject_GeometryCollision(m_pPlayer);
 
-	if (XMVectorGetY(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION)) <= fHeight)
+	if (true == IsGround)
 	{
 		pNextState = CPlayer_LandState::Create(m_pPlayer);
 		_float4 PlayerPos = {};
 		XMStoreFloat4(&PlayerPos, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
-		m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, XMVectorSet(PlayerPos.x, fHeight, PlayerPos.z, 1.f));
 	}
 
 	//낙하로 넘어가게 한다.

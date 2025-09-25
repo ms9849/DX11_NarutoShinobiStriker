@@ -32,7 +32,7 @@ CPlayerState* CPlayer_BeatenBlastedState::Update(_float fTimeDelta)
 
     if (false == IsAnimFinished && fAnimProgress <= 0.7f)
         m_pPlayer->Get_Transform()->Go_Direction(XMLoadFloat3(&m_vDirection), 1.6f * fTimeDelta * m_pGameInstance->Calc_Quadratic(-2.f, 0.f, 1.f, fAnimProgress),
-            m_pPlayer->Get_Navigation());
+            nullptr);
 
     if (true == IsAnimFinished)
     {

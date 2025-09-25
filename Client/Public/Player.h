@@ -41,6 +41,8 @@ public:
 	_float	Get_AnimProgress();
 	void	Set_AnimProgress(_float fProgress);
 	void	Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate = 1.f, _bool IsBlend = true, _float fBlendRatio = 0.15f, _bool IsLoop = false);
+	
+	_bool   Get_Ground() { return m_IsGround; }
 	void	Set_Ground(_bool bFlag) { m_IsGround = bFlag; }
 
 	void	   Set_Collider_Active(const _wstring& strColliderTag, _bool bFlag);
@@ -77,7 +79,7 @@ private:
 
 	class CPlayerState*		m_pState = { nullptr };
 
-	_bool					m_IsGround = { true };
+	_bool					m_IsGround = { false };
 	_bool					m_IsInvincible = { false };
 	_bool					m_IsVisible = { true };
 

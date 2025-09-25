@@ -94,7 +94,7 @@ void CWoodHand::Update(_float fTimeDelta)
         m_fTimeAcc += fTimeDelta;
 
         if (m_fTimeAcc >= 3.f)
-            m_isDead = true;
+            m_IsDead = true;
     }
 
     if (false == m_isAttackOn && true == m_IsMoveFinished && (0.55f <= Get_AnimProgress()))

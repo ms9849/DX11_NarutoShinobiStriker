@@ -53,11 +53,11 @@ CPlayerState* CPlayer_ChidoriAttackState::Update(_float fTimeDelta)
     //치도리 사용중 바라보는 방향으로 날아가기
     if (ANIM_STATE::ATTACK == m_eAnimState && m_fTimeAcc < 1.0f)
         m_pPlayer->Get_Transform()->Go_Direction(m_pPlayer->Get_Transform()->Get_State(STATE::LOOK), fTimeDelta * 2.f,
-            m_pPlayer->Get_Navigation());
+            nullptr);
 
     else if (ANIM_STATE::ATTACK_END == m_eAnimState && fAnimProgress < 0.5f && false == IsAnimFinished)
         m_pPlayer->Get_Transform()->Go_Direction(m_pPlayer->Get_Transform()->Get_State(STATE::LOOK), fTimeDelta * 1.f * m_pGameInstance->Calc_Linear(-2.f, 1.f, fAnimProgress),
-            m_pPlayer->Get_Navigation());
+            nullptr);
 
     // 추적
     CTransform* pTargetTransform = m_pGameManager->Calc_Target(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));

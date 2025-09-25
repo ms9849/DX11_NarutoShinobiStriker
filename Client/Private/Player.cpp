@@ -14,7 +14,7 @@
 #include "Weapon_Character.h"
 
 #include "PlayerState.h"
-#include "Player_IdleState.h"
+#include "Player_JumpState.h"
 #include "Player_BeatenState.h"
 #include "Player_BeatenBlastedState.h"
 
@@ -172,7 +172,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 		return E_FAIL;
 
 	/* 상태 초기화 및 시작. */
-	m_pState = CPlayer_IdleState::Create(this);
+	m_pState = CPlayer_JumpState::Create(this, 0.f, CPlayer_JumpState::ANIM_STATE::FALL);
 	m_pState->Start(true);
 
 	if (LEVEL::TUTORIAL == m_pGameManager->Get_NextLevel())

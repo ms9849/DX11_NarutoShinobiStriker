@@ -97,15 +97,15 @@ CPlayerState* CPlayer_RasenganState::Update(_float fTimeDelta)
     // 나선환 사용중 바라보는 방향으로 날아가기
     if (ANIM_STATE::ATTACK == m_eAnimState)
         m_pPlayer->Get_Transform()->Go_Direction(m_pPlayer->Get_Transform()->Get_State(STATE::LOOK), fTimeDelta * 1.5f,
-            m_pPlayer->Get_Navigation());
+            nullptr);
 
     else if (ANIM_STATE::ATTACK_START == m_eAnimState)
         m_pPlayer->Get_Transform()->Go_Direction(m_pPlayer->Get_Transform()->Get_State(STATE::LOOK), fTimeDelta * m_pGameInstance->Calc_Linear(1.5f, 0.f, fAnimProgress),
-            m_pPlayer->Get_Navigation());
+            nullptr);
 
     else if (false == IsAnimFinished && fAnimProgress < 0.7f && ANIM_STATE::ATTACK_END == m_eAnimState)
         m_pPlayer->Get_Transform()->Go_Direction(m_pPlayer->Get_Transform()->Get_State(STATE::LOOK), fTimeDelta * m_pGameInstance->Calc_Linear(-1.5f, 1.1f, fAnimProgress),
-            m_pPlayer->Get_Navigation());
+            nullptr);
 
 	return pNextState;
 }

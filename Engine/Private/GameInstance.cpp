@@ -513,9 +513,24 @@ void CGameInstance::Add_Geometry_ToPhysx(class CGameObject* pGameObject, class C
 	m_pPhysxManager->Add_Geometry_ToPhysx(pGameObject, pModel);
 }
 
-void CGameInstance::Check_GeometryCollision(_float fTimeDelta)
+void CGameInstance::Check_GeometryCollision()
 {
-	m_pPhysxManager->Check_GeometryCollision(fTimeDelta);
+	m_pPhysxManager->Check_GeometryCollision();
+}
+
+_bool CGameInstance::Check_GameObject_GeometryCollision(CGameObject* pGameObject)
+{
+	return 	m_pPhysxManager->Check_GameObject_GeometryCollision(pGameObject);
+}
+
+_bool CGameInstance::Check_GeometryPicking()
+{
+	return m_pPhysxManager->Check_GeometryPicking();
+}
+
+_bool CGameInstance::Check_GameObject_GeometryPicking(CGameObject* pGameObject)
+{
+	return m_pPhysxManager->Check_GameObject_GeometryPicking(pGameObject);
 }
 
 #pragma endregion
