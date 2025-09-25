@@ -71,9 +71,11 @@ void CPhysxManager::Add_GameObject_ToPhysx(CGameObject* pGameObject)
     /* 머테리얼은 튜토리얼 대로 세팅 */
     PxMaterial* Material = m_PxPhysx->createMaterial(0.5f, 0.5f, 0.6f);
     /* 0.5 반지름 (구), 0.4 반높이 (원통) 크기의 캡슐 콜라이더 세팅. */
-    PxShape* pShape = m_PxPhysx->createShape(PxCapsuleGeometry(0.4f, 0.3f), *Material);
+    PxShape* pShape = m_PxPhysx->createShape(PxCapsuleGeometry(0.5f, 0.4f), *Material);
 
     pDynamicActor->attachShape(*pShape);
+    ///* 연속 충돌 활성화. 현재는 플레이어만 제어하므로 켜도 된다. */
+    //pDynamicActor->setRigidBodyFlag(PxRigidBodyFlag::eENABLE_CCD, true);
 
     pShape->release();
     Material->release();
@@ -318,7 +320,7 @@ _bool CPhysxManager::Check_GeometryPicking()
     PxVec3 vPxPosition = PxVec3(0.f, 0.f, 0.f);
     PxQuat vPxQuaternion = PxQuat(0.f, 0.f, 0.f, 1.f);
 
-    PxTransform PxWorldMatrix = PxTransform(vPxPosition, vPxQuaternion);
+    PxTransform PxMeshWorldMatrix = PxTransform(vPxPosition, vPxQuaternion);
 
     for (auto& Pair : m_DynamicActors)
     {
@@ -333,6 +335,8 @@ _bool CPhysxManager::Check_GeometryPicking()
         PxVec3 vPxPosition = PxVec3(XMVectorGetX(vTranslation), XMVectorGetY(vTranslation), XMVectorGetZ(vTranslation));
         PxQuat vPxQuaternion = PxQuat(XMVectorGetX(vRotation), XMVectorGetY(vRotation), XMVectorGetZ(vRotation), XMVectorGetW(vRotation));
 
+        PxTransform PxWorldMatrix = PxTransform(vPxPosition, vPxQuaternion);
+        Pair.second->setGlobalPose(PxWorldMatrix);
         /* Actor에서 현재 위치 / 회전 가져오기 */
         PxTransform ActorTransform = Pair.second->getGlobalPose();
 
@@ -348,7 +352,7 @@ _bool CPhysxManager::Check_GeometryPicking()
                 ActorTransform.p,       // 레이 위치 
                 PxVec3(0.f, -1.f, 0.f), // 레이 방향
                 *Mesh,                  // Geometry 정보
-                PxWorldMatrix,          // Geometry의 트랜스폼 가져와야 함.
+                PxMeshWorldMatrix,          // Geometry의 트랜스폼 가져와야 함.
                 100.f,                  // 체크할 최대 거리
                 PxHitFlags(PxHitFlag::ePOSITION),   // 플래그, (기본적으로 Distance는 제공. Postion까지 추가로 가져옴)
                 1,                      // 체크할 최대 히트 갯수 ( 1개라면 가장 가까운 피킹 지점의 정보 반환 )
