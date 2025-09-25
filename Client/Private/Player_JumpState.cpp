@@ -77,6 +77,7 @@ CPlayerState* CPlayer_JumpState::Update(_float fTimeDelta)
 	if (m_pGameInstance->Key_Down(DIK_SPACE) && m_bCanDoubleJump && ANIM_STATE::JUMP == m_eAnimState && m_fTimeAcc >= 0.15f)
 	{
 		//보간 ratio 추가
+		m_pPlayer->Set_Pickable(true);
 		m_pPlayer->Set_AnimIndex("CustomMan_DoubleJump", 2.5f, false);
 		m_eAnimState = ANIM_STATE::DOUBLE_JUMP;
 		m_fTimeAcc = 0.f;

@@ -364,13 +364,14 @@ _bool CPhysxManager::Check_GeometryPicking()
                 0.4 반구, 0.3 반 높이를 가진 캡슐 콜라이더임을 명심해야함. */
                 vNearestPos = vResultPos;
                 fNearestDist = fDist;
+
+                /* 바로 땅에 붙이기 */
+                if (fNearestDist <= 0.4f)
+                {
+                    Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 0.f, 0.f, 0.f));
+                }
+
             }
-        }
-        
-        /* 바로 땅에 붙이기 */
-        if (fNearestDist <= 0.4f)
-        {
-            Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 0.f, 0.f, 0.f));
         }
     }
 
