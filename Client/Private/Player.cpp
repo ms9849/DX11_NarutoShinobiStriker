@@ -209,8 +209,8 @@ void CPlayer::Update(_float fTimeDelta)
 
 	/* 네비메쉬 높이 업데이트 */
 
-	if(true == m_IsGround)
-		m_pNavigationCom->Compute_Height(m_pTransformCom);
+	//if(true == m_IsGround)
+	//	m_pNavigationCom->Compute_Height(m_pTransformCom);
 
 	
 	Key_Input(fTimeDelta);

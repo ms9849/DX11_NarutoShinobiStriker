@@ -348,6 +348,11 @@ HRESULT CLevel_KonohaVillage::Ready_Layer_Map(const _wstring& strLayerTag)
 		ENUM_CLASS(LEVEL::KONOHA_VILLAGE), strLayerTag)))
 		return E_FAIL;
 
+	/* Ãæµ¹¿ë ¸Þ½Ã (³ª¹µÀÙ ¸¶À») */
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_COL_KonohaVillage"),
+		ENUM_CLASS(LEVEL::KONOHA_VILLAGE), strLayerTag)))
+		return E_FAIL;
+
 	return S_OK;
 }
 

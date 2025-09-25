@@ -371,7 +371,6 @@ HRESULT CMainApp::Ready_Prototypes()
 		CVIBuffer_Rect_Instance::Create(m_pDevice, m_pContext, &SnowDesc))))
 		return E_FAIL;
 
-
 	/* For.Prototype_Component_VIBuffer_Particle_Explosion */
 	CVIBuffer_Point_Instance::POINT_INSTANCE_DESC		ExplosionDesc{};
 
