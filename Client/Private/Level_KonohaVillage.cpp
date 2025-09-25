@@ -102,8 +102,8 @@ void CLevel_KonohaVillage::Update(_float fTimeDelta)
 
 	m_pGameManager->Update_Collision();
 
-	m_pGameInstance->Check_GeometryCollision();
 	m_pGameInstance->Check_GeometryPicking();
+	m_pGameInstance->Check_GeometryCollision();
 }
 
 HRESULT CLevel_KonohaVillage::Render()
