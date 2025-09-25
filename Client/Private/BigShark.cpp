@@ -43,7 +43,7 @@ void CBigShark::Update(_float fTimeDelta)
 	m_fTimeAcc += fTimeDelta;
 
 	if (m_fTimeAcc >= m_fLifeTime)
-		m_isDead = true;
+		m_IsDead = true;
 
 	m_pTransformCom->Go_Straight(fTimeDelta, nullptr);
 

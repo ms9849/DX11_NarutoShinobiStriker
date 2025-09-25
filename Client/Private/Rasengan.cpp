@@ -48,7 +48,7 @@ void CRasengan::Update(_float fTimeDelta)
     m_fTimeAcc += fTimeDelta;
 
     if (m_fTimeAcc >= 1.f)
-        m_isDead = true;
+        m_IsDead = true;
 
     ///* 부모 행렬 적용 */
     //XMStoreFloat4x4(&m_CombinedWorldMatrix,

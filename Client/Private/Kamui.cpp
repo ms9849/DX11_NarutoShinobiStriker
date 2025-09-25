@@ -45,7 +45,7 @@ void CKamui::Update(_float fTimeDelta)
     m_fAttackCoolDown += fTimeDelta;
 
     if (true == m_isFinal)
-        m_isDead = true;
+        m_IsDead = true;
 
     if (m_fTimeAcc >= m_fLifeTime)
         m_isFinal = true;

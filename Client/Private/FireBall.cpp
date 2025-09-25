@@ -41,7 +41,7 @@ void CFireBall::Priority_Update(_float fTimeDelta)
 void CFireBall::Update(_float fTimeDelta)
 {
     if (false == m_pColliderCom->Get_Active())
-        m_isDead = true;
+        m_IsDead = true;
 
     m_pTransformCom->Go_Straight(fTimeDelta, nullptr);
 

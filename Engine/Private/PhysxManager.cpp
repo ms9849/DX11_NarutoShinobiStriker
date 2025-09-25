@@ -71,7 +71,7 @@ void CPhysxManager::Add_GameObject_ToPhysx(CGameObject* pGameObject)
     /* 머테리얼은 튜토리얼 대로 세팅 */
     PxMaterial* Material = m_PxPhysx->createMaterial(0.5f, 0.5f, 0.6f);
     /* 0.5 반지름 (구), 0.4 반높이 (원통) 크기의 캡슐 콜라이더 세팅. */
-    PxShape* pShape = m_PxPhysx->createShape(PxCapsuleGeometry(0.5f, 0.4f), *Material);
+    PxShape* pShape = m_PxPhysx->createShape(PxCapsuleGeometry(0.4f, 0.3f), *Material);
 
     pDynamicActor->attachShape(*pShape);
 
@@ -147,8 +147,11 @@ void CPhysxManager::Add_Geometry_ToPhysx(CGameObject* pGameObject, CModel* pMode
     }
 }
 
-void CPhysxManager::Check_GeometryCollision(_float fTimeDelta)
+_bool CPhysxManager::Check_GeometryCollision()
 {
+    /* Triangle Mesh Geometry와 충돌 처리 */
+    _bool IsGround = false;
+
     for (auto& Pair : m_DynamicActors)
     {
         /* 계산 하기 전, 트랜스폼 가져와서 actor 최신화. */
@@ -180,11 +183,6 @@ void CPhysxManager::Check_GeometryCollision(_float fTimeDelta)
         PxVec3 vPxStartPos = ActorTransform.p + vPxUp * -Geom.halfHeight;
         PxVec3 vPxEndPos = ActorTransform.p + vPxUp * Geom.halfHeight;
 
-        /* Triangle Mesh Geometry와 충돌 처리 */
-        _bool IsCollision = false;
-        _bool IsGround = false;
-
-
         for (auto& Mesh : m_Geometries)
         {
             PxVec3 vDir;
@@ -197,7 +195,7 @@ void CPhysxManager::Check_GeometryCollision(_float fTimeDelta)
                 // 땅 체크
                 _vector vDown = XMVectorSet(0.0f, 1.0f, 0.0f, 0.f);
                 _float fAngle = XMConvertToDegrees(acosf(XMVectorGetX(XMVector3Dot(vDown, vResultDir))));
-                if (fAngle <= 60.0f)
+                if (fAngle <= 50.0f)
                     IsGround = true;
 
                 vResultDir *= fLength;
@@ -206,11 +204,182 @@ void CPhysxManager::Check_GeometryCollision(_float fTimeDelta)
                 _vector vOriginPos = Pair.first->Get_Transform()->Get_State(STATE::POSITION);
                 _vector vResultPos = vOriginPos + vResultDir;
                 Pair.first->Get_Transform()->Set_State(STATE::POSITION, vResultPos);
-
-                IsCollision = true;
             }
         }
     }
+
+    /* 
+    모든 메쉬와의 충돌 처리는 어쨌든 수행하긴 해야 한다. 
+    (2곳 이상 동시에 충돌하는 상황도 있고 여러 예외 사항이 많음.)
+    */
+    return IsGround;
+}
+
+_bool CPhysxManager::Check_GameObject_GeometryCollision(CGameObject* pGameObject)
+{
+    /* Triangle Mesh Geometry와 충돌 처리 */
+    _bool IsGround = false;
+
+    for (auto& Pair : m_DynamicActors)
+    {
+        /* 계산 하기 전, 트랜스폼 가져와서 actor 최신화. */
+        /* 특정 오브젝트만 충돌처리 해주는 함수. 주소 기반으로 비교하게 된다. */
+        
+        if (Pair.first == pGameObject)
+        {
+            _matrix matWorld = XMLoadFloat4x4(Pair.first->Get_Transform()->Get_WorldMatrixPtr());
+            _vector vTranslation, vRotation, vScale;
+
+            XMMatrixDecompose(&vScale, &vRotation, &vTranslation, matWorld);
+
+            PxVec3 vPxPosition = PxVec3(XMVectorGetX(vTranslation), XMVectorGetY(vTranslation), XMVectorGetZ(vTranslation));
+            PxQuat vPxQuaternion = PxQuat(XMVectorGetX(vRotation), XMVectorGetY(vRotation), XMVectorGetZ(vRotation), XMVectorGetW(vRotation));
+
+            PxTransform PxWorldMatrix = PxTransform(vPxPosition, vPxQuaternion);
+            Pair.second->setGlobalPose(PxWorldMatrix);
+
+            /* Actor에서 현재 위치 / 회전 가져오기 */
+            PxTransform ActorTransform = Pair.second->getGlobalPose();
+
+            /* 캡술 콜라이더 정보 꺼내오기 */
+            PxShape* pShape = nullptr;
+            Pair.second->getShapes(&pShape, 1);
+
+            PxCapsuleGeometry Geom;
+            PxGeometryHolder GeomHolder = pShape->getGeometry();
+            if (GeomHolder.getType() == PxGeometryType::eCAPSULE)
+                Geom = GeomHolder.capsule();
+
+            /* 월드 기준 캡슐 콜라이더 정보 계산 */
+            PxVec3 vPxUp = ActorTransform.q.rotate(PxVec3(0, 1, 0));
+            PxVec3 vPxStartPos = ActorTransform.p + vPxUp * -Geom.halfHeight;
+            PxVec3 vPxEndPos = ActorTransform.p + vPxUp * Geom.halfHeight;
+
+            for (auto& Mesh : m_Geometries)
+            {
+                PxVec3 vDir;
+                PxReal fLength;
+                
+                if (PxComputeTriangleMeshPenetration(vDir, fLength, Geom, ActorTransform, *Mesh, PxTransform(PxIDENTITY::PxIdentity), 1))
+                {
+                    _vector vResultDir = XMVectorSet(vDir.x, vDir.y, vDir.z, 0.f);
+                    vResultDir = XMVector3Normalize(vResultDir);
+
+                    // 땅 체크
+                    _vector vDown = XMVectorSet(0.0f, 1.0f, 0.0f, 0.f);
+                    _float fAngle = XMConvertToDegrees(acosf(XMVectorGetX(XMVector3Dot(vDown, vResultDir))));
+                    if (fAngle <= 60.0f)
+                        IsGround = true;
+
+                    vResultDir *= fLength;
+
+                    // 플레이어 Transform 위치 보정
+                    _vector vOriginPos = Pair.first->Get_Transform()->Get_State(STATE::POSITION);
+                    _vector vResultPos = vOriginPos + vResultDir;
+                    Pair.first->Get_Transform()->Set_State(STATE::POSITION, vResultPos);
+                }
+            }
+
+            return IsGround;
+        }
+    }
+
+    /*
+    모든 메쉬와의 충돌 처리는 어쨌든 수행하긴 해야 한다.
+    (2곳 이상 동시에 충돌하는 상황도 있고 여러 예외 사항이 많음.)
+    */
+    return false;
+}
+
+/*
+아이온 퓨리때 쓴 방법이긴 한데.. 먹힐진 모르겠다. 
+
+0, -1, 0 의 방향을 가지는 레이를 쏜 뒤,
+1. 거리에 따라 지형에 달라붙게 할지, 2. 떨어지게 할지 처리하는 함수
+*/
+_bool CPhysxManager::Check_GeometryPicking()
+{
+    /*
+    origin : 레이의 시작점 ( 플레이어의 위치 )
+    unitDir : 레이의 방향을 정의하는 단위 벡터 ( 무조건 0,-1,0 임. 이미 월드상 위치로 세팅 되어있기 때문이다. )
+    maxDist : 레이를 따라 검색할 최대 거리 (0~inf 범위 내에 있어야 함) ( 임의로 100으로 설정 )
+    geom : 테스트할 Geometry ( Geometry 순회 ) 
+    pose : geom의 위치 -> 임의로 항등행렬로 세팅.  
+    hitFlags : 쿼리에서 반환해야 할 값을 지정하고 쿼리를 처리하는 옵션
+    maxHits : 반환할 최대 충돌 수 ( 1 )
+    hitInfo : PxRaycastHit 구조체를 받으며, 레이캐스트 결과 저장
+    */
+
+    /* 
+    eMeshAny 플래그를 사용하지 않는다면, 
+    가장 가까운 위치의 포인트를 자동으로 반환해준다고 한다.
+    */
+
+    PxVec3 vPxPosition = PxVec3(0.f, 0.f, 0.f);
+    PxQuat vPxQuaternion = PxQuat(0.f, 0.f, 0.f, 1.f);
+
+    PxTransform PxWorldMatrix = PxTransform(vPxPosition, vPxQuaternion);
+
+    for (auto& Pair : m_DynamicActors)
+    {
+        if (false == Pair.first->Get_Pickable())
+            continue;
+        /* 계산 하기 전, 트랜스폼 가져와서 actor 최신화. */
+        _matrix matWorld = XMLoadFloat4x4(Pair.first->Get_Transform()->Get_WorldMatrixPtr());
+        _vector vTranslation, vRotation, vScale;
+
+        XMMatrixDecompose(&vScale, &vRotation, &vTranslation, matWorld);
+
+        PxVec3 vPxPosition = PxVec3(XMVectorGetX(vTranslation), XMVectorGetY(vTranslation), XMVectorGetZ(vTranslation));
+        PxQuat vPxQuaternion = PxQuat(XMVectorGetX(vRotation), XMVectorGetY(vRotation), XMVectorGetZ(vRotation), XMVectorGetW(vRotation));
+
+        /* Actor에서 현재 위치 / 회전 가져오기 */
+        PxTransform ActorTransform = Pair.second->getGlobalPose();
+
+        _float fNearestDist = { FLT_MAX };
+        _vector vNearestPos = {};
+
+        for (auto& Mesh : m_Geometries)
+        {
+            PxRaycastHit HitInfo = PxRaycastHit();
+
+            /* 히트 지점 갯수를 반환한다. 즉, 0개라면 충돌이 존재하지 않음. */
+            PxU32 HitCount = PxGeometryQuery::raycast(
+                ActorTransform.p,       // 레이 위치 
+                PxVec3(0.f, -1.f, 0.f), // 레이 방향
+                *Mesh,                  // Geometry 정보
+                PxWorldMatrix,          // Geometry의 트랜스폼 가져와야 함.
+                100.f,                  // 체크할 최대 거리
+                PxHitFlags(PxHitFlag::ePOSITION),   // 플래그, (기본적으로 Distance는 제공. Postion까지 추가로 가져옴)
+                1,                      // 체크할 최대 히트 갯수 ( 1개라면 가장 가까운 피킹 지점의 정보 반환 )
+                &HitInfo);
+
+            if (0 != HitCount) 
+            {
+                _vector vResultPos = XMVectorSet(HitInfo.position.x, HitInfo.position.y, HitInfo.position.z, 1.f);
+                _float  fDist = HitInfo.distance;
+
+                /* 거리가 0.45보다 짧다면, 달라붙게끔 한다.*/
+                /* 콜라이더의 중심으로부터 세팅되므로, 현재 콜라이더 크기인 
+                0.4 반구, 0.3 반 높이를 가진 캡슐 콜라이더임을 명심해야함. */
+                vNearestPos = vResultPos;
+                fNearestDist = fDist;
+            }
+        }
+        
+        /* 바로 땅에 붙이기 */
+        if (fNearestDist <= 0.4f)
+        {
+            Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 0.f, 0.f, 0.f));
+        }
+    }
+
+    return _bool();
+}
+
+_bool CPhysxManager::Check_GameObject_GeometryPicking(CGameObject* pGameObject)
+{
+    return _bool();
 }
 
 CPhysxManager* CPhysxManager::Create()

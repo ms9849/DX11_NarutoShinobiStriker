@@ -52,7 +52,7 @@ CPlayerState* CPlayer_RunState::Update(_float fTimeDelta)
 	{
 		// 같은 애니 반복이면 보간 안하게. 
 		m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta,
-			m_pPlayer->Get_Navigation());
+			nullptr);
 
 		// 멈추는 중이였다면 보간해서 달리는 애니 나오게 해주기.
 		if (m_eAnimState == ANIM_STATE::RUN_END)

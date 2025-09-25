@@ -21,12 +21,17 @@ CPlayer_SuperJumpState::CPlayer_SuperJumpState(CPlayer* pPlayer, _float fPower)
 void CPlayer_SuperJumpState::Start(_bool IsBlend)
 {
 	m_pPlayer->Set_Ground(false);
+	m_pPlayer->Set_Pickable(false);
+
 	m_pPlayer->Set_AnimIndex("CustomMan_ChakraJump_Charge_End", 0.6f, false);
 	m_eAnimState = ANIM_STATE::START;
 }
 
 CPlayerState* CPlayer_SuperJumpState::Update(_float fTimeDelta)
 {
+	if (m_fTimeAcc >= 0.2f)
+		m_pPlayer->Set_Pickable(true);
+	
 	CPlayerState* pNextState = { nullptr };
 	_bool IsAnimFinished; 
 	_float fAnimProgress = m_pPlayer->Get_AnimProgress();
@@ -51,7 +56,7 @@ CPlayerState* CPlayer_SuperJumpState::Update(_float fTimeDelta)
 		m_fMovement = -0.5f;
 
 	m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fMovement, 0.f, 0.f));
-	m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * 2.5f, m_pPlayer->Get_Navigation());
+	m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * 2.5f, nullptr);
 
 	if (m_pGameInstance->Key_Pressing(DIK_A) ||
 		m_pGameInstance->Key_Pressing(DIK_D)
@@ -71,15 +76,14 @@ CPlayerState* CPlayer_SuperJumpState::Update(_float fTimeDelta)
 		m_eAnimState = ANIM_STATE::JUMP; 
 	}
 
-	// LAND로의 상태 전환 
-	_float fHeight = m_pPlayer->Get_Navigation()->Get_CellHeight(m_pPlayer->Get_Transform());
+	// LAND로의 상태 전환.
+	_bool  IsGround = m_pGameInstance->Check_GameObject_GeometryCollision(m_pPlayer);
 
-	if (XMVectorGetY(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION)) < fHeight)
+	if (true == IsGround)
 	{
 		pNextState = CPlayer_LandState::Create(m_pPlayer);
 		_float4 PlayerPos = {};
 		XMStoreFloat4(&PlayerPos, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
-		m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, XMVectorSet(PlayerPos.x, fHeight, PlayerPos.z, 1.f));
 	}
 
 	return pNextState;

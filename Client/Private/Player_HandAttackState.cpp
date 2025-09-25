@@ -60,10 +60,10 @@ CPlayerState* CPlayer_HandAttackState::Update(_float fTimeDelta)
 
     if (false == IsAnimFinished && fAnimProgress <= 0.4f && ANIM_STATE::BACK_KICK != m_eAnimState)
         m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * m_pGameInstance->Calc_Quadratic(-10.f, 4.f, 0.f, fAnimProgress),
-            m_pPlayer->Get_Navigation());
+            nullptr);
     else if(false == IsAnimFinished && fAnimProgress <= 0.3f && ANIM_STATE::BACK_KICK == m_eAnimState)
         m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * m_pGameInstance->Calc_Quadratic(-10.f, 4.f, 0.f, fAnimProgress),
-            m_pPlayer->Get_Navigation());
+            nullptr);
 
     if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON) 
         && m_eAnimState == ANIM_STATE::LEFT_PUNCH && fAnimProgress >= 0.5f)

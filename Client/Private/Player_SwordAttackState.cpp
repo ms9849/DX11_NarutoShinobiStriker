@@ -50,7 +50,7 @@ CPlayerState* CPlayer_SwordAttackState::Update(_float fTimeDelta)
             m_pPlayer->Get_Transform()->LookAt_XZ(pTargetTransform->Get_State(STATE::POSITION));
 
         m_pPlayer->Get_Transform()->Go_Straight(0.5f * fTimeDelta * m_pGameInstance->Calc_Linear(-1.4f, 0.7f, fAnimProgress),
-            m_pPlayer->Get_Navigation());
+            nullptr);
 
     }
 
@@ -60,7 +60,7 @@ CPlayerState* CPlayer_SwordAttackState::Update(_float fTimeDelta)
             m_pPlayer->Get_Transform()->LookAt_XZ(pTargetTransform->Get_State(STATE::POSITION));
 
         m_pPlayer->Get_Transform()->Go_Straight(0.5f * fTimeDelta * m_pGameInstance->Calc_Linear(-2.3f, 0.7f, fAnimProgress),
-            m_pPlayer->Get_Navigation());
+            nullptr);
     }
 
     else if (false == IsAnimFinished && fAnimProgress <= 0.35f && fAnimProgress >= 0.25f && ANIM_STATE::ATTACK_03 == m_eAnimState)
@@ -69,7 +69,7 @@ CPlayerState* CPlayer_SwordAttackState::Update(_float fTimeDelta)
             m_pPlayer->Get_Transform()->LookAt_XZ(pTargetTransform->Get_State(STATE::POSITION));
 
         m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * m_pGameInstance->Calc_Linear(-4.f, 1.4f, fAnimProgress),
-            m_pPlayer->Get_Navigation());
+            nullptr);
     }
 
 

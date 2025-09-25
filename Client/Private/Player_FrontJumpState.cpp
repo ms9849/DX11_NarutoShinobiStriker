@@ -24,6 +24,7 @@ CPlayer_FrontJumpState::CPlayer_FrontJumpState(CPlayer* pPlayer)
 void CPlayer_FrontJumpState::Start(_bool IsBlend)
 {
 	m_pPlayer->Set_Ground(false);
+	m_pPlayer->Set_Pickable(false);
 
     m_pPlayer->Set_AnimIndex("CustomMan_Jump_Front", 1.f, true);
     m_eAnimState = ANIM_STATE::JUMP;
@@ -32,6 +33,9 @@ void CPlayer_FrontJumpState::Start(_bool IsBlend)
 
 CPlayerState* CPlayer_FrontJumpState::Update(_float fTimeDelta)
 {
+	if (m_fTimeAcc >= 0.2f)
+		m_pPlayer->Set_Pickable(true);
+
     CPlayerState* pNextState = { nullptr };
 
 	_bool IsAnimFinished = m_pPlayer->Play_Animation(fTimeDelta);
@@ -49,7 +53,7 @@ CPlayerState* CPlayer_FrontJumpState::Update(_float fTimeDelta)
 		)
 	{
 		m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta,
-			m_pPlayer->Get_Navigation());
+			nullptr);
 
 		if (m_pGameInstance->Key_Pressing(DIK_D))
 			m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * 0.3f);
@@ -78,15 +82,14 @@ CPlayerState* CPlayer_FrontJumpState::Update(_float fTimeDelta)
 		m_eAnimState = ANIM_STATE::FALL;
 	}
 
-	_float fHeight = m_pPlayer->Get_Navigation()->Get_CellHeight(m_pPlayer->Get_Transform());
-
 	// LAND로의 상태 전환 
-	if (XMVectorGetY(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION)) < fHeight)
+	_bool  IsGround = m_pGameInstance->Check_GameObject_GeometryCollision(m_pPlayer);
+
+	if (true == IsGround)
 	{
 		pNextState = CPlayer_LandState::Create(m_pPlayer);
 		_float4 PlayerPos = {};
 		XMStoreFloat4(&PlayerPos, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
-		m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, XMVectorSet(PlayerPos.x, fHeight, PlayerPos.z, 1.f));
 	}
 	// 공격
 	else if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON))

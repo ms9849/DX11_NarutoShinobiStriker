@@ -45,7 +45,7 @@ void CDummy::Late_Update(_float fTimeDelta)
 
 	if (m_fLife >= 15.f)
 	{
-		m_isDead = true;
+		m_IsDead = true;
 		m_fLife = 0.f;
 	}
 }

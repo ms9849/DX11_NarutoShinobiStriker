@@ -47,7 +47,7 @@ void CEffect_CoolDown::Update(_float fTimeDelta)
 
 	if (m_fTimeAcc >= 0.25f)
 	{
-		m_isDead = true;
+		m_IsDead = true;
 		m_fTimeAcc = 0.f;
 		m_pTransformCom->Set_Scale(10.f, 10.f, 1.f);
 	}

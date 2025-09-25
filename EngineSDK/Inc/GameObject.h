@@ -27,7 +27,7 @@ public:
 
 public:
 	_bool IsDead() const {
-		return m_isDead;
+		return m_IsDead;
 	}
 
 	_uint Get_ObjectID() const {
@@ -35,11 +35,19 @@ public:
 	}
 
 	void Set_Dead(_bool bFlag) {
-		m_isDead = bFlag;
+		m_IsDead = bFlag;
 	}
 
 	class CTransform* Get_Transform() {
 		return m_pTransformCom;
+	}
+
+	_bool Get_Pickable() {
+		return m_IsPickable;
+	}
+	
+	void Set_Pickable(_bool bFlag) {
+		m_IsPickable = bFlag;
 	}
 
 public:
@@ -51,8 +59,8 @@ protected:
 	ID3D11Device* m_pDevice = { nullptr };
 	ID3D11DeviceContext* m_pContext = { nullptr };
 	class CGameInstance*		m_pGameInstance = { nullptr };
-	_bool						m_isDead = { false };
-
+	_bool						m_IsDead = { false };
+	_bool						m_IsPickable = { true };
 	/* Transform은 GameObject에서 들고 있게끔 한다. */
 	class CTransform* m_pTransformCom = { nullptr };
 	map<const _wstring, class CComponent*>		m_Components;

@@ -55,7 +55,7 @@ void CMonsterSpawner::OnCollision()
 	m_pGameManager->OnTrigger(m_eTriggerType);
 
 	m_pColliderCom->Set_Active(false);
-	m_isDead = true;
+	m_IsDead = true;
 }
 
 HRESULT CMonsterSpawner::Ready_Components()
