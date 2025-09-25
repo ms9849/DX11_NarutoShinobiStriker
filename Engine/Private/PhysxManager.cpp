@@ -370,9 +370,9 @@ _bool CPhysxManager::Check_GeometryPicking()
                 fNearestDist = fDist;
 
                 /* 바로 땅에 붙이기 */
-                if (fNearestDist <= 0.4f)
+                if (fNearestDist <= 1.0f)
                 {
-                    Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 0.f, 0.f, 0.f));
+                    Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 0.7f, 0.f, 0.f));
                 }
 
             }
