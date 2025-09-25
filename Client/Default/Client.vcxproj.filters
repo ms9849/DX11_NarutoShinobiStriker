@@ -448,6 +448,9 @@
     <Filter Include="02.GameObjects\Enemy\Bird\State\Beaten\Electric">
       <UniqueIdentifier>{1293bfc7-4581-46e1-b676-0584f3a1fe59}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Map\KonohaVillage\Col">
+      <UniqueIdentifier>{41c62ec0-5d0d-40ac-a921-6370b0c9d98a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -864,6 +867,9 @@
     <ClInclude Include="..\Public\Bird_ElectricShockState.h">
       <Filter>02.GameObjects\Enemy\Bird\State\Beaten\Electric</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Col_KonohaVillage.h">
+      <Filter>02.GameObjects\Map\KonohaVillage\Col</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1277,6 +1283,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Bird_ElectricShockState.cpp">
       <Filter>02.GameObjects\Enemy\Bird\State\Beaten\Electric</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Col_KonohaVillage.cpp">
+      <Filter>02.GameObjects\Map\KonohaVillage\Col</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

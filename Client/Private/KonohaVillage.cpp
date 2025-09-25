@@ -25,9 +25,6 @@ HRESULT CKonohaVillage::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_iNumMeshes = m_pModelCom->Get_NumMeshes();
-	m_iNumColMeshes = m_pColModelCom->Get_NumMeshes();
-
-	m_pGameInstance->Add_Geometry_ToPhysx(this, m_pColModelCom);
 
 	return S_OK;
 }
@@ -81,11 +78,6 @@ HRESULT CKonohaVillage::Ready_Components()
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 
-	/* Com_ColModel */
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_Component_Model_COL_KonohaVillage"),
-		TEXT("Com_ColModel"), reinterpret_cast<CComponent**>(&m_pColModelCom))))
-
-		return E_FAIL;
 	/* Com_Navigation */
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Navigation_KonohaVillage"),
 		TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom))))
@@ -162,6 +154,5 @@ void CKonohaVillage::Free()
 
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);
-	Safe_Release(m_pColModelCom);
 	Safe_Release(m_pNavigationCom);
 }

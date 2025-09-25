@@ -160,6 +160,7 @@
     <ClInclude Include="..\Public\BirdState.h" />
     <ClInclude Include="..\Public\Bird_ElectricShockState.h" />
     <ClInclude Include="..\Public\Bird_WalkState.h" />
+    <ClInclude Include="..\Public\Col_KonohaVillage.h" />
     <ClInclude Include="..\Public\Kunai.h" />
     <ClInclude Include="..\Public\Bird_AttackState.h" />
     <ClInclude Include="..\Public\Bird_BeatenBlastedState.h" />
@@ -300,6 +301,7 @@
     <ClCompile Include="..\Private\BirdState.cpp" />
     <ClCompile Include="..\Private\Bird_ElectricShockState.cpp" />
     <ClCompile Include="..\Private\Bird_WalkState.cpp" />
+    <ClCompile Include="..\Private\Col_KonohaVillage.cpp" />
     <ClCompile Include="..\Private\Kunai.cpp" />
     <ClCompile Include="..\Private\Bird_AttackState.cpp" />
     <ClCompile Include="..\Private\Bird_BeatenBlastedState.cpp" />

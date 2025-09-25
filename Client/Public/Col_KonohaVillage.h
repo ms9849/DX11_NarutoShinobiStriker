@@ -5,16 +5,17 @@
 
 NS_BEGIN(Engine)
 class CModel;
-NS_END 
+class CShader;
+NS_END
 
 NS_BEGIN(Client)
 
-class CKonohaVillage final : public CGameObject 
+class CCol_KonohaVillage : public CGameObject
 {
 private:
-	CKonohaVillage(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
-	CKonohaVillage(const CKonohaVillage& rhs);
-	virtual ~CKonohaVillage() = default;
+	CCol_KonohaVillage(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
+	CCol_KonohaVillage(const CCol_KonohaVillage& rhs);
+	virtual ~CCol_KonohaVillage() = default;
 
 public:
 	HRESULT Initialize_Prototype();
@@ -28,14 +29,13 @@ private:
 	CModel* m_pModelCom = { nullptr };
 	CShader* m_pShaderCom = { nullptr };
 	_uint  m_iNumMeshes = {};
-	CNavigation* m_pNavigationCom = { nullptr };
 
 private:
 	HRESULT Ready_Components();
 	HRESULT Bind_ShaderResources();
 
 public:
-	static CKonohaVillage* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
+	static CCol_KonohaVillage* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 };
