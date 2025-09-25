@@ -163,13 +163,6 @@ void CPhysxManager::Check_GeometryCollision(_float fTimeDelta)
         PxTransform PxWorldMatrix = PxTransform(vPxPosition, vPxQuaternion);
         Pair.second->setGlobalPose(PxWorldMatrix);
 
-        ///* 계산 하기 전, 트랜스폼 가져와서 actor 최신화. */
-        //_vector vObjectPosition = Pair.first->Get_Transform()->Get_State(STATE::POSITION);
-        //PxTransform ActorPos(PxVec3(XMVectorGetX(vObjectPosition), XMVectorGetY(vObjectPosition), XMVectorGetZ(vObjectPosition)),
-        //    Pair.second->getGlobalPose().q); // 회전은 기존 Actor 회전 유지
-
-        //Pair.second->setGlobalPose(ActorPos);
-
         /* Actor에서 현재 위치 / 회전 가져오기 */
         PxTransform ActorTransform = Pair.second->getGlobalPose();
 
@@ -218,29 +211,6 @@ void CPhysxManager::Check_GeometryCollision(_float fTimeDelta)
             }
         }
     }
-    /*
-                    if (fLength > 0.1f)
-                {
-                    _vector vResultDir = XMVectorSet(vDir.x, vDir.y, vDir.z, 0.f);
-                    vResultDir = XMVector3Normalize(vResultDir);
-
-                    // 땅 체크
-                    _vector vDown = XMVectorSet(0.0f, 1.0f, 0.0f, 0.f);
-                    _float fAngle = XMConvertToDegrees(acosf(XMVectorGetX(XMVector3Dot(vDown, vResultDir))));
-                    if (fAngle <= 60.0f)
-                        IsGround = true;
-
-                    fLength -= 0.1f;
-                    vResultDir *= fLength;
-
-                    // 플레이어 Transform 위치 보정
-                    _vector vOriginPos = Pair.first->Get_Transform()->Get_State(STATE::POSITION);
-                    _vector vResultPos = vOriginPos + vResultDir;
-                    Pair.first->Get_Transform()->Set_State(STATE::POSITION, vResultPos);
-
-                    IsCollision = true;
-                }
-    */
 }
 
 CPhysxManager* CPhysxManager::Create()
@@ -285,21 +255,3 @@ void CPhysxManager::Free()
     if (nullptr != m_PxFoundation)
         m_PxFoundation->release();
 }
-///* 지형을 실제로 PhysX 씬에 세팅 */
-//_matrix matWorld = XMLoadFloat4x4(pGameObject->Get_Transform()->Get_WorldMatrixPtr());
-//_vector vPos, vRotation, vScale;
-
-//XMMatrixDecompose(&vPos, &vRotation, &vScale, matWorld);
-
-//PxVec3 vPxPosition = PxVec3(XMVectorGetX(vPos), XMVectorGetY(vPos), XMVectorGetZ(vPos));
-//PxQuat vPxQuaternion = PxQuat(XMVectorGetX(vRotation), XMVectorGetY(vRotation), XMVectorGetZ(vRotation), XMVectorGetW(vRotation));
-
-//PxTransform PxWorldMatrix = PxTransform(vPxPosition, vPxQuaternion);
-
-//PxRigidStatic* pActor = m_PxPhysx->createRigidStatic(PxWorldMatrix);
-
-//PxShape* pShape = m_PxPhysx->createShape(*pGeometry, *m_PxPhysx->createMaterial(0.5f, 0.5f, 0.6f));
-
-//pActor->attachShape(*pShape);
-
-//m_PxScene->addActor(*pActor);
