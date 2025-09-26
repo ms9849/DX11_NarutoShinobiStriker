@@ -427,11 +427,11 @@ void CPlayer::Change_Skills()
 void CPlayer::Set_Gravity(_bool bFlag, _float fDist)
 {
 	/* 고저차가 크지 않다면 자연스럽게 떨어지게 */
-	if (fDist <= 2.5 && true == m_IsGround)
-	{
-		m_pTransformCom->Set_State(STATE::POSITION, m_pTransformCom->Get_State(STATE::POSITION) - XMVectorSet(0.f, 0.05f, 0.f, 0.f));
-	}
-	else if(true == m_IsGround)
+	//if (fDist <= 1.7f && true == m_IsGround)
+	//{
+	//	m_pTransformCom->Set_State(STATE::POSITION, m_pTransformCom->Get_State(STATE::POSITION) - XMVectorSet(0.f, 0.05f, 0.f, 0.f));
+	//}
+	if(fDist >= 4.f && true == m_IsGround)
 	{
 		CPlayer_JumpState* pNextState = CPlayer_JumpState::Create(this, 5.3f, CPlayer_JumpState::ANIM_STATE::FALL);
 		Change_State(pNextState, true);

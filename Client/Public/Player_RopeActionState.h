@@ -14,9 +14,9 @@ public:
 	로프를 던지는 중인 THROW 상태,
 	로프
 	*/
-	enum class ANIM_STATE { THROW, FLY, END };
+	enum class ANIM_STATE { THROW, WAIT, ROPE, END };
 private:
-	CPlayer_RopeActionState(class CPlayer* pPlayer, _vector vDir, _vector vPosition);
+	CPlayer_RopeActionState(class CPlayer* pPlayer);
 	virtual ~CPlayer_RopeActionState() = default;
 
 public:
@@ -28,11 +28,14 @@ public:
 	virtual _bool	End() override;
 
 private:
+	class CRope* m_pRope = { nullptr };
 	class CPlayer* m_pPlayer = { nullptr };
 	_float3 m_vTargetDir = {};
 	_float3 m_vTargetPos = {};
+	ANIM_STATE m_eAnimState = {};
+
 public:
-	static CPlayer_RopeActionState* Create(class CPlayer* pPlayer, _vector vDir, _vector vPosition);
+	static CPlayer_RopeActionState* Create(class CPlayer* pPlayer);
 	virtual void Free() override;
 };
 

@@ -100,6 +100,8 @@ public:
 	_bool	Picking_InWorldSpace(_fvector vPointA, _fvector vPointB, _fvector vPointC, _float3* pOut);
 	void	Transform_Picking_ToLocalSpace(_fmatrix WorldMatrixInverse);
 	_bool	Picking_InLocalSpace(_fvector vPointA, _fvector vPointB, _fvector vPointC, _float3* pOut);
+	_float3 Get_RayPos(RAY eRayType);
+	_float3 Get_RayDir(RAY eRayType);
 #pragma endregion
 
 #pragma region SOUND_MANAGER
@@ -139,7 +141,7 @@ public:
 	void Check_GeometryCollision();
 	_bool Check_GameObject_GeometryCollision(class CGameObject* pGameObject);
 	_bool Check_GeometryPicking();
-	_bool Check_GameObject_GeometryPicking(class CGameObject* pGameObject);
+	_bool Check_Ray_GeometryPicking(_float3 vRayPos, _float3 vRayDir, _float3* vResultPos, _float* fResultDist);
 #pragma endregion
 
 private:

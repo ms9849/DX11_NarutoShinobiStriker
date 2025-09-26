@@ -12,6 +12,7 @@
 #include "Player_AerialFireBallState.h"
 
 #include "Player_AerialRasenShurikenState.h"
+#include "Player_RopeActionState.h"
 
 #pragma endregion
 
@@ -44,8 +45,8 @@ CPlayerState* CPlayer_FrontJumpState::Update(_float fTimeDelta)
 	m_fMovement = (m_fTimeAcc - 0.5f * m_fTimeAcc * m_fTimeAcc * 7.0f * (m_fTimeAcc));
 	if (m_fMovement <= -0.25f)
 		m_fMovement = -0.25f;
-	else if (m_fMovement >= 0.25f)
-		m_fMovement = 0.25f;
+	else if (m_fMovement >= 0.2f)
+		m_fMovement = 0.2f;
 
 	m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fMovement, 0.f, 0.f));
 
@@ -64,7 +65,6 @@ CPlayerState* CPlayer_FrontJumpState::Update(_float fTimeDelta)
 			m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * -0.3f);
 	}
 
-
 	// 더블 점프.
 	if (m_pGameInstance->Key_Down(DIK_SPACE) && m_bCanDoubleJump && m_fTimeAcc >= 0.15f)
 	{
@@ -81,7 +81,7 @@ CPlayerState* CPlayer_FrontJumpState::Update(_float fTimeDelta)
 	if ((m_fMovement < 0.f && m_fTimeAcc != 0.f && ANIM_STATE::JUMP == m_eAnimState)
 		|| (ANIM_STATE::DOUBLE_JUMP == m_eAnimState && IsAnimFinished))
 	{
-		m_pPlayer->Set_AnimIndex("CustomMan_Fall_Vertical_Loop", 2.5f, true);
+		m_pPlayer->Set_AnimIndex("CustomMan_Fall_Front_Loop", 1.25f, true);
 		m_eAnimState = ANIM_STATE::FALL;
 	}
 
@@ -116,7 +116,10 @@ CPlayerState* CPlayer_FrontJumpState::Update(_float fTimeDelta)
 		else if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
 			pNextState = CPlayer_AerialRasenShurikenState::Create(m_pPlayer, m_fTimeAcc);
 	}
-
+	else if (m_pGameInstance->Key_Up(DIK_Q))
+	{
+		pNextState = CPlayer_RopeActionState::Create(m_pPlayer);
+	}
 	return pNextState;
 }
 

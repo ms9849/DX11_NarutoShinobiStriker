@@ -35,7 +35,7 @@ public:
 	_bool Check_GeometryCollision();
 	_bool Check_GameObject_GeometryCollision(class CGameObject* pGameObject);
 	_bool Check_GeometryPicking();
-	_bool Check_GameObject_GeometryPicking(class CGameObject* pGameObject);
+	_bool Check_Ray_GeometryPicking(_float3 vRayPos, _float3 vRayDir, _float3* vResultPos, _float* fResultDist);
 private:
 	/* 모든 Physx 모듈을 사용하려면 필요한 인스턴스. 다렉의 Device나 현재 프레임워크의 GameInstance 같은 녀석.*/
 	PxFoundation* m_PxFoundation = { nullptr };

@@ -63,6 +63,8 @@ void CPicking_Manager::Update()
 
     m_vRayPos[ENUM_CLASS(RAY::WORLD)] = RayPos;
     m_vRayDir[ENUM_CLASS(RAY::WORLD)] = RayDir;
+
+    Calc_ScreenCenter();
 }
 
 void CPicking_Manager::Transform_ToLocalSpace(_fmatrix WorldMatrixInverse)
@@ -106,6 +108,39 @@ _bool CPicking_Manager::Picking_InLocalSpace(_fvector vPointA, _fvector vPointB,
     }
 
     return isColl;
+}
+
+void CPicking_Manager::Calc_ScreenCenter()
+{
+    _float4         vProjSpaceMousePos{};
+
+    /* 투영스페이스 상의 마우스 좌표를 구한다. 현재는 정중앙임. */
+    vProjSpaceMousePos.x = 0.f;
+    vProjSpaceMousePos.y = 0.f;
+    vProjSpaceMousePos.z = 0.f; /* near를 클릭한 것이기 때문에 .*/
+    vProjSpaceMousePos.w = 1.f; /* w로 나눠서 결정된 값이기 대문에. */
+
+    /* 뷰스페이스 상의 마우스 좌표를 구한다. */
+    _vector vViewSpaceMousePos = XMVector4Transform(XMLoadFloat4(&vProjSpaceMousePos), m_pGameInstance->Get_PipeLine_InverseMatrix(D3DTS::PROJ));
+
+    _float3         RayPos{}, RayDir{};
+
+    /*
+    뷰 스페이스 상의 카메라는 0,0,0 에서 바라봄.
+
+    레이의 위치는 0,0,0 에서 출발해야 한다.
+    레이의 방향은 투영 평면(2차원)상의 점을 뷰 스페이스로 끌어들인, 3차원 상의 점으로의 방향으로 세팅한다.
+    */
+    RayPos = _float3(0.f, 0.f, 0.f);
+    RayDir = _float3(XMVectorGetX(vViewSpaceMousePos), XMVectorGetY(vViewSpaceMousePos), XMVectorGetZ(vViewSpaceMousePos));
+
+    /* 월드스페이스 상의 마우스 좌표(Pos, Dir)를 구한다. */
+
+    XMStoreFloat3(&RayPos, XMVector3TransformCoord(XMLoadFloat3(&RayPos), m_pGameInstance->Get_PipeLine_InverseMatrix(D3DTS::VIEW)));
+    XMStoreFloat3(&RayDir, XMVector3Normalize(XMVector3TransformNormal(XMLoadFloat3(&RayDir), m_pGameInstance->Get_PipeLine_InverseMatrix(D3DTS::VIEW))));
+
+    m_vRayPos[ENUM_CLASS(RAY::CENTER)] = RayPos;
+    m_vRayDir[ENUM_CLASS(RAY::CENTER)] = RayDir;
 }
 
 _bool CPicking_Manager::Picking(_uint iLevelIdx, _float3* pOut)
