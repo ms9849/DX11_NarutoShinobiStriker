@@ -26,35 +26,22 @@ public:
 	virtual void Set_Desc(void* pDesc);
 
 public:
-	_bool IsDead() const {
-		return m_IsDead;
-	}
+	_bool IsDead() const { return m_IsDead; }
+	void Set_Dead(_bool bFlag) { m_IsDead = bFlag; }
 
-	_uint Get_ObjectID() const {
-		return m_iObjectID;
-	}
+	_uint Get_ObjectID() const { return m_iObjectID; }
+	class CTransform* Get_Transform() { return m_pTransformCom; }
+	_bool Get_Pickable() { return m_IsPickable; }
+	void Set_Pickable(_bool bFlag) { m_IsPickable = bFlag; }
 
-	void Set_Dead(_bool bFlag) {
-		m_IsDead = bFlag;
-	}
-
-	class CTransform* Get_Transform() {
-		return m_pTransformCom;
-	}
-
-	_bool Get_Pickable() {
-		return m_IsPickable;
-	}
-	
-	void Set_Pickable(_bool bFlag) {
-		m_IsPickable = bFlag;
-	}
+	virtual void Set_Gravity(_bool bFlag, _float fDist = 0) {}
 
 public:
 	_float Get_CamDistance() const;
 	class CComponent* Find_Component(const _wstring& strComponentTag);
 
 protected:
+	_bool m_IsGravity = { false };
 	_uint m_iObjectID = {};
 	ID3D11Device* m_pDevice = { nullptr };
 	ID3D11DeviceContext* m_pContext = { nullptr };

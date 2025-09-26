@@ -33,7 +33,7 @@ void CPlayer_FrontJumpState::Start(_bool IsBlend)
 
 CPlayerState* CPlayer_FrontJumpState::Update(_float fTimeDelta)
 {
-	if (m_fTimeAcc >= 0.2f)
+	if (m_fTimeAcc >= 0.35f)
 		m_pPlayer->Set_Pickable(true);
 
     CPlayerState* pNextState = { nullptr };
@@ -42,8 +42,10 @@ CPlayerState* CPlayer_FrontJumpState::Update(_float fTimeDelta)
 
 	m_fTimeAcc += fTimeDelta;
 	m_fMovement = (m_fTimeAcc - 0.5f * m_fTimeAcc * m_fTimeAcc * 7.0f * (m_fTimeAcc));
-	if (m_fMovement <= -0.45f)
-		m_fMovement = -0.45f;
+	if (m_fMovement <= -0.25f)
+		m_fMovement = -0.25f;
+	else if (m_fMovement >= 0.25f)
+		m_fMovement = 0.25f;
 
 	m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fMovement, 0.f, 0.f));
 
@@ -64,7 +66,7 @@ CPlayerState* CPlayer_FrontJumpState::Update(_float fTimeDelta)
 
 
 	// 더블 점프.
-	if (m_pGameInstance->Key_Down(DIK_SPACE) && m_bCanDoubleJump && ANIM_STATE::JUMP == m_eAnimState && m_fTimeAcc >= 0.15f)
+	if (m_pGameInstance->Key_Down(DIK_SPACE) && m_bCanDoubleJump && m_fTimeAcc >= 0.15f)
 	{
 		m_pPlayer->Set_Pickable(true);
 		//보간 ratio 추가
@@ -79,7 +81,7 @@ CPlayerState* CPlayer_FrontJumpState::Update(_float fTimeDelta)
 	if ((m_fMovement < 0.f && m_fTimeAcc != 0.f && ANIM_STATE::JUMP == m_eAnimState)
 		|| (ANIM_STATE::DOUBLE_JUMP == m_eAnimState && IsAnimFinished))
 	{
-		m_pPlayer->Set_AnimIndex("CustomMan_Fall_Vertical_Loop", 1.0f, true);
+		m_pPlayer->Set_AnimIndex("CustomMan_Fall_Vertical_Loop", 2.5f, true);
 		m_eAnimState = ANIM_STATE::FALL;
 	}
 
@@ -121,6 +123,7 @@ CPlayerState* CPlayer_FrontJumpState::Update(_float fTimeDelta)
 _bool CPlayer_FrontJumpState::End()
 {
 	m_pPlayer->Set_Ground(true);
+	m_pPlayer->Set_Pickable(true);
 
 	return true;
 }

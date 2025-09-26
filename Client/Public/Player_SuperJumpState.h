@@ -10,7 +10,7 @@ NS_BEGIN(Client)
 class CPlayer_SuperJumpState final : public CPlayerState
 {
 public:
-	enum class ANIM_STATE { START, JUMP };
+	enum class ANIM_STATE { START, JUMP, DOUBLE_JUMP, FALL };
 private:
 	CPlayer_SuperJumpState(class CPlayer* pPlayer, _float fPower);
 	virtual ~CPlayer_SuperJumpState() = default;
@@ -30,6 +30,7 @@ private:
 	_float m_fPower = { 0.f };
 	_float m_fMovement = {};
 	_bool  m_IsAnimLoopFinished = { false };
+	_bool  m_IsTriggered = { false };
 public:
 	static CPlayer_SuperJumpState* Create(class CPlayer* pPlayer, _float fPower);
 	virtual void Free() override;

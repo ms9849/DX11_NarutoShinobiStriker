@@ -56,7 +56,7 @@ void CMainCamera::Priority_Update(_float fTimeDelta)
     m_fRotateY = fmod(m_fRotateY, XM_2PI);
 
     // 라디안 제한 ( -90  ~ +90 + 여기에 캐릭터의 Look 벡터까지. )
-    _float fLimit = XMConvertToRadians(89.f);
+    _float fLimit = XMConvertToRadians(30.f);
 
     /* Y 라디안 제한 */
     if (m_fRotateY > fLimit)
@@ -72,14 +72,14 @@ void CMainCamera::Priority_Update(_float fTimeDelta)
     //if (m_fRotateX < -fLimit) 
     //    m_fRotateX = -fLimit;
 
-    _vector		vQuternion = XMQuaternionRotationRollPitchYaw(/*m_fRotateY*/ 0.f, m_fRotateX, 0.f);
+    _vector		vQuternion = XMQuaternionRotationRollPitchYaw(m_fRotateY, m_fRotateX, 0.f);
 
     _matrix		RotationMatrix = XMMatrixRotationQuaternion(vQuternion);
     _vector     vCamPos = XMVector3TransformNormal(StartVector, RotationMatrix);
 
     _float      fLength = XMVectorGetX(XMVector3Length(vCamPos));
 
-    m_pTransformCom->Chase_Lerp(m_pPlayerTransform->Get_State(STATE::POSITION) + vCamPos, fTimeDelta * 2.0f, 0.f);
+    m_pTransformCom->Chase_Lerp(m_pPlayerTransform->Get_State(STATE::POSITION) + vCamPos, fTimeDelta, 0.f);
     m_pTransformCom->LookAt_Lerp(m_pPlayerTransform->Get_State(STATE::POSITION) + XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::LOOK)) * 1.f);
 
     // 클라이언트 영역 크기 얻기

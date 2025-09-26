@@ -451,6 +451,12 @@
     <Filter Include="02.GameObjects\Map\KonohaVillage\Col">
       <UniqueIdentifier>{41c62ec0-5d0d-40ac-a921-6370b0c9d98a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\BASE\RopeActionState">
+      <UniqueIdentifier>{90c4c854-66cc-4232-bd28-d3d5e11c128a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Character\Player\State\BASE\RopeActionState\Rope">
+      <UniqueIdentifier>{a17817f6-b305-486c-9609-b5dddf076eb0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -870,6 +876,12 @@
     <ClInclude Include="..\Public\Col_KonohaVillage.h">
       <Filter>02.GameObjects\Map\KonohaVillage\Col</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Player_RopeActionState.h">
+      <Filter>02.GameObjects\Character\Player\State\BASE\RopeActionState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Rope.h">
+      <Filter>02.GameObjects\Character\Player\State\BASE\RopeActionState\Rope</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1286,6 +1298,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Col_KonohaVillage.cpp">
       <Filter>02.GameObjects\Map\KonohaVillage\Col</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_RopeActionState.cpp">
+      <Filter>02.GameObjects\Character\Player\State\BASE\RopeActionState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Rope.cpp">
+      <Filter>02.GameObjects\Character\Player\State\BASE\RopeActionState\Rope</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
