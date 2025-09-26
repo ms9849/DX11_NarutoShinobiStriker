@@ -42,17 +42,17 @@ void CPlayer_JumpState::Start(_bool IsBlend)
 
 CPlayerState* CPlayer_JumpState::Update(_float fTimeDelta)
 {
-	if (m_fTimeAcc >= 0.2f)
+	if (m_fTimeAcc >= 0.35f)
 		m_pPlayer->Set_Pickable(true);
 
 	_bool IsAnimFinished = m_pPlayer->Play_Animation(fTimeDelta);
 
 	m_fTimeAcc += fTimeDelta;
 	m_fMovement = (m_fTimeAcc - 0.5f * m_fTimeAcc * m_fTimeAcc * 7.0f * (m_fTimeAcc));
-	if (m_fMovement <= -0.3f)
-		m_fMovement = -0.3f;
-	else if (m_fMovement >= 0.3f)
-		m_fMovement = 0.3f;
+	if (m_fMovement <= -0.25f)
+		m_fMovement = -0.25f;
+	else if (m_fMovement >= 0.25f)
+		m_fMovement = 0.25f;
 
 	m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fMovement, 0.f, 0.f));
 
@@ -63,7 +63,7 @@ CPlayerState* CPlayer_JumpState::Update(_float fTimeDelta)
 		m_pGameInstance->Key_Pressing(DIK_D)
 		)
 	{
-		m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * 0.2f,
+		m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta,
 			nullptr);
 
 		if (m_pGameInstance->Key_Pressing(DIK_D))
@@ -74,7 +74,7 @@ CPlayerState* CPlayer_JumpState::Update(_float fTimeDelta)
 	}
 
 	// 더블 점프.
-	if (m_pGameInstance->Key_Down(DIK_SPACE) && m_bCanDoubleJump && ANIM_STATE::JUMP == m_eAnimState && m_fTimeAcc >= 0.15f)
+	if (m_pGameInstance->Key_Down(DIK_SPACE) && m_bCanDoubleJump && m_fTimeAcc >= 0.15f)
 	{
 		//보간 ratio 추가
 		m_pPlayer->Set_Pickable(true);
@@ -89,7 +89,7 @@ CPlayerState* CPlayer_JumpState::Update(_float fTimeDelta)
 	if ((m_fMovement < 0.f && m_fTimeAcc != 0.f && ANIM_STATE::JUMP == m_eAnimState) 
 		|| (ANIM_STATE::DOUBLE_JUMP == m_eAnimState && IsAnimFinished))
 	{
-		m_pPlayer->Set_AnimIndex("CustomMan_Fall_Vertical_Loop", 1.0f, true);
+		m_pPlayer->Set_AnimIndex("CustomMan_Fall_Vertical_Loop", 2.5f, true);
 		m_eAnimState = ANIM_STATE::FALL;
 	}
 
@@ -132,6 +132,7 @@ CPlayerState* CPlayer_JumpState::Update(_float fTimeDelta)
 _bool CPlayer_JumpState::End()
 {
 	m_pPlayer->Set_Ground(true);
+	m_pPlayer->Set_Pickable(true);
 
 	return true;
 }

@@ -23,7 +23,7 @@ void CPlayer_SuperJumpState::Start(_bool IsBlend)
 	m_pPlayer->Set_Ground(false);
 	m_pPlayer->Set_Pickable(false);
 
-	m_pPlayer->Set_AnimIndex("CustomMan_ChakraJump_Charge_End", 0.6f, false);
+	m_pPlayer->Set_AnimIndex("CustomMan_ChakraJump_Charge_End", 0.7f, false);
 	m_eAnimState = ANIM_STATE::START;
 }
 
@@ -50,30 +50,68 @@ CPlayerState* CPlayer_SuperJumpState::Update(_float fTimeDelta)
 	else 
 		IsAnimFinished = m_pPlayer->Play_Animation(fTimeDelta);
 
-	m_fTimeAcc += fTimeDelta;
-	m_fMovement = (m_fPower * 1.5f * m_fTimeAcc - 0.5f * m_fTimeAcc * m_fTimeAcc * 7.0f * (m_fTimeAcc));
-	if (m_fMovement <= -0.5f)
-		m_fMovement = -0.5f;
-
-	m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fMovement, 0.f, 0.f));
-	m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * 2.5f, nullptr);
-
-	if (m_pGameInstance->Key_Pressing(DIK_A) ||
-		m_pGameInstance->Key_Pressing(DIK_D)
-		)
+	if(ANIM_STATE::DOUBLE_JUMP == m_eAnimState || ANIM_STATE::FALL == m_eAnimState)
 	{
+		m_fTimeAcc += fTimeDelta;
 
-		if (m_pGameInstance->Key_Pressing(DIK_D))
-			m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * 0.3f);
+		m_fMovement = (m_fTimeAcc - 0.5f * m_fTimeAcc * m_fTimeAcc * 7.0f * (m_fTimeAcc));
+		if (m_fMovement <= -0.25f)
+			m_fMovement = -0.25f;
+		else if (m_fMovement >= 0.25f)
+			m_fMovement = 0.25f;
 
-		if (m_pGameInstance->Key_Pressing(DIK_A))
-			m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * -0.3f);
+		m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fMovement, 0.f, 0.f));
+		m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * 2.f, nullptr);
+
+		if (m_pGameInstance->Key_Pressing(DIK_A) ||
+			m_pGameInstance->Key_Pressing(DIK_D)
+			)
+		{
+			if (m_pGameInstance->Key_Pressing(DIK_D))
+				m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * 0.3f);
+
+			if (m_pGameInstance->Key_Pressing(DIK_A))
+				m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * -0.3f);
+		}
 	}
-
-	if (m_fMovement < 0.f && ANIM_STATE::START == m_eAnimState)
+	else
 	{
-		m_pPlayer->Set_AnimIndex("CustomMan_Jump_Vertical", 1.f, true, 0.2f);
-		m_eAnimState = ANIM_STATE::JUMP; 
+		m_fTimeAcc += fTimeDelta * 0.7f;
+
+		m_fMovement = (m_fPower * m_fTimeAcc - 0.5f * m_fTimeAcc * m_fTimeAcc * 7.0f * (m_fTimeAcc));
+		if (m_fMovement <= -0.3f)
+			m_fMovement = -0.2f;
+
+		m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fMovement, 0.f, 0.f));
+		m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * 1.5f, nullptr);
+
+		if (m_pGameInstance->Key_Pressing(DIK_A) || m_pGameInstance->Key_Pressing(DIK_D))
+		{
+
+			if (m_pGameInstance->Key_Pressing(DIK_D))
+				m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * 0.3f);
+
+			if (m_pGameInstance->Key_Pressing(DIK_A))
+				m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * -0.3f);
+		}
+	}
+	// 낙하
+	// 점프 중에 가속도 떨어지거나, 더블점프 중 + 애니 재생 끝났다면
+	if (((m_fMovement < 0.f && m_fTimeAcc != 0.f) || (ANIM_STATE::DOUBLE_JUMP == m_eAnimState && IsAnimFinished)))
+	{
+		m_pPlayer->Set_AnimIndex("CustomMan_Fall_Vertical_Loop", 2.5f, true);
+		m_eAnimState = ANIM_STATE::FALL;
+
+	}
+	// 더블 점프.
+	if (m_pGameInstance->Key_Down(DIK_SPACE) && false == m_IsTriggered)
+	{
+		m_pPlayer->Set_Pickable(true);
+		//보간 ratio 추가
+		m_pPlayer->Set_AnimIndex("CustomMan_DoubleJump", 2.5f, false);
+		m_fTimeAcc = 0.f;
+		m_eAnimState = ANIM_STATE::DOUBLE_JUMP;
+		m_IsTriggered = true;
 	}
 
 	// LAND로의 상태 전환.
@@ -85,6 +123,7 @@ CPlayerState* CPlayer_SuperJumpState::Update(_float fTimeDelta)
 		_float4 PlayerPos = {};
 		XMStoreFloat4(&PlayerPos, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
 	}
+
 
 	return pNextState;
 }

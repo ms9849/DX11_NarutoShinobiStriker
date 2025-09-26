@@ -197,7 +197,7 @@ _bool CPhysxManager::Check_GeometryCollision()
                 // 땅 체크
                 _vector vDown = XMVectorSet(0.0f, 1.0f, 0.0f, 0.f);
                 _float fAngle = XMConvertToDegrees(acosf(XMVectorGetX(XMVector3Dot(vDown, vResultDir))));
-                if (fAngle <= 50.0f)
+                if (fAngle <= 75.0f)
                     IsGround = true;
 
                 vResultDir *= fLength;
@@ -270,7 +270,7 @@ _bool CPhysxManager::Check_GameObject_GeometryCollision(CGameObject* pGameObject
                     // 땅 체크
                     _vector vDown = XMVectorSet(0.0f, 1.0f, 0.0f, 0.f);
                     _float fAngle = XMConvertToDegrees(acosf(XMVectorGetX(XMVector3Dot(vDown, vResultDir))));
-                    if (fAngle <= 60.0f)
+                    if (fAngle <= 75.0f)
                         IsGround = true;
 
                     vResultDir *= fLength;
@@ -354,7 +354,7 @@ _bool CPhysxManager::Check_GeometryPicking()
                 *Mesh,                  // Geometry 정보
                 PxMeshWorldMatrix,          // Geometry의 트랜스폼 가져와야 함.
                 100.f,                  // 체크할 최대 거리
-                PxHitFlags(PxHitFlag::ePOSITION),   // 플래그, (기본적으로 Distance는 제공. Postion까지 추가로 가져옴)
+                PxHitFlags(PxHitFlag::ePOSITION),   // 플래그, (기본적으로 Distance는 제공. Position까지 추가로 가져옴)
                 1,                      // 체크할 최대 히트 갯수 ( 1개라면 가장 가까운 피킹 지점의 정보 반환 )
                 &HitInfo);
 
@@ -366,17 +366,25 @@ _bool CPhysxManager::Check_GeometryPicking()
                 /* 거리가 0.45보다 짧다면, 달라붙게끔 한다.*/
                 /* 콜라이더의 중심으로부터 세팅되므로, 현재 콜라이더 크기인 
                 0.4 반구, 0.3 반 높이를 가진 캡슐 콜라이더임을 명심해야함. */
-                vNearestPos = vResultPos;
-                fNearestDist = fDist;
-
-                /* 바로 땅에 붙이기 */
-                if (fNearestDist <= 1.0f)
+                if (fDist <= fNearestDist)
                 {
-                    Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 0.7f, 0.f, 0.f));
+                    vNearestPos = vResultPos;
+                    fNearestDist = fDist;
                 }
-
             }
         }
+        /* NearestDist와 NearesetPos의 결과값에 따라 처리 */
+        /* 바로 땅에 붙이기 */
+        if (fNearestDist <= 1.5f)
+        {
+            Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 0.7f, 0.f, 0.f));
+        }
+        /* 고저차가 높지 않은 지형. 가볍게 떨어지게 한다. */
+        else
+        {
+            Pair.first->Set_Gravity(true, fNearestDist);
+        }
+
     }
 
     return _bool();

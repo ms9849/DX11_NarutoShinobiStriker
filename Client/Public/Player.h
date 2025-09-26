@@ -51,6 +51,7 @@ public:
 
 	void	Set_Visible(_bool bFlag) { m_IsVisible = bFlag; }
 	void	Set_Invincible(_bool bFlag) { m_IsInvincible = bFlag; }
+	virtual void Set_Gravity(_bool bFlag, _float fDist) override;
 public:
 	void	Clear_State();
 	void	Update_State(_float fTimeDelta);

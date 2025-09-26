@@ -191,6 +191,8 @@
     <ClInclude Include="..\Public\Explosion.h" />
     <ClInclude Include="..\Public\Face_Character.h" />
     <ClInclude Include="..\Public\FireBall.h" />
+    <ClInclude Include="..\Public\Player_RopeActionState.h" />
+    <ClInclude Include="..\Public\Rope.h" />
     <ClInclude Include="..\Public\Trigger_Manager.h" />
     <ClInclude Include="..\Public\GameManager.h" />
     <ClInclude Include="..\Public\Gate.h" />
@@ -331,6 +333,8 @@
     <ClCompile Include="..\Private\Explosion.cpp" />
     <ClCompile Include="..\Private\Face_Character.cpp" />
     <ClCompile Include="..\Private\FireBall.cpp" />
+    <ClCompile Include="..\Private\Player_RopeActionState.cpp" />
+    <ClCompile Include="..\Private\Rope.cpp" />
     <ClCompile Include="..\Private\Trigger_Manager.cpp" />
     <ClCompile Include="..\Private\GameManager.cpp" />
     <ClCompile Include="..\Private\Gate.cpp" />
