@@ -15,8 +15,8 @@ class CRope final : public CGameObject
 public:
 	typedef struct tagRopeDesc : public GAMEOBJECT_DESC {
 		_float3 vStartPos;
-		_float3 vDir;
 		_float3 vTargetPos;
+		_float4x4 SocketMatrix;
 
 	} ROPE_DESC;
 
@@ -46,6 +46,7 @@ private:
 	CShader*	m_pShaderCom = { nullptr };
 	CModel*		m_pModelCom = { nullptr };
 	_uint		m_iNumMeshes = {};
+	_float4x4   m_WorldMatrix = {};
 
 private:
 	HRESULT Ready_Components();

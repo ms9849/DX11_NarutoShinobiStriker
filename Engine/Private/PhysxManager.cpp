@@ -375,7 +375,10 @@ _bool CPhysxManager::Check_GeometryPicking()
         }
         /* NearestDist와 NearesetPos의 결과값에 따라 처리 */
         /* 바로 땅에 붙이기 */
-        if (fNearestDist <= 1.5f)
+        if (fNearestDist <= 0.1f)
+            return true;
+
+        else if (fNearestDist <= 1.6f)
         {
             Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 0.7f, 0.f, 0.f));
         }
@@ -387,12 +390,62 @@ _bool CPhysxManager::Check_GeometryPicking()
 
     }
 
-    return _bool();
+    return true;
 }
 
-_bool CPhysxManager::Check_GameObject_GeometryPicking(CGameObject* pGameObject)
+/* 주어진 레이와 충돌한 결과를 가져온다. */
+_bool CPhysxManager::Check_Ray_GeometryPicking(_float3 vRayPos, _float3 vRayDir, _float3* vResultPos, _float* fResultDist)
 {
-    return _bool();
+    /* 레이 트랜스폼 생성 */
+    PxVec3 vPxRayPos = PxVec3(vRayPos.x, vRayPos.y, vRayPos.z);
+    PxQuat vPxRayQuaternion = PxQuat(0.f, 0.f, 0.f, 1.f);
+
+    PxTransform PxRayWorldMatrix = PxTransform(vPxRayPos, vPxRayQuaternion);
+
+    /* 충돌용 메시 트랜스폼 생성 */
+    PxVec3 vPxPosition = PxVec3(0.f, 0.f, 0.f);
+    PxQuat vPxQuaternion = PxQuat(0.f, 0.f, 0.f, 1.f);
+
+    PxTransform PxMeshWorldMatrix = PxTransform(vPxPosition, vPxQuaternion);
+
+    _float fNearestDist = { FLT_MAX };
+    _vector vNearestPos = {};
+
+    for (auto& Mesh : m_Geometries)
+    {
+        PxRaycastHit HitInfo = PxRaycastHit();
+
+        /* 히트 지점 갯수를 반환한다. 즉, 0개라면 충돌이 존재하지 않음. */
+        PxU32 HitCount = PxGeometryQuery::raycast(
+            PxRayWorldMatrix.p,       // 레이 위치 
+            PxVec3(vRayDir.x, vRayDir.y, vRayDir.z), // 레이 방향
+            *Mesh,                  // Geometry 정보
+            PxMeshWorldMatrix,          // Geometry의 트랜스폼 가져와야 함.
+            100.f,                  // 체크할 최대 거리
+            PxHitFlags(PxHitFlag::ePOSITION),   // 플래그, (기본적으로 Distance는 제공. Position까지 추가로 가져옴)
+            1,                      // 체크할 최대 히트 갯수 ( 1개라면 가장 가까운 피킹 지점의 정보 반환 )
+            &HitInfo);
+
+        if (0 != HitCount)
+        {
+            _vector vResultPos = XMVectorSet(HitInfo.position.x, HitInfo.position.y, HitInfo.position.z, 1.f);
+            _float  fDist = HitInfo.distance;
+
+            /* 거리가 0.45보다 짧다면, 달라붙게끔 한다.*/
+            /* 콜라이더의 중심으로부터 세팅되므로, 현재 콜라이더 크기인
+            0.4 반구, 0.3 반 높이를 가진 캡슐 콜라이더임을 명심해야함. */
+            if (fDist <= fNearestDist)
+            {
+                vNearestPos = vResultPos;
+                fNearestDist = fDist;
+            }
+        }
+    }
+
+    XMStoreFloat3(vResultPos, vNearestPos);
+    *fResultDist = fNearestDist;
+
+    return true;
 }
 
 CPhysxManager* CPhysxManager::Create()

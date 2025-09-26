@@ -51,8 +51,8 @@ CPlayerState* CPlayer_JumpState::Update(_float fTimeDelta)
 	m_fMovement = (m_fTimeAcc - 0.5f * m_fTimeAcc * m_fTimeAcc * 7.0f * (m_fTimeAcc));
 	if (m_fMovement <= -0.25f)
 		m_fMovement = -0.25f;
-	else if (m_fMovement >= 0.25f)
-		m_fMovement = 0.25f;
+	else if (m_fMovement >= 0.2f)
+		m_fMovement = 0.2f;
 
 	m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fMovement, 0.f, 0.f));
 

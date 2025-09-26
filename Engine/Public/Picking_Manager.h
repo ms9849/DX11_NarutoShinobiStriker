@@ -62,6 +62,7 @@ public:
 	void Update();
 
 public:
+	void Calc_ScreenCenter();
 	_bool Picking(_uint iLevelIdx, _float3* pOut);
 	_bool Picking_InWorldSpace(_fvector vPointA, _fvector vPointB, _fvector vPointC, _float3* pOut);
 	void Transform_ToLocalSpace(_fmatrix WorldMatrixInverse);

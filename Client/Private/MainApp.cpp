@@ -31,6 +31,8 @@
 #include "Chidori.h"
 #include "Kunai.h"
 
+#include "Rope.h"
+
 #pragma endregion
 
 #include "Effect_CoolDown.h"
@@ -525,6 +527,11 @@ HRESULT CMainApp::Ready_Prototypes()
 	/* For.Prototype_GameObject_Kunai */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Kunai"),
 		CKunai::Create(m_pDevice, m_pContext, OBJECTID::KUNAI))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Rope */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Rope"),
+		CRope::Create(m_pDevice, m_pContext, OBJECTID::ROPE))))
 		return E_FAIL;
 
 #pragma endregion

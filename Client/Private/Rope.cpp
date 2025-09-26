@@ -28,11 +28,12 @@ HRESULT CRope::Initialize(void* pArg)
 	m_iNumMeshes = m_pModelCom->Get_NumMeshes();
 
 	ROPE_DESC* pDesc = static_cast<ROPE_DESC*>(pArg);
-	pDesc->fSpeedPerSec = 20.f;
+	pDesc->fSpeedPerSec = 40.f;
 
 	m_pTransformCom->Set_State(STATE::POSITION, XMLoadFloat3(&pDesc->vStartPos));
-	m_vTargetDir = pDesc->vDir;
 	m_vTargetPos = pDesc->vTargetPos;
+	/* 방향은 타겟 위치에서 내 위치 뺴서 구해줄 것 */
+	XMStoreFloat3(&m_vTargetDir, XMVector3Normalize(XMLoadFloat3(&pDesc->vTargetPos) - m_pTransformCom->Get_State(STATE::POSITION)));
 
 	m_pTransformCom->LookAt(XMLoadFloat3(&m_vTargetPos));
 
@@ -46,7 +47,7 @@ void CRope::Priority_Update(_float fTimeDelta)
 void CRope::Update(_float fTimeDelta)
 {
 	if(false == m_IsArrive)
-		m_pTransformCom->Set_State(STATE::POSITION, m_pTransformCom->Get_State(STATE::POSITION) + XMLoadFloat3(&m_vTargetDir) * fTimeDelta * 20.f);
+		m_pTransformCom->Set_State(STATE::POSITION, m_pTransformCom->Get_State(STATE::POSITION) + XMLoadFloat3(&m_vTargetDir) * fTimeDelta * 60.f);
 
 	_float fDist = XMVectorGetX(XMVector3Length(m_pTransformCom->Get_State(STATE::POSITION) - XMLoadFloat3(&m_vTargetPos)));
 	

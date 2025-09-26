@@ -393,6 +393,16 @@ _bool CGameInstance::Picking_InLocalSpace(_fvector vPointA, _fvector vPointB, _f
 	return m_pPicking_Manager->Picking_InLocalSpace(vPointA, vPointB, vPointC, pOut);
 }
 
+_float3 CGameInstance::Get_RayPos(RAY eRayType)
+{
+	return m_pPicking_Manager->Get_RayPos(eRayType);
+}
+
+_float3 CGameInstance::Get_RayDir(RAY eRayType)
+{
+	return m_pPicking_Manager->Get_RayDir(eRayType);
+}
+
 #pragma endregion
 #pragma region SOUND_MANAGER
 
@@ -528,9 +538,9 @@ _bool CGameInstance::Check_GeometryPicking()
 	return m_pPhysxManager->Check_GeometryPicking();
 }
 
-_bool CGameInstance::Check_GameObject_GeometryPicking(CGameObject* pGameObject)
+_bool CGameInstance::Check_Ray_GeometryPicking(_float3 vRayPos, _float3 vRayDir, _float3* vResultPos, _float* fResultDist)
 {
-	return m_pPhysxManager->Check_GameObject_GeometryPicking(pGameObject);
+	return m_pPhysxManager->Check_Ray_GeometryPicking(vRayPos, vRayDir, vResultPos, fResultDist);
 }
 
 #pragma endregion

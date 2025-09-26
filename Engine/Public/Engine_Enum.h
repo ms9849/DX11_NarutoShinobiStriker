@@ -9,7 +9,7 @@ namespace Engine
 	enum class RENDER { PRIORITY, NONBLEND, BLEND, UI, END};
 	enum class TEXTURE { PLANE, CUBE, END };
 	enum class MODEL { ANIM, NONANIM, COLLISION, END };
-	enum class RAY { LOCAL, WORLD, END };
+	enum class RAY { LOCAL, WORLD, CENTER, END };
 	enum class D3DTS { VIEW, PROJ, END };
 	enum class LIGHT { DIRECTIONAL, POINT, SPOT, END };
 	enum class CHANNELID { SOUND_EFFECT, SOUND_BGM, SOUND_END };
