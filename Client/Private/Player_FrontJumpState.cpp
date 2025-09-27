@@ -48,12 +48,19 @@ CPlayerState* CPlayer_FrontJumpState::Update(_float fTimeDelta)
 
 	_bool IsAnimFinished = m_pPlayer->Play_Animation(fTimeDelta);
 
-	m_fTimeAcc += fTimeDelta;
-	m_fMovement = (m_fTimeAcc - 0.5f * m_fTimeAcc * m_fTimeAcc * 7.0f * (m_fTimeAcc));
-	if (m_fMovement <= -0.25f)
-		m_fMovement = -0.25f;
-	else if (m_fMovement >= 0.2f)
-		m_fMovement = 0.2f;
+	_float v0 = 6.f;    // 초기 점프 속도
+	_float g = 9.8f;    // 중력
+	_float jumpHeight = 0.08f; // 전체 스케일 (최대 높이)
+
+	m_fTimeAcc += fTimeDelta * 2.1f;
+
+	m_fMovement = v0 * m_fTimeAcc - 0.5f * g * m_fTimeAcc * m_fTimeAcc;
+	m_fMovement *= jumpHeight;
+
+	if (m_fMovement < -0.3f)
+		m_fMovement = -0.3f;
+	else if (m_fMovement > 0.3f)
+		m_fMovement = 0.3f;
 
 	m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fMovement, 0.f, 0.f));
 
