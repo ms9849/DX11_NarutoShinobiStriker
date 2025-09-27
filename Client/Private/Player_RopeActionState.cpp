@@ -87,7 +87,7 @@ CPlayerState* CPlayer_RopeActionState::Update(_float fTimeDelta)
         }
         else if (true == IsCollision && false == IsGround)
         {
-            pNextState = CPlayer_FrontJumpState::Create(m_pPlayer, 0.54f, CPlayer_FrontJumpState::ANIM_STATE::FALL);
+            pNextState = CPlayer_FrontJumpState::Create(m_pPlayer, 1.1f, CPlayer_FrontJumpState::ANIM_STATE::FALL);
             m_pPlayer->Set_Pickable(true);
             m_pRope->Set_Dead(true);
         }

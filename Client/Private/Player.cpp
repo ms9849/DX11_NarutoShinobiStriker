@@ -17,6 +17,7 @@
 #include "Player_FrontJumpState.h"
 #include "Player_BeatenState.h"
 #include "Player_BeatenBlastedState.h"
+#include "Player_LandState.h"
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 	: CCharacter { pDevice, pContext, eObjectID }
@@ -172,7 +173,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 		return E_FAIL;
 
 	/* 상태 초기화 및 시작. */
-	m_pState = CPlayer_FrontJumpState::Create(this, 0.f, CPlayer_FrontJumpState::ANIM_STATE::FALL);
+	m_pState = CPlayer_FrontJumpState::Create(this, 1.23f, CPlayer_FrontJumpState::ANIM_STATE::FALL);
 	m_pState->Start(true);
 
 	if (LEVEL::TUTORIAL == m_pGameManager->Get_NextLevel())
@@ -415,11 +416,16 @@ void CPlayer::Set_Gravity(_bool bFlag, _float fDist)
 	///* 고저차가 크지 않다면 자연스럽게 떨어지게 */
 	if (fDist <= 3.5f && true == m_IsGround)
 	{
-		m_pTransformCom->Set_State(STATE::POSITION, m_pTransformCom->Get_State(STATE::POSITION) - XMVectorSet(0.f, 0.05f, 0.f, 0.f));
+		m_pTransformCom->Set_State(STATE::POSITION, m_pTransformCom->Get_State(STATE::POSITION) - XMVectorSet(0.f, 0.1f, 0.f, 0.f));
 	}
-	if(fDist > 3.5f && true == m_IsGround)
+	else if(fDist > 3.5f && true == m_IsGround)
 	{
-		CPlayer_FrontJumpState* pNextState = CPlayer_FrontJumpState::Create(this, 0.54f, CPlayer_FrontJumpState::ANIM_STATE::FALL);
+		CPlayer_FrontJumpState* pNextState = CPlayer_FrontJumpState::Create(this, 1.23f, CPlayer_FrontJumpState::ANIM_STATE::FALL);
+		Change_State(pNextState, true);
+	}
+	else if (fDist < 1.5f && false == m_IsGround)
+	{
+		CPlayer_LandState* pNextState = CPlayer_LandState::Create(this);
 		Change_State(pNextState, true);
 	}
 }

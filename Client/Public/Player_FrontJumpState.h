@@ -33,7 +33,7 @@ private:
 	_float	       m_fMovement = { 0.f };
 	_float		   m_fSpeed = { 3.f };
 	_float		   m_fTimeAcc = { 0.f };
-	_bool		   m_bCanDoubleJump = false;
+	_bool		   m_bCanDoubleJump = { true };
 public:
 	static CPlayer_FrontJumpState* Create(class CPlayer* pPlayer, _float fTimeAcc = 0.f, ANIM_STATE eStartAnimState = ANIM_STATE::JUMP);
 	virtual void Free() override;

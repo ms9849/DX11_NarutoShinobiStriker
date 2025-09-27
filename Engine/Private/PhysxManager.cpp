@@ -437,11 +437,15 @@ _bool CPhysxManager::Check_GeometryPicking()
         }
         else if (fNearestDist <= 2.0f && fAngle >= 40.f)
         {
-            Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 1.15f, 0.f, 0.f));
+            Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 1.2f, 0.f, 0.f));
+        }
+        else if (fNearestDist <= 2.15f && fAngle >= 60.f)
+        {
+            Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 1.35f, 0.f, 0.f));
         }
         else if (fNearestDist <= 2.3 && fAngle >= 70.f)
         {
-            Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 1.3f, 0.f, 0.f));
+            Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 1.5f, 0.f, 0.f));
         }
         else if(fNearestDist <= 1.5f && fAngle >= 80.f)
         {

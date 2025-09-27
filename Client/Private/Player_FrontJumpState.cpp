@@ -32,35 +32,37 @@ void CPlayer_FrontJumpState::Start(_bool IsBlend)
 	if (m_eAnimState == ANIM_STATE::JUMP)
 		m_pPlayer->Set_AnimIndex("CustomMan_Jump_Front", 1.f, IsBlend);
 
+
 	else if (m_eAnimState == ANIM_STATE::FALL)
 		m_pPlayer->Set_AnimIndex("CustomMan_Fall_Front_Loop", 1.0f, true);
 
-    m_bCanDoubleJump = true;
-
+	else if (m_eAnimState == ANIM_STATE::DOUBLE_JUMP)
+	{
+		m_pPlayer->Set_AnimIndex("CustomMan_Fall_Front_Loop", 1.0f, true);
+		m_bCanDoubleJump = false;
+	}
 }
 
 CPlayerState* CPlayer_FrontJumpState::Update(_float fTimeDelta)
 {
-	if (m_fTimeAcc >= 0.35f)
+	if (m_fTimeAcc >= 0.5f)
 		m_pPlayer->Set_Pickable(true);
 
     CPlayerState* pNextState = { nullptr };
 
 	_bool IsAnimFinished = m_pPlayer->Play_Animation(fTimeDelta);
 
-	_float v0 = 6.f;    // 초기 점프 속도
-	_float g = 9.8f;    // 중력
-	_float jumpHeight = 0.08f; // 전체 스케일 (최대 높이)
+	_float fStartSpeed = 6.f;    // 초기 점프 속도
+	_float fGravity = 9.8f;    // 중력
+	_float fJumpScale = 0.08f; // 전체 스케일 (최대 높이)
 
 	m_fTimeAcc += fTimeDelta * 2.1f;
 
-	m_fMovement = v0 * m_fTimeAcc - 0.5f * g * m_fTimeAcc * m_fTimeAcc;
-	m_fMovement *= jumpHeight;
+	m_fMovement = fStartSpeed * m_fTimeAcc - 0.5f * fGravity * m_fTimeAcc * m_fTimeAcc;
+	m_fMovement *= fJumpScale;
 
 	if (m_fMovement < -0.3f)
 		m_fMovement = -0.3f;
-	else if (m_fMovement > 0.3f)
-		m_fMovement = 0.3f;
 
 	m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fMovement, 0.f, 0.f));
 
@@ -82,7 +84,7 @@ CPlayerState* CPlayer_FrontJumpState::Update(_float fTimeDelta)
 	// 더블 점프.
 	if (m_pGameInstance->Key_Down(DIK_SPACE) && m_bCanDoubleJump && m_fTimeAcc >= 0.15f)
 	{
-		m_pPlayer->Set_Pickable(true);
+		m_pPlayer->Set_Pickable(false);
 		//보간 ratio 추가
 		m_pPlayer->Set_AnimIndex("CustomMan_DoubleJump", 2.5f, false);
 		m_eAnimState = ANIM_STATE::DOUBLE_JUMP;
