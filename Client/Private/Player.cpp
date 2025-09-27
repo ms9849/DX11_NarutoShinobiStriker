@@ -399,20 +399,6 @@ void CPlayer::Key_Input(_float fTimeDelta)
 		if (m_eCurAttackType == ATTACK_TYPE::END)
 			m_eCurAttackType = ATTACK_TYPE::MELEE;
 	}
-
-	//if (m_pGameInstance->Key_Down(DIK_7))
-	//{
-	//	/* 콤보 시스템에서 초기화해줌.*/
-	//	/* 로직은 묶였지만 아직 bool 타입 못 묶음..*/
-	//	m_IsEnemyHit = true;
-	//}
-
-	//if (m_pGameInstance->Key_Down(DIK_8))
-	//{
-	//	/* 콤보 시스템에서 초기화해줌.*/
-	//	/* 로직은 묶였지만 아직 bool 타입 못 묶음..*/
-	//	m_IsEnemyKO = true;
-	//}
 }
 
 void CPlayer::Change_Skills()
@@ -426,8 +412,8 @@ void CPlayer::Change_Skills()
 
 void CPlayer::Set_Gravity(_bool bFlag, _float fDist)
 {
-	/* 고저차가 크지 않다면 자연스럽게 떨어지게 */
-	//if (fDist <= 1.7f && true == m_IsGround)
+	///* 고저차가 크지 않다면 자연스럽게 떨어지게 */
+	//if (fDist <= 1.6f && true == m_IsGround)
 	//{
 	//	m_pTransformCom->Set_State(STATE::POSITION, m_pTransformCom->Get_State(STATE::POSITION) - XMVectorSet(0.f, 0.05f, 0.f, 0.f));
 	//}

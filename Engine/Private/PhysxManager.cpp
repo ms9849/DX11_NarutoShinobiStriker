@@ -70,7 +70,7 @@ void CPhysxManager::Add_GameObject_ToPhysx(CGameObject* pGameObject)
 
     /* 머테리얼은 튜토리얼 대로 세팅 */
     PxMaterial* Material = m_PxPhysx->createMaterial(0.5f, 0.5f, 0.6f);
-    /* 0.5 반지름 (구), 0.4 반높이 (원통) 크기의 캡슐 콜라이더 세팅. */
+    /* 0.5 반지름 (구), 0.5 반높이 (원통) 크기의 캡슐 콜라이더 세팅. */
     PxShape* pShape = m_PxPhysx->createShape(PxCapsuleGeometry(0.5f, 0.4f), *Material);
 
     pDynamicActor->attachShape(*pShape);
@@ -270,15 +270,17 @@ _bool CPhysxManager::Check_GameObject_GeometryCollision(CGameObject* pGameObject
                     // 땅 체크
                     _vector vDown = XMVectorSet(0.0f, 1.0f, 0.0f, 0.f);
                     _float fAngle = XMConvertToDegrees(acosf(XMVectorGetX(XMVector3Dot(vDown, vResultDir))));
-                    if (fAngle <= 75.0f)
+                    if (fAngle <= 70.f)
                         IsGround = true;
+                    else if(fAngle > 70.f)
+                    {
+                        vResultDir *= fLength;
 
-                    vResultDir *= fLength;
-
-                    // 플레이어 Transform 위치 보정
-                    _vector vOriginPos = Pair.first->Get_Transform()->Get_State(STATE::POSITION);
-                    _vector vResultPos = vOriginPos + vResultDir;
-                    Pair.first->Get_Transform()->Set_State(STATE::POSITION, vResultPos);
+                        // 플레이어 Transform 위치 보정
+                        _vector vOriginPos = Pair.first->Get_Transform()->Get_State(STATE::POSITION);
+                        _vector vResultPos = vOriginPos + vResultDir;
+                        Pair.first->Get_Transform()->Set_State(STATE::POSITION, vResultPos);
+                    }
                 }
             }
 
@@ -342,7 +344,7 @@ _bool CPhysxManager::Check_GeometryPicking()
 
         _float fNearestDist = { FLT_MAX };
         _vector vNearestPos = {};
-
+        _vector vGroundNormal = {};
         for (auto& Mesh : m_Geometries)
         {
             PxRaycastHit HitInfo = PxRaycastHit();
@@ -354,7 +356,7 @@ _bool CPhysxManager::Check_GeometryPicking()
                 *Mesh,                  // Geometry 정보
                 PxMeshWorldMatrix,          // Geometry의 트랜스폼 가져와야 함.
                 100.f,                  // 체크할 최대 거리
-                PxHitFlags(PxHitFlag::ePOSITION),   // 플래그, (기본적으로 Distance는 제공. Position까지 추가로 가져옴)
+                PxHitFlags(PxHitFlag::ePOSITION | PxHitFlag::eNORMAL),   // 플래그, (기본적으로 Distance는 제공. Position & Normal 까지 추가로 가져옴)
                 1,                      // 체크할 최대 히트 갯수 ( 1개라면 가장 가까운 피킹 지점의 정보 반환 )
                 &HitInfo);
 
@@ -363,13 +365,14 @@ _bool CPhysxManager::Check_GeometryPicking()
                 _vector vResultPos = XMVectorSet(HitInfo.position.x, HitInfo.position.y, HitInfo.position.z, 1.f);
                 _float  fDist = HitInfo.distance;
 
-                /* 거리가 0.45보다 짧다면, 달라붙게끔 한다.*/
+                /* 거리가 0.1보다 짧다면, 달라붙게끔 한다.*/
                 /* 콜라이더의 중심으로부터 세팅되므로, 현재 콜라이더 크기인 
-                0.4 반구, 0.3 반 높이를 가진 캡슐 콜라이더임을 명심해야함. */
+                0.5 반구, 0.5 반 높이를 가진 캡슐 콜라이더임을 명심해야함. */
                 if (fDist <= fNearestDist)
                 {
                     vNearestPos = vResultPos;
                     fNearestDist = fDist;
+                    vGroundNormal = XMVector3Normalize(XMVectorSet(HitInfo.normal.x, 0.f, HitInfo.normal.z, 0.f));
                 }
             }
         }
@@ -378,11 +381,23 @@ _bool CPhysxManager::Check_GeometryPicking()
         if (fNearestDist <= 0.1f)
             return true;
 
-        else if (fNearestDist <= 1.6f)
+        else if (fNearestDist <= 1.5f)
         {
-            Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 0.7f, 0.f, 0.f));
+            /* 테스트 */
+            /*/////////////////////////////////////////////////*/
+            PxShape* shape = nullptr;
+            Pair.second->getShapes(&shape, 1); // 첫 번째 shape 가져오기
+
+            PxCapsuleGeometry geom;
+            PxGeometryHolder holder = shape->getGeometry();
+            if (holder.getType() == PxGeometryType::eCAPSULE)
+            {
+                geom = holder.capsule(); // 런타임 캡슐 정보 가져오기
+            }
+            /*/////////////////////////////////////////////*///+ XMVectorSet(0.f, 0.4f, 0.f, 0.f)
+            Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 0.7f, 0.f, 0.f)  + vGroundNormal * 0.05f);
         }
-        /* 고저차가 높지 않은 지형. 가볍게 떨어지게 한다. */
+        /* 가볍게 떨어지게 한다. */
         else
         {
             Pair.first->Set_Gravity(true, fNearestDist);
@@ -431,9 +446,6 @@ _bool CPhysxManager::Check_Ray_GeometryPicking(_float3 vRayPos, _float3 vRayDir,
             _vector vResultPos = XMVectorSet(HitInfo.position.x, HitInfo.position.y, HitInfo.position.z, 1.f);
             _float  fDist = HitInfo.distance;
 
-            /* 거리가 0.45보다 짧다면, 달라붙게끔 한다.*/
-            /* 콜라이더의 중심으로부터 세팅되므로, 현재 콜라이더 크기인
-            0.4 반구, 0.3 반 높이를 가진 캡슐 콜라이더임을 명심해야함. */
             if (fDist <= fNearestDist)
             {
                 vNearestPos = vResultPos;
