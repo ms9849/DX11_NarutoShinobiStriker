@@ -32,6 +32,7 @@ private:
 	class CPlayer* m_pPlayer = { nullptr };
 	_float3 m_vTargetDir = {};
 	_float3 m_vTargetPos = {};
+	_float3 m_vStartPos = {};
 	ANIM_STATE m_eAnimState = {};
 
 public:

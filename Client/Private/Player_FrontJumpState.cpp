@@ -16,10 +16,12 @@
 
 #pragma endregion
 
-CPlayer_FrontJumpState::CPlayer_FrontJumpState(CPlayer* pPlayer)
-    : m_pPlayer { pPlayer }
+CPlayer_FrontJumpState::CPlayer_FrontJumpState(CPlayer* pPlayer, _float fTimeAcc, ANIM_STATE eStartAnimState)
+	: m_pPlayer{ pPlayer }
+	, m_fTimeAcc { fTimeAcc }
+	, m_eAnimState { eStartAnimState }
 {
-    Safe_AddRef(m_pPlayer);
+	Safe_AddRef(m_pPlayer);
 }
 
 void CPlayer_FrontJumpState::Start(_bool IsBlend)
@@ -27,9 +29,14 @@ void CPlayer_FrontJumpState::Start(_bool IsBlend)
 	m_pPlayer->Set_Ground(false);
 	m_pPlayer->Set_Pickable(false);
 
-    m_pPlayer->Set_AnimIndex("CustomMan_Jump_Front", 1.f, true);
-    m_eAnimState = ANIM_STATE::JUMP;
+	if (m_eAnimState == ANIM_STATE::JUMP)
+		m_pPlayer->Set_AnimIndex("CustomMan_Jump_Front", 1.f, IsBlend);
+
+	else if (m_eAnimState == ANIM_STATE::FALL)
+		m_pPlayer->Set_AnimIndex("CustomMan_Fall_Front_Loop", 1.0f, true);
+
     m_bCanDoubleJump = true;
+
 }
 
 CPlayerState* CPlayer_FrontJumpState::Update(_float fTimeDelta)
@@ -131,9 +138,9 @@ _bool CPlayer_FrontJumpState::End()
 	return true;
 }
 
-CPlayer_FrontJumpState* CPlayer_FrontJumpState::Create(CPlayer* pPlayer)
+CPlayer_FrontJumpState* CPlayer_FrontJumpState::Create(CPlayer* pPlayer, _float fTimeAcc, ANIM_STATE eStartAnimState)
 {
-    return new CPlayer_FrontJumpState(pPlayer);
+	return new CPlayer_FrontJumpState(pPlayer, fTimeAcc, eStartAnimState);
 }
 
 void CPlayer_FrontJumpState::Free()

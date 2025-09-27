@@ -71,7 +71,7 @@ void CPhysxManager::Add_GameObject_ToPhysx(CGameObject* pGameObject)
     /* 머테리얼은 튜토리얼 대로 세팅 */
     PxMaterial* Material = m_PxPhysx->createMaterial(0.5f, 0.5f, 0.6f);
     /* 0.5 반지름 (구), 0.5 반높이 (원통) 크기의 캡슐 콜라이더 세팅. */
-    PxShape* pShape = m_PxPhysx->createShape(PxCapsuleGeometry(0.5f, 0.4f), *Material);
+    PxShape* pShape = m_PxPhysx->createShape(PxCapsuleGeometry(0.5f, 0.5f), *Material);
 
     pDynamicActor->attachShape(*pShape);
     ///* 연속 충돌 활성화. 현재는 플레이어만 제어하므로 켜도 된다. */
@@ -81,6 +81,8 @@ void CPhysxManager::Add_GameObject_ToPhysx(CGameObject* pGameObject)
     Material->release();
 
     m_DynamicActors.push_back(make_pair(pGameObject, pDynamicActor));
+    m_HasCollided.push_back(false);
+
     m_PxScene->addActor(*pDynamicActor);
 }
 
@@ -149,13 +151,31 @@ void CPhysxManager::Add_Geometry_ToPhysx(CGameObject* pGameObject, CModel* pMode
     }
 }
 
+void CPhysxManager::Calc_Geometry()
+{
+    Check_GeometryCollision();
+    Check_GeometryPicking();
+}
+
 _bool CPhysxManager::Check_GeometryCollision()
 {
     /* Triangle Mesh Geometry와 충돌 처리 */
     _bool IsGround = false;
+    _uint iIdx = 0;
 
     for (auto& Pair : m_DynamicActors)
     {
+        if (m_HasCollided[iIdx] == true)
+        {
+            m_HasCollided[iIdx] = false;
+            continue;
+        }
+        else
+        {
+            m_HasCollided[iIdx] = false;
+            iIdx++;
+        }
+
         /* 계산 하기 전, 트랜스폼 가져와서 actor 최신화. */
         _matrix matWorld = XMLoadFloat4x4(Pair.first->Get_Transform()->Get_WorldMatrixPtr());
         _vector vTranslation, vRotation, vScale;
@@ -195,10 +215,12 @@ _bool CPhysxManager::Check_GeometryCollision()
                 vResultDir = XMVector3Normalize(vResultDir);
 
                 // 땅 체크
-                _vector vDown = XMVectorSet(0.0f, 1.0f, 0.0f, 0.f);
-                _float fAngle = XMConvertToDegrees(acosf(XMVectorGetX(XMVector3Dot(vDown, vResultDir))));
-                if (fAngle <= 75.0f)
+                _vector vVertical = XMVectorSet(0.0f, 1.0f, 0.0f, 0.f);
+                _float fAngle = XMConvertToDegrees(acosf(XMVectorGetX(XMVector3Dot(vVertical, vResultDir))));
+                if (fAngle < 60.f)
                     IsGround = true;
+                else
+                    XMVectorSetY(vResultDir, 0.f);
 
                 vResultDir *= fLength;
 
@@ -206,6 +228,7 @@ _bool CPhysxManager::Check_GeometryCollision()
                 _vector vOriginPos = Pair.first->Get_Transform()->Get_State(STATE::POSITION);
                 _vector vResultPos = vOriginPos + vResultDir;
                 Pair.first->Get_Transform()->Set_State(STATE::POSITION, vResultPos);
+
             }
         }
     }
@@ -217,10 +240,13 @@ _bool CPhysxManager::Check_GeometryCollision()
     return IsGround;
 }
 
-_bool CPhysxManager::Check_GameObject_GeometryCollision(CGameObject* pGameObject)
+_bool CPhysxManager::Check_GameObject_GeometryCollision(CGameObject* pGameObject, _bool* IsCollision)
 {
     /* Triangle Mesh Geometry와 충돌 처리 */
     _bool IsGround = false;
+
+    if (nullptr != IsCollision)
+        *IsCollision = false;
 
     for (auto& Pair : m_DynamicActors)
     {
@@ -264,23 +290,24 @@ _bool CPhysxManager::Check_GameObject_GeometryCollision(CGameObject* pGameObject
                 
                 if (PxComputeTriangleMeshPenetration(vDir, fLength, Geom, ActorTransform, *Mesh, PxTransform(PxIDENTITY::PxIdentity), 1))
                 {
+                    if (nullptr != IsCollision)
+                        *IsCollision = true;
                     _vector vResultDir = XMVectorSet(vDir.x, vDir.y, vDir.z, 0.f);
                     vResultDir = XMVector3Normalize(vResultDir);
 
                     // 땅 체크
-                    _vector vDown = XMVectorSet(0.0f, 1.0f, 0.0f, 0.f);
-                    _float fAngle = XMConvertToDegrees(acosf(XMVectorGetX(XMVector3Dot(vDown, vResultDir))));
-                    if (fAngle <= 70.f)
+                    _vector vVertical = XMVectorSet(0.0f, 1.0f, 0.0f, 0.f);
+                    _float fAngle = XMConvertToDegrees(acosf(XMVectorGetX(XMVector3Dot(vVertical, vResultDir))));
+                    
+                    if (fAngle < 60.f)
                         IsGround = true;
-                    else if(fAngle > 70.f)
-                    {
-                        vResultDir *= fLength;
 
-                        // 플레이어 Transform 위치 보정
-                        _vector vOriginPos = Pair.first->Get_Transform()->Get_State(STATE::POSITION);
-                        _vector vResultPos = vOriginPos + vResultDir;
-                        Pair.first->Get_Transform()->Set_State(STATE::POSITION, vResultPos);
-                    }
+                    vResultDir *= fLength;
+
+                    // 플레이어 Transform 위치 보정
+                    _vector vOriginPos = Pair.first->Get_Transform()->Get_State(STATE::POSITION);
+                    _vector vResultPos = vOriginPos + vResultDir;
+                    Pair.first->Get_Transform()->Set_State(STATE::POSITION, vResultPos);
                 }
             }
 
@@ -321,6 +348,7 @@ _bool CPhysxManager::Check_GeometryPicking()
 
     PxVec3 vPxPosition = PxVec3(0.f, 0.f, 0.f);
     PxQuat vPxQuaternion = PxQuat(0.f, 0.f, 0.f, 1.f);
+    _uint iIdx = { 0 };
 
     PxTransform PxMeshWorldMatrix = PxTransform(vPxPosition, vPxQuaternion);
 
@@ -328,6 +356,7 @@ _bool CPhysxManager::Check_GeometryPicking()
     {
         if (false == Pair.first->Get_Pickable())
             continue;
+
         /* 계산 하기 전, 트랜스폼 가져와서 actor 최신화. */
         _matrix matWorld = XMLoadFloat4x4(Pair.first->Get_Transform()->Get_WorldMatrixPtr());
         _vector vTranslation, vRotation, vScale;
@@ -345,6 +374,7 @@ _bool CPhysxManager::Check_GeometryPicking()
         _float fNearestDist = { FLT_MAX };
         _vector vNearestPos = {};
         _vector vGroundNormal = {};
+
         for (auto& Mesh : m_Geometries)
         {
             PxRaycastHit HitInfo = PxRaycastHit();
@@ -364,7 +394,6 @@ _bool CPhysxManager::Check_GeometryPicking()
             {
                 _vector vResultPos = XMVectorSet(HitInfo.position.x, HitInfo.position.y, HitInfo.position.z, 1.f);
                 _float  fDist = HitInfo.distance;
-
                 /* 거리가 0.1보다 짧다면, 달라붙게끔 한다.*/
                 /* 콜라이더의 중심으로부터 세팅되므로, 현재 콜라이더 크기인 
                 0.5 반구, 0.5 반 높이를 가진 캡슐 콜라이더임을 명심해야함. */
@@ -372,37 +401,55 @@ _bool CPhysxManager::Check_GeometryPicking()
                 {
                     vNearestPos = vResultPos;
                     fNearestDist = fDist;
-                    vGroundNormal = XMVector3Normalize(XMVectorSet(HitInfo.normal.x, 0.f, HitInfo.normal.z, 0.f));
+                    vGroundNormal = XMVector3Normalize(XMVectorSet(HitInfo.normal.x, HitInfo.normal.y, HitInfo.normal.z, 0.f));
                 }
             }
         }
-        /* NearestDist와 NearesetPos의 결과값에 따라 처리 */
+
+        PxShape* shape = nullptr;
+        Pair.second->getShapes(&shape, 1); // 첫 번째 shape 가져오기
+
+        PxCapsuleGeometry geom;
+        PxGeometryHolder holder = shape->getGeometry();
+        if (holder.getType() == PxGeometryType::eCAPSULE)
+            geom = holder.capsule(); // 런타임 캡슐 정보 가져오기
+
+        // 만약 경사진 면이라면 그라운드 벡터 사용, 그게 아니라면 그냥 보정. 
+        _vector vVertical = XMVectorSet(0.0f, 1.0f, 0.0f, 0.f);
+        _float fAngle = XMConvertToDegrees(acosf(XMVectorGetX(XMVector3Dot(vVertical, vGroundNormal))));
+
         /* 바로 땅에 붙이기 */
-        if (fNearestDist <= 0.1f)
-            return true;
-
-        else if (fNearestDist <= 1.5f)
+        if (fNearestDist <= 0.3f)
         {
-            /* 테스트 */
-            /*/////////////////////////////////////////////////*/
-            PxShape* shape = nullptr;
-            Pair.second->getShapes(&shape, 1); // 첫 번째 shape 가져오기
-
-            PxCapsuleGeometry geom;
-            PxGeometryHolder holder = shape->getGeometry();
-            if (holder.getType() == PxGeometryType::eCAPSULE)
-            {
-                geom = holder.capsule(); // 런타임 캡슐 정보 가져오기
-            }
-            /*/////////////////////////////////////////////*///+ XMVectorSet(0.f, 0.4f, 0.f, 0.f)
-            Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 0.7f, 0.f, 0.f)  + vGroundNormal * 0.05f);
+            return true;
+        }
+        /* 경사에 따른 지형 처리를 다르게 세팅. */
+        else if (fNearestDist <= 1.5f && fAngle < 25.f)
+        {
+            Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 0.7f, 0.f, 0.f));
+            m_HasCollided[iIdx++] = false;
+        }
+        else if (fNearestDist <= 1.8f && fAngle >= 25.f) 
+        {
+            Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 1.0f, 0.f, 0.f));
+        }
+        else if (fNearestDist <= 2.0f && fAngle >= 40.f)
+        {
+            Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 1.2f, 0.f, 0.f));
+        }
+        else if (fNearestDist <= 2.3 && fAngle >= 70.f)
+        {
+            Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 1.3f, 0.f, 0.f));
+        }
+        else if(fNearestDist <= 1.5f && fAngle >= 80.f)
+        {
+            Pair.first->Set_Gravity(true, fNearestDist);
         }
         /* 가볍게 떨어지게 한다. */
         else
         {
             Pair.first->Set_Gravity(true, fNearestDist);
         }
-
     }
 
     return true;

@@ -138,8 +138,9 @@ public:
 	void Add_GameObject_ToPhysx(class CGameObject* pGameObject);
 	void Add_Geometry_ToPhysx(class CGameObject* pGameObject, class CModel* pModel);
 
+	void  Calc_Geometry();
 	void Check_GeometryCollision();
-	_bool Check_GameObject_GeometryCollision(class CGameObject* pGameObject);
+	_bool Check_GameObject_GeometryCollision(class CGameObject* pGameObject, _bool* IsCollision = nullptr);
 	_bool Check_GeometryPicking();
 	_bool Check_Ray_GeometryPicking(_float3 vRayPos, _float3 vRayDir, _float3* vResultPos, _float* fResultDist);
 #pragma endregion
