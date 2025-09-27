@@ -301,6 +301,8 @@ _bool CPhysxManager::Check_GameObject_GeometryCollision(CGameObject* pGameObject
                     
                     if (fAngle < 60.f)
                         IsGround = true;
+                    else
+                        XMVectorSetY(vResultDir, 0.f);
 
                     vResultDir *= fLength;
 
@@ -435,7 +437,7 @@ _bool CPhysxManager::Check_GeometryPicking()
         }
         else if (fNearestDist <= 2.0f && fAngle >= 40.f)
         {
-            Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 1.2f, 0.f, 0.f));
+            Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 1.15f, 0.f, 0.f));
         }
         else if (fNearestDist <= 2.3 && fAngle >= 70.f)
         {
