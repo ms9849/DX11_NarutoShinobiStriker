@@ -32,8 +32,9 @@ public:
 	void Add_GameObject_ToPhysx(class CGameObject* pGameObject);
 	void Add_Geometry_ToPhysx(class CGameObject* pGameObject, class CModel* pModel);
 
+	void  Calc_Geometry();
 	_bool Check_GeometryCollision();
-	_bool Check_GameObject_GeometryCollision(class CGameObject* pGameObject);
+	_bool Check_GameObject_GeometryCollision(class CGameObject* pGameObject, _bool* IsCollision = nullptr);
 	_bool Check_GeometryPicking();
 	_bool Check_Ray_GeometryPicking(_float3 vRayPos, _float3 vRayDir, _float3* vResultPos, _float* fResultDist);
 private:
@@ -62,6 +63,7 @@ private:
 	받지 않을때 사용한다고 한다.
 	*/
 	vector<pair<class CGameObject*, PxRigidDynamic*>> m_DynamicActors = {};
+	vector<_bool> m_HasCollided = {};
 	/*
 	구워놓은 충돌용 메시들 보관용. 추후 순회해서 
 	객체들과의 충돌 감지를 수행해야 한다.

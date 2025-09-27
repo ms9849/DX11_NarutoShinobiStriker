@@ -53,6 +53,8 @@ void CRope::Update(_float fTimeDelta)
 	
 	if (fDist < 0.5f)
 		m_IsArrive = true;
+
+	m_pColliderCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
 }
 
 void CRope::Late_Update(_float fTimeDelta)
@@ -77,6 +79,10 @@ HRESULT CRope::Render()
 			return E_FAIL;
 	}
 
+#ifdef _DEBUG
+	m_pColliderCom->Render();
+#endif
+
 	return S_OK;
 }
 
@@ -90,6 +96,15 @@ HRESULT CRope::Ready_Components()
 	/* Com_Model */
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_SkyBox"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
+		return E_FAIL;
+
+	CBounding_Sphere::BOUNDING_SPHERE_DESC		SphereDesc{};
+
+	SphereDesc.fRadius = 0.5f;
+	SphereDesc.vCenter = { 0.f, 0.f, 0.f };
+
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_Sphere"),
+		TEXT("Com_Collider_Sphere"), reinterpret_cast<CComponent**>(&m_pColliderCom), &SphereDesc)))
 		return E_FAIL;
 
 	return S_OK;

@@ -523,14 +523,19 @@ void CGameInstance::Add_Geometry_ToPhysx(class CGameObject* pGameObject, class C
 	m_pPhysxManager->Add_Geometry_ToPhysx(pGameObject, pModel);
 }
 
+void CGameInstance::Calc_Geometry()
+{
+	m_pPhysxManager->Calc_Geometry();
+}
+
 void CGameInstance::Check_GeometryCollision()
 {
 	m_pPhysxManager->Check_GeometryCollision();
 }
 
-_bool CGameInstance::Check_GameObject_GeometryCollision(CGameObject* pGameObject)
+_bool CGameInstance::Check_GameObject_GeometryCollision(CGameObject* pGameObject, _bool* IsCollision)
 {
-	return 	m_pPhysxManager->Check_GameObject_GeometryCollision(pGameObject);
+	return m_pPhysxManager->Check_GameObject_GeometryCollision(pGameObject, IsCollision);
 }
 
 _bool CGameInstance::Check_GeometryPicking()

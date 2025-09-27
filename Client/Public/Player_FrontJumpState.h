@@ -16,7 +16,7 @@ class CPlayer_FrontJumpState final : public CPlayerState
 public:
 	enum class ANIM_STATE { JUMP, DOUBLE_JUMP, FALL };
 private:
-	CPlayer_FrontJumpState(class CPlayer* pPlayer);
+	CPlayer_FrontJumpState(class CPlayer* pPlayer, _float fTimeAcc, ANIM_STATE eStartAnimState);
 	virtual ~CPlayer_FrontJumpState() = default;
 
 public:
@@ -35,7 +35,7 @@ private:
 	_float		   m_fTimeAcc = { 0.f };
 	_bool		   m_bCanDoubleJump = false;
 public:
-	static CPlayer_FrontJumpState* Create(class CPlayer* pPlayer);
+	static CPlayer_FrontJumpState* Create(class CPlayer* pPlayer, _float fTimeAcc = 0.f, ANIM_STATE eStartAnimState = ANIM_STATE::JUMP);
 	virtual void Free() override;
 };
 
