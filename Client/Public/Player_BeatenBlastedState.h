@@ -2,9 +2,6 @@
 #include "Client_Defines.h"
 #include "PlayerState.h"
 
-/*
-가장 기본적인 IDLE STATE
-*/
 NS_BEGIN(Client)
 
 class CPlayer_BeatenBlastedState final : public CPlayerState

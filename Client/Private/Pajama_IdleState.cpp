@@ -3,7 +3,6 @@
 #include "GameManager.h"
 #include "GameInstance.h"
 
-#include "Player.h"
 #include "Pajama.h"
 
 #pragma region TRANSFER_STATE
