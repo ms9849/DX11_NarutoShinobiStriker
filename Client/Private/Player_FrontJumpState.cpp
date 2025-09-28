@@ -38,7 +38,11 @@ void CPlayer_FrontJumpState::Start(_bool IsBlend)
 
 	else if (m_eAnimState == ANIM_STATE::DOUBLE_JUMP)
 	{
-		m_pPlayer->Set_AnimIndex("CustomMan_Fall_Front_Loop", 1.0f, true);
+		m_pPlayer->Set_Pickable(false);
+		//보간 ratio 추가
+		m_pPlayer->Set_AnimIndex("CustomMan_DoubleJump", 2.5f, false);
+		m_eAnimState = ANIM_STATE::DOUBLE_JUMP;
+		m_fTimeAcc = 0.f;
 		m_bCanDoubleJump = false;
 	}
 }

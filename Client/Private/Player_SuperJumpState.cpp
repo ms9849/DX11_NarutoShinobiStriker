@@ -8,6 +8,7 @@
 
 #include "Player_LandState.h"
 #include "Player_IdleState.h"
+#include "Player_FrontJumpState.h"
 
 #pragma endregion
 
@@ -38,7 +39,7 @@ CPlayerState* CPlayer_SuperJumpState::Update(_float fTimeDelta)
 
 	_float fStartSpeed = 10.f;    // 초기 점프 속도
 	_float fGravity = 7.f;    // 중력
-	_float fJumpScale = 0.16f; // 전체 스케일 (최대 높이)
+	_float fJumpScale = 0.08f; // 전체 스케일 (최대 높이)
 
 	m_fTimeAcc += fTimeDelta * 2.1f;
 
@@ -62,7 +63,7 @@ CPlayerState* CPlayer_SuperJumpState::Update(_float fTimeDelta)
 	else 
 		IsAnimFinished = m_pPlayer->Play_Animation(fTimeDelta);
 
-	if(ANIM_STATE::DOUBLE_JUMP == m_eAnimState || ANIM_STATE::FALL == m_eAnimState)
+	if(ANIM_STATE::FALL == m_eAnimState)
 	{
 		m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fMovement, 0.f, 0.f));
 
@@ -100,21 +101,11 @@ CPlayerState* CPlayer_SuperJumpState::Update(_float fTimeDelta)
 	}
 	// 낙하
 	// 점프 중에 가속도 떨어지거나, 더블점프 중 + 애니 재생 끝났다면
-	if (((m_fMovement < 0.f && m_fTimeAcc != 0.f) || (ANIM_STATE::DOUBLE_JUMP == m_eAnimState && IsAnimFinished)))
+	if (m_fMovement < 0.f && m_fTimeAcc != 0.f)
 	{
 		m_pPlayer->Set_AnimIndex("CustomMan_Fall_Front_Loop", 2.5f, true);
 		m_eAnimState = ANIM_STATE::FALL;
 
-	}
-	// 더블 점프.
-	if (m_pGameInstance->Key_Down(DIK_SPACE) && false == m_IsTriggered)
-	{
-		m_pPlayer->Set_Pickable(true);
-		//보간 ratio 추가
-		m_pPlayer->Set_AnimIndex("CustomMan_DoubleJump", 2.5f, false);
-		m_fTimeAcc = 0.f;
-		m_eAnimState = ANIM_STATE::DOUBLE_JUMP;
-		m_IsTriggered = true;
 	}
 
 	// LAND로의 상태 전환.
@@ -126,7 +117,11 @@ CPlayerState* CPlayer_SuperJumpState::Update(_float fTimeDelta)
 		_float4 PlayerPos = {};
 		XMStoreFloat4(&PlayerPos, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
 	}
-
+	// 더블 점프.
+	else if (m_pGameInstance->Key_Down(DIK_SPACE) && false == m_IsTriggered)
+	{
+		pNextState = CPlayer_FrontJumpState::Create(m_pPlayer, 0.f, CPlayer_FrontJumpState::ANIM_STATE::DOUBLE_JUMP);
+	}
 
 	return pNextState;
 }

@@ -63,7 +63,7 @@ private:
 	받지 않을때 사용한다고 한다.
 	*/
 	vector<pair<class CGameObject*, PxRigidDynamic*>> m_DynamicActors = {};
-	vector<_bool> m_HasCollided = {};
+	vector<_bool> m_IsOnSlope = {};
 	/*
 	구워놓은 충돌용 메시들 보관용. 추후 순회해서 
 	객체들과의 충돌 감지를 수행해야 한다.
