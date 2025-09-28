@@ -32,7 +32,7 @@ CPajamaState* CPajama_ThrowKunaiState::Update(_float fTimeDelta)
     _bool IsAnimFinished = m_pPajama->Play_Animation(fTimeDelta);
     _float fAnimProgress = m_pPajama->Get_AnimProgress();
 
-    if (fAnimProgress >= 0.8f && false == m_IsKunaiThrow)
+    if (fAnimProgress >= 0.5f && false == m_IsKunaiThrow)
     {
         CKunai::KUNAI_DESC Desc;
 

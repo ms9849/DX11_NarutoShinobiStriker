@@ -13,13 +13,11 @@ NS_END
 
 NS_BEGIN(Client)
 
-class CPajama_SlidingKunaiState final : public CPajamaState
+class CPajama_FireballState final : public CPajamaState
 {
-public:
-	enum class ANIM_STATE { LEFT, RIGHT, END };
 private:
-	CPajama_SlidingKunaiState(class CNavigation* pNavigation, class CPajama* pPajama, ANIM_STATE eAnimState);
-	virtual ~CPajama_SlidingKunaiState() = default;
+	CPajama_FireballState(class CNavigation* pNavigation, class CPajama* pPajama);
+	virtual ~CPajama_FireballState() = default;
 
 public:
 	/* Start */
@@ -32,10 +30,10 @@ public:
 private:
 	CPajama*		m_pPajama = { nullptr };
 	CNavigation*	m_pNavigationCom = { nullptr };
-	_bool			m_IsKunaiThrow = { false };
-	ANIM_STATE		m_eAnimState = {};
+	_bool			m_IsFireballThrow = { false };
+
 public:
-	static CPajama_SlidingKunaiState* Create(class CNavigation* pNavigation, class CPajama* pPajama, ANIM_STATE eAnimState);
+	static CPajama_FireballState* Create(class CNavigation* pNavigation, class CPajama* pPajama);
 	virtual void Free() override;
 };
 

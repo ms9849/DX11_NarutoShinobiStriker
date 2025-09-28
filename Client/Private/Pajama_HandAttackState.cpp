@@ -9,7 +9,7 @@
 
 #pragma region TRANSFER_STATE
 
-#include "Pajama_IdleState.h"
+#include "Pajama_BackStepState.h"
 
 #pragma endregion
 
@@ -42,7 +42,7 @@ CPajamaState* CPajama_HandAttackState::Update(_float fTimeDelta)
     if (true == IsAnimFinished)
     {
         /* 나중에 백스텝으로 변경 */
-        pNextState = CPajama_IdleState::Create(m_pNavigationCom, m_pPajama);
+        pNextState = CPajama_BackStepState::Create(m_pNavigationCom, m_pPajama);
     }
 
     return pNextState;

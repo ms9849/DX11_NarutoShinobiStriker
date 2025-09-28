@@ -32,7 +32,7 @@ CPajamaState* CPajama_IdleState::Update(_float fTimeDelta)
 
 	_float fDist = XMVectorGetX(XMVector3Length(m_pPajama->Get_Transform()->Get_State(STATE::POSITION) - m_pPlayerTransformCom->Get_State(STATE::POSITION)));
 
-	if (fDist < 4.f)
+	if (fDist < 5.f)
 		pNextState = CPajama_WalkState::Create(m_pNavigationCom, m_pPajama);
 
 	else if (fDist < 15.f)

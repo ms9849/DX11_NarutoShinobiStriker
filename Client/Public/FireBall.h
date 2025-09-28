@@ -19,6 +19,7 @@ public:
 	typedef struct tagFireBallDesc : public GAMEOBJECT_DESC{
 		_float3 vPosition;
 		_float3 vLook;
+		_bool   IsEnemy = { false };
 	} FIREBALL_DESC;
 
 private:
@@ -39,8 +40,8 @@ private:
 	/* ¸â¹ö º¯¼öµé */
 	_float			 m_fLifeTime = { 1.2f };
 	_float			 m_fTimeAcc = { 0.f };
-	_bool			 m_isHit = { false };
-
+	_bool			 m_IsHit = { false };
+	_bool			 m_IsEnemy = { false };
 
 private:
 	HRESULT Ready_Components();

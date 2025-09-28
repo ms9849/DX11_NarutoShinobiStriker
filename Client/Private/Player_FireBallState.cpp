@@ -37,7 +37,7 @@ CPlayerState* CPlayer_FireBallState::Update(_float fTimeDelta)
     _bool IsAnimFinished = m_pPlayer->Play_Animation(fTimeDelta);
     _float fAnimProgress = m_pPlayer->Get_AnimProgress();
 
-    if (false == m_isFireballThrow && fAnimProgress >= 0.7f)
+    if (false == m_IsFireballThrow && fAnimProgress >= 0.7f)
     {
         CFireBall::FIREBALL_DESC Desc;
 
@@ -60,7 +60,7 @@ CPlayerState* CPlayer_FireBallState::Update(_float fTimeDelta)
         m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_FireBall"),
             m_pGameInstance->Get_LevelID(), TEXT("Layer_Skill"), &Desc);
 
-        m_isFireballThrow = true;
+        m_IsFireballThrow = true;
     }
 
     if (true == IsAnimFinished)
