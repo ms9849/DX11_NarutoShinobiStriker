@@ -52,6 +52,9 @@ CPlayerState* CPlayer_FrontJumpState::Update(_float fTimeDelta)
 	if (m_fTimeAcc >= 0.5f)
 		m_pPlayer->Set_Pickable(true);
 
+	else if (m_fTimeAcc >= 0.1f && m_eAnimState == ANIM_STATE::DOUBLE_JUMP)
+		m_pPlayer->Set_Pickable(true);
+
     CPlayerState* pNextState = { nullptr };
 
 	_bool IsAnimFinished = m_pPlayer->Play_Animation(fTimeDelta);
