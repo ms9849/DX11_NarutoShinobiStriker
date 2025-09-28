@@ -86,7 +86,7 @@ HRESULT CBoxer::Initialize(void* pArg)
 	m_pState = CBoxer_IdleState::Create(m_pNavigationCom, this);
 	m_pState->Start(true);
 
-	return S_OK ;
+	return S_OK;
 }
 
 void CBoxer::Priority_Update(_float fTimeDelta)
@@ -98,7 +98,7 @@ void CBoxer::Update(_float fTimeDelta)
 {
 	Update_State(fTimeDelta);
 	Update_SkillCoolDown(fTimeDelta);
-	//m_pNavigationCom->Compute_Height(m_pTransformCom);
+	m_pNavigationCom->Compute_Height(m_pTransformCom);
 
 	__super::Update(fTimeDelta);
 

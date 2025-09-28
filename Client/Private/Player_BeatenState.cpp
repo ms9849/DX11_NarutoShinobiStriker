@@ -38,7 +38,7 @@ CPlayerState* CPlayer_BeatenState::Update(_float fTimeDelta)
 
 	/* 임시 코드. 방향 받아와서 처리해야 한다.*/
 	if (false == IsAnimFinished && fAnimProgress <= 0.7f)
-		m_pPlayer->Get_Transform()->Go_Direction(XMLoadFloat3(&m_vDirection), m_fRatio * fTimeDelta * m_pGameInstance->Calc_Quadratic(-0.89f, 0.48f, 0.11f, fAnimProgress),
+		m_pPlayer->Get_Transform()->Go_Direction(XMVectorSetY(XMLoadFloat3(&m_vDirection), 0.f), m_fRatio * fTimeDelta * m_pGameInstance->Calc_Quadratic(-0.89f, 0.48f, 0.11f, fAnimProgress),
 			nullptr);
 
 	if (true == IsAnimFinished)

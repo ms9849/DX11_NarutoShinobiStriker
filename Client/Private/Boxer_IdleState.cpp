@@ -21,7 +21,7 @@ CBoxer_IdleState::CBoxer_IdleState(CNavigation* pNavigation, CBoxer* pBoxer)
 
 void CBoxer_IdleState::Start(_bool IsBlend)
 {
-    m_pPlayerTransformCom = CGameManager::GetInstance()->Get_PlayerPtr()->Get_Transform();
+    m_pPlayerTransformCom = m_pGameManager->Get_PlayerPtr()->Get_Transform();
     Safe_AddRef(m_pPlayerTransformCom);
 
     m_pBoxer->Set_AnimIndex("CustomMan_Idle_Loop", 1.f, IsBlend, 0.1f);

@@ -47,7 +47,6 @@ public:
 
 	void	   Set_Collider_Active(const _wstring& strColliderTag, _bool bFlag);
 	CCollider* Get_Collider(const _wstring& strColliderTag);
-	CNavigation* Get_Navigation() { return m_pNavigationCom; }
 
 	void	Set_Visible(_bool bFlag) { m_IsVisible = bFlag; }
 	void	Set_Invincible(_bool bFlag) { m_IsInvincible = bFlag; }
@@ -74,7 +73,6 @@ public:
 private:
 	class CGameManager*		m_pGameManager = { nullptr };
 
-	CNavigation*			m_pNavigationCom = { nullptr };
 	CCollider*				m_pColliderCom = { nullptr };
 	CCollider*				m_pHandAttackColliderCom = { nullptr };
 

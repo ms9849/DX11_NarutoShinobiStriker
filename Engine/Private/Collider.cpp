@@ -102,7 +102,7 @@ HRESULT CCollider::Render()
 
 _bool CCollider::InterSect(CCollider* pTargetCollider)
 {
-	m_isColl = m_pBounding->Intersect(m_eType, pTargetCollider->m_pBounding);
+	m_isColl = m_pBounding->Intersect(pTargetCollider->m_eType, pTargetCollider->m_pBounding);
 	return m_isColl;
 }
 

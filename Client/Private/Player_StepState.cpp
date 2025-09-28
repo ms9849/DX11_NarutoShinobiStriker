@@ -136,8 +136,7 @@ CPlayerState* CPlayer_StepState::Update(_float fTimeDelta)
 				&& fAnimProgress >= 0.5f)
 			pNextState = CPlayer_RunState::Create(m_pPlayer);
 
-		m_pPlayer->Get_Transform()->Go_Left(fTimeDelta * fStepSpeed,
-			nullptr);
+		m_pPlayer->Get_Transform()->Go_Left(fTimeDelta * fStepSpeed);
 	}
 	// ø¿∏•¬  ¬™¥ÎΩ√
 	else if (ANIM_STATE::RIGHT == m_eAnimState)
@@ -201,8 +200,7 @@ CPlayerState* CPlayer_StepState::Update(_float fTimeDelta)
 				&& fAnimProgress >= 0.5f)
 			pNextState = CPlayer_RunState::Create(m_pPlayer);
 
-		m_pPlayer->Get_Transform()->Go_Right(fTimeDelta * fStepSpeed,
-			nullptr);
+		m_pPlayer->Get_Transform()->Go_Right(fTimeDelta * fStepSpeed);
 	}
 	// πÈΩ∫≈‹ 
 	else if (ANIM_STATE::BACK == m_eAnimState)
@@ -261,8 +259,7 @@ CPlayerState* CPlayer_StepState::Update(_float fTimeDelta)
 			pNextState = CPlayer_RunState::Create(m_pPlayer);
 
 		else if (fAnimProgress != 0.f && fAnimProgress <= 0.6f)
-			m_pPlayer->Get_Transform()->Go_Backward(fTimeDelta * fStepSpeed, 
-				nullptr);
+			m_pPlayer->Get_Transform()->Go_Backward(fTimeDelta * fStepSpeed);
 	}
 	// æ’ ¬™¥ÎΩ√
 	else if (ANIM_STATE::FRONT == m_eAnimState)
@@ -323,13 +320,10 @@ CPlayerState* CPlayer_StepState::Update(_float fTimeDelta)
 			if (m_pGameInstance->Key_Down(DIK_LSHIFT))
 				pNextState = CPlayer_StepState::Create(m_pPlayer, CPlayer_StepState::ANIM_STATE::BACK);
 		}
-
-
 		if (fAnimProgress < 0.45f)
 		{
 			_float fStepSpeed = m_pGameInstance->Calc_Quadratic(-29.3f, 10.5f, 1.2f, fAnimProgress);
-			m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * fStepSpeed,
-				nullptr);
+			m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * fStepSpeed);
 		}
 		
 	}

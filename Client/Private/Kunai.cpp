@@ -31,7 +31,7 @@ HRESULT CKunai::Initialize(void* pArg)
         return E_FAIL;
 
     /* 위치 & 포지션 세팅 */
-    BIRD_THROW_DESC* pDesc = static_cast<BIRD_THROW_DESC*>(pArg);
+    KUNAI_DESC* pDesc = static_cast<KUNAI_DESC*>(pArg);
     m_vDirection = pDesc->vDirection;
 
     m_pTransformCom->Set_State(STATE::POSITION, XMLoadFloat3(&pDesc->vPosition));
@@ -50,7 +50,12 @@ void CKunai::Priority_Update(_float fTimeDelta)
 void CKunai::Update(_float fTimeDelta)
 {
     if (false == m_pColliderCom->Get_Active())
-        m_IsDead = true;
+    {
+        m_fTimeAcc += fTimeDelta;
+
+        if(1.0 <= m_fTimeAcc)
+            m_IsDead = true;
+    }
 
     m_pTransformCom->Go_Straight(fTimeDelta);
 
@@ -59,7 +64,7 @@ void CKunai::Update(_float fTimeDelta)
 
 void CKunai::Late_Update(_float fTimeDelta)
 {
-    m_pGameManager->Add_Collider_ToCollision(TEXT("Monster_Attack"), COLLIDER_HANDLE_ID::ENEMY_BIRD_THROW, m_pColliderCom);
+    m_pGameManager->Add_Collider_ToCollision(TEXT("Monster_Attack"), COLLIDER_HANDLE_ID::ENEMY_THROW, m_pColliderCom);
 
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }

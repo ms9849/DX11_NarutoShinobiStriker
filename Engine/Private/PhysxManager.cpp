@@ -447,7 +447,6 @@ _bool CPhysxManager::Check_GeometryPicking()
         else if (fNearestDist <= 1.5f && fAngle < 25.f)
         {
             Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 0.7f, 0.f, 0.f));
-            m_IsOnSlope[iIdx++] = false;
         }
         else if (fNearestDist <= 1.8f && fAngle >= 25.f) 
         {

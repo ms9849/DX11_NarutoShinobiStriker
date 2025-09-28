@@ -68,8 +68,8 @@ void CTransform::Go_Straight(_float fTimeDelta, class CNavigation* pNavigation)
 
 	_float3 vSliding = {};
 
-	if (nullptr == pNavigation ||
-		true == pNavigation->isMove(vPosition, &vSliding))
+	if ((nullptr == pNavigation) ||
+		(true == pNavigation->isMove(vPosition, &vSliding)))
 		Set_State(STATE::POSITION, vPosition);
 
 	else if (true == pNavigation->isMove(Get_State(STATE::POSITION) + fTimeDelta * m_fSpeedPerSec * XMVector3Normalize((XMLoadFloat3(&vSliding))), nullptr))
@@ -87,8 +87,8 @@ void CTransform::Go_Backward(_float fTimeDelta, class CNavigation* pNavigation)
 
 	_float3 vSliding = {};
 
-	if (nullptr == pNavigation ||
-		true == pNavigation->isMove(vPosition, &vSliding))
+	if ((nullptr == pNavigation) ||
+		(true == pNavigation->isMove(vPosition, &vSliding)))
 		Set_State(STATE::POSITION, vPosition);
 
 	else if (true == pNavigation->isMove(Get_State(STATE::POSITION) + fTimeDelta * m_fSpeedPerSec * XMVector3Normalize(XMLoadFloat3(&vSliding)), nullptr))
@@ -105,8 +105,8 @@ void CTransform::Go_Left(_float fTimeDelta, class CNavigation* pNavigation)
 
 	_float3 vSliding = {};
 
-	if (nullptr == pNavigation ||
-		true == pNavigation->isMove(vPosition, &vSliding))
+	if ((nullptr == pNavigation) ||
+		(true == pNavigation->isMove(vPosition, &vSliding)))
 		Set_State(STATE::POSITION, vPosition);
 
 	else if (true == pNavigation->isMove(Get_State(STATE::POSITION) + fTimeDelta * m_fSpeedPerSec * (XMLoadFloat3(&vSliding)), nullptr))
@@ -123,8 +123,8 @@ void CTransform::Go_Right(_float fTimeDelta, class CNavigation* pNavigation)
 
 	_float3 vSliding = {};
 
-	if (nullptr == pNavigation ||
-		true == pNavigation->isMove(vPosition, &vSliding))
+	if ((nullptr == pNavigation) ||
+		(true == pNavigation->isMove(vPosition, &vSliding)))
 		Set_State(STATE::POSITION, vPosition);
 
 	else if (true == pNavigation->isMove(Get_State(STATE::POSITION) + fTimeDelta * m_fSpeedPerSec * XMVector3Normalize(XMLoadFloat3(&vSliding)), nullptr))
@@ -136,13 +136,13 @@ void CTransform::Go_Direction(_fvector vDir, _float fTimeDelta, class CNavigatio
 	_vector vPosition = Get_State(STATE::POSITION);
 	
 	/* 방향은 정규화해야지 */
-	_vector vDirection = XMVector3Normalize(vDir) * m_fSpeedPerSec * fTimeDelta;
+	_vector vDirection = XMVectorSetW(XMVector3Normalize(vDir) * m_fSpeedPerSec * fTimeDelta, 0.f);
 	vPosition += vDirection; 
 
 	_float3 vSliding = {};
 
-	if (nullptr == pNavigation ||
-		true == pNavigation->isMove(vPosition, &vSliding))
+	if ((nullptr == pNavigation) ||
+		(true == pNavigation->isMove(vPosition, &vSliding)))
 		Set_State(STATE::POSITION, vPosition);
 
 	else if (true == pNavigation->isMove(Get_State(STATE::POSITION) + fTimeDelta * m_fSpeedPerSec * XMVector3Normalize(XMLoadFloat3(&vSliding)), nullptr))
@@ -246,8 +246,6 @@ void CTransform::LookAt_XZ(_fvector vAt)
 	_vector     vPosition = Get_State(STATE::POSITION);
 	_float3		vScale = Get_Scale();
 	_vector		vRight, vUp, vLook;
-
-	vPosition = XMVectorSetY(vPosition, 0.f);
 
 	vLook = vAt - vPosition;
 	vLook = XMVectorSetW(XMVectorSetY(vLook, 0.f), 0.f);

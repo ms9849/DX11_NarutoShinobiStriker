@@ -45,6 +45,8 @@ _bool CBounding_Sphere::Intersect(COLLIDER eType, CBounding* pTarget)
 	return isColl;
 }
 
+#ifdef _DEBUG
+
 HRESULT CBounding_Sphere::Render(PrimitiveBatch<VertexPositionColor>* pBatch, _fvector vColor)
 {
 	/* 내 셰이더로 세팅하고, 그려주기 */
@@ -56,6 +58,8 @@ HRESULT CBounding_Sphere::Render(PrimitiveBatch<VertexPositionColor>* pBatch, _f
 
 	return S_OK;
 }
+
+#endif
 
 CBounding_Sphere* CBounding_Sphere::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const void* pArg)
 {

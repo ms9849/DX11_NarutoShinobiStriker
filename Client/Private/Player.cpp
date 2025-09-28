@@ -154,7 +154,7 @@ HRESULT CPlayer::Initialize_Prototype()
 HRESULT CPlayer::Initialize(void* pArg)
 {
 	CGameObject::GAMEOBJECT_DESC	Desc{};
-	Desc.fRotationPerSec = XMConvertToRadians(180.0f);
+	Desc.fRotationPerSec = XMConvertToRadians(150.0f);
 	Desc.fSpeedPerSec = 8.5f;
 
 	if (FAILED(__super::Initialize(&Desc)))
@@ -273,11 +273,10 @@ void CPlayer::OnCollision(COLLIDER_HANDLE_ID eHandleID, _float3 vColliderPos)
 
 	CPlayerState* pNextState = { nullptr };
 
-	_vector vDirection = m_pTransformCom->Get_State(STATE::POSITION) - XMLoadFloat3(&vColliderPos);
-
+	_vector vDirection = XMVectorSetW(XMVectorSetY(XMVector3Normalize(m_pTransformCom->Get_State(STATE::POSITION) - XMLoadFloat3(&vColliderPos)), 0.f), 0.f);
 	m_pTransformCom->LookAt_XZ(XMLoadFloat3(&vColliderPos));
 
-	if (COLLIDER_HANDLE_ID::ENEMY_BIRD_THROW == eHandleID ||
+	if (COLLIDER_HANDLE_ID::ENEMY_THROW == eHandleID ||
 		COLLIDER_HANDLE_ID::ENEMY_JETSU_ATTACK == eHandleID)
 	{
 		pNextState = CPlayer_BeatenState::Create(this, vDirection, 1.f);
@@ -286,7 +285,6 @@ void CPlayer::OnCollision(COLLIDER_HANDLE_ID eHandleID, _float3 vColliderPos)
 	{
 		pNextState = CPlayer_BeatenBlastedState::Create(this, vDirection, 1.f);
 	}
-
 
 	/* 플레이어 죽는 상태 X */
 	Change_State(pNextState, false);
@@ -303,35 +301,24 @@ void CPlayer::Change_State(CPlayerState* pNextState, _bool bBlend)
 
 HRESULT CPlayer::Ready_Components()
 {
-	/* Com_Navigation */
-	CNavigation::NAVIGATION_DESC Desc;
-	Desc.iCurrentCellIndex = 0;
-
-	if (LEVEL::TUTORIAL == m_pGameManager->Get_NextLevel())
-	{
-		if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Navigation_Tutorial"),
-			TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
-			return E_FAIL;
-	}
-	else if (LEVEL::KONOHA_VILLAGE == m_pGameManager->Get_NextLevel())
-	{
-		if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Navigation_KonohaVillage"),
-			TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
-			return E_FAIL;
-	}
 	/* Com_Collider */
+	CBounding_OBB::BOUNDING_OBB_DESC OBBDesc{};
+
+	OBBDesc.vAngles = _float3( 0.f, 0.f, 0.f );
+	OBBDesc.vSize = _float3(0.95f, 1.4f, 0.95f);
+	OBBDesc.vCenter = _float3( 0.f, 0.8f, 0.f );
+	OBBDesc.isActive = true;
+
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &OBBDesc)))
+		return E_FAIL;
 
 	CBounding_Sphere::BOUNDING_SPHERE_DESC ColliderDesc{};
 
 	ColliderDesc.fRadius = 0.7f;
 	ColliderDesc.vCenter = _float3{ 0.f, 0.7f, 0.f };
-	ColliderDesc.isActive = true;
-
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_Sphere"),
-		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
-		return E_FAIL;
-	
 	ColliderDesc.isActive = false;
+
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_Sphere"),
 		TEXT("Com_Collider_HandAttack"), reinterpret_cast<CComponent**>(&m_pHandAttackColliderCom), &ColliderDesc)))
 		return E_FAIL;
@@ -473,5 +460,4 @@ void CPlayer::Free()
 
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pHandAttackColliderCom);
-	Safe_Release(m_pNavigationCom);
 }

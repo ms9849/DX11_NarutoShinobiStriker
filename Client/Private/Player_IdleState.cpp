@@ -30,8 +30,7 @@
 
 /* 서로 참조해서 안지워진다 ㅅㅂ.. */
 CPlayer_IdleState::CPlayer_IdleState(CPlayer* pPlayer)
-	: CPlayerState {}
-	, m_pPlayer { pPlayer }
+	: m_pPlayer { pPlayer }
 {
 	Safe_AddRef(m_pPlayer);
 }
