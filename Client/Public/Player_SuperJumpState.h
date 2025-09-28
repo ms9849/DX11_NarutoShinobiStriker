@@ -10,7 +10,7 @@ NS_BEGIN(Client)
 class CPlayer_SuperJumpState final : public CPlayerState
 {
 public:
-	enum class ANIM_STATE { START, JUMP, DOUBLE_JUMP, FALL };
+	enum class ANIM_STATE { START, JUMP, FALL };
 private:
 	CPlayer_SuperJumpState(class CPlayer* pPlayer, _float fPower);
 	virtual ~CPlayer_SuperJumpState() = default;

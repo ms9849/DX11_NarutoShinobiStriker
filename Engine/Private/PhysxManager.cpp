@@ -81,7 +81,7 @@ void CPhysxManager::Add_GameObject_ToPhysx(CGameObject* pGameObject)
     Material->release();
 
     m_DynamicActors.push_back(make_pair(pGameObject, pDynamicActor));
-    m_HasCollided.push_back(false);
+    m_IsOnSlope.push_back(false);
 
     m_PxScene->addActor(*pDynamicActor);
 }
@@ -165,17 +165,6 @@ _bool CPhysxManager::Check_GeometryCollision()
 
     for (auto& Pair : m_DynamicActors)
     {
-        if (m_HasCollided[iIdx] == true)
-        {
-            m_HasCollided[iIdx] = false;
-            continue;
-        }
-        else
-        {
-            m_HasCollided[iIdx] = false;
-            iIdx++;
-        }
-
         /* 계산 하기 전, 트랜스폼 가져와서 actor 최신화. */
         _matrix matWorld = XMLoadFloat4x4(Pair.first->Get_Transform()->Get_WorldMatrixPtr());
         _vector vTranslation, vRotation, vScale;
@@ -220,7 +209,18 @@ _bool CPhysxManager::Check_GeometryCollision()
                 if (fAngle < 60.f)
                     IsGround = true;
                 else
-                    XMVectorSetY(vResultDir, 0.f);
+                {
+                    /* 경사면에 있었다면 지형과의 충돌처리는 하지 않는다. */
+                    if (m_IsOnSlope[iIdx] == true)
+                    {
+                        m_IsOnSlope[iIdx] = false;
+                        continue;
+                    }
+                    else
+                    {
+                        XMVectorSetY(vResultDir, 0.f);
+                    }
+                }
 
                 vResultDir *= fLength;
 
@@ -231,6 +231,7 @@ _bool CPhysxManager::Check_GeometryCollision()
 
             }
         }
+        iIdx++;
     }
 
     /* 
@@ -429,7 +430,7 @@ _bool CPhysxManager::Check_GeometryPicking()
         else if (fNearestDist <= 1.5f && fAngle < 25.f)
         {
             Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 0.7f, 0.f, 0.f));
-            m_HasCollided[iIdx++] = false;
+            m_IsOnSlope[iIdx++] = false;
         }
         else if (fNearestDist <= 1.8f && fAngle >= 25.f) 
         {
@@ -441,11 +442,13 @@ _bool CPhysxManager::Check_GeometryPicking()
         }
         else if (fNearestDist <= 2.15f && fAngle >= 60.f)
         {
-            Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 1.35f, 0.f, 0.f));
+            Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 1.4f, 0.f, 0.f));
+            m_IsOnSlope[iIdx] = true;
         }
         else if (fNearestDist <= 2.3 && fAngle >= 70.f)
         {
             Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 1.5f, 0.f, 0.f));
+            m_IsOnSlope[iIdx] = true;
         }
         else if(fNearestDist <= 1.5f && fAngle >= 80.f)
         {
