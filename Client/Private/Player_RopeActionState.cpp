@@ -75,7 +75,7 @@ CPlayerState* CPlayer_RopeActionState::Update(_float fTimeDelta)
     {
         _bool IsCollision = { false };
         _bool IsGround = { false };
-        m_pPlayer->Get_Transform()->Go_Direction(XMLoadFloat3(&m_vTargetDir), fTimeDelta * 3.f);
+        m_pPlayer->Get_Transform()->Go_Direction(XMLoadFloat3(&m_vTargetDir), fTimeDelta * 4.5f);
     
         IsGround = m_pGameInstance->Check_GameObject_GeometryCollision(m_pPlayer, &IsCollision);
 
