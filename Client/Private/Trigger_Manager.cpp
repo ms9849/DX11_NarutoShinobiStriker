@@ -21,7 +21,7 @@ HRESULT CTrigger_Manager::OnTrigger(TRIGGER_TYPE eTriggerType)
         Desc.eTriggerType = TRIGGER_TYPE::TUTORIAL_SPAWNER_01;
         Desc.fRadius = 5.f;
         Desc.vCenter = _float3(0.f, 0.f, 0.f);
-        Desc.vPosition = _float3(1.222f, -0.021f, -30.5f);
+        Desc.vPosition = _float3(1.222f, 0.679f, -30.5f);
 
         if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_MonsterSpawner"),
             ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_Trigger"), &Desc)))

@@ -47,6 +47,24 @@ HRESULT CPhysxManager::Initialize()
     return S_OK;
 }
 
+void CPhysxManager::Clear()
+{
+    for (auto& Pair : m_DynamicActors)
+       Pair.second->release();
+
+    m_DynamicActors.clear();
+
+    for (auto& Geometry : m_Geometries)
+        Safe_Delete(Geometry);
+
+    m_Geometries.clear();
+
+    for (auto& TriangleMesh : m_TriangleMeshes)
+        TriangleMesh->release();
+
+    m_TriangleMeshes.clear();
+}
+
 void CPhysxManager::Add_GameObject_ToPhysx(CGameObject* pGameObject)
 {
     /* 객체의 트랜스폼을 받아와서, 피직스에서 쓸 수 있는 상태로 변환한다. */
@@ -56,7 +74,6 @@ void CPhysxManager::Add_GameObject_ToPhysx(CGameObject* pGameObject)
     사용자가 가져다 쓸때 하나의 단위계로만 통일해서 사용하면 
     문제 없을거라고 했음.
     */
-    
     _matrix matWorld = XMLoadFloat4x4(pGameObject->Get_Transform()->Get_WorldMatrixPtr());
 	_vector vPos, vRotation, vScale;
 

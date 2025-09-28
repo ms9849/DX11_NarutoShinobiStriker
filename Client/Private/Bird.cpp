@@ -229,6 +229,8 @@ void CBird::Late_Update(_float fTimeDelta)
     /* 새의 몸통 콜라이더를 콜리전 매니저에 등록*/
     m_pGameManager->Add_Object_ToCollision(TEXT("Monster_Body"), this, m_pColliderCom);
 
+    m_pNavigationCom->Compute_Height(m_pTransformCom);
+
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 

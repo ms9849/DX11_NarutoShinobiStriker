@@ -37,6 +37,7 @@
 
 #include "Col_KonohaVillage.h"
 #include "KonohaVillage.h"
+#include "Col_TutorialMap.h"
 #include "TutorialMap.h"
 
 #include "MainCamera.h"
@@ -403,10 +404,17 @@ HRESULT CLoader::Loading_For_Tutorial()
 		CTutorialMap::Create(m_pDevice, m_pContext, OBJECTID::TUTORIAL_MAP))))
 		return E_FAIL;
 
-	/* For.Prototype_GameObject_KonohaVillage */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_KonohaVillage"),
-		CKonohaVillage::Create(m_pDevice, m_pContext, OBJECTID::KONOHA_VILLAGE))))
+	/* For.Prototype_GameObject_COL_TutorialMap */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_COL_TutorialMap"),
+		CCol_TutorialMap::Create(m_pDevice, m_pContext, OBJECTID::TUTORIAL_MAP))))
 		return E_FAIL;
+
+	/* For.Prototype_Component_Model_COL_TutorialMap */
+	_matrix PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_Component_Model_COL_TutorialMap"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/TutorialMap/COL_TutorialMap.fbx", PreTransformMatrix))))
+		return E_FAIL;
+
 
 	/* For.Prototype_GameObject_WhiteJetsu */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_WhiteJetsu"),
@@ -637,11 +645,6 @@ HRESULT CLoader::Loading_For_KonohaVillage()
 		return E_FAIL;
 
 #pragma region MAP
-	
-	/* For.Prototype_GameObject_TutorialMap */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_TutorialMap"),
-		CTutorialMap::Create(m_pDevice, m_pContext, OBJECTID::TUTORIAL_MAP))))
-		return E_FAIL;
 
 	/* For.Prototype_GameObject_KonohaVillage */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_KonohaVillage"),

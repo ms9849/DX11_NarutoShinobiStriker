@@ -457,6 +457,9 @@
     <Filter Include="02.GameObjects\Character\Player\State\BASE\RopeActionState\Rope">
       <UniqueIdentifier>{a17817f6-b305-486c-9609-b5dddf076eb0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Map\TutorialMap\Col">
+      <UniqueIdentifier>{6fe4d054-02e6-4fa5-b69b-80256f24dea1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -882,6 +885,9 @@
     <ClInclude Include="..\Public\Rope.h">
       <Filter>02.GameObjects\Character\Player\State\BASE\RopeActionState\Rope</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Col_TutorialMap.h">
+      <Filter>02.GameObjects\Map\TutorialMap\Col</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1304,6 +1310,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Rope.cpp">
       <Filter>02.GameObjects\Character\Player\State\BASE\RopeActionState\Rope</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Col_TutorialMap.cpp">
+      <Filter>02.GameObjects\Map\TutorialMap\Col</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

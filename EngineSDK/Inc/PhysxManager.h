@@ -28,7 +28,9 @@ private:
 
 public:
 	HRESULT Initialize();
+	void Clear();
 
+public:
 	void Add_GameObject_ToPhysx(class CGameObject* pGameObject);
 	void Add_Geometry_ToPhysx(class CGameObject* pGameObject, class CModel* pModel);
 
