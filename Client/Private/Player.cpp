@@ -181,6 +181,8 @@ HRESULT CPlayer::Initialize(void* pArg)
 		m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(0.3f, 0.031f, -51.82f, 1.f));
 		/* 게임 매니저에 현재 플레이어 정보 세팅. 레벨 변경되도 안전할거니까.. */
 		m_pGameManager->Set_PlayerPtr(this);
+
+		m_pGameInstance->Add_GameObject_ToPhysx(this);
 	}
 
 	else if (LEVEL::KONOHA_VILLAGE == m_pGameManager->Get_NextLevel())

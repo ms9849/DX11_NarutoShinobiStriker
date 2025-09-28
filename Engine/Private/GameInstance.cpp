@@ -523,6 +523,11 @@ void CGameInstance::Add_Geometry_ToPhysx(class CGameObject* pGameObject, class C
 	m_pPhysxManager->Add_Geometry_ToPhysx(pGameObject, pModel);
 }
 
+void CGameInstance::Clear_Geometry()
+{
+	m_pPhysxManager->Clear();
+}
+
 void CGameInstance::Calc_Geometry()
 {
 	m_pPhysxManager->Calc_Geometry();

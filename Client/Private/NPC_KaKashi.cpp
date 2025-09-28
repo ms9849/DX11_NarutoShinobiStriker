@@ -52,7 +52,7 @@ HRESULT CNPC_KaKashi::Initialize(void* pArg)
 
 	if (LEVEL::TUTORIAL == m_pGameManager->Get_NextLevel())
 	{
-		m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(5.3f, 0.031f, -45.82f, 1.f));
+		m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(5.3f, 0.731f, -45.82f, 1.f));
 		m_pTransformCom->Rotation(0.f, 135.f, 0.f);
 	}
 
