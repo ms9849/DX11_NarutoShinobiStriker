@@ -24,6 +24,7 @@ public:
 	virtual _bool	End() = 0;
 
 protected:
+	class CGameManager* m_pGameManager = { nullptr };
 	CGameInstance* m_pGameInstance = { nullptr };
 	_bool		   m_IsNextAnimBlened = { true };
 

@@ -9,6 +9,7 @@ class CShader;
 class CModel;
 NS_END 
 
+/* 쿠나이 방향 계산 해야함 */
 NS_BEGIN(Client)
 
 class CKunai : public CGameObject
@@ -18,7 +19,7 @@ public:
 		_float3 vPosition;
 		_float3 vDirection;
 
-	} BIRD_THROW_DESC;
+	} KUNAI_DESC;
 
 private:
 	CKunai(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
@@ -40,6 +41,8 @@ private:
 	CShader*	m_pShaderCom = { nullptr };
 	_uint		m_iNumMeshes = {};
 	_float3		m_vDirection = {};
+	_float		m_fTimeAcc = { 0.f };
+
 private:
 	HRESULT Ready_Components();
 	HRESULT Bind_ShaderResources();

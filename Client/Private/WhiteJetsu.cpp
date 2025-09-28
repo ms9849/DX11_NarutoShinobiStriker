@@ -298,8 +298,6 @@ HRESULT CWhiteJetsu::Ready_Components()
         return E_FAIL;
 
     /* Com_Navigation */
-
-    /* Com_Navigation */
     CNavigation::NAVIGATION_DESC Desc;
     Desc.iCurrentCellIndex = 0;
 

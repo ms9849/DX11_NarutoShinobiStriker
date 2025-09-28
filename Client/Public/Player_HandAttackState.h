@@ -30,7 +30,6 @@ private:
 	ANIM_STATE		m_eAnimState = {};
 	_bool			m_IsOnCollider = { false };
 
-
 public:
 	static CPlayer_HandAttackState* Create(class CPlayer* pPlayer);
 	virtual void Free() override;

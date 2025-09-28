@@ -25,7 +25,7 @@ CBird_ElectricShockState::CBird_ElectricShockState(CNavigation* pNavigation, CBi
 
 void CBird_ElectricShockState::Start(_bool IsBlend)
 {
-    m_pBird->Set_AnimIndex("WhiteZetsuCrowdForm_Beaten_ElectricShock_Loop", 2.f, true);
+    m_pBird->Set_AnimIndex("TenTailsCloneLoser02_Beaten_ElectricShock_Loop", 2.f, true);
 }
 
 CBirdState* CBird_ElectricShockState::Update(_float fTimeDelta)

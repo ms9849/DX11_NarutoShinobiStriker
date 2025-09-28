@@ -460,6 +460,36 @@
     <Filter Include="02.GameObjects\Map\TutorialMap\Col">
       <UniqueIdentifier>{6fe4d054-02e6-4fa5-b69b-80256f24dea1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Enemy\Pajama">
+      <UniqueIdentifier>{8a730f21-d205-4ec9-9546-e7b5d2b6e336}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Pajama\State">
+      <UniqueIdentifier>{d7dd960b-d0c7-4c3c-95aa-92bce7ec1001}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Pajama\State\Idle">
+      <UniqueIdentifier>{e66f93b3-739c-46f5-8acb-9778bb13aa2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Pajama\State\Walk">
+      <UniqueIdentifier>{6ea029de-40fd-4de8-8c97-8b2b42192d2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Pajama\State\Run">
+      <UniqueIdentifier>{23b0fc3d-bf07-4d60-b5dd-c8628dc33ac7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Pajama\State\Beaten">
+      <UniqueIdentifier>{24b79cf2-1179-4791-86b7-90521ee50c1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Pajama\State\Attack">
+      <UniqueIdentifier>{8767e238-ff5e-4965-a1bf-8f229e4e43f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Pajama\State\Attack\Throw">
+      <UniqueIdentifier>{a8cf6672-6e05-41b4-9dba-c66e001d17b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Pajama\State\Beaten\Blasted">
+      <UniqueIdentifier>{91d10992-c355-4bb7-873f-040ff2ccd670}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Pajama\State\Beaten\Electric">
+      <UniqueIdentifier>{b13bd25f-a4a7-4e58-8b32-4b96823bdf82}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -888,6 +918,39 @@
     <ClInclude Include="..\Public\Col_TutorialMap.h">
       <Filter>02.GameObjects\Map\TutorialMap\Col</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Pajama.h">
+      <Filter>02.GameObjects\Enemy\Pajama</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\PajamaState.h">
+      <Filter>02.GameObjects\Enemy\Pajama\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Pajama_IdleState.h">
+      <Filter>02.GameObjects\Enemy\Pajama\State\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Pajama_WalkState.h">
+      <Filter>02.GameObjects\Enemy\Pajama\State\Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Pajama_HandAttackState.h">
+      <Filter>02.GameObjects\Enemy\Pajama\State\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Pajama_SlidingKunaiState.h">
+      <Filter>02.GameObjects\Enemy\Pajama\State\Attack\Throw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Pajama_RunState.h">
+      <Filter>02.GameObjects\Enemy\Pajama\State\Run</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Pajama_BeatenState.h">
+      <Filter>02.GameObjects\Enemy\Pajama\State\Beaten</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Pajama_BeatenBlastedState.h">
+      <Filter>02.GameObjects\Enemy\Pajama\State\Beaten\Blasted</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Pajama_ElectricShockState.h">
+      <Filter>02.GameObjects\Enemy\Pajama\State\Beaten\Electric</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Pajama_ThrowKunaiState.h">
+      <Filter>02.GameObjects\Enemy\Pajama\State\Attack\Throw</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1313,6 +1376,39 @@
     </ClCompile>
     <ClCompile Include="..\Private\Col_TutorialMap.cpp">
       <Filter>02.GameObjects\Map\TutorialMap\Col</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Pajama.cpp">
+      <Filter>02.GameObjects\Enemy\Pajama</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\PajamaState.cpp">
+      <Filter>02.GameObjects\Enemy\Pajama\State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Pajama_IdleState.cpp">
+      <Filter>02.GameObjects\Enemy\Pajama\State\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Pajama_WalkState.cpp">
+      <Filter>02.GameObjects\Enemy\Pajama\State\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Pajama_HandAttackState.cpp">
+      <Filter>02.GameObjects\Enemy\Pajama\State\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Pajama_SlidingKunaiState.cpp">
+      <Filter>02.GameObjects\Enemy\Pajama\State\Attack\Throw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Pajama_ThrowKunaiState.cpp">
+      <Filter>02.GameObjects\Enemy\Pajama\State\Attack\Throw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Pajama_RunState.cpp">
+      <Filter>02.GameObjects\Enemy\Pajama\State\Run</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Pajama_BeatenState.cpp">
+      <Filter>02.GameObjects\Enemy\Pajama\State\Beaten</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Pajama_BeatenBlastedState.cpp">
+      <Filter>02.GameObjects\Enemy\Pajama\State\Beaten\Blasted</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Pajama_ElectricShockState.cpp">
+      <Filter>02.GameObjects\Enemy\Pajama\State\Beaten\Electric</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

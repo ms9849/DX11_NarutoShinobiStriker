@@ -40,7 +40,7 @@ CBirdState* CBird_AttackState::Update(_float fTimeDelta)
 
     if (0.6 <= fAnimProgress && false == m_isThrow)
     {
-        CKunai::BIRD_THROW_DESC Desc;
+        CKunai::KUNAI_DESC Desc;
 
         XMStoreFloat3(&Desc.vPosition, m_pBird->Get_Transform()->Get_State(STATE::POSITION));
         XMStoreFloat3(&Desc.vDirection, m_pBird->Get_Transform()->Get_State(STATE::LOOK));

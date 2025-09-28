@@ -37,15 +37,15 @@ CPlayerState* CPlayer_ChidoriAerialReadyState::Update(_float fTimeDelta)
 	m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fMovement / 5.f, 0.f, 0.f));
 
 
-	_float fHeight = m_pPlayer->Get_Navigation()->Get_CellHeight(m_pPlayer->Get_Transform());
-	if (XMVectorGetY(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION)) < fHeight)
-	{
-		IsGround = true;
-		_float4 PlayerPos = {};
-		XMStoreFloat4(&PlayerPos, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
+	//_float fHeight = m_pPlayer->Get_Navigation()->Get_CellHeight(m_pPlayer->Get_Transform());
+	//if (XMVectorGetY(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION)) < fHeight)
+	//{
+	//	IsGround = true;
+	//	_float4 PlayerPos = {};
+	//	XMStoreFloat4(&PlayerPos, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
 
-		m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, XMVectorSet(PlayerPos.x, fHeight, PlayerPos.z, 1.f));
-	}
+	//	m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, XMVectorSet(PlayerPos.x, fHeight, PlayerPos.z, 1.f));
+	//}
 
 	if ((m_pGameInstance->Key_Pressing(DIK_W) ||
 		m_pGameInstance->Key_Pressing(DIK_A) ||

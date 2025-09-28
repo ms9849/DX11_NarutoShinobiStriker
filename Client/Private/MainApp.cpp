@@ -251,6 +251,26 @@ HRESULT CMainApp::Ready_Prototypes()
 		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Monster/Boxer/Upper_Boxer.fbx", PreTransformMatrix))))
 		return E_FAIL;
 
+	/* 파자마 */
+	/* For.Prototype_Component_Model_Head_Pajama */
+	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_Head_Pajama"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Monster/Pajama/Head_Pajama.fbx", PreTransformMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Face_Pajama */
+	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_Face_Pajama"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Monster/Pajama/Face_Pajama.fbx", PreTransformMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Upper_Pajama */
+	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_Upper_Pajama"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Monster/Pajama/Upper_Pajama.fbx", PreTransformMatrix))))
+		return E_FAIL;
+
+
 	/* 목둔 박수 */
 	/* For.Prototype_Component_Model_WoodHand_L */
 	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(270.0f)) * XMMatrixTranslation(-2.65f, 0.f, 0.f);
@@ -547,6 +567,7 @@ HRESULT CMainApp::Ready_Prototypes()
 		CExplosion::Create(m_pDevice, m_pContext, OBJECTID::EXPLOSION))))
 		return E_FAIL;
 #pragma endregion
+
 	return S_OK;
 }
 
