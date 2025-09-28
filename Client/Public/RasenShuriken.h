@@ -43,7 +43,7 @@ private:
 
 	_float			 m_fLifeTime = { 2.0 };
 	_float			 m_fTimeAcc = { 0.f };
-	_bool			 m_isHit = { false };
+	_bool			 m_IsHit = { false };
 	_float3			 m_vDirection = { };
 	_float			 m_fSpeed = { 5.f };
 

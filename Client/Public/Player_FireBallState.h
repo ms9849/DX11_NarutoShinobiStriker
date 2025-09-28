@@ -24,7 +24,7 @@ public:
 private:
 	class CGameManager* m_pGameManager = { nullptr };
 	class CPlayer* m_pPlayer = { nullptr };
-	_bool		   m_isFireballThrow = { false };
+	_bool		   m_IsFireballThrow = { false };
 public:
 	static CPlayer_FireBallState* Create(class CPlayer* pPlayer);
 	virtual void Free() override;

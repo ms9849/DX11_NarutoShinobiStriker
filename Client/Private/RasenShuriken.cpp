@@ -56,7 +56,7 @@ void CRasenShuriken::Update(_float fTimeDelta)
 
     if (false == m_pColliderCom->Get_Active() && true == m_isThrowing)
     {
-        m_isHit = true;
+        m_IsHit = true;
     }
 
     /* 던진 상태라면 시간 쌓기 */
@@ -68,7 +68,7 @@ void CRasenShuriken::Update(_float fTimeDelta)
         m_isFinal = true;
 
     /* 추후 폭발로직에 맞춰 이펙트 수정해야 함. */
-    if (false == m_isHit && false == m_isInHand && true == m_isThrowing)
+    if (false == m_IsHit && false == m_isInHand && true == m_isThrowing)
     {
         /* 던지는 도중에는 정해진 방향으로 날아가기. */
         /* 갑자기 사라지는 현상 체크할 것 */
@@ -82,9 +82,9 @@ void CRasenShuriken::Update(_float fTimeDelta)
     }
 
     /* 나선 수리검이 폭발하는 조건 2개 */
-    if (true == m_isHit && true == m_isThrowing)
+    if (true == m_IsHit && true == m_isThrowing)
     {
-        m_isHit = false;
+        m_IsHit = false;
         m_isThrowing = false;
         m_fLifeTime = 1.5f;
         m_fTimeAcc = 0.f;

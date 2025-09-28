@@ -490,6 +490,12 @@
     <Filter Include="02.GameObjects\Enemy\Pajama\State\Beaten\Electric">
       <UniqueIdentifier>{b13bd25f-a4a7-4e58-8b32-4b96823bdf82}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Enemy\Pajama\State\Step">
+      <UniqueIdentifier>{cea44b5d-e245-4b3b-954d-19e8968e712c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\Pajama\State\Attack\Fireball">
+      <UniqueIdentifier>{acbf0feb-fceb-4e6b-bebe-f64fc5e2b719}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -951,6 +957,12 @@
     <ClInclude Include="..\Public\Pajama_ThrowKunaiState.h">
       <Filter>02.GameObjects\Enemy\Pajama\State\Attack\Throw</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Pajama_BackStepState.h">
+      <Filter>02.GameObjects\Enemy\Pajama\State\Step</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Pajama_FireballState.h">
+      <Filter>02.GameObjects\Enemy\Pajama\State\Attack\Fireball</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1409,6 +1421,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Pajama_ElectricShockState.cpp">
       <Filter>02.GameObjects\Enemy\Pajama\State\Beaten\Electric</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Pajama_BackStepState.cpp">
+      <Filter>02.GameObjects\Enemy\Pajama\State\Step</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Pajama_FireballState.cpp">
+      <Filter>02.GameObjects\Enemy\Pajama\State\Attack\Fireball</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -37,7 +37,7 @@ private:
 	_float4x4		 m_CombinedWorldMatrix = {};
 	_float			 m_fLifeTime = { 1.2f };
 	_float			 m_fTimeAcc = { 0.f };
-	_bool			 m_isHit = { false };
+	_bool			 m_IsHit = { false };
 
 private:
 	HRESULT Ready_Components();

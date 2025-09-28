@@ -30,6 +30,7 @@ HRESULT CFireBall::Initialize(void* pArg)
     
     m_pTransformCom->Set_State(STATE::POSITION, XMLoadFloat3(&pDesc->vPosition));
     m_pTransformCom->LookAt(m_pTransformCom->Get_State(STATE::POSITION) + XMLoadFloat3(&pDesc->vLook));
+    m_IsEnemy = pDesc->IsEnemy;
 
     return S_OK;
 }
@@ -50,8 +51,12 @@ void CFireBall::Update(_float fTimeDelta)
 
 void CFireBall::Late_Update(_float fTimeDelta)
 {
-    CGameManager::GetInstance()->Add_Collider_ToCollision(TEXT("Player_Skill"),
-        COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_FIREBALL, m_pColliderCom);
+    if(false == m_IsEnemy)
+        CGameManager::GetInstance()->Add_Collider_ToCollision(TEXT("Player_Skill"),
+            COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_FIREBALL, m_pColliderCom);
+    else if(true == m_IsEnemy)
+        CGameManager::GetInstance()->Add_Collider_ToCollision(TEXT("Monster_Skill"),
+            COLLIDER_HANDLE_ID::ENEMY_JETSU_WOODHAND, m_pColliderCom);
 
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
