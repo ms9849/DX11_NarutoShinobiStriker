@@ -48,6 +48,15 @@ void CPlayer_HandAttackState::Start(_bool IsBlend)
 CPlayerState* CPlayer_HandAttackState::Update(_float fTimeDelta)
 {
     CTransform* pTargetTransform = m_pGameManager->Calc_Target(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
+    /* CHASE */
+    if (nullptr != pTargetTransform)
+    {
+        _float fTargetDist = XMVectorGetX(XMVector3Length(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION) - pTargetTransform->Get_State(STATE::POSITION)));
+        if (fTargetDist <= 3.f && ANIM_STATE::BACK_KICK != m_eAnimState)
+            m_pPlayer->Get_Transform()->Chase_XZ(pTargetTransform->Get_State(STATE::POSITION), fTimeDelta * 0.1f, nullptr, 1.2f);
+
+    }
+    /* chase ³¡ */
 
     CPlayerState* pNextState = { nullptr };
 

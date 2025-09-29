@@ -65,13 +65,27 @@ CPlayerState* CPlayer_FrontJumpState::Update(_float fTimeDelta)
 
 	m_fTimeAcc += fTimeDelta * 2.1f;
 
-	m_fMovement = fStartSpeed * m_fTimeAcc - 0.5f * fGravity * m_fTimeAcc * m_fTimeAcc;
-	m_fMovement *= fJumpScale;
+	m_fCurMovement = fStartSpeed * m_fTimeAcc - 0.5f * fGravity * m_fTimeAcc * m_fTimeAcc;
+	m_fCurMovement *= fJumpScale;
 
-	if (m_fMovement < -0.3f)
-		m_fMovement = -0.3f;
+	// 최솟값 제한
+	if (m_fCurMovement < -0.3f)
+		m_fCurMovement = -0.3f;
 
-	m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fMovement, 0.f, 0.f));
+	// 이번 프레임의 이동량
+	_float fDeltaMovement = m_fCurMovement - m_fPreMovement;
+
+	// Q 누르면 이번 프레임의 이동량만 0.3배로 줄임
+	if (m_pGameInstance->Key_Pressing(DIK_Q) && m_fTimeAcc >= 0.5f)
+		fDeltaMovement *= 0.05f;
+
+	// 최종 이동량.
+	m_fCurMovement = m_fPreMovement + fDeltaMovement;
+
+	// 다음 프레임을 위해 저장
+	m_fPreMovement = m_fCurMovement;
+
+	m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fCurMovement, 0.f, 0.f));
 
 	if (m_pGameInstance->Key_Pressing(DIK_W) ||
 		m_pGameInstance->Key_Pressing(DIK_A) ||
@@ -101,7 +115,7 @@ CPlayerState* CPlayer_FrontJumpState::Update(_float fTimeDelta)
 
 	// 낙하
 	// 점프 중에 가속도 떨어지거나, 더블점프 중 + 애니 재생 끝났다면
-	if ((m_fMovement < 0.f && m_fTimeAcc != 0.f && ANIM_STATE::JUMP == m_eAnimState)
+	if ((m_fCurMovement < 0.f && m_fTimeAcc != 0.f && ANIM_STATE::JUMP == m_eAnimState)
 		|| (ANIM_STATE::DOUBLE_JUMP == m_eAnimState && IsAnimFinished))
 	{
 		m_pPlayer->Set_AnimIndex("CustomMan_Fall_Front_Loop", 1.25f, true);

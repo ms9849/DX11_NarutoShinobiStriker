@@ -57,13 +57,13 @@ CPajamaState* CPajama_WalkState::Update(_float fTimeDelta)
     {
         pNextState = CPajama_ThrowKunaiState::Create(m_pNavigationCom, m_pPajama);
     }
-    else if (fDist >= 2.f)
+    else if (fDist >= 1.3f)
     {
         m_pPajama->Get_Transform()->Go_Right(fTimeDelta * 0.1f, m_pNavigationCom);
         m_pPajama->Get_Transform()->Chase(m_pPlayerTransformCom->Get_State(STATE::POSITION), fTimeDelta * 0.05f, nullptr, fDist);
         m_pPajama->Get_Transform()->LookAt_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION));
     }
-    else if (fDist < 2.f)
+    else if (fDist < 1.3f)
     {
         pNextState = CPajama_HandAttackState::Create(m_pNavigationCom, m_pPajama);
     }

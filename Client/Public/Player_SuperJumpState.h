@@ -28,7 +28,7 @@ private:
 	_float m_fTimeAcc = { 0.f };
 	ANIM_STATE m_eAnimState = {};
 	_float m_fPower = { 0.f };
-	_float m_fMovement = {};
+	_float m_fCurMovement = {};
 	_bool  m_IsAnimLoopFinished = { false };
 	_bool  m_IsTriggered = { false };
 public:

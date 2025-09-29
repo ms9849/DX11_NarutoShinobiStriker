@@ -28,10 +28,12 @@ public:
 private:
 	class CPlayer* m_pPlayer = { nullptr };
 	ANIM_STATE	   m_eAnimState = {};
-	_float	       m_fMovement = { 0.f };
+	_float	       m_fCurMovement = { 0.f };
 	_float		   m_fSpeed = { 3.f };
 	_float		   m_fTimeAcc = { 0.f };
 	_bool		   m_bCanDoubleJump = false;
+	_float		   m_fPreMovement = { 0.f };
+
 public:
 	static CPlayer_JumpState* Create(class CPlayer* pPlayer, _float fTimeAcc = 0.f, ANIM_STATE eStartAnimState = ANIM_STATE::JUMP);
 	virtual void Free() override;

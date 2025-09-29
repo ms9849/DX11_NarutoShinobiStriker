@@ -33,8 +33,8 @@ CPlayerState* CPlayer_ChidoriAerialReadyState::Update(_float fTimeDelta)
 	_float fAnimProgress = m_pPlayer->Get_AnimProgress();
 
 	m_fTimeAcc += fTimeDelta;
-	m_fMovement = (m_fTimeAcc - 0.5f * m_fTimeAcc * m_fTimeAcc * 7.0f * (m_fTimeAcc));
-	m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fMovement / 5.f, 0.f, 0.f));
+	m_fCurMovement = (m_fTimeAcc - 0.5f * m_fTimeAcc * m_fTimeAcc * 7.0f * (m_fTimeAcc));
+	m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fCurMovement / 5.f, 0.f, 0.f));
 
 
 	//_float fHeight = m_pPlayer->Get_Navigation()->Get_CellHeight(m_pPlayer->Get_Transform());

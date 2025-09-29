@@ -36,8 +36,8 @@ CPlayerState* CPlayer_AerialRasenShurikenState::Update(_float fTimeDelta)
 
 	if (fAnimProgress < 0.3f)
 	{
-		m_fMovement = (m_fTimeAcc - 0.5f * m_fTimeAcc * m_fTimeAcc * 7.0f * (m_fTimeAcc));
-		m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION) + XMVectorSet(0.f, 0.05f * m_fMovement * (0.3f - fAnimProgress), 0.f, 0.f));
+		m_fCurMovement = (m_fTimeAcc - 0.5f * m_fTimeAcc * m_fTimeAcc * 7.0f * (m_fTimeAcc));
+		m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION) + XMVectorSet(0.f, 0.05f * m_fCurMovement * (0.3f - fAnimProgress), 0.f, 0.f));
 	}
 
 	//_float fHeight = m_pPlayer->Get_Navigation()->Get_CellHeight(m_pPlayer->Get_Transform());
