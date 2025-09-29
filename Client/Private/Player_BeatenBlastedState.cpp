@@ -7,6 +7,7 @@
 #pragma region TRANSFER_STATE
 
 #include "Player_IdleState.h"
+#include "Player_StepState.h"
 
 #pragma endregion
 
@@ -37,6 +38,27 @@ CPlayerState* CPlayer_BeatenBlastedState::Update(_float fTimeDelta)
     if (true == IsAnimFinished)
     {
         pNextState = CPlayer_IdleState::Create(m_pPlayer);
+    }
+    // ¹é½ºÅÜ
+    else if (m_pGameInstance->Key_Pressing(DIK_S) && m_pGameInstance->Key_Down(DIK_LSHIFT)
+        && fAnimProgress >= 0.7f)
+    {
+        pNextState = CPlayer_StepState::Create(m_pPlayer, CPlayer_StepState::ANIM_STATE::BACK);
+        m_IsNextAnimBlened = true;
+    }
+    // ¿À¸¥ÂÊ ½ºÅÜ
+    else if (m_pGameInstance->Key_Pressing(DIK_D)
+        && fAnimProgress >= 0.7f)
+    {
+        if (m_pGameInstance->Key_Down(DIK_LSHIFT) && nullptr == pNextState)
+            pNextState = CPlayer_StepState::Create(m_pPlayer, CPlayer_StepState::ANIM_STATE::RIGHT);
+    }
+    // ¿ÞÂÊ ½ºÅÜ
+    else if (m_pGameInstance->Key_Pressing(DIK_A)
+        && fAnimProgress >= 0.7f)
+    {
+        if (m_pGameInstance->Key_Down(DIK_LSHIFT) && nullptr == pNextState)
+            pNextState = CPlayer_StepState::Create(m_pPlayer, CPlayer_StepState::ANIM_STATE::LEFT);
     }
 
     return pNextState;

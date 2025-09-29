@@ -27,7 +27,7 @@ private:
 	class CPlayer*	m_pPlayer = { nullptr };
 	ANIM_STATE		m_eAnimState = {};
 	_float			m_fTimeAcc =  {};
-	_float			m_fMovement = {};
+	_float			m_fCurMovement = {};
 
 public:
 	static CPlayer_HandAerialAttackState* Create(class CPlayer* pPlayer, _float fTimeAcc);

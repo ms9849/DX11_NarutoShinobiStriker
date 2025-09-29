@@ -84,8 +84,9 @@ void CMainCamera::Priority_Update(_float fTimeDelta)
     _vector     vCamPos = XMVector3TransformNormal(StartVector, RotationMatrix);
 
     _float      fLength = XMVectorGetX(XMVector3Length(vCamPos));
-
-    m_pTransformCom->Chase_Lerp(m_pPlayerTransform->Get_State(STATE::POSITION) + vCamPos, fTimeDelta * 0.4f, 0.f);
+    
+    _float      fSpeedFactor = true == m_pGameInstance->Key_Pressing(DIK_Q) ? 0.8f : 0.4f;
+    m_pTransformCom->Chase_Lerp(m_pPlayerTransform->Get_State(STATE::POSITION) + vCamPos, fTimeDelta * fSpeedFactor, 0.f);
     m_pTransformCom->LookAt_Lerp(
         m_pPlayerTransform->Get_State(STATE::POSITION) + 
         XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::LOOK)) * 1.f + 

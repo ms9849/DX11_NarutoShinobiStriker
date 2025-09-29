@@ -43,11 +43,11 @@ CPlayerState* CPlayer_SuperJumpState::Update(_float fTimeDelta)
 
 	m_fTimeAcc += fTimeDelta * 2.1f;
 
-	m_fMovement = fStartSpeed * m_fTimeAcc - 0.5f * fGravity * m_fTimeAcc * m_fTimeAcc;
-	m_fMovement *= fJumpScale;
+	m_fCurMovement = fStartSpeed * m_fTimeAcc - 0.5f * fGravity * m_fTimeAcc * m_fTimeAcc;
+	m_fCurMovement *= fJumpScale;
 
-	if (m_fMovement < -0.3f)
-		m_fMovement = -0.3f;
+	if (m_fCurMovement < -0.3f)
+		m_fCurMovement = -0.3f;
 
 	/* 시작 한번만 재생. */
 	if (ANIM_STATE::START == m_eAnimState)
@@ -65,7 +65,7 @@ CPlayerState* CPlayer_SuperJumpState::Update(_float fTimeDelta)
 
 	if(ANIM_STATE::FALL == m_eAnimState)
 	{
-		m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fMovement, 0.f, 0.f));
+		m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fCurMovement, 0.f, 0.f));
 
 		if (m_pGameInstance->Key_Pressing(DIK_W) ||
 			m_pGameInstance->Key_Pressing(DIK_A) ||
@@ -83,7 +83,7 @@ CPlayerState* CPlayer_SuperJumpState::Update(_float fTimeDelta)
 	}
 	else
 	{
-		m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fMovement, 0.f, 0.f));
+		m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION) + XMVectorSet(0.f, m_fCurMovement, 0.f, 0.f));
 
 		if (m_pGameInstance->Key_Pressing(DIK_W) ||
 			m_pGameInstance->Key_Pressing(DIK_A) ||
@@ -101,7 +101,7 @@ CPlayerState* CPlayer_SuperJumpState::Update(_float fTimeDelta)
 	}
 	// 낙하
 	// 점프 중에 가속도 떨어지거나, 더블점프 중 + 애니 재생 끝났다면
-	if (m_fMovement < 0.f && m_fTimeAcc != 0.f)
+	if (m_fCurMovement < 0.f && m_fTimeAcc != 0.f)
 	{
 		m_pPlayer->Set_AnimIndex("CustomMan_Fall_Front_Loop", 2.5f, true);
 		m_eAnimState = ANIM_STATE::FALL;

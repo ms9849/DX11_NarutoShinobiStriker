@@ -25,7 +25,7 @@ private:
 	class CPlayer* m_pPlayer = { nullptr };
 	ANIM_STATE	   m_eAnimState = {};
 	_float		   m_fTimeAcc = { 0.f };
-	_float		   m_fMovement = { 0.f };
+	_float		   m_fCurMovement = { 0.f };
 public:
 	static CPlayer_ChidoriAerialReadyState* Create(class CPlayer* pPlayer, _float fTimeAcc);
 	virtual void Free() override;

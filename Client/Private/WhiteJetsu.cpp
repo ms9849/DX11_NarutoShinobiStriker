@@ -72,7 +72,7 @@ void CWhiteJetsu::OnCollision(COLLIDER_HANDLE_ID eHandleID)
     {
         m_fCurrentHP -= 1.f;
 
-        pNextState = CWhiteJetsu_BeatenState::Create(m_pNavigationCom, this, vDirection, 1.5f);
+        pNextState = CWhiteJetsu_BeatenState::Create(m_pNavigationCom, this, vDirection, 1.8f);
     }
     else if (COLLIDER_HANDLE_ID::PLAYER_HAND_ATTACK_FINAL == eHandleID)
     {
@@ -314,15 +314,22 @@ HRESULT CWhiteJetsu::Ready_Components()
             return E_FAIL;
     }
 
+    /* Com_Collider */
+    CBounding_OBB::BOUNDING_OBB_DESC OBBDesc{};
+
+    OBBDesc.vAngles = _float3(0.f, 0.f, 0.f);
+    OBBDesc.vSize = _float3(0.7f, 1.4f, 0.7f);
+    OBBDesc.vCenter = _float3(0.f, 0.8f, 0.f);
+    OBBDesc.isActive = true;
+
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_OBB"),
+        TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &OBBDesc)))
+        return E_FAIL;
+
     CBounding_Sphere::BOUNDING_SPHERE_DESC ColliderDesc{};
 
     ColliderDesc.fRadius = 0.7f;
     ColliderDesc.vCenter = _float3{ 0.f, 0.7f, 0.f };
-
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_Sphere"),
-        TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
-        return E_FAIL;
-
     ColliderDesc.isActive = false;
 
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_Sphere"),
