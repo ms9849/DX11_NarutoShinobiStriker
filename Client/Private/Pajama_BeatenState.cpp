@@ -21,12 +21,10 @@ CPajama_BeatenState::CPajama_BeatenState(CNavigation* pNavigation, CPajama* pPaj
 
 void CPajama_BeatenState::Start(_bool IsBlend)
 {
-	m_pPajama->Set_AnimIndex("CustomMan_Beaten_Left", 1.f, IsBlend);
-
 	if (TEXT("CustomMan_Beaten_Left") != m_pPajama->Get_CurrentAnim())
-		m_pPajama->Set_AnimIndex("CustomMan_Beaten_Left", 1.5f, IsBlend);
+		m_pPajama->Set_AnimIndex("CustomMan_Beaten_Left", 1.5f, false);
 	else
-		m_pPajama->Set_AnimIndex("CustomMan_Beaten_Right", 1.5f, IsBlend);
+		m_pPajama->Set_AnimIndex("CustomMan_Beaten_Right", 1.5f, false);
 
 	m_pPajama->Get_Transform()->LookAt_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION));
 }

@@ -305,7 +305,7 @@ HRESULT CPlayer::Ready_Components()
 	CBounding_OBB::BOUNDING_OBB_DESC OBBDesc{};
 
 	OBBDesc.vAngles = _float3( 0.f, 0.f, 0.f );
-	OBBDesc.vSize = _float3(0.95f, 1.4f, 0.95f);
+	OBBDesc.vSize = _float3(0.7f, 1.4f, 0.7f);
 	OBBDesc.vCenter = _float3( 0.f, 0.8f, 0.f );
 	OBBDesc.isActive = true;
 

@@ -32,6 +32,8 @@ public:
 	virtual void OnChange(const _float4x4* pWorldMatrix) override;
 
 private:
+	_float m_fPhi = { 0.f };
+	_float m_fTheta = { 0.f };
 	_float3 m_vCameraPos = {};
 	_float m_fRotateX = {};
 	_float m_fRotateY = {};
