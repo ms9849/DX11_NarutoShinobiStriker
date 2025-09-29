@@ -20,11 +20,11 @@ using namespace physx;
 
 NS_BEGIN(Engine)
 
-class CPhysxManager : public CBase
+class CPhysx_Manager : public CBase
 {
 private:
-	CPhysxManager();
-	virtual ~CPhysxManager() = default;
+	CPhysx_Manager();
+	virtual ~CPhysx_Manager() = default;
 
 public:
 	HRESULT Initialize();
@@ -73,7 +73,7 @@ private:
 	vector<PxTriangleMeshGeometry*> m_Geometries = {};
 	vector<PxTriangleMesh*> m_TriangleMeshes = {};
 public:
-	static CPhysxManager* Create();
+	static CPhysx_Manager* Create();
 	virtual void Free() override;
 };
 

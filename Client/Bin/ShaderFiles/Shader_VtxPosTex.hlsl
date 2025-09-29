@@ -12,11 +12,6 @@ float   g_SkillCoolDown;
 float   g_CurrentHP;
 float   g_MaxHP;
 
-sampler DefaultSampler = sampler_state
-{
-    Filter = MIN_MAG_MIP_LINEAR;
-};
-
 struct VS_IN
 {
     float3 vPosition : POSITION;

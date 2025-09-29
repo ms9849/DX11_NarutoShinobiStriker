@@ -13,7 +13,8 @@
 #include "Picking_Manager.h"
 #include "IMGUI_Manager.h"
 #include "Light_Manager.h"
-#include "PhysxManager.h"
+#include "Physx_Manager.h"
+#include "Target_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -55,6 +56,10 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	if (nullptr == m_pLevel_Manager)
 		return E_FAIL;
 	
+	m_pTarget_Manager = CTarget_Manager::Create(*ppDevice, *ppContext);
+	if (nullptr == m_pTarget_Manager)
+		return E_FAIL;
+
 	m_pRenderer = CRenderer::Create(*ppDevice, *ppContext);
 	if (nullptr == m_pRenderer)
 		return E_FAIL;
@@ -75,7 +80,7 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	if (nullptr == m_pIMGUI_Manager)
 		return E_FAIL;
 
-	m_pPhysxManager = CPhysxManager::Create();
+	m_pPhysxManager = CPhysx_Manager::Create();
 	if (nullptr == m_pPhysxManager)
 		return E_FAIL;
 
@@ -511,6 +516,11 @@ HRESULT CGameInstance::Add_Light(const LIGHT_DESC& LightDesc)
 	return m_pLight_Manager->Add_Light(LightDesc);
 }
 
+HRESULT CGameInstance::Render_Lights(CShader* pShader, CVIBuffer* pVIBuffer)
+{
+	return m_pLight_Manager->Render_Lights(pShader, pVIBuffer);
+}
+
 #pragma endregion
 
 #pragma region Physx_MANAGER 
@@ -554,6 +564,49 @@ _bool CGameInstance::Check_Ray_GeometryPicking(_float3 vRayPos, _float3 vRayDir,
 }
 
 #pragma endregion
+
+#pragma region TARGET_MANAGER
+
+HRESULT CGameInstance::Add_RenderTarget(const _wstring& strTargetTag, _uint iSizeX, _uint iSizeY, DXGI_FORMAT ePixelFormat, const _float4& vClearColor)
+{
+	return m_pTarget_Manager->Add_RenderTarget(strTargetTag, iSizeX, iSizeY, ePixelFormat, vClearColor);
+}
+
+HRESULT CGameInstance::Add_MRT(const _wstring& strMRTTag, const _wstring& strTargetTag)
+{
+	return m_pTarget_Manager->Add_MRT(strMRTTag, strTargetTag);
+}
+
+HRESULT CGameInstance::Begin_MRT(const _wstring& strMRTTag)
+{
+	return m_pTarget_Manager->Begin_MRT(strMRTTag);
+}
+
+HRESULT CGameInstance::End_MRT()
+{
+	return m_pTarget_Manager->End_MRT();
+}
+
+HRESULT CGameInstance::Bind_RenderTarget(const _wstring& strTargetTag, CShader* pShader, const _char* pConstantName)
+{
+	return m_pTarget_Manager->Bind_RenderTarget(strTargetTag, pShader, pConstantName);
+}
+
+#ifdef _DEBUG
+
+HRESULT CGameInstance::Ready_RT_Debug(const _wstring& strTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY)
+{
+	return m_pTarget_Manager->Ready_Debug(strTargetTag, fX, fY, fSizeX, fSizeY);
+}
+
+HRESULT CGameInstance::Render_RT_Debug(const _wstring& strMRTTag, CShader* pShader, CVIBuffer_Rect* pVIBuffer)
+{
+	return m_pTarget_Manager->Render_Debug(strMRTTag, pShader, pVIBuffer);
+}
+
+#endif
+
+#pragma endregion
 void CGameInstance::Release_Engine()
 {
 	DestroyInstance();
@@ -564,6 +617,7 @@ void CGameInstance::Release_Engine()
 	Safe_Release(m_pPrototype_Manager);
 	Safe_Release(m_pObject_Manager);
 	Safe_Release(m_pLevel_Manager);
+	Safe_Release(m_pTarget_Manager);
 	Safe_Release(m_pSound_Manager);
 	Safe_Release(m_pInput_Manager);
 	Safe_Release(m_pPooling_Manager);

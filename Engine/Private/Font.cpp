@@ -89,6 +89,7 @@ HRESULT CFont::DrawFont()
     /* 폰트에 따라 서로 다른 이펙트를 받긴 해야 하니까.. */
     /* 그렇다고 셰이더에 종속시키고 싶진 않고.. */
     // -> 알파값만 받아올 것
+    m_pContext->GSSetShader(nullptr, nullptr, 0);
 
     m_pBatch->Begin(
         SpriteSortMode_Deferred,

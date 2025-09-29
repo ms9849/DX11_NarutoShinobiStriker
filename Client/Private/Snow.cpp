@@ -39,7 +39,7 @@ void CSnow::Update(_float fTimeDelta)
 
 void CSnow::Late_Update(_float fTimeDelta)
 {
-	m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+	m_pGameInstance->Add_RenderGroup(RENDER::NONLIGHT, this);
 }
 
 HRESULT CSnow::Render()

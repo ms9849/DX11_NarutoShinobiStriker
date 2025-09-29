@@ -1,24 +1,8 @@
 #include "Engine_Shader_Defines.hlsli"
 
 matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
-
-vector g_vCamPosition;
-
-vector g_vLightDir;
-vector g_vLightDiffuse;
-vector g_vLightAmbient;
-vector g_vLightSpecular;
-
 texture2D g_DiffuseTexture;
-vector g_vMtrlAmbient = vector(1.f, 1.f, 1.f, 1.f);
-vector g_vMtrlSpecular = vector(1.f, 1.f, 1.f, 1.f);
 
-sampler DefaultSampler = sampler_state
-{
-    Filter = MIN_MAG_MIP_LINEAR;
-    AddressU = wrap;
-    AddressV = wrap;
-};
 
 /* 정점 쉐이더 : */
 /* 정점에 대한 셰이딩 == 정점에 필요한 연산을 수행한다 == 정점의 상태변환(월드, 뷰, 투영) + 추가변환 */
@@ -69,10 +53,9 @@ struct PS_IN
 
 struct PS_OUT
 {
-    float4 vColor : SV_TARGET0;
+    float4 vDiffuse : SV_TARGET0;
+    float4 vNormal : SV_TARGET1;
 };
-
-
 
 /* 픽셀 쉐이더 : 픽셀의 최종적인 색을 결정하낟. */
 PS_OUT PS_MAIN(PS_IN In)
@@ -80,16 +63,11 @@ PS_OUT PS_MAIN(PS_IN In)
     PS_OUT Out;
     
     vector vMtrlDiffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexcoord * 30.f);
+
+    Out.vDiffuse = vMtrlDiffuse;
     
-    float fShade = max(dot(normalize(g_vLightDir) * -1.f, In.vNormal), 0.f);
-    
-    vector vReflect = normalize(reflect(normalize(g_vLightDir), In.vNormal));
-    vector vLook = In.vWorldPos - g_vCamPosition;
-    
-    float fSpecular = pow(max(dot(normalize(vLook) * -1.f, vReflect), 0.f), 50.f);
-    
-    Out.vColor = (g_vLightDiffuse * vMtrlDiffuse) * (fShade + (g_vLightAmbient * g_vMtrlAmbient)) +
-        (g_vLightSpecular * g_vMtrlSpecular) * fSpecular;
+    /* -1 ~ 1 -> 0 ~ 1 */
+    Out.vNormal = float4(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
     
     return Out;
 }
@@ -106,15 +84,4 @@ technique11 DefaultTechnique
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN();
     }
-
-    //pass Frame
-    //{
-    //    VertexShader = compile vs_5_0 VS_MAIN();
-    //    PixelShader = compile ps_5_0 PS_MAIN();
-    //}
-    //pass AlphaBlend
-    //{
-    //    VertexShader = compile vs_5_0 VS_MAIN();
-    //    PixelShader = compile ps_5_0 PS_MAIN();
-    //
 }

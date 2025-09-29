@@ -132,6 +132,7 @@ public:
 #pragma region LIGHT_MANAGER
 	const LIGHT_DESC* Get_LightDesc(_uint iIndex) const;
 	HRESULT Add_Light(const LIGHT_DESC& LightDesc);
+	HRESULT Render_Lights(class CShader* pShader, class CVIBuffer* pVIBuffer);
 #pragma endregion
 
 #pragma region Physx_Manager
@@ -144,6 +145,19 @@ public:
 	_bool	Check_GameObject_GeometryCollision(class CGameObject* pGameObject, _bool* IsCollision = nullptr);
 	_bool	Check_GeometryPicking();
 	_bool	Check_Ray_GeometryPicking(_float3 vRayPos, _float3 vRayDir, _float3* vResultPos, _float* fResultDist);
+#pragma endregion
+
+
+#pragma region Target_Manager
+	HRESULT Add_RenderTarget(const _wstring& strTargetTag, _uint iSizeX, _uint iSizeY, DXGI_FORMAT ePixelFormat, const _float4& vClearColor);
+	HRESULT Add_MRT(const _wstring& strMRTTag, const _wstring& strTargetTag);
+	HRESULT Begin_MRT(const _wstring& strMRTTag);
+	HRESULT End_MRT();
+	HRESULT Bind_RenderTarget(const _wstring& strTargetTag, class CShader* pShader, const _char* pConstantName);
+#ifdef _DEBUG
+	HRESULT Ready_RT_Debug(const _wstring& strTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY);
+	HRESULT Render_RT_Debug(const _wstring& strMRTTag, CShader* pShader, CVIBuffer_Rect* pVIBuffer);
+#endif
 #pragma endregion
 
 private:
@@ -160,8 +174,8 @@ private:
 	class CInput_Manager*			m_pInput_Manager = { nullptr };
 	class CPooling_Manager*			m_pPooling_Manager = { nullptr };
 	class CLight_Manager*			m_pLight_Manager = { nullptr };
-	class CPhysxManager*			m_pPhysxManager = { nullptr };
-
+	class CPhysx_Manager*			m_pPhysxManager = { nullptr };
+	class CTarget_Manager*			m_pTarget_Manager = { nullptr };
 public:
 	void Release_Engine();
 	virtual void Free() override;

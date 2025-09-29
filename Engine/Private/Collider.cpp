@@ -84,6 +84,8 @@ HRESULT CCollider::Render()
 	if (nullptr == m_pBounding)
 		return E_FAIL;
 
+	m_pContext->GSSetShader(nullptr, nullptr, 0);
+
 	m_pEffect->SetWorld(XMMatrixIdentity());
 	m_pEffect->SetView(m_pGameInstance->Get_PipeLine_Matrix(D3DTS::VIEW));
 	m_pEffect->SetProjection(m_pGameInstance->Get_PipeLine_Matrix(D3DTS::PROJ));

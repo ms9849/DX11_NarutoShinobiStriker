@@ -1,14 +1,14 @@
-#include "PhysxManager.h"
+#include "Physx_Manager.h"
 
 #include "GameObject.h"
 #include "Model.h"
 #include "Mesh.h"
 
-CPhysxManager::CPhysxManager()
+CPhysx_Manager::CPhysx_Manager()
 {
 }
 
-HRESULT CPhysxManager::Initialize()
+HRESULT CPhysx_Manager::Initialize()
 {
     /* 피직스 초기화 */
 	m_PxFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, m_DefaultAllocator, m_DefaultErrorCallback);
@@ -47,7 +47,7 @@ HRESULT CPhysxManager::Initialize()
     return S_OK;
 }
 
-void CPhysxManager::Clear()
+void CPhysx_Manager::Clear()
 {
     for (auto& Pair : m_DynamicActors)
        Pair.second->release();
@@ -65,7 +65,7 @@ void CPhysxManager::Clear()
     m_TriangleMeshes.clear();
 }
 
-void CPhysxManager::Add_GameObject_ToPhysx(CGameObject* pGameObject)
+void CPhysx_Manager::Add_GameObject_ToPhysx(CGameObject* pGameObject)
 {
     /* 객체의 트랜스폼을 받아와서, 피직스에서 쓸 수 있는 상태로 변환한다. */
     
@@ -104,7 +104,7 @@ void CPhysxManager::Add_GameObject_ToPhysx(CGameObject* pGameObject)
 }
 
 /* 지형 처리할 오브젝트 내부에서 Initialize 할때 수행 */
-void CPhysxManager::Add_Geometry_ToPhysx(CGameObject* pGameObject, CModel* pModel)
+void CPhysx_Manager::Add_Geometry_ToPhysx(CGameObject* pGameObject, CModel* pModel)
 {
     _int iMeshNum = pModel->Get_MeshNum();
 
@@ -168,13 +168,13 @@ void CPhysxManager::Add_Geometry_ToPhysx(CGameObject* pGameObject, CModel* pMode
     }
 }
 
-void CPhysxManager::Calc_Geometry()
+void CPhysx_Manager::Calc_Geometry()
 {
     Check_GeometryCollision();
     Check_GeometryPicking();
 }
 
-_bool CPhysxManager::Check_GeometryCollision()
+_bool CPhysx_Manager::Check_GeometryCollision()
 {
     /* Triangle Mesh Geometry와 충돌 처리 */
     _bool IsGround = false;
@@ -258,7 +258,7 @@ _bool CPhysxManager::Check_GeometryCollision()
     return IsGround;
 }
 
-_bool CPhysxManager::Check_GameObject_GeometryCollision(CGameObject* pGameObject, _bool* IsCollision)
+_bool CPhysx_Manager::Check_GameObject_GeometryCollision(CGameObject* pGameObject, _bool* IsCollision)
 {
     /* Triangle Mesh Geometry와 충돌 처리 */
     _bool IsGround = false;
@@ -348,7 +348,7 @@ _bool CPhysxManager::Check_GameObject_GeometryCollision(CGameObject* pGameObject
 0, -1, 0 의 방향을 가지는 레이를 쏜 뒤,
 1. 거리에 따라 지형에 달라붙게 할지, 2. 떨어지게 할지 처리하는 함수
 */
-_bool CPhysxManager::Check_GeometryPicking()
+_bool CPhysx_Manager::Check_GeometryPicking()
 {
     /*
     origin : 레이의 시작점 ( 플레이어의 위치 )
@@ -481,7 +481,7 @@ _bool CPhysxManager::Check_GeometryPicking()
 }
 
 /* 주어진 레이와 충돌한 결과를 가져온다. */
-_bool CPhysxManager::Check_Ray_GeometryPicking(_float3 vRayPos, _float3 vRayDir, _float3* vResultPos, _float* fResultDist)
+_bool CPhysx_Manager::Check_Ray_GeometryPicking(_float3 vRayPos, _float3 vRayDir, _float3* vResultPos, _float* fResultDist)
 {
     /* 레이 트랜스폼 생성 */
     PxVec3 vPxRayPos = PxVec3(vRayPos.x, vRayPos.y, vRayPos.z);
@@ -532,9 +532,9 @@ _bool CPhysxManager::Check_Ray_GeometryPicking(_float3 vRayPos, _float3 vRayDir,
     return true;
 }
 
-CPhysxManager* CPhysxManager::Create()
+CPhysx_Manager* CPhysx_Manager::Create()
 {
-    CPhysxManager* pInstance = new CPhysxManager();
+    CPhysx_Manager* pInstance = new CPhysx_Manager();
     if (FAILED(pInstance->Initialize()))
     {
 		MSG_BOX("Create Failed : PhysxManager");
@@ -544,7 +544,7 @@ CPhysxManager* CPhysxManager::Create()
     return pInstance;
 }
 
-void CPhysxManager::Free()
+void CPhysx_Manager::Free()
 {
     __super::Free();
 

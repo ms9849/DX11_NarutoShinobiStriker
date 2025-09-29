@@ -193,7 +193,7 @@
     <ClInclude Include="..\Public\VIBuffer_Cell.h">
       <Filter>01.Utility\03.Components\VIBuffer\Cell</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\PhysxManager.h">
+    <ClInclude Include="..\Public\Physx_Manager.h">
       <Filter>01.Utility\09. Physx</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Collider.h">
@@ -225,6 +225,12 @@
     </ClInclude>
     <ClInclude Include="..\Public\VIBuffer_Point_Instance.h">
       <Filter>01.Utility\03.Components\VIBuffer\Instance\Point</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\RenderTarget.h">
+      <Filter>01.Utility\10. RenderTargets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Target_Manager.h">
+      <Filter>01.Utility\10. RenderTargets\Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -375,7 +381,7 @@
     <ClCompile Include="..\Private\VIBuffer_Cell.cpp">
       <Filter>01.Utility\03.Components\VIBuffer\Cell</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\PhysxManager.cpp">
+    <ClCompile Include="..\Private\Physx_Manager.cpp">
       <Filter>01.Utility\09. Physx</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Collider.cpp">
@@ -407,6 +413,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\VIBuffer_Point_Instance.cpp">
       <Filter>01.Utility\03.Components\VIBuffer\Instance\Point</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\RenderTarget.cpp">
+      <Filter>01.Utility\10. RenderTargets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Target_Manager.cpp">
+      <Filter>01.Utility\10. RenderTargets\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -608,6 +620,12 @@
     <Filter Include="01.Utility\03.Components\VIBuffer\Instance\Rect">
       <UniqueIdentifier>{a648e988-77c6-47e2-a2bc-31cf6a6e80b2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\10. RenderTargets">
+      <UniqueIdentifier>{156aa0fb-9893-4fe3-a2a7-501c278604de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\10. RenderTargets\Manager">
+      <UniqueIdentifier>{22d83f15-9e2b-4524-8aea-d4b7f5a0b2be}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Public\FMOD\fmod.cs">
@@ -633,6 +651,9 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Cell.hlsl">
+      <Filter>98.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Deferred.hlsl">
       <Filter>98.ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>
