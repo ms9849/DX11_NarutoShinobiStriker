@@ -63,6 +63,7 @@ private:
 	_float		m_fMaxKunaiCoolDown = { 4.f };
 	_float		m_fSlidingTimeAcc = { 0.f };
 	_float		m_fMaxSlidingCoolDown = { 5.f };
+	_bool		m_isPlayingDeadAnim = { false };
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_PartObjects();

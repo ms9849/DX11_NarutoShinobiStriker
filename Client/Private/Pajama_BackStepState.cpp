@@ -32,7 +32,7 @@ CPajamaState* CPajama_BackStepState::Update(_float fTimeDelta)
     _float fStepSpeed = m_pGameInstance->Calc_Quadratic(-7.86f, 3.57f, 1.f, fAnimProgress);
 
     if (fAnimProgress != 0.f && fAnimProgress <= 0.6f)
-        m_pPajama->Get_Transform()->Go_Backward(fTimeDelta * fStepSpeed);
+        m_pPajama->Get_Transform()->Go_Backward(fTimeDelta * fStepSpeed, m_pNavigationCom);
 
     if (0.65f <= fAnimProgress)
         pNextState = CPajama_IdleState::Create(m_pNavigationCom, m_pPajama);

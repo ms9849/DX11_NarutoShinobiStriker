@@ -38,7 +38,12 @@ CPajamaState* CPajama_SlidingKunaiState::Update(_float fTimeDelta)
     _float fAnimProgress = m_pPajama->Get_AnimProgress();
 
     _float fStepSpeed = m_pGameInstance->Calc_Quadratic(-5.f, 4.f, 1.f, fAnimProgress);
-    m_pPajama->Get_Transform()->Go_Left(fTimeDelta * fStepSpeed * 0.6f);
+
+    if (ANIM_STATE::LEFT == m_eAnimState)
+        m_pPajama->Get_Transform()->Go_Left(fTimeDelta * fStepSpeed * 0.6f, m_pNavigationCom);
+
+    else if (ANIM_STATE::RIGHT == m_eAnimState)
+        m_pPajama->Get_Transform()->Go_Right(fTimeDelta * fStepSpeed * 0.6f, m_pNavigationCom);
 
     if (fAnimProgress >= 0.5f && false == m_IsKunaiThrow)
     {

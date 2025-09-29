@@ -197,6 +197,7 @@
     <ClInclude Include="..\Public\Pajama_BackStepState.h" />
     <ClInclude Include="..\Public\Pajama_BeatenBlastedState.h" />
     <ClInclude Include="..\Public\Pajama_BeatenState.h" />
+    <ClInclude Include="..\Public\Pajama_DeadState.h" />
     <ClInclude Include="..\Public\Pajama_ElectricShockState.h" />
     <ClInclude Include="..\Public\Pajama_FireballState.h" />
     <ClInclude Include="..\Public\Pajama_HandAttackState.h" />
@@ -353,6 +354,7 @@
     <ClCompile Include="..\Private\Pajama_BackStepState.cpp" />
     <ClCompile Include="..\Private\Pajama_BeatenBlastedState.cpp" />
     <ClCompile Include="..\Private\Pajama_BeatenState.cpp" />
+    <ClCompile Include="..\Private\Pajama_DeadState.cpp" />
     <ClCompile Include="..\Private\Pajama_ElectricShockState.cpp" />
     <ClCompile Include="..\Private\Pajama_FireballState.cpp" />
     <ClCompile Include="..\Private\Pajama_HandAttackState.cpp" />
