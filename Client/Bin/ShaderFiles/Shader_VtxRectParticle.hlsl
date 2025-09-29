@@ -4,13 +4,6 @@ matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 
 texture2D g_Texture;
 
-sampler DefaultSampler = sampler_state
-{
-    Filter = MIN_MAG_MIP_LINEAR;
-    AddressU = mirror;
-    AddressV = mirror;
-};
-
 struct VS_IN
 {
     float3 vPosition : POSITION;
@@ -95,21 +88,4 @@ technique11 DefaultTechnique
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN();
     }
-
-    //pass Frame
-    //{
-    //    VertexShader = compile vs_5_0 VS_MAIN();
-    //    PixelShader = compile ps_5_0 PS_MAIN();
-    //}
-    //pass AlphaBlend
-    //{
-    //    VertexShader = compile vs_5_0 VS_MAIN();
-    //    PixelShader = compile ps_5_0 PS_MAIN();
-    //}
-
-
- 
-    
-
- 
 }

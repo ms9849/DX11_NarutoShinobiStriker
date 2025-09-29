@@ -5,13 +5,6 @@ matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 texture2D g_Texture;
 vector g_vCamPosition;
 
-sampler DefaultSampler = sampler_state
-{
-    Filter = MIN_MAG_MIP_LINEAR;
-    AddressU = mirror;
-    AddressV = mirror;
-};
-
 struct VS_IN
 {
     float3 vPosition : POSITION;
@@ -58,11 +51,6 @@ struct GS_OUT
 //GS_MAIN(triangle GS_INIn[3])
 //GS_MAIN(line GS_IN In[2])
 
-/*
-Geometry shader 함수가 최대 몇개의 정점을 출력할 수 있는지를 의미하는
-어트리뷰트
-*/
-
 [maxvertexcount(6)]
 void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> OutStream)
 {
@@ -91,11 +79,6 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> OutStream)
     Out[3].vTexcoord = float2(0.f, 1.f);
     Out[3].vLifeTime = In[0].vLifeTime;
     
-    /* 
-    append로 내보내면 Triangle Strip으로 인식,
-    따라서 Restart Strip을 이용하여 
-    점 3개가 하나의 삼각형을 그릴 수 있게 만든다.
-    */
     
     OutStream.Append(Out[0]);
     OutStream.Append(Out[1]);
@@ -107,6 +90,10 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> OutStream)
     OutStream.Append(Out[3]);
     OutStream.RestartStrip();
 }
+
+/* 출력된 정점 위치벡터의 w값으로 모든 성분을 나눈다 -> 투영스페이스로 변환 */ 
+/* 정점의 위치에 대해서 뷰포트 변환을 수행한다 */ 
+/* 정점의 모든 정보를 보간하여 픽셀을 만든다. -> 래스터라이즈 */ 
 
 struct PS_IN
 {
@@ -148,21 +135,4 @@ technique11 DefaultTechnique
         GeometryShader = compile gs_5_0 GS_MAIN();
         PixelShader = compile ps_5_0 PS_MAIN();
     }
-
-    //pass Frame
-    //{
-    //    VertexShader = compile vs_5_0 VS_MAIN();
-    //    PixelShader = compile ps_5_0 PS_MAIN();
-    //}
-    //pass AlphaBlend
-    //{
-    //    VertexShader = compile vs_5_0 VS_MAIN();
-    //    PixelShader = compile ps_5_0 PS_MAIN();
-    //}
-
-
- 
-    
-
- 
 }

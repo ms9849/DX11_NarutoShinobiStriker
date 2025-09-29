@@ -22,18 +22,38 @@ public:
 	void Render();
 
 private:
-	ID3D11Device* m_pDevice = { nullptr };
-	ID3D11DeviceContext* m_pContext = { nullptr };
-	list<class CGameObject*>			m_RenderObjects[ENUM_CLASS(RENDER::END)];
-	list<class CFont*>					m_Fonts = {};
+	ID3D11Device*				m_pDevice = { nullptr };
+	ID3D11DeviceContext*		m_pContext = { nullptr };
+	class CGameInstance*		m_pGameInstance = { nullptr };
+
+	list<class CGameObject*>	m_RenderObjects[ENUM_CLASS(RENDER::END)];
+	list<class CFont*>			m_Fonts = {};
+
+private:
+	class CShader*				m_pShader = { nullptr };
+	class CVIBuffer_Rect*		m_pVIBuffer = { nullptr };
+
+private:
+	_float4x4					m_WorldMatrix{}, m_ViewMatrix{}, m_ProjMatrix{};
 
 
 private:
 	void Render_Priority();
 	void Render_NonBlend();
+	/* 디퍼드 셰이딩을 통해 조명 연산을 하기 위한 렌더 단계. */
+	void Render_LightAcc();
+	/* LightAcc에서 연산된 조명들과 디퓨즈를 합성하는 렌더 단계. */
+	void Render_Combined();
+	void Render_NonLight();
 	void Render_Blend();
 	void Render_UI();
 	void Render_Font();
+
+#ifdef _DEBUG
+private:
+	void Render_Debug();
+
+#endif
 
 public:
 	static CRenderer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

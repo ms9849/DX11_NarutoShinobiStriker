@@ -1,3 +1,10 @@
+/* 디폴트 샘플러 세팅 */
+sampler DefaultSampler = sampler_state
+{
+    Filter = MIN_MAG_MIP_LINEAR;
+    AddressU = wrap;
+    AddressV = wrap;
+};
 
 /* Rasterizer 디폴트 세팅 */
 RasterizerState RS_Default

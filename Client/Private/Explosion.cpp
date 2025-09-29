@@ -39,7 +39,7 @@ void CExplosion::Update(_float fTimeDelta)
 
 void CExplosion::Late_Update(_float fTimeDelta)
 {
-    m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+    m_pGameInstance->Add_RenderGroup(RENDER::NONLIGHT, this);
 }
 
 HRESULT CExplosion::Render()
