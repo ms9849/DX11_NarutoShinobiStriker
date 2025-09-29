@@ -11,6 +11,10 @@
 
 #include "Player.h"
 #include "Pajama_IdleState.h"
+#include "Pajama_BeatenState.h"
+#include "Pajama_BeatenBlastedState.h"
+#include "Pajama_ElectricShockState.h"
+#include "Pajama_DeadState.h"
 
 CPajama::CPajama(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CEnemy{ pDevice, pContext, eObjectID }
@@ -67,12 +71,12 @@ CCollider* CPajama::Get_Collider(const _wstring& strColliderTag)
 
 void CPajama::OnCollision(COLLIDER_HANDLE_ID eHandleID)
 {
-    /*if (true == m_IsInvincible || true == m_isPlayingDeadAnim)
+    if (true == m_IsInvincible || true == m_isPlayingDeadAnim)
         return;
 
     m_pGameManager->Active_Combo();
 
-    CWhiteJetsuState* pNextState = { nullptr };
+    CPajamaState* pNextState = { nullptr };
 
     _vector vDirection = m_pTransformCom->Get_State(STATE::POSITION) -
         CGameManager::GetInstance()->Get_PlayerPtr()->Get_Transform()->Get_State(STATE::POSITION);
@@ -81,27 +85,27 @@ void CPajama::OnCollision(COLLIDER_HANDLE_ID eHandleID)
     {
         m_fCurrentHP -= 1.f;
 
-        pNextState = CWhiteJetsu_BeatenState::Create(m_pNavigationCom, this, vDirection, 1.5f);
+        pNextState = CPajama_BeatenState::Create(m_pNavigationCom, this, vDirection, 1.5f);
     }
     else if (COLLIDER_HANDLE_ID::PLAYER_HAND_ATTACK_FINAL == eHandleID)
     {
         m_fCurrentHP -= 3.f;
 
-        pNextState = CWhiteJetsu_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection);
+        pNextState = CPajama_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);
     }
 
     else if (COLLIDER_HANDLE_ID::PLAYER_SWORD_ATTACK == eHandleID)
     {
         m_fCurrentHP -= 3.f;
 
-        pNextState = CWhiteJetsu_BeatenState::Create(m_pNavigationCom, this, vDirection, 1.75f);
+        pNextState = CPajama_BeatenState::Create(m_pNavigationCom, this, vDirection, 1.75f);
     }
 
     else if (COLLIDER_HANDLE_ID::PLAYER_SWORD_ATTACK_FINAL == eHandleID)
     {
         m_fCurrentHP -= 3.f;
 
-        pNextState = CWhiteJetsu_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection);
+        pNextState = CPajama_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);
     }
 
     else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENGAN == eHandleID ||
@@ -109,7 +113,7 @@ void CPajama::OnCollision(COLLIDER_HANDLE_ID eHandleID)
     {
         m_fCurrentHP -= 15.f;
 
-        pNextState = CWhiteJetsu_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection);
+        pNextState = CPajama_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);
     }
 
     else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENSHURIKEN == eHandleID ||
@@ -117,14 +121,14 @@ void CPajama::OnCollision(COLLIDER_HANDLE_ID eHandleID)
     {
         m_fCurrentHP -= 1.f;
 
-        pNextState = CWhiteJetsu_BeatenState::Create(m_pNavigationCom, this, vDirection, 0.f);
+        pNextState = CPajama_BeatenState::Create(m_pNavigationCom, this, vDirection, 0.f);
     }
 
     else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_KAMUI == eHandleID)
     {
         m_fCurrentHP -= 1.f;
 
-        pNextState = CWhiteJetsu_BeatenState::Create(m_pNavigationCom, this, vDirection, 0.f);
+        pNextState = CPajama_BeatenState::Create(m_pNavigationCom, this, vDirection, 0.f);
     }
 
     else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_KAMUI_END == eHandleID ||
@@ -132,14 +136,14 @@ void CPajama::OnCollision(COLLIDER_HANDLE_ID eHandleID)
     {
         m_fCurrentHP -= 5.f;
 
-        pNextState = CWhiteJetsu_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection);
+        pNextState = CPajama_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);
     }
 
     else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_BIGSHARK == eHandleID)
     {
         m_fCurrentHP -= 15.f;
 
-        pNextState = CWhiteJetsu_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection);
+        pNextState = CPajama_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);
         Set_Invincible(1.f);
     }
 
@@ -149,7 +153,7 @@ void CPajama::OnCollision(COLLIDER_HANDLE_ID eHandleID)
             TEXT("Chidori_Action_Camera"), nullptr);
 
         m_fCurrentHP -= 15.f;
-        pNextState = CWhiteJetsu_ElectricShockState::Create(m_pNavigationCom, this);
+        pNextState = CPajama_ElectricShockState::Create(m_pNavigationCom, this);
         Set_Invincible(1.f);
     }
 
@@ -161,10 +165,10 @@ void CPajama::OnCollision(COLLIDER_HANDLE_ID eHandleID)
             pNextState->End();
             Safe_Release(pNextState);
         }
-        pNextState = CWhiteJetsu_DeadState::Create(m_pNavigationCom, this);
+        pNextState = CPajama_DeadState::Create(m_pNavigationCom, this);
     }
 
-    Change_State(pNextState, false);*/
+    Change_State(pNextState, false);
 
     m_fCurrentHP -= 1.f;
 }

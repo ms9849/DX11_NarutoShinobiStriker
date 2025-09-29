@@ -35,7 +35,7 @@ CPajamaState* CPajama_HandAttackState::Update(_float fTimeDelta)
 
     if (false == IsAnimFinished && fAnimProgress <= 0.4f)
         m_pPajama->Get_Transform()->Go_Straight(fTimeDelta * m_pGameInstance->Calc_Quadratic(-10.f, 4.f, 0.f, fAnimProgress),
-            nullptr);
+            m_pNavigationCom);
 
     Update_Collider(fAnimProgress);
 

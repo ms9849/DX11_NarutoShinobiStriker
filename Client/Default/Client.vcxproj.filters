@@ -496,6 +496,9 @@
     <Filter Include="02.GameObjects\Enemy\Pajama\State\Attack\Fireball">
       <UniqueIdentifier>{acbf0feb-fceb-4e6b-bebe-f64fc5e2b719}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Enemy\Pajama\State\Dead">
+      <UniqueIdentifier>{2957a829-c655-4ee2-9804-4ca4d97bf5a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -963,6 +966,9 @@
     <ClInclude Include="..\Public\Pajama_FireballState.h">
       <Filter>02.GameObjects\Enemy\Pajama\State\Attack\Fireball</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Pajama_DeadState.h">
+      <Filter>02.GameObjects\Enemy\Pajama\State\Dead</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1427,6 +1433,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Pajama_FireballState.cpp">
       <Filter>02.GameObjects\Enemy\Pajama\State\Attack\Fireball</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Pajama_DeadState.cpp">
+      <Filter>02.GameObjects\Enemy\Pajama\State\Dead</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
