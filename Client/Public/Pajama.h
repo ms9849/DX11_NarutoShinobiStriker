@@ -48,6 +48,7 @@ public:
 	/* 슬라이딩 */
 	_bool Use_Sliding();
 	void  Update_SkillCoolDown(_float fTimeDelta);
+
 private:
 	/* 추후 상태 추가해야함*/
 	//class CWhiteJetsuState* m_pState = { nullptr };
@@ -64,6 +65,7 @@ private:
 	_float		m_fSlidingTimeAcc = { 0.f };
 	_float		m_fMaxSlidingCoolDown = { 5.f };
 	_bool		m_isPlayingDeadAnim = { false };
+
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_PartObjects();

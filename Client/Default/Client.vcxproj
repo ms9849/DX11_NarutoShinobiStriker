@@ -160,6 +160,12 @@
     <ClInclude Include="..\Public\BirdState.h" />
     <ClInclude Include="..\Public\Bird_ElectricShockState.h" />
     <ClInclude Include="..\Public\Bird_WalkState.h" />
+    <ClInclude Include="..\Public\Boxer_BeatenBlastedState.h" />
+    <ClInclude Include="..\Public\Boxer_BeatenState.h" />
+    <ClInclude Include="..\Public\Boxer_DeadState.h" />
+    <ClInclude Include="..\Public\Boxer_ElectricShockState.h" />
+    <ClInclude Include="..\Public\Boxer_SpinKickState.h" />
+    <ClInclude Include="..\Public\Boxer_StepState.h" />
     <ClInclude Include="..\Public\Col_KonohaVillage.h" />
     <ClInclude Include="..\Public\Col_TutorialMap.h" />
     <ClInclude Include="..\Public\Kunai.h" />
@@ -318,6 +324,12 @@
     <ClCompile Include="..\Private\BirdState.cpp" />
     <ClCompile Include="..\Private\Bird_ElectricShockState.cpp" />
     <ClCompile Include="..\Private\Bird_WalkState.cpp" />
+    <ClCompile Include="..\Private\Boxer_BeatenBlastedState.cpp" />
+    <ClCompile Include="..\Private\Boxer_BeatenState.cpp" />
+    <ClCompile Include="..\Private\Boxer_DeadState.cpp" />
+    <ClCompile Include="..\Private\Boxer_ElectricShockState.cpp" />
+    <ClCompile Include="..\Private\Boxer_SpinKickState.cpp" />
+    <ClCompile Include="..\Private\Boxer_StepState.cpp" />
     <ClCompile Include="..\Private\Col_KonohaVillage.cpp" />
     <ClCompile Include="..\Private\Col_TutorialMap.cpp" />
     <ClCompile Include="..\Private\Kunai.cpp" />

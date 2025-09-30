@@ -2,7 +2,6 @@
 
 #include "GameManager.h"
 #include "GameInstance.h"
-#include "Player.h"
 #include "Boxer.h"
 
 #pragma region TRANSFER_STATE
@@ -21,9 +20,6 @@ CBoxer_AttackState::CBoxer_AttackState(CNavigation* pNavigation, CBoxer* pBoxer)
 
 void CBoxer_AttackState::Start(_bool IsBlend)
 {
-	m_pPlayerTransformCom = CGameManager::GetInstance()->Get_PlayerPtr()->Get_Transform();
-	Safe_AddRef(m_pPlayerTransformCom);
-
 	/* 공격 하면서 플레이어 바라보게 */
 	m_pBoxer->Set_AnimIndex("CustomMan_Attack_Hand_Punch_Left", 2.0f, true, 0.1f, false);
 	m_pBoxer->Get_Transform()->LookAt_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION));
@@ -37,7 +33,7 @@ CBoxerState* CBoxer_AttackState::Update(_float fTimeDelta)
 
 	if (true == IsAnimFinished && ANIM_STATE::ATTACK_01 == m_eAnimState)
 	{
-		m_pBoxer->Set_AnimIndex("CustomMan_Attack_Hand_StraightPunch", 5.f, true, 0.1f, false);
+		m_pBoxer->Set_AnimIndex("CustomMan_Attack_Hand_StraightPunch", 4.f, true, 0.1f, false);
 		m_pBoxer->Get_Transform()->LookAt_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION));
 		m_eAnimState = ANIM_STATE::ATTACK_02;
 	}
@@ -70,5 +66,4 @@ void CBoxer_AttackState::Free()
 	__super::Free();
 
 	Safe_Release(m_pNavigationCom);
-	Safe_Release(m_pPlayerTransformCom);
 }

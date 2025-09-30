@@ -10,7 +10,12 @@
 #include "Weapon_Character.h"
 
 #include "Player.h"
+
 #include "Boxer_IdleState.h"
+#include "Boxer_BeatenBlastedState.h"
+#include "Boxer_BeatenState.h"
+#include "Boxer_DeadState.h"
+#include "Boxer_ElectricShockState.h"
 
 CBoxer::CBoxer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 	: CEnemy { pDevice, pContext, eObjectID }
@@ -55,6 +60,120 @@ _bool CBoxer::Play_Animation(_float fTimeDelta)
 	dynamic_cast<CParts_Character*>(Find_PartObject(TEXT("Part_Weapon_L")))->Play_Animation(fTimeDelta);
 
 	return isAnimFinished;
+}
+
+void CBoxer::Set_Collider_Active(const _wstring& strColliderTag, _bool bFlag)
+{
+	static_cast<CCollider*>(Find_Component(strColliderTag))->Set_Active(bFlag);
+}
+
+CCollider* CBoxer::Get_Collider(const _wstring& strColliderTag)
+{
+	return static_cast<CCollider*>(Find_Component(strColliderTag));
+}
+
+void CBoxer::OnCollision(COLLIDER_HANDLE_ID eHandleID)
+{
+	if (true == m_IsInvincible || true == m_IsPlayingDeadAnim)
+		return;
+
+	m_pGameManager->Active_Combo();
+
+	CBoxerState* pNextState = { nullptr };
+
+	_vector vDirection = m_pTransformCom->Get_State(STATE::POSITION) -
+		CGameManager::GetInstance()->Get_PlayerPtr()->Get_Transform()->Get_State(STATE::POSITION);
+
+	if (COLLIDER_HANDLE_ID::PLAYER_HAND_ATTACK == eHandleID)
+	{
+		m_fCurrentHP -= 1.f;
+
+		pNextState = CBoxer_BeatenState::Create(m_pNavigationCom, this, vDirection, 1.5f);
+	}
+	else if (COLLIDER_HANDLE_ID::PLAYER_HAND_ATTACK_FINAL == eHandleID)
+	{
+		m_fCurrentHP -= 3.f;
+		pNextState = CBoxer_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);
+	}
+	else if (COLLIDER_HANDLE_ID::PLAYER_SWORD_ATTACK == eHandleID)
+	{
+		m_fCurrentHP -= 3.f;
+		pNextState = CBoxer_BeatenState::Create(m_pNavigationCom, this, vDirection, 1.75f);
+	}
+
+	else if (COLLIDER_HANDLE_ID::PLAYER_SWORD_ATTACK_FINAL == eHandleID)
+	{
+		m_fCurrentHP -= 3.f;
+		pNextState = CBoxer_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);
+	}
+
+	else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENGAN == eHandleID ||
+		COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_FIREBALL == eHandleID)
+	{
+		m_fCurrentHP -= 15.f;
+		pNextState = CBoxer_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);
+	}
+
+	else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENSHURIKEN == eHandleID ||
+		COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENSHURIKEN_EXPLODE == eHandleID)
+	{
+		m_fCurrentHP -= 1.f;
+		pNextState = CBoxer_BeatenState::Create(m_pNavigationCom, this, vDirection, 0.f);
+	}
+
+	else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_KAMUI == eHandleID)
+	{
+		m_fCurrentHP -= 1.f;
+		pNextState = CBoxer_BeatenState::Create(m_pNavigationCom, this, vDirection, 0.f);
+	}
+
+	else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_KAMUI_END == eHandleID ||
+		COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENSHURIKEN_END == eHandleID)
+	{
+		m_fCurrentHP -= 5.f;
+		pNextState = CBoxer_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);
+	}
+
+	else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_BIGSHARK == eHandleID)
+	{
+		m_fCurrentHP -= 15.f;
+		pNextState = CBoxer_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);
+		Set_Invincible(1.f);
+	}
+
+	else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_CHIDORI == eHandleID)
+	{
+		m_pGameManager->Change_Camera(static_cast<LEVEL>(m_pGameInstance->Get_LevelID()),
+			TEXT("Chidori_Action_Camera"), nullptr);
+
+		m_fCurrentHP -= 15.f;
+		pNextState = CBoxer_ElectricShockState::Create(m_pNavigationCom, this);
+		Set_Invincible(1.f);
+	}
+
+	if (m_fCurrentHP <= 0.f && false == m_IsPlayingDeadAnim)
+	{
+		m_IsPlayingDeadAnim = true;
+		if (nullptr != pNextState)
+		{
+			pNextState->End();
+			Safe_Release(pNextState);
+		}
+		pNextState = CBoxer_DeadState::Create(m_pNavigationCom, this);
+	}
+
+	Change_State(pNextState, false);
+
+	m_fCurrentHP -= 10.f;
+}
+
+void CBoxer::Change_State(CBoxerState* pNextState, _bool bBlend)
+{
+	_bool IsBlend = m_pState->End();
+	Safe_Release(m_pState);
+
+	pNextState->Start(bBlend);
+	m_pState = pNextState;
 }
 
 HRESULT CBoxer::Initialize_Prototype()
@@ -103,21 +222,35 @@ void CBoxer::Update(_float fTimeDelta)
 	__super::Update(fTimeDelta);
 
 	m_pColliderCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
+
+	_matrix PlayerMatrix = XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr());
+	_vector PlayerTranslation = m_pTransformCom->Get_State(STATE::POSITION);
+	PlayerTranslation += m_pTransformCom->Get_State(STATE::LOOK) * 0.4f;
+	PlayerMatrix.r[3] = PlayerTranslation;
+
+	m_pHandAttackColliderCom->Update(PlayerMatrix);
 }
 
 void CBoxer::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 
+	/* 파자마의 몸통 콜라이더를 콜리전 매니저에 등록 */
+	m_pGameManager->Add_Object_ToCollision(TEXT("Monster_Body"), this, m_pColliderCom);
+	m_pGameManager->Add_Collider_ToCollision(TEXT("Monster_Attack"), COLLIDER_HANDLE_ID::ENEMY_JETSU_ATTACK, m_pHandAttackColliderCom);
+
+	m_pNavigationCom->Compute_Height(m_pTransformCom);
+
 	m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+
+#ifdef _DEBUG
+	m_pGameInstance->Add_DebugComponent(m_pColliderCom);
+	m_pGameInstance->Add_DebugComponent(m_pHandAttackColliderCom);
+#endif
 }
 
 HRESULT CBoxer::Render()
 {
-#ifdef _DEBUG
-	m_pColliderCom->Render();
-#endif
-
 	return S_OK;
 }
 
@@ -132,24 +265,47 @@ _bool CBoxer::Use_Skill()
 		return false;
 }
 
+_bool CBoxer::Use_SpinKick()
+{
+	if (m_fSpinKickTimeAcc >= m_fMaxSpinKickCoolDown)
+	{
+		m_fSpinKickTimeAcc = 0.f;
+		return true;
+	}
+	else
+		return false;
+}
+
 void CBoxer::Update_SkillCoolDown(_float fTimeDelta)
 {
 	m_fSkillTimeAcc += fTimeDelta;
+	m_fSpinKickTimeAcc += fTimeDelta;
 
 	if (m_fSkillTimeAcc >= m_fMaxSkillCoolDown)
 		m_fSkillTimeAcc = m_fMaxSkillCoolDown;
+
+	if (m_fSpinKickTimeAcc >= m_fMaxSpinKickCoolDown)
+		m_fSpinKickTimeAcc = m_fMaxSpinKickCoolDown;
 }
 
 HRESULT CBoxer::Ready_Components()
 {
 	/* Com_Navigation */
+	CNavigation::NAVIGATION_DESC Desc;
+	Desc.iCurrentCellIndex = 0;
 
-	//CNavigation::NAVIGATION_DESC Desc;
-	//Desc.iCurrentCellIndex = 1;
-
-	//if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_NavigationMesh"),
-	//	TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
-	//	return E_FAIL;
+	if (LEVEL::TUTORIAL == m_pGameManager->Get_NextLevel())
+	{
+		if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Navigation_Tutorial"),
+			TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
+			return E_FAIL;
+	}
+	else if (LEVEL::KONOHA_VILLAGE == m_pGameManager->Get_NextLevel())
+	{
+		if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Navigation_KonohaVillage"),
+			TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
+			return E_FAIL;
+	}
 
 	/* Com_Collider */
 	CBounding_OBB::BOUNDING_OBB_DESC OBBDesc{};
@@ -163,6 +319,15 @@ HRESULT CBoxer::Ready_Components()
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &OBBDesc)))
 		return E_FAIL;
 
+	CBounding_Sphere::BOUNDING_SPHERE_DESC ColliderDesc{};
+
+	ColliderDesc.fRadius = 0.7f;
+	ColliderDesc.vCenter = _float3{ 0.f, 0.7f, 0.f };
+	ColliderDesc.isActive = false;
+
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_Sphere"),
+		TEXT("Com_Collider_HandAttack"), reinterpret_cast<CComponent**>(&m_pHandAttackColliderCom), &ColliderDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }

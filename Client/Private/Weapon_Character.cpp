@@ -127,6 +127,10 @@ void CWeapon_Character::Update(_float fTimeDelta)
 void CWeapon_Character::Late_Update(_float fTimeDelta)
 {
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+
+#ifdef _DEBUG
+    m_pGameInstance->Add_DebugComponent(m_pColliderCom);
+#endif
 }
 
 HRESULT CWeapon_Character::Render()
@@ -147,10 +151,6 @@ HRESULT CWeapon_Character::Render()
         if (FAILED(m_pModelCom->Render(i)))
             return E_FAIL;
     }
-
-#ifdef _DEBUG
-    m_pColliderCom->Render();
-#endif
 
     return S_OK;
 }

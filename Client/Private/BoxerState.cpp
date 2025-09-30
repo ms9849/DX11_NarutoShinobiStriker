@@ -2,12 +2,15 @@
 
 #include "GameInstance.h"
 #include "GameManager.h"
+#include "Player.h"
 
 CBoxerState::CBoxerState()
 	: m_pGameInstance { CGameInstance::GetInstance() }
 	, m_pGameManager { CGameManager::GetInstance() }
+	, m_pPlayerTransformCom{ m_pGameManager->Get_PlayerPtr()->Get_Transform() }
 {
 	Safe_AddRef(m_pGameInstance);
+	Safe_AddRef(m_pPlayerTransformCom);
 	Safe_AddRef(m_pGameManager);
 }
 
@@ -17,4 +20,5 @@ void CBoxerState::Free()
 
 	Safe_Release(m_pGameInstance);
 	Safe_Release(m_pGameManager);
+	Safe_Release(m_pPlayerTransformCom);
 }

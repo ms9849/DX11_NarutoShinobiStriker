@@ -67,6 +67,10 @@ void CKunai::Late_Update(_float fTimeDelta)
     m_pGameManager->Add_Collider_ToCollision(TEXT("Monster_Attack"), COLLIDER_HANDLE_ID::ENEMY_THROW, m_pColliderCom);
 
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+#ifdef _DEBUG
+    m_pGameInstance->Add_DebugComponent(m_pColliderCom);
+#endif
+
 }
 
 HRESULT CKunai::Render()
@@ -88,10 +92,6 @@ HRESULT CKunai::Render()
     //    if (FAILED(m_pModelCom->Render(i)))
     //        return E_FAIL;
     //}
-
-#ifdef _DEBUG
-    m_pColliderCom->Render();
-#endif
 
     return S_OK;
 }

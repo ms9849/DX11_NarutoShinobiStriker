@@ -2,7 +2,6 @@
 
 #include "GameManager.h"
 #include "GameInstance.h"
-#include "Player.h"
 #include "Boxer.h"
 
 #pragma region TRANSFER_STATE
@@ -21,9 +20,7 @@ CBoxer_LeafHurricaneState::CBoxer_LeafHurricaneState(CNavigation* pNavigation, C
 
 void CBoxer_LeafHurricaneState::Start(_bool IsBlend)
 {
-	m_pBoxer->Set_AnimIndex("CustomMan_Ninjutsu_LeafHurricane_Start", 1.f, IsBlend, 0.1f, false);
-	m_pPlayerTransformCom = CGameManager::GetInstance()->Get_PlayerPtr()->Get_Transform();
-	Safe_AddRef(m_pPlayerTransformCom);
+	m_pBoxer->Set_AnimIndex("CustomMan_Ninjutsu_LeafHurricane_Start", 1.5f, IsBlend, 0.1f, false);
 	m_eAnimState = ANIM_STATE::ATTACK_START;
 }
 
@@ -45,7 +42,7 @@ CBoxerState* CBoxer_LeafHurricaneState::Update(_float fTimeDelta)
 	if (ANIM_STATE::ATTACK_START == m_eAnimState
 		&& (true == IsAnimFinished || fDist <= 2.f) )
 	{
-		m_pBoxer->Set_AnimIndex("CustomMan_Ninjutsu_LeafHurricane", 1.f, false, 0.1f, true);
+		m_pBoxer->Set_AnimIndex("CustomMan_Ninjutsu_LeafHurricane", 2.f, false, 0.1f, true);
 		m_eAnimState = ANIM_STATE::ATTACK_END;
 	}
 	/* ³ª¹µÀÙ ¼±Ç³ ´Þ·Á°¡´Â Áß*/
@@ -79,5 +76,4 @@ void CBoxer_LeafHurricaneState::Free()
 	__super::Free();
 
 	Safe_Release(m_pNavigationCom);
-	Safe_Release(m_pPlayerTransformCom);
 }

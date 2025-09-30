@@ -79,6 +79,10 @@ public:
 #pragma region RENDERER
 	HRESULT Add_RenderGroup(RENDER eRenderGroup, class CGameObject* pRenderObject);
 	HRESULT Add_Font(class CFont* pRenderFont);
+#ifdef _DEBUG
+	HRESULT Add_DebugComponent(class CComponent* pDebugComponent);
+#endif
+
 #pragma endregion
 
 #pragma region PIPELINE

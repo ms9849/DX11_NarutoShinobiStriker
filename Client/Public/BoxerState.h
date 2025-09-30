@@ -5,6 +5,7 @@
 
 NS_BEGIN(Engine)
 class CGameInstance;
+class CTransform;
 NS_END
 
 NS_BEGIN(Client)
@@ -25,8 +26,9 @@ public:
 
 protected:
 	class CGameManager* m_pGameManager = { nullptr };
-	CGameInstance* m_pGameInstance = { nullptr };
-	_bool		   m_IsNextAnimBlened = { true };
+	CGameInstance*		m_pGameInstance = { nullptr };
+	CTransform*			m_pPlayerTransformCom = { nullptr };
+	_bool				m_IsNextAnimBlened = { true };
 
 public:
 	virtual void Free() override;

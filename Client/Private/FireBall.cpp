@@ -59,13 +59,13 @@ void CFireBall::Late_Update(_float fTimeDelta)
             COLLIDER_HANDLE_ID::ENEMY_JETSU_WOODHAND, m_pColliderCom);
 
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+#ifdef _DEBUG
+    m_pGameInstance->Add_DebugComponent(m_pColliderCom);
+#endif
 }
 
 HRESULT CFireBall::Render()
 {
-#ifdef _DEBUG
-    m_pColliderCom->Render();
-#endif
     return S_OK;
 }
 

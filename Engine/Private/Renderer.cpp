@@ -30,8 +30,16 @@ HRESULT CRenderer::Initialize()
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Normal"), Viewport.Width, Viewport.Height, DXGI_FORMAT_R16G16B16A16_UNORM, _float4(0.0f, 0.f, 0.f, 1.f))))
 		return E_FAIL;
 
+	/* Target_Depth */
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Depth"), Viewport.Width, Viewport.Height, DXGI_FORMAT_R16G16B16A16_UNORM, _float4(0.0f, 0.f, 0.f, 0.f))))
+		return E_FAIL;
+
 	/* Target_Shade */
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Shade"), Viewport.Width, Viewport.Height, DXGI_FORMAT_R16G16B16A16_UNORM, _float4(0.0f, 0.f, 0.f, 1.f))))
+		return E_FAIL;
+
+	/* Target_Specular */
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Specular"), Viewport.Width, Viewport.Height, DXGI_FORMAT_R16G16B16A16_UNORM, _float4(0.0f, 0.f, 0.f, 0.f))))
 		return E_FAIL;
 
 	/* 게임 오브젝트로부터 뽑아와야하는 디퓨즈 노멀은 MRT_GameObjects로 세팅. */
@@ -40,10 +48,15 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_GameObjects"), TEXT("Target_Normal"))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_GameObjects"), TEXT("Target_Depth"))))
+		return E_FAIL;
 
 	/* MRT_LightAcc */
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_LightAcc"), TEXT("Target_Shade"))))
 		return E_FAIL;
+	///* Specular는 LightAcc에서 쌓아서 계산한다. */
+	//if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_LightAcc"), TEXT("Target_Specular"))))
+	//	return E_FAIL;
 
 	m_pShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Deferred.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements);
 	if (nullptr == m_pShader)
@@ -58,15 +71,16 @@ HRESULT CRenderer::Initialize()
 	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH(Viewport.Width, Viewport.Height, 0.f, 1.f));
 
 #ifdef _DEBUG
-	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Diffuse"), 640.f, 360.f, 1280.f, 720.f)))
-	//	return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Diffuse"), 75.f, 75.f, 150.f, 150.f)))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Normal"), 75.f, 225.f, 150.f, 150.f)))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Shade"), 225.f, 75.f, 150.f, 150.f)))
 		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Specular"), 450.0f, 450.0f, 300.f, 300.f)))
+	//	return E_FAIL;
 #endif
+
     return S_OK;
 }
 
@@ -110,6 +124,18 @@ void CRenderer::Render()
 #endif
 }
 
+#ifdef _DEBUG
+
+HRESULT CRenderer::Add_DebugComponent(CComponent* pDebugComponent)
+{
+	m_DebugComponents.push_back(pDebugComponent);
+	Safe_AddRef(pDebugComponent);
+
+	return S_OK;
+}
+
+#endif
+
 void CRenderer::Render_Priority()
 {
 	for (auto& pRenderObject : m_RenderObjects[ENUM_CLASS(RENDER::PRIORITY)])
@@ -150,6 +176,7 @@ void CRenderer::Render_NonBlend()
 		return;
 }
 
+/* 이 함수에서 쓰이는 셰이더는 Shader_Deffered, 디퍼드 셰이딩을 위한 셰이더 파일 */
 void CRenderer::Render_LightAcc()
 {
 	/* 후처리 조명 연산을 위한 함수. 앞서 기록된 Target_Normal을 이용하여 조명 연산을 수행한다.*/
@@ -159,10 +186,12 @@ void CRenderer::Render_LightAcc()
 	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_LightAcc"))))
 		return;
 
-	/* 이 함수에서 쓰이는 셰이더는 Shader_Deffered, 디퍼드 셰이딩을 위한 셰이더 파일 */
 	m_pShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix);
 	m_pShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix);
 	m_pShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix);
+	m_pShader->Bind_Matrix("g_ViewMatrixInv", m_pGameInstance->Get_PipeLine_Float4x4(D3DTS::VIEW));
+	m_pShader->Bind_Matrix("g_ProjMatrixInv", m_pGameInstance->Get_PipeLine_InverseFloat4x4(D3DTS::PROJ));
+	m_pShader->Bind_RawValue("g_vCamPosition", m_pGameInstance->Get_CamState(STATE::POSITION), sizeof(_float4));
 
 	/* 셰이더에 Target_Normal 바인딩. */
 	/* -> g_NormalTexture라는 이름으로 올라가게 된다. */
@@ -170,6 +199,10 @@ void CRenderer::Render_LightAcc()
 	/* 또한 여기서 실질적인 조명 연산이 이루어지게 된다. */
 	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Normal"), m_pShader, "g_NormalTexture")))
 		return;
+
+	/* 추후 조명 연산 풀어야 함. */
+	//if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Depth"), m_pShader, "g_DepthTexture")))
+	//	return;
 
 	/* 화면 전체에 대해 조명 연산이 들어가야하니까 직교투영한 뒤 Bind Resource 세팅 */
 	/* 픽셀 셰이더를 수행하기 위해, Bind Resource를 수행한다. */
@@ -266,6 +299,15 @@ void CRenderer::Render_Font()
 
 void CRenderer::Render_Debug()
 {
+	for (auto& pDebugComponent : m_DebugComponents)
+	{
+		if (nullptr != pDebugComponent)
+			pDebugComponent->Render();
+
+		Safe_Release(pDebugComponent);
+	}
+	m_DebugComponents.clear();
+
 	if (FAILED(m_pShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
 		return;
 	if (FAILED(m_pShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))

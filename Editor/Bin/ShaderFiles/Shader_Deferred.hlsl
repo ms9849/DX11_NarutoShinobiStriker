@@ -11,14 +11,20 @@ PS_MAIN_COMBINED -> 디퓨즈와 노멀 렌더 타겟을 섞어, 광원 처리를 하기 위한 패스
 */
 
 matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
-texture2D g_Texture;
+matrix g_ViewMatrixInv, g_ProjMatrixInv;
 
+texture2D g_Texture;
 vector g_vLightDir;
+vector g_vCamPosition;
 
 texture2D g_NormalTexture;
 texture2D g_DiffuseTexture;
 texture2D g_ShadeTexture;
+texture2D g_DepthTexture;
 
+vector g_vLightDiffuse;
+vector g_vLightAmbient;
+vector g_vLightSpecular;
 
 struct VS_IN
 {
@@ -80,8 +86,15 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
     
     float4 vNormal = vector(vNormalDesc.xyz * 2.f - 1.f, 0.0f);
     
-    Out.vShade = max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f);
+    float fDiffuse = g_vLightDiffuse * saturate(max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f));
     
+    if(fDiffuse <= 0.3f)
+        fDiffuse = 0.3f;
+    else
+        fDiffuse = 1.f;
+    
+    Out.vShade =  fDiffuse + (g_vLightAmbient * g_vMtrlAmbient);
+    /* 스페큘러 연산은 추후 추가해야함. */
     return Out;
 }
 

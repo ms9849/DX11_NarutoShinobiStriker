@@ -28,7 +28,6 @@ public:
 	virtual _bool	End() override;
 
 private:
-	CTransform* m_pPlayerTransformCom = { nullptr };
 	CBoxer* m_pBoxer = { nullptr };
 	CNavigation* m_pNavigationCom = { nullptr };
 

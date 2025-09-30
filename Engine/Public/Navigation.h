@@ -40,9 +40,10 @@ public:
 	_float Get_CellHeight(class CTransform* pTransform);
 	_bool isMove(_fvector vPosition,_float3* pSlidingVector = nullptr);
 	virtual void Compute_Height(class CTransform* pTransform);
+
 #ifdef _DEBUG
 public:
-	HRESULT Render();
+	virtual HRESULT Render() override;
 #endif
 
 protected:
