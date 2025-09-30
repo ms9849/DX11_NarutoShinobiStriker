@@ -21,6 +21,11 @@ public:
 	HRESULT Add_Font(class CFont* pRenderFont);
 	void Render();
 
+#ifdef _DEBUG
+public:
+	HRESULT Add_DebugComponent(class CComponent* pDebugComponent);
+
+#endif
 private:
 	ID3D11Device*				m_pDevice = { nullptr };
 	ID3D11DeviceContext*		m_pContext = { nullptr };
@@ -29,6 +34,10 @@ private:
 	list<class CGameObject*>	m_RenderObjects[ENUM_CLASS(RENDER::END)];
 	list<class CFont*>			m_Fonts = {};
 
+#ifdef _DEBUG
+private:
+	list<class CComponent*>				m_DebugComponents;
+#endif
 private:
 	class CShader*				m_pShader = { nullptr };
 	class CVIBuffer_Rect*		m_pVIBuffer = { nullptr };

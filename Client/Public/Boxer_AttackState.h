@@ -31,10 +31,10 @@ public:
 	virtual _bool	End() override;
 
 private:
-	CTransform* m_pPlayerTransformCom = { nullptr };
 	CBoxer* m_pBoxer = { nullptr };
 	CNavigation* m_pNavigationCom = { nullptr };
 	ANIM_STATE m_eAnimState = {};
+
 public:
 	static CBoxer_AttackState* Create(class CNavigation* pNavigation, class CBoxer* pBoxer);
 	virtual void Free() override;

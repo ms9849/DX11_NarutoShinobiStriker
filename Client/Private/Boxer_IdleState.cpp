@@ -3,7 +3,6 @@
 #include "GameManager.h"
 #include "GameInstance.h"
 
-#include "Player.h"
 #include "Boxer.h"
 
 #pragma region TRANSFER_STATE
@@ -21,9 +20,6 @@ CBoxer_IdleState::CBoxer_IdleState(CNavigation* pNavigation, CBoxer* pBoxer)
 
 void CBoxer_IdleState::Start(_bool IsBlend)
 {
-    m_pPlayerTransformCom = m_pGameManager->Get_PlayerPtr()->Get_Transform();
-    Safe_AddRef(m_pPlayerTransformCom);
-
     m_pBoxer->Set_AnimIndex("CustomMan_Idle_Loop", 1.f, IsBlend, 0.1f);
 }
 
@@ -55,5 +51,4 @@ void CBoxer_IdleState::Free()
     __super::Free();
 
     Safe_Release(m_pNavigationCom);
-    Safe_Release(m_pPlayerTransformCom);
 }

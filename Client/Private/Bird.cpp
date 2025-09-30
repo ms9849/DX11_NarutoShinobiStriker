@@ -232,6 +232,11 @@ void CBird::Late_Update(_float fTimeDelta)
     m_pNavigationCom->Compute_Height(m_pTransformCom);
 
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+
+#ifdef _DEBUG
+    m_pGameInstance->Add_DebugComponent(m_pColliderCom);
+#endif
+
 }
 
 HRESULT CBird::Render()
@@ -253,10 +258,6 @@ HRESULT CBird::Render()
         if (FAILED(m_pModelCom->Render(i)))
             return E_FAIL;
     }
-
-#ifdef _DEBUG
-    m_pColliderCom->Render();
-#endif
 
     return S_OK;
 }

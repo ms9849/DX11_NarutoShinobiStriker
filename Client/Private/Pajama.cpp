@@ -248,15 +248,15 @@ void CPajama::Late_Update(_float fTimeDelta)
     m_pNavigationCom->Compute_Height(m_pTransformCom);
 
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+#ifdef _DEBUG
+    m_pGameInstance->Add_DebugComponent(m_pColliderCom);
+    m_pGameInstance->Add_DebugComponent(m_pHandAttackColliderCom);
+#endif
+
 }
 
 HRESULT CPajama::Render()
 {
-#ifdef _DEBUG
-    m_pColliderCom->Render();
-    m_pHandAttackColliderCom->Render();
-#endif
-
     return S_OK;
 }
 

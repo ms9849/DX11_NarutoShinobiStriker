@@ -1,3 +1,9 @@
+
+/* 재질들 임시로 세팅 */
+vector g_vMtrlDiffuse = 1.f;
+vector g_vMtrlAmbient = 1.f;
+vector g_vMtrlSpecular = 1.f;
+
 /* 디폴트 샘플러 세팅 */
 sampler DefaultSampler = sampler_state
 {

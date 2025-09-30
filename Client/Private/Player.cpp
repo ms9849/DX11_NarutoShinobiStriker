@@ -250,17 +250,17 @@ void CPlayer::Late_Update(_float fTimeDelta)
 
 	m_pGameManager->Add_Object_ToCollision(TEXT("Player_Body"), this, m_pColliderCom);
 	m_pGameManager->Add_Collider_ToCollision(TEXT("Player_Body"), COLLIDER_HANDLE_ID::PLAYER_BODY, m_pColliderCom);
+	
 	m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+
+#ifdef _DEBUG
+	m_pGameInstance->Add_DebugComponent(m_pColliderCom);
+	m_pGameInstance->Add_DebugComponent(m_pHandAttackColliderCom);
+#endif
 }
 
 HRESULT CPlayer::Render()
 {
-#ifdef _DEBUG
-
-	m_pColliderCom->Render();
-	m_pHandAttackColliderCom->Render();
-
-#endif
 
 	return S_OK;
 }

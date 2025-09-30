@@ -10,8 +10,6 @@ vector g_vLightAmbient;
 vector g_vLightSpecular;
 
 texture2D g_DiffuseTexture;
-vector g_vMtrlAmbient = vector(1.f, 1.f, 1.f, 1.f);
-vector g_vMtrlSpecular = vector(1.f, 1.f, 1.f, 1.f);
 
 /* 메시다 ㅇ영향을 주는 뼈들의 집합*/
 matrix g_BoneMatrices[512];

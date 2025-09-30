@@ -330,6 +330,13 @@ HRESULT CGameInstance::Add_Font(CFont* pRenderFont)
 	return m_pRenderer->Add_Font(pRenderFont);
 }
 
+#ifdef _DEBUG
+HRESULT CGameInstance::Add_DebugComponent(CComponent* pDebugComponent)
+{
+	return m_pRenderer->Add_DebugComponent(pDebugComponent);
+}
+#endif
+
 #pragma endregion
 
 #pragma region PIPELINE

@@ -236,6 +236,11 @@ void CWhiteJetsu::Late_Update(_float fTimeDelta)
     m_pNavigationCom->Compute_Height(m_pTransformCom);
 
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+#ifdef _DEBUG
+    m_pGameInstance->Add_DebugComponent(m_pColliderCom);
+    m_pGameInstance->Add_DebugComponent(m_pHandAttackColliderCom);
+#endif
+
 }
 
 HRESULT CWhiteJetsu::Render()
@@ -257,11 +262,6 @@ HRESULT CWhiteJetsu::Render()
         if (FAILED(m_pModelCom->Render(i)))
             return E_FAIL;
     }
-
-#ifdef _DEBUG
-    m_pColliderCom->Render();
-    m_pHandAttackColliderCom->Render();
-#endif
 
     return S_OK;
 }

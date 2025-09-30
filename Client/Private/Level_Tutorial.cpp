@@ -297,6 +297,10 @@ HRESULT CLevel_Tutorial::Ready_Layer_Monster(const _wstring& strLayerTag)
 		ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag)))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Boxer"),
+		ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag)))
+		return E_FAIL;
+
 	return S_OK;
 }
 

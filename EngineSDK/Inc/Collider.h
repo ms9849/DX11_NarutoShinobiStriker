@@ -21,8 +21,11 @@ public:
 	virtual HRESULT Initialize_Prototype(COLLIDER eType);
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void	Update(_fmatrix WorldMatrix);
-	virtual HRESULT Render();
 
+#ifdef _DEBUG
+public:
+	virtual HRESULT Render() override;
+#endif
 	/* 활성화 되어있는지에 따라 콜리전 매니저에서의 충돌도 제어할 수 있게 한다. */
 public:
 	_float3 Get_Pos() { return m_pBounding->Get_Pos(); }
