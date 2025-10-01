@@ -57,6 +57,7 @@ CBoxerState* CBoxer_SpinKickState::Update(_float fTimeDelta)
 	else if (ANIM_STATE::ATTACK_END == m_eAnimState
 		&& true == IsAnimFinished)
 	{
+		_float fRandom = m_pGameInstance->Random_Normal();
 		pNextState = CBoxer_IdleState::Create(m_pNavigationCom, m_pBoxer);
 	}
 

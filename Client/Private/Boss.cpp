@@ -11,6 +11,8 @@
 
 #include "Player.h"
 
+#include "Boss_IdleState.h"
+
 CBoss::CBoss(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CEnemy{ pDevice, pContext, eObjectID }
 {
@@ -172,7 +174,7 @@ void CBoss::OnCollision(COLLIDER_HANDLE_ID eHandleID)
     //m_fCurrentHP -= 1.f;
 }
 
-void CBoss::Change_State(CPajamaState* pNextState, _bool bBlend)
+void CBoss::Change_State(CBossState* pNextState, _bool bBlend)
 {
     _bool IsBlend = m_pState->End();
     Safe_Release(m_pState);
@@ -183,7 +185,7 @@ void CBoss::Change_State(CPajamaState* pNextState, _bool bBlend)
 
 HRESULT CBoss::Initialize_Prototype()
 {
-    return E_NOTIMPL;
+    return S_OK;
 }
 
 HRESULT CBoss::Initialize(void* pArg)
@@ -207,15 +209,14 @@ HRESULT CBoss::Initialize(void* pArg)
     m_pGameManager->Add_TargetTransform(m_pTransformCom);
 
     /* 상태 초기화 및 시작. */
-    m_pState = CPajama_IdleState::Create(m_pNavigationCom, this);
+    m_pState = CBoss_IdleState::Create(m_pNavigationCom, this);
     m_pState->Start(true);
 
+    m_SkillCoolDowns[ENUM_CLASS(BOSS_SKILL::FIREBALL)] = 10.f;
+    m_SkillCoolDowns[ENUM_CLASS(BOSS_SKILL::LIGHTING_RUSH)] = 30.f;
 
-    m_SkillCoolDowns[ENUM_CLASS(SKILL_LIST::FIREBALL)] = 10.f;
-    m_SkillCoolDowns[ENUM_CLASS(SKILL_LIST::LIGHTING_RUSH)] = 30.f;
-
-    m_SkillCoolDowns[ENUM_CLASS(SKILL_LIST::SHARINGAN)] = 600.f;
-    m_SkillCoolDowns[ENUM_CLASS(SKILL_LIST::SPIN_KICK)] = 5.f;
+    m_SkillCoolDowns[ENUM_CLASS(BOSS_SKILL::SHARINGAN)] = 600.f;
+    m_SkillCoolDowns[ENUM_CLASS(BOSS_SKILL::SPIN_KICK)] = 5.f;
 
     return S_OK;
 }
@@ -265,20 +266,29 @@ HRESULT CBoss::Render()
     return S_OK;
 }
 
-_bool CBoss::Use_Skill(SKILL_LIST eSkillList)
+/* 아직 미구현 상태 */
+_bool CBoss::Use_Skill(BOSS_SKILL eSkillList)
 {
-    return _bool();
+    if(m_SkillTimeAccs[ENUM_CLASS(eSkillList)] >= m_SkillCoolDowns[ENUM_CLASS(eSkillList)])
+    {
+        /* 쿨타임 초기화*/
+        m_SkillTimeAccs[ENUM_CLASS(eSkillList)] = 0.f;
+
+        return true;
+    }
+
+    return false;
 }
 
 void CBoss::Update_SkillCoolDown(_float fTimeDelta)
 {
     /* 쿨타임이 존재하는 여러 동작들에 대해 연산을 수행해줌. */
 
-    for (_uint i = 0; i < ENUM_CLASS(SKILL::END); ++i)
+    for (_uint i = 0; i < ENUM_CLASS(BOSS_SKILL::END); ++i)
     {
         m_SkillTimeAccs[i] += fTimeDelta;
 
-        if (m_SkillCoolDowns[i] >= m_SkillCoolDowns[i])
+        if (m_SkillTimeAccs[i] >= m_SkillCoolDowns[i])
             m_SkillTimeAccs[i] = m_SkillCoolDowns[i];
     }
 }
@@ -361,7 +371,7 @@ HRESULT CBoss::Ready_PartObjects()
 
 void CBoss::Update_State(_float fTimeDelta)
 {
-    CPajamaState* pNextState = { nullptr };
+    CBossState* pNextState = { nullptr };
     pNextState = m_pState->Update(fTimeDelta);
 
     if (nullptr != pNextState)
@@ -370,7 +380,7 @@ void CBoss::Update_State(_float fTimeDelta)
         //현재 스테이트 날려버림.
         Safe_Release(m_pState);
 
-        //새로운 상태 시작해줌. (내부적으로 복서 들게 됨. 레퍼런스 카운트 증가 안함.)
+        //새로운 상태 시작해줌.
         pNextState->Start(IsBlend);
 
         m_pState = pNextState;
@@ -393,7 +403,7 @@ CGameObject* CBoss::Clone(void* pArg)
 {
     CBoss* pInstance = new CBoss(*this);
 
-    if (FAILED(pInstance->Initialize_Prototype()))
+    if (FAILED(pInstance->Initialize(pArg)))
     {
         MSG_BOX("Clone Failed : Boss");
         Safe_Release(pInstance);
@@ -408,4 +418,5 @@ void CBoss::Free()
     Safe_Release(m_pNavigationCom);
     Safe_Release(m_pColliderCom);
     Safe_Release(m_pHandAttackColliderCom);
+    Safe_Release(m_pState);
 }

@@ -59,6 +59,7 @@
 #include "Bird.h"
 #include "Boxer.h"
 #include "Pajama.h"
+#include "Boss.h"
 
 #include "WoodHand.h"
 
@@ -424,17 +425,18 @@ HRESULT CLoader::Loading_For_Tutorial()
 		return E_FAIL;
 
 
-	/* For.Prototype_GameObject_WhiteJetsu */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_WhiteJetsu"),
-		CWhiteJetsu::Create(m_pDevice, m_pContext, OBJECTID::WHITEJETSU))))
-		return E_FAIL;
+#pragma region MONSTER
 
 	/* For.Prototype_GameObject_WoodHand */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_WoodHand"),
 		CWoodHand::Create(m_pDevice, m_pContext, OBJECTID::WOODHAND))))
 		return E_FAIL;
 
-#pragma region MONSTER
+	/* For.Prototype_GameObject_WhiteJetsu */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_WhiteJetsu"),
+		CWhiteJetsu::Create(m_pDevice, m_pContext, OBJECTID::WHITEJETSU))))
+		return E_FAIL;
+
 	/* For.Prototype_GameObject_Bird */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Bird"),
 		CBird::Create(m_pDevice, m_pContext, OBJECTID::BIRD))))
@@ -450,13 +452,19 @@ HRESULT CLoader::Loading_For_Tutorial()
 		CPajama::Create(m_pDevice, m_pContext, OBJECTID::PAJAMA))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_Boss */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Boss"),
+		CBoss::Create(m_pDevice, m_pContext, OBJECTID::BOSS))))
+		return E_FAIL;
+
+#pragma endregion
+
+#pragma region CAMERA
 	/* For.Prototype_GameObject_TestCamera */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_TestCamera"),
 		CTestCamera::Create(m_pDevice, m_pContext, OBJECTID::TEST_CAMERA))))
 		return E_FAIL;
-#pragma endregion
 
-#pragma region CAMERA
 	/* For.Prototype_GameObject_MainCamera */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_MainCamera"),
 		CMainCamera::Create(m_pDevice, m_pContext, OBJECTID::MAIN_CAMERA))))
@@ -683,17 +691,17 @@ HRESULT CLoader::Loading_For_KonohaVillage()
 
 #pragma endregion
 
-	/* For.Prototype_GameObject_WhiteJetsu */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_WhiteJetsu"),
-		CWhiteJetsu::Create(m_pDevice, m_pContext, OBJECTID::WHITEJETSU))))
-		return E_FAIL;
-
+#pragma region MONSTER
 	/* For.Prototype_GameObject_WoodHand */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_WoodHand"),
 		CWoodHand::Create(m_pDevice, m_pContext, OBJECTID::WOODHAND))))
 		return E_FAIL;
 
-#pragma region MONSTER
+	/* For.Prototype_GameObject_WhiteJetsu */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_WhiteJetsu"),
+		CWhiteJetsu::Create(m_pDevice, m_pContext, OBJECTID::WHITEJETSU))))
+		return E_FAIL;
+
 	/* For.Prototype_GameObject_Bird */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_Bird"),
 		CBird::Create(m_pDevice, m_pContext, OBJECTID::BIRD))))
@@ -709,14 +717,19 @@ HRESULT CLoader::Loading_For_KonohaVillage()
 		CPajama::Create(m_pDevice, m_pContext, OBJECTID::PAJAMA))))
 		return E_FAIL;
 
-	/* For.Prototype_GameObject_TestCamera */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_TestCamera"),
-		CTestCamera::Create(m_pDevice, m_pContext, OBJECTID::TEST_CAMERA))))
+	/* For.Prototype_GameObject_Boss */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_Boss"),
+		CBoss::Create(m_pDevice, m_pContext, OBJECTID::BOSS))))
 		return E_FAIL;
 
 #pragma endregion
 
 #pragma region CAMERA
+	/* For.Prototype_GameObject_TestCamera */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_TestCamera"),
+		CTestCamera::Create(m_pDevice, m_pContext, OBJECTID::TEST_CAMERA))))
+		return E_FAIL;
+
 	/* For.Prototype_GameObject_MainCamera */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_MainCamera"),
 		CMainCamera::Create(m_pDevice, m_pContext, OBJECTID::MAIN_CAMERA))))

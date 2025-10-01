@@ -28,7 +28,7 @@ NS_BEGIN(Client)
 class CBoss final : public CEnemy
 {
 public:
-	enum class SKILL_LIST { FIREBALL, LIGHTING_RUSH, SHARINGAN, SPIN_KICK, END };
+	enum class BOSS_SKILL { FIREBALL, LIGHTING_RUSH, SHARINGAN, SPIN_KICK, END };
 
 private:
 	CBoss(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
@@ -45,7 +45,7 @@ public:
 
 public:
 	virtual void OnCollision(COLLIDER_HANDLE_ID eHandleID) override;
-	void Change_State(class CPajamaState* pNextState, _bool bBlend = true);
+	void Change_State(class CBossState* pNextState, _bool bBlend = true);
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -56,7 +56,7 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	_bool Use_Skill(SKILL_LIST eSkillList);
+	_bool Use_Skill(BOSS_SKILL eSkillList);
 	void  Update_SkillCoolDown(_float fTimeDelta);
 
 private:
@@ -70,8 +70,8 @@ private:
 
 	_bool		m_IsPlayingDeadAnim = { false };
 	/* ¿Ø¥œ∆˚ √ ±‚»≠ø°º≠µµ 0 √ ±‚»≠ ∏‘»˚ */
-	_float		m_SkillTimeAccs[ENUM_CLASS(SKILL_LIST::END)] = { 0, };
-	_float		m_SkillCoolDowns[ENUM_CLASS(SKILL_LIST::END)] = {};
+	_float		m_SkillTimeAccs[ENUM_CLASS(BOSS_SKILL::END)] = { 0, };
+	_float		m_SkillCoolDowns[ENUM_CLASS(BOSS_SKILL::END)] = { 0, };
 
 private:
 	HRESULT Ready_Components();
