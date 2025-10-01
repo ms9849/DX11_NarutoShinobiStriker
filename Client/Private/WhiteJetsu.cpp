@@ -58,7 +58,7 @@ CCollider* CWhiteJetsu::Get_Collider(const _wstring& strColliderTag)
 
 void CWhiteJetsu::OnCollision(COLLIDER_HANDLE_ID eHandleID)
 {
-    if (true == m_IsInvincible || true == m_isPlayingDeadAnim)
+    if (true == m_IsInvincible || true == m_IsPlayingDeadAnim)
         return;
     
     m_pGameManager->Active_Combo();
@@ -144,9 +144,9 @@ void CWhiteJetsu::OnCollision(COLLIDER_HANDLE_ID eHandleID)
         Set_Invincible(1.f);
     }
 
-    if (m_fCurrentHP <= 0.f && false == m_isPlayingDeadAnim)
+    if (m_fCurrentHP <= 0.f && false == m_IsPlayingDeadAnim)
     {
-        m_isPlayingDeadAnim = true;
+        m_IsPlayingDeadAnim = true;
         if (nullptr != pNextState)
         {
             pNextState->End();

@@ -46,6 +46,7 @@ public:
 	void Set_ComboKoPanel(class CComboKOPanel* pComboKOPanel);
 	void Set_MissionAlertPanel(class CMissionAlertPanel* pMissionAlertPanel);
 	void Set_WinPanel(class CWinPanel* pWinPanel);
+	void Set_CutScenePanel(class CCutScenePanel* pCutScenePanel);
 
 public:
 	void Set_Dialog_Text(const _wstring& strDialogText);
@@ -62,7 +63,8 @@ public:
 
 	void AlertPanel_Start_FadeIn(const _wstring& strMissionText);
 	void WinPanel_Start_FadeIn();
-
+	
+	void Set_CutScene_Visible(_bool bFlag);
 private:
 	CGameInstance* m_pGameInstance = { nullptr };
 
@@ -72,7 +74,7 @@ private:
 	class CComboKOPanel* m_pComboKOPanel = { nullptr };
 	class CMissionAlertPanel* m_pMissionAlertPanel = { nullptr };
 	class CWinPanel* m_pWinPanel = { nullptr };
-
+	class CCutScenePanel* m_pCutScenePanel = { nullptr };
 public:
 	static CUI_Manager* Create();
 	virtual void Free() override;

@@ -9,6 +9,7 @@
 #include "ActionCamera.h"
 #include "SkillActionCamera.h"
 #include "NPCTalkCamera.h"
+#include "CutSceneCamera.h"
 
 #include "TimerPanel.h"
 #include "SkillSlotPanel.h"
@@ -17,6 +18,7 @@
 #include "DialogUI.h"
 #include "MissionAlertPanel.h"
 #include "WinPanel.h"
+#include "CutScenePanel.h"
 
 #include "NPC_KaKashi.h"
 
@@ -62,7 +64,7 @@ HRESULT CLevel_Tutorial::Initialize()
 	if (FAILED(Ready_Layer_Map(TEXT("Layer_Map"))))
 		return E_FAIL;
 
-	if (FAILED(m_pGameManager->Change_Camera(LEVEL::TUTORIAL, TEXT("Main_Camera"))))
+	if (FAILED(m_pGameManager->Change_Camera(LEVEL::TUTORIAL, TEXT("CutScene_Camera"))))
 		return E_FAIL;
 
 	m_pGameManager->Get_PlayerPtr()->Change_Skills();
@@ -276,6 +278,11 @@ HRESULT CLevel_Tutorial::Ready_Layer_Camera(const _wstring& strLayerTag)
 		PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_SkillActionCamera"), &SkillActionCameraDesc)))))
 		return E_FAIL;
 
+	/* 카메라는 게임 매니저에 추가하여 관리한다. */
+	if (FAILED(m_pGameManager->Add_Camera(LEVEL::TUTORIAL, TEXT("CutScene_Camera"), static_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
+		PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_CutSceneCamera"), &MainCameraDesc)))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -389,6 +396,13 @@ HRESULT CLevel_Tutorial::Ready_Layer_UI(const _wstring& strLayerTag)
 
 	m_pGameManager->Set_WinPanel(static_cast<CWinPanel*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag, m_pGameInstance->Get_LayerSize(ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag) - 1)));
 
+	Desc = CUIObject::CreateDesc(g_iWinSizeX / 2.f, g_iWinSizeY / 2.f, 0.01f, g_iWinSizeX, g_iWinSizeY, 0, 0.f);
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_CutScenePanel"),
+		ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag, &Desc)))
+		return E_FAIL;
+
+	m_pGameManager->Set_CutScenePanel(static_cast<CCutScenePanel*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag, m_pGameInstance->Get_LayerSize(ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag) - 1)));
 
 	return S_OK;
 }

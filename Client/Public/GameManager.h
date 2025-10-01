@@ -93,7 +93,7 @@ public:
 	void Set_ComboKoPanel(class CComboKOPanel* pComboKOPanel);
 	void Set_MissionAlertPanel(class CMissionAlertPanel* pMissionAlertPanel);
 	void Set_WinPanel(class CWinPanel* pWinPanel);
-
+	void Set_CutScenePanel(class CCutScenePanel* pCutScenePanel);
 	void Set_Dialog_Text(const _wstring& strDialogText);
 	void Set_Dialog_Visible(_bool bFlag);
 
@@ -109,6 +109,7 @@ public:
 	void AlertPanel_Start_FadeIn(const _wstring& strMissionText);
 
 	void WinPanel_Start_FadeIn();
+	void Set_CutScene_Visible(_bool bFlag);
 #pragma endregion
 
 #pragma region FLOW

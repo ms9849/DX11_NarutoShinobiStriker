@@ -7,6 +7,7 @@
 #include "AttackTypePanel.h"
 #include "MissionAlertPanel.h"
 #include "WinPanel.h"
+#include "CutScenePanel.h"
 
 CUI_Manager::CUI_Manager()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
@@ -74,6 +75,15 @@ void CUI_Manager::Set_WinPanel(CWinPanel* pWinPanel)
 	Safe_AddRef(m_pWinPanel);
 }
 
+void CUI_Manager::Set_CutScenePanel(CCutScenePanel* pCutScenePanel)
+{
+	if (nullptr != m_pCutScenePanel)
+		Safe_Release(m_pCutScenePanel);
+
+	m_pCutScenePanel = pCutScenePanel;
+	Safe_AddRef(m_pCutScenePanel);
+}
+
 void CUI_Manager::Set_Dialog_Text(const _wstring& strDialogText)
 {
 	m_pDialogUI->Set_Text(strDialogText);
@@ -124,6 +134,11 @@ void CUI_Manager::WinPanel_Start_FadeIn()
 	m_pWinPanel->WinPanel_Start_FadeIn();
 }
 
+void CUI_Manager::Set_CutScene_Visible(_bool bFlag)
+{
+	m_pCutScenePanel->Set_Visible(bFlag);
+}
+
 CUI_Manager* CUI_Manager::Create()
 {
 	return new CUI_Manager();
@@ -139,5 +154,6 @@ void CUI_Manager::Free()
 	Safe_Release(m_pComboKOPanel);
 	Safe_Release(m_pSkillSlotPanel);
 	Safe_Release(m_pMissionAlertPanel);
+	Safe_Release(m_pCutScenePanel);
 	Safe_Release(m_pWinPanel);
 }

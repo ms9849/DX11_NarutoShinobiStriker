@@ -1,4 +1,4 @@
-#include "Pajama.h"
+#include "Boss.h"
 
 #include "GameInstance.h"
 #include "GameManager.h"
@@ -10,28 +10,25 @@
 #include "Weapon_Character.h"
 
 #include "Player.h"
-#include "Pajama_IdleState.h"
-#include "Pajama_BeatenState.h"
-#include "Pajama_BeatenBlastedState.h"
-#include "Pajama_ElectricShockState.h"
-#include "Pajama_DeadState.h"
 
-CPajama::CPajama(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
+CBoss::CBoss(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CEnemy{ pDevice, pContext, eObjectID }
 {
 }
 
-CPajama::CPajama(const CPajama& rhs)
+CBoss::CBoss(const CBoss& rhs)
     : CEnemy{ rhs }
 {
 }
 
-_float CPajama::Get_AnimProgress()
+#pragma region SETTER
+
+_float CBoss::Get_AnimProgress()
 {
     return dynamic_cast<CParts_Character*>(Find_PartObject(TEXT("Part_Upper")))->Get_AnimProgress();
 }
 
-void CPajama::Set_AnimProgress(_float fProgress)
+void CBoss::Set_AnimProgress(_float fProgress)
 {
     for (auto& pPart : m_PartObjects)
     {
@@ -39,7 +36,7 @@ void CPajama::Set_AnimProgress(_float fProgress)
     }
 }
 
-void CPajama::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _bool IsBlend, _float fBlendRatio, _bool IsLoop)
+void CBoss::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _bool IsBlend, _float fBlendRatio, _bool IsLoop)
 {
     for (auto& pPart : m_PartObjects)
     {
@@ -47,7 +44,7 @@ void CPajama::Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate, _
     }
 }
 
-_bool CPajama::Play_Animation(_float fTimeDelta)
+_bool CBoss::Play_Animation(_float fTimeDelta)
 {
     _bool isAnimFinished = { false };
 
@@ -59,121 +56,123 @@ _bool CPajama::Play_Animation(_float fTimeDelta)
     return isAnimFinished;
 }
 
-void CPajama::Set_Collider_Active(const _wstring& strColliderTag, _bool bFlag)
+void CBoss::Set_Collider_Active(const _wstring& strColliderTag, _bool bFlag)
 {
     static_cast<CCollider*>(Find_Component(strColliderTag))->Set_Active(bFlag);
 }
 
-CCollider* CPajama::Get_Collider(const _wstring& strColliderTag)
+CCollider* CBoss::Get_Collider(const _wstring& strColliderTag)
 {
     return static_cast<CCollider*>(Find_Component(strColliderTag));
 }
 
-void CPajama::OnCollision(COLLIDER_HANDLE_ID eHandleID)
+#pragma endregion
+
+void CBoss::OnCollision(COLLIDER_HANDLE_ID eHandleID)
 {
-    if (true == m_IsInvincible || true == m_IsPlayingDeadAnim)
-        return;
+    //if (true == m_IsInvincible || true == m_IsPlayingDeadAnim)
+    //    return;
 
-    m_pGameManager->Active_Combo();
+    //m_pGameManager->Active_Combo();
 
-    CPajamaState* pNextState = { nullptr };
+    //CPajamaState* pNextState = { nullptr };
 
-    _vector vDirection = m_pTransformCom->Get_State(STATE::POSITION) -
-        CGameManager::GetInstance()->Get_PlayerPtr()->Get_Transform()->Get_State(STATE::POSITION);
+    //_vector vDirection = m_pTransformCom->Get_State(STATE::POSITION) -
+    //    CGameManager::GetInstance()->Get_PlayerPtr()->Get_Transform()->Get_State(STATE::POSITION);
 
-    if (COLLIDER_HANDLE_ID::PLAYER_HAND_ATTACK == eHandleID)
-    {
-        m_fCurrentHP -= 1.f;
+    //if (COLLIDER_HANDLE_ID::PLAYER_HAND_ATTACK == eHandleID)
+    //{
+    //    m_fCurrentHP -= 1.f;
 
-        pNextState = CPajama_BeatenState::Create(m_pNavigationCom, this, vDirection, 1.5f);
-    }
-    else if (COLLIDER_HANDLE_ID::PLAYER_HAND_ATTACK_FINAL == eHandleID)
-    {
-        m_fCurrentHP -= 3.f;
+    //    pNextState = CPajama_BeatenState::Create(m_pNavigationCom, this, vDirection, 1.5f);
+    //}
+    //else if (COLLIDER_HANDLE_ID::PLAYER_HAND_ATTACK_FINAL == eHandleID)
+    //{
+    //    m_fCurrentHP -= 3.f;
 
-        pNextState = CPajama_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);
-    }
+    //    pNextState = CPajama_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);
+    //}
 
-    else if (COLLIDER_HANDLE_ID::PLAYER_SWORD_ATTACK == eHandleID)
-    {
-        m_fCurrentHP -= 3.f;
+    //else if (COLLIDER_HANDLE_ID::PLAYER_SWORD_ATTACK == eHandleID)
+    //{
+    //    m_fCurrentHP -= 3.f;
 
-        pNextState = CPajama_BeatenState::Create(m_pNavigationCom, this, vDirection, 1.75f);
-    }
+    //    pNextState = CPajama_BeatenState::Create(m_pNavigationCom, this, vDirection, 1.75f);
+    //}
 
-    else if (COLLIDER_HANDLE_ID::PLAYER_SWORD_ATTACK_FINAL == eHandleID)
-    {
-        m_fCurrentHP -= 3.f;
+    //else if (COLLIDER_HANDLE_ID::PLAYER_SWORD_ATTACK_FINAL == eHandleID)
+    //{
+    //    m_fCurrentHP -= 3.f;
 
-        pNextState = CPajama_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);
-    }
+    //    pNextState = CPajama_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);
+    //}
 
-    else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENGAN == eHandleID ||
-        COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_FIREBALL == eHandleID)
-    {
-        m_fCurrentHP -= 15.f;
+    //else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENGAN == eHandleID ||
+    //    COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_FIREBALL == eHandleID)
+    //{
+    //    m_fCurrentHP -= 15.f;
 
-        pNextState = CPajama_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);
-    }
+    //    pNextState = CPajama_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);
+    //}
 
-    else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENSHURIKEN == eHandleID ||
-        COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENSHURIKEN_EXPLODE == eHandleID)
-    {
-        m_fCurrentHP -= 1.f;
+    //else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENSHURIKEN == eHandleID ||
+    //    COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENSHURIKEN_EXPLODE == eHandleID)
+    //{
+    //    m_fCurrentHP -= 1.f;
 
-        pNextState = CPajama_BeatenState::Create(m_pNavigationCom, this, vDirection, 0.f);
-    }
+    //    pNextState = CPajama_BeatenState::Create(m_pNavigationCom, this, vDirection, 0.f);
+    //}
 
-    else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_KAMUI == eHandleID)
-    {
-        m_fCurrentHP -= 1.f;
+    //else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_KAMUI == eHandleID)
+    //{
+    //    m_fCurrentHP -= 1.f;
 
-        pNextState = CPajama_BeatenState::Create(m_pNavigationCom, this, vDirection, 0.f);
-    }
+    //    pNextState = CPajama_BeatenState::Create(m_pNavigationCom, this, vDirection, 0.f);
+    //}
 
-    else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_KAMUI_END == eHandleID ||
-        COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENSHURIKEN_END == eHandleID)
-    {
-        m_fCurrentHP -= 5.f;
+    //else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_KAMUI_END == eHandleID ||
+    //    COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENSHURIKEN_END == eHandleID)
+    //{
+    //    m_fCurrentHP -= 5.f;
 
-        pNextState = CPajama_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);
-    }
+    //    pNextState = CPajama_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);
+    //}
 
-    else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_BIGSHARK == eHandleID)
-    {
-        m_fCurrentHP -= 15.f;
+    //else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_BIGSHARK == eHandleID)
+    //{
+    //    m_fCurrentHP -= 15.f;
 
-        pNextState = CPajama_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);
-        Set_Invincible(1.f);
-    }
+    //    pNextState = CPajama_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);
+    //    Set_Invincible(1.f);
+    //}
 
-    else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_CHIDORI == eHandleID)
-    {
-        m_pGameManager->Change_Camera(static_cast<LEVEL>(m_pGameInstance->Get_LevelID()),
-            TEXT("Chidori_Action_Camera"), nullptr);
+    //else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_CHIDORI == eHandleID)
+    //{
+    //    m_pGameManager->Change_Camera(static_cast<LEVEL>(m_pGameInstance->Get_LevelID()),
+    //        TEXT("Chidori_Action_Camera"), nullptr);
 
-        m_fCurrentHP -= 15.f;
-        pNextState = CPajama_ElectricShockState::Create(m_pNavigationCom, this);
-        Set_Invincible(1.f);
-    }
+    //    m_fCurrentHP -= 15.f;
+    //    pNextState = CPajama_ElectricShockState::Create(m_pNavigationCom, this);
+    //    Set_Invincible(1.f);
+    //}
 
-    if (m_fCurrentHP <= 0.f && false == m_IsPlayingDeadAnim)
-    {
-        m_IsPlayingDeadAnim = true;
-        if (nullptr != pNextState)
-        {
-            pNextState->End();
-            Safe_Release(pNextState);
-        }
-        pNextState = CPajama_DeadState::Create(m_pNavigationCom, this);
-    }
+    //if (m_fCurrentHP <= 0.f && false == m_IsPlayingDeadAnim)
+    //{
+    //    m_IsPlayingDeadAnim = true;
+    //    if (nullptr != pNextState)
+    //    {
+    //        pNextState->End();
+    //        Safe_Release(pNextState);
+    //    }
+    //    pNextState = CPajama_DeadState::Create(m_pNavigationCom, this);
+    //}
 
-    Change_State(pNextState, false);
+    //Change_State(pNextState, false);
 
-    m_fCurrentHP -= 1.f;
+    //m_fCurrentHP -= 1.f;
 }
 
-void CPajama::Change_State(CPajamaState* pNextState, _bool bBlend)
+void CBoss::Change_State(CPajamaState* pNextState, _bool bBlend)
 {
     _bool IsBlend = m_pState->End();
     Safe_Release(m_pState);
@@ -182,12 +181,12 @@ void CPajama::Change_State(CPajamaState* pNextState, _bool bBlend)
     m_pState = pNextState;
 }
 
-HRESULT CPajama::Initialize_Prototype()
+HRESULT CBoss::Initialize_Prototype()
 {
-    return S_OK;
+    return E_NOTIMPL;
 }
 
-HRESULT CPajama::Initialize(void* pArg)
+HRESULT CBoss::Initialize(void* pArg)
 {
     CGameObject::GAMEOBJECT_DESC	Desc{};
     Desc.fRotationPerSec = XMConvertToRadians(180.0f);
@@ -211,15 +210,22 @@ HRESULT CPajama::Initialize(void* pArg)
     m_pState = CPajama_IdleState::Create(m_pNavigationCom, this);
     m_pState->Start(true);
 
+
+    m_SkillCoolDowns[ENUM_CLASS(SKILL_LIST::FIREBALL)] = 10.f;
+    m_SkillCoolDowns[ENUM_CLASS(SKILL_LIST::LIGHTING_RUSH)] = 30.f;
+
+    m_SkillCoolDowns[ENUM_CLASS(SKILL_LIST::SHARINGAN)] = 600.f;
+    m_SkillCoolDowns[ENUM_CLASS(SKILL_LIST::SPIN_KICK)] = 5.f;
+
     return S_OK;
 }
 
-void CPajama::Priority_Update(_float fTimeDelta)
+void CBoss::Priority_Update(_float fTimeDelta)
 {
     __super::Priority_Update(fTimeDelta);
 }
 
-void CPajama::Update(_float fTimeDelta)
+void CBoss::Update(_float fTimeDelta)
 {
     Update_State(fTimeDelta);
     Update_SkillCoolDown(fTimeDelta);
@@ -237,11 +243,11 @@ void CPajama::Update(_float fTimeDelta)
     m_pHandAttackColliderCom->Update(PlayerMatrix);
 }
 
-void CPajama::Late_Update(_float fTimeDelta)
+void CBoss::Late_Update(_float fTimeDelta)
 {
     __super::Late_Update(fTimeDelta);
 
-    /* 파자마의 몸통 콜라이더를 콜리전 매니저에 등록 */
+    /* 몸통 콜라이더를 콜리전 매니저에 등록 */
     m_pGameManager->Add_Object_ToCollision(TEXT("Monster_Body"), this, m_pColliderCom);
     m_pGameManager->Add_Collider_ToCollision(TEXT("Monster_Attack"), COLLIDER_HANDLE_ID::ENEMY_JETSU_ATTACK, m_pHandAttackColliderCom);
 
@@ -254,62 +260,30 @@ void CPajama::Late_Update(_float fTimeDelta)
 #endif
 }
 
-HRESULT CPajama::Render()
+HRESULT CBoss::Render()
 {
     return S_OK;
 }
 
-_bool CPajama::Use_Skill()
+_bool CBoss::Use_Skill(SKILL_LIST eSkillList)
 {
-    if (m_fSkillTimeAcc >= m_fMaxSkillCoolDown)
-    {
-        m_fSkillTimeAcc = 0.f;
-        return true;
-    }
-    else
-        return false;
+    return _bool();
 }
 
-_bool CPajama::Use_Kunai()
-{
-    if (m_fKunaiTimeAcc >= m_fMaxKunaiCoolDown)
-    {
-        m_fKunaiTimeAcc = 0.f;
-        return true;
-    }
-    else
-        return false;
-}
-
-_bool CPajama::Use_Sliding()
-{
-    if (m_fSlidingTimeAcc >= m_fMaxSlidingCoolDown)
-    {
-        m_fSlidingTimeAcc = 0.f;
-        return true;
-    }
-    else
-        return false;
-}
-
-void CPajama::Update_SkillCoolDown(_float fTimeDelta)
+void CBoss::Update_SkillCoolDown(_float fTimeDelta)
 {
     /* 쿨타임이 존재하는 여러 동작들에 대해 연산을 수행해줌. */
-    m_fSkillTimeAcc += fTimeDelta;
-    m_fKunaiTimeAcc += fTimeDelta;
-    m_fSlidingTimeAcc += fTimeDelta;
 
-    if (m_fSkillTimeAcc >= m_fMaxSkillCoolDown)
-        m_fSkillTimeAcc = m_fMaxSkillCoolDown;
+    for (_uint i = 0; i < ENUM_CLASS(SKILL::END); ++i)
+    {
+        m_SkillTimeAccs[i] += fTimeDelta;
 
-    if (m_fKunaiTimeAcc >= m_fMaxKunaiCoolDown)
-        m_fKunaiTimeAcc = m_fMaxKunaiCoolDown;
-
-    if (m_fSlidingTimeAcc >= m_fMaxSlidingCoolDown)
-        m_fSlidingTimeAcc = m_fMaxSlidingCoolDown;
+        if (m_SkillCoolDowns[i] >= m_SkillCoolDowns[i])
+            m_SkillTimeAccs[i] = m_SkillCoolDowns[i];
+    }
 }
 
-HRESULT CPajama::Ready_Components()
+HRESULT CBoss::Ready_Components()
 {
     /* Com_Navigation */
     CNavigation::NAVIGATION_DESC Desc;
@@ -353,19 +327,19 @@ HRESULT CPajama::Ready_Components()
     return S_OK;
 }
 
-HRESULT CPajama::Ready_PartObjects()
+HRESULT CBoss::Ready_PartObjects()
 {
     CUpper_Character::UPPER_PLAYER_DESC UpperDesc{};
     UpperDesc.pParentTransform = m_pTransformCom;
-    UpperDesc.strModelName = TEXT("Prototype_Component_Model_Upper_Pajama");
+    UpperDesc.strModelName = TEXT("Prototype_Component_Model_Upper_Boss");
 
     CHead_Character::HEAD_PLAYER_DESC HeadDesc{};
     HeadDesc.pParentTransform = m_pTransformCom;
-    HeadDesc.strModelName = TEXT("Prototype_Component_Model_Head_Pajama");
+    HeadDesc.strModelName = TEXT("Prototype_Component_Model_Head_Boss");
 
     CFace_Character::tagFace_Player_Desc FaceDesc{};
     FaceDesc.pParentTransform = m_pTransformCom;
-    FaceDesc.strModelName = TEXT("Prototype_Component_Model_Face_Pajama");
+    FaceDesc.strModelName = TEXT("Prototype_Component_Model_Face_Boss");
 
     /* Part_Upper */
     if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Upper_Player"),
@@ -385,7 +359,7 @@ HRESULT CPajama::Ready_PartObjects()
     return S_OK;
 }
 
-void CPajama::Update_State(_float fTimeDelta)
+void CBoss::Update_State(_float fTimeDelta)
 {
     CPajamaState* pNextState = { nullptr };
     pNextState = m_pState->Update(fTimeDelta);
@@ -403,37 +377,34 @@ void CPajama::Update_State(_float fTimeDelta)
     }
 }
 
-CPajama* CPajama::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
+CBoss* CBoss::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 {
-    CPajama* pInstance = new CPajama(pDevice, pContext, eObjectID);
+    CBoss* pInstance = new CBoss(pDevice, pContext, eObjectID);
 
     if (FAILED(pInstance->Initialize_Prototype()))
     {
-        MSG_BOX("Create Failed : CPajama");
+        MSG_BOX("Create Failed : Boss");
         Safe_Release(pInstance);
     }
-
     return pInstance;
 }
 
-CGameObject* CPajama::Clone(void* pArg)
+CGameObject* CBoss::Clone(void* pArg)
 {
-    CPajama* pInstance = new CPajama(*this);
+    CBoss* pInstance = new CBoss(*this);
 
-    if (FAILED(pInstance->Initialize(pArg)))
+    if (FAILED(pInstance->Initialize_Prototype()))
     {
-        MSG_BOX("Clone Failed : CPajama");
+        MSG_BOX("Clone Failed : Boss");
         Safe_Release(pInstance);
     }
-
     return pInstance;
 }
 
-void CPajama::Free()
+void CBoss::Free()
 {
     __super::Free();
 
-    Safe_Release(m_pState);
     Safe_Release(m_pNavigationCom);
     Safe_Release(m_pColliderCom);
     Safe_Release(m_pHandAttackColliderCom);

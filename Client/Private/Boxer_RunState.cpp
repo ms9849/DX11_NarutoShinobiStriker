@@ -10,6 +10,7 @@
 #include "Boxer_AttackState.h"
 #include "Boxer_IdleState.h"
 #include "Boxer_LeafHurricaneState.h"
+#include "Boxer_SpinKickState.h"
 
 #pragma endregion	
 
@@ -37,10 +38,13 @@ CBoxerState* CBoxer_RunState::Update(_float fTimeDelta)
 	_float fDist = XMVectorGetX(XMVector3Length(m_pBoxer->Get_Transform()->Get_State(STATE::POSITION) - m_pPlayerTransformCom->Get_State(STATE::POSITION)));
 
 	/* ³ª¹µÀÙ ¼±Ç³ »ç¿ë */
-	if (fDist < 10.f && true == m_pBoxer->Use_Skill())
+	if (fDist < 15.f && true == m_pBoxer->Use_Skill())
 		pNextState = CBoxer_LeafHurricaneState::Create(m_pNavigationCom, m_pBoxer);
 
-	else if (fDist < 2.f)
+	else if (fDist < 15.f && true == m_pBoxer->Use_SpinKick())
+		pNextState = CBoxer_SpinKickState::Create(m_pNavigationCom, m_pBoxer);
+
+	else if (fDist < 1.8f)
 		pNextState = CBoxer_AttackState::Create(m_pNavigationCom, m_pBoxer);
 
 	return pNextState;

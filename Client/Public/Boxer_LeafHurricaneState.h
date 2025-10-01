@@ -30,10 +30,14 @@ public:
 	/* End */
 	virtual _bool	End() override;
 
+	void Update_Collider(_float fAnimProgress);
+
 private:
-	CBoxer* m_pBoxer = { nullptr };
-	CNavigation* m_pNavigationCom = { nullptr };
-	ANIM_STATE m_eAnimState = {};
+	CBoxer*			m_pBoxer = { nullptr };
+	CNavigation*	m_pNavigationCom = { nullptr };
+	ANIM_STATE		m_eAnimState = {};
+	_bool			m_IsOnCollider = { false };
+
 public:
 	static CBoxer_LeafHurricaneState* Create(class CNavigation* pNavigation, class CBoxer* pBoxer);
 	virtual void Free() override;

@@ -244,47 +244,8 @@
     <Filter Include="02.GameObjects\Enemy">
       <UniqueIdentifier>{34935787-5105-4ed4-aea5-eae298f28013}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Enemy\Jetsu">
-      <UniqueIdentifier>{e6ff5d31-87cf-441c-bcbc-049833278571}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Enemy\Jetsu\State">
-      <UniqueIdentifier>{de360d71-d62a-41fc-8aff-88c07c3d3e9f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Enemy\Jetsu\State\Idle">
-      <UniqueIdentifier>{4e1b6ada-b7a9-43bc-a884-2e939f1623e2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Enemy\Jetsu\State\Attack">
-      <UniqueIdentifier>{b3097455-a8d4-45b1-9096-d64d72005e81}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Enemy\Jetsu\State\Run">
-      <UniqueIdentifier>{38c1c968-546d-45e4-80b5-bddee566d2f4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Enemy\HPBar">
-      <UniqueIdentifier>{3206a7e6-945e-4907-9df7-3067c7739f1f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Enemy\Bird">
-      <UniqueIdentifier>{a72ef035-7afc-4e5f-84ce-51f2dfa80273}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Enemy\Bird\State">
-      <UniqueIdentifier>{2ba88135-4be6-40e4-a0ec-ff0f6191db55}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Enemy\Bird\State\Attack">
-      <UniqueIdentifier>{a586552e-af54-4e6a-a96e-421875cfa2ab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Enemy\Bird\State\Idle">
-      <UniqueIdentifier>{2898f63f-4f4e-464c-b95d-bb45576ad7af}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Enemy\Bird\State\Run">
-      <UniqueIdentifier>{4b49e70c-53c0-4a58-89ce-8f1e511abe06}</UniqueIdentifier>
-    </Filter>
     <Filter Include="96. GameManager\Managers">
       <UniqueIdentifier>{a0ea510a-afe8-4f4a-a807-4d58ae933da1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Enemy\Boxer">
-      <UniqueIdentifier>{fb08bc9e-1599-48c1-88ee-8d73d9c294ab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Enemy\Boxer\State">
-      <UniqueIdentifier>{eb01dd6c-6f1e-4df9-a755-ffc7db1e801a}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\Character\Parts">
       <UniqueIdentifier>{f147d662-5586-4b75-aba1-4624b3bf91b9}</UniqueIdentifier>
@@ -304,27 +265,6 @@
     <Filter Include="02.GameObjects\Character\Parts\Weapon">
       <UniqueIdentifier>{4bb12619-e08d-491b-8e3d-e478c4cfb16a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Enemy\Boxer\State\Idle">
-      <UniqueIdentifier>{7efdcf7e-cce7-4de5-91ef-05589a4290b4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Enemy\Boxer\State\Run">
-      <UniqueIdentifier>{9835e08b-129c-4920-873c-7e158d29ef32}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Enemy\Boxer\State\Attack">
-      <UniqueIdentifier>{24616a33-3795-4ecf-8faf-ecf52c1faeb1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Enemy\Boxer\State\LeafHurricane">
-      <UniqueIdentifier>{5d4362f9-4272-45a2-a341-e8607b254953}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Enemy\Jetsu\State\Woodhand">
-      <UniqueIdentifier>{799e7c80-550a-45f5-a1ff-eeaa06b76be3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Enemy\Jetsu\Skill">
-      <UniqueIdentifier>{5dfe555b-5392-41c0-bba8-b48a7272690d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Enemy\Jetsu\Skill\Part">
-      <UniqueIdentifier>{918e081b-508b-4b73-89e3-7d0d31c45344}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\SkyBox">
       <UniqueIdentifier>{a51f9c92-5103-4bca-92ee-7fb3cb8bb86a}</UniqueIdentifier>
     </Filter>
@@ -333,12 +273,6 @@
     </Filter>
     <Filter Include="96. GameManager\Managers\Collision">
       <UniqueIdentifier>{6231534f-860c-4b61-b216-8673d3633fca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Enemy\Jetsu\State\Beaten">
-      <UniqueIdentifier>{538be42e-6d74-4c91-a3ff-38bbca8556ac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Enemy\Jetsu\State\Beaten\Blast">
-      <UniqueIdentifier>{e9c16a6e-43c4-411a-b0f7-b89065a88884}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\Character\Player\Skills">
       <UniqueIdentifier>{f9de02e3-299a-48d4-ba2d-b915b998d667}</UniqueIdentifier>
@@ -364,23 +298,11 @@
     <Filter Include="02.GameObjects\Character\Player\Skills\Chidori">
       <UniqueIdentifier>{abc23ad8-dc36-4b53-9e63-d010f6057a4f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Enemy\Jetsu\State\Dead">
-      <UniqueIdentifier>{09d2a421-ab43-4840-ab1e-eebaebebe7f6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Particle">
       <UniqueIdentifier>{40d4ad0c-68d9-4df2-81e0-7aa4e5219f50}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\Particle\Snow">
       <UniqueIdentifier>{5e4bb9d6-69a7-4284-9d12-f3bbec472f21}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Enemy\Bird\State\Beaten">
-      <UniqueIdentifier>{ceee3e9a-e290-447b-be60-b3ef5946ae53}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Enemy\Bird\State\Beaten\Blast">
-      <UniqueIdentifier>{17e51163-d86c-4f52-ac36-d76e7e3657d2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Enemy\Bird\State\Dead">
-      <UniqueIdentifier>{28b90545-7c64-4cef-9401-e0aef8667eee}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\Character\Player\State\BASE\BeatenState\Blast">
       <UniqueIdentifier>{6af502c3-f612-46db-9b8f-e12a0bf5f1d3}</UniqueIdentifier>
@@ -393,9 +315,6 @@
     </Filter>
     <Filter Include="02.GameObjects\Camera\SkillAction">
       <UniqueIdentifier>{f57ef861-1dcb-4b93-a0ca-3117abde05c5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Enemy\Boss">
-      <UniqueIdentifier>{a85843b1-ca13-4153-bb49-e1ae9a0586f0}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\NPC">
       <UniqueIdentifier>{0bbc84b4-31a9-40ef-8e75-214c08d5d91e}</UniqueIdentifier>
@@ -427,9 +346,6 @@
     <Filter Include="96. GameManager\Managers\Trigger">
       <UniqueIdentifier>{23d8103a-da99-4687-b014-5a2eb14e0a68}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Enemy\Jetsu\State\Beaten\Electric">
-      <UniqueIdentifier>{dfd713ef-41cb-448f-adc6-5218be126816}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\UI\Panel\GAMEPLAY\WinPanel">
       <UniqueIdentifier>{c796cc45-1149-40bb-88ff-2d20336197b8}</UniqueIdentifier>
     </Filter>
@@ -438,12 +354,6 @@
     </Filter>
     <Filter Include="02.GameObjects\Kunai">
       <UniqueIdentifier>{a0a34d1f-8c3f-4819-86b8-e5c8b6405700}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Enemy\Bird\State\Walk">
-      <UniqueIdentifier>{92fc3722-5364-48b1-b619-ee03d85dbe3a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Enemy\Bird\State\Beaten\Electric">
-      <UniqueIdentifier>{1293bfc7-4581-46e1-b676-0584f3a1fe59}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\Map\KonohaVillage\Col">
       <UniqueIdentifier>{41c62ec0-5d0d-40ac-a921-6370b0c9d98a}</UniqueIdentifier>
@@ -457,62 +367,164 @@
     <Filter Include="02.GameObjects\Map\TutorialMap\Col">
       <UniqueIdentifier>{6fe4d054-02e6-4fa5-b69b-80256f24dea1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Enemy\Pajama">
-      <UniqueIdentifier>{8a730f21-d205-4ec9-9546-e7b5d2b6e336}</UniqueIdentifier>
+    <Filter Include="02.GameObjects\UI\Panel\GAMEPLAY\CutScenePanel">
+      <UniqueIdentifier>{ba130bb0-8de7-4b1f-bbbf-8a3c4f1e505f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Enemy\Pajama\State">
-      <UniqueIdentifier>{d7dd960b-d0c7-4c3c-95aa-92bce7ec1001}</UniqueIdentifier>
+    <Filter Include="02.GameObjects\Camera\CutScene">
+      <UniqueIdentifier>{d666d2e8-8a62-4764-93d9-1c30c5803373}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Enemy\Pajama\State\Idle">
-      <UniqueIdentifier>{e66f93b3-739c-46f5-8acb-9778bb13aa2b}</UniqueIdentifier>
+    <Filter Include="02.GameObjects\Enemy\00. Boss">
+      <UniqueIdentifier>{a85843b1-ca13-4153-bb49-e1ae9a0586f0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Enemy\Pajama\State\Walk">
-      <UniqueIdentifier>{6ea029de-40fd-4de8-8c97-8b2b42192d2c}</UniqueIdentifier>
+    <Filter Include="02.GameObjects\Enemy\02. Boxer">
+      <UniqueIdentifier>{fb08bc9e-1599-48c1-88ee-8d73d9c294ab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Enemy\Pajama\State\Run">
-      <UniqueIdentifier>{23b0fc3d-bf07-4d60-b5dd-c8628dc33ac7}</UniqueIdentifier>
+    <Filter Include="02.GameObjects\Enemy\02. Boxer\State">
+      <UniqueIdentifier>{eb01dd6c-6f1e-4df9-a755-ffc7db1e801a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Enemy\Pajama\State\Beaten">
-      <UniqueIdentifier>{24b79cf2-1179-4791-86b7-90521ee50c1a}</UniqueIdentifier>
+    <Filter Include="02.GameObjects\Enemy\02. Boxer\State\Idle">
+      <UniqueIdentifier>{7efdcf7e-cce7-4de5-91ef-05589a4290b4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Enemy\Pajama\State\Attack">
-      <UniqueIdentifier>{8767e238-ff5e-4965-a1bf-8f229e4e43f6}</UniqueIdentifier>
+    <Filter Include="02.GameObjects\Enemy\02. Boxer\State\Run">
+      <UniqueIdentifier>{9835e08b-129c-4920-873c-7e158d29ef32}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Enemy\Pajama\State\Attack\Throw">
-      <UniqueIdentifier>{a8cf6672-6e05-41b4-9dba-c66e001d17b6}</UniqueIdentifier>
+    <Filter Include="02.GameObjects\Enemy\02. Boxer\State\Attack">
+      <UniqueIdentifier>{24616a33-3795-4ecf-8faf-ecf52c1faeb1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Enemy\Pajama\State\Beaten\Blasted">
-      <UniqueIdentifier>{91d10992-c355-4bb7-873f-040ff2ccd670}</UniqueIdentifier>
+    <Filter Include="02.GameObjects\Enemy\02. Boxer\State\LeafHurricane">
+      <UniqueIdentifier>{5d4362f9-4272-45a2-a341-e8607b254953}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Enemy\Pajama\State\Beaten\Electric">
-      <UniqueIdentifier>{b13bd25f-a4a7-4e58-8b32-4b96823bdf82}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Enemy\Pajama\State\Step">
-      <UniqueIdentifier>{cea44b5d-e245-4b3b-954d-19e8968e712c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Enemy\Pajama\State\Attack\Fireball">
-      <UniqueIdentifier>{acbf0feb-fceb-4e6b-bebe-f64fc5e2b719}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Enemy\Pajama\State\Dead">
-      <UniqueIdentifier>{2957a829-c655-4ee2-9804-4ca4d97bf5a3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Enemy\Boxer\State\Beaten">
+    <Filter Include="02.GameObjects\Enemy\02. Boxer\State\Beaten">
       <UniqueIdentifier>{ebe837c9-6351-45e3-96b3-79229fbf5e65}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Enemy\Boxer\State\Beaten\Blasted">
+    <Filter Include="02.GameObjects\Enemy\02. Boxer\State\Beaten\Blasted">
       <UniqueIdentifier>{b16032eb-d99a-4672-8f8b-0400940c39dd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Enemy\Boxer\State\Beaten\Electric">
+    <Filter Include="02.GameObjects\Enemy\02. Boxer\State\Beaten\Electric">
       <UniqueIdentifier>{8bba276a-3419-4e0b-82cd-f9e42ab6d0c1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Enemy\Boxer\State\SpinKick">
+    <Filter Include="02.GameObjects\Enemy\02. Boxer\State\SpinKick">
       <UniqueIdentifier>{59f24dc4-9815-46f9-8adf-c3b0e2a62794}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Enemy\Boxer\State\Step">
+    <Filter Include="02.GameObjects\Enemy\02. Boxer\State\Step">
       <UniqueIdentifier>{6b51736b-b652-4473-89f0-850fee7b425c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Enemy\Boxer\State\Dead">
+    <Filter Include="02.GameObjects\Enemy\02. Boxer\State\Dead">
       <UniqueIdentifier>{254296b9-4131-4172-ac98-a7c8ab4efc91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\02. Boxer\State\Walk">
+      <UniqueIdentifier>{95e07307-534f-49b8-b3f0-e53d9f7e4e6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\99. HPBar">
+      <UniqueIdentifier>{3206a7e6-945e-4907-9df7-3067c7739f1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\03. Jetsu">
+      <UniqueIdentifier>{e6ff5d31-87cf-441c-bcbc-049833278571}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\03. Jetsu\State">
+      <UniqueIdentifier>{de360d71-d62a-41fc-8aff-88c07c3d3e9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\03. Jetsu\State\Idle">
+      <UniqueIdentifier>{4e1b6ada-b7a9-43bc-a884-2e939f1623e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\03. Jetsu\State\Attack">
+      <UniqueIdentifier>{b3097455-a8d4-45b1-9096-d64d72005e81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\03. Jetsu\State\Run">
+      <UniqueIdentifier>{38c1c968-546d-45e4-80b5-bddee566d2f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\03. Jetsu\State\Woodhand">
+      <UniqueIdentifier>{799e7c80-550a-45f5-a1ff-eeaa06b76be3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\03. Jetsu\State\Beaten">
+      <UniqueIdentifier>{538be42e-6d74-4c91-a3ff-38bbca8556ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\03. Jetsu\State\Beaten\Blast">
+      <UniqueIdentifier>{e9c16a6e-43c4-411a-b0f7-b89065a88884}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\03. Jetsu\State\Beaten\Electric">
+      <UniqueIdentifier>{dfd713ef-41cb-448f-adc6-5218be126816}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\03. Jetsu\State\Dead">
+      <UniqueIdentifier>{09d2a421-ab43-4840-ab1e-eebaebebe7f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\03. Jetsu\Skill">
+      <UniqueIdentifier>{5dfe555b-5392-41c0-bba8-b48a7272690d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\03. Jetsu\Skill\Part">
+      <UniqueIdentifier>{918e081b-508b-4b73-89e3-7d0d31c45344}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\01. Pajama">
+      <UniqueIdentifier>{8a730f21-d205-4ec9-9546-e7b5d2b6e336}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\01. Pajama\State">
+      <UniqueIdentifier>{d7dd960b-d0c7-4c3c-95aa-92bce7ec1001}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\01. Pajama\State\Idle">
+      <UniqueIdentifier>{e66f93b3-739c-46f5-8acb-9778bb13aa2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\01. Pajama\State\Walk">
+      <UniqueIdentifier>{6ea029de-40fd-4de8-8c97-8b2b42192d2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\01. Pajama\State\Run">
+      <UniqueIdentifier>{23b0fc3d-bf07-4d60-b5dd-c8628dc33ac7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\01. Pajama\State\Beaten">
+      <UniqueIdentifier>{24b79cf2-1179-4791-86b7-90521ee50c1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\01. Pajama\State\Beaten\Blasted">
+      <UniqueIdentifier>{91d10992-c355-4bb7-873f-040ff2ccd670}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\01. Pajama\State\Beaten\Electric">
+      <UniqueIdentifier>{b13bd25f-a4a7-4e58-8b32-4b96823bdf82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\01. Pajama\State\Attack">
+      <UniqueIdentifier>{8767e238-ff5e-4965-a1bf-8f229e4e43f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\01. Pajama\State\Attack\Throw">
+      <UniqueIdentifier>{a8cf6672-6e05-41b4-9dba-c66e001d17b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\01. Pajama\State\Attack\Fireball">
+      <UniqueIdentifier>{acbf0feb-fceb-4e6b-bebe-f64fc5e2b719}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\01. Pajama\State\Step">
+      <UniqueIdentifier>{cea44b5d-e245-4b3b-954d-19e8968e712c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\01. Pajama\State\Dead">
+      <UniqueIdentifier>{2957a829-c655-4ee2-9804-4ca4d97bf5a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\04. Bird">
+      <UniqueIdentifier>{a72ef035-7afc-4e5f-84ce-51f2dfa80273}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\04. Bird\State">
+      <UniqueIdentifier>{2ba88135-4be6-40e4-a0ec-ff0f6191db55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\04. Bird\State\Attack">
+      <UniqueIdentifier>{a586552e-af54-4e6a-a96e-421875cfa2ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\04. Bird\State\Idle">
+      <UniqueIdentifier>{2898f63f-4f4e-464c-b95d-bb45576ad7af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\04. Bird\State\Run">
+      <UniqueIdentifier>{4b49e70c-53c0-4a58-89ce-8f1e511abe06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\04. Bird\State\Beaten">
+      <UniqueIdentifier>{ceee3e9a-e290-447b-be60-b3ef5946ae53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\04. Bird\State\Beaten\Blast">
+      <UniqueIdentifier>{17e51163-d86c-4f52-ac36-d76e7e3657d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\04. Bird\State\Beaten\Electric">
+      <UniqueIdentifier>{1293bfc7-4581-46e1-b676-0584f3a1fe59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\04. Bird\State\Dead">
+      <UniqueIdentifier>{28b90545-7c64-4cef-9401-e0aef8667eee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\04. Bird\State\Walk">
+      <UniqueIdentifier>{92fc3722-5364-48b1-b619-ee03d85dbe3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Enemy\00. Boss\State">
+      <UniqueIdentifier>{0f9887bd-b262-4948-b4e9-e75fe3491a6e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -548,9 +560,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\Dummy.h">
       <Filter>02.GameObjects\Dummy</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Panel.h">
-      <Filter>02.GameObjects\UI\Panel</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Button.h">
       <Filter>02.GameObjects\UI\Button</Filter>
@@ -757,70 +766,70 @@
       <Filter>02.GameObjects\Character\Player\State\BASE\DuckingState</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\WhiteJetsuState.h">
-      <Filter>02.GameObjects\Enemy\Jetsu\State</Filter>
+      <Filter>02.GameObjects\Enemy\03. Jetsu\State</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\WhiteJetsu_IdleState.h">
-      <Filter>02.GameObjects\Enemy\Jetsu\State\Idle</Filter>
+      <Filter>02.GameObjects\Enemy\03. Jetsu\State\Idle</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\WhiteJetsu_AttackState.h">
-      <Filter>02.GameObjects\Enemy\Jetsu\State\Attack</Filter>
+      <Filter>02.GameObjects\Enemy\03. Jetsu\State\Attack</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\WhiteJetsu_RunState.h">
-      <Filter>02.GameObjects\Enemy\Jetsu\State\Run</Filter>
+      <Filter>02.GameObjects\Enemy\03. Jetsu\State\Run</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Enemy.h">
       <Filter>02.GameObjects\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\WhiteJetsu.h">
-      <Filter>02.GameObjects\Enemy\Jetsu</Filter>
+      <Filter>02.GameObjects\Enemy\03. Jetsu</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Effect_CoolDown.h">
       <Filter>02.GameObjects\Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Enemy_HPBar.h">
-      <Filter>02.GameObjects\Enemy\HPBar</Filter>
+      <Filter>02.GameObjects\Enemy\99. HPBar</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Bird.h">
-      <Filter>02.GameObjects\Enemy\Bird</Filter>
+      <Filter>02.GameObjects\Enemy\04. Bird</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\BirdState.h">
-      <Filter>02.GameObjects\Enemy\Bird\State</Filter>
+      <Filter>02.GameObjects\Enemy\04. Bird\State</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Bird_AttackState.h">
-      <Filter>02.GameObjects\Enemy\Bird\State\Attack</Filter>
+      <Filter>02.GameObjects\Enemy\04. Bird\State\Attack</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Bird_IdleState.h">
-      <Filter>02.GameObjects\Enemy\Bird\State\Idle</Filter>
+      <Filter>02.GameObjects\Enemy\04. Bird\State\Idle</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Bird_RunState.h">
-      <Filter>02.GameObjects\Enemy\Bird\State\Run</Filter>
+      <Filter>02.GameObjects\Enemy\04. Bird\State\Run</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Boxer.h">
-      <Filter>02.GameObjects\Enemy\Boxer</Filter>
+      <Filter>02.GameObjects\Enemy\02. Boxer</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\BoxerState.h">
-      <Filter>02.GameObjects\Enemy\Boxer\State</Filter>
+      <Filter>02.GameObjects\Enemy\02. Boxer\State</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Boxer_IdleState.h">
-      <Filter>02.GameObjects\Enemy\Boxer\State\Idle</Filter>
+      <Filter>02.GameObjects\Enemy\02. Boxer\State\Idle</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Boxer_RunState.h">
-      <Filter>02.GameObjects\Enemy\Boxer\State\Run</Filter>
+      <Filter>02.GameObjects\Enemy\02. Boxer\State\Run</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Boxer_AttackState.h">
-      <Filter>02.GameObjects\Enemy\Boxer\State\Attack</Filter>
+      <Filter>02.GameObjects\Enemy\02. Boxer\State\Attack</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Boxer_LeafHurricaneState.h">
-      <Filter>02.GameObjects\Enemy\Boxer\State\LeafHurricane</Filter>
+      <Filter>02.GameObjects\Enemy\02. Boxer\State\LeafHurricane</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\WhiteJetsu_WoodHandState.h">
-      <Filter>02.GameObjects\Enemy\Jetsu\State\Woodhand</Filter>
+      <Filter>02.GameObjects\Enemy\03. Jetsu\State\Woodhand</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\WoodHand.h">
-      <Filter>02.GameObjects\Enemy\Jetsu\Skill</Filter>
+      <Filter>02.GameObjects\Enemy\03. Jetsu\Skill</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Parts_WoodHand.h">
-      <Filter>02.GameObjects\Enemy\Jetsu\Skill\Part</Filter>
+      <Filter>02.GameObjects\Enemy\03. Jetsu\Skill\Part</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\SkyBox.h">
       <Filter>02.GameObjects\SkyBox</Filter>
@@ -832,10 +841,10 @@
       <Filter>96. GameManager\Managers\Collision</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\WhiteJetsu_BeatenState.h">
-      <Filter>02.GameObjects\Enemy\Jetsu\State\Beaten</Filter>
+      <Filter>02.GameObjects\Enemy\03. Jetsu\State\Beaten</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\WhiteJetsu_BeatenBlastedState.h">
-      <Filter>02.GameObjects\Enemy\Jetsu\State\Beaten\Blast</Filter>
+      <Filter>02.GameObjects\Enemy\03. Jetsu\State\Beaten\Blast</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Rasengan.h">
       <Filter>02.GameObjects\Character\Player\Skills\Rasengan</Filter>
@@ -859,19 +868,19 @@
       <Filter>02.GameObjects\Character\Player\Skills\Chidori</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\WhiteJetsu_DeadState.h">
-      <Filter>02.GameObjects\Enemy\Jetsu\State\Dead</Filter>
+      <Filter>02.GameObjects\Enemy\03. Jetsu\State\Dead</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Snow.h">
       <Filter>02.GameObjects\Particle\Snow</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Bird_BeatenState.h">
-      <Filter>02.GameObjects\Enemy\Bird\State\Beaten</Filter>
+      <Filter>02.GameObjects\Enemy\04. Bird\State\Beaten</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Bird_BeatenBlastedState.h">
-      <Filter>02.GameObjects\Enemy\Bird\State\Beaten\Blast</Filter>
+      <Filter>02.GameObjects\Enemy\04. Bird\State\Beaten\Blast</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Bird_DeadState.h">
-      <Filter>02.GameObjects\Enemy\Bird\State\Dead</Filter>
+      <Filter>02.GameObjects\Enemy\04. Bird\State\Dead</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Player_BeatenBlastedState.h">
       <Filter>02.GameObjects\Character\Player\State\BASE\BeatenState\Blast</Filter>
@@ -919,13 +928,13 @@
       <Filter>02.GameObjects\UI\Panel\GAMEPLAY\WinPanel</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Bird_WalkState.h">
-      <Filter>02.GameObjects\Enemy\Bird\State\Walk</Filter>
+      <Filter>02.GameObjects\Enemy\04. Bird\State\Walk</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\WhiteJetsu_ElectricShockState.h">
-      <Filter>02.GameObjects\Enemy\Jetsu\State\Beaten\Electric</Filter>
+      <Filter>02.GameObjects\Enemy\03. Jetsu\State\Beaten\Electric</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Bird_ElectricShockState.h">
-      <Filter>02.GameObjects\Enemy\Bird\State\Beaten\Electric</Filter>
+      <Filter>02.GameObjects\Enemy\04. Bird\State\Beaten\Electric</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Col_KonohaVillage.h">
       <Filter>02.GameObjects\Map\KonohaVillage\Col</Filter>
@@ -940,67 +949,85 @@
       <Filter>02.GameObjects\Map\TutorialMap\Col</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Pajama.h">
-      <Filter>02.GameObjects\Enemy\Pajama</Filter>
+      <Filter>02.GameObjects\Enemy\01. Pajama</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\PajamaState.h">
-      <Filter>02.GameObjects\Enemy\Pajama\State</Filter>
+      <Filter>02.GameObjects\Enemy\01. Pajama\State</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Pajama_IdleState.h">
-      <Filter>02.GameObjects\Enemy\Pajama\State\Idle</Filter>
+      <Filter>02.GameObjects\Enemy\01. Pajama\State\Idle</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Pajama_WalkState.h">
-      <Filter>02.GameObjects\Enemy\Pajama\State\Walk</Filter>
+      <Filter>02.GameObjects\Enemy\01. Pajama\State\Walk</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Pajama_HandAttackState.h">
-      <Filter>02.GameObjects\Enemy\Pajama\State\Attack</Filter>
+      <Filter>02.GameObjects\Enemy\01. Pajama\State\Attack</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Pajama_SlidingKunaiState.h">
-      <Filter>02.GameObjects\Enemy\Pajama\State\Attack\Throw</Filter>
+      <Filter>02.GameObjects\Enemy\01. Pajama\State\Attack\Throw</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Pajama_RunState.h">
-      <Filter>02.GameObjects\Enemy\Pajama\State\Run</Filter>
+      <Filter>02.GameObjects\Enemy\01. Pajama\State\Run</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Pajama_BeatenState.h">
-      <Filter>02.GameObjects\Enemy\Pajama\State\Beaten</Filter>
+      <Filter>02.GameObjects\Enemy\01. Pajama\State\Beaten</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Pajama_BeatenBlastedState.h">
-      <Filter>02.GameObjects\Enemy\Pajama\State\Beaten\Blasted</Filter>
+      <Filter>02.GameObjects\Enemy\01. Pajama\State\Beaten\Blasted</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Pajama_ElectricShockState.h">
-      <Filter>02.GameObjects\Enemy\Pajama\State\Beaten\Electric</Filter>
+      <Filter>02.GameObjects\Enemy\01. Pajama\State\Beaten\Electric</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Pajama_ThrowKunaiState.h">
-      <Filter>02.GameObjects\Enemy\Pajama\State\Attack\Throw</Filter>
+      <Filter>02.GameObjects\Enemy\01. Pajama\State\Attack\Throw</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Pajama_BackStepState.h">
-      <Filter>02.GameObjects\Enemy\Pajama\State\Step</Filter>
+      <Filter>02.GameObjects\Enemy\01. Pajama\State\Step</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Pajama_FireballState.h">
-      <Filter>02.GameObjects\Enemy\Pajama\State\Attack\Fireball</Filter>
+      <Filter>02.GameObjects\Enemy\01. Pajama\State\Attack\Fireball</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Pajama_DeadState.h">
-      <Filter>02.GameObjects\Enemy\Pajama\State\Dead</Filter>
+      <Filter>02.GameObjects\Enemy\01. Pajama\State\Dead</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Skill_Table.h">
       <Filter>02.GameObjects\Character\Player\Skills</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Boxer_BeatenBlastedState.h">
-      <Filter>02.GameObjects\Enemy\Boxer\State\Beaten\Blasted</Filter>
+      <Filter>02.GameObjects\Enemy\02. Boxer\State\Beaten\Blasted</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Boxer_BeatenState.h">
-      <Filter>02.GameObjects\Enemy\Boxer\State\Beaten</Filter>
+      <Filter>02.GameObjects\Enemy\02. Boxer\State\Beaten</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Boxer_ElectricShockState.h">
-      <Filter>02.GameObjects\Enemy\Boxer\State\Beaten\Electric</Filter>
+      <Filter>02.GameObjects\Enemy\02. Boxer\State\Beaten\Electric</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Boxer_SpinKickState.h">
-      <Filter>02.GameObjects\Enemy\Boxer\State\SpinKick</Filter>
+      <Filter>02.GameObjects\Enemy\02. Boxer\State\SpinKick</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Boxer_StepState.h">
-      <Filter>02.GameObjects\Enemy\Boxer\State\Step</Filter>
+      <Filter>02.GameObjects\Enemy\02. Boxer\State\Step</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Boxer_DeadState.h">
-      <Filter>02.GameObjects\Enemy\Boxer\State\Dead</Filter>
+      <Filter>02.GameObjects\Enemy\02. Boxer\State\Dead</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Boxer_WalkState.h">
+      <Filter>02.GameObjects\Enemy\02. Boxer\State\Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Panel.h">
+      <Filter>02.GameObjects\UI\Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\CutScenePanel.h">
+      <Filter>02.GameObjects\UI\Panel\GAMEPLAY\CutScenePanel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\CutSceneCamera.h">
+      <Filter>02.GameObjects\Camera\CutScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Boss.h">
+      <Filter>02.GameObjects\Enemy\00. Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\BossState.h">
+      <Filter>02.GameObjects\Enemy\00. Boss\State</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1037,9 +1064,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\Dummy.cpp">
       <Filter>02.GameObjects\Dummy</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Panel.cpp">
-      <Filter>02.GameObjects\UI\Panel</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Button.cpp">
       <Filter>02.GameObjects\UI\Button</Filter>
@@ -1243,70 +1267,70 @@
       <Filter>02.GameObjects\Character\Player\State\BASE\DuckingState</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\WhiteJetsuState.cpp">
-      <Filter>02.GameObjects\Enemy\Jetsu\State</Filter>
+      <Filter>02.GameObjects\Enemy\03. Jetsu\State</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\WhiteJetsu_IdleState.cpp">
-      <Filter>02.GameObjects\Enemy\Jetsu\State\Idle</Filter>
+      <Filter>02.GameObjects\Enemy\03. Jetsu\State\Idle</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\WhiteJetsu_AttackState.cpp">
-      <Filter>02.GameObjects\Enemy\Jetsu\State\Attack</Filter>
+      <Filter>02.GameObjects\Enemy\03. Jetsu\State\Attack</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\WhiteJetsu_RunState.cpp">
-      <Filter>02.GameObjects\Enemy\Jetsu\State\Run</Filter>
+      <Filter>02.GameObjects\Enemy\03. Jetsu\State\Run</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Enemy.cpp">
       <Filter>02.GameObjects\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\WhiteJetsu.cpp">
-      <Filter>02.GameObjects\Enemy\Jetsu</Filter>
+      <Filter>02.GameObjects\Enemy\03. Jetsu</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Effect_CoolDown.cpp">
       <Filter>02.GameObjects\Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Enemy_HPBar.cpp">
-      <Filter>02.GameObjects\Enemy\HPBar</Filter>
+      <Filter>02.GameObjects\Enemy\99. HPBar</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Bird.cpp">
-      <Filter>02.GameObjects\Enemy\Bird</Filter>
+      <Filter>02.GameObjects\Enemy\04. Bird</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\BirdState.cpp">
-      <Filter>02.GameObjects\Enemy\Bird\State</Filter>
+      <Filter>02.GameObjects\Enemy\04. Bird\State</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Bird_IdleState.cpp">
-      <Filter>02.GameObjects\Enemy\Bird\State\Idle</Filter>
+      <Filter>02.GameObjects\Enemy\04. Bird\State\Idle</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Bird_RunState.cpp">
-      <Filter>02.GameObjects\Enemy\Bird\State\Run</Filter>
+      <Filter>02.GameObjects\Enemy\04. Bird\State\Run</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Boxer.cpp">
-      <Filter>02.GameObjects\Enemy\Boxer</Filter>
+      <Filter>02.GameObjects\Enemy\02. Boxer</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Head_Character.cpp">
       <Filter>02.GameObjects\Character\Parts\Head</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\BoxerState.cpp">
-      <Filter>02.GameObjects\Enemy\Boxer\State</Filter>
+      <Filter>02.GameObjects\Enemy\02. Boxer\State</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Boxer_IdleState.cpp">
-      <Filter>02.GameObjects\Enemy\Boxer\State\Idle</Filter>
+      <Filter>02.GameObjects\Enemy\02. Boxer\State\Idle</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Boxer_RunState.cpp">
-      <Filter>02.GameObjects\Enemy\Boxer\State\Run</Filter>
+      <Filter>02.GameObjects\Enemy\02. Boxer\State\Run</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Boxer_AttackState.cpp">
-      <Filter>02.GameObjects\Enemy\Boxer\State\Attack</Filter>
+      <Filter>02.GameObjects\Enemy\02. Boxer\State\Attack</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Boxer_LeafHurricaneState.cpp">
-      <Filter>02.GameObjects\Enemy\Boxer\State\LeafHurricane</Filter>
+      <Filter>02.GameObjects\Enemy\02. Boxer\State\LeafHurricane</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\WhiteJetsu_WoodHandState.cpp">
-      <Filter>02.GameObjects\Enemy\Jetsu\State\Woodhand</Filter>
+      <Filter>02.GameObjects\Enemy\03. Jetsu\State\Woodhand</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\WoodHand.cpp">
-      <Filter>02.GameObjects\Enemy\Jetsu\Skill</Filter>
+      <Filter>02.GameObjects\Enemy\03. Jetsu\Skill</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Parts_WoodHand.cpp">
-      <Filter>02.GameObjects\Enemy\Jetsu\Skill\Part</Filter>
+      <Filter>02.GameObjects\Enemy\03. Jetsu\Skill\Part</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\SkyBox.cpp">
       <Filter>02.GameObjects\SkyBox</Filter>
@@ -1318,10 +1342,10 @@
       <Filter>96. GameManager\Managers\Collision</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\WhiteJetsu_BeatenState.cpp">
-      <Filter>02.GameObjects\Enemy\Jetsu\State\Beaten</Filter>
+      <Filter>02.GameObjects\Enemy\03. Jetsu\State\Beaten</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\WhiteJetsu_BeatenBlastedState.cpp">
-      <Filter>02.GameObjects\Enemy\Jetsu\State\Beaten\Blast</Filter>
+      <Filter>02.GameObjects\Enemy\03. Jetsu\State\Beaten\Blast</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Rasengan.cpp">
       <Filter>02.GameObjects\Character\Player\Skills\Rasengan</Filter>
@@ -1345,22 +1369,22 @@
       <Filter>02.GameObjects\Character\Player\Skills\Chidori</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\WhiteJetsu_DeadState.cpp">
-      <Filter>02.GameObjects\Enemy\Jetsu\State\Dead</Filter>
+      <Filter>02.GameObjects\Enemy\03. Jetsu\State\Dead</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Snow.cpp">
       <Filter>02.GameObjects\Particle\Snow</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Bird_AttackState.cpp">
-      <Filter>02.GameObjects\Enemy\Bird\State\Attack</Filter>
+      <Filter>02.GameObjects\Enemy\04. Bird\State\Attack</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Bird_BeatenState.cpp">
-      <Filter>02.GameObjects\Enemy\Bird\State\Beaten</Filter>
+      <Filter>02.GameObjects\Enemy\04. Bird\State\Beaten</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Bird_BeatenBlastedState.cpp">
-      <Filter>02.GameObjects\Enemy\Bird\State\Beaten\Blast</Filter>
+      <Filter>02.GameObjects\Enemy\04. Bird\State\Beaten\Blast</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Bird_DeadState.cpp">
-      <Filter>02.GameObjects\Enemy\Bird\State\Dead</Filter>
+      <Filter>02.GameObjects\Enemy\04. Bird\State\Dead</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Player_BeatenBlastedState.cpp">
       <Filter>02.GameObjects\Character\Player\State\BASE\BeatenState\Blast</Filter>
@@ -1405,16 +1429,16 @@
       <Filter>96. GameManager\Managers\Trigger</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\WhiteJetsu_ElectricShockState.cpp">
-      <Filter>02.GameObjects\Enemy\Jetsu\State\Beaten\Electric</Filter>
+      <Filter>02.GameObjects\Enemy\03. Jetsu\State\Beaten\Electric</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\WinPanel.cpp">
       <Filter>02.GameObjects\UI\Panel\GAMEPLAY\WinPanel</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Bird_WalkState.cpp">
-      <Filter>02.GameObjects\Enemy\Bird\State\Walk</Filter>
+      <Filter>02.GameObjects\Enemy\04. Bird\State\Walk</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Bird_ElectricShockState.cpp">
-      <Filter>02.GameObjects\Enemy\Bird\State\Beaten\Electric</Filter>
+      <Filter>02.GameObjects\Enemy\04. Bird\State\Beaten\Electric</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Col_KonohaVillage.cpp">
       <Filter>02.GameObjects\Map\KonohaVillage\Col</Filter>
@@ -1429,64 +1453,82 @@
       <Filter>02.GameObjects\Map\TutorialMap\Col</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Pajama.cpp">
-      <Filter>02.GameObjects\Enemy\Pajama</Filter>
+      <Filter>02.GameObjects\Enemy\01. Pajama</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\PajamaState.cpp">
-      <Filter>02.GameObjects\Enemy\Pajama\State</Filter>
+      <Filter>02.GameObjects\Enemy\01. Pajama\State</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Pajama_IdleState.cpp">
-      <Filter>02.GameObjects\Enemy\Pajama\State\Idle</Filter>
+      <Filter>02.GameObjects\Enemy\01. Pajama\State\Idle</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Pajama_WalkState.cpp">
-      <Filter>02.GameObjects\Enemy\Pajama\State\Walk</Filter>
+      <Filter>02.GameObjects\Enemy\01. Pajama\State\Walk</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Pajama_HandAttackState.cpp">
-      <Filter>02.GameObjects\Enemy\Pajama\State\Attack</Filter>
+      <Filter>02.GameObjects\Enemy\01. Pajama\State\Attack</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Pajama_SlidingKunaiState.cpp">
-      <Filter>02.GameObjects\Enemy\Pajama\State\Attack\Throw</Filter>
+      <Filter>02.GameObjects\Enemy\01. Pajama\State\Attack\Throw</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Pajama_ThrowKunaiState.cpp">
-      <Filter>02.GameObjects\Enemy\Pajama\State\Attack\Throw</Filter>
+      <Filter>02.GameObjects\Enemy\01. Pajama\State\Attack\Throw</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Pajama_RunState.cpp">
-      <Filter>02.GameObjects\Enemy\Pajama\State\Run</Filter>
+      <Filter>02.GameObjects\Enemy\01. Pajama\State\Run</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Pajama_BeatenState.cpp">
-      <Filter>02.GameObjects\Enemy\Pajama\State\Beaten</Filter>
+      <Filter>02.GameObjects\Enemy\01. Pajama\State\Beaten</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Pajama_BeatenBlastedState.cpp">
-      <Filter>02.GameObjects\Enemy\Pajama\State\Beaten\Blasted</Filter>
+      <Filter>02.GameObjects\Enemy\01. Pajama\State\Beaten\Blasted</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Pajama_ElectricShockState.cpp">
-      <Filter>02.GameObjects\Enemy\Pajama\State\Beaten\Electric</Filter>
+      <Filter>02.GameObjects\Enemy\01. Pajama\State\Beaten\Electric</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Pajama_BackStepState.cpp">
-      <Filter>02.GameObjects\Enemy\Pajama\State\Step</Filter>
+      <Filter>02.GameObjects\Enemy\01. Pajama\State\Step</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Pajama_FireballState.cpp">
-      <Filter>02.GameObjects\Enemy\Pajama\State\Attack\Fireball</Filter>
+      <Filter>02.GameObjects\Enemy\01. Pajama\State\Attack\Fireball</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Pajama_DeadState.cpp">
-      <Filter>02.GameObjects\Enemy\Pajama\State\Dead</Filter>
+      <Filter>02.GameObjects\Enemy\01. Pajama\State\Dead</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Boxer_BeatenBlastedState.cpp">
-      <Filter>02.GameObjects\Enemy\Boxer\State\Beaten\Blasted</Filter>
+      <Filter>02.GameObjects\Enemy\02. Boxer\State\Beaten\Blasted</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Boxer_BeatenState.cpp">
-      <Filter>02.GameObjects\Enemy\Boxer\State\Beaten</Filter>
+      <Filter>02.GameObjects\Enemy\02. Boxer\State\Beaten</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Boxer_ElectricShockState.cpp">
-      <Filter>02.GameObjects\Enemy\Boxer\State\Beaten\Electric</Filter>
+      <Filter>02.GameObjects\Enemy\02. Boxer\State\Beaten\Electric</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Boxer_SpinKickState.cpp">
-      <Filter>02.GameObjects\Enemy\Boxer\State\SpinKick</Filter>
+      <Filter>02.GameObjects\Enemy\02. Boxer\State\SpinKick</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Boxer_StepState.cpp">
-      <Filter>02.GameObjects\Enemy\Boxer\State\Step</Filter>
+      <Filter>02.GameObjects\Enemy\02. Boxer\State\Step</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Boxer_DeadState.cpp">
-      <Filter>02.GameObjects\Enemy\Boxer\State\Dead</Filter>
+      <Filter>02.GameObjects\Enemy\02. Boxer\State\Dead</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Boxer_WalkState.cpp">
+      <Filter>02.GameObjects\Enemy\02. Boxer\State\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Panel.cpp">
+      <Filter>02.GameObjects\UI\Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CutScenePanel.cpp">
+      <Filter>02.GameObjects\UI\Panel\GAMEPLAY\CutScenePanel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CutSceneCamera.cpp">
+      <Filter>02.GameObjects\Camera\CutScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Boss.cpp">
+      <Filter>02.GameObjects\Enemy\00. Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\BossState.cpp">
+      <Filter>02.GameObjects\Enemy\00. Boss\State</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -31,6 +31,7 @@
 #include "ComboKOPanel.h"
 #include "KOUI.h"
 #include "WinPanel.h"
+#include "CutScenePanel.h"
 
 #include "GameInstance.h"
 #include "Model.h"
@@ -44,6 +45,7 @@
 #include "ActionCamera.h"
 #include "SkillActionCamera.h"
 #include "NPCTalkCamera.h"
+#include "CutSceneCamera.h"
 
 #include "Lower_Character.h"
 #include "Upper_Character.h"
@@ -475,6 +477,11 @@ HRESULT CLoader::Loading_For_Tutorial()
 		CNPCTalkCamera::Create(m_pDevice, m_pContext, OBJECTID::NPC_TALK_CAMERA))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_CutSceneCamera */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_CutSceneCamera"),
+		CCutSceneCamera::Create(m_pDevice, m_pContext, OBJECTID::CUTSCENE_CAMERA))))
+		return E_FAIL;
+
 
 #pragma endregion
 
@@ -564,6 +571,11 @@ HRESULT CLoader::Loading_For_Tutorial()
 		CWinPanel::Create(m_pDevice, m_pContext, OBJECTID::WIN_UI))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_WinPanel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_CutScenePanel"),
+		CCutScenePanel::Create(m_pDevice, m_pContext, OBJECTID::CUTSCENE_UI))))
+
+		return E_FAIL;
 #pragma endregion
 
 	//Prototype_GameObject_NPC_Kakashi

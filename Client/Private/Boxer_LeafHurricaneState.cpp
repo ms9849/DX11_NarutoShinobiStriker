@@ -28,8 +28,11 @@ CBoxerState* CBoxer_LeafHurricaneState::Update(_float fTimeDelta)
 {
 	CBoxerState* pNextState = { nullptr };
 	_bool IsAnimFinished = m_pBoxer->Play_Animation(fTimeDelta);
+	_float fAnimProgress = m_pBoxer->Get_AnimProgress();
 
 	_float fDist = XMVectorGetX(XMVector3Length(m_pBoxer->Get_Transform()->Get_State(STATE::POSITION) - m_pPlayerTransformCom->Get_State(STATE::POSITION)));
+
+	Update_Collider(fAnimProgress);
 
 	if (ANIM_STATE::ATTACK_START == m_eAnimState)
 	{
@@ -40,7 +43,7 @@ CBoxerState* CBoxer_LeafHurricaneState::Update(_float fTimeDelta)
 
 	/* 나뭇잎 선풍 시작 상태에다가, 달려가는 중에 플레이어랑 가깝다면 */
 	if (ANIM_STATE::ATTACK_START == m_eAnimState
-		&& (true == IsAnimFinished || fDist <= 2.f) )
+		&& (fDist <= 2.0f))
 	{
 		m_pBoxer->Set_AnimIndex("CustomMan_Ninjutsu_LeafHurricane", 2.f, false, 0.1f, true);
 		m_eAnimState = ANIM_STATE::ATTACK_END;
@@ -63,7 +66,20 @@ CBoxerState* CBoxer_LeafHurricaneState::Update(_float fTimeDelta)
 
 _bool CBoxer_LeafHurricaneState::End()
 {
+	m_pBoxer->Get_Collider(TEXT("Com_Collider_LeafHurricane"))->Set_Active(false);
     return true;
+}
+
+void CBoxer_LeafHurricaneState::Update_Collider(_float fAnimProgress)
+{
+	if (fAnimProgress >= 0.5f)
+		m_pBoxer->Get_Collider(TEXT("Com_Collider_LeafHurricane"))->Set_Active(false);
+
+	else if (false == m_IsOnCollider && m_eAnimState == ANIM_STATE::ATTACK_END)
+	{
+		m_pBoxer->Get_Collider(TEXT("Com_Collider_LeafHurricane"))->Set_Active(true);
+		m_IsOnCollider = true;
+	}
 }
 
 CBoxer_LeafHurricaneState* CBoxer_LeafHurricaneState::Create(CNavigation* pNavigation, CBoxer* pBoxer)
