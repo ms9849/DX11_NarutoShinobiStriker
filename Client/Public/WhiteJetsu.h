@@ -52,7 +52,7 @@ private:
 	CCollider* m_pColliderCom = { nullptr };
 	CCollider* m_pHandAttackColliderCom = { nullptr };
 
-	_bool m_isPlayingDeadAnim = { false };
+	_bool m_IsPlayingDeadAnim = { false };
 	_uint m_iNumMeshes = {};
 
 	/* 제츠 전용 상태 */

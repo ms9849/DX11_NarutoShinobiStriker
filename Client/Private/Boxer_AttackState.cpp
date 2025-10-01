@@ -8,6 +8,7 @@
 
 #include "Boxer_RunState.h"
 #include "Boxer_IdleState.h"
+#include "Boxer_StepState.h"
 
 #pragma endregion
 
@@ -30,10 +31,17 @@ CBoxerState* CBoxer_AttackState::Update(_float fTimeDelta)
 {
 	CBoxerState* pNextState = { nullptr };
 	_bool IsAnimFinished = m_pBoxer->Play_Animation(fTimeDelta);
+	_float fAnimProgress = m_pBoxer->Get_AnimProgress();
+	Update_Collider(fAnimProgress);
+
+	if (false == IsAnimFinished && fAnimProgress <= 0.4f)
+		m_pBoxer->Get_Transform()->Go_Straight(fTimeDelta * m_pGameInstance->Calc_Quadratic(-10.f, 4.f, 0.f, fAnimProgress),
+			nullptr);
 
 	if (true == IsAnimFinished && ANIM_STATE::ATTACK_01 == m_eAnimState)
 	{
-		m_pBoxer->Set_AnimIndex("CustomMan_Attack_Hand_StraightPunch", 4.f, true, 0.1f, false);
+		m_IsOnCollider = false;
+		m_pBoxer->Set_AnimIndex("CustomMan_Attack_Hand_StraightPunch", 4.5f, false, 0.1f, false);
 		m_pBoxer->Get_Transform()->LookAt_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION));
 		m_eAnimState = ANIM_STATE::ATTACK_02;
 	}
@@ -42,11 +50,21 @@ CBoxerState* CBoxer_AttackState::Update(_float fTimeDelta)
 		_float fDist = XMVectorGetX(XMVector3Length(m_pBoxer->Get_Transform()->Get_State(STATE::POSITION) - m_pPlayerTransformCom->Get_State(STATE::POSITION)));
 
 		if (fDist < 30.f)
-			pNextState = CBoxer_RunState::Create(m_pNavigationCom, m_pBoxer);
+		{
+			m_pBoxer->Get_Transform()->LookAt_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION));
+
+			_float fRandom = m_pGameInstance->Random_Normal();
+			if(fRandom >= 0.7f)
+				pNextState = CBoxer_StepState::Create(m_pNavigationCom, m_pBoxer, CBoxer_StepState::ANIM_STATE::BACK);
+			else if(fRandom >= 0.4f)
+				pNextState = CBoxer_StepState::Create(m_pNavigationCom, m_pBoxer, CBoxer_StepState::ANIM_STATE::RIGHT);
+			else
+				pNextState = CBoxer_StepState::Create(m_pNavigationCom, m_pBoxer, CBoxer_StepState::ANIM_STATE::LEFT);
+
+		}
 		else
 			pNextState = CBoxer_IdleState::Create(m_pNavigationCom, m_pBoxer);
 	}
-
 
 	return pNextState;
 }
@@ -54,6 +72,18 @@ CBoxerState* CBoxer_AttackState::Update(_float fTimeDelta)
 _bool CBoxer_AttackState::End()
 {
 	return true;
+}
+
+void CBoxer_AttackState::Update_Collider(_float fAnimProgress)
+{
+	if (fAnimProgress <= 0.2f || fAnimProgress >= 0.8f)
+		m_pBoxer->Get_Collider(TEXT("Com_Collider_HandAttack"))->Set_Active(false);
+
+	else if (false == m_IsOnCollider)
+	{
+		m_pBoxer->Get_Collider(TEXT("Com_Collider_HandAttack"))->Set_Active(true);
+		m_IsOnCollider = true;
+	}
 }
 
 CBoxer_AttackState* CBoxer_AttackState::Create(CNavigation* pNavigation, CBoxer* pBoxer)

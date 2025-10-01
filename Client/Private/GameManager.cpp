@@ -191,6 +191,11 @@ void CGameManager::Set_WinPanel(CWinPanel* pWinPanel)
 	m_pUI_Manager->Set_WinPanel(pWinPanel);
 }
 
+void CGameManager::Set_CutScenePanel(CCutScenePanel* pCutScenePanel)
+{
+	m_pUI_Manager->Set_CutScenePanel(pCutScenePanel);
+}
+
 void CGameManager::Set_Dialog_Text(const _wstring& strDialogText)
 {
 	m_pUI_Manager->Set_Dialog_Text(strDialogText);
@@ -239,6 +244,11 @@ void CGameManager::AlertPanel_Start_FadeIn(const _wstring& strMissionText)
 void CGameManager::WinPanel_Start_FadeIn()
 {
 	m_pUI_Manager->WinPanel_Start_FadeIn();
+}
+
+void CGameManager::Set_CutScene_Visible(_bool bFlag)
+{
+	m_pUI_Manager->Set_CutScene_Visible(bFlag);
 }
 
 HRESULT CGameManager::OnTrigger(TRIGGER_TYPE eTriggerType)

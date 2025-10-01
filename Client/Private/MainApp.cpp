@@ -325,7 +325,6 @@ HRESULT CMainApp::Ready_Prototypes()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/EnemyHPBar/EnemyHPBar.png"), 1))))
 		return E_FAIL;
 
-
 	/* For.Prototype_Component_Texture_Snow */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Snow"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Snow/Snow.png"), 1))))
@@ -334,6 +333,11 @@ HRESULT CMainApp::Ready_Prototypes()
 	/* For.Prototype_Component_Texture_DialogUI */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_DialogUI"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Dialog/Dialog.png"), 1))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_CutSencePanel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_CutSceneUI"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/CutScene/CutScene.png"), 1))))
 		return E_FAIL;
 
 #pragma endregion
@@ -367,7 +371,7 @@ HRESULT CMainApp::Ready_Prototypes()
 		CFont::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Fonts/MyFont.spritefont")))))
 		return E_FAIL;
 
-	/* For.Prototype_Component_Font */
+	/* For.Prototype_Component_Font_Large */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Font_Large"),
 		CFont::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Fonts/MyFont_Large.spritefont")))))
 		return E_FAIL;

@@ -50,7 +50,7 @@ private:
 	_float m_fSkillTimeAcc = { 0.f };
 	_float m_fMaxSkillCoolDown = { 4.f };
 
-	_bool m_isPlayingDeadAnim = { false };
+	_bool m_IsPlayingDeadAnim = { false };
 
 	class CBirdState*	m_pState = { nullptr };
 	CNavigation*		m_pNavigationCom = { nullptr };

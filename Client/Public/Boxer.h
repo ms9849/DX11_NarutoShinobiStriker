@@ -52,6 +52,8 @@ private:
 	CNavigation* m_pNavigationCom = { nullptr };
 	CCollider*	 m_pColliderCom = { nullptr };
 	CCollider*	 m_pHandAttackColliderCom = { nullptr };
+	CCollider*	 m_pLeafHurricaneColliderCom = { nullptr };
+	CCollider*   m_pSpinKickColliderCom = { nullptr };
 
 	class CBoxerState* m_pState = { nullptr };
 

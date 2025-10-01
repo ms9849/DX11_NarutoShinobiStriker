@@ -285,8 +285,15 @@ void CPlayer::OnCollision(COLLIDER_HANDLE_ID eHandleID, _float3 vColliderPos)
 	{
 		pNextState = CPlayer_BeatenBlastedState::Create(this, vDirection, 1.f);
 	}
+	else if (COLLIDER_HANDLE_ID::ENEMY_BOXER_LEAFHURRICANE == eHandleID)
+	{
+		pNextState = CPlayer_BeatenState::Create(this, vDirection, 5.f);
+	}
+	else if (COLLIDER_HANDLE_ID::ENEMY_BOXER_SPINKICK == eHandleID)
+	{
+		pNextState = CPlayer_BeatenBlastedState::Create(this, vDirection, 1.3f);
+	}
 
-	/* 플레이어 죽는 상태 X */
 	Change_State(pNextState, false);
 }
 

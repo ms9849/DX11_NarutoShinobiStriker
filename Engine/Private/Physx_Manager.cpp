@@ -449,20 +449,20 @@ _bool CPhysx_Manager::Check_GeometryPicking()
         {
             Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 0.7f, 0.f, 0.f));
         }
-        else if (fNearestDist <= 1.85f && fAngle >= 25.f) 
+        else if (fNearestDist <= 1.8f && fAngle >= 25.f) 
         {
             Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 1.0f, 0.f, 0.f));
         }
-        else if (fNearestDist <= 2.05f && fAngle >= 40.f)
+        else if (fNearestDist <= 2.0f && fAngle >= 40.f)
         {
             Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 1.2f, 0.f, 0.f));
         }
-        else if (fNearestDist <= 2.20f && fAngle >= 60.f)
+        else if (fNearestDist <= 2.2f && fAngle >= 60.f)
         {
             Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 1.4f, 0.f, 0.f));
             m_IsOnSlope[iIdx] = true;
         }
-        else if (fNearestDist <= 2.35 && fAngle >= 70.f)
+        else if (fNearestDist <= 2.3f && fAngle >= 70.f)
         {
             Pair.first->Get_Transform()->Set_State(STATE::POSITION, vNearestPos + XMVectorSet(0.f, 1.5f, 0.f, 0.f));
             m_IsOnSlope[iIdx] = true;

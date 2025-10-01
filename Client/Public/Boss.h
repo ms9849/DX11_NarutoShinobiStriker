@@ -10,14 +10,30 @@ class CNavigation;
 class CCollider;
 NS_END
 
+/*
+사용할 보스 패턴들 
+1. 가까이와서 스핀 킥
+2. 멀리서 7연 돌진
+3. 화염구 3연속
+4. 사륜안
+-> 이 4개는 확정. 혹시 필요하다면 플레이어 스킬 중에서 재탕할 것.
+
+5. 필요하면 슬라이딩 쿠나이
+6. 평타 패턴 몇 개
+*/
+
+
 NS_BEGIN(Client)
 
-class CPajama final : public CEnemy
+class CBoss final : public CEnemy
 {
+public:
+	enum class SKILL_LIST { FIREBALL, LIGHTING_RUSH, SHARINGAN, SPIN_KICK, END };
+
 private:
-	CPajama(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
-	CPajama(const CPajama& rhs);
-	virtual ~CPajama() = default;
+	CBoss(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
+	CBoss(const CBoss& rhs);
+	virtual ~CBoss() = default;
 
 public:
 	_float		Get_AnimProgress();
@@ -25,7 +41,7 @@ public:
 	void		Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate = 1.f, _bool IsBlend = true, _float fBlendRatio = 0.15f, _bool IsLoop = false);
 	_bool		Play_Animation(_float fTimeDelta);
 	void		Set_Collider_Active(const _wstring& strColliderTag, _bool bFlag);
-	CCollider*	Get_Collider(const _wstring& strColliderTag);
+	CCollider* Get_Collider(const _wstring& strColliderTag);
 
 public:
 	virtual void OnCollision(COLLIDER_HANDLE_ID eHandleID) override;
@@ -40,13 +56,7 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	/* 화둔 호화구 */
-	/* 스킬을 쓸 수 있는 상태라면 True를 반환하고 상태에서 제어. */
-	_bool Use_Skill();
-	/* 작은 쿠나이 */
-	_bool Use_Kunai();
-	/* 슬라이딩 */
-	_bool Use_Sliding();
+	_bool Use_Skill(SKILL_LIST eSkillList);
 	void  Update_SkillCoolDown(_float fTimeDelta);
 
 private:
@@ -56,15 +66,12 @@ private:
 	CCollider* m_pColliderCom = { nullptr };
 	CCollider* m_pHandAttackColliderCom = { nullptr };
 
-	class CPajamaState* m_pState = { nullptr };
+	class CBossState* m_pState = { nullptr };
 
-	_float		m_fSkillTimeAcc = { 0.f };
-	_float		m_fMaxSkillCoolDown = { 8.f };
-	_float		m_fKunaiTimeAcc = { 0.f };
-	_float		m_fMaxKunaiCoolDown = { 4.f };
-	_float		m_fSlidingTimeAcc = { 0.f };
-	_float		m_fMaxSlidingCoolDown = { 5.f };
 	_bool		m_IsPlayingDeadAnim = { false };
+	/* 유니폼 초기화에서도 0 초기화 먹힘 */
+	_float		m_SkillTimeAccs[ENUM_CLASS(SKILL_LIST::END)] = { 0, };
+	_float		m_SkillCoolDowns[ENUM_CLASS(SKILL_LIST::END)] = {};
 
 private:
 	HRESULT Ready_Components();
@@ -72,7 +79,7 @@ private:
 	void	Update_State(_float fTimeDelta);
 
 public:
-	static CPajama* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
+	static CBoss* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 };

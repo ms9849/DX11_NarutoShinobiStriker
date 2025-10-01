@@ -13,14 +13,11 @@ NS_END
 
 NS_BEGIN(Client)
 
-class CBoxer_AttackState final : public CBoxerState
+class CBoxer_WalkState final : public CBoxerState
 {
-public:
-	enum class ANIM_STATE { ATTACK_01, ATTACK_02, ATTACK_03 };
-
 private:
-	CBoxer_AttackState(class CNavigation* pNavigation, class CBoxer* pBoxer);
-	virtual ~CBoxer_AttackState() = default;
+	CBoxer_WalkState(class CNavigation* pNavigation, class CBoxer* pBoxer);
+	virtual ~CBoxer_WalkState() = default;
 
 public:
 	/* Start */
@@ -30,14 +27,12 @@ public:
 	/* End */
 	virtual _bool	End() override;
 
-	void Update_Collider(_float fAnimProgress);
 private:
 	CBoxer* m_pBoxer = { nullptr };
 	CNavigation* m_pNavigationCom = { nullptr };
-	ANIM_STATE m_eAnimState = {};
-	_bool m_IsOnCollider = { false };
+
 public:
-	static CBoxer_AttackState* Create(class CNavigation* pNavigation, class CBoxer* pBoxer);
+	static CBoxer_WalkState* Create(class CNavigation* pNavigation, class CBoxer* pBoxer);
 	virtual void Free() override;
 };
 

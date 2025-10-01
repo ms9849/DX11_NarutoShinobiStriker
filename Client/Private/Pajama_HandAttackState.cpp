@@ -57,7 +57,7 @@ _bool CPajama_HandAttackState::End()
 
 void CPajama_HandAttackState::Update_Collider(_float fAnimProgress)
 {
-    if (fAnimProgress <= 0.1f && fAnimProgress >= 0.3f)
+    if (fAnimProgress <= 0.1f || fAnimProgress >= 0.3f)
         m_pPajama->Get_Collider(TEXT("Com_Collider_HandAttack"))->Set_Active(false);
 
     else if (false == m_IsOnCollider)

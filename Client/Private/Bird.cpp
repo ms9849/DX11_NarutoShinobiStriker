@@ -49,7 +49,7 @@ _bool CBird::Play_Animation(_float fTimeDelta)
 
 void CBird::OnCollision(COLLIDER_HANDLE_ID eHandleID)
 {
-    if (true == m_IsInvincible || true == m_isPlayingDeadAnim)
+    if (true == m_IsInvincible || true == m_IsPlayingDeadAnim)
         return;
 
     CBirdState* pNextState = { nullptr };
@@ -134,9 +134,9 @@ void CBird::OnCollision(COLLIDER_HANDLE_ID eHandleID)
         Set_Invincible(1.f);
     }
 
-    if (m_fCurrentHP <= 0.f && false == m_isPlayingDeadAnim)
+    if (m_fCurrentHP <= 0.f && false == m_IsPlayingDeadAnim)
     {
-        m_isPlayingDeadAnim = true;
+        m_IsPlayingDeadAnim = true;
         if (nullptr != pNextState)
         {
             pNextState->End();

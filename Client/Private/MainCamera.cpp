@@ -3,12 +3,6 @@
 #include "GameManager.h"
 #include "GameInstance.h"
 
-template <typename T>
-constexpr const T& MyClamp(const T& v, const T& lo, const T& hi)
-{
-    return (v < lo) ? lo : (hi < v) ? hi : v;
-}
-
 CMainCamera::CMainCamera(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CCamera { pDevice, pContext, ENUM_CLASS(eObjectID) }
     , m_pGameManager { CGameManager::GetInstance() }
@@ -20,6 +14,7 @@ CMainCamera::CMainCamera(const CMainCamera& rhs)
     : CCamera{ rhs }
     , m_pGameManager { CGameManager::GetInstance() }
 {
+    Safe_AddRef(m_pGameManager);
 }
 
 HRESULT CMainCamera::Initialize_Prototype()

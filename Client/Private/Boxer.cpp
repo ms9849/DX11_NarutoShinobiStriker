@@ -154,11 +154,13 @@ void CBoxer::OnCollision(COLLIDER_HANDLE_ID eHandleID)
 	if (m_fCurrentHP <= 0.f && false == m_IsPlayingDeadAnim)
 	{
 		m_IsPlayingDeadAnim = true;
+
 		if (nullptr != pNextState)
 		{
 			pNextState->End();
 			Safe_Release(pNextState);
 		}
+
 		pNextState = CBoxer_DeadState::Create(m_pNavigationCom, this);
 	}
 
@@ -222,6 +224,7 @@ void CBoxer::Update(_float fTimeDelta)
 	__super::Update(fTimeDelta);
 
 	m_pColliderCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
+	m_pLeafHurricaneColliderCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
 
 	_matrix PlayerMatrix = XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr());
 	_vector PlayerTranslation = m_pTransformCom->Get_State(STATE::POSITION);
@@ -229,6 +232,7 @@ void CBoxer::Update(_float fTimeDelta)
 	PlayerMatrix.r[3] = PlayerTranslation;
 
 	m_pHandAttackColliderCom->Update(PlayerMatrix);
+	m_pSpinKickColliderCom->Update(PlayerMatrix);
 }
 
 void CBoxer::Late_Update(_float fTimeDelta)
@@ -238,6 +242,8 @@ void CBoxer::Late_Update(_float fTimeDelta)
 	/* 파자마의 몸통 콜라이더를 콜리전 매니저에 등록 */
 	m_pGameManager->Add_Object_ToCollision(TEXT("Monster_Body"), this, m_pColliderCom);
 	m_pGameManager->Add_Collider_ToCollision(TEXT("Monster_Attack"), COLLIDER_HANDLE_ID::ENEMY_JETSU_ATTACK, m_pHandAttackColliderCom);
+	m_pGameManager->Add_Collider_ToCollision(TEXT("Monster_Skill"), COLLIDER_HANDLE_ID::ENEMY_BOXER_LEAFHURRICANE, m_pLeafHurricaneColliderCom);
+	m_pGameManager->Add_Collider_ToCollision(TEXT("Monster_Skill"), COLLIDER_HANDLE_ID::ENEMY_BOXER_SPINKICK, m_pSpinKickColliderCom);
 
 	m_pNavigationCom->Compute_Height(m_pTransformCom);
 
@@ -246,6 +252,8 @@ void CBoxer::Late_Update(_float fTimeDelta)
 #ifdef _DEBUG
 	m_pGameInstance->Add_DebugComponent(m_pColliderCom);
 	m_pGameInstance->Add_DebugComponent(m_pHandAttackColliderCom);
+	m_pGameInstance->Add_DebugComponent(m_pLeafHurricaneColliderCom);
+	m_pGameInstance->Add_DebugComponent(m_pSpinKickColliderCom);
 #endif
 }
 
@@ -327,6 +335,17 @@ HRESULT CBoxer::Ready_Components()
 
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_Sphere"),
 		TEXT("Com_Collider_HandAttack"), reinterpret_cast<CComponent**>(&m_pHandAttackColliderCom), &ColliderDesc)))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_Sphere"),
+		TEXT("Com_Collider_SpinKick"), reinterpret_cast<CComponent**>(&m_pSpinKickColliderCom), &ColliderDesc)))
+		return E_FAIL;
+
+	ColliderDesc.fRadius = 1.5f;
+	ColliderDesc.vCenter = _float3{ 0.f, 0.5f, 0.f };
+
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_Sphere"),
+		TEXT("Com_Collider_LeafHurricane"), reinterpret_cast<CComponent**>(&m_pLeafHurricaneColliderCom), &ColliderDesc)))
 		return E_FAIL;
 
 	return S_OK;
@@ -437,4 +456,7 @@ void CBoxer::Free()
 	Safe_Release(m_pState);
 	Safe_Release(m_pNavigationCom);
 	Safe_Release(m_pColliderCom);
+	Safe_Release(m_pHandAttackColliderCom);
+	Safe_Release(m_pLeafHurricaneColliderCom);
+	Safe_Release(m_pSpinKickColliderCom);
 }
