@@ -7,6 +7,7 @@
 #pragma region TRANSFER_STATE
 
 #include "Boss_IdleState.h"
+#include "Boss_SlidingKunaiState.h"
 
 #pragma endregion
 
@@ -40,7 +41,13 @@ CBossState* CBoss_BeatenBlastedState::Update(_float fTimeDelta)
 
     if (true == IsAnimFinished)
     {
-        pNextState = CBoss_IdleState::Create(m_pNavigationCom, m_pBoss);
+        _float fRandom = m_pGameInstance->Random_Normal();
+
+        if (fRandom >= 0.5f)
+            pNextState = CBoss_SlidingKunaiState::Create(m_pNavigationCom, m_pBoss, CBoss_SlidingKunaiState::ANIM_STATE::LEFT);
+        
+        else
+            pNextState = CBoss_SlidingKunaiState::Create(m_pNavigationCom, m_pBoss, CBoss_SlidingKunaiState::ANIM_STATE::RIGHT);
     }
 
     return pNextState;
