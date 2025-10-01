@@ -1,11 +1,7 @@
-
 #pragma once
 #include "Client_Defines.h"
 #include "BoxerState.h"
 
-/*
-가장 기본적인 IDLE STATE
-*/
 NS_BEGIN(Engine)
 class CNavigation;
 NS_END 

@@ -199,11 +199,17 @@ HRESULT CPlayer::Initialize(void* pArg)
 
 void CPlayer::Priority_Update(_float fTimeDelta)
 {
+	if (false == m_IsVisible)
+		return;
+
 	__super::Priority_Update(fTimeDelta);
 }
 
 void CPlayer::Update(_float fTimeDelta)
 {
+	if (false == m_IsVisible)
+		return;
+
 	m_pGameManager->Update_LockOnManager(fTimeDelta);
 
 	/* 스테이트 업데이트. */
@@ -236,15 +242,15 @@ void CPlayer::Update(_float fTimeDelta)
 
 void CPlayer::Late_Update(_float fTimeDelta)
 {
+	if (false == m_IsVisible)
+		return;
+
 	/* 스킬이 바뀌었다면. */
 	if (m_eCurAttackType != m_ePreAttackType)
 	{
 		__super::Change_AttackType();
 		Change_Skills();
 	}
-
-	if (false == m_IsVisible)
-		return;
 
 	__super::Late_Update(fTimeDelta);
 

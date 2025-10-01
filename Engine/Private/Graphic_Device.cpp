@@ -255,7 +255,7 @@ void CGraphic_Device::Free()
 		OutputDebugStringW(L"                                                                    D3D11 Live Object ref Count Checker \r ");
 		OutputDebugStringW(L"----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- \r ");
 
-		hr = d3dDebug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
+		hr = d3dDebug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL | D3D11_RLDO_IGNORE_INTERNAL);
 
 		OutputDebugStringW(L"----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- \r ");
 		OutputDebugStringW(L"                                                                    D3D11 Live Object ref Count Checker END \r ");
