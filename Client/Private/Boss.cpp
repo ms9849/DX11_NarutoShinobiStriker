@@ -12,6 +12,10 @@
 #include "Player.h"
 
 #include "Boss_IdleState.h"
+#include "Boss_BeatenState.h"
+#include "Boss_BeatenBlastedState.h"
+#include "Boss_ElectricShockState.h"
+#include "Boss_DeadState.h"
 
 CBoss::CBoss(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CEnemy{ pDevice, pContext, eObjectID }
@@ -72,106 +76,106 @@ CCollider* CBoss::Get_Collider(const _wstring& strColliderTag)
 
 void CBoss::OnCollision(COLLIDER_HANDLE_ID eHandleID)
 {
-    //if (true == m_IsInvincible || true == m_IsPlayingDeadAnim)
-    //    return;
+    if (true == m_IsInvincible || true == m_IsPlayingDeadAnim)
+        return;
 
-    //m_pGameManager->Active_Combo();
+    m_pGameManager->Active_Combo();
 
-    //CPajamaState* pNextState = { nullptr };
+    CBossState* pNextState = { nullptr };
 
-    //_vector vDirection = m_pTransformCom->Get_State(STATE::POSITION) -
-    //    CGameManager::GetInstance()->Get_PlayerPtr()->Get_Transform()->Get_State(STATE::POSITION);
+    _vector vDirection = m_pTransformCom->Get_State(STATE::POSITION) -
+        CGameManager::GetInstance()->Get_PlayerPtr()->Get_Transform()->Get_State(STATE::POSITION);
 
-    //if (COLLIDER_HANDLE_ID::PLAYER_HAND_ATTACK == eHandleID)
-    //{
-    //    m_fCurrentHP -= 1.f;
+    if (COLLIDER_HANDLE_ID::PLAYER_HAND_ATTACK == eHandleID)
+    {
+        m_fCurrentHP -= 1.f;
 
-    //    pNextState = CPajama_BeatenState::Create(m_pNavigationCom, this, vDirection, 1.5f);
-    //}
-    //else if (COLLIDER_HANDLE_ID::PLAYER_HAND_ATTACK_FINAL == eHandleID)
-    //{
-    //    m_fCurrentHP -= 3.f;
+        pNextState = CBoss_BeatenState::Create(m_pNavigationCom, this, vDirection, 1.5f);
+    }
+    else if (COLLIDER_HANDLE_ID::PLAYER_HAND_ATTACK_FINAL == eHandleID)
+    {
+        m_fCurrentHP -= 3.f;
 
-    //    pNextState = CPajama_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);
-    //}
+        pNextState = CBoss_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);
+    }
 
-    //else if (COLLIDER_HANDLE_ID::PLAYER_SWORD_ATTACK == eHandleID)
-    //{
-    //    m_fCurrentHP -= 3.f;
+    else if (COLLIDER_HANDLE_ID::PLAYER_SWORD_ATTACK == eHandleID)
+    {
+        m_fCurrentHP -= 3.f;
 
-    //    pNextState = CPajama_BeatenState::Create(m_pNavigationCom, this, vDirection, 1.75f);
-    //}
+        pNextState = CBoss_BeatenState::Create(m_pNavigationCom, this, vDirection, 1.75f);
+    }
 
-    //else if (COLLIDER_HANDLE_ID::PLAYER_SWORD_ATTACK_FINAL == eHandleID)
-    //{
-    //    m_fCurrentHP -= 3.f;
+    else if (COLLIDER_HANDLE_ID::PLAYER_SWORD_ATTACK_FINAL == eHandleID)
+    {
+        m_fCurrentHP -= 3.f;
 
-    //    pNextState = CPajama_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);
-    //}
+        pNextState = CBoss_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);
+    }
 
-    //else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENGAN == eHandleID ||
-    //    COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_FIREBALL == eHandleID)
-    //{
-    //    m_fCurrentHP -= 15.f;
+    else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENGAN == eHandleID ||
+        COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_FIREBALL == eHandleID)
+    {
+        m_fCurrentHP -= 15.f;
 
-    //    pNextState = CPajama_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);
-    //}
+        pNextState = CBoss_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);
+    }
 
-    //else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENSHURIKEN == eHandleID ||
-    //    COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENSHURIKEN_EXPLODE == eHandleID)
-    //{
-    //    m_fCurrentHP -= 1.f;
+    else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENSHURIKEN == eHandleID ||
+        COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENSHURIKEN_EXPLODE == eHandleID)
+    {
+        m_fCurrentHP -= 1.f;
 
-    //    pNextState = CPajama_BeatenState::Create(m_pNavigationCom, this, vDirection, 0.f);
-    //}
+        pNextState = CBoss_BeatenState::Create(m_pNavigationCom, this, vDirection, 0.f);
+    }
 
-    //else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_KAMUI == eHandleID)
-    //{
-    //    m_fCurrentHP -= 1.f;
+    else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_KAMUI == eHandleID)
+    {
+        m_fCurrentHP -= 1.f;
 
-    //    pNextState = CPajama_BeatenState::Create(m_pNavigationCom, this, vDirection, 0.f);
-    //}
+        pNextState = CBoss_BeatenState::Create(m_pNavigationCom, this, vDirection, 0.f);
+    }
 
-    //else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_KAMUI_END == eHandleID ||
-    //    COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENSHURIKEN_END == eHandleID)
-    //{
-    //    m_fCurrentHP -= 5.f;
+    else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_KAMUI_END == eHandleID ||
+        COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENSHURIKEN_END == eHandleID)
+    {
+        m_fCurrentHP -= 5.f;
 
-    //    pNextState = CPajama_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);
-    //}
+        pNextState = CBoss_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);
+    }
 
-    //else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_BIGSHARK == eHandleID)
-    //{
-    //    m_fCurrentHP -= 15.f;
+    else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_BIGSHARK == eHandleID)
+    {
+        m_fCurrentHP -= 15.f;
 
-    //    pNextState = CPajama_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);
-    //    Set_Invincible(1.f);
-    //}
+        pNextState = CBoss_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);
+        Set_Invincible(1.f);
+    }
 
-    //else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_CHIDORI == eHandleID)
-    //{
-    //    m_pGameManager->Change_Camera(static_cast<LEVEL>(m_pGameInstance->Get_LevelID()),
-    //        TEXT("Chidori_Action_Camera"), nullptr);
+    else if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_CHIDORI == eHandleID)
+    {
+        m_pGameManager->Change_Camera(static_cast<LEVEL>(m_pGameInstance->Get_LevelID()),
+            TEXT("Chidori_Action_Camera"), nullptr);
 
-    //    m_fCurrentHP -= 15.f;
-    //    pNextState = CPajama_ElectricShockState::Create(m_pNavigationCom, this);
-    //    Set_Invincible(1.f);
-    //}
+        m_fCurrentHP -= 15.f;
+        pNextState = CBoss_ElectricShockState::Create(m_pNavigationCom, this);
+        Set_Invincible(1.f);
+    }
 
-    //if (m_fCurrentHP <= 0.f && false == m_IsPlayingDeadAnim)
-    //{
-    //    m_IsPlayingDeadAnim = true;
-    //    if (nullptr != pNextState)
-    //    {
-    //        pNextState->End();
-    //        Safe_Release(pNextState);
-    //    }
-    //    pNextState = CPajama_DeadState::Create(m_pNavigationCom, this);
-    //}
+    if (m_fCurrentHP <= 0.f && false == m_IsPlayingDeadAnim)
+    {
+        m_IsPlayingDeadAnim = true;
+        if (nullptr != pNextState)
+        {
+            pNextState->End();
+            Safe_Release(pNextState);
+        }
+        pNextState = CBoss_DeadState::Create(m_pNavigationCom, this);
+    }
 
-    //Change_State(pNextState, false);
+    Change_State(pNextState, false);
 
-    //m_fCurrentHP -= 1.f;
+    m_fCurrentHP -= 1.f;
 }
 
 void CBoss::Change_State(CBossState* pNextState, _bool bBlend)
