@@ -1113,6 +1113,9 @@
     <ClInclude Include="..\Public\Boss_ElectricShockState.h">
       <Filter>02.GameObjects\00. Character\01. Enemy\00. Boss\State\00. BASE\Beaten\Electric</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Boss_SlidingKunaiState.h">
+      <Filter>02.GameObjects\00. Character\01. Enemy\00. Boss\State\00. BASE\Attack\SlidingKunai</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1649,6 +1652,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Boss_ElectricShockState.cpp">
       <Filter>02.GameObjects\00. Character\01. Enemy\00. Boss\State\00. BASE\Beaten\Electric</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Boss_SlidingKunaiState.cpp">
+      <Filter>02.GameObjects\00. Character\01. Enemy\00. Boss\State\00. BASE\Attack\SlidingKunai</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
