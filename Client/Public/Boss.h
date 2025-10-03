@@ -12,14 +12,14 @@ NS_END
 
 /*
 사용할 보스 패턴들 
-1. 가까이와서 스핀 킥
-2. 멀리서 7연 돌진
-3. 화염구 3연속
-4. 사륜안
--> 이 4개는 확정. 혹시 필요하다면 플레이어 스킬 중에서 재탕할 것.
+1. 가까이와서 스핀 킥 -> 완료
+2. 멀리서 7연 돌진 
+3. 화염구 3연속 -> 완료
+4. 사륜안 -> 이펙트 위주의 스킬이라 추후 수정 필요 
+-> 이 4개는 확정. 혹시 필요하다면 플레이어 스킬 중에서 재탕할 것. 
 
-5. 필요하면 슬라이딩 쿠나이
-6. 평타 패턴 몇 개
+5. 필요하면 슬라이딩 쿠나이 -> 완료
+6. 평타 패턴 몇 개 -> 날아와서 차는건 완료
 */
 
 
@@ -35,14 +35,15 @@ private:
 	CBoss(const CBoss& rhs);
 	virtual ~CBoss() = default;
 
+
 public:
 	_float		Get_AnimProgress();
 	void		Set_AnimProgress(_float fProgress);
 	void		Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate = 1.f, _bool IsBlend = true, _float fBlendRatio = 0.15f, _bool IsLoop = false);
 	_bool		Play_Animation(_float fTimeDelta);
 	void		Set_Collider_Active(const _wstring& strColliderTag, _bool bFlag);
-	CCollider* Get_Collider(const _wstring& strColliderTag);
-
+	CCollider*  Get_Collider(const _wstring& strColliderTag);
+	void		Set_Flying(_bool bFlag) { m_IsFlying = bFlag; }
 public:
 	virtual void OnCollision(COLLIDER_HANDLE_ID eHandleID) override;
 	void Change_State(class CBossState* pNextState, _bool bBlend = true);
@@ -72,6 +73,7 @@ private:
 	/* 유니폼 초기화에서도 0 초기화 먹힘 */
 	_float		m_SkillTimeAccs[ENUM_CLASS(BOSS_SKILL::END)] = { 0, };
 	_float		m_SkillCoolDowns[ENUM_CLASS(BOSS_SKILL::END)] = { 0, };
+	_bool		m_IsFlying = { false };
 
 private:
 	HRESULT Ready_Components();

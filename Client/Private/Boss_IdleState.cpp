@@ -9,6 +9,7 @@
 
 #include "Boss_RunState.h"
 #include "Boss_WalkState.h"
+#include "Boss_LightingRushState.h"
 
 #pragma endregion
 
@@ -31,7 +32,10 @@ CBossState* CBoss_IdleState::Update(_float fTimeDelta)
 
 	_float fDist = XMVectorGetX(XMVector3Length(m_pBoss->Get_Transform()->Get_State(STATE::POSITION) - m_pPlayerTransformCom->Get_State(STATE::POSITION)));
 
-	if (fDist < 10.f)
+	if (fDist >= 20.f)
+		pNextState = CBoss_LightingRushState::Create(m_pNavigationCom, m_pBoss);
+
+	else if (fDist < 10.f)
 		pNextState = CBoss_WalkState::Create(m_pNavigationCom, m_pBoss);
 
 	else

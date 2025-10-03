@@ -256,7 +256,8 @@ void CBoss::Late_Update(_float fTimeDelta)
     m_pGameManager->Add_Object_ToCollision(TEXT("Monster_Body"), this, m_pColliderCom);
     m_pGameManager->Add_Collider_ToCollision(TEXT("Monster_Attack"), COLLIDER_HANDLE_ID::ENEMY_JETSU_ATTACK, m_pHandAttackColliderCom);
 
-    m_pNavigationCom->Compute_Height(m_pTransformCom);
+    if(false == m_IsFlying)
+        m_pNavigationCom->Compute_Height(m_pTransformCom);
 
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 #ifdef _DEBUG
