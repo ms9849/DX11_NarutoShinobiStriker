@@ -27,18 +27,23 @@ void CBoss_LightingRushState::Start(_bool IsBlend)
     m_pBoss->Set_Flying(true);
     m_pBoss->Set_AnimIndex("CustomMan_Ninjutsu_RasenSenkoCBS_Start", 1.5f, true);
     m_eAnimState = ANIM_STATE::START;
-    /* 타겟 위치 */
-    XMStoreFloat3(&m_vTargetPos, m_pPlayerTransformCom->Get_State(STATE::POSITION));
 
+    m_pBoss->Get_Transform()->LookAt_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION));
+    /* 타겟보다 약간 앞으로 향하는 벡터 */
+    _vector vBossToTarget = m_pPlayerTransformCom->Get_State(STATE::POSITION) - m_pBoss->Get_Transform()->Get_State(STATE::POSITION) + 
+        XMVector3Normalize(m_pPlayerTransformCom->Get_State(STATE::POSITION) + m_pBoss->Get_Transform()->Get_State(STATE::POSITION));
 
-    /* 타겟에게 돌진할때 사용할 벡터 */
-    _vector vDir, vRight;
-    
-    vDir = m_pPlayerTransformCom->Get_State(STATE::POSITION) - m_pBoss->Get_Transform()->Get_State(STATE::POSITION);
-    vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), m_pPlayerTransformCom->Get_State(STATE::POSITION) - m_pBoss->Get_Transform()->Get_State(STATE::POSITION));
+    _vector vDir = m_pBoss->Get_Transform()->Get_State(STATE::LOOK); 
+    _vector vRight = m_pBoss->Get_Transform()->Get_State(STATE::RIGHT); 
+    _vector RushDirs[2] = {};
 
-    XMStoreFloat3(&m_RushDirs[0], XMVector3Normalize(XMVector3Normalize(vDir + vRight) + XMVectorSet(0.f, 0.2f, 0.f, 0.f)));
-    XMStoreFloat3(&m_RushDirs[1], XMVector3Normalize(XMVector3Normalize(vDir - vRight) + XMVectorSet(0.f, 0.2f, 0.f, 0.f)));
+    RushDirs[0] = XMVector3Normalize(XMVector3Normalize(vDir + vRight));
+    RushDirs[1] = XMVector3Normalize(XMVector3Normalize(vDir - vRight));
+
+    for (_int i = 0; i < 8; ++i)
+    {
+        XMStoreFloat4(&m_RushPoints[i], XMVectorSetW(m_pBoss->Get_Transform()->Get_State(STATE::POSITION) + vBossToTarget / 8.f * (i+1) + RushDirs[i % 2] * (i+1), 1.f));
+    }
 }
 
 CBossState* CBoss_LightingRushState::Update(_float fTimeDelta)
@@ -46,32 +51,29 @@ CBossState* CBoss_LightingRushState::Update(_float fTimeDelta)
     CBossState* pNextState = { nullptr };
     _bool IsAnimFinished = m_pBoss->Play_Animation(fTimeDelta);
 
-    /* 돌진 횟수를 제한, 미리 거리에 따른 Offset을 계산해놓는다면? */
     if (true == IsAnimFinished && ANIM_STATE::START == m_eAnimState)
     {
         /* 여기서 상태 변경하고 날아가게 해야한다 */
-        m_pBoss->Set_AnimIndex("CustomMan_Ninjutsu_RasenSenkoCBS_Loop", 1.5f, false);
+        m_pBoss->Set_AnimIndex("CustomMan_Ninjutsu_RasenSenkoCBS_Loop", 1.5f, true);
+        m_eAnimState = ANIM_STATE::LOOP;
     }
 
     if (ANIM_STATE::LOOP == m_eAnimState)
     {
-        _float fTargetDist =  XMVectorGetX(m_pBoss->Get_Transform()->Get_State(STATE::POSITION) - XMLoadFloat3(&m_vTargetPos));
-        if (fTargetDist <= 5.f)
-        {
-            /* 임시로 플레이어 pos로 설정. 무조건 맞긴한다.. */
-            m_pBoss->Get_Transform()->Set_State(STATE::POSITION, m_pPlayerTransformCom->Get_State(STATE::POSITION));
-        }
-
         m_fTimeAcc += fTimeDelta;
-       
-        if (0.2f <= m_fTimeAcc)
-        {
-            m_pBoss->Get_Transform()->Set_State(STATE::POSITION, m_pBoss->Get_Transform()->Get_State(STATE::POSITION) + XMLoadFloat3(&m_RushDirs[m_iRushDir]) * m_iRushCount);
 
-            m_fTimeAcc = 0.f;
-            /* 1이였다면 0, 0이였다면 1로 */
-            m_iRushDir = 1 - m_iRushDir;
+        if (0.2f <= m_fTimeAcc && m_iRushCount >= 7)
+        {
+            m_pNavigationCom->Compute_Height(m_pBoss->Get_Transform());
+            m_pBoss->Get_Transform()->Set_State(STATE::POSITION, XMLoadFloat4(&m_RushPoints[m_iRushCount]) + XMVectorSet(0.f, 0.4f, 0.f, 0.f) * (m_iRushCount + 1));
+            pNextState = CBoss_IdleState::Create(m_pNavigationCom, m_pBoss);
+        }
+       
+        else if (0.2f <= m_fTimeAcc)
+        {   
+            m_pBoss->Get_Transform()->Set_State(STATE::POSITION, XMLoadFloat4(&m_RushPoints[m_iRushCount]) + XMVectorSet(0.f, 0.4f, 0.f, 0.f) * (m_iRushCount + 1));
             m_iRushCount++;
+            m_fTimeAcc = 0.f;
         }
     }
 
