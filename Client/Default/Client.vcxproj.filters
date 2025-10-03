@@ -1200,9 +1200,6 @@
     <ClCompile Include="..\Private\Player.cpp">
       <Filter>02.GameObjects\00. Character\00. Player</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Character.cpp">
-      <Filter>02.GameObjects\00. Character</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\SkillSlotUI.cpp">
       <Filter>02.GameObjects\UI\Panel\GAMEPLAY\SkillSlotPanel\SkillSlot</Filter>
     </ClCompile>
@@ -1655,6 +1652,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Boss_SlidingKunaiState.cpp">
       <Filter>02.GameObjects\00. Character\01. Enemy\00. Boss\State\00. BASE\Attack\SlidingKunai</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Character.cpp">
+      <Filter>02.GameObjects\00. Character</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

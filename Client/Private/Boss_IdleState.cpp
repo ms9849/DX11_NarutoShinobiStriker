@@ -32,6 +32,7 @@ CBossState* CBoss_IdleState::Update(_float fTimeDelta)
 
 	_float fDist = XMVectorGetX(XMVector3Length(m_pBoss->Get_Transform()->Get_State(STATE::POSITION) - m_pPlayerTransformCom->Get_State(STATE::POSITION)));
 
+	/* 돌진 패턴은 거리 20 이상일때만 발동한다. */
 	if (fDist >= 20.f)
 		pNextState = CBoss_LightingRushState::Create(m_pNavigationCom, m_pBoss);
 

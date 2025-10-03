@@ -33,14 +33,11 @@ public:
 private:
 	class CBoss* m_pBoss = { nullptr };
 	CNavigation* m_pNavigationCom = { nullptr };
-	ANIM_STATE	 m_eAnimState = { };
-	_uint		 m_iRushCount = { 0 };
-	_float		 m_fTimeAcc = { 0.f };
 
-	_float3		 m_vTargetPos = {};
-	_float		 m_fTargetDist = {};
-	_float3      m_RushDirs[2] = {};
-	_int		 m_iRushDir = {};
+	ANIM_STATE	 m_eAnimState = {};
+	_float4		 m_RushPoints[8] = {};
+	_float		 m_fTimeAcc = { 0.f }; 
+	_uint		 m_iRushCount = { 0 };
 
 public:
 	static CBoss_LightingRushState* Create(class CNavigation* pNavigation, class CBoss* pBoss);

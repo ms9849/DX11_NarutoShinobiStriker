@@ -14,8 +14,6 @@ CBossState::CBossState()
     Safe_AddRef(m_pGameManager);
 }
 
-
-
 void CBossState::Free()
 {
     __super::Free();
