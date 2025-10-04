@@ -12,6 +12,8 @@
 #include "Boss_FireballState.h"
 #include "Boss_RunState.h"
 #include "Boss_SpinKickState.h"
+#include "Boss_LightingRushState.h"
+#include "Boss_WoodHandState.h"
 
 #pragma endregion
 
@@ -35,9 +37,19 @@ CBossState* CBoss_WalkState::Update(_float fTimeDelta)
 	/* 만약 멀다면 Run, */
 	/* 스킬 사용 */
 
-	if (true == m_pBoss->Use_Skill(CBoss::BOSS_SKILL::SPIN_KICK) && fDist <= 20.f)
+
+	/* 돌진 패턴은 거리 20 이상일때만 발동한다. */
+	if (true == m_pBoss->Use_Skill(CBoss::BOSS_SKILL::LIGHTING_RUSH) && fDist >= 20.f)
+	{
+		pNextState = CBoss_LightingRushState::Create(m_pNavigationCom, m_pBoss);
+	}
+	else if (true == m_pBoss->Use_Skill(CBoss::BOSS_SKILL::SPIN_KICK) && fDist <= 20.f)
 	{
 		pNextState = CBoss_SpinKickState::Create(m_pNavigationCom, m_pBoss);
+	}
+	else if (true == m_pBoss->Use_Skill(CBoss::BOSS_SKILL::WOODHAND) && fDist >= 8.f)
+	{
+		pNextState = CBoss_WoodHandState::Create(m_pNavigationCom, m_pBoss);
 	}
 	else if (true == m_pBoss->Use_Skill(CBoss::BOSS_SKILL::FIREBALL) && fDist >= 5.f)
 	{

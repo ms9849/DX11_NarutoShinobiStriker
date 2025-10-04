@@ -211,6 +211,9 @@ HRESULT CPajama::Initialize(void* pArg)
     m_pState = CPajama_IdleState::Create(m_pNavigationCom, this);
     m_pState->Start(true);
 
+    m_fCurrentHP = 200.f;
+    m_fMaxHP = 200.f;
+
     return S_OK;
 }
 

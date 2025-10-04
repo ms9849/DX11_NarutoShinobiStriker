@@ -11,6 +11,7 @@
 
 #include "Boss_IdleState.h"
 #include "Boss_StepState.h"
+#include "Boss_LandState.h"
 
 #pragma endregion
 
@@ -26,12 +27,15 @@ void CBoss_LightingRushState::Start(_bool IsBlend)
 {
     m_pBoss->Set_Flying(true);
     m_pBoss->Set_AnimIndex("CustomMan_Ninjutsu_RasenSenkoCBS_Start", 1.5f, true);
+
+    m_pBoss->Get_Collider(TEXT("Com_Collider_Rush"))->Set_Active(true);
+
+
     m_eAnimState = ANIM_STATE::START;
 
     m_pBoss->Get_Transform()->LookAt_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION));
     /* 타겟보다 약간 앞으로 향하는 벡터 */
-    _vector vBossToTarget = m_pPlayerTransformCom->Get_State(STATE::POSITION) - m_pBoss->Get_Transform()->Get_State(STATE::POSITION) + 
-        XMVector3Normalize(m_pPlayerTransformCom->Get_State(STATE::POSITION) + m_pBoss->Get_Transform()->Get_State(STATE::POSITION));
+    _vector vBossToTarget = m_pPlayerTransformCom->Get_State(STATE::POSITION) - m_pBoss->Get_Transform()->Get_State(STATE::POSITION);
 
     _vector vDir = m_pBoss->Get_Transform()->Get_State(STATE::LOOK); 
     _vector vRight = m_pBoss->Get_Transform()->Get_State(STATE::RIGHT); 
@@ -43,6 +47,9 @@ void CBoss_LightingRushState::Start(_bool IsBlend)
     for (_int i = 0; i < 8; ++i)
     {
         XMStoreFloat4(&m_RushPoints[i], XMVectorSetW(m_pBoss->Get_Transform()->Get_State(STATE::POSITION) + vBossToTarget / 8.f * (i+1) + RushDirs[i % 2] * (i+1), 1.f));
+    
+        if(i == 6)
+            XMStoreFloat4(&m_RushPoints[i], XMVectorSetW(m_pBoss->Get_Transform()->Get_State(STATE::POSITION) + vBossToTarget / 8.f * (i + 1) + RushDirs[i % 2] * (i + 1), 1.f) + XMVectorSet(0.f, -0.8f, 0.f, 0.f));
     }
 }
 
@@ -64,14 +71,14 @@ CBossState* CBoss_LightingRushState::Update(_float fTimeDelta)
 
         if (0.2f <= m_fTimeAcc && m_iRushCount >= 7)
         {
+            m_pBoss->Get_Transform()->Set_State(STATE::POSITION, XMLoadFloat4(&m_RushPoints[m_iRushCount]) + XMVectorSet(0.f, 0.3f, 0.f, 0.f) * (m_iRushCount + 1));
             m_pNavigationCom->Compute_Height(m_pBoss->Get_Transform());
-            m_pBoss->Get_Transform()->Set_State(STATE::POSITION, XMLoadFloat4(&m_RushPoints[m_iRushCount]) + XMVectorSet(0.f, 0.4f, 0.f, 0.f) * (m_iRushCount + 1));
-            pNextState = CBoss_IdleState::Create(m_pNavigationCom, m_pBoss);
+            pNextState = CBoss_LandState::Create(m_pNavigationCom, m_pBoss);
         }
        
         else if (0.2f <= m_fTimeAcc)
         {   
-            m_pBoss->Get_Transform()->Set_State(STATE::POSITION, XMLoadFloat4(&m_RushPoints[m_iRushCount]) + XMVectorSet(0.f, 0.4f, 0.f, 0.f) * (m_iRushCount + 1));
+            m_pBoss->Get_Transform()->Set_State(STATE::POSITION, XMLoadFloat4(&m_RushPoints[m_iRushCount]) + XMVectorSet(0.f, 0.3f, 0.f, 0.f) * (m_iRushCount + 1));
             m_iRushCount++;
             m_fTimeAcc = 0.f;
         }
@@ -83,6 +90,7 @@ CBossState* CBoss_LightingRushState::Update(_float fTimeDelta)
 _bool CBoss_LightingRushState::End()
 {
     m_pBoss->Set_Flying(false);
+    m_pBoss->Get_Collider(TEXT("Com_Collider_SpinKick"))->Set_Active(false);
 
     return true;
 }

@@ -97,11 +97,15 @@ void CWoodHand::Update(_float fTimeDelta)
             m_IsDead = true;
     }
 
+    /* 콜라이더 켰다가 */
     if (false == m_isAttackOn && true == m_IsMoveFinished && (0.55f <= Get_AnimProgress()))
     {
         m_pColliderCom->Set_Active(true);
         m_isAttackOn = true;
     }
+    /* 콜라이더 다시 꺼지게 */
+    if (true == m_isAttackOn && true == m_IsMoveFinished && (0.7f <= Get_AnimProgress()))
+        m_pColliderCom->Set_Active(false);
 
 
     m_pColliderCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
