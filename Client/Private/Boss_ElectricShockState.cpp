@@ -20,7 +20,6 @@ CBoss_ElectricShockState::CBoss_ElectricShockState(CNavigation* pNavigation, CBo
 void CBoss_ElectricShockState::Start(_bool IsBlend)
 {    /* Beaten보다 훨씬 멀리 날아가야 함 */
     m_pBoss->Set_AnimIndex("CustomMan_Beaten_ElectricShock_Loop", 2.f, true);
-
     m_pBoss->Get_Transform()->LookAt_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION));
 }
 

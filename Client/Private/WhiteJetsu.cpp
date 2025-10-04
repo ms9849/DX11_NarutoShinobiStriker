@@ -197,6 +197,9 @@ HRESULT CWhiteJetsu::Initialize(void* pArg)
     m_pState = CWhiteJetsu_IdleState::Create(m_pNavigationCom, this);
     m_pState->Start(true);
 
+    m_fCurrentHP = 100.f;
+    m_fMaxHP = 100.f;
+
     return S_OK;
 }
 

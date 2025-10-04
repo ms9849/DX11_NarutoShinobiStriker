@@ -168,6 +168,7 @@
     <ClInclude Include="..\Public\Boss_ElectricShockState.h" />
     <ClInclude Include="..\Public\Boss_FireBallState.h" />
     <ClInclude Include="..\Public\Boss_IdleState.h" />
+    <ClInclude Include="..\Public\Boss_LandState.h" />
     <ClInclude Include="..\Public\Boss_LightingRushState.h" />
     <ClInclude Include="..\Public\Boss_RunState.h" />
     <ClInclude Include="..\Public\Boss_SharinganState.h" />
@@ -175,6 +176,7 @@
     <ClInclude Include="..\Public\Boss_SpinKickState.h" />
     <ClInclude Include="..\Public\Boss_StepState.h" />
     <ClInclude Include="..\Public\Boss_WalkState.h" />
+    <ClInclude Include="..\Public\Boss_WoodHandState.h" />
     <ClInclude Include="..\Public\Boxer_BeatenBlastedState.h" />
     <ClInclude Include="..\Public\Boxer_BeatenState.h" />
     <ClInclude Include="..\Public\Boxer_DeadState.h" />
@@ -350,6 +352,7 @@
     <ClCompile Include="..\Private\Boss_ElectricShockState.cpp" />
     <ClCompile Include="..\Private\Boss_FireBallState.cpp" />
     <ClCompile Include="..\Private\Boss_IdleState.cpp" />
+    <ClCompile Include="..\Private\Boss_LandState.cpp" />
     <ClCompile Include="..\Private\Boss_LightingRushState.cpp" />
     <ClCompile Include="..\Private\Boss_RunState.cpp" />
     <ClCompile Include="..\Private\Boss_SharinganState.cpp" />
@@ -357,6 +360,7 @@
     <ClCompile Include="..\Private\Boss_SpinKickState.cpp" />
     <ClCompile Include="..\Private\Boss_StepState.cpp" />
     <ClCompile Include="..\Private\Boss_WalkState.cpp" />
+    <ClCompile Include="..\Private\Boss_WoodHandState.cpp" />
     <ClCompile Include="..\Private\Boxer_BeatenBlastedState.cpp" />
     <ClCompile Include="..\Private\Boxer_BeatenState.cpp" />
     <ClCompile Include="..\Private\Boxer_DeadState.cpp" />

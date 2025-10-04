@@ -574,6 +574,12 @@
     <Filter Include="02.GameObjects\00. Character\01. Enemy\00. Boss\State\00. BASE\Beaten\Electric">
       <UniqueIdentifier>{85135748-0715-4b59-b9af-a550f0a25075}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\00. Character\01. Enemy\00. Boss\State\00. BASE\Land">
+      <UniqueIdentifier>{e4e008f8-f6c6-41f1-9652-530315895fde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\00. Character\01. Enemy\00. Boss\State\01. SKILL\WoodHand">
+      <UniqueIdentifier>{858a7538-a5d2-4055-a4fa-aaa18addae73}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1116,6 +1122,12 @@
     <ClInclude Include="..\Public\Boss_SlidingKunaiState.h">
       <Filter>02.GameObjects\00. Character\01. Enemy\00. Boss\State\00. BASE\Attack\SlidingKunai</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Boss_LandState.h">
+      <Filter>02.GameObjects\00. Character\01. Enemy\00. Boss\State\00. BASE\Land</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Boss_WoodHandState.h">
+      <Filter>02.GameObjects\00. Character\01. Enemy\00. Boss\State\01. SKILL\WoodHand</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1199,6 +1211,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Player.cpp">
       <Filter>02.GameObjects\00. Character\00. Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Character.cpp">
+      <Filter>02.GameObjects\00. Character</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\SkillSlotUI.cpp">
       <Filter>02.GameObjects\UI\Panel\GAMEPLAY\SkillSlotPanel\SkillSlot</Filter>
@@ -1653,8 +1668,11 @@
     <ClCompile Include="..\Private\Boss_SlidingKunaiState.cpp">
       <Filter>02.GameObjects\00. Character\01. Enemy\00. Boss\State\00. BASE\Attack\SlidingKunai</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Character.cpp">
-      <Filter>02.GameObjects\00. Character</Filter>
+    <ClCompile Include="..\Private\Boss_LandState.cpp">
+      <Filter>02.GameObjects\00. Character\01. Enemy\00. Boss\State\00. BASE\Land</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Boss_WoodHandState.cpp">
+      <Filter>02.GameObjects\00. Character\01. Enemy\00. Boss\State\01. SKILL\WoodHand</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

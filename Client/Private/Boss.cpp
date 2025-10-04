@@ -217,10 +217,17 @@ HRESULT CBoss::Initialize(void* pArg)
     m_pState->Start(true);
 
     m_SkillCoolDowns[ENUM_CLASS(BOSS_SKILL::FIREBALL)] = 10.f;
-    m_SkillCoolDowns[ENUM_CLASS(BOSS_SKILL::LIGHTING_RUSH)] = 30.f;
-
+    m_SkillCoolDowns[ENUM_CLASS(BOSS_SKILL::LIGHTING_RUSH)] = 15.f;
     m_SkillCoolDowns[ENUM_CLASS(BOSS_SKILL::SHARINGAN)] = 600.f;
     m_SkillCoolDowns[ENUM_CLASS(BOSS_SKILL::SPIN_KICK)] = 5.f;
+    m_SkillCoolDowns[ENUM_CLASS(BOSS_SKILL::WOODHAND)] = 10.f;
+
+    /* 이 둘은 바로 쓸 수 있게 세팅. */
+    m_SkillTimeAccs[ENUM_CLASS(BOSS_SKILL::SHARINGAN)] = 600.f;
+    m_SkillTimeAccs[ENUM_CLASS(BOSS_SKILL::LIGHTING_RUSH)] = 15.f;
+
+    m_fCurrentHP = 200.f;
+    m_fMaxHP = 200.f;
 
     return S_OK;
 }
@@ -248,6 +255,8 @@ void CBoss::Update(_float fTimeDelta)
     PlayerMatrix.r[3] = PlayerTranslation;
 
     m_pHandAttackColliderCom->Update(PlayerMatrix);
+    m_pSpinKickColliderCom->Update(PlayerMatrix);
+    m_pRushColliderCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
 }
 
 void CBoss::Late_Update(_float fTimeDelta)
@@ -257,12 +266,16 @@ void CBoss::Late_Update(_float fTimeDelta)
     /* 몸통 콜라이더를 콜리전 매니저에 등록 */
     m_pGameManager->Add_Object_ToCollision(TEXT("Monster_Body"), this, m_pColliderCom);
     m_pGameManager->Add_Collider_ToCollision(TEXT("Monster_Attack"), COLLIDER_HANDLE_ID::ENEMY_JETSU_ATTACK, m_pHandAttackColliderCom);
+    m_pGameManager->Add_Collider_ToCollision(TEXT("Monster_Attack"), COLLIDER_HANDLE_ID::ENEMY_BOXER_SPINKICK, m_pSpinKickColliderCom);
+    m_pGameManager->Add_Collider_ToCollision(TEXT("Monster_Attack"), COLLIDER_HANDLE_ID::ENEMY_BOXER_SPINKICK, m_pSpinKickColliderCom);
 
 
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 #ifdef _DEBUG
     m_pGameInstance->Add_DebugComponent(m_pColliderCom);
     m_pGameInstance->Add_DebugComponent(m_pHandAttackColliderCom);
+    m_pGameInstance->Add_DebugComponent(m_pSpinKickColliderCom);
+    m_pGameInstance->Add_DebugComponent(m_pRushColliderCom);
 #endif
 }
 
@@ -337,6 +350,18 @@ HRESULT CBoss::Ready_Components()
 
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_Sphere"),
         TEXT("Com_Collider_HandAttack"), reinterpret_cast<CComponent**>(&m_pHandAttackColliderCom), &ColliderDesc)))
+        return E_FAIL;
+
+
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_Sphere"),
+        TEXT("Com_Collider_SpinKick"), reinterpret_cast<CComponent**>(&m_pSpinKickColliderCom), &ColliderDesc)))
+        return E_FAIL;
+
+    ColliderDesc.fRadius = 1.4f;
+    ColliderDesc.vCenter = _float3{ 0.f, 1.4f, 0.f };
+
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_Sphere"),
+        TEXT("Com_Collider_Rush"), reinterpret_cast<CComponent**>(&m_pRushColliderCom), &ColliderDesc)))
         return E_FAIL;
 
     return S_OK;
@@ -423,5 +448,6 @@ void CBoss::Free()
     Safe_Release(m_pNavigationCom);
     Safe_Release(m_pColliderCom);
     Safe_Release(m_pHandAttackColliderCom);
+    Safe_Release(m_pSpinKickColliderCom);
     Safe_Release(m_pState);
 }

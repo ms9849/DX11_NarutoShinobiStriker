@@ -28,7 +28,8 @@ NS_BEGIN(Client)
 class CBoss final : public CEnemy
 {
 public:
-	enum class BOSS_SKILL { FIREBALL, LIGHTING_RUSH, SHARINGAN, SPIN_KICK, END };
+	/* 목둔 박수도 추가할까? */
+	enum class BOSS_SKILL { FIREBALL, LIGHTING_RUSH, SHARINGAN, SPIN_KICK, WOODHAND, END };
 
 private:
 	CBoss(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
@@ -66,6 +67,8 @@ private:
 	CNavigation* m_pNavigationCom = { nullptr };
 	CCollider* m_pColliderCom = { nullptr };
 	CCollider* m_pHandAttackColliderCom = { nullptr };
+	CCollider* m_pSpinKickColliderCom = { nullptr };
+	CCollider* m_pRushColliderCom = { nullptr };
 
 	class CBossState* m_pState = { nullptr };
 

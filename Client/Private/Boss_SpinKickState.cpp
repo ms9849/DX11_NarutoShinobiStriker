@@ -71,14 +71,14 @@ _bool CBoss_SpinKickState::End()
 
 void CBoss_SpinKickState::Update_Collider(_float fAnimProgress)
 {
-	//if (fAnimProgress >= 0.7f)
-	//	m_pBoss->Get_Collider(TEXT("Com_Collider_SpinKick"))->Set_Active(false);
+	if (fAnimProgress >= 0.7f)
+		m_pBoss->Get_Collider(TEXT("Com_Collider_SpinKick"))->Set_Active(false);
 
-	//else if (false == m_IsOnCollider && m_eAnimState == ANIM_STATE::ATTACK_END)
-	//{
-	//	m_pBoss->Get_Collider(TEXT("Com_Collider_SpinKick"))->Set_Active(true);
-	//	m_IsOnCollider = true;
-	//}
+	else if (false == m_IsOnCollider && m_eAnimState == ANIM_STATE::ATTACK_END)
+	{
+		m_pBoss->Get_Collider(TEXT("Com_Collider_SpinKick"))->Set_Active(true);
+		m_IsOnCollider = true;
+	}
 }
 
 CBoss_SpinKickState* CBoss_SpinKickState::Create(CNavigation* pNavigation, CBoss* pBoss)
