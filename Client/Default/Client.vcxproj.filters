@@ -580,6 +580,9 @@
     <Filter Include="02.GameObjects\UI\Panel\GAMEPLAY\BossHPPanel">
       <UniqueIdentifier>{bb0a2642-d90c-4b7e-9640-d891587b12b3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Icon">
+      <UniqueIdentifier>{e9e26f5f-fbde-484a-a38f-37aaedfd4be2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1131,6 +1134,9 @@
     <ClInclude Include="..\Public\BossHPPanel.h">
       <Filter>02.GameObjects\UI\Panel\GAMEPLAY\BossHPPanel</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Icon.h">
+      <Filter>02.GameObjects\Icon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1679,6 +1685,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\BossHPPanel.cpp">
       <Filter>02.GameObjects\UI\Panel\GAMEPLAY\BossHPPanel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Icon.cpp">
+      <Filter>02.GameObjects\Icon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,31 +1,23 @@
-#include "Enemy_HPBar.h"
-
-#include "GameInstance.h"
 #include "Icon.h"
+#include "GameManager.h"
+#include "GameInstance.h"
 
-CEnemy_HPBar::CEnemy_HPBar(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
-	: CGameObject { pDevice, pContext, ENUM_CLASS(eObjectID)}
+CIcon::CIcon(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
+	: CGameObject { pDevice, pContext, eObjectID }
 {
 }
 
-CEnemy_HPBar::CEnemy_HPBar(const CEnemy_HPBar& rhs)
-	: CGameObject { rhs }
+CIcon::CIcon(const CIcon& rhs) 
+	: CGameObject{ rhs }
 {
 }
 
-
-void CEnemy_HPBar::Set_HP(_float fCurrentHP, _float fMaxHP)
-{
-	m_fCurrentHp = fCurrentHP;
-	m_fMaxHp = fMaxHP;
-}
-
-HRESULT CEnemy_HPBar::Initialize_Prototype()
+HRESULT CIcon::Initialize_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CEnemy_HPBar::Initialize(void* pArg)
+HRESULT CIcon::Initialize(void* pArg)
 {
 	if (nullptr == pArg)
 		return E_FAIL;
@@ -38,27 +30,29 @@ HRESULT CEnemy_HPBar::Initialize(void* pArg)
 
 	ENEMY_HPBAR_DESC* pDesc = static_cast<ENEMY_HPBAR_DESC*>(pArg);
 	m_pTargetTransform = pDesc->pTargetTransform;
+	m_iTextureIdx = pDesc->iTextureIdx;
+
 	Safe_AddRef(m_pTargetTransform);
 
 	return S_OK;
 }
 
-void CEnemy_HPBar::Priority_Update(_float fTimeDelta)
+void CIcon::Priority_Update(_float fTimeDelta)
 {
 }
 
-void CEnemy_HPBar::Update(_float fTimeDelta)
+void CIcon::Update(_float fTimeDelta)
 {
 }
 
-void CEnemy_HPBar::Late_Update(_float fTimeDelta)
+void CIcon::Late_Update(_float fTimeDelta)
 {
 	/* 업데이트 어느 순간에 돌지 모르니까. */
 	m_pTransformCom->Set_State(STATE::POSITION, m_pTargetTransform->Get_State(STATE::POSITION) + XMVectorSet(0.f, 1.75f, 0.f, 0.f));
 	m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
 }
 
-HRESULT CEnemy_HPBar::Render()
+HRESULT CIcon::Render()
 {
 	/* 카메라랑 같은 시점 바라보게끔 설정 */
 	_float4x4 CameraWorld = *m_pGameInstance->Get_PipeLine_InverseFloat4x4(D3DTS::VIEW);
@@ -75,7 +69,7 @@ HRESULT CEnemy_HPBar::Render()
 	if (FAILED(m_pShaderCom->Begin(ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_ENEMYHPBAR))))
 		return E_FAIL;
 
-	if(FAILED(m_pVIBufferCom->Bind_Resources()))
+	if (FAILED(m_pVIBufferCom->Bind_Resources()))
 		return E_FAIL;
 
 	if (FAILED(m_pVIBufferCom->Render()))
@@ -84,7 +78,7 @@ HRESULT CEnemy_HPBar::Render()
 	return S_OK;
 }
 
-HRESULT CEnemy_HPBar::Ready_Components()
+HRESULT CIcon::Ready_Components()
 {
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
 		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
@@ -101,7 +95,7 @@ HRESULT CEnemy_HPBar::Ready_Components()
 	return S_OK;
 }
 
-HRESULT CEnemy_HPBar::Bind_ShaderResources()
+HRESULT CIcon::Bind_ShaderResources()
 {
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
@@ -112,45 +106,39 @@ HRESULT CEnemy_HPBar::Bind_ShaderResources()
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_PipeLine_Float4x4(D3DTS::PROJ))))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_CurrentHP", &m_fCurrentHp, sizeof(_float))))
-		return E_FAIL;
-
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_MaxHP", &m_fMaxHp, sizeof(_float))))
-		return E_FAIL;
-
-	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
+	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", m_iTextureIdx)))
 		return E_FAIL;
 
 	return S_OK;
 }
 
-CEnemy_HPBar* CEnemy_HPBar::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
+CIcon* CIcon::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 {
-	CEnemy_HPBar* pInstance = new CEnemy_HPBar(pDevice, pContext, eObjectID);
+	CIcon* pInstance = new CIcon(pDevice, pContext, eObjectID);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Create Failed : ENEMY HPBAR");
+		MSG_BOX("Create Failed : CIcon");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CEnemy_HPBar* CEnemy_HPBar::Clone(void* pArg)
+CIcon* CIcon::Clone(void* pArg)
 {
-	CEnemy_HPBar* pInstance = new CEnemy_HPBar(*this);
+	CIcon* pInstance = new CIcon(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Clone Failed : ENEMY HPBAR");
+		MSG_BOX("Clone Failed : CIcon");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CEnemy_HPBar::Free()
+void CIcon::Free()
 {
 	__super::Free();
 

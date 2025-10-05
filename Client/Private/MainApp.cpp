@@ -521,10 +521,10 @@ HRESULT CMainApp::Ready_Prototypes()
 
 	/* For.Prototype_Component_Texture_ProgressBarUI */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_ProgressBarUI"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/ProgressBar/ProgressBar%d.png"), 4))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/ProgressBar/ProgressBar%d.png"), 5))))
 		return E_FAIL;
 
-	/* For.Prototype_Component_Texture_ProgressBarUI */
+	/* For.Prototype_Component_Texture_BossHPPanel */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_BossHPPanel"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/BossHPBar/BossHPBar.png"), 1))))
 		return E_FAIL;
