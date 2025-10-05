@@ -189,6 +189,7 @@
     <ClInclude Include="..\Public\Col_TutorialMap.h" />
     <ClInclude Include="..\Public\CutSceneCamera.h" />
     <ClInclude Include="..\Public\CutScenePanel.h" />
+    <ClInclude Include="..\Public\Icon.h" />
     <ClInclude Include="..\Public\Kunai.h" />
     <ClInclude Include="..\Public\Bird_AttackState.h" />
     <ClInclude Include="..\Public\Bird_BeatenBlastedState.h" />
@@ -374,6 +375,7 @@
     <ClCompile Include="..\Private\Col_TutorialMap.cpp" />
     <ClCompile Include="..\Private\CutSceneCamera.cpp" />
     <ClCompile Include="..\Private\CutScenePanel.cpp" />
+    <ClCompile Include="..\Private\Icon.cpp" />
     <ClCompile Include="..\Private\Kunai.cpp" />
     <ClCompile Include="..\Private\Bird_AttackState.cpp" />
     <ClCompile Include="..\Private\Bird_BeatenBlastedState.cpp" />

@@ -483,6 +483,7 @@ void CBoss::Free()
     Safe_Release(m_pColliderCom);
     Safe_Release(m_pHandAttackColliderCom);
     Safe_Release(m_pSpinKickColliderCom);
+    Safe_Release(m_pRushColliderCom);
     Safe_Release(m_pState);
     Safe_Release(m_pHPBar);
 }

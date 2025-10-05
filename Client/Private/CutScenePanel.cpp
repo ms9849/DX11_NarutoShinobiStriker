@@ -47,8 +47,8 @@ void CCutScenePanel::Late_Update(_float fTimeDelta)
 	/* 렌더러에 자기자신 추가 */
 	m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
 
-	m_pFontCom->Bind_Resources(m_strFontText.c_str(), _float2{ 50.f, 50.f }, true,
-		0.5f, XMVectorSet(1.f, 1.f, 1.f, 1.f));
+	m_pFontCom->Bind_Resources(m_strFontText.c_str(), _float2{ -1.f * g_iWinSizeX / 2.f + 30.f, g_iWinSizeY / 2.f - 30.f }, false,
+		1.f, XMVectorSet(1.f, 1.f, 1.f, 1.f));
 
 	m_pGameInstance->Add_Font(m_pFontCom);
 }
