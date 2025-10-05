@@ -161,6 +161,7 @@
     <ClInclude Include="..\Public\Bird_ElectricShockState.h" />
     <ClInclude Include="..\Public\Bird_WalkState.h" />
     <ClInclude Include="..\Public\Boss.h" />
+    <ClInclude Include="..\Public\BossHPPanel.h" />
     <ClInclude Include="..\Public\BossState.h" />
     <ClInclude Include="..\Public\Boss_BeatenBlastedState.h" />
     <ClInclude Include="..\Public\Boss_BeatenState.h" />
@@ -345,6 +346,7 @@
     <ClCompile Include="..\Private\Bird_ElectricShockState.cpp" />
     <ClCompile Include="..\Private\Bird_WalkState.cpp" />
     <ClCompile Include="..\Private\Boss.cpp" />
+    <ClCompile Include="..\Private\BossHPPanel.cpp" />
     <ClCompile Include="..\Private\BossState.cpp" />
     <ClCompile Include="..\Private\Boss_BeatenBlastedState.cpp" />
     <ClCompile Include="..\Private\Boss_BeatenState.cpp" />

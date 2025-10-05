@@ -12,6 +12,7 @@ NS_END
 
 /*
 사용할 보스 패턴들 
+
 1. 가까이와서 스핀 킥 -> 완료
 2. 멀리서 7연 돌진 
 3. 화염구 3연속 -> 완료
@@ -20,8 +21,8 @@ NS_END
 
 5. 필요하면 슬라이딩 쿠나이 -> 완료
 6. 평타 패턴 몇 개 -> 날아와서 차는건 완료
+7. 목둔 박수 -> 완료
 */
-
 
 NS_BEGIN(Client)
 
@@ -36,7 +37,6 @@ private:
 	CBoss(const CBoss& rhs);
 	virtual ~CBoss() = default;
 
-
 public:
 	_float		Get_AnimProgress();
 	void		Set_AnimProgress(_float fProgress);
@@ -45,6 +45,7 @@ public:
 	void		Set_Collider_Active(const _wstring& strColliderTag, _bool bFlag);
 	CCollider*  Get_Collider(const _wstring& strColliderTag);
 	void		Set_Flying(_bool bFlag) { m_IsFlying = bFlag; }
+
 public:
 	virtual void OnCollision(COLLIDER_HANDLE_ID eHandleID) override;
 	void Change_State(class CBossState* pNextState, _bool bBlend = true);
@@ -72,6 +73,7 @@ private:
 
 	class CBossState* m_pState = { nullptr };
 
+	class CBossHPPanel* m_pHPBar = { nullptr };
 	_bool		m_IsPlayingDeadAnim = { false };
 	/* 유니폼 초기화에서도 0 초기화 먹힘 */
 	_float		m_SkillTimeAccs[ENUM_CLASS(BOSS_SKILL::END)] = { 0, };
@@ -81,6 +83,7 @@ private:
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_PartObjects();
+	HRESULT Ready_BossHPPanel();
 	void	Update_State(_float fTimeDelta);
 
 public:

@@ -17,6 +17,8 @@
 #include "Boss_ElectricShockState.h"
 #include "Boss_DeadState.h"
 
+#include "BossHPPanel.h"
+
 CBoss::CBoss(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CEnemy{ pDevice, pContext, eObjectID }
 {
@@ -171,6 +173,7 @@ void CBoss::OnCollision(COLLIDER_HANDLE_ID eHandleID)
             Safe_Release(pNextState);
         }
         pNextState = CBoss_DeadState::Create(m_pNavigationCom, this);
+        m_pHPBar->Set_Visible(false);
     }
 
     Change_State(pNextState, false);
@@ -204,7 +207,11 @@ HRESULT CBoss::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
-    if (FAILED(Ready_HPBar()))
+    /* 보스는 전용 체력바 사용함. */
+    //if (FAILED(Ready_HPBar()))
+    //    return E_FAIL;
+
+    if (FAILED(Ready_BossHPPanel()))
         return E_FAIL;
 
     if (FAILED(Ready_PartObjects()))
@@ -257,6 +264,8 @@ void CBoss::Update(_float fTimeDelta)
     m_pHandAttackColliderCom->Update(PlayerMatrix);
     m_pSpinKickColliderCom->Update(PlayerMatrix);
     m_pRushColliderCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
+    /* 체력 설정. 한프레임 늦긴한다. */
+    m_pHPBar->Set_Progress(m_fCurrentHP);
 }
 
 void CBoss::Late_Update(_float fTimeDelta)
@@ -399,6 +408,31 @@ HRESULT CBoss::Ready_PartObjects()
     return S_OK;
 }
 
+HRESULT CBoss::Ready_BossHPPanel()
+{
+    CUIObject::UIOBJECT_DESC Desc;
+    Desc.fSizeX = 400.f;
+    Desc.fSizeY = 100.f;
+    Desc.fX = g_iWinSizeX / 2.f + 10.f;
+    Desc.fY = g_iWinSizeY / 2.f - 270.f;
+    Desc.fZ = 0.1f;
+
+    /* 추후 레벨 수정 */
+    m_pHPBar = static_cast<CBossHPPanel*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::TUTORIAL),
+        TEXT("Prototype_GameObject_BossHPPanel"), &Desc));
+
+    if (nullptr == m_pHPBar)
+        return E_FAIL;
+
+    Safe_AddRef(m_pHPBar);
+    m_pGameInstance->Add_Clone_ToLayer(m_pHPBar, ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_UI"));
+
+    /* 내 최대 HP로 세팅. */
+    m_pHPBar->Set_MaxProgress(m_fMaxHP);
+
+    return S_OK;
+}
+
 void CBoss::Update_State(_float fTimeDelta)
 {
     CBossState* pNextState = { nullptr };
@@ -450,4 +484,5 @@ void CBoss::Free()
     Safe_Release(m_pHandAttackColliderCom);
     Safe_Release(m_pSpinKickColliderCom);
     Safe_Release(m_pState);
+    Safe_Release(m_pHPBar);
 }
