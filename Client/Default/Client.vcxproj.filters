@@ -40,9 +40,6 @@
     <Filter Include="02.GameObjects\UI\Button">
       <UniqueIdentifier>{ed40d40b-50c0-454e-bf89-d2f71e12461a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\UI\Text">
-      <UniqueIdentifier>{c83ffc33-2d2e-4fc5-8744-bc5511817d7f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\UI\Button\TestButton">
       <UniqueIdentifier>{92abfbf0-ae57-4c8a-b809-38cb15a9f35c}</UniqueIdentifier>
     </Filter>
@@ -579,6 +576,9 @@
     </Filter>
     <Filter Include="02.GameObjects\00. Character\01. Enemy\00. Boss\State\01. SKILL\WoodHand">
       <UniqueIdentifier>{858a7538-a5d2-4055-a4fa-aaa18addae73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Panel\GAMEPLAY\BossHPPanel">
+      <UniqueIdentifier>{bb0a2642-d90c-4b7e-9640-d891587b12b3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1128,6 +1128,9 @@
     <ClInclude Include="..\Public\Boss_WoodHandState.h">
       <Filter>02.GameObjects\00. Character\01. Enemy\00. Boss\State\01. SKILL\WoodHand</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\BossHPPanel.h">
+      <Filter>02.GameObjects\UI\Panel\GAMEPLAY\BossHPPanel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1673,6 +1676,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Boss_WoodHandState.cpp">
       <Filter>02.GameObjects\00. Character\01. Enemy\00. Boss\State\01. SKILL\WoodHand</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\BossHPPanel.cpp">
+      <Filter>02.GameObjects\UI\Panel\GAMEPLAY\BossHPPanel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

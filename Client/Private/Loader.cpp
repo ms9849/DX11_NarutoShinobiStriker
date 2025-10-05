@@ -32,6 +32,7 @@
 #include "KOUI.h"
 #include "WinPanel.h"
 #include "CutScenePanel.h"
+#include "BossHPPanel.h"
 
 #include "GameInstance.h"
 #include "Model.h"
@@ -579,10 +580,14 @@ HRESULT CLoader::Loading_For_Tutorial()
 		CWinPanel::Create(m_pDevice, m_pContext, OBJECTID::WIN_UI))))
 		return E_FAIL;
 
-	/* For.Prototype_GameObject_WinPanel */
+	/* For.Prototype_GameObject_CutScenePanel */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_CutScenePanel"),
 		CCutScenePanel::Create(m_pDevice, m_pContext, OBJECTID::CUTSCENE_UI))))
+		return E_FAIL;
 
+	/* For.Prototype_GameObject_BossHPPanel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_BossHPPanel"),
+		CBossHPPanel::Create(m_pDevice, m_pContext, OBJECTID::BOSSHP_UI))))
 		return E_FAIL;
 #pragma endregion
 
@@ -837,6 +842,11 @@ HRESULT CLoader::Loading_For_KonohaVillage()
 	/* For.Prototype_GameObject_WinPanel */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_WinPanel"),
 		CWinPanel::Create(m_pDevice, m_pContext, OBJECTID::WIN_UI))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_BossHPPanel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_BossHPPanel"),
+		CBossHPPanel::Create(m_pDevice, m_pContext, OBJECTID::BOSSHP_UI))))
 		return E_FAIL;
 
 #pragma endregion

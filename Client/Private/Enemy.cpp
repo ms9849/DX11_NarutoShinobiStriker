@@ -107,8 +107,12 @@ void CEnemy::Update(_float fTimeDelta)
 
 void CEnemy::Late_Update(_float fTimeDelta)
 {
-    m_pHPBar->Set_HP(m_fCurrentHP, m_fMaxHP);
-    m_pHPBar->Late_Update(fTimeDelta);
+    if (nullptr != m_pHPBar)
+    {
+        m_pHPBar->Set_HP(m_fCurrentHP, m_fMaxHP);
+        m_pHPBar->Late_Update(fTimeDelta);
+    }
+
 
     m_fInvincibleTime -= fTimeDelta;
 
