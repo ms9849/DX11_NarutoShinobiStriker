@@ -1,7 +1,6 @@
 #include "Effect_CoolDown.h"
 
 #include "GameInstance.h"
-#include "Pooling.h"
 
 CEffect_CoolDown::CEffect_CoolDown(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 	: CGameObject {  pDevice, pContext, ENUM_CLASS(eObjectID) }

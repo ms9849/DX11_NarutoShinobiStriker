@@ -18,6 +18,7 @@
 #include "Boss_DeadState.h"
 
 #include "BossHPPanel.h"
+#include "Icon.h"
 
 CBoss::CBoss(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CEnemy{ pDevice, pContext, eObjectID }
@@ -214,6 +215,9 @@ HRESULT CBoss::Initialize(void* pArg)
     if (FAILED(Ready_BossHPPanel()))
         return E_FAIL;
 
+    if (FAILED(Ready_BossIcon()))
+        return E_FAIL;
+
     if (FAILED(Ready_PartObjects()))
         return E_FAIL;
 
@@ -246,6 +250,9 @@ void CBoss::Priority_Update(_float fTimeDelta)
 
 void CBoss::Update(_float fTimeDelta)
 {
+    if (false == m_IsActive)
+        return;
+
     Update_State(fTimeDelta);
     Update_SkillCoolDown(fTimeDelta);
 
@@ -433,6 +440,22 @@ HRESULT CBoss::Ready_BossHPPanel()
     return S_OK;
 }
 
+HRESULT CBoss::Ready_BossIcon()
+{
+    CIcon::ICON_DESC Desc;
+    Desc.iTextureIdx = 0;
+    Desc.pTargetTransform = m_pTransformCom;
+
+    /* 추후 레벨 수정 */
+    m_pIcon = static_cast<CIcon*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::TUTORIAL),
+        TEXT("Prototype_GameObject_Icon"), &Desc));
+
+    Safe_AddRef(m_pIcon);
+    m_pGameInstance->Add_Clone_ToLayer(m_pIcon, ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_UI"));
+
+    return S_OK;
+}
+
 void CBoss::Update_State(_float fTimeDelta)
 {
     CBossState* pNextState = { nullptr };
@@ -485,5 +508,6 @@ void CBoss::Free()
     Safe_Release(m_pSpinKickColliderCom);
     Safe_Release(m_pRushColliderCom);
     Safe_Release(m_pState);
+    Safe_Release(m_pIcon);
     Safe_Release(m_pHPBar);
 }

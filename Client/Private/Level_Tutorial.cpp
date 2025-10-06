@@ -317,17 +317,16 @@ HRESULT CLevel_Tutorial::Ready_Layer_Monster(const _wstring& strLayerTag)
 
 HRESULT CLevel_Tutorial::Ready_Layer_Effect(const _wstring& strLayerTag)
 {
-	/*for (size_t i = 0; i < 50; i++)
-	{
-		if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Effect"),
-			ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag)))
-			return E_FAIL;
-	}*/
-
 	for (_int i = 0; i < 10; ++i)
 	{
 		m_pGameInstance->Add_GameObject_ToPool(ENUM_CLASS(LEVEL::TUTORIAL), static_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::TUTORIAL),
 			TEXT("Prototype_GameObject_Effect_SkillCoolDown"), nullptr)));
+	}
+
+	for (_int i = 0; i < 50; ++i)
+	{
+		m_pGameInstance->Add_GameObject_ToPool(ENUM_CLASS(LEVEL::TUTORIAL), static_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::TUTORIAL),
+			TEXT("Prototype_GameObject_Effect_Icon"), nullptr)));
 	}
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Snow"),

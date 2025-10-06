@@ -260,6 +260,12 @@ HRESULT CLevel_KonohaVillage::Ready_Layer_Effect(const _wstring& strLayerTag)
 			TEXT("Prototype_GameObject_Effect_SkillCoolDown"), nullptr)));
 	}
 
+	for (_int i = 0; i < 50; ++i)
+	{
+		m_pGameInstance->Add_GameObject_ToPool(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), static_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::KONOHA_VILLAGE),
+			TEXT("Prototype_GameObject_Effect_Icon"), nullptr)));
+	}
+
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Snow"),
 		ENUM_CLASS(LEVEL::KONOHA_VILLAGE), strLayerTag)))
 		return E_FAIL;

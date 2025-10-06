@@ -38,9 +38,7 @@
 #include "Effect_CoolDown.h"
 #include "Snow.h"
 #include "Explosion.h"
-
 #include "Collider.h"
-
 #include "GameManager.h"
 
 /* 테스트 브랜치용 주석 */
@@ -357,6 +355,11 @@ HRESULT CMainApp::Ready_Prototypes()
 	/* For.Prototype_Component_Texture_CutSencePanel */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_CutSceneUI"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/CutScene/CutScene.png"), 1))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_Icon */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Icon"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Icon/Icon%d.png"), 3))))
 		return E_FAIL;
 
 #pragma endregion

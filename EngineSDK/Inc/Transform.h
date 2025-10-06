@@ -31,6 +31,9 @@ public:
 	void Set_Scale(_float fX, _float fY, _float fZ);
 
 	void Set_State(STATE eState, _fvector vState) {
+		if (STATE::POSITION == eState)
+			XMVectorSetW(vState, 1.f);
+
 		XMStoreFloat4(reinterpret_cast<_float4*>(&m_WorldMatrix.m[ENUM_CLASS(eState)]), vState);
 	}
 

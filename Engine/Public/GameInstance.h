@@ -21,17 +21,21 @@ public:
 
 #pragma region TOOLS
 	/* 리턴 값은 라디안 */
-	_float  Calc_Dot(_fvector vVector1, _fvector vVector2);
+	_float   Calc_Dot(_fvector vVector1, _fvector vVector2);
 	/* 일차함수 계산기 */
-	_float  Calc_Linear(_float fLinear, _float fConstant, _float fValue);
+	_float   Calc_Linear(_float fLinear, _float fConstant, _float fValue);
 	/* 이차함수 계산기 */
-	_float  Calc_Quadratic(_float fQuad, _float fLinear, _float fConstant, _float fValue);
-	_float	Random_Normal();
-	_float	Random(_float fMin, _float fMax);
+	_float   Calc_Quadratic(_float fQuad, _float fLinear, _float fConstant, _float fValue);
+	_float	 Random_Normal();
+	_float	 Random(_float fMin, _float fMax);
+	/* Clamp 기능. 직접 구현해서 사용. */
+	_float	 Clamp_Float(_float fValue, _float fMin, _float fMax);
 
-	_string	ToString(_wstring wStr);
+	_string	 ToString(_wstring wStr);
 	_wstring ToWstring(_string Str);
-	_float Lerp_Float(_float fSource, _float fDest, _float fLerpRate);
+	_float	 Lerp_Float(_float fSource, _float fDest, _float fLerpRate);
+	_vector  Clamp_Position_ToViewPort(_fvector vPosition);
+	_bool	 IsInViewPort(_fvector vPosition, _float* fPosX, _float* fPosY);
 #pragma endregion
 
 #pragma region GRAPHIC_DEVICE
@@ -180,6 +184,11 @@ private:
 	class CLight_Manager*			m_pLight_Manager = { nullptr };
 	class CPhysx_Manager*			m_pPhysxManager = { nullptr };
 	class CTarget_Manager*			m_pTarget_Manager = { nullptr };
+
+private:
+	_uint m_iWinSizeX = {};
+	_uint m_iWinSizeY = {};
+
 public:
 	void Release_Engine();
 	virtual void Free() override;

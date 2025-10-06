@@ -55,7 +55,7 @@ void CEnemy_HPBar::Late_Update(_float fTimeDelta)
 {
 	/* 업데이트 어느 순간에 돌지 모르니까. */
 	m_pTransformCom->Set_State(STATE::POSITION, m_pTargetTransform->Get_State(STATE::POSITION) + XMVectorSet(0.f, 1.75f, 0.f, 0.f));
-	m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
+	m_pGameInstance->Add_RenderGroup(RENDER::WORLD_UI, this);
 }
 
 HRESULT CEnemy_HPBar::Render()

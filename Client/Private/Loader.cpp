@@ -19,8 +19,6 @@
 #include "ModelSelectButtonUI.h"
 #include "ModelDecideButtonUI.h"
 
-#include "Effect_CoolDown.h"
-
 #include "SkillSlotPanel.h"
 #include "SkillSlotUI.h"
 #include "DialogUI.h"
@@ -33,6 +31,7 @@
 #include "WinPanel.h"
 #include "CutScenePanel.h"
 #include "BossHPPanel.h"
+#include "Icon.h"
 
 #include "GameInstance.h"
 #include "Model.h"
@@ -63,6 +62,13 @@
 #include "Boss.h"
 
 #include "WoodHand.h"
+
+#pragma endregion
+
+#pragma region EFFECT
+
+#include "Effect_CoolDown.h"
+#include "Effect_Icon.h"
 
 #pragma endregion
 
@@ -393,15 +399,29 @@ HRESULT CLoader::Loading_For_Tutorial()
 	m_fLoadingProgress += 0.3f;
 	m_strMessage = TEXT("셰이더를(을) 로딩 중 입니다.");
 
+#pragma region EFFECT
+
 	/* For.Prototype_GameObject_Effect_SkillCoolDown */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Effect_SkillCoolDown"),
 		CEffect_CoolDown::Create(m_pDevice, m_pContext, OBJECTID::EFFECT))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_Effect_Icon */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Effect_Icon"),
+		CEffect_Icon::Create(m_pDevice, m_pContext, OBJECTID::EFFECT))))
+		return E_FAIL;
+
+#pragma endregion
+
 	m_strMessage = TEXT("객체원형를(을) 로딩 중 입니다.");
 	/* For.Prototype_GameObject_SkyBox */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_SkyBox"),
 		CSkyBox::Create(m_pDevice, m_pContext, OBJECTID::SKYBOX))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Icon */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Icon"),
+		CIcon::Create(m_pDevice, m_pContext, OBJECTID::SKYBOX))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_Terrain */
@@ -666,10 +686,19 @@ HRESULT CLoader::Loading_For_KonohaVillage()
 	m_fLoadingProgress += 0.3f;
 	m_strMessage = TEXT("셰이더를(을) 로딩 중 입니다.");
 
+#pragma region EFFECT
+
 	/* For.Prototype_GameObject_Effect_SkillCoolDown */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_Effect_SkillCoolDown"),
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Effect_SkillCoolDown"),
 		CEffect_CoolDown::Create(m_pDevice, m_pContext, OBJECTID::EFFECT))))
 		return E_FAIL;
+
+	/* For.Prototype_GameObject_Effect_Icon */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Effect_Icon"),
+		CEffect_Icon::Create(m_pDevice, m_pContext, OBJECTID::EFFECT))))
+		return E_FAIL;
+
+#pragma endregion
 
 	m_strMessage = TEXT("객체원형를(을) 로딩 중 입니다.");
 	/* For.Prototype_GameObject_SkyBox */
@@ -680,6 +709,11 @@ HRESULT CLoader::Loading_For_KonohaVillage()
 	/* For.Prototype_GameObject_Terrain */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_Terrain"),
 		CTerrain::Create(m_pDevice, m_pContext, OBJECTID::TERRAIN))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Icon */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_Icon"),
+		CIcon::Create(m_pDevice, m_pContext, OBJECTID::SKYBOX))))
 		return E_FAIL;
 
 #pragma region MAP
