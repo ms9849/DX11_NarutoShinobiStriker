@@ -24,6 +24,9 @@ CGameInstance::CGameInstance()
 
 HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11Device** ppDevice, ID3D11DeviceContext** ppContext)
 {
+	m_iWinSizeX = EngineDesc.iWinSizeX;
+	m_iWinSizeY = EngineDesc.iWinSizeY;
+
 	m_pGraphic_Device = CGraphic_Device::Create(EngineDesc.hWnd, EngineDesc.eWindowMode, EngineDesc.iWinSizeX, EngineDesc.iWinSizeY, ppDevice, ppContext);
 	if (nullptr == m_pGraphic_Device)
 		return E_FAIL;
@@ -174,6 +177,18 @@ _float CGameInstance::Random(_float fMin, _float fMax)
 	return fMin + Random_Normal() * (fMax - fMin);	
 }
 
+_float CGameInstance::Clamp_Float(_float fValue, _float fMin, _float fMax)
+{
+	if (fMin > fValue)
+		return fMin;
+
+	else if (fMax < fValue)
+		return fMax;
+
+	else
+		return fValue;
+}
+
 _string CGameInstance::ToString(_wstring wStr)
 {
 	_uint iSize = WideCharToMultiByte(CP_UTF8, 0, wStr.c_str(),(_uint)wStr.size(), nullptr, 0, nullptr, nullptr);
@@ -199,6 +214,109 @@ _float CGameInstance::Lerp_Float(_float fSource, _float fDest, _float fLerpRate)
 	return fSource + (fDest - fSource) * fLerpRate;
 }
 
+_vector CGameInstance::Clamp_Position_ToViewPort(_fvector vPosition)
+{
+	_bool IsBack = { false };
+	_float fZ = {};
+	_float fMargin = { 0.05f } ;
+	// 투영 행렬까지 곱한 상태. 
+	_vector vClipSpacePos = XMVector4Transform(vPosition,
+		m_pPipeLine->Get_PipeLine_Matrix(D3DTS::VIEW) * m_pPipeLine->Get_PipeLine_Matrix(D3DTS::PROJ));
+
+	/* 0에서 far. 5보다 작으면 5로 세팅. */
+	_float fW = XMVectorGetW(vClipSpacePos);
+
+	_float fNdcX = XMVectorGetX(vClipSpacePos) / fW;
+	_float fNdcY = XMVectorGetY(vClipSpacePos) / fW;
+	_float fNdcZ = XMVectorGetZ(vClipSpacePos) / fW;
+
+	// NDC에서 마진 적용
+	fNdcX = Clamp_Float(fNdcX, -1.0f + fMargin, 1.0f - fMargin);
+	fNdcY = Clamp_Float(fNdcY, -1.0f + fMargin, 1.0f - fMargin);
+
+	//if (true == IsBack)
+	//	fNdcY = fNdcY > 0.f ? 0.95f : -0.95f;
+
+	// Clip Space로 변환
+	_vector vResult = XMVectorSet(fNdcX * fW, fNdcY * fW, fNdcZ * fW, fW);
+
+	vResult = XMVectorSetW(XMVector4Transform(vResult,
+		m_pPipeLine->Get_PipeLine_InverseMatrix(D3DTS::PROJ) * m_pPipeLine->Get_PipeLine_InverseMatrix(D3DTS::VIEW)), 1.f);
+
+	_vector vCamPos = XMLoadFloat4(m_pPipeLine->Get_CamState(STATE::POSITION));
+	_float fDist = XMVectorGetX(XMVector3Length(vResult - vCamPos));
+
+	return vResult;
+}
+
+_bool CGameInstance::IsInViewPort(_fvector vPosition, _float* fPosX, _float* fPosY)
+{
+	_float fZ = {};
+	// 투영 행렬까지 곱한 상태. 
+	_vector vClipSpacePos = XMVector4Transform(vPosition,
+		m_pPipeLine->Get_PipeLine_Matrix(D3DTS::VIEW) * m_pPipeLine->Get_PipeLine_Matrix(D3DTS::PROJ));
+
+	/* 0에서 far. 5보다 작으면 5로 세팅. */
+	_float fW = XMVectorGetW(vClipSpacePos);
+
+	_float fNdcX = XMVectorGetX(vClipSpacePos) / fW;
+	_float fNdcY = XMVectorGetY(vClipSpacePos) / fW;
+	_float fNdcZ = XMVectorGetZ(vClipSpacePos) / fW;
+
+	_float fScreenX = (fNdcX * 0.5f + 0.5f) * m_iWinSizeX;
+	_float fScreenY = (1.0f - (fNdcY * 0.5f + 0.5f)) * m_iWinSizeY;
+
+	if (nullptr != fPosX)
+	{
+		*fPosX = Clamp_Float(fScreenX, 50.f, m_iWinSizeX - 50.f);
+	}
+	if (nullptr != fPosY)
+	{
+		*fPosY = Clamp_Float(fScreenY, 50.f, m_iWinSizeY - 50.f);
+	}
+
+	if (fNdcX < -1.f || fNdcX > 1.f || fNdcY < -1.f || fNdcY > 1.f)
+		return false;
+
+	return true;
+}
+
+/*
+_vector CGameInstance::Clamp_Position_ToViewPort(_fvector vPosition)
+{
+	_bool IsBack = { false };
+	_float fZ = {};
+	_float fMargin = { 0.05f } ;
+	_vector vClipSpacePos = XMVector4Transform(vPosition,
+		m_pPipeLine->Get_PipeLine_Matrix(D3DTS::VIEW) * m_pPipeLine->Get_PipeLine_Matrix(D3DTS::PROJ));
+	// NDC 변환
+	_float fW	 = XMVectorGetW(vClipSpacePos);
+
+	if (XMVectorGetZ(vClipSpacePos) < 0.f)
+		IsBack = true;
+	if (fW < 5.f)
+		fW = 5.f;
+
+	_float fNdcX = XMVectorGetX(vClipSpacePos) / fW;
+	_float fNdcY = XMVectorGetY(vClipSpacePos) / fW;
+	_float fNdcZ = XMVectorGetZ(vClipSpacePos) / fW;
+
+	// NDC에서 마진 적용
+	fNdcX = Clamp_Float(fNdcX, -1.0f + fMargin, 1.0f - fMargin);
+	fNdcY = Clamp_Float(fNdcY, -1.0f + fMargin, 1.0f - fMargin);
+
+	if (true == IsBack)
+	fNdcY = fNdcY > 0.f ? 0.95f : -0.95f;
+
+	// Clip Space로 변환
+	_vector vResult = XMVectorSet(fNdcX * fW, fNdcY * fW, fabsf(fNdcZ * fW), fW);
+
+	vResult = XMVectorSetW(XMVector4Transform(vResult,
+		m_pPipeLine->Get_PipeLine_InverseMatrix(D3DTS::PROJ) * m_pPipeLine->Get_PipeLine_InverseMatrix(D3DTS::VIEW)), 1.f);
+
+	return vResult;
+}
+*/
 #pragma endregion
 
 #pragma region GRAPHIC_DEVICE

@@ -11,6 +11,8 @@ float   g_MaxSkillCoolDown;
 float   g_SkillCoolDown;
 float   g_CurrentHP;
 float   g_MaxHP;
+float   g_iWinSizeX;
+float   g_iWinSizeY;
 
 struct VS_IN
 {
@@ -68,7 +70,7 @@ PS_OUT PS_MASK(PS_IN In)
     
     Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
     
-    if (Out.vColor.r < 0.3)
+    if (Out.vColor.r < 0.5)
         discard;
     
     return Out;

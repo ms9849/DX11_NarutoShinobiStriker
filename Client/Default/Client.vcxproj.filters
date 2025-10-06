@@ -583,6 +583,15 @@
     <Filter Include="02.GameObjects\Icon">
       <UniqueIdentifier>{e9e26f5f-fbde-484a-a38f-37aaedfd4be2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Potion">
+      <UniqueIdentifier>{e81719c8-317b-481b-a359-23974230f61f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Effect\CoolDown">
+      <UniqueIdentifier>{05515ed2-36d4-4a33-9575-5d1c93aacfea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Effect\Icon">
+      <UniqueIdentifier>{fe96f895-9657-4ec1-947b-d883e05b6788}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -839,9 +848,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\WhiteJetsu.h">
       <Filter>02.GameObjects\00. Character\01. Enemy\03. Jetsu</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Effect_CoolDown.h">
-      <Filter>02.GameObjects\Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Enemy_HPBar.h">
       <Filter>02.GameObjects\00. Character\01. Enemy\99. HPBar</Filter>
@@ -1137,6 +1143,15 @@
     <ClInclude Include="..\Public\Icon.h">
       <Filter>02.GameObjects\Icon</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Potion.h">
+      <Filter>02.GameObjects\Potion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Effect_CoolDown.h">
+      <Filter>02.GameObjects\Effect\CoolDown</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Effect_Icon.h">
+      <Filter>02.GameObjects\Effect\Icon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1391,9 +1406,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\WhiteJetsu.cpp">
       <Filter>02.GameObjects\00. Character\01. Enemy\03. Jetsu</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Effect_CoolDown.cpp">
-      <Filter>02.GameObjects\Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Enemy_HPBar.cpp">
       <Filter>02.GameObjects\00. Character\01. Enemy\99. HPBar</Filter>
@@ -1688,6 +1700,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\Icon.cpp">
       <Filter>02.GameObjects\Icon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Potion.cpp">
+      <Filter>02.GameObjects\Potion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Effect_CoolDown.cpp">
+      <Filter>02.GameObjects\Effect\CoolDown</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Effect_Icon.cpp">
+      <Filter>02.GameObjects\Effect\Icon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

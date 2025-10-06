@@ -71,19 +71,21 @@ private:
 	CCollider* m_pSpinKickColliderCom = { nullptr };
 	CCollider* m_pRushColliderCom = { nullptr };
 
-	class CBossState* m_pState = { nullptr };
-
+	class CBossState*	m_pState = { nullptr };
+	class CIcon*		m_pIcon = { nullptr };
 	class CBossHPPanel* m_pHPBar = { nullptr };
 	_bool		m_IsPlayingDeadAnim = { false };
 	/* ¿Ø¥œ∆˚ √ ±‚»≠ø°º≠µµ 0 √ ±‚»≠ ∏‘»˚ */
 	_float		m_SkillTimeAccs[ENUM_CLASS(BOSS_SKILL::END)] = { 0, };
 	_float		m_SkillCoolDowns[ENUM_CLASS(BOSS_SKILL::END)] = { 0, };
 	_bool		m_IsFlying = { false };
+	_bool		m_IsActive = { false };
 
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_PartObjects();
 	HRESULT Ready_BossHPPanel();
+	HRESULT Ready_BossIcon();
 	void	Update_State(_float fTimeDelta);
 
 public:

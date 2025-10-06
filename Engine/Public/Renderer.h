@@ -55,6 +55,7 @@ private:
 	void Render_Combined();
 	void Render_NonLight();
 	void Render_Blend();
+	void Render_WorldUI();
 	void Render_UI();
 	void Render_Font();
 

@@ -77,9 +77,9 @@ _float CGameObject::Get_CamDistance() const
 {
 	/* 
 	Pipeline에서 카메라 위치 꺼내와서, 거리 구한뒤 리턴. 
-	
 	Priority Update에서 실행되면 문제가 발생할 수 있음.
 	*/
+
 	return 	XMVectorGetX(XMVector3Length(m_pTransformCom->Get_State(STATE::POSITION) - XMLoadFloat4(m_pGameInstance->Get_CamState(STATE::POSITION))));
 }
 

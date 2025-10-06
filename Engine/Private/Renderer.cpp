@@ -117,6 +117,7 @@ void CRenderer::Render()
 	Render_NonLight();
 	Render_Blend();
 	Render_UI();
+	Render_WorldUI();
 	Render_Font();
 
 #ifdef _DEBUG
@@ -262,6 +263,19 @@ void CRenderer::Render_Blend()
 	}
 
 	m_RenderObjects[ENUM_CLASS(RENDER::BLEND)].clear();
+}
+
+void CRenderer::Render_WorldUI()
+{
+	for (auto& pRenderObject : m_RenderObjects[ENUM_CLASS(RENDER::WORLD_UI)])
+	{
+		if (nullptr != pRenderObject)
+			pRenderObject->Render();
+
+		Safe_Release(pRenderObject);
+	}
+
+	m_RenderObjects[ENUM_CLASS(RENDER::WORLD_UI)].clear();
 }
 
 void CRenderer::Render_UI()

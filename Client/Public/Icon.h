@@ -11,6 +11,7 @@ NS_BEGIN(Engine)
 class CTexture;
 class CShader;
 class CVIBuffer_Rect;
+class COrthogonal;
 NS_END
 
 NS_BEGIN(Client)
@@ -18,10 +19,10 @@ NS_BEGIN(Client)
 class CIcon : public CGameObject
 {
 public:
-	typedef struct tagEnemyHPBar {
+	typedef struct tagIcon {
 		class CTransform* pTargetTransform = {};
 		_uint iTextureIdx;
-	} ENEMY_HPBAR_DESC;
+	} ICON_DESC;
 private:
 	CIcon(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	CIcon(const CIcon& rhs);
@@ -39,15 +40,21 @@ public:
 	virtual HRESULT Render() override;
 
 private:
-	class CTransform* m_pTargetTransform = { nullptr };
-	class CTexture* m_pTextureCom = { nullptr };
-	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
-	class CShader* m_pShaderCom = { nullptr };
+	CTransform* m_pOrthoTransform = { nullptr };
+	CTransform* m_pTargetTransform = { nullptr };
+	CTexture* m_pTextureCom = { nullptr };
+	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
+	CShader* m_pShaderCom = { nullptr };
+	COrthogonal* m_pOrthogonalCom = { nullptr };
 
-	_uint m_iTextureIdx;
+	_uint m_iTextureIdx = {};
+	_float m_fTimeAcc = { 0.f }; 
+	_bool  m_IsOrthogonal = { false };
+	_float m_fOrthoX, m_fOrthoY;
 private:
 	HRESULT Ready_Components();
 	HRESULT Bind_ShaderResources();
+	HRESULT Bind_Orthogonal_ShaderResources();
 
 public:
 	static CIcon* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
