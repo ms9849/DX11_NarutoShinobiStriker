@@ -119,6 +119,16 @@ void CUI_Manager::Change_AttackType(ATTACK_TYPE eAttackType)
 	m_pAttackTypePanel->Change_AttackType(eAttackType);
 }
 
+void CUI_Manager::Set_HpProgress(_float fProgress)
+{
+	m_pSkillSlotPanel->Set_HpProgress(fProgress);
+}
+
+void CUI_Manager::Set_MaxHpProgress(_float fMaxProgress)
+{
+	m_pSkillSlotPanel->Set_MaxHpProgress(fMaxProgress);
+}
+
 void CUI_Manager::Set_AttackType_Visible(_bool bFlag)
 {
 	m_pAttackTypePanel->Set_AttackType_Visible(bFlag);

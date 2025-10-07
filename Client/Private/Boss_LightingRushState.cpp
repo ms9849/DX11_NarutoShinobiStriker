@@ -90,7 +90,7 @@ CBossState* CBoss_LightingRushState::Update(_float fTimeDelta)
 _bool CBoss_LightingRushState::End()
 {
     m_pBoss->Set_Flying(false);
-    m_pBoss->Get_Collider(TEXT("Com_Collider_SpinKick"))->Set_Active(false);
+    m_pBoss->Get_Collider(TEXT("Com_Collider_Rush"))->Set_Active(false);
 
     return true;
 }

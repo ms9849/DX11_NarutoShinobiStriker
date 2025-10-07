@@ -98,15 +98,13 @@ PS_OUT PS_ENEMY_HPBAR(PS_IN In)
 PS_OUT PS_ProgressBar(PS_IN In)
 {
     PS_OUT Out;
-    
-    /* 필살기 게이지 */
+  
+    /* 체력바 */
     if(g_iProgressBarTextureNum == 2)
-    {
-        float fSlope = 0.05f;
-        
+    {        
         Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
         
-        if (In.vTexcoord.x < g_ProgressRate - fSlope * (In.vTexcoord.y - 0.5f))
+        if (In.vTexcoord.x < g_ProgressRate)
         {
             Out.vColor = float4(0.0f, 0.9f, 0.f, Out.vColor.a);
         }
