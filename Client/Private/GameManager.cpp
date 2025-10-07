@@ -83,16 +83,6 @@ _wstring CGameManager::Get_CameraName()
 	return m_pCamera_Manager->Get_CameraName();
 }
 
-CTransform* CGameManager::Get_TargetTransform()
-{
-	return m_pCamera_Manager->Get_TargetTransform();
-}
-
-void CGameManager::SetUp_Target()
-{
-	return m_pCamera_Manager->SetUp_Target();
-}
-
 HRESULT CGameManager::Add_TargetTransform(CTransform* pTransformCom)
 {
  	return m_pCamera_Manager->Add_TargetTransform(pTransformCom);

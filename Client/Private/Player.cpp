@@ -205,7 +205,7 @@ void CPlayer::Update(_float fTimeDelta)
 	if (false == m_IsVisible)
 		return;
 
-	m_pGameManager->Update_LockOnManager(fTimeDelta);
+	//m_pGameManager->Update_LockOnManager(fTimeDelta);
 
 	/* 스테이트 업데이트. */
 	if(false == m_pGameManager->IsTalking())
@@ -262,7 +262,6 @@ void CPlayer::Late_Update(_float fTimeDelta)
 
 HRESULT CPlayer::Render()
 {
-
 	return S_OK;
 }
 

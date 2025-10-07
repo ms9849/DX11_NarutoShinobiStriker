@@ -31,6 +31,10 @@ public:
 public:
 	virtual void OnChange(const _float4x4* pWorldMatrix) override;
 
+	void Look_Target(_float fTimeDelta);
+	void Chase_Target(_float fTimeDelta);
+	void Mouse_Lock();
+
 private:
 	_float m_fPhi = { 0.f };
 	_float m_fTheta = { 0.f };
