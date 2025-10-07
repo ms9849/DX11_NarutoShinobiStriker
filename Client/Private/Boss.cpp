@@ -301,7 +301,6 @@ HRESULT CBoss::Render()
     return S_OK;
 }
 
-/* 아직 미구현 상태 */
 _bool CBoss::Use_Skill(BOSS_SKILL eSkillList)
 {
     if(m_SkillTimeAccs[ENUM_CLASS(eSkillList)] >= m_SkillCoolDowns[ENUM_CLASS(eSkillList)])

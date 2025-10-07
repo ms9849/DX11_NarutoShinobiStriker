@@ -10,14 +10,6 @@ CCamera_Manager::CCamera_Manager()
 	Safe_AddRef(m_pGameInstance);
 }
 
-/*
-컬링 배우면 나중에 컬링으로 대체해야 함.
-*/
-void CCamera_Manager::SetUp_Target()
-{
-
-}
-
 _wstring CCamera_Manager::Get_CameraName()
 {
 	return m_strActivatedCameraTag;

@@ -258,7 +258,7 @@ void CTransform::LookAt_XZ(_fvector vAt)
 	Set_State(STATE::LOOK, XMVector3Normalize(vLook) * vScale.z);
 }
 
-void CTransform::LookAt_Lerp(_fvector vAt)
+void CTransform::LookAt_Lerp(_fvector vAt, _float fRatio)
 {
 	_float3		vScale = Get_Scale();
 
@@ -266,7 +266,7 @@ void CTransform::LookAt_Lerp(_fvector vAt)
 	_vector		vTarget = XMVector3Normalize(vAt - Get_State(STATE::POSITION));
 	vTarget = XMVectorSetW(vTarget, 0.f);
 
-	vLook = XMVector3Normalize(XMVectorLerp(Get_State(STATE::LOOK), vTarget, 0.1f));
+	vLook = XMVector3Normalize(XMVectorLerp(Get_State(STATE::LOOK), vTarget, fRatio));
 	vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
 	vUp = XMVector3Cross(vLook, vRight);
 

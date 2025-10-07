@@ -689,12 +689,12 @@ HRESULT CLoader::Loading_For_KonohaVillage()
 #pragma region EFFECT
 
 	/* For.Prototype_GameObject_Effect_SkillCoolDown */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Effect_SkillCoolDown"),
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_Effect_SkillCoolDown"),
 		CEffect_CoolDown::Create(m_pDevice, m_pContext, OBJECTID::EFFECT))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_Effect_Icon */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Effect_Icon"),
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_Effect_Icon"),
 		CEffect_Icon::Create(m_pDevice, m_pContext, OBJECTID::EFFECT))))
 		return E_FAIL;
 

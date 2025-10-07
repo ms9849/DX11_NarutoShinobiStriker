@@ -73,7 +73,7 @@ public:
 	/* Lookat 2가지 버전 구분*/
 	void LookAt(_fvector vAt);
 	void LookAt_XZ(_fvector vAt);
-	void LookAt_Lerp(_fvector vAt);
+	void LookAt_Lerp(_fvector vAt, _float fRatio = 0.1f);
 
 	/* 정해진 지점으로 추적하는 함수. Lerp를 통해 깔끔하게 보간하는 기능을 제공한다. */
 	void Chase(_fvector vTargetPos, _float fTimeDelta, class CNavigation* pNavigation = nullptr, _float fLimitDistance = 0.f);

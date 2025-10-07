@@ -18,11 +18,6 @@ private:
 	virtual ~CCamera_Manager() = default;
 
 public:
-	class CTransform* Get_TargetTransform() {
-		return m_pTargetTransform;
-	}
-
-	void		SetUp_Target();
 	_wstring    Get_CameraName();
 	HRESULT		Add_TargetTransform(CTransform* pTransformCom);
 	HRESULT		Add_Camera(LEVEL eLevelID, const _wstring& strCameraTag, CCamera* pCamera);

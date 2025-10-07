@@ -112,6 +112,7 @@ void CLevel_Tutorial::Update(_float fTimeDelta)
 	m_pGameInstance->Check_GeometryCollision();
 
 #pragma region LEVEL_CHANGE
+
 	if (TRIGGER_TYPE::TUTORIAL_SPAWNER_01 == m_pGameManager->Get_CurrentTrigger()
 		&& (0 == m_pGameInstance->Get_LayerSize(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_Monster"))))
 	{
@@ -337,7 +338,6 @@ HRESULT CLevel_Tutorial::Ready_Layer_Effect(const _wstring& strLayerTag)
 		ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag)))
 		return E_FAIL;
 
-
 	return S_OK;
 }
 
@@ -435,6 +435,7 @@ HRESULT CLevel_Tutorial::Ready_Layer_StaticObjects(const _wstring& strLayerTag)
 HRESULT CLevel_Tutorial::Ready_Layer_NPC(const _wstring& strLayerTag)
 {
 	/* Ä«Ä«½Ã */
+
 	CNPC_KaKashi::NPC_KAKASHI_DESC Desc;
 	Desc.vPosition = { 0.f, 0.f, 4.f };
 
@@ -456,7 +457,6 @@ HRESULT CLevel_Tutorial::Ready_Layer_Map(const _wstring& strLayerTag)
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_COL_TutorialMap"),
 		ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag)))
 		return E_FAIL;
-
 
 	return S_OK;
 }
