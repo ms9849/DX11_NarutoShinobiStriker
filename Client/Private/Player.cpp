@@ -130,14 +130,9 @@ _bool CPlayer::Use_Skill(SKILLNUM eSlotNum)
 {
 	SKILL_INFO*  pInfo = Get_Skill_Info(Get_Skill_Slot(eSlotNum));
 
-		/* 필살기라면 게이지 0, 일반 스킬이라면 쿨타임 돌게끔. */
-	if (pInfo->IsSpecial == true && pInfo->fMaxGauge >= pInfo->fGaugeAcc)
-	{
-		pInfo->fGaugeAcc = 0.f;
-		return true;
+	/* 쿨타임 돌게끔. */
 
-	}
-	else if (pInfo->IsSpecial == false && pInfo->fTimeAcc >= pInfo->fMaxCoolDown)
+	if ( pInfo->fTimeAcc >= pInfo->fMaxCoolDown)
 	{
 		pInfo->fTimeAcc = 0.f;
 		return true;
@@ -300,7 +295,7 @@ void CPlayer::OnCollision(COLLIDER_HANDLE_ID eHandleID, _float3 vColliderPos)
 		pNextState = CPlayer_BeatenBlastedState::Create(this, vDirection, 1.3f);
 	}
 
-	m_iCurrentHp -= 1.f;
+	m_fCurrentHp -= 0.5f;
 
 	Change_State(pNextState, false);
 }

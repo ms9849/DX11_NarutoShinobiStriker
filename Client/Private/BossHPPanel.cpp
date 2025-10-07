@@ -71,7 +71,7 @@ void CBossHPPanel::Set_MaxProgress(_float fMaxProgress)
 HRESULT CBossHPPanel::Ready_ProgressBar()
 {
 	/* 3번 텍스쳐로 출력 */
-	UIOBJECT_DESC Desc = CUIObject::CreateDesc(g_iWinSizeX/2.f + 35.f, g_iWinSizeY / 2.f - 268.f, m_fZ - 0.05f, 290.f, 50.f, 3, 0.f);
+	UIOBJECT_DESC Desc = CUIObject::CreateDesc(g_iWinSizeX/2.f + 35.f, g_iWinSizeY / 2.f - 268.f, m_fZ - 0.05f, 272.f, 50.f, 3, 0.f);
 
 	CProgressBarUI* pProgressBar = static_cast<CProgressBarUI*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC),
 		TEXT("Prototype_GameObject_ProgressBarUI"), &Desc));

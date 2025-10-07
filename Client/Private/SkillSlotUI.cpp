@@ -81,13 +81,21 @@ void CSkillSlotUI::Update(_float fTimeDelta)
     m_fSkillTimeAcc = pInfo->fTimeAcc;
     m_fMaxSkillCoolDown = pInfo->fMaxCoolDown;
 
-    if (ENUM_CLASS(SKILLNUM::SPECIAL) != m_iSkillNum && m_fSkillTimeAcc >= m_fMaxSkillCoolDown && m_fPreSkillTimeAcc <= m_fMaxSkillCoolDown)
+    if (m_fSkillTimeAcc >= m_fMaxSkillCoolDown && m_fPreSkillTimeAcc <= m_fMaxSkillCoolDown)
     {
         CEffect_CoolDown::EFFECT_COOLDOWN_DESC Desc{};
         _vector vPosition = m_pTransformCom->Get_State(STATE::POSITION);
 
-        Desc.fX = XMVectorGetX(vPosition);
-        Desc.fY = XMVectorGetY(vPosition);
+        if (false == pInfo->IsSpecial)
+        {
+            Desc.fX = XMVectorGetX(vPosition);
+            Desc.fY = XMVectorGetY(vPosition);
+        }
+        else
+        {
+            Desc.fX = XMVectorGetX(vPosition - XMVectorSet(120.f, 0.f, 0.f, 0.f));
+            Desc.fY = XMVectorGetY(vPosition);
+        }
 
         m_pGameInstance->Add_PoolingObject_ToLayer(TEXT("Effect_SkillCoolDown"), ENUM_CLASS(LEVEL::TUTORIAL),
             &Desc, ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_Effect"));
@@ -139,15 +147,11 @@ HRESULT CSkillSlotUI::Bind_ShaderResources()
     if (FAILED(m_pTextureCom_Skill->Bind_ShaderResource(m_pShaderCom, "g_Texture_Skill", m_iTextureIdx_Skill)))
         return E_FAIL;
 
-    if (m_iSkillNum != ENUM_CLASS(SKILLNUM::SPECIAL))
-    {
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_SkillCoolDown", &m_fSkillTimeAcc, sizeof(_float))))
+        return E_FAIL;
 
-        if (FAILED(m_pShaderCom->Bind_RawValue("g_SkillCoolDown", &m_fSkillTimeAcc, sizeof(_float))))
-            return E_FAIL;
-
-        if (FAILED(m_pShaderCom->Bind_RawValue("g_MaxSkillCoolDown", &m_fMaxSkillCoolDown, sizeof(_float))))
-            return E_FAIL;
-    }
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_MaxSkillCoolDown", &m_fMaxSkillCoolDown, sizeof(_float))))
+        return E_FAIL;
 
     return S_OK;
 }

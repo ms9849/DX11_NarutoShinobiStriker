@@ -34,8 +34,8 @@ private:
 	virtual ~CPlayer() = default;
 
 public:
-	_uint Get_CurrentHp() { return m_iCurrentHp; }
-	_uint Get_MaxHp() { return m_iMaxHp; }
+	_float Get_CurrentHp() { return m_fCurrentHp; }
+	_float Get_MaxHp() { return m_fMaxHp; }
 
 	const _float4x4* Get_BoneMatrix(const _wstring strPartTag, const _char* pBoneName);
 	CCollider*	Get_WeaponCollider();
@@ -84,8 +84,8 @@ private:
 	_bool					m_IsGround = { false };
 	_bool					m_IsInvincible = { false };
 	_bool					m_IsVisible = { true };
-	_uint					m_iMaxHp = { 300 };
-	_uint					m_iCurrentHp = { 255 };
+	_float					m_fMaxHp = { 100 };
+	_float					m_fCurrentHp = { 100 };
 
 private:
 	HRESULT Ready_Components();

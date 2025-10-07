@@ -135,36 +135,49 @@ PS_OUT PS_FadeInOut(PS_IN In)
 PS_OUT PS_Skill(PS_IN In)
 {
     PS_OUT Out;
+
     float2 vCenter = float2(0.5, 0.5);
-    float fDist = length(In.vTexcoord - vCenter);
-    
-    /* 스킬 아이콘 그려짐 */
-    if (fDist <= 0.4)
+    float fRadius = 0.4f;
+
+    float2 vDiff = In.vTexcoord - vCenter;
+    float fDist = length(vDiff);
+
+    Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
+
+    // 스킬 아이콘 영역 안일 때만 처리
+    if (fDist <= fRadius)
     {
-        float fScale = 1.2;
-        // 중심 0.5 0.5에서 떨어진 거리 구하고, 그만큼 스케일링 해줌.
-        float2 vUV = vCenter + (In.vTexcoord - vCenter) * fScale;
+        float fScale = 1.2f;
+
+        float2 vTextureCenter = float2(0.5, 0.5);
+        float2 vUV = vTextureCenter + vDiff * fScale;
 
         Out.vColor = g_Texture_Skill.Sample(DefaultSampler, vUV);
-        
-        if (0.9f - (g_SkillCoolDown / g_MaxSkillCoolDown) * 0.8f >= In.vTexcoord.y)
+
+        float fTop = vCenter.y + fRadius; 
+        float fBottom = vCenter.y - fRadius;
+
+        float fRatio = g_SkillCoolDown / g_MaxSkillCoolDown;
+
+        float fCut = lerp(fBottom, fTop, fRatio);
+
+        if (In.vTexcoord.y >= fCut)
         {
-            Out.vColor *= 0.2f;
+            Out.vColor.rgb *= 0.2f;
             Out.vColor.a = 1.f;
         }
-
     }
-    
-    else
-        Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
-    
+
     return Out;
 }
-
 PS_OUT PS_SpecialSkill(PS_IN In)
 {
     PS_OUT Out;
-    float2 vCenter = float2(0.2, 0.55);
+    
+    float fCenterY = 0.55f;
+    float fRadius = 0.3f;
+    
+    float2 vCenter = float2(0.2, fCenterY);
     float2 vTextureCenter = float2(0.5, 0.5);
     float fRatio = 4.0f;
     
@@ -172,14 +185,29 @@ PS_OUT PS_SpecialSkill(PS_IN In)
     vDiff.x *= fRatio;
     
     float fDist = length(vDiff);
+    
     /* 스킬 아이콘 그려짐 */
-    if (fDist <= 0.30)
+    if (fDist <= fRadius)
     {
         float fScale = 1.8f;
         // 중심 0.5 0.5에서 떨어진 거리 구하고, 그만큼 스케일링 해줌.
         float2 vUV = vTextureCenter + vDiff * fScale;
 
         Out.vColor = g_Texture_Skill.Sample(DefaultSampler, vUV);
+        
+        float fTop = fCenterY + fRadius; // 아이콘 위쪽 Y
+        float fBottom = fCenterY - fRadius; // 아이콘 아래쪽 Y
+
+        float fRatio = g_SkillCoolDown / g_MaxSkillCoolDown; // 0~1
+        float fCut = lerp(fBottom, fTop, fRatio);
+
+        /* 스킬 아이콘이 표현되는 최소 최대 y의 texcoord 구한뒤, fRatio를 이용하여 */
+        /* 보간을 통해 어느 지점부터 밝게 표현할 것인지 설정 */
+        if (In.vTexcoord.y >= fCut)
+        {
+            Out.vColor *= 0.2f;
+            Out.vColor.a = 1.f;
+        }
     }
     else
         Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
