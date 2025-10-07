@@ -249,7 +249,7 @@ _vector CGameInstance::Clamp_Position_ToViewPort(_fvector vPosition)
 	return vResult;
 }
 
-_bool CGameInstance::IsInViewPort(_fvector vPosition, _float* fPosX, _float* fPosY)
+_bool CGameInstance::IsInViewPort(_fvector vPosition, _float fRatioX, _float fRatioY, _float* fPosX, _float* fPosY)
 {
 	_float fZ = {};
 	// 투영 행렬까지 곱한 상태. 
