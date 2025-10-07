@@ -203,7 +203,7 @@ HRESULT CLevel_Tutorial::Ready_Layer_Camera(const _wstring& strLayerTag)
 	MainCameraDesc.vEye = _float4(0.f, 30.f, -30.f, 1.f);
 	MainCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
 	MainCameraDesc.fSpeedPerSec = 15.f;
-	MainCameraDesc.fRotationPerSec = XMConvertToRadians(90.0f);
+	MainCameraDesc.fRotationPerSec = XMConvertToRadians(60.0f);
 	MainCameraDesc.pPlayerTransform = m_pGameManager->Get_PlayerPtr()->Get_Transform();
 	/* 카메라는 게임 매니저에 추가하여 관리한다. */
 	if (FAILED(m_pGameManager->Add_Camera(LEVEL::TUTORIAL, TEXT("Main_Camera"), static_cast<CCamera*>(m_pGameInstance->Clone_Prototype(

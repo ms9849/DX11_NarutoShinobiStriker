@@ -137,7 +137,7 @@ HRESULT CSkillSlotPanel::Ready_SkillSlots()
 HRESULT CSkillSlotPanel::Ready_ProgressBar()
 {
 	UIOBJECT_DESC Desc;
-	Desc = CUIObject::CreateDesc(m_fX - 830, m_fY + 18.5, m_fZ - 0.10f, 380.f, 46.f, 2, 0.f);
+	Desc = CUIObject::CreateDesc(m_fX - 825, m_fY + 19.25, m_fZ - 0.10f, 230.f, 46.f, 2, 0.f);
 
 	//여기서 Progress바 하나 생성.
 	CProgressBarUI* pProgressBar = static_cast<CProgressBarUI*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ProgressBarUI"), &Desc));

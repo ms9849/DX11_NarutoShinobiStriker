@@ -174,7 +174,8 @@ void CBoss::OnCollision(COLLIDER_HANDLE_ID eHandleID)
             Safe_Release(pNextState);
         }
         pNextState = CBoss_DeadState::Create(m_pNavigationCom, this);
-        m_pHPBar->Set_Visible(false);
+        m_pHPBar->Set_Dead(true);
+        m_pIcon->Set_Dead(true);
     }
 
     Change_State(pNextState, false);
