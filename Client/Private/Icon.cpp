@@ -58,7 +58,7 @@ void CIcon::Late_Update(_float fTimeDelta)
 	m_pTransformCom->Set_State(STATE::POSITION, 
 		m_pTargetTransform->Get_State(STATE::POSITION) + XMVectorSet(0.f, 2.0f, 0.f, 0.f));
 
-	if (true == m_pGameInstance->IsInViewPort(m_pTransformCom->Get_State(STATE::POSITION), &m_fOrthoX, &m_fOrthoY))
+	if (true == m_pGameInstance->IsInViewPort(m_pTransformCom->Get_State(STATE::POSITION), 1.f, 1.f, &m_fOrthoX, &m_fOrthoY))
 	{
 		m_IsOrthogonal = false;
 		m_fTimeAcc += fTimeDelta;

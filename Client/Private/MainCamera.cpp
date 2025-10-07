@@ -135,56 +135,6 @@ void CMainCamera::OnChange(const _float4x4* pWorldMatrix)
 
 void CMainCamera::Look_Target(_float fTimeDelta)
 {
-    _float fMouseMoveX = (_float)m_pGameInstance->Get_MouseMove(MOUSEMOVESTATE::X) / g_iWinSizeX;
-    _float fMouseMoveY = (_float)m_pGameInstance->Get_MouseMove(MOUSEMOVESTATE::Y) / g_iWinSizeY;
-
-    // 회전할 벡터와 각도
-    _vector  StartVector = XMVectorSet(1.f, 2.5f, -3.f, 0.f);
-
-    /* 플레이어 기준으로 누적된 위치에 세팅*/
-    //    _vector  StartVector;
-    //StartVector = XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::LOOK)) * -4.f;
-    //StartVector += XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::UP)) * 3.f;
-    //StartVector += XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::RIGHT)) * 1.f;
-
-    /* 스타트 벡터에 따라 다르게 제한이 들어가야 하는데.. */
-    m_fRotateX += XMConvertToRadians(fMouseMoveX * 180.f);
-    m_fRotateX = fmod(m_fRotateX, XM_2PI);
-
-    m_fRotateY += XMConvertToRadians(fMouseMoveY * 180.f);
-    m_fRotateY = fmod(m_fRotateY, XM_2PI);
-
-    // 라디안 제한 ( -90  ~ +90 + 여기에 캐릭터의 Look 벡터까지. )
-    _float fLimit = XMConvertToRadians(30.f);
-
-    /* Y 라디안 제한 */
-    if (m_fRotateY > fLimit)
-        m_fRotateY = fLimit;
-
-    if (m_fRotateY < -fLimit)
-        m_fRotateY = -fLimit;
-
-    ///* X 라디안 제한 */
-    //if (m_fRotateX > fLimit) 
-    //    m_fRotateX = fLimit;
-
-    //if (m_fRotateX < -fLimit) 
-    //    m_fRotateX = -fLimit;
-
-    _vector		vQuternion = XMQuaternionRotationRollPitchYaw(m_fRotateY, m_fRotateX, 0.f);
-
-    _matrix		RotationMatrix = XMMatrixRotationQuaternion(vQuternion);
-    _vector     vCamPos = XMVector3TransformNormal(StartVector, RotationMatrix);
-
-    _float      fLength = XMVectorGetX(XMVector3Length(vCamPos));
-
-    _float      fSpeedFactor = true == m_pGameInstance->Key_Pressing(DIK_Q) ? 0.8f : 0.4f;
-
-    m_pTransformCom->Chase_Lerp(m_pPlayerTransform->Get_State(STATE::POSITION) + vCamPos, fTimeDelta * fSpeedFactor, 0.f);
-}
-
-void CMainCamera::Chase_Target(_float fTimeDelta)
-{
     CTransform* pTargetTransform = m_pGameManager->Calc_Target(m_pPlayerTransform->Get_State(STATE::POSITION));
 
     if (nullptr != pTargetTransform)
@@ -216,6 +166,42 @@ void CMainCamera::Chase_Target(_float fTimeDelta)
             XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::LOOK)) * 1.f +
             XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::UP)) * 1.f);
     }
+}
+
+void CMainCamera::Chase_Target(_float fTimeDelta)
+{
+    _float fMouseMoveX = (_float)m_pGameInstance->Get_MouseMove(MOUSEMOVESTATE::X) / g_iWinSizeX;
+    _float fMouseMoveY = (_float)m_pGameInstance->Get_MouseMove(MOUSEMOVESTATE::Y) / g_iWinSizeY;
+
+    // 회전할 벡터와 각도
+    _vector  StartVector = XMVectorSet(1.f, 2.0f, -2.5f, 0.f);
+
+    /* 스타트 벡터에 따라 다르게 제한이 들어가야 하는데.. */
+    m_fRotateX += XMConvertToRadians(fMouseMoveX * 180.f);
+    m_fRotateX = XMScalarModAngle(m_fRotateX);
+
+    m_fRotateY += XMConvertToRadians(fMouseMoveY * 180.f);
+    m_fRotateY = XMScalarModAngle(m_fRotateY);
+
+    // 라디안 제한 ( -90  ~ +90 + 여기에 캐릭터의 Look 벡터까지. )
+    _float fLimit = XMConvertToRadians(15.f);
+
+    /* Y 라디안 제한 */
+    if (m_fRotateY > fLimit)
+        m_fRotateY = fLimit;
+
+    if (m_fRotateY < -fLimit)
+        m_fRotateY = -fLimit;
+
+    _vector		vQuternion = XMQuaternionRotationRollPitchYaw(m_fRotateY, m_fRotateX, 0.f);
+
+    _matrix		RotationMatrix = XMMatrixRotationQuaternion(vQuternion);
+    _vector     vCamPos = XMVector3Rotate(StartVector, vQuternion);
+    _float      fLength = XMVectorGetX(XMVector3Length(vCamPos));
+
+    _float      fSpeedFactor = true == m_pGameInstance->Key_Pressing(DIK_Q) ? 0.8f : 0.4f;
+
+    m_pTransformCom->Chase_Lerp(m_pPlayerTransform->Get_State(STATE::POSITION) + vCamPos, fTimeDelta * fSpeedFactor, 0.f);
 }
 
 void CMainCamera::Mouse_Lock()

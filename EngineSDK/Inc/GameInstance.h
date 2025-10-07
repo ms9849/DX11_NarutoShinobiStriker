@@ -35,7 +35,7 @@ public:
 	_wstring ToWstring(_string Str);
 	_float	 Lerp_Float(_float fSource, _float fDest, _float fLerpRate);
 	_vector  Clamp_Position_ToViewPort(_fvector vPosition);
-	_bool	 IsInViewPort(_fvector vPosition, _float* fPosX, _float* fPosY);
+	_bool	 IsInViewPort(_fvector vPosition, _float fRatioX = 1.f, _float fRatioY = 1.f, _float* fPosX = nullptr, _float* fPosY = nullptr);
 #pragma endregion
 
 #pragma region GRAPHIC_DEVICE
