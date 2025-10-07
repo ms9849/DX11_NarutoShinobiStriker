@@ -3,10 +3,11 @@
 #include "GameInstance.h"
 #include "GameManager.h"
 
+#include "Player.h"
+
 #include "SkillSlotUI.h"
 #include "ProgressBarUI.h"
 
-#include "Player.h"
 
 CSkillSlotPanel::CSkillSlotPanel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 	: CPanel { pDevice, pContext, eObjectID }
@@ -34,6 +35,8 @@ HRESULT CSkillSlotPanel::Initialize(void* pArg)
 	if (FAILED(Ready_ProgressBar()))
 		return E_FAIL;
 
+	Set_MaxHpProgress(m_pGameManager->Get_PlayerPtr()->Get_MaxHp());
+
 	return S_OK;
 }
 
@@ -43,6 +46,7 @@ void CSkillSlotPanel::Priority_Update(_float fTimeDelta)
 
 void CSkillSlotPanel::Update(_float fTimeDelta)
 {
+	Set_HpProgress(m_pGameManager->Get_PlayerPtr()->Get_CurrentHp());
 }
 
 void CSkillSlotPanel::Late_Update(_float fTimeDelta)
@@ -64,12 +68,12 @@ void CSkillSlotPanel::Set_SkillSlot_Visible(_bool bFlag)
 	static_cast<CProgressBarUI*>(m_Childs[4])->Set_Visible(bFlag);
 }
 
-void CSkillSlotPanel::Set_SpecialSkillProgress(_float fProgress)
+void CSkillSlotPanel::Set_HpProgress(_float fProgress)
 {
 	static_cast<CProgressBarUI*>(m_Childs[4])->Set_Progress(fProgress);
 }
 
-void CSkillSlotPanel::Set_MaxSpecialSkillProgress(_float fMaxProgress)
+void CSkillSlotPanel::Set_MaxHpProgress(_float fMaxProgress)
 {
 	static_cast<CProgressBarUI*>(m_Childs[4])->Set_MaxProgress(fMaxProgress);
 }
@@ -133,7 +137,7 @@ HRESULT CSkillSlotPanel::Ready_SkillSlots()
 HRESULT CSkillSlotPanel::Ready_ProgressBar()
 {
 	UIOBJECT_DESC Desc;
-	Desc = CUIObject::CreateDesc(m_fX - 830, m_fY + 19, m_fZ - 0.10f, 380.f, 46.f, 2, 0.f);
+	Desc = CUIObject::CreateDesc(m_fX - 830, m_fY + 18.5, m_fZ - 0.10f, 380.f, 46.f, 2, 0.f);
 
 	//여기서 Progress바 하나 생성.
 	CProgressBarUI* pProgressBar = static_cast<CProgressBarUI*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ProgressBarUI"), &Desc));

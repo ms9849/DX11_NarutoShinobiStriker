@@ -23,8 +23,8 @@ public:
 
 public:
 	void Set_SkillSlot_Visible(_bool bFlag);
-	void Set_SpecialSkillProgress(_float fProgress);
-	void Set_MaxSpecialSkillProgress(_float fMaxProgress);
+	void Set_HpProgress(_float fProgress);
+	void Set_MaxHpProgress(_float fMaxProgress);
 	void Change_Skill(_uint iSkillIdx, SKILL eSkill);
 
 private:

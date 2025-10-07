@@ -231,6 +231,16 @@ void CGameManager::Change_AttackType(ATTACK_TYPE eAttackType)
 	m_pUI_Manager->Change_AttackType(eAttackType);
 }
 
+void CGameManager::Set_HpProgress(_float fProgress)
+{
+	m_pUI_Manager->Set_HpProgress(fProgress);
+}
+
+void CGameManager::Set_MaxHpProgress(_float fMaxProgress)
+{
+	m_pUI_Manager->Set_MaxHpProgress(fMaxProgress);
+}
+
 void CGameManager::Set_AttackType_Visible(_bool bFlag)
 {
 	m_pUI_Manager->Set_AttackType_Visible(bFlag);

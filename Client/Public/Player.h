@@ -34,22 +34,25 @@ private:
 	virtual ~CPlayer() = default;
 
 public:
+	_uint Get_CurrentHp() { return m_iCurrentHp; }
+	_uint Get_MaxHp() { return m_iMaxHp; }
+
 	const _float4x4* Get_BoneMatrix(const _wstring strPartTag, const _char* pBoneName);
 	CCollider*	Get_WeaponCollider();
-	void	Set_WeaponCollider_Active(_bool bFlag);
-	_wstring Get_CurrentAnim();
-	_float	Get_AnimProgress();
-	void	Set_AnimProgress(_float fProgress);
-	void	Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate = 1.f, _bool IsBlend = true, _float fBlendRatio = 0.15f, _bool IsLoop = false);
+	void		Set_WeaponCollider_Active(_bool bFlag);
+	_wstring	Get_CurrentAnim();
+	_float		Get_AnimProgress();
+	void		Set_AnimProgress(_float fProgress);
+	void		Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate = 1.f, _bool IsBlend = true, _float fBlendRatio = 0.15f, _bool IsLoop = false);
 	
-	_bool   Get_Ground() { return m_IsGround; }
-	void	Set_Ground(_bool bFlag) { m_IsGround = bFlag; }
+	_bool		Get_Ground() { return m_IsGround; }
+	void		Set_Ground(_bool bFlag) { m_IsGround = bFlag; }
 
-	void	   Set_Collider_Active(const _wstring& strColliderTag, _bool bFlag);
-	CCollider* Get_Collider(const _wstring& strColliderTag);
+	void		Set_Collider_Active(const _wstring& strColliderTag, _bool bFlag);
+	CCollider*	Get_Collider(const _wstring& strColliderTag);
 
-	void	Set_Visible(_bool bFlag) { m_IsVisible = bFlag; }
-	void	Set_Invincible(_bool bFlag) { m_IsInvincible = bFlag; }
+	void		Set_Visible(_bool bFlag) { m_IsVisible = bFlag; }
+	void		Set_Invincible(_bool bFlag) { m_IsInvincible = bFlag; }
 	virtual void Set_Gravity(_bool bFlag, _float fDist) override;
 public:
 	void	Clear_State();
@@ -81,6 +84,8 @@ private:
 	_bool					m_IsGround = { false };
 	_bool					m_IsInvincible = { false };
 	_bool					m_IsVisible = { true };
+	_uint					m_iMaxHp = { 300 };
+	_uint					m_iCurrentHp = { 255 };
 
 private:
 	HRESULT Ready_Components();

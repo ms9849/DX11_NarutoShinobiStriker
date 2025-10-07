@@ -300,6 +300,8 @@ void CPlayer::OnCollision(COLLIDER_HANDLE_ID eHandleID, _float3 vColliderPos)
 		pNextState = CPlayer_BeatenBlastedState::Create(this, vDirection, 1.3f);
 	}
 
+	m_iCurrentHp -= 1.f;
+
 	Change_State(pNextState, false);
 }
 

@@ -59,12 +59,15 @@ public:
 	void Set_SkillSlot_Visible(_bool bFlag);
 
 	void Change_AttackType(ATTACK_TYPE eAttackType);
+	void Set_HpProgress(_float fProgress);
+	void Set_MaxHpProgress(_float fMaxProgress);
 	void Set_AttackType_Visible(_bool bFlag);
 
 	void AlertPanel_Start_FadeIn(const _wstring& strMissionText);
 	void WinPanel_Start_FadeIn();
 	
 	void Set_CutScene_Visible(_bool bFlag);
+
 private:
 	CGameInstance* m_pGameInstance = { nullptr };
 

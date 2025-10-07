@@ -79,7 +79,7 @@ private:
 	_float		m_SkillTimeAccs[ENUM_CLASS(BOSS_SKILL::END)] = { 0, };
 	_float		m_SkillCoolDowns[ENUM_CLASS(BOSS_SKILL::END)] = { 0, };
 	_bool		m_IsFlying = { false };
-	_bool		m_IsActive = { false };
+	_bool		m_IsActive = { true };
 
 private:
 	HRESULT Ready_Components();

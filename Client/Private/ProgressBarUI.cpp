@@ -61,9 +61,10 @@ void CProgressBarUI::Set_Progress(_float fProgress)
 {
 	if (fProgress > m_fMaxProgress)
 		m_fProgress = m_fMaxProgress;
+	else
+		m_fProgress = fProgress;
 
 	m_fPreProgress = m_fProgress;
-	m_fProgress = fProgress;
 }
 
 void CProgressBarUI::Set_MaxProgress(_float fMaxProgress)
@@ -98,8 +99,8 @@ HRESULT CProgressBarUI::Bind_ShaderResources()
 	if(FAILED(__super::Bind_ShaderResources()))
 		return E_FAIL;
 
-	_float fAlphaValue = m_fProgress / m_fMaxProgress;
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_ProgressRate", &fAlphaValue, sizeof(_float))))
+	_float fProgress = m_fProgress / m_fMaxProgress;
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_ProgressRate", &fProgress, sizeof(_float))))
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_iProgressBarTextureNum", &m_iTextureIdx, sizeof(_uint))))
