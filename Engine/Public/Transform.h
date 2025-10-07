@@ -70,6 +70,8 @@ public:
 	/* 항등 기준으로 임의의 축으로 공전.*/
 	void Orbit(_fvector vAxisPos, _fvector vAxis, _float fRadian);
 
+	/* Look Vector 강제 변경 */
+	void Change_Look_Force(_fvector vLook);
 	/* Lookat 2가지 버전 구분*/
 	void LookAt(_fvector vAt);
 	void LookAt_XZ(_fvector vAt);

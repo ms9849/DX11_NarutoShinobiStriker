@@ -36,6 +36,7 @@ public:
 	void Mouse_Lock();
 
 private:
+	_float m_fTimeAcc = { 0.f };
 	_float m_fPhi = { 0.f };
 	_float m_fTheta = { 0.f };
 	_float3 m_vCameraPos = {};
@@ -43,6 +44,7 @@ private:
 	_float m_fRotateY = {};
 	class CGameManager* m_pGameManager = { nullptr };
 	class CTransform*	m_pPlayerTransform = { nullptr };
+	_bool m_IsLockOn = { true };
 
 public:
 	static CMainCamera* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);

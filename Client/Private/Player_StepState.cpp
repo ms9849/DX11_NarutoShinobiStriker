@@ -33,17 +33,28 @@ CPlayer_StepState::CPlayer_StepState(CPlayer* pPlayer, ANIM_STATE eAnimState)
 
 void CPlayer_StepState::Start(_bool IsBlend)
 {
+	_vector vPlayerLook = XMLoadFloat4(m_pGameInstance->Get_CamState(STATE::LOOK));
+
 	if (ANIM_STATE::LEFT == m_eAnimState)
+	{
 		m_pPlayer->Set_AnimIndex("CustomMan_DashStep_Left", 1.4f, IsBlend);
+	}
 
 	else if (ANIM_STATE::RIGHT == m_eAnimState)
+	{
 		m_pPlayer->Set_AnimIndex("CustomMan_DashStep_Right", 1.4f, IsBlend);
+	}
+	else if (ANIM_STATE::BACK == m_eAnimState)
+	{
+		m_pPlayer->Set_AnimIndex("CustomMan_DashStep_Behind", 1.4f, IsBlend);
+	}
 
 	else if (ANIM_STATE::FRONT == m_eAnimState)
+	{
 		m_pPlayer->Set_AnimIndex("CustomMan_DashStep_Front", 1.4f, IsBlend);
+	}
 
-	else if (ANIM_STATE::BACK == m_eAnimState)
-		m_pPlayer->Set_AnimIndex("CustomMan_DashStep_Behind", 1.4f, IsBlend);
+	m_pPlayer->Get_Transform()->Change_Look_Force(vPlayerLook);
 }
 
 CPlayerState* CPlayer_StepState::Update(_float fTimeDelta)
@@ -252,6 +263,12 @@ CPlayerState* CPlayer_StepState::Update(_float fTimeDelta)
 		else if (m_pGameInstance->Key_Down(DIK_SPACE) && fAnimProgress >= 0.65f)
 			pNextState = CPlayer_JumpState::Create(m_pPlayer);
 
+		else if (fAnimProgress >= 0.65f && m_pGameInstance->Key_Pressing(DIK_W))
+		{
+			// 돌다가 스텝 밟으면 상태 변경
+			if (m_pGameInstance->Key_Down(DIK_LSHIFT))
+				pNextState = CPlayer_StepState::Create(m_pPlayer, CPlayer_StepState::ANIM_STATE::FRONT);
+		}
 		else if ((m_pGameInstance->Key_Pressing(DIK_W) ||
 			m_pGameInstance->Key_Pressing(DIK_A) ||
 			m_pGameInstance->Key_Pressing(DIK_D))

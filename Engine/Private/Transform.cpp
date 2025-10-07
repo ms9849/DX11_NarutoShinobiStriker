@@ -225,6 +225,16 @@ void CTransform::Orbit(_fvector vAxisPos, _fvector vAxis, _float fRadian)
 	XMStoreFloat4x4(&m_WorldMatrix, XMMatrixMultiply(XMLoadFloat4x4(&m_WorldMatrix), RotationMatrix));
 }
 
+/* up이 늘 0 1 0으로 고정되게 해주는 상황. 즉 right 축으로의 회전은 강제로 없앤다. */
+void CTransform::Change_Look_Force(_fvector vLook)
+{
+	_float3		vScale = Get_Scale();
+	_vector vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMVector3Normalize(vLook));
+
+	Set_State(STATE::RIGHT, XMVector3Normalize(vRight) * vScale.x);
+	Set_State(STATE::LOOK, XMVector3Normalize(XMVector3Cross(vRight, XMVectorSet(0.f, 1.f, 0.f, 0.f)) * vScale.z));
+}
+
 void CTransform::LookAt(_fvector vAt)
 {
 	_vector     vPosition = Get_State(STATE::POSITION);
