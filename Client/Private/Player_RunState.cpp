@@ -50,8 +50,7 @@ CPlayerState* CPlayer_RunState::Update(_float fTimeDelta)
 		m_pGameInstance->Key_Pressing(DIK_D)
 		)
 	{
-		// 같은 애니 반복이면 보간 안하게. 
-		m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta);
+		_vector vCameraLook = XMLoadFloat4(m_pGameInstance->Get_CamState(STATE::LOOK));
 
 		// 멈추는 중이였다면 보간해서 달리는 애니 나오게 해주기.
 		if (m_eAnimState == ANIM_STATE::RUN_END)
@@ -77,8 +76,9 @@ CPlayerState* CPlayer_RunState::Update(_float fTimeDelta)
 		// 오른쪽으로 돌아 
 		if (m_pGameInstance->Key_Pressing(DIK_D))
 		{
-			m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta);
-			
+			_matrix matRot = XMMatrixRotationY(XMConvertToRadians(90.0f));
+			vCameraLook = XMVector3TransformNormal(vCameraLook, matRot);
+
 			// 돌다가 스텝 밟으면 상태 변경
 			if (m_pGameInstance->Key_Down(DIK_LSHIFT) && nullptr == pNextState)
 			{
@@ -88,8 +88,9 @@ CPlayerState* CPlayer_RunState::Update(_float fTimeDelta)
 		// 왼쪽으로 돌아
 		if (m_pGameInstance->Key_Pressing(DIK_A))
 		{
-			m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * -1.f);
-			
+			_matrix matRot = XMMatrixRotationY(XMConvertToRadians(-90.0f));
+			vCameraLook = XMVector3TransformNormal(vCameraLook, matRot);
+
 			// 돌다가 스텝 밟으면 상태 변경
 			if (m_pGameInstance->Key_Down(DIK_LSHIFT) && nullptr == pNextState)
 			{
@@ -97,6 +98,14 @@ CPlayerState* CPlayer_RunState::Update(_float fTimeDelta)
 			}
 		}
 		
+
+		// 플레이어가 누른 키에 따라 방향 보정.
+		m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta);
+
+		_vector vPlayerLook = m_pPlayer->Get_Transform()->Get_State(STATE::LOOK);
+		_vector vResult = XMVectorLerp(vPlayerLook, vCameraLook, 0.1f);
+		m_pPlayer->Get_Transform()->Change_Look_Force(vResult);
+
 		if (m_pGameInstance->Key_Down(DIK_SPACE))
 		{
 			pNextState = CPlayer_FrontJumpState::Create(m_pPlayer);
