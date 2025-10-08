@@ -339,7 +339,7 @@ HRESULT CModelPanel::Ready_Buttons()
     /* 테스트용 모델 외형 결정 버튼 */
     for (_uint i = 0; i < 8; ++i)
     {
-        Desc = CUIObject::CreateDesc(g_iWinSizeX / 2.f - 300.f, g_iWinSizeY / 2.f - 100.f + 47.f * i, m_fZ - 0.05f, 380.f, 40.f, 0, 0.f);
+        Desc = CUIObject::CreateDesc(g_iWinSizeX / 2.f + 300.f, g_iWinSizeY / 2.f - 100.f + 47.f * i, m_fZ - 0.05f, 380.f, 40.f, 0, 0.f);
 
         pModelSelectButton = static_cast<CModelSelectButtonUI*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_GameObject_ModelSelectButtonUI"), &Desc));
         m_pGameInstance->Add_Clone_ToLayer(pModelSelectButton, ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Layer_UI"));
@@ -356,7 +356,7 @@ HRESULT CModelPanel::Ready_DecideButton()
     UIOBJECT_DESC Desc;
 
     /* 테스트용 모델 외형 결정 버튼 */
-    Desc = CUIObject::CreateDesc(g_iWinSizeX / 2.f - 300.f, g_iWinSizeY / 2.f + 300.f, m_fZ - 0.05f, 250.f, 50.f, 0, 0.f);
+    Desc = CUIObject::CreateDesc(g_iWinSizeX / 2.f + 300.f, g_iWinSizeY / 2.f + 300.f, m_fZ - 0.05f, 250.f, 50.f, 0, 0.f);
 
     CModelDecideButtonUI* pModelDecideButton = static_cast<CModelDecideButtonUI*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_GameObject_ModelDecideButtonUI"), &Desc));
     m_pGameInstance->Add_Clone_ToLayer(pModelDecideButton, ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Layer_UI"));
@@ -364,8 +364,8 @@ HRESULT CModelPanel::Ready_DecideButton()
     m_Childs.push_back(pModelDecideButton);
     Safe_AddRef(pModelDecideButton);
 
-    /* 8번 인덱스는 외형 결정 버튼이다. */
-    m_iDecideButtonNum = 8;
+    /* 마지막 인덱스는 외형 결정 버튼이다. */
+    m_iDecideButtonNum = m_Childs.size() - 1;
 
     return S_OK;
 }
@@ -399,4 +399,6 @@ CGameObject* CModelPanel::Clone(void* pArg)
 void CModelPanel::Free()
 {
     __super::Free();
+
+    Safe_Release(m_pDecideButton);
 }

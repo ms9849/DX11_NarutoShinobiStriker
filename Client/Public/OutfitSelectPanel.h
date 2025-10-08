@@ -21,7 +21,6 @@ public:
 	HRESULT Render();
 
 private:
-	HRESULT Ready_Components();
 	HRESULT Bind_ShaderResources();
 	HRESULT Ready_CreateCharacterUI();
 

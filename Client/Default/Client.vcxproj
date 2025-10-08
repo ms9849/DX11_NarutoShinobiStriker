@@ -221,6 +221,7 @@
     <ClInclude Include="..\Public\Explosion.h" />
     <ClInclude Include="..\Public\Face_Character.h" />
     <ClInclude Include="..\Public\FireBall.h" />
+    <ClInclude Include="..\Public\OutfitBackGround.h" />
     <ClInclude Include="..\Public\Pajama.h" />
     <ClInclude Include="..\Public\PajamaState.h" />
     <ClInclude Include="..\Public\Pajama_BackStepState.h" />
@@ -408,6 +409,7 @@
     <ClCompile Include="..\Private\Explosion.cpp" />
     <ClCompile Include="..\Private\Face_Character.cpp" />
     <ClCompile Include="..\Private\FireBall.cpp" />
+    <ClCompile Include="..\Private\OutfitBackGround.cpp" />
     <ClCompile Include="..\Private\Pajama.cpp" />
     <ClCompile Include="..\Private\PajamaState.cpp" />
     <ClCompile Include="..\Private\Pajama_BackStepState.cpp" />
@@ -463,7 +465,9 @@
     <ClCompile Include="..\Private\MainApp.cpp" />
     <ClCompile Include="..\Private\Mannequin.cpp" />
     <ClCompile Include="..\Private\MissionAlertPanel.cpp" />
-    <ClCompile Include="..\Private\ModelDecideButtonUI.cpp" />
+    <ClCompile Include="..\Private\ModelDecideButtonUI.cpp">
+      <MultiProcessorCompilation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</MultiProcessorCompilation>
+    </ClCompile>
     <ClCompile Include="..\Private\ModelPanel.cpp" />
     <ClCompile Include="..\Private\ModelSelectButtonUI.cpp" />
     <ClCompile Include="..\Private\OutfitSelectCamera.cpp" />

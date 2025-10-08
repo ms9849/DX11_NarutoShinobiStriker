@@ -24,9 +24,6 @@ HRESULT COutfitSelectPanel::Initialize(void* pArg)
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
-    if (FAILED(Ready_Components()))
-        return E_FAIL;
-
     if (FAILED(Ready_CreateCharacterUI()))
         return E_FAIL;
 
@@ -43,32 +40,10 @@ void COutfitSelectPanel::Update(_float fTimeDelta)
 
 void COutfitSelectPanel::Late_Update(_float fTimeDelta)
 {
-    m_pGameInstance->Add_RenderGroup(RENDER::PRIORITY, this);
 }
 
 HRESULT COutfitSelectPanel::Render()
 {
-    /* 부모 단에서 Bind ShaderResource도 처리해줌. */
-    if (FAILED(__super::Render()))
-        return E_FAIL;
-
-    return S_OK;
-}
-
-HRESULT COutfitSelectPanel::Ready_Components()
-{
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
-        TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
-        return E_FAIL;
-
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxPosTex"),
-        TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
-        return E_FAIL;
-
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_Component_Texture_OutfirSelectPanel"),
-        TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
-        return E_FAIL;
-
     return S_OK;
 }
 

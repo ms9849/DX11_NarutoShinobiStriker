@@ -17,6 +17,9 @@ CLevel_OutfitSelect::CLevel_OutfitSelect(ID3D11Device* pDevice, ID3D11DeviceCont
 
 HRESULT CLevel_OutfitSelect::Initialize()
 {
+    if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
+        return E_FAIL;
+
     if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
         return E_FAIL;
 
@@ -71,6 +74,15 @@ void CLevel_OutfitSelect::Update(_float fTimeDelta)
 HRESULT CLevel_OutfitSelect::Render()
 {
     SetWindowText(g_hWnd, TEXT("외형 선택 레벨"));
+
+    return S_OK;
+}
+
+HRESULT CLevel_OutfitSelect::Ready_Layer_BackGround(const _wstring& strLayerTag)
+{
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_GameObject_OutfitBackGround"),
+        ENUM_CLASS(LEVEL::OUTFITSELECT), strLayerTag)))
+        return E_FAIL;
 
     return S_OK;
 }
@@ -133,7 +145,7 @@ HRESULT CLevel_OutfitSelect::Ready_Layer_UI(const _wstring& strLayerTag)
         ENUM_CLASS(LEVEL::OUTFITSELECT), strLayerTag, &Desc)))
         return E_FAIL;
 
-    Desc = CUIObject::CreateDesc(g_iWinSizeX / 2.f - 300.f, g_iWinSizeY / 2.f + 50.f, 0.8f, g_iWinSizeX / 2.f - 200.f, g_iWinSizeY / 2.f + 100.f, 0, 0.f);
+    Desc = CUIObject::CreateDesc(g_iWinSizeX / 2.f + 300.f, g_iWinSizeY / 2.f + 50.f, 0.8f, g_iWinSizeX / 2.f - 200.f, g_iWinSizeY / 2.f + 100.f, 0, 0.f);
 
     if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_GameObject_ModelPanel"),
         ENUM_CLASS(LEVEL::OUTFITSELECT), strLayerTag, &Desc)))

@@ -52,7 +52,7 @@ void CMannequin::Update(_float fTimeDelta)
 
 void CMannequin::Late_Update(_float fTimeDelta)
 {
-	m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+	//m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 
 HRESULT CMannequin::Render()

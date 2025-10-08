@@ -8,8 +8,8 @@ CFont::CFont(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 }
 
 /* Sprite, Batch는 DXTK에서 제공되는 타입이라 AddRef, Release가 불가능함 */
-/* 따라서 얕은복사로 하되, 레퍼런스 카운트로 관리하지 않고 Release 할때, */
-/* 원형인지 체크해서 메모리 지워주게 해줌 */
+/* 따라서 얕은복사로 하되, 레퍼런스 카운트로 관리하지 않고 */
+/* Release 할때, 원형인지 체크해서 메모리 지워주게 해줌 */
 CFont::CFont(const CFont& rhs)
     : CComponent { rhs }
     , m_pFont { rhs.m_pFont }
@@ -85,10 +85,6 @@ HRESULT CFont::Bind_Resources(const _tchar* pText, const _float2& vPosition, _bo
 
 HRESULT CFont::DrawFont()
 {
-    /* 이펙트를 어떻게 넘겨주지..? */
-    /* 폰트에 따라 서로 다른 이펙트를 받긴 해야 하니까.. */
-    /* 그렇다고 셰이더에 종속시키고 싶진 않고.. */
-    // -> 알파값만 받아올 것
     m_pContext->GSSetShader(nullptr, nullptr, 0);
 
     m_pBatch->Begin(

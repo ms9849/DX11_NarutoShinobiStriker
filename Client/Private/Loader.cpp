@@ -11,8 +11,10 @@
 #include "TitleUI.h"
 #include "PressAnyButtonUI.h"
 
+
 #include "OutfitSelectCamera.h"
 #include "Mannequin.h"
+#include "OutfitBackGround.h"
 #include "OutfitSelectPanel.h"
 #include "CreateCharacterUI.h"
 #include "ModelPanel.h"
@@ -242,9 +244,9 @@ HRESULT CLoader::Loading_For_OutfitSelect()
 	m_fLoadingProgress += 0.4f;
 	m_strMessage = TEXT("텍스쳐를(을) 로딩 중 입니다.");
 
-	/* For.Prototype_Component_Texture_OutfirSelectPanel */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_Component_Texture_OutfirSelectPanel"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/OutfitSelect/OutfitSelectPanel.png"), 1))))
+	/* For.Prototype_Component_Texture_OutfitSelectBackGround */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_Component_Texture_OutfitBackGround"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/OutfitSelect/OutfitSelectBackGround.png"), 1))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Texture_CreateCharacterUI */
@@ -288,6 +290,11 @@ HRESULT CLoader::Loading_For_OutfitSelect()
 	m_strMessage = TEXT("셰이더를(을) 로딩 중 입니다.");
 
 	m_strMessage = TEXT("객체원형를(을) 로딩 중 입니다.");
+
+	/* For.Prototype_GameObject_OutfitBackGround */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_GameObject_OutfitBackGround"),
+		COutfitBackGround::Create(m_pDevice, m_pContext, OBJECTID::OUTFIT_BACKGROUND))))
+		return E_FAIL;
 
 	/* For.Prototype_GameObject_TestCamera */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_GameObject_TestCamera"),
