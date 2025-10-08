@@ -33,7 +33,6 @@ void CMannequin::Activate_Parts(SELECT_TYPE eType, _uint iModelNum)
 
 void CMannequin::Play_Animation(_float fTimeDelta)
 {
-
 	/* 활성화된 녀석들에 대해서만 애니 재생 */
 	//for (_uint i = 1; i < ENUM_CLASS(SELECT_TYPE::END); ++i)
 	//{
@@ -68,6 +67,8 @@ HRESULT CMannequin::Initialize(void* pArg)
 	if (FAILED(Ready_AllOutfits()))
 		return E_FAIL;
 
+	m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(0.7f, 0.f, 0.f, 1.f));
+
 	return S_OK;
 }
 
@@ -93,6 +94,7 @@ void CMannequin::Update(_float fTimeDelta)
 	}
 
 	Play_Animation(fTimeDelta);
+	Key_Input(fTimeDelta);
 }
 
 void CMannequin::Late_Update(_float fTimeDelta)
@@ -139,6 +141,16 @@ HRESULT CMannequin::Ready_AllOutfits()
 	}
 
 	return S_OK;
+}
+
+void CMannequin::Key_Input(_float fTimeDelta)
+{
+	if (true == m_pGameInstance->Mouse_Pressing(MOUSEKEYSTATE::RBUTTON))
+	{
+		_float fMouseMoveX = (_float)m_pGameInstance->Get_MouseMove(MOUSEMOVESTATE::X) / g_iWinSizeX;
+
+		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), -1.5f * fMouseMoveX * fTimeDelta);
+	}
 }
 
 CMannequin* CMannequin::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)

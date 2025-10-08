@@ -157,8 +157,12 @@ HRESULT CLevel_OutfitSelect::Ready_Layer_Outfits(const _wstring& strLayerTag)
 
 HRESULT CLevel_OutfitSelect::Ready_Layer_Mannequin(const _wstring& strLayerTag)
 {
+    CGameObject::GAMEOBJECT_DESC Desc;
+    Desc.fRotationPerSec = 180.f;
+    Desc.fSpeedPerSec = 10.f;
+
     if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_GameObject_Mannequin"),
-        ENUM_CLASS(LEVEL::OUTFITSELECT), strLayerTag)))
+        ENUM_CLASS(LEVEL::OUTFITSELECT), strLayerTag, &Desc)))
         return E_FAIL;
 
     return S_OK;

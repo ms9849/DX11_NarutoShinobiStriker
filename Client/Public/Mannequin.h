@@ -45,7 +45,8 @@ private:
 
 private:
 	HRESULT Ready_AllOutfits();
-	
+	void Key_Input(_float fTimeDelta);
+
 public:
 	static CMannequin* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	virtual CGameObject* Clone(void* pArg);
