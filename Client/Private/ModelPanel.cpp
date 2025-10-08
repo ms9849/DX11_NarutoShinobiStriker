@@ -1,7 +1,9 @@
 #include "ModelPanel.h"
 
 #include "GameInstance.h"
+#include "GameManager.h"
 
+#include "Mannequin.h"
 #include "ModelSelectButtonUI.h"
 #include "ModelDecideButtonUI.h"
 
@@ -33,6 +35,17 @@ HRESULT CModelPanel::Initialize(void* pArg)
 
     if (FAILED(Ready_DecideButton()))
         return E_FAIL;
+
+    /* 마네킹 객체 들고 있게끔 세팅 */
+    //ENUM_CLASS(SELECT_TYPE::END) - 1, 7, 5, 2, 3, 4
+    m_ButtonInfos[0] = ENUM_CLASS(SELECT_TYPE::END) - 1;
+    
+    for (_int i = 1; i < ENUM_CLASS(SELECT_TYPE::END); ++i)
+    {
+        m_ButtonInfos[i] = m_pGameManager->Get_Outfits(static_cast<SELECT_TYPE>(i)).size();
+    }
+
+    m_pMannequin = static_cast<CMannequin*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Layer_Mannequin"), 0));
 
     m_iFocusedNum = -1;
     m_eSelectType = SELECT_TYPE::PARTS;
@@ -222,8 +235,12 @@ void CModelPanel::Change_ButtonText(_bool IsSelectParts)
     }
     else
     {
+        vector<pair<_wstring, _wstring >> OutFits = m_pGameManager->Get_Outfits(static_cast<SELECT_TYPE>(m_iFocusedNum + 1));
+        
         for (_int i = 0; i < m_ButtonInfos[m_iFocusedNum + 1]; ++i)
-            static_cast<CModelSelectButtonUI*>(m_Childs[i])->Change_Text(TEXT("testforchange"));
+        {
+            static_cast<CModelSelectButtonUI*>(m_Childs[i])->Change_Text(OutFits[i].first);
+        }
     }
 }
 
@@ -277,11 +294,12 @@ void CModelPanel::Key_Input()
 
             m_bChangeSelectType = true;
         }
+
         else
-        {
-            /* 여기서 외형 바꿔주면 될 것 */
-        }
+            m_pMannequin->Activate_Parts(m_eSelectType, m_iFocusedNum);
     }
+    else if (m_pGameInstance->Key_Down(DIK_SPACE) && m_iFocusedNum == m_iDecideButtonNum)
+        m_pGameInstance->Request_LevelChange();
 
     if (m_pGameInstance->Key_Down(DIK_ESCAPE))
     {
@@ -420,5 +438,5 @@ void CModelPanel::Free()
 {
     __super::Free();
 
-    Safe_Release(m_pDecideButton);
+    Safe_Release(m_pMannequin);
 }

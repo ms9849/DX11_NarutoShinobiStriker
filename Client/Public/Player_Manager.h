@@ -36,9 +36,11 @@ public:
 
 public:
 	/* ¾Æ¿ôÇÍ ¸ñ·Ïµé ´Ù °¡Á®¿È. */
-	map<_wstring, _wstring>& Get_Outfits(SELECT_TYPE eType) { return m_OutFits[ENUM_CLASS(eType)]; }
+	vector<pair<_wstring, _wstring>>& Get_Outfits(SELECT_TYPE eType) { return m_OutFits[ENUM_CLASS(eType)]; }
 	void Add_Outfit(SELECT_TYPE eType, const _wstring& strOutfitTag, const _wstring& strModelTag);
-
+	void Set_PlayerModelInfo(SELECT_TYPE eType, _uint iModelNum);
+	_wstring Get_PlayerModelInfo(SELECT_TYPE eType);
+	_bool IsOneCloth() { return m_IsOneCloth; }
 public:
 	void	Clear();
 
@@ -46,8 +48,11 @@ private:
 	class CGameManager* m_pGameManager = { nullptr };
 	class CGameInstance* m_pGameInstance = { nullptr };
 	class CPlayer* m_pPlayer = {};
-	map<_wstring, _wstring> m_OutFits[ENUM_CLASS(SELECT_TYPE::END)] = {};
 	
+	vector<pair<_wstring, _wstring>> m_OutFits[ENUM_CLASS(SELECT_TYPE::END)] = {};
+	_uint m_ModelNums[ENUM_CLASS(SELECT_TYPE::END)] = {};
+	_bool m_IsOneCloth = { false };
+
 public:
 	static CPlayer_Manager* Create();
 	virtual void Free() override;

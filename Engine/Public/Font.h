@@ -24,6 +24,9 @@ private:
 	SpriteFont* m_pFont = { nullptr };
 	SpriteBatch* m_pBatch = { nullptr };
 
+	ID3D11SamplerState* m_pSampleState = { nullptr };
+	ID3D11BlendState* m_pBlendState = { nullptr };
+
 	_wstring m_Text = {};
 	_float2 m_vPosition = {};
 	_float  m_fScale = {};

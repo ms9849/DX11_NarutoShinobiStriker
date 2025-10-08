@@ -72,7 +72,7 @@ private:
 	데이터 받아온뒤 세팅해주는 
 	방식으로 진행. 
 	*/
-	_int m_ButtonInfos[ENUM_CLASS(SELECT_TYPE::END)] = { 5,7,5,2,3,4 };
+	_int m_ButtonInfos[ENUM_CLASS(SELECT_TYPE::END)] = {};
 	_int m_iFocusedNum = { 0 };
 	_int m_iMaxActivateNum = { 0 };
 	_int m_iDecideButtonNum = { 0 };
@@ -92,8 +92,7 @@ private:
 
 	_float m_fButtonDelay = { 0.03f };
 
-	class CModelDecideButtonUI* m_pDecideButton = { nullptr };
-
+	class CMannequin* m_pMannequin = { nullptr };
 private:
 	void Change_FocusedButton(_int iNum);
 	void Change_SelectType();

@@ -115,6 +115,12 @@ public:
 #pragma region PLAYER
 	class CPlayer* Get_PlayerPtr();
 	HRESULT	Set_PlayerPtr(class CPlayer* pPlayer);
+	vector<pair<_wstring, _wstring>>& Get_Outfits(SELECT_TYPE eType);
+	void Add_Outfit(SELECT_TYPE eType, const _wstring& strOutfitTag, const _wstring& strModelTag);
+	void Set_PlayerModelInfo(SELECT_TYPE eType, _uint iModelNum);
+	_wstring Get_PlayerModelInfo(SELECT_TYPE eType);
+	_bool IsOneCloth();
+
 #pragma endregion
 
 private:

@@ -68,20 +68,26 @@ HRESULT CButton::Bind_ShaderResources()
 	if (FAILED(__super::Bind_ShaderResources()))
 		return E_FAIL;
 
-	if (true == m_bShowNormal)
+	if (true == m_bShowNormal && m_iShaderPassIdx != ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT))
 	{
 		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", m_iTextureIdx)))
 			return E_FAIL;
 	}
 
-	if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_IsFadeOut)
+	else if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_IsFadeOut)
 	{
+		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
+			return E_FAIL;
+
 		_float fAlphaValue = 1 - (m_fFadeOutTimeAcc / m_fFadeOutMaxTimeAcc);
 		m_pShaderCom->Bind_RawValue("g_Alpha", &fAlphaValue, sizeof(_float));
 	}
 
 	else if (m_iShaderPassIdx == ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT) && m_IsFadeIn)
 	{
+		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
+			return E_FAIL;
+
 		_float fAlphaValue = m_fFadeInTimeAcc / m_fFadeInMaxTimeAcc;
 		m_pShaderCom->Bind_RawValue("g_Alpha", &fAlphaValue, sizeof(_float));
 	}

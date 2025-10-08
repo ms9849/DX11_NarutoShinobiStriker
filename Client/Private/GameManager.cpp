@@ -90,12 +90,36 @@ HRESULT CGameManager::Set_PlayerPtr(CPlayer* pPlayer)
 {
 	return m_pPlayer_Manager->Set_PlayerPtr(pPlayer);
 }
+
+vector<pair<_wstring, _wstring>>& CGameManager::Get_Outfits(SELECT_TYPE eType)
+{
+	return m_pPlayer_Manager->Get_Outfits(eType);
+}
+
+void CGameManager::Add_Outfit(SELECT_TYPE eType, const _wstring& strOutfitTag, const _wstring& strModelTag)
+{
+	return m_pPlayer_Manager->Add_Outfit(eType, strOutfitTag, strModelTag);
+}
+void CGameManager::Set_PlayerModelInfo(SELECT_TYPE eType, _uint iModelNum)
+{
+	m_pPlayer_Manager->Set_PlayerModelInfo(eType, iModelNum);
+}
+
+_wstring CGameManager::Get_PlayerModelInfo(SELECT_TYPE eType)
+{
+	return m_pPlayer_Manager->Get_PlayerModelInfo(eType);
+}
+
+_bool CGameManager::IsOneCloth()
+{
+	return m_pPlayer_Manager->IsOneCloth();
+}
+
 #pragma endregion
 
 HRESULT CGameManager::Set_NextLevelID(LEVEL eLevelID)
 {
 	m_eNextLevel = eLevelID;
-
 	return S_OK;
 }
 
