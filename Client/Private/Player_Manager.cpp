@@ -24,12 +24,29 @@ HRESULT CPlayer_Manager::Set_PlayerPtr(CPlayer* pPlayer)
 
 void CPlayer_Manager::Add_Outfit(SELECT_TYPE eType, const _wstring& strOutfitTag, const _wstring& strModelTag)
 {
-	m_OutFits[ENUM_CLASS(eType)].emplace(strOutfitTag, strModelTag);
+	m_OutFits[ENUM_CLASS(eType)].push_back(make_pair(strOutfitTag, strModelTag));
+}
+
+void CPlayer_Manager::Set_PlayerModelInfo(SELECT_TYPE eType, _uint iModelNum)
+{
+	if (SELECT_TYPE::ONE_CLOTH == eType)
+		m_IsOneCloth = true;
+
+	if (SELECT_TYPE::UPPER == eType || SELECT_TYPE::LOWER == eType)
+		m_IsOneCloth = false;
+
+	m_ModelNums[ENUM_CLASS(eType)] = iModelNum;
+}
+
+_wstring CPlayer_Manager::Get_PlayerModelInfo(SELECT_TYPE eType)
+{
+	return m_OutFits[ENUM_CLASS(eType)][m_ModelNums[ENUM_CLASS(eType)]].second;
 }
 
 void CPlayer_Manager::Clear()
 {
 	Safe_Release(m_pPlayer);
+
 	if (nullptr != m_pPlayer)
 	{
 		m_pPlayer->Clear_State();

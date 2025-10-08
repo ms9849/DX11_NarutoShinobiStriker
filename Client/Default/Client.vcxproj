@@ -237,6 +237,7 @@
     <ClInclude Include="..\Public\Pajama_SlidingKunaiState.h" />
     <ClInclude Include="..\Public\Pajama_ThrowKunaiState.h" />
     <ClInclude Include="..\Public\Pajama_WalkState.h" />
+    <ClInclude Include="..\Public\Part_Mannequin.h" />
     <ClInclude Include="..\Public\Player_Manager.h" />
     <ClInclude Include="..\Public\Player_RopeActionState.h" />
     <ClInclude Include="..\Public\Potion.h" />
@@ -426,6 +427,7 @@
     <ClCompile Include="..\Private\Pajama_SlidingKunaiState.cpp" />
     <ClCompile Include="..\Private\Pajama_ThrowKunaiState.cpp" />
     <ClCompile Include="..\Private\Pajama_WalkState.cpp" />
+    <ClCompile Include="..\Private\Part_Mannequin.cpp" />
     <ClCompile Include="..\Private\Player_Manager.cpp" />
     <ClCompile Include="..\Private\Player_RopeActionState.cpp" />
     <ClCompile Include="..\Private\Potion.cpp" />

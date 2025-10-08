@@ -601,6 +601,9 @@
     <Filter Include="96. GameManager\Managers\Player">
       <UniqueIdentifier>{60cca2e5-6523-417b-bd2b-1e95f126c450}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Mannequin\Part">
+      <UniqueIdentifier>{f3752cef-510c-40c5-96cb-446e7ed2b869}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1167,6 +1170,9 @@
     <ClInclude Include="..\Public\Player_Manager.h">
       <Filter>96. GameManager\Managers\Player</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Part_Mannequin.h">
+      <Filter>02.GameObjects\Mannequin\Part</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1730,6 +1736,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Player_Manager.cpp">
       <Filter>96. GameManager\Managers\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Part_Mannequin.cpp">
+      <Filter>02.GameObjects\Mannequin\Part</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -118,7 +118,9 @@ _bool CPlayer::Play_Animation(_float fTimeDelta)
 
 	isAnimFinished = dynamic_cast<CParts_Character*>(Find_PartObject(TEXT("Part_Upper")))->Play_Animation(fTimeDelta);
 
-	dynamic_cast<CParts_Character*>(Find_PartObject(TEXT("Part_Lower")))->Play_Animation(fTimeDelta);
+	if(false == m_pGameManager->IsOneCloth())
+		dynamic_cast<CParts_Character*>(Find_PartObject(TEXT("Part_Lower")))->Play_Animation(fTimeDelta);
+
 	dynamic_cast<CParts_Character*>(Find_PartObject(TEXT("Part_Face")))->Play_Animation(fTimeDelta);
 	dynamic_cast<CParts_Character*>(Find_PartObject(TEXT("Part_Head")))->Play_Animation(fTimeDelta);
 	dynamic_cast<CParts_Character*>(Find_PartObject(TEXT("Part_Weapon")))->Play_Animation(fTimeDelta);
@@ -339,28 +341,21 @@ HRESULT CPlayer::Ready_PartObjects()
 {
 	CUpper_Character::UPPER_PLAYER_DESC UpperDesc{};
 	UpperDesc.pParentTransform = m_pTransformCom;
-	UpperDesc.strModelName = TEXT("Prototype_Component_Model_Upper_Player");
-
-	CLower_Character::LOWER_PLAYER_DESC LowerDesc{};
-	LowerDesc.pParentTransform = m_pTransformCom;
-	LowerDesc.strModelName = TEXT("Prototype_Component_Model_Lower_Player");
+	UpperDesc.strModelName = m_pGameManager->Get_PlayerModelInfo(SELECT_TYPE::UPPER);
 
 	CHead_Character::HEAD_PLAYER_DESC HeadDesc{};
 	HeadDesc.pParentTransform = m_pTransformCom;
 	HeadDesc.strModelName = TEXT("Prototype_Component_Model_Head_Player");
+	HeadDesc.strModelName = m_pGameManager->Get_PlayerModelInfo(SELECT_TYPE::HEAD);
 
 	CFace_Character::tagFace_Player_Desc FaceDesc{};
 	FaceDesc.pParentTransform = m_pTransformCom;
 	FaceDesc.strModelName = TEXT("Prototype_Component_Model_Face_Player");
+	FaceDesc.strModelName = m_pGameManager->Get_PlayerModelInfo(SELECT_TYPE::FACE);
 
 	/* Part_Upper */
 	if (FAILED(__super::Add_PartObject(ENUM_CLASS(m_pGameManager->Get_NextLevel()), TEXT("Prototype_GameObject_Upper_Player"),
 		TEXT("Part_Upper"), &UpperDesc)))
-		return E_FAIL;
-
-	/* Part_Lower */
-	if (FAILED(__super::Add_PartObject(ENUM_CLASS(m_pGameManager->Get_NextLevel()), TEXT("Prototype_GameObject_Lower_Player"),
-		TEXT("Part_Lower"), &LowerDesc)))
 		return E_FAIL;
 
 	/* Part_Head */
@@ -372,6 +367,19 @@ HRESULT CPlayer::Ready_PartObjects()
 	if (FAILED(__super::Add_PartObject(ENUM_CLASS(m_pGameManager->Get_NextLevel()), TEXT("Prototype_GameObject_Face_Player"),
 		TEXT("Part_Face"), &FaceDesc)))
 		return E_FAIL;
+
+
+	if (false == m_pGameManager->IsOneCloth())
+	{
+		CLower_Character::LOWER_PLAYER_DESC LowerDesc{};
+		LowerDesc.pParentTransform = m_pTransformCom;
+		LowerDesc.strModelName = m_pGameManager->Get_PlayerModelInfo(SELECT_TYPE::LOWER);
+
+		/* Part_Lower */
+		if (FAILED(__super::Add_PartObject(ENUM_CLASS(m_pGameManager->Get_NextLevel()), TEXT("Prototype_GameObject_Lower_Player"),
+			TEXT("Part_Lower"), &LowerDesc)))
+			return E_FAIL;
+	}
 
 	CWeapon_Character::WEAPON_PLAYER_DESC WeaponDesc{};
 	CUpper_Character* pUpperPlayer = dynamic_cast<CUpper_Character*>(Find_PartObject(TEXT("Part_Upper")));

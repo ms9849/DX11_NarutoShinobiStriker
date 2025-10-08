@@ -16,7 +16,11 @@ CFont::CFont(const CFont& rhs)
     , m_pBatch { rhs.m_pBatch }
     , m_fWinSizeX { rhs.m_fWinSizeX }
     , m_fWinSizeY { rhs.m_fWinSizeY }
+    , m_pBlendState{ rhs.m_pBlendState }
+    , m_pSampleState { rhs.m_pSampleState }
 {
+    Safe_AddRef(m_pBlendState);
+    Safe_AddRef(m_pSampleState);
 }
 
 HRESULT CFont::Initialize_Prototype(const _tchar* pFontFilePath)
@@ -34,6 +38,12 @@ HRESULT CFont::Initialize_Prototype(const _tchar* pFontFilePath)
     CommonStates* BatchState = new CommonStates(m_pDevice);
     if (nullptr == BatchState)
         return E_FAIL;
+
+    m_pBlendState = BatchState->NonPremultiplied();
+    Safe_AddRef(m_pBlendState);
+    
+    m_pSampleState = BatchState->PointClamp();
+    Safe_AddRef(m_pSampleState);
 
     Safe_Delete(BatchState);
 
@@ -83,7 +93,10 @@ HRESULT CFont::DrawFont()
 {
     m_pContext->GSSetShader(nullptr, nullptr, 0);
 
-    m_pBatch->Begin();
+    m_pBatch->Begin(
+        SpriteSortMode_Deferred,
+        m_pBlendState
+    );
 
     m_pFont->DrawString(m_pBatch, m_Text.c_str(), m_vPosition, m_vColor, m_fRotation, m_vOrigin, m_fScale);
 
@@ -127,4 +140,7 @@ void CFont::Free()
         Safe_Delete(m_pFont);
         Safe_Delete(m_pBatch);
     }
+
+    Safe_Release(m_pBlendState);
+    Safe_Release(m_pSampleState);
 }
