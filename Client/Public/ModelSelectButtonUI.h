@@ -17,6 +17,9 @@ private:
 	virtual ~CModelSelectButtonUI() = default;
 
 public:
+	void Change_Text(const _wstring& strFontText) { m_strFontText = strFontText; }
+
+public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void	Priority_Update(_float fTimeDelta) override;
@@ -26,6 +29,7 @@ public:
 
 private:
 	CFont* m_pFontCom = { nullptr };
+	_wstring m_strFontText = { TEXT("test") };
 
 private:
 	HRESULT Ready_Components();

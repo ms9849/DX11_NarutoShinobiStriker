@@ -598,6 +598,9 @@
     <Filter Include="02.GameObjects\01. BackGround\01. OutfitBackGround">
       <UniqueIdentifier>{8dd45cc8-d394-4698-9e41-5f9e1e33c1c1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="96. GameManager\Managers\Player">
+      <UniqueIdentifier>{60cca2e5-6523-417b-bd2b-1e95f126c450}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1161,6 +1164,9 @@
     <ClInclude Include="..\Public\OutfitBackGround.h">
       <Filter>02.GameObjects\01. BackGround\01. OutfitBackGround</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Player_Manager.h">
+      <Filter>96. GameManager\Managers\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1721,6 +1727,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\OutfitBackGround.cpp">
       <Filter>02.GameObjects\01. BackGround\01. OutfitBackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_Manager.cpp">
+      <Filter>96. GameManager\Managers\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

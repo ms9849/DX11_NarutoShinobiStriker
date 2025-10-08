@@ -53,7 +53,7 @@ void CModelDecideButtonUI::Late_Update(_float fTimeDelta)
 	else if (true == m_IsFadeIn)
 		fAlphaValue = m_fFadeInTimeAcc / m_fFadeInMaxTimeAcc;
 
-	m_pFontCom->Bind_Resources(TEXT("결정"), _float2{ vPosition.x, vPosition.y + 2.f }, true, 
+	m_pFontCom->Bind_Resources(TEXT("결정"), _float2{vPosition.x, vPosition.y + 2.f}, true,
 		0.6f, XMVectorSet(1.f, 1.f, 1.f, fAlphaValue));
 
 	m_pGameInstance->Add_Font(m_pFontCom);

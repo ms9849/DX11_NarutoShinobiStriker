@@ -49,9 +49,6 @@ NS_BEGIN(Client)
 
 class CModelPanel final : public CPanel
 {
-public:
-	enum class SELECT_TYPE { PARTS, HEAD, FACE, UPPER, LOWER, ACCESSORY, END };
-
 private:
 	CModelPanel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	CModelPanel(const CModelPanel& rhs);
@@ -75,7 +72,7 @@ private:
 	데이터 받아온뒤 세팅해주는 
 	방식으로 진행. 
 	*/
-	_int m_ButtonInfos[ENUM_CLASS(SELECT_TYPE::END)] = { 6,7,5,2,3,4 };
+	_int m_ButtonInfos[ENUM_CLASS(SELECT_TYPE::END)] = { 5,7,5,2,3,4 };
 	_int m_iFocusedNum = { 0 };
 	_int m_iMaxActivateNum = { 0 };
 	_int m_iDecideButtonNum = { 0 };
@@ -100,6 +97,7 @@ private:
 private:
 	void Change_FocusedButton(_int iNum);
 	void Change_SelectType();
+	void Change_ButtonText(_bool IsSelectParts = false);
 	void Back_ToParts();
 	void Key_Input();
 	void Set_Visible_Buttons(_uint iMaxIdx);

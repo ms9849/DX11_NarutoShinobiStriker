@@ -43,12 +43,7 @@ private:
 	virtual ~CGameManager() = default;
 
 public:
-	class CPlayer* Get_PlayerPtr() {
-		return m_pPlayer;
-	}
-
 	LEVEL		Get_NextLevel();
-	HRESULT		Set_PlayerPtr(class CPlayer* pPlayer);
 	HRESULT		Set_NextLevelID(LEVEL eLevelID);
 
 public:
@@ -115,8 +110,13 @@ public:
 #pragma region FLOW
 	HRESULT	OnTrigger(TRIGGER_TYPE eTriggerType);
 	TRIGGER_TYPE Get_CurrentTrigger();
-
 #pragma endregion
+
+#pragma region PLAYER
+	class CPlayer* Get_PlayerPtr();
+	HRESULT	Set_PlayerPtr(class CPlayer* pPlayer);
+#pragma endregion
+
 private:
 	CGameInstance* m_pGameInstance = { nullptr };
 
@@ -125,9 +125,9 @@ private:
 	class CLockOn_Manager* m_pLockOn_Manager = { nullptr };
 	class CUI_Manager* m_pUI_Manager = { nullptr };
 	class CTrigger_Manager* m_pTrigger_Manager = { nullptr };
+	class CPlayer_Manager* m_pPlayer_Manager = { nullptr };
 
 	/* 게임 매니저 단에서 직접 관리할 변수들 */
-	class CPlayer*  m_pPlayer = {};
 	_bool			m_IsTalking = { false };
 	LEVEL			m_eNextLevel = {};
 

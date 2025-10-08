@@ -44,6 +44,13 @@ void CCreateCharacterUI::Update(_float fTimeDelta)
 void CCreateCharacterUI::Late_Update(_float fTimeDelta)
 {
     m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
+
+    _float4 vPosition = m_pTransformCom->Get_State_Float4(STATE::POSITION);
+
+    m_pFontCom->Bind_Resources(TEXT("외형 선택"), _float2{ vPosition.x - 110.f, vPosition.y + 23.f}, true,
+        1.f, XMVectorSet(1.f, 1.f, 1.f, 1.f));
+
+    m_pGameInstance->Add_Font(m_pFontCom);
 }
 
 HRESULT CCreateCharacterUI::Render()
@@ -84,6 +91,10 @@ HRESULT CCreateCharacterUI::Ready_Components()
 
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::OUTFITSELECT), TEXT("Prototype_Component_Texture_CreateCharacterUI"),
         TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
+        return E_FAIL;
+
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Font"),
+        TEXT("Com_Font"), reinterpret_cast<CComponent**>(&m_pFontCom))))
         return E_FAIL;
 
     return S_OK;
@@ -132,4 +143,6 @@ CGameObject* CCreateCharacterUI::Clone(void* pArg)
 void CCreateCharacterUI::Free()
 {
     __super::Free();
+
+    Safe_Release(m_pFontCom);
 }

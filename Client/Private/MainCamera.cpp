@@ -94,14 +94,14 @@ void CMainCamera::Look_Target(_float fTimeDelta)
         {
             _vector vLookPos = m_pPlayerTransform->Get_State(STATE::POSITION) + 2.f * XMVector3Normalize(pTargetTransform->Get_State(STATE::POSITION) - m_pPlayerTransform->Get_State(STATE::POSITION)
                 + XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::UP)) * 1.f);
-            m_pTransformCom->LookAt_Lerp(vLookPos, 0.15f);
+            m_pTransformCom->LookAt_Lerp(vLookPos, 0.175f);
         }
         else
         {
             m_pTransformCom->LookAt_Lerp(
                 m_pPlayerTransform->Get_State(STATE::POSITION) +
                 XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::LOOK)) * 1.f +
-                XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::UP)) * 1.f, 0.15f);
+                XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::UP)) * 1.f, 0.175f);
         }
     }
     else
@@ -109,7 +109,7 @@ void CMainCamera::Look_Target(_float fTimeDelta)
         m_pTransformCom->LookAt_Lerp(
             m_pPlayerTransform->Get_State(STATE::POSITION) +
             XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::LOOK)) * 1.f +
-            XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::UP)) * 1.f, 0.15f);
+            XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::UP)) * 1.f, 0.175f);
     }
 }
 

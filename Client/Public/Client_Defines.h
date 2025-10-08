@@ -127,22 +127,13 @@ namespace Client
 	};
 
 	/* 일단은 튜토리얼과 관련된 로직만. */
-	enum class TRIGGER_TYPE { 
-		TUTORIAL_KAKASHI_TALK, TUTORIAL_SPAWNER_01, TUTORIAL_CLEAR, 
-		END 
-	};
+	enum class TRIGGER_TYPE { TUTORIAL_KAKASHI_TALK, TUTORIAL_SPAWNER_01, TUTORIAL_CLEAR, END };
 
+	/* 모델 선택용 */
+	enum class SELECT_TYPE { PARTS, HEAD, FACE, UPPER, ONE_CLOTH, LOWER, END };
 }
 
 using namespace Client;
 
 extern HINSTANCE g_hInstance;
 extern HWND g_hWnd;
-
-/* 프레임워크 */
-/* 배경(맵) */
-/* 이펙트(파티클 인스턴싱, 스프라이트) */
-/* 유아이 */
-/* 애니메이션 툴 */
-/* 컨텐츠작업 */
-/* 플레이어담당, 몬스터 담당. 게임 컨텐츠 작업. */
