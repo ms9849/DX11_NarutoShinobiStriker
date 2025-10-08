@@ -50,7 +50,7 @@ NS_BEGIN(Client)
 class CModelPanel final : public CPanel
 {
 public:
-	enum class SELECT_TYPE { PARTS, HEAD, EYE, UPPER, LOWER, MASK, ACCESSORY, END };
+	enum class SELECT_TYPE { PARTS, HEAD, FACE, UPPER, LOWER, ACCESSORY, END };
 
 private:
 	CModelPanel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
@@ -75,7 +75,7 @@ private:
 	데이터 받아온뒤 세팅해주는 
 	방식으로 진행. 
 	*/
-	_int m_ButtonInfos[ENUM_CLASS(SELECT_TYPE::END)] = { 6,7,5,2,3,4,4 };
+	_int m_ButtonInfos[ENUM_CLASS(SELECT_TYPE::END)] = { 6,7,5,2,3,4 };
 	_int m_iFocusedNum = { 0 };
 	_int m_iMaxActivateNum = { 0 };
 	_int m_iDecideButtonNum = { 0 };
@@ -86,14 +86,17 @@ private:
 	_bool m_bChangeSelectType = { false };
 	_bool m_bBackToParts = { false };
 
-	_float m_fAnimationDist = { 50.f };
-	_float m_fFadeOutMaxTimeAcc = { 0.5f };
+	_float m_fAnimationDist = { 40.f };
+	_float m_fFadeOutMaxTimeAcc = { 0.4f };
 	_float m_fFadeOutTimeAcc = { 0.f };
 
-	_float m_fFadeInMaxTimeAcc = { 0.5f };
+	_float m_fFadeInMaxTimeAcc = { 0.4f };
 	_float m_fFadeInTimeAcc = { 0.f };
 
-	_float m_fButtonDelay = { 0.07f };
+	_float m_fButtonDelay = { 0.03f };
+
+	class CModelDecideButtonUI* m_pDecideButton = { nullptr };
+
 private:
 	void Change_FocusedButton(_int iNum);
 	void Change_SelectType();

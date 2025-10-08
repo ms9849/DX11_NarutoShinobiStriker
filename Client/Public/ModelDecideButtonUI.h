@@ -2,6 +2,10 @@
 #include "Client_Defines.h"
 #include "Button.h"
 
+NS_BEGIN(Engine)
+class CFont;
+NS_END 
+
 NS_BEGIN(Client)
 
 class CModelDecideButtonUI : public CButton
@@ -18,6 +22,9 @@ public:
 	virtual void	Update(_float fTimeDelta) override;
 	virtual void	Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
+
+private:
+	CFont* m_pFontCom = { nullptr };
 
 private:
 	HRESULT Ready_Components();

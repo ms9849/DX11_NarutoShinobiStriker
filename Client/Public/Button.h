@@ -66,6 +66,7 @@ protected:
 	_bool  m_IsFadeIn = { false };
 
 	_bool  m_bShowNormal = { false };
+
 protected:
 	virtual HRESULT Bind_ShaderResources() override;
 

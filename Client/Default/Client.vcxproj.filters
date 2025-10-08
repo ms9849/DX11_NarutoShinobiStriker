@@ -172,9 +172,6 @@
     <Filter Include="96. GameManager\Managers">
       <UniqueIdentifier>{a0ea510a-afe8-4f4a-a807-4d58ae933da1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\SkyBox">
-      <UniqueIdentifier>{a51f9c92-5103-4bca-92ee-7fb3cb8bb86a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="96. GameManager\Managers\Camera">
       <UniqueIdentifier>{ea52a134-9003-4d75-bbbb-2070dd27f466}</UniqueIdentifier>
     </Filter>
@@ -592,6 +589,15 @@
     <Filter Include="02.GameObjects\Effect\Icon">
       <UniqueIdentifier>{fe96f895-9657-4ec1-947b-d883e05b6788}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\01. BackGround">
+      <UniqueIdentifier>{a275f7e0-9ccb-43e4-9d90-c1f1c2ac43ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\01. BackGround\00. SkyBox">
+      <UniqueIdentifier>{a51f9c92-5103-4bca-92ee-7fb3cb8bb86a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\01. BackGround\01. OutfitBackGround">
+      <UniqueIdentifier>{8dd45cc8-d394-4698-9e41-5f9e1e33c1c1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -895,7 +901,7 @@
       <Filter>02.GameObjects\00. Character\01. Enemy\03. Jetsu\Skill\Part</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\SkyBox.h">
-      <Filter>02.GameObjects\SkyBox</Filter>
+      <Filter>02.GameObjects\01. BackGround\00. SkyBox</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Camera_Manager.h">
       <Filter>96. GameManager\Managers\Camera</Filter>
@@ -1151,6 +1157,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\Effect_Icon.h">
       <Filter>02.GameObjects\Effect\Icon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\OutfitBackGround.h">
+      <Filter>02.GameObjects\01. BackGround\01. OutfitBackGround</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1453,7 +1462,7 @@
       <Filter>02.GameObjects\00. Character\01. Enemy\03. Jetsu\Skill\Part</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\SkyBox.cpp">
-      <Filter>02.GameObjects\SkyBox</Filter>
+      <Filter>02.GameObjects\01. BackGround\00. SkyBox</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Camera_Manager.cpp">
       <Filter>96. GameManager\Managers\Camera</Filter>
@@ -1709,6 +1718,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Effect_Icon.cpp">
       <Filter>02.GameObjects\Effect\Icon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\OutfitBackGround.cpp">
+      <Filter>02.GameObjects\01. BackGround\01. OutfitBackGround</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
