@@ -21,11 +21,10 @@ public:
 	HRESULT DrawFont();
 
 private:
-	ID3D11BlendState* m_pBlendState = { nullptr };
 	SpriteFont* m_pFont = { nullptr };
 	SpriteBatch* m_pBatch = { nullptr };
 
-	const _tchar* m_pText = {};
+	_wstring m_Text = {};
 	_float2 m_vPosition = {};
 	_float  m_fScale = {};
 	_vector m_vColor = {};

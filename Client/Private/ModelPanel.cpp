@@ -38,6 +38,7 @@ HRESULT CModelPanel::Initialize(void* pArg)
     m_eSelectType = SELECT_TYPE::PARTS;
     m_iMaxActivateNum = m_ButtonInfos[ENUM_CLASS(m_eSelectType)];
     Set_Visible_Buttons(m_iMaxActivateNum);
+    Change_ButtonText(true);
 
     return S_OK;
 }
@@ -124,7 +125,6 @@ void CModelPanel::Play_Animation_FadeOut(_float fTimeDelta)
         m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(m_fX - g_iWinSizeX / 2.f, -1.f * (m_fY - g_iWinSizeY / 2.f), m_fZ, 1.f));
         m_IsFadeOut = false;
         m_fFadeOutTimeAcc = 0.f;
-        //m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI);
 
         /* FadeOut 끝났으면 바로 FadeIn 켜버리기 */
         m_IsFadeIn = true;
@@ -134,8 +134,9 @@ void CModelPanel::Play_Animation_FadeOut(_float fTimeDelta)
             for (_int i = 0; i < m_ButtonInfos[m_iFocusedNum + 1]; ++i)
                 static_cast<CButton*>(m_Childs[i])->Trigger_FadeIn((i + 1) * m_fButtonDelay);
 
-            static_cast<CButton*>(m_Childs[m_iDecideButtonNum])->Set_Visible(false);
+            Change_ButtonText();
 
+            static_cast<CButton*>(m_Childs[m_iDecideButtonNum])->Set_Visible(false);
         }
 
         else if (true == m_bBackToParts)
@@ -143,6 +144,8 @@ void CModelPanel::Play_Animation_FadeOut(_float fTimeDelta)
             for (_int i = 0; i < m_ButtonInfos[ENUM_CLASS(SELECT_TYPE::PARTS)]; ++i)
                 static_cast<CButton*>(m_Childs[i])->Trigger_FadeIn((i + 1) * m_fButtonDelay);
             
+            Change_ButtonText(true);
+
             /* 결정 버튼도 애니메이션 재생해주기 */
             static_cast<CButton*>(m_Childs[m_iDecideButtonNum])->Trigger_FadeIn(0.f);
         }
@@ -205,6 +208,23 @@ void CModelPanel::Change_SelectType()
         static_cast<CButton*>(m_Childs[m_iFocusedNum])->Toggle_Focus();
     m_iFocusedNum = -1;
     Set_Visible_Buttons(m_iMaxActivateNum);
+}
+
+void CModelPanel::Change_ButtonText(_bool IsSelectParts)
+{
+    if (true == IsSelectParts)
+    {
+        static_cast<CModelSelectButtonUI*>(m_Childs[0])->Change_Text(TEXT("머리"));
+        static_cast<CModelSelectButtonUI*>(m_Childs[1])->Change_Text(TEXT("얼굴"));
+        static_cast<CModelSelectButtonUI*>(m_Childs[2])->Change_Text(TEXT("상의"));
+        static_cast<CModelSelectButtonUI*>(m_Childs[3])->Change_Text(TEXT("한벌옷"));
+        static_cast<CModelSelectButtonUI*>(m_Childs[4])->Change_Text(TEXT("하의"));
+    }
+    else
+    {
+        for (_int i = 0; i < m_ButtonInfos[m_iFocusedNum + 1]; ++i)
+            static_cast<CModelSelectButtonUI*>(m_Childs[i])->Change_Text(TEXT("testforchange"));
+    }
 }
 
 void CModelPanel::Back_ToParts()

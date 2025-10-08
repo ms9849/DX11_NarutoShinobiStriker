@@ -3,6 +3,10 @@
 #include "Client_Defines.h"
 #include "UIObject.h"
 
+NS_BEGIN(Engine)
+class CFont;
+NS_END 
+
 NS_BEGIN(Client)
 
 class CCreateCharacterUI final : public CUIObject
@@ -21,6 +25,7 @@ public:
 	virtual HRESULT Render() override;
 
 private:
+	CFont* m_pFontCom = { nullptr };
 	_bool m_IsTriggered = { false };
 	_float m_fAnimationDist = { 10.f };
 	_float m_fTimeAcc = { 0.f };

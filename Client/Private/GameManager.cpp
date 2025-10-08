@@ -11,6 +11,7 @@
 #include "Collision_Manager.h"
 #include "UI_Manager.h"
 #include "Trigger_Manager.h"
+#include "Player_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameManager);
 
@@ -42,6 +43,10 @@ HRESULT CGameManager::Initialize_GameManager()
 	if (nullptr == m_pTrigger_Manager)
 		return E_FAIL;
 
+	m_pPlayer_Manager = CPlayer_Manager::Create();
+	if (nullptr == m_pPlayer_Manager)
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -49,10 +54,7 @@ void CGameManager::Release_GameManager()
 {
 	DestroyInstance();
 
-	if(nullptr != m_pPlayer)
-		m_pPlayer->Clear_State();
-
-	Safe_Release(m_pPlayer);
+	Safe_Release(m_pPlayer_Manager);
 	Safe_Release(m_pGameInstance);
 	Safe_Release(m_pCamera_Manager);
 	Safe_Release(m_pCollision_Manager);
@@ -65,17 +67,7 @@ void CGameManager::Clear()
 {
 	m_pCamera_Manager->Clear();
 	m_pCollision_Manager->Clear();
-
-	/* 지울때 레퍼런스 카운트가 0임을 보장하지 않음*/
-	/* 따라서 명시적으로 nullptr 처리 해줘야함 */
-
-	/* 플레이어 지우기 */
-	Safe_Release(m_pPlayer);
-	if (nullptr != m_pPlayer)
-	{
-		m_pPlayer->Clear_State();
-		m_pPlayer = nullptr;
-	}
+	m_pPlayer_Manager->Clear();
 }
 
 _wstring CGameManager::Get_CameraName()
@@ -88,21 +80,17 @@ HRESULT CGameManager::Add_TargetTransform(CTransform* pTransformCom)
  	return m_pCamera_Manager->Add_TargetTransform(pTransformCom);
 }
 
+#pragma region PLAYER
+CPlayer* CGameManager::Get_PlayerPtr()
+{
+	return m_pPlayer_Manager->Get_PlayerPtr();
+}
+
 HRESULT CGameManager::Set_PlayerPtr(CPlayer* pPlayer)
 {
-	//인자로 받은 플레이어가 nullptr 이라면
-	if (nullptr == pPlayer)
-		return E_FAIL;
-
-	//이미 플레이어가 등록되어 있다면,
-	if (nullptr != m_pPlayer)
-		Safe_Release(m_pPlayer);
-
-	m_pPlayer = pPlayer;
-	Safe_AddRef(m_pPlayer);
-
-	return S_OK;
+	return m_pPlayer_Manager->Set_PlayerPtr(pPlayer);
 }
+#pragma endregion
 
 HRESULT CGameManager::Set_NextLevelID(LEVEL eLevelID)
 {

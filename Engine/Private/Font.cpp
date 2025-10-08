@@ -14,11 +14,9 @@ CFont::CFont(const CFont& rhs)
     : CComponent { rhs }
     , m_pFont { rhs.m_pFont }
     , m_pBatch { rhs.m_pBatch }
-    , m_pBlendState { rhs.m_pBlendState }
     , m_fWinSizeX { rhs.m_fWinSizeX }
     , m_fWinSizeY { rhs.m_fWinSizeY }
 {
-    Safe_AddRef(m_pBlendState);
 }
 
 HRESULT CFont::Initialize_Prototype(const _tchar* pFontFilePath)
@@ -36,9 +34,6 @@ HRESULT CFont::Initialize_Prototype(const _tchar* pFontFilePath)
     CommonStates* BatchState = new CommonStates(m_pDevice);
     if (nullptr == BatchState)
         return E_FAIL;
-
-    m_pBlendState = BatchState->NonPremultiplied();
-    Safe_AddRef(m_pBlendState);
 
     Safe_Delete(BatchState);
 
@@ -61,7 +56,8 @@ HRESULT CFont::Initialize(void* pArg)
 
 HRESULT CFont::Bind_Resources(const _tchar* pText, const _float2& vPosition, _bool IsAlign, _float fScale, _fvector vColor, _float fRotation, const _float2& vOrigin)
 {
-    m_pText = pText;
+    m_Text = _wstring(pText);
+    
     m_fScale = fScale;
 
     _float2 vTextSize;
@@ -87,12 +83,9 @@ HRESULT CFont::DrawFont()
 {
     m_pContext->GSSetShader(nullptr, nullptr, 0);
 
-    m_pBatch->Begin(
-        SpriteSortMode_Deferred,
-        m_pBlendState
-    );
+    m_pBatch->Begin();
 
-    m_pFont->DrawString(m_pBatch, m_pText, m_vPosition, m_vColor, m_fRotation, m_vOrigin, m_fScale);
+    m_pFont->DrawString(m_pBatch, m_Text.c_str(), m_vPosition, m_vColor, m_fRotation, m_vOrigin, m_fScale);
 
     m_pBatch->End();
 
@@ -134,6 +127,4 @@ void CFont::Free()
         Safe_Delete(m_pFont);
         Safe_Delete(m_pBatch);
     }
-
-    Safe_Release(m_pBlendState);
 }

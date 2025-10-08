@@ -113,6 +113,7 @@
       <AdditionalIncludeDirectories>../public/;../../EngineSDK/Inc/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>ClientPch.h</PrecompiledHeaderFile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -236,6 +237,7 @@
     <ClInclude Include="..\Public\Pajama_SlidingKunaiState.h" />
     <ClInclude Include="..\Public\Pajama_ThrowKunaiState.h" />
     <ClInclude Include="..\Public\Pajama_WalkState.h" />
+    <ClInclude Include="..\Public\Player_Manager.h" />
     <ClInclude Include="..\Public\Player_RopeActionState.h" />
     <ClInclude Include="..\Public\Potion.h" />
     <ClInclude Include="..\Public\Rope.h" />
@@ -424,6 +426,7 @@
     <ClCompile Include="..\Private\Pajama_SlidingKunaiState.cpp" />
     <ClCompile Include="..\Private\Pajama_ThrowKunaiState.cpp" />
     <ClCompile Include="..\Private\Pajama_WalkState.cpp" />
+    <ClCompile Include="..\Private\Player_Manager.cpp" />
     <ClCompile Include="..\Private\Player_RopeActionState.cpp" />
     <ClCompile Include="..\Private\Potion.cpp" />
     <ClCompile Include="..\Private\Rope.cpp" />
