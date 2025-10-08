@@ -67,7 +67,7 @@ HRESULT CMannequin::Initialize(void* pArg)
 	if (FAILED(Ready_AllOutfits()))
 		return E_FAIL;
 
-	m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(0.7f, 0.f, 0.f, 1.f));
+	m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(1.0f, 0.f, 0.f, 1.f));
 
 	return S_OK;
 }

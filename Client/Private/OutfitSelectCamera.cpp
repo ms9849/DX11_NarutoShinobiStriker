@@ -48,7 +48,7 @@ HRESULT COutfitSelectCamera::Render()
 void COutfitSelectCamera::Camera_Action(_float fTimeDelta)
 {
 	m_pTransformCom->LookAt_Lerp(XMVectorSet(0.f, 1.f, -1.f, 1.f));
-	m_pTransformCom->Chase_Lerp(XMVectorSet(0.5f, 1.5f, 1.5f, 1.f), fTimeDelta, 0.2f);
+	m_pTransformCom->Chase_Lerp(XMVectorSet(0.5f, 1.2f, 2.5f, 1.f), fTimeDelta, 0.f);
 }
 
 COutfitSelectCamera* COutfitSelectCamera::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
