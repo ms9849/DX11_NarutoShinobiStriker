@@ -14,7 +14,7 @@ NS_BEGIN(Client)
 class CNPC_KaKashi : public CGameObject
 {
 public:
-	enum class ANIM_STATE { ANIM_IDLE, ANIM_GREET };
+	enum class ANIM_STATE { ANIM_IDLE, ANIM_GREET, ANIM_EXIT };
 
 	typedef struct tagNPCKaKashiDesc {
 		_float3 vPosition;
@@ -52,11 +52,13 @@ private:
 	_uint		m_iNumMeshes = {};
 	ANIM_STATE	m_eAnimState = {};
 
-	_bool		m_isTalkable = { false };
-	_bool		m_isTalking = { false };
+	_bool		m_IsTalkable = { false };
+	_bool		m_IsTalking = { false };
 	_int		m_iCurrentDialog = {};
 	_int		m_iDialogSize = { 0 };
-	
+	_float      m_fTimeAcc = { 0.f };
+	_float		m_fDeathCount = { 5.f };
+	_bool		m_IsActiveDeath = { false };
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_KaKashiIcon();

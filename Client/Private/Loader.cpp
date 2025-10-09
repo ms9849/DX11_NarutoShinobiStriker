@@ -11,9 +11,7 @@
 #include "TitleUI.h"
 #include "PressAnyButtonUI.h"
 
-
 #include "Navigation.h"
-
 
 #include "OutfitSelectCamera.h"
 #include "Mannequin.h"

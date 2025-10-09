@@ -190,7 +190,11 @@ HRESULT CWhiteJetsu::Initialize(void* pArg)
 
     m_iNumMeshes = m_pModelCom->Get_NumMeshes();
 
-    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(7.f, 0.f, 3.f, 1.f));
+    if (TRIGGER_TYPE::TUTORIAL_SPAWNER_01 == m_pGameManager->Get_CurrentTrigger())
+        m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(7.f, 0.f, 3.f, 1.f));
+    else if (TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_01 == m_pGameManager->Get_CurrentTrigger())
+        m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(95.838f, 7.775f, -60.551f, 1.f));
+
     /* 상태 초기화 및 시작. */
     m_pGameManager->Add_TargetTransform(m_pTransformCom);
 
@@ -306,13 +310,13 @@ HRESULT CWhiteJetsu::Ready_Components()
 
     if (LEVEL::TUTORIAL == m_pGameManager->Get_NextLevel())
     {
-        if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Navigation_Tutorial"),
+        if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_Component_Navigation_Tutorial"),
             TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
             return E_FAIL;
     }
     else if (LEVEL::KONOHA_VILLAGE == m_pGameManager->Get_NextLevel())
     {
-        if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Navigation_KonohaVillage"),
+        if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_Component_Navigation_KonohaVillage_2"),
             TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
             return E_FAIL;
     }

@@ -39,6 +39,7 @@ public:
 	virtual HRESULT Render() override;
 
 private:
+	class CGameManager* m_pGameManager = { nullptr };
 	CTransform* m_pOrthoTransform = { nullptr };
 	CTexture* m_pTextureCom = { nullptr };
 	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };

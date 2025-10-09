@@ -307,13 +307,13 @@ HRESULT CBoxer::Ready_Components()
 
 	if (LEVEL::TUTORIAL == m_pGameManager->Get_NextLevel())
 	{
-		if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Navigation_Tutorial"),
+		if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_Component_Navigation_Tutorial"),
 			TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
 			return E_FAIL;
 	}
 	else if (LEVEL::KONOHA_VILLAGE == m_pGameManager->Get_NextLevel())
 	{
-		if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Navigation_KonohaVillage"),
+		if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_Component_Navigation_KonohaVillage_3"),
 			TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
 			return E_FAIL;
 	}
@@ -369,17 +369,17 @@ HRESULT CBoxer::Ready_PartObjects()
 	FaceDesc.strModelName = TEXT("Prototype_Component_Model_Face_Boxer");
 
 	/* Part_Upper */
-	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Upper_Player"),
+	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_Upper_Player"),
 		TEXT("Part_Upper"), &UpperDesc)))
 		return E_FAIL;
 
 	/* Part_Head */
-	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Head_Player"),
+	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_Head_Player"),
 		TEXT("Part_Head"), &HeadDesc)))
 		return E_FAIL;
 
 	/* Part_Face */
-	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Face_Player"),
+	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_Face_Player"),
 		TEXT("Part_Face"), &FaceDesc)))
 		return E_FAIL;
 
@@ -391,7 +391,7 @@ HRESULT CBoxer::Ready_PartObjects()
 	WeaponDesc.strModelName = TEXT("Prototype_Component_Model_Weapon_Boxer_L");
 	WeaponDesc.eType = CWeapon_Character::WEAPON_TYPE::GLOVE;
 	/* Part_Weapon_R */
-	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Weapon_Player"),
+	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_Weapon_Player"),
 		TEXT("Part_Weapon_L"), &WeaponDesc)))
 		return E_FAIL;
 
@@ -400,7 +400,7 @@ HRESULT CBoxer::Ready_PartObjects()
 	WeaponDesc.eType = CWeapon_Character::WEAPON_TYPE::GLOVE;
 
 	/* Part_Weapon_L */
-	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Weapon_Player"),
+	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_Weapon_Player"),
 		TEXT("Part_Weapon_R"), &WeaponDesc)))
 		return E_FAIL;
 
