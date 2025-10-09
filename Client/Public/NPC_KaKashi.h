@@ -34,6 +34,8 @@ public:
 	virtual HRESULT Render() override;
 
 public:
+	void Set_Kakashi_Transform();
+	void Create_Dialog();
 	void Start_Dialog();
 	void End_Dialog();
 	void Check_Talkable();
@@ -42,6 +44,7 @@ public:
 private:
 	vector<_wstring> m_DialogTexts = {};
 
+	class CIcon* m_pIcon = { nullptr };
 	class CGameManager* m_pGameManager = { nullptr };
 	CTransform* m_pPlayerTransform = { nullptr };
 	CShader*	m_pShaderCom = { nullptr };
@@ -53,9 +56,10 @@ private:
 	_bool		m_isTalking = { false };
 	_int		m_iCurrentDialog = {};
 	_int		m_iDialogSize = { 0 };
-
+	
 private:
 	HRESULT Ready_Components();
+	HRESULT Ready_KaKashiIcon();
 	HRESULT Bind_ShaderResources();
 
 public:

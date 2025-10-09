@@ -33,6 +33,7 @@ private:
 public:
 	HRESULT	OnTrigger(TRIGGER_TYPE eTriggerType);
 	TRIGGER_TYPE Get_CurrentTrigger() { return m_eCurrentTrigger; }
+	_bool IsActivated(TRIGGER_TYPE eTriggerType) { return m_IsTriggerActivated[ENUM_CLASS(eTriggerType)]; }
 
 private:
 	class CGameManager* m_pGameManager = { nullptr };

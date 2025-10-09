@@ -274,6 +274,8 @@ void CBoss::Update(_float fTimeDelta)
     m_pRushColliderCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
     /* 체력 설정. 한프레임 늦긴한다. */
     m_pHPBar->Set_Progress(m_fCurrentHP);
+
+    m_pIcon->Set_Position(m_pTransformCom->Get_State(STATE::POSITION) + XMVectorSet(0.f, 2.0f, 0.f, 0.f));
 }
 
 void CBoss::Late_Update(_float fTimeDelta)
@@ -335,13 +337,13 @@ HRESULT CBoss::Ready_Components()
 
     if (LEVEL::TUTORIAL == m_pGameManager->Get_NextLevel())
     {
-        if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Navigation_Tutorial"),
+        if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_Component_Navigation_Tutorial"),
             TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
             return E_FAIL;
     }
     else if (LEVEL::KONOHA_VILLAGE == m_pGameManager->Get_NextLevel())
     {
-        if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Navigation_KonohaVillage"),
+        if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_Component_Navigation_KonohaVillage_4"),
             TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
             return E_FAIL;
     }
@@ -444,7 +446,6 @@ HRESULT CBoss::Ready_BossIcon()
 {
     CIcon::ICON_DESC Desc;
     Desc.iTextureIdx = 0;
-    Desc.pTargetTransform = m_pTransformCom;
 
     /* 추후 레벨 수정 */
     m_pIcon = static_cast<CIcon*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::TUTORIAL),

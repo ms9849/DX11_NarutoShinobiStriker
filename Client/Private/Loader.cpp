@@ -12,6 +12,9 @@
 #include "PressAnyButtonUI.h"
 
 
+#include "Navigation.h"
+
+
 #include "OutfitSelectCamera.h"
 #include "Mannequin.h"
 #include "OutfitBackGround.h"
@@ -428,7 +431,7 @@ HRESULT CLoader::Loading_For_Tutorial()
 
 	/* For.Prototype_GameObject_Icon */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Icon"),
-		CIcon::Create(m_pDevice, m_pContext, OBJECTID::SKYBOX))))
+		CIcon::Create(m_pDevice, m_pContext, OBJECTID::ICON))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_Terrain */
@@ -452,6 +455,10 @@ HRESULT CLoader::Loading_For_Tutorial()
 		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/TutorialMap/COL_TutorialMap.fbx", PreTransformMatrix))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Navigation_Tutorial */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_Component_Navigation_Tutorial"),
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/DataFiles/Navigation_TutorialMap.dat")))))
+		return E_FAIL;
 
 #pragma region MONSTER
 
@@ -720,7 +727,27 @@ HRESULT CLoader::Loading_For_KonohaVillage()
 
 	/* For.Prototype_GameObject_Icon */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_Icon"),
-		CIcon::Create(m_pDevice, m_pContext, OBJECTID::SKYBOX))))
+		CIcon::Create(m_pDevice, m_pContext, OBJECTID::ICON))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Navigation_KonohaVillage_1 */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_Component_Navigation_KonohaVillage_1"),
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/DataFiles/Navigation_KonohaVillage_1.dat")))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Navigation_KonohaVillage_2 */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_Component_Navigation_KonohaVillage_2"),
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/DataFiles/Navigation_KonohaVillage_2.dat")))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Navigation_KonohaVillage_3 */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_Component_Navigation_KonohaVillage_3"),
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/DataFiles/Navigation_KonohaVillage_3.dat")))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Navigation_KonohaVillage_4 */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_Component_Navigation_KonohaVillage_4"),
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/DataFiles/Navigation_KonohaVillage_4.dat")))))
 		return E_FAIL;
 
 #pragma region MAP

@@ -346,19 +346,6 @@ HRESULT CMainApp::Ready_Prototypes()
 
 #pragma endregion
 
-#pragma region NAVIGATION
-	/* For.Prototype_Component_Navigation_Tutorial */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Navigation_Tutorial"),
-		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/DataFiles/Navigation_TutorialMap.dat")))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Navigation_KonohaVillage */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Navigation_KonohaVillage"),
-		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/DataFiles/Navigation_KonohaVillage.dat")))))
-		return E_FAIL;
-
-#pragma endregion
-
 #pragma region COMPONENT
 	/* For.Prototype_Component_Pooling*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Pooling"),

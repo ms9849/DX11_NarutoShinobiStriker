@@ -107,9 +107,10 @@ public:
 	void Set_CutScene_Visible(_bool bFlag);
 #pragma endregion
 
-#pragma region FLOW
+#pragma region TRIGGER
 	HRESULT	OnTrigger(TRIGGER_TYPE eTriggerType);
 	TRIGGER_TYPE Get_CurrentTrigger();
+	_bool IsActivated(TRIGGER_TYPE eTriggerType);
 #pragma endregion
 
 #pragma region PLAYER

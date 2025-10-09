@@ -20,7 +20,6 @@ class CIcon : public CGameObject
 {
 public:
 	typedef struct tagIcon {
-		class CTransform* pTargetTransform = {};
 		_uint iTextureIdx;
 	} ICON_DESC;
 private:
@@ -29,7 +28,7 @@ private:
 	virtual ~CIcon() = default;
 
 public:
-	void Set_HP(_float fCurrentHP, _float fMaxHP);
+	void Set_Position(_fvector vPos);
 public:
 
 	virtual HRESULT Initialize_Prototype() override;
@@ -41,7 +40,6 @@ public:
 
 private:
 	CTransform* m_pOrthoTransform = { nullptr };
-	CTransform* m_pTargetTransform = { nullptr };
 	CTexture* m_pTextureCom = { nullptr };
 	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 	CShader* m_pShaderCom = { nullptr };
@@ -51,6 +49,7 @@ private:
 	_float m_fTimeAcc = { 0.f }; 
 	_bool  m_IsOrthogonal = { false };
 	_float m_fOrthoX, m_fOrthoY;
+
 private:
 	HRESULT Ready_Components();
 	HRESULT Bind_ShaderResources();
