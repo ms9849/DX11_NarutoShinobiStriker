@@ -125,7 +125,7 @@ void CLevel_Tutorial::Update(_float fTimeDelta)
 
 	if (m_pGameInstance->Key_Down(DIK_F8))
 	{
-		m_pGameInstance->Request_LevelChange();
+		m_pGameManager->OnTrigger(TRIGGER_TYPE::TUTORIAL_CLEAR);
 	}
 
 	if (m_pGameInstance->IsLevelChangeRequested())
@@ -168,7 +168,6 @@ HRESULT CLevel_Tutorial::Ready_Layer_BackGround(const _wstring& strLayerTag)
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Terrain"),
 		ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag)))
 		return E_FAIL;
-
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_SkyBox"),
 		ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag)))
@@ -434,13 +433,8 @@ HRESULT CLevel_Tutorial::Ready_Layer_StaticObjects(const _wstring& strLayerTag)
 
 HRESULT CLevel_Tutorial::Ready_Layer_NPC(const _wstring& strLayerTag)
 {
-	/* Ä«Ä«½Ã */
-
-	CNPC_KaKashi::NPC_KAKASHI_DESC Desc;
-	Desc.vPosition = { 0.f, 0.f, 4.f };
-
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_NPC_Kakashi"),
-		ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag, &Desc)))
+		ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag)))
 		return E_FAIL;
 
 	return S_OK;

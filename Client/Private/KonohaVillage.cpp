@@ -36,7 +36,10 @@ void CKonohaVillage::Priority_Update(_float fTimeDelta)
 
 void CKonohaVillage::Update(_float fTimeDelta)
 {
-	m_pNavigationCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
+	for (_uint i = 0; i < ENUM_CLASS(KONOHA_VILLAGE_SECTION::END); ++i)
+	{
+		m_NavigationComs[i]->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
+	}
 }
 
 void CKonohaVillage::Late_Update(_float fTimeDelta)
@@ -62,7 +65,10 @@ HRESULT CKonohaVillage::Render()
 	}
 
 #ifdef _DEBUG
-	m_pNavigationCom->Render();
+	for (_uint i = 0; i < ENUM_CLASS(KONOHA_VILLAGE_SECTION::END); ++i)
+	{
+		m_NavigationComs[i]->Render();
+	}
 #endif
 
 	return S_OK;
@@ -80,8 +86,20 @@ HRESULT CKonohaVillage::Ready_Components()
 		return E_FAIL;
 
 	/* Com_Navigation */
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Navigation_KonohaVillage"),
-		TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom))))
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_Component_Navigation_KonohaVillage_1"),
+		TEXT("Com_Navigation_1"), reinterpret_cast<CComponent**>(&m_NavigationComs[0]))))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_Component_Navigation_KonohaVillage_2"),
+		TEXT("Com_Navigation_2"), reinterpret_cast<CComponent**>(&m_NavigationComs[1]))))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_Component_Navigation_KonohaVillage_3"),
+		TEXT("Com_Navigation_3"), reinterpret_cast<CComponent**>(&m_NavigationComs[2]))))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_Component_Navigation_KonohaVillage_4"),
+		TEXT("Com_Navigation_4"), reinterpret_cast<CComponent**>(&m_NavigationComs[3]))))
 		return E_FAIL;
 
 	return S_OK;
@@ -135,5 +153,9 @@ void CKonohaVillage::Free()
 
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);
-	Safe_Release(m_pNavigationCom);
+
+	for (_uint i = 0; i < ENUM_CLASS(KONOHA_VILLAGE_SECTION::END); ++i)
+	{
+		Safe_Release(m_NavigationComs[i]);
+	} 
 }

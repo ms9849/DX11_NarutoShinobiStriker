@@ -82,7 +82,7 @@ HRESULT CTutorialMap::Ready_Components()
 		return E_FAIL;
 
 	/* Com_Navigation */
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Navigation_Tutorial"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_Component_Navigation_Tutorial"),
 		TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom))))
 		return E_FAIL;
 

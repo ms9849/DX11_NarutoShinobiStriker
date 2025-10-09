@@ -3,6 +3,7 @@
 #include "GameInstance.h"
 #include "GameManager.h"
 #include "Player.h"
+#include "Icon.h"
 
 CNPC_KaKashi::CNPC_KaKashi(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 	: CGameObject { pDevice, pContext, ENUM_CLASS(eObjectID) }
@@ -31,30 +32,19 @@ HRESULT CNPC_KaKashi::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_pPlayerTransform = m_pGameManager->Get_PlayerPtr()->Get_Transform();
-	Safe_AddRef(m_pPlayerTransform);
-
-	NPC_KAKASHI_DESC* pDesc = static_cast<NPC_KAKASHI_DESC*>(pArg);
-	m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetW(XMLoadFloat3(&pDesc->vPosition), 1.f));
+	if (FAILED(Ready_KaKashiIcon()))
+		return E_FAIL;
 
 	m_iNumMeshes = m_pModelCom->Get_NumMeshes();
 
 	m_pModelCom->Set_AnimIndex("Kakashi_etc_Tutorial_Loop", 1.f, true, 0.05f);
 	m_eAnimState = ANIM_STATE::ANIM_IDLE;
 
-	m_DialogTexts.push_back(TEXT("반갑다 하급닌자. 이 훈련장은 처음이지?"));
-	m_DialogTexts.push_back(TEXT("본격적인 임무에 앞서 연습을 위한 훈련장이야"));
-	m_DialogTexts.push_back(TEXT("저 앞에 보이는 푸른 원 안으로 들어가면 시작할 수 있어"));
-	m_DialogTexts.push_back(TEXT("그럼 건투를 빈다"));
-	m_DialogTexts.push_back(TEXT("졸작 팀장은 한재훈 김누리 김찬빈"));
+	m_pPlayerTransform = m_pGameManager->Get_PlayerPtr()->Get_Transform();
+	Safe_AddRef(m_pPlayerTransform);
 
-	m_iDialogSize = (_uint)m_DialogTexts.size();
-
-	if (LEVEL::TUTORIAL == m_pGameManager->Get_NextLevel())
-	{
-		m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(5.3f, 0.731f, -45.82f, 1.f));
-		m_pTransformCom->Rotation(0.f, 135.f, 0.f);
-	}
+	Set_Kakashi_Transform();
+	Create_Dialog();
 
 	return S_OK;
 }
@@ -75,6 +65,8 @@ void CNPC_KaKashi::Update(_float fTimeDelta)
 		m_pModelCom->Set_AnimIndex("Kakashi_etc_Tutorial_Loop", 1.f, true, 0.05f);
 		m_eAnimState = ANIM_STATE::ANIM_IDLE;
 	}
+	
+	m_pIcon->Set_Position(m_pTransformCom->Get_State(STATE::POSITION) + XMVectorSet(0.f, 2.25f, 0.f, 0.f));
 }
 
 void CNPC_KaKashi::Late_Update(_float fTimeDelta)
@@ -105,6 +97,42 @@ HRESULT CNPC_KaKashi::Render()
 	return S_OK;
 }
 
+void CNPC_KaKashi::Set_Kakashi_Transform()
+{
+	/* 튜토리얼 카카시 */
+	if (LEVEL::TUTORIAL == m_pGameManager->Get_NextLevel())
+	{
+		m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(5.3f, 0.731f, -45.82f, 1.f));
+		m_pTransformCom->Rotation(0.f, 135.f, 0.f);
+	}
+	/* 나뭇잎 마을 카카시 1 */
+	else if (LEVEL::KONOHA_VILLAGE == m_pGameManager->Get_NextLevel() && TRIGGER_TYPE::TUTORIAL_CLEAR == m_pGameManager->Get_CurrentTrigger())
+	{
+		m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(-87.878f, 17.8f, -71.192f, 1.f));
+		m_pTransformCom->Rotation(0.f, 230.f, 0.f);
+	}
+}
+
+void CNPC_KaKashi::Create_Dialog()
+{
+	if (TRIGGER_TYPE::END == m_pGameManager->Get_CurrentTrigger())
+	{
+		m_DialogTexts.push_back(TEXT("반갑다 하급닌자. 이 훈련장은 처음이지?"));
+		m_DialogTexts.push_back(TEXT("본격적인 임무에 앞서 연습을 위한 훈련장이야"));
+		m_DialogTexts.push_back(TEXT("저 앞에 보이는 푸른 원 안으로 들어가면 시작할 수 있어"));
+		m_DialogTexts.push_back(TEXT("그럼 건투를 빈다"));
+	}
+	else if (TRIGGER_TYPE::TUTORIAL_CLEAR == m_pGameManager->Get_CurrentTrigger())
+	{
+		m_DialogTexts.push_back(TEXT("이봐 하급닌자, 갑작스럽지만 바로 실전 임무에 투입하게 됐다."));
+		m_DialogTexts.push_back(TEXT("마을에 나타난 침입자들이 시연회를 망치려 들고 있는 상황이야.."));
+		m_DialogTexts.push_back(TEXT("만약 침입자들을 무찌르지 못한다면 시연회는 완성하지 못하고\n졸작과 취업도 힘들어지겠지."));
+		m_DialogTexts.push_back(TEXT("서둘러 침입자들을 무찌르고 마을의 평화를 찾아온 뒤,\n시연회를 잘 마무리 하도록!"));
+	}
+
+	m_iDialogSize = (_uint)m_DialogTexts.size();
+}
+
 void CNPC_KaKashi::Start_Dialog()
 {
 	/* 카메라도 NPC 전용으로 교체할 것. */
@@ -116,7 +144,12 @@ void CNPC_KaKashi::Start_Dialog()
 
 	m_pGameManager->Set_AttackType_Visible(false);
 	m_pGameManager->Set_SkillSlot_Visible(false);
-	m_pGameManager->OnTrigger(TRIGGER_TYPE::TUTORIAL_KAKASHI_TALK);
+
+	if (TRIGGER_TYPE::END == m_pGameManager->Get_CurrentTrigger())
+		m_pGameManager->OnTrigger(TRIGGER_TYPE::TUTORIAL_KAKASHI_TALK);
+
+	else if (TRIGGER_TYPE::TUTORIAL_CLEAR == m_pGameManager->Get_CurrentTrigger())
+		m_pGameManager->OnTrigger(TRIGGER_TYPE::KONOHA_VILLAGE_KAKASHI_TALK_1);
 }
 
 void CNPC_KaKashi::End_Dialog()
@@ -183,6 +216,21 @@ HRESULT CNPC_KaKashi::Ready_Components()
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_NPC_Kakashi"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CNPC_KaKashi::Ready_KaKashiIcon()
+{
+	CIcon::ICON_DESC Desc;
+	Desc.iTextureIdx = 1;
+
+	/* 추후 레벨 수정 */
+	m_pIcon = static_cast<CIcon*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_pGameManager->Get_NextLevel()),
+		TEXT("Prototype_GameObject_Icon"), &Desc));
+
+	Safe_AddRef(m_pIcon);
+	m_pGameInstance->Add_Clone_ToLayer(m_pIcon, ENUM_CLASS(m_pGameManager->Get_NextLevel()), TEXT("Layer_UI"));
 
 	return S_OK;
 }

@@ -232,6 +232,11 @@ HRESULT CLevel_KonohaVillage::Ready_Layer_Camera(const _wstring& strLayerTag)
 		PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_SkillActionCamera"), &SkillActionCameraDesc)))))
 		return E_FAIL;
 
+	/* 카메라는 게임 매니저에 추가하여 관리한다. */
+	if (FAILED(m_pGameManager->Add_Camera(LEVEL::KONOHA_VILLAGE, TEXT("CutScene_Camera"), static_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
+		PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_CutSceneCamera"), &MainCameraDesc)))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -330,7 +335,7 @@ HRESULT CLevel_KonohaVillage::Ready_Layer_UI(const _wstring& strLayerTag)
 	Desc = CUIObject::CreateDesc(g_iWinSizeX / 2.f, g_iWinSizeY / 2.f, 0.01f, g_iWinSizeX / 2.f, g_iWinSizeY / 2.f, 0, 0.f);
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_WinPanel"),
-		ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag, &Desc)))
+		ENUM_CLASS(LEVEL::KONOHA_VILLAGE), strLayerTag, &Desc)))
 		return E_FAIL;
 
 	m_pGameManager->Set_WinPanel(static_cast<CWinPanel*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), strLayerTag, m_pGameInstance->Get_LayerSize(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), strLayerTag) - 1)));
@@ -345,6 +350,10 @@ HRESULT CLevel_KonohaVillage::Ready_Layer_StaticObjects(const _wstring& strLayer
 
 HRESULT CLevel_KonohaVillage::Ready_Layer_NPC(const _wstring& strLayerTag)
 {
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_NPC_Kakashi"),
+		ENUM_CLASS(LEVEL::KONOHA_VILLAGE), strLayerTag)))
+		return E_FAIL;
+
 	return S_OK;
 }
 

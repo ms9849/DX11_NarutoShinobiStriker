@@ -11,6 +11,10 @@ NS_BEGIN(Client)
 
 class CKonohaVillage final : public CGameObject 
 {
+public:
+	/* 나뭇잎 마을 네비게이션 구역 */
+	enum class KONOHA_VILLAGE_SECTION { SECTION_1, SECTION_2, SECTION_3, SECTION_4, END };
+
 private:
 	CKonohaVillage(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	CKonohaVillage(const CKonohaVillage& rhs);
@@ -28,7 +32,7 @@ private:
 	CModel* m_pModelCom = { nullptr };
 	CShader* m_pShaderCom = { nullptr };
 	_uint  m_iNumMeshes = {};
-	CNavigation* m_pNavigationCom = { nullptr };
+	CNavigation* m_NavigationComs[ENUM_CLASS(KONOHA_VILLAGE_SECTION::END)] = {};
 
 private:
 	HRESULT Ready_Components();

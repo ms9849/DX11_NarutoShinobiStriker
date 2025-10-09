@@ -50,6 +50,22 @@ HRESULT CTrigger_Manager::OnTrigger(TRIGGER_TYPE eTriggerType)
 
         m_IsTriggerActivated[ENUM_CLASS(TRIGGER_TYPE::TUTORIAL_CLEAR)] = true;
     }
+
+    else if (TRIGGER_TYPE::KONOHA_VILLAGE_KAKASHI_TALK_1 == eTriggerType && false == m_IsTriggerActivated[ENUM_CLASS(TRIGGER_TYPE::TUTORIAL_CLEAR)])
+    {
+        CTriggerBox::TRIGGER_BOX_DESC Desc;
+        Desc.eTriggerType = TRIGGER_TYPE::TUTORIAL_SPAWNER_01;
+        Desc.fRadius = 5.f;
+        Desc.vCenter = _float3(0.f, 0.f, 0.f);
+        Desc.vPosition = _float3(1.222f, 0.679f, -30.5f);
+
+        if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_MonsterSpawner"),
+            ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Layer_Trigger"), &Desc)))
+            return E_FAIL;
+
+        m_pGameManager->AlertPanel_Start_FadeIn(TEXT("정해진 구역으로 이동하라!"));
+    }
+
     m_eCurrentTrigger = eTriggerType;
 
     return S_OK;

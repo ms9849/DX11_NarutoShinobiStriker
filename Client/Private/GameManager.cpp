@@ -273,6 +273,11 @@ TRIGGER_TYPE CGameManager::Get_CurrentTrigger()
 	return m_pTrigger_Manager->Get_CurrentTrigger();
 }
 
+_bool CGameManager::IsActivated(TRIGGER_TYPE eTriggerType)
+{
+	return m_pTrigger_Manager->IsActivated(eTriggerType);
+}
+
 LEVEL CGameManager::Get_NextLevel()
 {
 	return m_eNextLevel;

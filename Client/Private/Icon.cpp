@@ -14,6 +14,11 @@ CIcon::CIcon(const CIcon& rhs)
 {
 }
 
+void CIcon::Set_Position(_fvector vPos)
+{
+	m_pTransformCom->Set_State(STATE::POSITION, vPos);
+}
+
 HRESULT CIcon::Initialize_Prototype()
 {
 	return S_OK;
@@ -31,9 +36,7 @@ HRESULT CIcon::Initialize(void* pArg)
 		return E_FAIL;
 
 	ICON_DESC* pDesc = static_cast<ICON_DESC*>(pArg);
-	m_pTargetTransform = pDesc->pTargetTransform;
 	m_iTextureIdx = pDesc->iTextureIdx;
-	Safe_AddRef(m_pTargetTransform);
 
 	/* 행렬 저장해. */
 	m_pOrthoTransform = CTransform::Create(m_pDevice, m_pContext);
@@ -54,9 +57,6 @@ void CIcon::Update(_float fTimeDelta)
 
 void CIcon::Late_Update(_float fTimeDelta)
 {
-	/* 업데이트 어느 순간에 돌지 모르니까. */
-	m_pTransformCom->Set_State(STATE::POSITION, 
-		m_pTargetTransform->Get_State(STATE::POSITION) + XMVectorSet(0.f, 2.0f, 0.f, 0.f));
 
 	if (true == m_pGameInstance->IsInViewPort(m_pTransformCom->Get_State(STATE::POSITION), 1.f, 1.f, &m_fOrthoX, &m_fOrthoY))
 	{
@@ -68,8 +68,8 @@ void CIcon::Late_Update(_float fTimeDelta)
 			CEffect_Icon::EFFECT_ICON_DESC Desc;
 			Desc.pTargetTransform = m_pTransformCom;
 
-			m_pGameInstance->Add_PoolingObject_ToLayer(TEXT("Effect_Icon"), ENUM_CLASS(LEVEL::TUTORIAL),
-				&Desc, ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_Effect"));
+			m_pGameInstance->Add_PoolingObject_ToLayer(TEXT("Effect_Icon"), m_pGameInstance->Get_LevelID(),
+				&Desc, m_pGameInstance->Get_LevelID(), TEXT("Layer_Effect"));
 
 			m_fTimeAcc = 0.f;
 		}
@@ -211,7 +211,6 @@ void CIcon::Free()
 	Safe_Release(m_pTextureCom);
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pTargetTransform);
 	Safe_Release(m_pOrthoTransform);
 	Safe_Release(m_pOrthogonalCom);
 }
