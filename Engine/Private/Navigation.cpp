@@ -104,6 +104,15 @@ void CNavigation::Create_Cells(_vector vPointA, _vector vPointB, _vector vPointC
 
 }
 
+void CNavigation::Find_CurrentCell(_vector vPosition)
+{
+	for (_uint i = 0; i < m_Cells.size(); ++i)
+	{
+		if (true == m_Cells[i]->Check_InCell(vPosition))
+			m_iCurrentCellIndex = i;
+	}
+}
+
 HRESULT CNavigation::Initialize_Prototype(const _tchar* pNavigationDataFiles)
 {
 	_ulong		dwByte = { };
@@ -143,9 +152,11 @@ HRESULT CNavigation::Initialize(void* pArg)
 		return S_OK;
 
 	NAVIGATION_DESC* pDesc = static_cast<NAVIGATION_DESC*>(pArg);
-	
-	/* 현재 타고 있는 셀의 인덱스를 구해낸다. */
+	_float3 vPosition = pDesc->vPosition;
 	m_iCurrentCellIndex = pDesc->iCurrentCellIndex;
+
+	/* 현재 타고 있는 셀의 인덱스를 최초에 한번, 구해낸다. */
+	Find_CurrentCell(XMLoadFloat3(&vPosition));
 
 	return S_OK;
 }

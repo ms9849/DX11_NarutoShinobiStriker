@@ -29,6 +29,7 @@ public:
 	HRESULT Initialize(const _float3* vPoints, _uint iIndex);
 	_bool isIn(_fvector vPosition, _int* pNeighborIndex, _float3* pSlidingVector);
 
+	_bool Check_InCell(_fvector vPosition);
 	_bool Compare(_fvector vSourPoint, _fvector vDestPoint);
 	_float Compute_Height(_fvector vPoint);
 #ifdef _DEBUG

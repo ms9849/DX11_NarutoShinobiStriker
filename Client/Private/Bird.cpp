@@ -197,7 +197,12 @@ HRESULT CBird::Initialize(void* pArg)
         return E_FAIL;
 
     m_iNumMeshes = m_pModelCom->Get_NumMeshes();
-    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(1.f, 0.f, 3.f, 1.f));
+
+    if (TRIGGER_TYPE::TUTORIAL_SPAWNER_01 == m_pGameManager->Get_CurrentTrigger())
+        m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(1.f, 0.f, 2.f, 1.f));
+    else if (TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_01 == m_pGameManager->Get_CurrentTrigger())
+        m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(96.838f, 7.775f, -58.551f, 1.f));
+
     ///* 상태 초기화 및 시작. */
     m_pState = CBird_IdleState::Create(m_pNavigationCom, this);
     m_pState->Start(true);
@@ -283,13 +288,13 @@ HRESULT CBird::Ready_Components()
 
     if (LEVEL::TUTORIAL == m_pGameManager->Get_NextLevel())
     {
-        if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Navigation_Tutorial"),
+        if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_Component_Navigation_Tutorial"),
             TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
             return E_FAIL;
     }
     else if (LEVEL::KONOHA_VILLAGE == m_pGameManager->Get_NextLevel())
     {
-        if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Navigation_KonohaVillage"),
+        if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_Component_Navigation_KonohaVillage_2"),
             TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
             return E_FAIL;
     }
@@ -305,8 +310,6 @@ HRESULT CBird::Ready_Components()
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_OBB"),
         TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &OBBDesc)))
         return E_FAIL;
-
-
 
     return S_OK;
 }

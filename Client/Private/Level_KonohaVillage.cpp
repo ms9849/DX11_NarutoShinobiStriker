@@ -100,6 +100,21 @@ void CLevel_KonohaVillage::Update(_float fTimeDelta)
 	m_pGameManager->Check_Collision(TEXT("Player_Body"), TEXT("TriggerBox"), COLLISION_TYPE::TRIGGER);
 #pragma endregion
 
+#pragma region TRIGGER_HANDLE
+	if (TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_01 == m_pGameManager->Get_CurrentTrigger())
+		//&& (0 == m_pGameInstance->Get_LayerSize(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Layer_Monster"))))
+	{
+		m_pGameManager->OnTrigger(TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_01_CLEAR);
+	}
+
+	if (TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_02 == m_pGameManager->Get_CurrentTrigger())
+		//&& (0 == m_pGameInstance->Get_LayerSize(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Layer_Monster"))))
+	{
+		m_pGameManager->OnTrigger(TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_02_CLEAR);
+	}
+
+#pragma endregion
+	
 	m_pGameManager->Update_Collision();
 
 	m_pGameInstance->Check_GeometryPicking();

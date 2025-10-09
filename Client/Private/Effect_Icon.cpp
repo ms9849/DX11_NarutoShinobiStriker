@@ -52,15 +52,15 @@ void CEffect_Icon::Update(_float fTimeDelta)
 
     m_fTimeAcc += fTimeDelta;
 
-    if (m_fTimeAcc >= 0.25f)
+    if (m_fTimeAcc >= 0.2f)
     {
         m_IsDead = true;
         m_fTimeAcc = 0.f;
-        m_pTransformCom->Set_Scale(1.f, 1.f, 1.f);
+        m_pTransformCom->Set_Scale(0.5f, 0.5f, 1.0f);
         Safe_Release(m_pTargetTransform);
     }
     else
-        m_pTransformCom->Set_Scale(m_fTimeAcc * 3.f + 1.f, m_fTimeAcc * 3.f + 1.f, 1.f);
+        m_pTransformCom->Set_Scale(m_fTimeAcc * 4.f + 0.5f, m_fTimeAcc * 4.f + 0.5f, 1.0f);
 }
 
 void CEffect_Icon::Late_Update(_float fTimeDelta)

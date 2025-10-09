@@ -57,7 +57,6 @@ void CIcon::Update(_float fTimeDelta)
 
 void CIcon::Late_Update(_float fTimeDelta)
 {
-
 	if (true == m_pGameInstance->IsInViewPort(m_pTransformCom->Get_State(STATE::POSITION), 1.f, 1.f, &m_fOrthoX, &m_fOrthoY))
 	{
 		m_IsOrthogonal = false;

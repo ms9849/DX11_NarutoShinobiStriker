@@ -37,7 +37,7 @@ HRESULT CNPC_KaKashi::Initialize(void* pArg)
 
 	m_iNumMeshes = m_pModelCom->Get_NumMeshes();
 
-	m_pModelCom->Set_AnimIndex("Kakashi_etc_Tutorial_Loop", 1.f, true, 0.05f);
+	m_pModelCom->Set_AnimIndex("KakashiNext_Idle_Loop", 1.f, true, 0.05f);
 	m_eAnimState = ANIM_STATE::ANIM_IDLE;
 
 	m_pPlayerTransform = m_pGameManager->Get_PlayerPtr()->Get_Transform();
@@ -56,14 +56,22 @@ void CNPC_KaKashi::Priority_Update(_float fTimeDelta)
 
 void CNPC_KaKashi::Update(_float fTimeDelta)
 {
+	if (true == m_IsActiveDeath)
+	{
+		m_fTimeAcc += fTimeDelta;
+
+		if (m_fTimeAcc >= 5.f)
+			m_IsDead = true;
+	}
+
 	Check_Talkable();
 
 	_bool isAnimFinished = m_pModelCom->Play_Animation(fTimeDelta);
 
 	if (ANIM_STATE::ANIM_GREET == m_eAnimState && true == isAnimFinished)
 	{
-		m_pModelCom->Set_AnimIndex("Kakashi_etc_Tutorial_Loop", 1.f, true, 0.05f);
-		m_eAnimState = ANIM_STATE::ANIM_IDLE;
+		m_pModelCom->Set_AnimIndex("KakashiNext_Idle_Loop", 1.f, true, 0.05f);
+		m_eAnimState = ANIM_STATE::ANIM_IDLE; 
 	}
 	
 	m_pIcon->Set_Position(m_pTransformCom->Get_State(STATE::POSITION) + XMVectorSet(0.f, 2.25f, 0.f, 0.f));
@@ -136,6 +144,7 @@ void CNPC_KaKashi::Create_Dialog()
 void CNPC_KaKashi::Start_Dialog()
 {
 	/* 카메라도 NPC 전용으로 교체할 것. */
+	m_pIcon->Set_Dead(true);
 	m_pModelCom->Set_AnimIndex("KakashiNext_Reaction3", 1.f, true);
 	m_pGameManager->Change_Camera(static_cast<LEVEL>(m_pGameInstance->Get_LevelID()), TEXT("NPC_Talk_Caemra"));
 	m_pGameManager->Get_PlayerPtr()->Set_Visible(false);
@@ -147,9 +156,6 @@ void CNPC_KaKashi::Start_Dialog()
 
 	if (TRIGGER_TYPE::END == m_pGameManager->Get_CurrentTrigger())
 		m_pGameManager->OnTrigger(TRIGGER_TYPE::TUTORIAL_KAKASHI_TALK);
-
-	else if (TRIGGER_TYPE::TUTORIAL_CLEAR == m_pGameManager->Get_CurrentTrigger())
-		m_pGameManager->OnTrigger(TRIGGER_TYPE::KONOHA_VILLAGE_KAKASHI_TALK_1);
 }
 
 void CNPC_KaKashi::End_Dialog()
@@ -157,12 +163,16 @@ void CNPC_KaKashi::End_Dialog()
 	m_pGameManager->Change_Camera(static_cast<LEVEL>(m_pGameInstance->Get_LevelID()), TEXT("Main_Camera"));
 	m_pGameManager->Set_Dialog_Visible(false);
 	m_pGameManager->Get_PlayerPtr()->Set_Visible(true);
-	m_isTalking = false;
+	m_IsTalking = false;
 	m_iCurrentDialog = 0;
 	m_pGameManager->Set_Talking(false);
 
 	m_pGameManager->Set_AttackType_Visible(true);
 	m_pGameManager->Set_SkillSlot_Visible(true);
+	m_IsActiveDeath = true;
+
+	if (TRIGGER_TYPE::TUTORIAL_CLEAR == m_pGameManager->Get_CurrentTrigger())
+		m_pGameManager->OnTrigger(TRIGGER_TYPE::KONOHA_VILLAGE_KAKASHI_TALK_1);
 }
 
 void CNPC_KaKashi::Check_Talkable()
@@ -171,19 +181,19 @@ void CNPC_KaKashi::Check_Talkable()
 	_float fDist = XMVectorGetX(XMVector3Length(vPlayerPos - m_pTransformCom->Get_State(STATE::POSITION)));
 
 	/* 이미 대화중이여도 대화를 하면 안됨. */
-	if (fDist <= 1.5f && false == m_isTalking)
-		m_isTalkable = true;
+	if (fDist <= 1.5f && false == m_IsTalking)
+		m_IsTalkable = true;
 
 	else
-		m_isTalkable = false;
+		m_IsTalkable = false;
 }
 
 void CNPC_KaKashi::Talk()
 {
 	/* F를 눌러서 대화 */
-	if(m_pGameInstance->Key_Down(DIK_F) && false == m_isTalking && true == m_isTalkable)
+	if(m_pGameInstance->Key_Down(DIK_F) && false == m_IsTalking && true == m_IsTalkable)
 	{ 
-		m_isTalking = true;
+		m_IsTalking = true;
 		m_iCurrentDialog = 0;
 
 		Start_Dialog();
@@ -192,7 +202,7 @@ void CNPC_KaKashi::Talk()
 	}
 
 	/* 이미 대화중이라면 */
-	else if (m_pGameInstance->Key_Down(DIK_F) && true == m_isTalking)
+	else if (m_pGameInstance->Key_Down(DIK_F) && true == m_IsTalking)
 	{
 		/* 대화 종료 */
 		if (m_iCurrentDialog >= m_iDialogSize - 1)

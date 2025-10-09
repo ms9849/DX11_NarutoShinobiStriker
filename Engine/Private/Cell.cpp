@@ -69,6 +69,26 @@ _bool CCell::isIn(_fvector vPosition, _int* pNeighborIndex, _float3* pSlidingVec
 	return true;
 }
 
+_bool CCell::Check_InCell(_fvector vPosition)
+{
+	for (size_t i = 0; i < ENUM_CLASS(NAVI_LINE::END); i++)
+	{
+		/* 시작점 -> 객체의 위치로 향하는 벡터와 */
+		_vector	vDir = XMVector3Normalize(vPosition - XMLoadFloat3(&m_vPoints[i]));
+		/* 선분의 법선 벡터를 */
+		_vector vNormal = XMLoadFloat3(&m_vNormals[i]);
+
+		/* 내적해서 결과값 (cos 함수의 결과) 0보다 크다면, */
+		/* 0 ~ 90도, 270 ~ 360도 사이, 즉 셀을 벗어났다고 판정한다.*/
+		if (0.f < XMVectorGetX(XMVector3Dot(vDir, vNormal)))
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
 _bool CCell::Compare(_fvector vSourPoint, _fvector vDestPoint)
 {
 	if (true == XMVector3Equal(XMLoadFloat3(&m_vPoints[ENUM_CLASS(NAVI_POINT::A)]), vSourPoint))
