@@ -63,8 +63,9 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	_bool Use_Skill(BOSS_SKILL eSkillList);
-	void  Update_SkillCoolDown(_float fTimeDelta);
+	HRESULT Start_Battle();
+	_bool	Use_Skill(BOSS_SKILL eSkillList);
+	void	Update_SkillCoolDown(_float fTimeDelta);
 
 private:
 	/* 추후 상태 추가해야함*/
@@ -86,6 +87,7 @@ private:
 	_bool		m_IsActive = { true };
 
 private:
+	HRESULT Ready_Position();
 	HRESULT Ready_Components();
 	HRESULT Ready_PartObjects();
 	HRESULT Ready_BossHPPanel();

@@ -3,6 +3,7 @@
 #include "GameManager.h"
 #include "GameInstance.h"
 #include "TriggerBox.h"
+#include "Boss.h"
 
 CTrigger_Manager::CTrigger_Manager()
     : m_pGameManager { CGameManager::GetInstance() }
@@ -34,18 +35,18 @@ HRESULT CTrigger_Manager::OnTrigger(TRIGGER_TYPE eTriggerType)
 
     else if (TRIGGER_TYPE::TUTORIAL_SPAWNER_01 == eTriggerType && false == m_IsTriggerActivated[ENUM_CLASS(TRIGGER_TYPE::TUTORIAL_SPAWNER_01)])
     {
-        /* 테스트용 코드. 추후 제거해야함. */
-        if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Boss"),
-        	ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_Monster"))))
-        	return E_FAIL;
+        /* 보스 테스트용 코드. 주석 풀었다 걸었다 하면서 체크 계속할 것. */
+        //if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Boss"),
+        //	ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_Monster"))))
+        //	return E_FAIL;
 
-        //if(FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_WhiteJetsu"),
-        //    ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_Monster"))))
-        //    return E_FAIL;
+        if(FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_WhiteJetsu"),
+            ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_Monster"))))
+            return E_FAIL;
 
-        //if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Bird"),
-        //    ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_Monster"))))
-        //    return E_FAIL;
+        if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Bird"),
+            ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_Monster"))))
+            return E_FAIL;
 
         m_pGameManager->AlertPanel_Start_FadeIn(TEXT("적을 쓰러뜨려라!"));
         m_IsTriggerActivated[ENUM_CLASS(TRIGGER_TYPE::TUTORIAL_SPAWNER_01)] = true;
@@ -137,17 +138,25 @@ HRESULT CTrigger_Manager::OnTrigger(TRIGGER_TYPE eTriggerType)
     /* 보스 스포너. 건드리면 컷씬 출력 */
     else if (TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_BOSS == eTriggerType && false == m_IsTriggerActivated[ENUM_CLASS(TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_BOSS)])
     {
+        if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_Boss"),
+        ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Layer_Boss"))))
+            return E_FAIL;
 
+        m_pGameManager->Set_CutScene_Visible(true);
+        m_pGameManager->Change_Camera(LEVEL::KONOHA_VILLAGE, TEXT("CutScene_Camera"), nullptr);
+
+        m_IsTriggerActivated[ENUM_CLASS(TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_BOSS)] = true;
     }
-    /* 여기서 진짜 보스 출력 */
+    /* 보스와의 전투 시작 이벤트 */
     else if (TRIGGER_TYPE::KONOHA_VILLAGE_BOSS_CUTSCENE_END == eTriggerType && false == m_IsTriggerActivated[ENUM_CLASS(TRIGGER_TYPE::KONOHA_VILLAGE_BOSS_CUTSCENE_END)])
     {
-
+        static_cast<CBoss*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Layer_Boss"), 0))->Start_Battle();
+        m_pGameManager->AlertPanel_Start_FadeIn(TEXT("시연회를 위해 적을 쓰러뜨려라!"));
+        m_IsTriggerActivated[ENUM_CLASS(TRIGGER_TYPE::KONOHA_VILLAGE_BOSS_CUTSCENE_END)] = true;
     }
     /* 끝..*/
     else if (TRIGGER_TYPE::CLEAR == eTriggerType && false == m_IsTriggerActivated[ENUM_CLASS(TRIGGER_TYPE::CLEAR)])
     {
-
     }
 
     return S_OK;

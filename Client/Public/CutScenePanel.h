@@ -31,8 +31,12 @@ public:
 
 private:
 	CFont* m_pFontCom = { nullptr };
+	CFont* m_pScriptFontCom = { nullptr };
+
 	_bool  m_IsVisible = { true };
+	_bool  m_IsActiveScript = { false };
 	_wstring m_strFontText = {};
+	_wstring m_strScriptFontText = {};
 	
 private:
 	HRESULT Ready_Components();
