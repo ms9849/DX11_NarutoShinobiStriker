@@ -50,9 +50,9 @@ _bool CBoss_IdleState::End()
 	return true;
 }
 
-CBoss_IdleState* CBoss_IdleState::Create(CNavigation* pNavigation, CBoss* pPajama)
+CBoss_IdleState* CBoss_IdleState::Create(CNavigation* pNavigation, CBoss* pBoss)
 {
-	return new CBoss_IdleState(pNavigation, pPajama);
+	return new CBoss_IdleState(pNavigation, pBoss);
 }
 
 void CBoss_IdleState::Free()

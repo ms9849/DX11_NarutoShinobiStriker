@@ -27,19 +27,6 @@ HRESULT CCutScenePanel::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	TRIGGER_TYPE eType = m_pGameManager->Get_CurrentTrigger();
-
-	switch (eType)
-	{
-	case TRIGGER_TYPE::TUTORIAL_CLEAR:
-		m_strFontText = TEXT("나뭇잎 마을");
-		break;
-
-	default:
-		m_strFontText = TEXT("중급 닌자 시험장");
-		break;
-	}
-
 	return S_OK;
 }
 
@@ -49,6 +36,25 @@ void CCutScenePanel::Priority_Update(_float fTimeDelta)
 
 void CCutScenePanel::Update(_float fTimeDelta)
 {
+	TRIGGER_TYPE eType = m_pGameManager->Get_CurrentTrigger();
+
+	switch (eType)
+	{
+	case TRIGGER_TYPE::TUTORIAL_CLEAR:
+		m_strFontText = TEXT("나뭇잎 마을");
+		break;
+
+	case TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_BOSS:
+		m_strFontText = TEXT("CUTSCENE");
+		m_strScriptFontText = TEXT("(boss) 네 놈의 시연회는 여기까지다!!");
+		m_IsActiveScript = true;
+		break;
+
+	default:
+		m_strFontText = TEXT("중급 닌자 시험장");
+		break;
+	}
+
 }
 
 void CCutScenePanel::Late_Update(_float fTimeDelta)
@@ -63,6 +69,14 @@ void CCutScenePanel::Late_Update(_float fTimeDelta)
 		1.f, XMVectorSet(1.f, 1.f, 1.f, 1.f));
 
 	m_pGameInstance->Add_Font(m_pFontCom);
+
+	if (true == m_IsActiveScript)
+	{
+		m_pScriptFontCom->Bind_Resources(m_strScriptFontText.c_str(), _float2{ 0.f, -287.f }, true,
+			0.6f, XMVectorSet(1.f, 1.f, 1.f, 1.f));
+
+		m_pGameInstance->Add_Font(m_pScriptFontCom);
+	}
 }
 
 HRESULT CCutScenePanel::Render()
@@ -91,6 +105,9 @@ HRESULT CCutScenePanel::Ready_Components()
 		TEXT("Com_Font"), reinterpret_cast<CComponent**>(&m_pFontCom))))
 		return E_FAIL;
 
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Font"),
+		TEXT("Com_Font_Script"), reinterpret_cast<CComponent**>(&m_pScriptFontCom))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -132,4 +149,5 @@ void CCutScenePanel::Free()
 	__super::Free();
 
 	Safe_Release(m_pFontCom);
+	Safe_Release(m_pScriptFontCom);
 }

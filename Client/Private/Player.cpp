@@ -341,7 +341,8 @@ HRESULT CPlayer::Ready_PartObjects()
 {
 	CUpper_Character::UPPER_PLAYER_DESC UpperDesc{};
 	UpperDesc.pParentTransform = m_pTransformCom;
-	UpperDesc.strModelName = m_pGameManager->Get_PlayerModelInfo(SELECT_TYPE::UPPER);
+	/* 일부 모델은 모든 레벨에 안들어가있어서 터짐. */
+	UpperDesc.strModelName = false == m_pGameManager->IsOneCloth() ? m_pGameManager->Get_PlayerModelInfo(SELECT_TYPE::UPPER) : m_pGameManager->Get_PlayerModelInfo(SELECT_TYPE::ONE_CLOTH);
 
 	CHead_Character::HEAD_PLAYER_DESC HeadDesc{};
 	HeadDesc.pParentTransform = m_pTransformCom;

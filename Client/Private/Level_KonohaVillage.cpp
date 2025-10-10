@@ -69,6 +69,9 @@ HRESULT CLevel_KonohaVillage::Initialize()
 
 void CLevel_KonohaVillage::Update(_float fTimeDelta)
 {
+	/* 추후 지워야할 디버깅 용 코드*/
+	m_pGameManager->OnTrigger(TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_02_CLEAR);
+	/**/
 #ifdef _DEBUG
 	if (m_pGameInstance->Key_Down(DIK_0))
 	{
@@ -112,6 +115,16 @@ void CLevel_KonohaVillage::Update(_float fTimeDelta)
 		//&& (0 == m_pGameInstance->Get_LayerSize(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Layer_Monster"))))
 	{
 		m_pGameManager->OnTrigger(TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_02_CLEAR);
+	}
+
+	if (TRIGGER_TYPE::KONOHA_VILLAGE_BOSS_CUTSCENE_END == m_pGameManager->Get_CurrentTrigger())
+		//&& (0 == m_pGameInstance->Get_LayerSize(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_Monster"))))
+	{
+		m_pGameManager->WinPanel_Start_FadeIn();
+		m_fTimeAcc += fTimeDelta;
+
+		if (m_fTimeAcc >= 3.f)
+			m_pGameManager->OnTrigger(TRIGGER_TYPE::CLEAR);
 	}
 
 #pragma endregion

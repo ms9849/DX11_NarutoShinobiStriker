@@ -119,7 +119,7 @@ void CLevel_Tutorial::Update(_float fTimeDelta)
 		m_pGameManager->WinPanel_Start_FadeIn();
 		m_fTimeAcc += fTimeDelta;
 
-		if (m_fTimeAcc >= 5.f)
+		if (m_fTimeAcc >= 3.f)
 			m_pGameManager->OnTrigger(TRIGGER_TYPE::TUTORIAL_CLEAR);
 	}
 

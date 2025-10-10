@@ -27,11 +27,15 @@ public:
 	virtual void	Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+public:
+	virtual void OnChange(const _float4x4* pWorldMatrix) override;
+
 private:
 	_float m_fTimeAcc = { 0.f };
 	_float3 m_vCameraPos = {};
 	class CGameManager* m_pGameManager = { nullptr };
 	class CTransform* m_pPlayerTransform = { nullptr };
+	class CTransform* m_pTargetTransform = { nullptr };
 
 	_float3 m_vStartPos = {};
 	_float3 m_vEndPos = {};

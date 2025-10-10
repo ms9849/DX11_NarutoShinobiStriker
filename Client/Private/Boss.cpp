@@ -16,6 +16,7 @@
 #include "Boss_BeatenBlastedState.h"
 #include "Boss_ElectricShockState.h"
 #include "Boss_DeadState.h"
+#include "Boss_StandState.h"
 
 #include "BossHPPanel.h"
 #include "Icon.h"
@@ -206,6 +207,9 @@ HRESULT CBoss::Initialize(void* pArg)
     if (FAILED(__super::Initialize(&Desc)))
         return E_FAIL;
 
+    if (FAILED(Ready_Position()))
+        return E_FAIL;
+
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
@@ -213,19 +217,13 @@ HRESULT CBoss::Initialize(void* pArg)
     //if (FAILED(Ready_HPBar()))
     //    return E_FAIL;
 
-    if (FAILED(Ready_BossHPPanel()))
-        return E_FAIL;
-
-    if (FAILED(Ready_BossIcon()))
-        return E_FAIL;
-
     if (FAILED(Ready_PartObjects()))
         return E_FAIL;
 
     m_pGameManager->Add_TargetTransform(m_pTransformCom);
 
     /* 상태 초기화 및 시작. */
-    m_pState = CBoss_IdleState::Create(m_pNavigationCom, this);
+    m_pState = CBoss_StandState::Create(m_pNavigationCom, this);
     m_pState->Start(true);
 
     m_SkillCoolDowns[ENUM_CLASS(BOSS_SKILL::FIREBALL)] = 10.f;
@@ -273,9 +271,11 @@ void CBoss::Update(_float fTimeDelta)
     m_pSpinKickColliderCom->Update(PlayerMatrix);
     m_pRushColliderCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
     /* 체력 설정. 한프레임 늦긴한다. */
-    m_pHPBar->Set_Progress(m_fCurrentHP);
+    if(nullptr != m_pHPBar)
+        m_pHPBar->Set_Progress(m_fCurrentHP);
 
-    m_pIcon->Set_Position(m_pTransformCom->Get_State(STATE::POSITION) + XMVectorSet(0.f, 2.0f, 0.f, 0.f));
+    if (nullptr != m_pIcon)
+        m_pIcon->Set_Position(m_pTransformCom->Get_State(STATE::POSITION) + XMVectorSet(0.f, 2.0f, 0.f, 0.f));
 }
 
 void CBoss::Late_Update(_float fTimeDelta)
@@ -329,11 +329,39 @@ void CBoss::Update_SkillCoolDown(_float fTimeDelta)
     }
 }
 
+HRESULT CBoss::Start_Battle()
+{
+    if (FAILED(Ready_BossHPPanel()))
+        return E_FAIL;
+
+    if (FAILED(Ready_BossIcon()))
+        return E_FAIL;
+
+    Change_State(CBoss_IdleState::Create(m_pNavigationCom, this), true);
+
+    return S_OK;
+}
+
+HRESULT CBoss::Ready_Position()
+{
+    if (TRIGGER_TYPE::TUTORIAL_SPAWNER_01 == m_pGameManager->Get_CurrentTrigger())
+        m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(0.f, 0.f, 0.f, 1.f));
+
+    else if (TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_BOSS == m_pGameManager->Get_CurrentTrigger())
+    {
+        m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(-85.641, 28.7f, 59.220f, 1.f));
+        m_pTransformCom->Rotation(0.f, 180.f, 0.f);
+    }
+
+    return S_OK;
+}
+
 HRESULT CBoss::Ready_Components()
 {
     /* Com_Navigation */
     CNavigation::NAVIGATION_DESC Desc;
     Desc.iCurrentCellIndex = 0;
+    XMStoreFloat3(&Desc.vPosition, m_pTransformCom->Get_State(STATE::POSITION));
 
     if (LEVEL::TUTORIAL == m_pGameManager->Get_NextLevel())
     {
