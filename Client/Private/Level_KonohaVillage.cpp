@@ -247,7 +247,7 @@ HRESULT CLevel_KonohaVillage::Ready_Layer_Camera(const _wstring& strLayerTag)
 		PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_SkillActionCamera"), &SkillActionCameraDesc)))))
 		return E_FAIL;
 
-	/* 카메라는 게임 매니저에 추가하여 관리한다. */
+	/* 컷씬 카메라. */
 	if (FAILED(m_pGameManager->Add_Camera(LEVEL::KONOHA_VILLAGE, TEXT("CutScene_Camera"), static_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
 		PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_CutSceneCamera"), &MainCameraDesc)))))
 		return E_FAIL;

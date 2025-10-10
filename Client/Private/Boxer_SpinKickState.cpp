@@ -37,7 +37,7 @@ CBoxerState* CBoxer_SpinKickState::Update(_float fTimeDelta)
 	if (ANIM_STATE::ATTACK_START == m_eAnimState)
 	{
 		m_pBoxer->Get_Transform()->LookAt_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION));
-		m_pBoxer->Get_Transform()->Chase_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION), fTimeDelta * 2.f);
+		m_pBoxer->Get_Transform()->Chase_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION), fTimeDelta * 2.f, m_pNavigationCom);
 	}
 
 	/* 나뭇잎 선풍 시작 상태에다가, 달려가는 중에 플레이어랑 가깝다면 */

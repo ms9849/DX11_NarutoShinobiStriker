@@ -250,7 +250,7 @@
     <ClInclude Include="..\Public\Level_KonohaVillage.h" />
     <ClInclude Include="..\Public\LockOn_Manager.h" />
     <ClInclude Include="..\Public\MainCamera.h" />
-    <ClInclude Include="..\Public\MonsterSpawner.h" />
+    <ClInclude Include="..\Public\TriggerBox.h" />
     <ClInclude Include="..\Public\NPCTalkCamera.h" />
     <ClInclude Include="..\Public\NPC_KaKashi.h" />
     <ClInclude Include="..\Public\Player_AerialFireBallState.h" />
@@ -321,7 +321,7 @@
     <ClInclude Include="..\Public\TitleUI.h" />
     <ClInclude Include="..\Public\TimerPanel.h" />
     <ClInclude Include="..\Public\Tree.h" />
-    <ClInclude Include="..\Public\TriggerBox.h" />
+    <ClInclude Include="..\Public\EventObject.h" />
     <ClInclude Include="..\Public\TutorialMap.h" />
     <ClInclude Include="..\Public\UI_Manager.h" />
     <ClInclude Include="..\Public\Upper_Character.h" />
@@ -440,7 +440,7 @@
     <ClCompile Include="..\Private\Level_KonohaVillage.cpp" />
     <ClCompile Include="..\Private\LockOn_Manager.cpp" />
     <ClCompile Include="..\Private\MainCamera.cpp" />
-    <ClCompile Include="..\Private\MonsterSpawner.cpp" />
+    <ClCompile Include="..\Private\TriggerBox.cpp" />
     <ClCompile Include="..\Private\NPCTalkCamera.cpp" />
     <ClCompile Include="..\Private\NPC_KaKashi.cpp" />
     <ClCompile Include="..\Private\Player_AerialFireBallState.cpp" />
@@ -512,7 +512,7 @@
     <ClCompile Include="..\Private\TitleUI.cpp" />
     <ClCompile Include="..\Private\TimerPanel.cpp" />
     <ClCompile Include="..\Private\Tree.cpp" />
-    <ClCompile Include="..\Private\TriggerBox.cpp" />
+    <ClCompile Include="..\Private\EventObject.cpp" />
     <ClCompile Include="..\Private\TutorialMap.cpp" />
     <ClCompile Include="..\Private\UI_Manager.cpp" />
     <ClCompile Include="..\Private\Upper_Character.cpp" />

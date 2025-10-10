@@ -196,7 +196,6 @@ HRESULT CLevel_Tutorial::Ready_Layer_Camera(const _wstring& strLayerTag)
 		return E_FAIL;
 
 	CMainCamera::MAIN_CAMERA_DESC			MainCameraDesc{};
-
 	MainCameraDesc.fFovy = XMConvertToRadians(60.0f);
 	MainCameraDesc.fNear = 0.1f;
 	MainCameraDesc.fFar = 1000.f;
@@ -209,7 +208,6 @@ HRESULT CLevel_Tutorial::Ready_Layer_Camera(const _wstring& strLayerTag)
 	if (FAILED(m_pGameManager->Add_Camera(LEVEL::TUTORIAL, TEXT("Main_Camera"), static_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
 		PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_MainCamera"), &MainCameraDesc)))))
 		return E_FAIL;
-
 
 	CActionCamera::ACTION_CAMERA_DESC		ActionCameraDesc{};
 	ActionCameraDesc.fFovy = XMConvertToRadians(60.0f);

@@ -18,7 +18,7 @@
 #include "Gate.h"
 #include "Tree.h"
 #include "Font.h"
-#include "MonsterSpawner.h"
+#include "TriggerBox.h"
 
 #pragma region Skill
 
@@ -150,7 +150,7 @@ HRESULT CMainApp::Ready_Prototypes()
 
 	/* For.Prototype_GameObject_MonsterSpawner*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_MonsterSpawner"),
-		CMonsterSpawner::Create(m_pDevice, m_pContext, OBJECTID::MONSTER_SPAWNER))))
+		CTriggerBox::Create(m_pDevice, m_pContext, OBJECTID::MONSTER_SPAWNER))))
 		return E_FAIL;
 
 #pragma endregion

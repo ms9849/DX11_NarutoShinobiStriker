@@ -68,6 +68,7 @@ private:
 
 private:
 	HRESULT Ready_Components();
+	HRESULT Ready_Position();
 	HRESULT Bind_ShaderResources();
 	void	Update_State(_float fTimeDelta);
 public:

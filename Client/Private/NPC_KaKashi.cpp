@@ -296,4 +296,5 @@ void CNPC_KaKashi::Free()
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pGameManager);
 	Safe_Release(m_pPlayerTransform);
+	Safe_Release(m_pIcon);
 }

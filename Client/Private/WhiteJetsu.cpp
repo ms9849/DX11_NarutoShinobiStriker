@@ -182,6 +182,9 @@ HRESULT CWhiteJetsu::Initialize(void* pArg)
     if (FAILED(__super::Initialize(&Desc)))
         return E_FAIL;
 
+    if (FAILED(Ready_Position()))
+        return E_FAIL;
+
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
@@ -189,11 +192,6 @@ HRESULT CWhiteJetsu::Initialize(void* pArg)
         return E_FAIL;
 
     m_iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-    if (TRIGGER_TYPE::TUTORIAL_SPAWNER_01 == m_pGameManager->Get_CurrentTrigger())
-        m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(7.f, 0.f, 3.f, 1.f));
-    else if (TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_01 == m_pGameManager->Get_CurrentTrigger())
-        m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(95.838f, 7.775f, -60.551f, 1.f));
 
     /* 상태 초기화 및 시작. */
     m_pGameManager->Add_TargetTransform(m_pTransformCom);
@@ -307,6 +305,7 @@ HRESULT CWhiteJetsu::Ready_Components()
     /* Com_Navigation */
     CNavigation::NAVIGATION_DESC Desc;
     Desc.iCurrentCellIndex = 0;
+    XMStoreFloat3(&Desc.vPosition, m_pTransformCom->Get_State(STATE::POSITION));
 
     if (LEVEL::TUTORIAL == m_pGameManager->Get_NextLevel())
     {
@@ -343,6 +342,16 @@ HRESULT CWhiteJetsu::Ready_Components()
         TEXT("Com_Collider_HandAttack"), reinterpret_cast<CComponent**>(&m_pHandAttackColliderCom), &ColliderDesc)))
         return E_FAIL;
 
+
+    return S_OK;
+}
+
+HRESULT CWhiteJetsu::Ready_Position()
+{
+    if (TRIGGER_TYPE::TUTORIAL_SPAWNER_01 == m_pGameManager->Get_CurrentTrigger())
+        m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(7.f, 0.f, 3.f, 1.f));
+    else if (TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_01 == m_pGameManager->Get_CurrentTrigger())
+        m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(94.140f, 7.775f, -69.703f, 1.f));
 
     return S_OK;
 }

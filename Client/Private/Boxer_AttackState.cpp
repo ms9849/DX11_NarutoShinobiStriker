@@ -36,7 +36,7 @@ CBoxerState* CBoxer_AttackState::Update(_float fTimeDelta)
 
 	if (false == IsAnimFinished && fAnimProgress <= 0.4f)
 		m_pBoxer->Get_Transform()->Go_Straight(fTimeDelta * m_pGameInstance->Calc_Quadratic(-10.f, 4.f, 0.f, fAnimProgress),
-			nullptr);
+			m_pNavigationCom);
 
 	if (true == IsAnimFinished && ANIM_STATE::ATTACK_01 == m_eAnimState)
 	{
