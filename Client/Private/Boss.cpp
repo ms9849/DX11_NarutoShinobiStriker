@@ -400,17 +400,17 @@ HRESULT CBoss::Ready_PartObjects()
     FaceDesc.strModelName = TEXT("Prototype_Component_Model_Face_Boss");
 
     /* Part_Upper */
-    if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Upper_Player"),
+    if (FAILED(__super::Add_PartObject(m_pGameInstance->Get_LevelID(), TEXT("Prototype_GameObject_Upper_Player"),
         TEXT("Part_Upper"), &UpperDesc)))
         return E_FAIL;
 
     /* Part_Head */
-    if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Head_Player"),
+    if (FAILED(__super::Add_PartObject(m_pGameInstance->Get_LevelID(), TEXT("Prototype_GameObject_Head_Player"),
         TEXT("Part_Head"), &HeadDesc)))
         return E_FAIL;
 
     /* Part_Face */
-    if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Face_Player"),
+    if (FAILED(__super::Add_PartObject(m_pGameInstance->Get_LevelID(), TEXT("Prototype_GameObject_Face_Player"),
         TEXT("Part_Face"), &FaceDesc)))
         return E_FAIL;
 

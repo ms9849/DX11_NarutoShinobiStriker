@@ -176,6 +176,7 @@
     <ClInclude Include="..\Public\Boss_SharinganState.h" />
     <ClInclude Include="..\Public\Boss_SlidingKunaiState.h" />
     <ClInclude Include="..\Public\Boss_SpinKickState.h" />
+    <ClInclude Include="..\Public\Boss_StandState.h" />
     <ClInclude Include="..\Public\Boss_StepState.h" />
     <ClInclude Include="..\Public\Boss_WalkState.h" />
     <ClInclude Include="..\Public\Boss_WoodHandState.h" />
@@ -367,6 +368,7 @@
     <ClCompile Include="..\Private\Boss_SharinganState.cpp" />
     <ClCompile Include="..\Private\Boss_SlidingKunaiState.cpp" />
     <ClCompile Include="..\Private\Boss_SpinKickState.cpp" />
+    <ClCompile Include="..\Private\Boss_StandState.cpp" />
     <ClCompile Include="..\Private\Boss_StepState.cpp" />
     <ClCompile Include="..\Private\Boss_WalkState.cpp" />
     <ClCompile Include="..\Private\Boss_WoodHandState.cpp" />

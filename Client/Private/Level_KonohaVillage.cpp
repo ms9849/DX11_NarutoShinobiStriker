@@ -16,6 +16,7 @@
 #include "DialogUI.h"
 #include "MissionAlertPanel.h"
 #include "WinPanel.h"
+#include "CutScenePanel.h"
 
 #include "Player.h"
 
@@ -58,7 +59,7 @@ HRESULT CLevel_KonohaVillage::Initialize()
 	if (FAILED(Ready_Layer_Map(TEXT("Layer_Map"))))
 		return E_FAIL;
 
-	if (FAILED(m_pGameManager->Change_Camera(LEVEL::KONOHA_VILLAGE, TEXT("Main_Camera"))))
+	if (FAILED(m_pGameManager->Change_Camera(LEVEL::KONOHA_VILLAGE, TEXT("CutScene_Camera"))))
 		return E_FAIL;
 
 	m_pGameManager->Get_PlayerPtr()->Change_Skills();
@@ -354,6 +355,14 @@ HRESULT CLevel_KonohaVillage::Ready_Layer_UI(const _wstring& strLayerTag)
 		return E_FAIL;
 
 	m_pGameManager->Set_WinPanel(static_cast<CWinPanel*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), strLayerTag, m_pGameInstance->Get_LayerSize(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), strLayerTag) - 1)));
+
+	Desc = CUIObject::CreateDesc(g_iWinSizeX / 2.f, g_iWinSizeY / 2.f, 0.01f, g_iWinSizeX, g_iWinSizeY, 0, 0.f);
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_CutScenePanel"),
+		ENUM_CLASS(LEVEL::KONOHA_VILLAGE), strLayerTag, &Desc)))
+		return E_FAIL;
+
+	m_pGameManager->Set_CutScenePanel(static_cast<CCutScenePanel*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), strLayerTag, m_pGameInstance->Get_LayerSize(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), strLayerTag) - 1)));
 
 	return S_OK;
 }

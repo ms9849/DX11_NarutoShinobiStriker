@@ -35,6 +35,8 @@ HRESULT CCutSceneCamera::Initialize(void* pArg)
     {
     case TRIGGER_TYPE::TUTORIAL_CLEAR:
         /* ³ª¹µÀÙ ¸¶À» ÀÔÀå ÄÆ¾À ¼¼ÆÃ */
+        m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(83.806f, 87.830f, -51.401f, 1.f));
+        m_pGameManager->Set_AttackType_Visible(false);
         break;
 
     case TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_BOSS:
@@ -91,12 +93,16 @@ HRESULT CCutSceneCamera::Render()
 
 void CCutSceneCamera::Tutorial_CutScene(_float fTimeDelta)
 {
-    _float CurDist = XMVectorGetX(XMVector3Length((m_pTransformCom->Get_State(STATE::POSITION) - XMVectorSet(84.477f, 66.518f, 24.298f, 1.f))));
-    _float MaxDist = XMVectorGetX(XMVector3Length((XMVectorSet(71.447f, 76.337f, -60.446f, 1.f) - XMVectorSet(84.477f, 66.518f, 24.298f, 1.f))));
+    _vector vStartPos = XMVectorSet(71.447f, 76.337f, -60.446f, 1.f);
+    _vector vEndPos = XMVectorSet(84.477f, 66.518f, 24.298f, 1.f);
+    _vector vLookPos = XMVectorSet(0.f, 0.f, 20.f, 1.f);
+
+    _float CurDist = XMVectorGetX(XMVector3Length((m_pTransformCom->Get_State(STATE::POSITION) - vEndPos)));
+    _float MaxDist = XMVectorGetX(XMVector3Length((vStartPos - vEndPos)));
     _float fRatio = (MaxDist - CurDist) / MaxDist;
 
     /* 0 ~ 1.. */
-    _vector vLerpPos = XMVectorSetW(XMQuaternionSlerp(m_pTransformCom->Get_State(STATE::POSITION), XMVectorSet(84.477f, 66.518f, 24.298f, 1.f), fTimeDelta * 0.5f), 1.f);
+    _vector vLerpPos = XMVectorSetW(XMQuaternionSlerp(m_pTransformCom->Get_State(STATE::POSITION), vEndPos, fTimeDelta * 0.5f), 1.f);
 
     m_pTransformCom->Set_State(STATE::POSITION, vLerpPos);
 
@@ -114,11 +120,40 @@ void CCutSceneCamera::Tutorial_CutScene(_float fTimeDelta)
             m_pGameManager->Change_Camera(LEVEL::TUTORIAL, TEXT("Main_Camera"), nullptr);
         }
     }
-    m_pTransformCom->LookAt(XMVectorSet(0.f, 0.f, 20.f, 1.f));
+    m_pTransformCom->LookAt(vLookPos);
 }
 
 void CCutSceneCamera::KonohaVillage_CustScene(_float fTimeDelta)
 {
+    _vector vStartPos = XMVectorSet(83.806f, 87.830f, -51.401f, 1.f);
+    _vector vEndPos = XMVectorSet(-66.215f, 66.921f, -71.987f, 1.f);
+    _vector vLookPos = XMVectorSet(-42.582f, 47.336f, 19.361f, 1.f);
+
+    _float CurDist = XMVectorGetX(XMVector3Length((m_pTransformCom->Get_State(STATE::POSITION) - vEndPos)));
+    _float MaxDist = XMVectorGetX(XMVector3Length((vStartPos - vEndPos)));
+    _float fRatio = (MaxDist - CurDist) / MaxDist;
+
+    /* 0 ~ 1.. */
+    _vector vLerpPos = XMVectorSetW(XMQuaternionSlerp(m_pTransformCom->Get_State(STATE::POSITION), vEndPos, fTimeDelta * 0.5f), 1.f);
+
+    m_pTransformCom->Set_State(STATE::POSITION, vLerpPos);
+
+    m_pGameManager->Get_PlayerPtr()->Set_Visible(false);
+
+    if (fRatio >= 0.9f)
+    {
+        m_fTimeAcc += fTimeDelta;
+
+        if (m_fTimeAcc >= 1.f)
+        {
+            m_pGameManager->Get_PlayerPtr()->Set_Visible(true);
+            m_pGameManager->Set_CutScene_Visible(false);
+            m_pGameManager->Set_AttackType_Visible(true);
+            m_pGameManager->Change_Camera(LEVEL::KONOHA_VILLAGE, TEXT("Main_Camera"), nullptr);
+        }
+    }
+    m_pTransformCom->LookAt(vLookPos);
+
 }
 
 void CCutSceneCamera::Boss_CutScene(_float fTimeDelta)
