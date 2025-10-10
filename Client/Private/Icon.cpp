@@ -104,7 +104,7 @@ HRESULT CIcon::Render()
 	else
 	{
 		m_pOrthoTransform->Set_Scale(75.f, 75.f, 1.f);
-		m_pOrthoTransform->Set_State(STATE::POSITION, XMVectorSet(m_fOrthoX - g_iWinSizeX / 2.f, g_iWinSizeY / 2.f - m_fOrthoY, 0.01f, 1.f));
+		m_pOrthoTransform->Set_State(STATE::POSITION, XMVectorSet(m_fOrthoX - g_iWinSizeX / 2.f, g_iWinSizeY / 2.f - m_fOrthoY, 0.02f, 1.f));
 
 		if (FAILED(Bind_Orthogonal_ShaderResources()))
 			return E_FAIL;

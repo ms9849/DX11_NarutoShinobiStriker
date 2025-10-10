@@ -34,13 +34,18 @@ HRESULT CTrigger_Manager::OnTrigger(TRIGGER_TYPE eTriggerType)
 
     else if (TRIGGER_TYPE::TUTORIAL_SPAWNER_01 == eTriggerType && false == m_IsTriggerActivated[ENUM_CLASS(TRIGGER_TYPE::TUTORIAL_SPAWNER_01)])
     {
-        if(FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_WhiteJetsu"),
-            ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_Monster"))))
-            return E_FAIL;
+        /* 테스트용 코드. 추후 제거해야함. */
+        if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Boss"),
+        	ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_Monster"))))
+        	return E_FAIL;
 
-        if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Bird"),
-            ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_Monster"))))
-            return E_FAIL;
+        //if(FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_WhiteJetsu"),
+        //    ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_Monster"))))
+        //    return E_FAIL;
+
+        //if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Bird"),
+        //    ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_Monster"))))
+        //    return E_FAIL;
 
         m_pGameManager->AlertPanel_Start_FadeIn(TEXT("적을 쓰러뜨려라!"));
         m_IsTriggerActivated[ENUM_CLASS(TRIGGER_TYPE::TUTORIAL_SPAWNER_01)] = true;

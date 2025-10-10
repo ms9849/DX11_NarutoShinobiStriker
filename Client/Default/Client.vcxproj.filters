@@ -604,6 +604,9 @@
     <Filter Include="02.GameObjects\04. Event\Trigger">
       <UniqueIdentifier>{02a59ba2-6cb6-44fa-bf58-ba50241009d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\00. Character\01. Enemy\00. Boss\State\00. BASE\Stand">
+      <UniqueIdentifier>{69759097-92cc-4369-9e4f-c6a5130a0522}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1173,6 +1176,9 @@
     <ClInclude Include="..\Public\Part_Mannequin.h">
       <Filter>02.GameObjects\06. Mannequin\Part</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Boss_StandState.h">
+      <Filter>02.GameObjects\00. Character\01. Enemy\00. Boss\State\00. BASE\Stand</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1739,6 +1745,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Part_Mannequin.cpp">
       <Filter>02.GameObjects\06. Mannequin\Part</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Boss_StandState.cpp">
+      <Filter>02.GameObjects\00. Character\01. Enemy\00. Boss\State\00. BASE\Stand</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

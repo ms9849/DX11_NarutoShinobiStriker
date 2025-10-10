@@ -821,6 +821,10 @@ HRESULT CLoader::Loading_For_KonohaVillage()
 		CNPCTalkCamera::Create(m_pDevice, m_pContext, OBJECTID::NPC_TALK_CAMERA))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_CutSceneCamera */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_CutSceneCamera"),
+		CCutSceneCamera::Create(m_pDevice, m_pContext, OBJECTID::CUTSCENE_CAMERA))))
+		return E_FAIL;
 
 #pragma endregion
 
@@ -913,6 +917,11 @@ HRESULT CLoader::Loading_For_KonohaVillage()
 	/* For.Prototype_GameObject_BossHPPanel */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_BossHPPanel"),
 		CBossHPPanel::Create(m_pDevice, m_pContext, OBJECTID::BOSSHP_UI))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_CutScenePanel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_CutScenePanel"),
+		CCutScenePanel::Create(m_pDevice, m_pContext, OBJECTID::CUTSCENE_UI))))
 		return E_FAIL;
 
 #pragma endregion

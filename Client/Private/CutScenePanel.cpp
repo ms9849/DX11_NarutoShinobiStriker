@@ -27,7 +27,19 @@ HRESULT CCutScenePanel::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_strFontText = TEXT("중급 닌자 시험장");
+	TRIGGER_TYPE eType = m_pGameManager->Get_CurrentTrigger();
+
+	switch (eType)
+	{
+	case TRIGGER_TYPE::TUTORIAL_CLEAR:
+		m_strFontText = TEXT("나뭇잎 마을");
+		break;
+
+	default:
+		m_strFontText = TEXT("중급 닌자 시험장");
+		break;
+	}
+
 	return S_OK;
 }
 
