@@ -190,6 +190,9 @@ HRESULT CBird::Initialize(void* pArg)
     if (FAILED(__super::Initialize(&Desc)))
         return E_FAIL;
 
+    if (FAILED(Ready_Position()))
+        return E_FAIL;
+
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
@@ -198,10 +201,6 @@ HRESULT CBird::Initialize(void* pArg)
 
     m_iNumMeshes = m_pModelCom->Get_NumMeshes();
 
-    if (TRIGGER_TYPE::TUTORIAL_SPAWNER_01 == m_pGameManager->Get_CurrentTrigger())
-        m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(1.f, 0.f, 2.f, 1.f));
-    else if (TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_01 == m_pGameManager->Get_CurrentTrigger())
-        m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(96.838f, 7.775f, -58.551f, 1.f));
 
     ///* 상태 초기화 및 시작. */
     m_pState = CBird_IdleState::Create(m_pNavigationCom, this);
@@ -285,6 +284,7 @@ HRESULT CBird::Ready_Components()
     /* Com_Navigation */
     CNavigation::NAVIGATION_DESC Desc;
     Desc.iCurrentCellIndex = 0;
+    XMStoreFloat3(&Desc.vPosition, m_pTransformCom->Get_State(STATE::POSITION));
 
     if (LEVEL::TUTORIAL == m_pGameManager->Get_NextLevel())
     {
@@ -310,6 +310,16 @@ HRESULT CBird::Ready_Components()
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_OBB"),
         TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &OBBDesc)))
         return E_FAIL;
+
+    return S_OK;
+}
+
+HRESULT CBird::Ready_Position()
+{
+    if (TRIGGER_TYPE::TUTORIAL_SPAWNER_01 == m_pGameManager->Get_CurrentTrigger())
+        m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(1.f, 0.f, 2.f, 1.f));
+    else if (TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_01 == m_pGameManager->Get_CurrentTrigger())
+        m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(87.347f, 7.775f, -38.277f, 1.f));
 
     return S_OK;
 }

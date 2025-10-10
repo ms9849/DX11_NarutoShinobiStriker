@@ -65,6 +65,7 @@ private:
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_PartObjects();
+	HRESULT Ready_Position();
 	void	Update_State(_float fTimeDelta);
 
 public:

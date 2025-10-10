@@ -43,21 +43,21 @@ CBoxerState* CBoxer_StepState::Update(_float fTimeDelta)
 	{
 		_float fStepSpeed = m_pGameInstance->Calc_Quadratic(-5.f, 4.f, 1.f, fAnimProgress);
 		if (fAnimProgress <= 0.8f)
-			m_pBoxer->Get_Transform()->Go_Left(fTimeDelta * fStepSpeed);
+			m_pBoxer->Get_Transform()->Go_Left(fTimeDelta * fStepSpeed, m_pNavigationCom);
 	}
 	else if (ANIM_STATE::RIGHT == m_eAnimState)
 	{
 		_float fStepSpeed = m_pGameInstance->Calc_Quadratic(-5.f, 4.f, 1.f, fAnimProgress);
 
 		if (fAnimProgress <= 0.8f)
-			m_pBoxer->Get_Transform()->Go_Right(fTimeDelta * fStepSpeed);
+			m_pBoxer->Get_Transform()->Go_Right(fTimeDelta * fStepSpeed, m_pNavigationCom);
 	}
 	else if (ANIM_STATE::BACK == m_eAnimState)
 	{
 		_float fStepSpeed = m_pGameInstance->Calc_Quadratic(-5.f, 4.f, 1.f, fAnimProgress);
 
 		if (fAnimProgress != 0.f && fAnimProgress <= 0.6f)
-			m_pBoxer->Get_Transform()->Go_Backward(fTimeDelta * fStepSpeed);
+			m_pBoxer->Get_Transform()->Go_Backward(fTimeDelta * fStepSpeed, m_pNavigationCom);
 	}
 
 	return pNextState;

@@ -427,14 +427,14 @@ HRESULT CBoss::Ready_BossHPPanel()
     Desc.fZ = 0.1f;
 
     /* 추후 레벨 수정 */
-    m_pHPBar = static_cast<CBossHPPanel*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::TUTORIAL),
+    m_pHPBar = static_cast<CBossHPPanel*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, m_pGameInstance->Get_LevelID(),
         TEXT("Prototype_GameObject_BossHPPanel"), &Desc));
 
     if (nullptr == m_pHPBar)
         return E_FAIL;
 
     Safe_AddRef(m_pHPBar);
-    m_pGameInstance->Add_Clone_ToLayer(m_pHPBar, ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_UI"));
+    m_pGameInstance->Add_Clone_ToLayer(m_pHPBar, m_pGameInstance->Get_LevelID(), TEXT("Layer_UI"));
 
     /* 내 최대 HP로 세팅. */
     m_pHPBar->Set_MaxProgress(m_fMaxHP);
@@ -447,12 +447,11 @@ HRESULT CBoss::Ready_BossIcon()
     CIcon::ICON_DESC Desc;
     Desc.iTextureIdx = 0;
 
-    /* 추후 레벨 수정 */
-    m_pIcon = static_cast<CIcon*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::TUTORIAL),
+    m_pIcon = static_cast<CIcon*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, m_pGameInstance->Get_LevelID(),
         TEXT("Prototype_GameObject_Icon"), &Desc));
 
     Safe_AddRef(m_pIcon);
-    m_pGameInstance->Add_Clone_ToLayer(m_pIcon, ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_UI"));
+    m_pGameInstance->Add_Clone_ToLayer(m_pIcon, m_pGameInstance->Get_LevelID(), TEXT("Layer_UI"));
 
     return S_OK;
 }

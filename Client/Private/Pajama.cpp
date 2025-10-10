@@ -196,6 +196,9 @@ HRESULT CPajama::Initialize(void* pArg)
     if (FAILED(__super::Initialize(&Desc)))
         return E_FAIL;
 
+    if (FAILED(Ready_Position()))
+        return E_FAIL;
+
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
@@ -317,6 +320,7 @@ HRESULT CPajama::Ready_Components()
     /* Com_Navigation */
     CNavigation::NAVIGATION_DESC Desc;
     Desc.iCurrentCellIndex = 0;
+    XMStoreFloat3(&Desc.vPosition, m_pTransformCom->Get_State(STATE::POSITION));
 
     if (LEVEL::TUTORIAL == m_pGameManager->Get_NextLevel())
     {
@@ -352,6 +356,16 @@ HRESULT CPajama::Ready_Components()
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_Sphere"),
         TEXT("Com_Collider_HandAttack"), reinterpret_cast<CComponent**>(&m_pHandAttackColliderCom), &ColliderDesc)))
         return E_FAIL;
+
+    return S_OK;
+}
+
+HRESULT CPajama::Ready_Position()
+{
+    if (TRIGGER_TYPE::TUTORIAL_SPAWNER_01 == m_pGameManager->Get_CurrentTrigger())
+        m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(0.f, 0.f, 0.f, 1.f));
+    else if (TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_02 == m_pGameManager->Get_CurrentTrigger())
+        m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(88.470f, 12.7f, 38.493f, 1.f));
 
     return S_OK;
 }

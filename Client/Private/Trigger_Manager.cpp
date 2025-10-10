@@ -19,7 +19,7 @@ HRESULT CTrigger_Manager::OnTrigger(TRIGGER_TYPE eTriggerType)
 
     if (TRIGGER_TYPE::TUTORIAL_KAKASHI_TALK == eTriggerType && false == m_IsTriggerActivated[ENUM_CLASS(TRIGGER_TYPE::TUTORIAL_KAKASHI_TALK)])
     {
-        CTriggerBox::TRIGGER_BOX_DESC Desc;
+        CEventObject::EVENT_COLLIDER_DESC Desc;
         Desc.eTriggerType = TRIGGER_TYPE::TUTORIAL_SPAWNER_01;
         Desc.fRadius = 5.f;
         Desc.vCenter = _float3(0.f, 0.f, 0.f);
@@ -55,7 +55,7 @@ HRESULT CTrigger_Manager::OnTrigger(TRIGGER_TYPE eTriggerType)
 
     else if (TRIGGER_TYPE::KONOHA_VILLAGE_KAKASHI_TALK_1 == eTriggerType && false == m_IsTriggerActivated[ENUM_CLASS(TRIGGER_TYPE::KONOHA_VILLAGE_KAKASHI_TALK_1)])
     {
-        CTriggerBox::TRIGGER_BOX_DESC Desc;
+        CEventObject::EVENT_COLLIDER_DESC Desc;
         Desc.eTriggerType = TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_01;
         Desc.fRadius = 5.f;
         Desc.vCenter = _float3(0.f, 0.f, 0.f);
@@ -85,7 +85,7 @@ HRESULT CTrigger_Manager::OnTrigger(TRIGGER_TYPE eTriggerType)
     /* 중간 보스 스포너 생성*/
     else if (TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_01_CLEAR == eTriggerType && false == m_IsTriggerActivated[ENUM_CLASS(TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_01_CLEAR)])
     {
-        CTriggerBox::TRIGGER_BOX_DESC Desc;
+        CEventObject::EVENT_COLLIDER_DESC Desc;
         Desc.eTriggerType = TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_02;
         Desc.fRadius = 5.f;
         Desc.vCenter = _float3(0.f, 0.f, 0.f);
@@ -116,7 +116,7 @@ HRESULT CTrigger_Manager::OnTrigger(TRIGGER_TYPE eTriggerType)
     /* 중간보스 클리어 */
     else if (TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_02_CLEAR == eTriggerType && false == m_IsTriggerActivated[ENUM_CLASS(TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_02_CLEAR)])
     {
-        CTriggerBox::TRIGGER_BOX_DESC Desc;
+        CEventObject::EVENT_COLLIDER_DESC Desc;
         Desc.eTriggerType = TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_BOSS;
         Desc.fRadius = 5.f;
         Desc.vCenter = _float3(0.f, 0.f, 0.f);

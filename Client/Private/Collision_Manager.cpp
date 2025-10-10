@@ -102,7 +102,7 @@ void CCollision_Manager::Check_Collision(const _wstring strColliderTag, const _w
                 else if (COLLISION_TYPE::PLAYER == eColType)
                     static_cast<CPlayer*>(pCollisionObject.first)->OnCollision(pCollider.first, pCollider.second->Get_Pos());
                 else if (COLLISION_TYPE::TRIGGER == eColType)
-                    static_cast<CTriggerBox*>(pCollisionObject.first)->OnCollision();
+                    static_cast<CEventObject*>(pCollisionObject.first)->OnCollision();
             }
         }
     }

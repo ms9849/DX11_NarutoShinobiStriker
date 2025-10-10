@@ -415,12 +415,6 @@
     <Filter Include="02.GameObjects\03. Effect\Icon">
       <UniqueIdentifier>{fe96f895-9657-4ec1-947b-d883e05b6788}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\04. TriggerBox">
-      <UniqueIdentifier>{98d79f22-f49c-4fbb-b649-07ca91dc0c2a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\04. TriggerBox\MonsterSpawner">
-      <UniqueIdentifier>{02a59ba2-6cb6-44fa-bf58-ba50241009d6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\05. NPC">
       <UniqueIdentifier>{0bbc84b4-31a9-40ef-8e75-214c08d5d91e}</UniqueIdentifier>
     </Filter>
@@ -603,6 +597,12 @@
     </Filter>
     <Filter Include="01. Levels\03. Tutorial">
       <UniqueIdentifier>{490444ba-eab1-44cf-9259-6b16f02e8e25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\04. Event">
+      <UniqueIdentifier>{98d79f22-f49c-4fbb-b649-07ca91dc0c2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\04. Event\Trigger">
+      <UniqueIdentifier>{02a59ba2-6cb6-44fa-bf58-ba50241009d6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -987,11 +987,11 @@
     <ClInclude Include="..\Public\Explosion.h">
       <Filter>02.GameObjects\03. Effect\Particle\Explosion</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\TriggerBox.h">
-      <Filter>02.GameObjects\04. TriggerBox</Filter>
+    <ClInclude Include="..\Public\EventObject.h">
+      <Filter>02.GameObjects\04. Event</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\MonsterSpawner.h">
-      <Filter>02.GameObjects\04. TriggerBox\MonsterSpawner</Filter>
+    <ClInclude Include="..\Public\TriggerBox.h">
+      <Filter>02.GameObjects\04. Event\Trigger</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_KonohaVillage.h">
       <Filter>01. Levels\04. KonohaVillage</Filter>
@@ -1557,11 +1557,11 @@
     <ClCompile Include="..\Private\Explosion.cpp">
       <Filter>02.GameObjects\03. Effect\Particle\Explosion</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\TriggerBox.cpp">
-      <Filter>02.GameObjects\04. TriggerBox</Filter>
+    <ClCompile Include="..\Private\EventObject.cpp">
+      <Filter>02.GameObjects\04. Event</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\MonsterSpawner.cpp">
-      <Filter>02.GameObjects\04. TriggerBox\MonsterSpawner</Filter>
+    <ClCompile Include="..\Private\TriggerBox.cpp">
+      <Filter>02.GameObjects\04. Event\Trigger</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_KonohaVillage.cpp">
       <Filter>01. Levels\04. KonohaVillage</Filter>

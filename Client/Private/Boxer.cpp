@@ -192,6 +192,9 @@ HRESULT CBoxer::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
 
+	if (FAILED(Ready_Position()))
+		return E_FAIL;
+
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
@@ -304,6 +307,7 @@ HRESULT CBoxer::Ready_Components()
 	/* Com_Navigation */
 	CNavigation::NAVIGATION_DESC Desc;
 	Desc.iCurrentCellIndex = 0;
+	XMStoreFloat3(&Desc.vPosition, m_pTransformCom->Get_State(STATE::POSITION));
 
 	if (LEVEL::TUTORIAL == m_pGameManager->Get_NextLevel())
 	{
@@ -403,6 +407,17 @@ HRESULT CBoxer::Ready_PartObjects()
 	if (FAILED(__super::Add_PartObject(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_Weapon_Player"),
 		TEXT("Part_Weapon_R"), &WeaponDesc)))
 		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CBoxer::Ready_Position()
+{
+	if (TRIGGER_TYPE::TUTORIAL_SPAWNER_01 == m_pGameManager->Get_CurrentTrigger())
+		m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(0.f, 0.f, 0.f, 1.f));
+
+	else if (TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_02 == m_pGameManager->Get_CurrentTrigger())
+		m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(67.787f, 12.7f, 37.657f, 1.f));
 
 	return S_OK;
 }

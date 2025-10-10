@@ -33,6 +33,13 @@ private:
 	class CGameManager* m_pGameManager = { nullptr };
 	class CTransform* m_pPlayerTransform = { nullptr };
 
+	_float3 m_vStartPos = {};
+	_float3 m_vEndPos = {};
+
+private:
+	void Tutorial_CutScene(_float fTimeDelta);
+	void KonohaVillage_CustScene(_float fTimeDelta);
+	void Boss_CutScene(_float fTimeDelta);
 public:
 	static CCutSceneCamera* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	virtual CGameObject* Clone(void* pArg);
