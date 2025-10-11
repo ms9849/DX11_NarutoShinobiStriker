@@ -42,7 +42,7 @@ void CCol_KonohaVillage::Update(_float fTimeDelta)
 
 void CCol_KonohaVillage::Late_Update(_float fTimeDelta)
 {
-    m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+    //m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 
 HRESULT CCol_KonohaVillage::Render()
