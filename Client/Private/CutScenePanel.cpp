@@ -46,7 +46,7 @@ void CCutScenePanel::Update(_float fTimeDelta)
 
 	case TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_BOSS:
 		m_strFontText = TEXT("CUTSCENE");
-		m_strScriptFontText = TEXT("(boss) 네 놈의 시연회는 여기까지다!!");
+		m_strScriptFontText = TEXT("(boss) 네 녀석의 시연회는 여기까지다!!");
 		m_IsActiveScript = true;
 		break;
 

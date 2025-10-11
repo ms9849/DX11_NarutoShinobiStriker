@@ -69,9 +69,9 @@ HRESULT CLevel_KonohaVillage::Initialize()
 
 void CLevel_KonohaVillage::Update(_float fTimeDelta)
 {
-	/* 추후 지워야할 디버깅 용 코드*/
-	m_pGameManager->OnTrigger(TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_02_CLEAR);
-	/**/
+	/* 디버깅 용 코드*/
+	//m_pGameManager->OnTrigger(TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_02_CLEAR);
+	///**/
 #ifdef _DEBUG
 	if (m_pGameInstance->Key_Down(DIK_0))
 	{
