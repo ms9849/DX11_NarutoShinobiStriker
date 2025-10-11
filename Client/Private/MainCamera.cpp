@@ -119,13 +119,13 @@ void CMainCamera::Chase_Target(_float fTimeDelta)
     _float fMouseMoveY = (_float)m_pGameInstance->Get_MouseMove(MOUSEMOVESTATE::Y) / g_iWinSizeY;
 
     // 회전할 벡터와 각도
-    _vector  StartVector = XMVectorSet(0.f, 2.0f, -2.5f, 0.f);
+    _vector  StartVector = XMVectorSet(0.f, 2.5f, -3.0f, 0.f);
 
     /* 스타트 벡터에 따라 다르게 제한이 들어가야 하는데.. */
-    m_fRotateX += XMConvertToRadians(fMouseMoveX * 180.f);
+    m_fRotateX += XMConvertToRadians(fMouseMoveX * 90.f);
     m_fRotateX = XMScalarModAngle(m_fRotateX);
 
-    m_fRotateY += XMConvertToRadians(fMouseMoveY * 180.f);
+    m_fRotateY += XMConvertToRadians(fMouseMoveY * 45.f);
     m_fRotateY = XMScalarModAngle(m_fRotateY);
 
     // 라디안 제한 ( -90  ~ +90 + 여기에 캐릭터의 Look 벡터까지. )
