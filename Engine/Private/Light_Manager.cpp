@@ -1,12 +1,8 @@
 #include "Light_Manager.h"
 #include "Light.h"
 
-#include "GameInstance.h"
-
 CLight_Manager::CLight_Manager()
-    : m_pGameInstance { CGameInstance::GetInstance() }
 {
-    Safe_AddRef(m_pGameInstance);
 }
 
 const LIGHT_DESC* CLight_Manager::Get_LightDesc(_uint iIndex) const
@@ -53,6 +49,4 @@ void CLight_Manager::Free()
         Safe_Release(pLight);
 
     m_Lights.clear();
-
-    Safe_Release(m_pGameInstance);
 }

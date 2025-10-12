@@ -19,7 +19,7 @@ public:
 
 private:
 	list<class CLight*>				m_Lights;
-	class CGameInstance*			m_pGameInstance;
+
 public:
 	static CLight_Manager* Create();
 	virtual void Free() override;
