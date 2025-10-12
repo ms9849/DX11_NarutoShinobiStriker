@@ -17,19 +17,17 @@ HRESULT CLight::Render(CShader* pShader, CVIBuffer* pVIBuffer)
 {
 	_uint			iPassIndex = { 0 };
 
-	/* 방향성 광원일때 세팅 */
 	if (LIGHT::DIRECTIONAL == m_LightDesc.eType)
 	{
 		if (FAILED(pShader->Bind_RawValue("g_vLightDir", &m_LightDesc.vDirection, sizeof(_float4))))
 			return E_FAIL;
 		iPassIndex = 1;
 	}
-	/* 점 광원일때의 세팅 */
 	else
 	{
 		if (FAILED(pShader->Bind_RawValue("g_vLightPos", &m_LightDesc.vPosition, sizeof(_float4))))
 			return E_FAIL;
-		if (FAILED(pShader->Bind_RawValue("g_vLightRange", &m_LightDesc.fRange, sizeof(_float))))
+		if (FAILED(pShader->Bind_RawValue("g_fLightRange", &m_LightDesc.fRange, sizeof(_float))))
 			return E_FAIL;
 		iPassIndex = 2;
 	}
@@ -38,7 +36,7 @@ HRESULT CLight::Render(CShader* pShader, CVIBuffer* pVIBuffer)
 		return E_FAIL;
 	if (FAILED(pShader->Bind_RawValue("g_vLightAmbient", &m_LightDesc.vAmbient, sizeof(_float4))))
 		return E_FAIL;
-	if (FAILED(pShader->Bind_RawValue("g_vLightSpecular", &m_LightDesc.vAmbient, sizeof(_float4))))
+	if (FAILED(pShader->Bind_RawValue("g_vLightSpecular", &m_LightDesc.vSpecular, sizeof(_float4))))
 		return E_FAIL;
 
 	if (FAILED(pShader->Begin(iPassIndex)))
@@ -66,3 +64,4 @@ void CLight::Free()
 
 
 }
+

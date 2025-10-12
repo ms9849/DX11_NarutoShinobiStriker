@@ -149,13 +149,23 @@ HRESULT CLevel_Tutorial::Ready_Lights()
 	/* DX11은 Dx9과 다르게 기본적인 광원 정보를 저장해주지 않는다. */
 	/* 광원은 후처리 연산이 훨씬 유리하다고 하심 */
 	/* Desc 세팅해서 라이트 매니저에 넣어줌. */
-	LIGHT_DESC		LightDesc{};
+	LIGHT_DESC			LightDesc{};
 
 	LightDesc.eType = LIGHT::DIRECTIONAL;
-	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
-	LightDesc.vAmbient = _float4(0.4f, 0.4f, 0.4f, 1.f);
-	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 0.f);
+	LightDesc.vDiffuse = _float4(0.5f, 0.5f, 0.5f, 1.f);
+	LightDesc.vAmbient = _float4(0.2f, 0.2f, 0.2f, 1.f);
+	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
 	LightDesc.vDirection = _float4(1.f, -1.f, 1.f, 0.f);
+				
+	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
+		return E_FAIL;
+
+	LightDesc.eType = LIGHT::POINT;
+	LightDesc.vDiffuse = _float4(1.f, 0.0f, 0.f, 1.f);
+	LightDesc.vAmbient = _float4(0.4f, 0.2f, 0.2f, 1.f);
+	LightDesc.vSpecular = LightDesc.vDiffuse;
+	LightDesc.vPosition = _float4(0.f, 5.f, 0.f, 1.f);
+	LightDesc.fRange = 10.f;
 
 	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
 		return E_FAIL;

@@ -30,8 +30,13 @@ HRESULT CRenderer::Initialize()
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Normal"), Viewport.Width, Viewport.Height, DXGI_FORMAT_R16G16B16A16_UNORM, _float4(0.0f, 0.f, 0.f, 1.f))))
 		return E_FAIL;
 
+	/* 
+	얼룩말 무늬 현상 방지 및, 
+	음수 단위의 깊이도 체크하기 위해 
+	픽셀 포맷을 다르게 세팅.
+	*/
 	/* Target_Depth */
-	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Depth"), Viewport.Width, Viewport.Height, DXGI_FORMAT_R16G16B16A16_UNORM, _float4(0.0f, 0.f, 0.f, 0.f))))
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Depth"), Viewport.Width, Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.0f, 0.f, 0.f, 0.f))))
 		return E_FAIL;
 
 	/* Target_Shade */
@@ -55,8 +60,8 @@ HRESULT CRenderer::Initialize()
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_LightAcc"), TEXT("Target_Shade"))))
 		return E_FAIL;
 	///* Specular는 LightAcc에서 쌓아서 계산한다. */
-	//if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_LightAcc"), TEXT("Target_Specular"))))
-	//	return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_LightAcc"), TEXT("Target_Specular"))))
+		return E_FAIL;
 
 	m_pShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Deferred.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements);
 	if (nullptr == m_pShader)
@@ -77,8 +82,8 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Shade"), Viewport.Width - 225.f, 75.f, 150.f, 150.f)))
 		return E_FAIL;
-	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Specular"), 450.0f, 450.0f, 300.f, 300.f)))
-	//	return E_FAIL;
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Specular"), 450.0f, 450.0f, 300.f, 300.f)))
+		return E_FAIL;
 #endif
 
     return S_OK;
@@ -129,7 +134,11 @@ void CRenderer::Render()
 
 HRESULT CRenderer::Add_DebugComponent(CComponent* pDebugComponent)
 {
+	if (nullptr == pDebugComponent)
+		return E_FAIL;
+
 	m_DebugComponents.push_back(pDebugComponent);
+
 	Safe_AddRef(pDebugComponent);
 
 	return S_OK;
@@ -190,20 +199,20 @@ void CRenderer::Render_LightAcc()
 	m_pShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix);
 	m_pShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix);
 	m_pShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix);
-	m_pShader->Bind_Matrix("g_ViewMatrixInv", m_pGameInstance->Get_PipeLine_Float4x4(D3DTS::VIEW));
+	m_pShader->Bind_Matrix("g_ViewMatrixInv", m_pGameInstance->Get_PipeLine_InverseFloat4x4(D3DTS::VIEW));
 	m_pShader->Bind_Matrix("g_ProjMatrixInv", m_pGameInstance->Get_PipeLine_InverseFloat4x4(D3DTS::PROJ));
 	m_pShader->Bind_RawValue("g_vCamPosition", m_pGameInstance->Get_CamState(STATE::POSITION), sizeof(_float4));
 
 	/* 셰이더에 Target_Normal 바인딩. */
 	/* -> g_NormalTexture라는 이름으로 올라가게 된다. */
-	/* -> PS_MAIN_DIRECTIONAL 에서 사용된다. */
+	/* -> PS_MAIN_DIRECTIONAL & PS_MAIN_POINT 에서 사용된다. */
 	/* 또한 여기서 실질적인 조명 연산이 이루어지게 된다. */
 	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Normal"), m_pShader, "g_NormalTexture")))
 		return;
 
 	/* 추후 조명 연산 풀어야 함. */
-	//if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Depth"), m_pShader, "g_DepthTexture")))
-	//	return;
+	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Depth"), m_pShader, "g_DepthTexture")))
+		return;
 
 	/* 화면 전체에 대해 조명 연산이 들어가야하니까 직교투영한 뒤 Bind Resource 세팅 */
 	/* 픽셀 셰이더를 수행하기 위해, Bind Resource를 수행한다. */
@@ -211,7 +220,7 @@ void CRenderer::Render_LightAcc()
 	m_pVIBuffer->Bind_Resources();
 
 	/* 셰이더에 조명 정보 바인딩. */
-	if (FAILED(m_pGameInstance->Render_Lights(m_pShader, m_pVIBuffer)))
+ 	if (FAILED(m_pGameInstance->Render_Lights(m_pShader, m_pVIBuffer)))
 		return;
 
 	if (FAILED(m_pGameInstance->End_MRT()))
@@ -229,6 +238,9 @@ void CRenderer::Render_Combined()
 		return;
 	/* 기록되어 있던 Shade (조명 연산의 결과, 명암.) 세팅*/
 	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Shade"), m_pShader, "g_ShadeTexture")))
+		return;
+
+	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Specular"), m_pShader, "g_SpecularTexture")))
 		return;
 
 	/* 셰이더에서 이 둘 곱해서 최종적인 계산값 뽑아냄. */
