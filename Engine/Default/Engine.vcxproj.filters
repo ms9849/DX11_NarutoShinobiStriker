@@ -232,6 +232,12 @@
     <ClInclude Include="..\Public\Target_Manager.h">
       <Filter>01.Utility\10. RenderTargets\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\EffectModel.h">
+      <Filter>01.Utility\03.Components\EffectModel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\EffectMesh.h">
+      <Filter>01.Utility\03.Components\EffectModel\Mesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -419,6 +425,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Target_Manager.cpp">
       <Filter>01.Utility\10. RenderTargets\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\EffectModel.cpp">
+      <Filter>01.Utility\03.Components\EffectModel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\EffectMesh.cpp">
+      <Filter>01.Utility\03.Components\EffectModel\Mesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -625,6 +637,12 @@
     </Filter>
     <Filter Include="01.Utility\10. RenderTargets\Manager">
       <UniqueIdentifier>{22d83f15-9e2b-4524-8aea-d4b7f5a0b2be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\EffectModel">
+      <UniqueIdentifier>{26a4fbce-f85a-4acb-8e14-594885639987}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\EffectModel\Mesh">
+      <UniqueIdentifier>{65f96b82-0d31-4817-ac59-a55d47953dfe}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,38 @@
+#pragma once
+
+#include "Effect_Defines.h"
+#include "Level.h"
+
+NS_BEGIN(Engine)
+class CGameObject;
+class CTransform;
+class CNavigation;
+class CCell;
+NS_END
+
+NS_BEGIN(EffectTool)
+
+class CLevel_Effect final : public CLevel
+{
+private:
+	CLevel_Effect(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID);
+	virtual ~CLevel_Effect() = default;
+
+public:
+	virtual HRESULT Initialize() override;
+	virtual void Update(_float fTimeDelta) override;
+	virtual HRESULT Render() override;
+
+public:
+	HRESULT Ready_Prototypes();
+	HRESULT Ready_Camera();
+	HRESULT Ready_EffectObjects();
+
+	class CEffect_GUI* m_pEffectGUI = { nullptr };
+
+public:
+	static CLevel_Effect* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID);
+	virtual void Free() override;
+};
+
+NS_END

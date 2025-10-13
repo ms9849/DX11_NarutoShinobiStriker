@@ -82,7 +82,7 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Shade"), Viewport.Width - 225.f, 75.f, 150.f, 150.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Specular"), 450.0f, 450.0f, 300.f, 300.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Specular"), Viewport.Width - 225.f, 225.f, 150.f, 150.f)))
 		return E_FAIL;
 #endif
 

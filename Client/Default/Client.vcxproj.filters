@@ -1772,5 +1772,8 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPointParticle.hlsl">
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxEffect.hlsl">
+      <Filter>97. ShaderFiles</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

@@ -46,6 +46,8 @@ namespace Client
 		
 		SNOW, EXPLOSION,
 
+		EFFECTOBJECT,
+
 		NPC_KAKASHI,
 
 		MONSTER_SPAWNER,

@@ -24,7 +24,6 @@ public:
 
 public:
 	virtual _bool Picking(_fmatrix WolrdMatrixInverse, _float3* pOut);
-	virtual _float Compute_Height(_fvector vPosition, _fmatrix vWorldMatrix);
 
 public:
 	virtual HRESULT Initialize_Prototype(MODEL eType, const class CModel* pModel, const aiMesh* pAIMesh, _fmatrix PreTransformMatrix);

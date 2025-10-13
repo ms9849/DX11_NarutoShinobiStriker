@@ -6,6 +6,7 @@
 #include "Model.h"
 //#include "VIBuffer_Cube.h"
 
+#include "EffectModel.h"
 #include "VIBuffer_Rect.h"
 #include "VIBuffer_Terrain.h"
 #include "Orthogonal.h"
