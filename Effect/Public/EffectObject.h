@@ -20,16 +20,25 @@ class CEffectObject final : public CGameObject
 public:
 	typedef struct tagEffectDesc
 	{
-		_float3			vPosition;
+		/* 포지션 및 태그 변경은 아직 미구현. */
+		_float3			vPosition = {};
 		_wstring		strTextureTag = { TEXT("") };
-		_uint			iTextureNum = { -1 };
+		_int			iTextureNum = { -1 };
 
 		_wstring		strMaskTextureTag = { TEXT("") };
-		_uint			iMaskTextureNum = { -1 };
+		_int			iMaskTextureNum = { -1 };
+
+		_wstring		strNoiseTextureTag = { TEXT("") };
+		_int			iNoiseTextureNum = { -1 };
 
 		_wstring		strModelTag = { TEXT("") };
 		_float			fDeltaU = { 0.f };
 		_float			fDeltaV = { 0.f };
+		_uint			iNumWidth = { 1 };
+		_uint			iNumHeight = { 1 };
+		_uint			iCurrentIdx = {};
+
+		_float			fFrameTime = { 0.1f }; 
 
 	} EFFECT_OBJECT_DESC;
 
@@ -47,6 +56,10 @@ public:
 	virtual HRESULT Render() override;
 
 public:
+	void Play_Sprite(_float fTimeDelta);
+	void Check_LifeTime(_float fTimeDelta);
+
+public:
 	virtual void Set_Desc(void* pArg) override;
 
 private:
@@ -56,12 +69,24 @@ private:
 
 	CTexture*			m_pDiffuseTextureCom = { nullptr };
 	CTexture*			m_pMaskTextureCom = { nullptr };
+	CTexture*			m_pNoiseTextureCom = { nullptr };
+
 	_uint				m_iDiffuseTextureIdx = {};
 	_uint				m_iMaskTextureIdx = {};
+	_uint				m_iNoiseTextureIdx = {};
 
 	_float				m_fDeltaU = { 0.f };
 	_float				m_fDeltaV = { 0.f };
+	_uint				m_iNumWidth = { 1 };
+	_uint 				m_iNumHeight = { 1 };
 
+	_uint				m_iCurrentIdx = { 0 };
+	_uint				m_iMaxIdx = { 0 };
+	_float				m_fTimeAcc = { 0.f };
+	_float				m_fFrameTime = { 0.1f };
+
+	_float				m_fLifeTimeAcc = { 0.f };
+	_float				m_fLifeTime = { 0.1f };
 private:
 	HRESULT Ready_Components();
 	HRESULT Bind_ShaderResources();

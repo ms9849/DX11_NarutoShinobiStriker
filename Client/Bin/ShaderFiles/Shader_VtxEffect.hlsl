@@ -1,8 +1,15 @@
 #include "Engine_Shader_Defines.hlsli"
 
-matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
-texture2D g_DiffuseTexture;
-texture2D g_MaskTexture;
+matrix      g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
+
+texture2D   g_DiffuseTexture;
+texture2D   g_MaskTexture;
+texture2D   g_NoiseTexture;
+
+float       g_fDeltaU, g_fDeltaV;
+float       g_fLifeTime, g_fLifeTimeAcc;
+int         g_iNumWidth, g_iNumHeight;
+int         g_iCurrentIdx;
 
 /* 정점 쉐이더 : */
 /* 정점에 대한 셰이딩 == 정점에 필요한 연산을 수행한다 == 정점의 상태변환(월드, 뷰, 투영) + 추가변환 */
@@ -13,6 +20,7 @@ struct VS_IN
     float3 vNormal : NORMAL;
     float3 vTangent : TANGENT;
     float2 vTexcoord : TEXCOORD0;
+    float2 vNoiseTexCoord : TEXCOORD1;
 };
 
 struct VS_OUT
@@ -20,6 +28,7 @@ struct VS_OUT
     float4 vPosition : SV_POSITION;
     float4 vNormal : NORMAL;
     float2 vTexcoord : TEXCOORD0;
+    float2 vNoiseTexCoord : TEXCOORD1;
 };
 
 VS_OUT VS_MAIN(VS_IN In)
@@ -32,7 +41,12 @@ VS_OUT VS_MAIN(VS_IN In)
     matWVP = mul(matWV, g_ProjMatrix);
     
     Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);
+    
+    Out.vNoiseTexCoord = In.vTexcoord;
     Out.vTexcoord = In.vTexcoord;
+    Out.vTexcoord.x = In.vTexcoord.x / g_iNumWidth + (1.0f / g_iNumWidth) * (g_iCurrentIdx % g_iNumWidth);
+    Out.vTexcoord.y = In.vTexcoord.y / g_iNumHeight + (1.0f / g_iNumHeight) * (g_iCurrentIdx / g_iNumWidth);
+    
     Out.vNormal = normalize(mul(vector(In.vNormal, 0.f), g_WorldMatrix));
     
     return Out;
@@ -47,6 +61,7 @@ struct PS_IN
     float4 vPosition : SV_POSITION;
     float4 vNormal : NORMAL;
     float2 vTexcoord : TEXCOORD0;
+    float2 vNoiseTexCoord : TEXCOORD1;
 };
 
 struct PS_OUT
@@ -59,12 +74,37 @@ PS_OUT PS_MAIN(PS_IN In)
 {
     PS_OUT Out;
     
-    vector vMtrlDiffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexcoord);
-    if (vMtrlDiffuse.a < 0.4f)
+    // diffuse 샘플
+    float4 Diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexcoord);
+
+    // mask 샘플 (같은 UV 사용)
+    float4 MaskSample = g_MaskTexture.Sample(DefaultSampler, In.vTexcoord);
+   
+    float NoiseValue = g_NoiseTexture.Sample(DefaultSampler, In.vNoiseTexCoord).r;
+    
+    float DissolveThreshold = g_fLifeTimeAcc / g_fLifeTime; // 0 ~ 1
+    /* 디졸브 먼저 수행 */
+    float alpha = smoothstep(DissolveThreshold - 0.1f, DissolveThreshold + 0.1f, NoiseValue);
+
+    Diffuse.a *= alpha;
+ 
+    /* 흑백 이미지라 rgb로 투명도 표현중인 것 같으니까 일단 이렇게.. */
+    /* 마스킹 수행 */
+    Diffuse.a *= MaskSample.r;
+
+    if (Diffuse.a < 0.01f)
         discard;
     
-    Out.vDiffuse = vMtrlDiffuse;
+    else if (Diffuse.a < 0.6f)
+        Diffuse.rgb = float3(1.f, 0.5f, 0.f);
+    
+    else
+        Diffuse.rgb = float3(1.f, 0.9f, 0.f);
 
+    Out.vDiffuse = Diffuse;
+   
+    
+    
     return Out;
 }
 

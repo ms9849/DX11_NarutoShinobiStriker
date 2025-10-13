@@ -22,6 +22,9 @@ void CEffectCamera::Set_Desc(void* pArg)
 
 void CEffectCamera::Key_Input(_float fTimeDelta)
 {
+	if (m_pGameInstance->Key_Down(DIK_F2))
+		m_IsCameraActivated = !m_IsCameraActivated;
+
 	if (false == m_IsCameraActivated || m_pGameInstance->Mouse_Pressing(MOUSEKEYSTATE::RBUTTON))
 		return;
 

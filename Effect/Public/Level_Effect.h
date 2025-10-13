@@ -28,6 +28,7 @@ public:
 	HRESULT Ready_Camera();
 	HRESULT Ready_EffectObjects();
 
+private:
 	class CEffect_GUI* m_pEffectGUI = { nullptr };
 
 public:

@@ -3,6 +3,10 @@
 #include "Effect_Defines.h"
 #include "Base.h"
 
+NS_BEGIN(Engine)
+class CGameInstance;
+NS_END
+
 NS_BEGIN(EffectTool)
 
 /*
@@ -11,17 +15,42 @@ NS_BEGIN(EffectTool)
 
 class CEffect_GUI final : public CBase
 {
+public:
+	enum class TEXTURE_TYPE { DIFFUSE, MASK, NOISE, END };
 private:
-	CEffect_GUI();
+	CEffect_GUI(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual ~CEffect_GUI() = default;
 
 public:
-	HRESULT Initialize();
-
-private:
+	HRESULT Add_SRV(const _tchar* pTextureFilePath, _uint iNumTextures, TEXTURE_TYPE eTextureType);
+	HRESULT Add_EffeectObject(class CEffectObject* pEffectObject);
 
 public:
-	static CEffect_GUI* Create();
+	HRESULT Initialize();
+	void Update(_float fTimeDelta);
+
+public:
+	void Effect_GUI();
+	void Particle_GUI();
+
+private:
+	CGameInstance* m_pGameInstance = { nullptr };
+	ID3D11Device* m_pDevice = { nullptr };
+	ID3D11DeviceContext* m_pContext = { nullptr };
+
+	class CEffectObject* m_pEffectObject = { nullptr };
+	vector<ID3D11ShaderResourceView*> m_DiffuseSRVs = {};
+	vector<ID3D11ShaderResourceView*> m_MaskSRVs = {};
+	vector<ID3D11ShaderResourceView*> m_NoiseSRVs = {};
+private:
+	_float m_fDeltaU = { 0.f }, m_fDeltaV = { 0.f };
+	_uint  m_iNumWidth = { 1 }, m_iNumHeight = { 1 };
+	_uint  m_iCurrentIdx = { 0 };
+	_uint  m_iTextureNum = { 0 }, m_iMaskTextureNum = { 0 };
+	_float m_fFrameTime = { 0.1f };
+
+public:
+	static CEffect_GUI* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual void Free() override;
 };
 

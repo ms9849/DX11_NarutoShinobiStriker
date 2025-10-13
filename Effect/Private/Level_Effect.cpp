@@ -13,7 +13,7 @@ CLevel_Effect::CLevel_Effect(ID3D11Device* pDevice, ID3D11DeviceContext* pContex
 
 HRESULT CLevel_Effect::Initialize()
 {
-	m_pEffectGUI = CEffect_GUI::Create();
+	m_pEffectGUI = CEffect_GUI::Create(m_pDevice, m_pContext);
 
 	if (FAILED(Ready_Prototypes()))
 		return E_FAIL;
@@ -24,12 +24,15 @@ HRESULT CLevel_Effect::Initialize()
 	if (FAILED(Ready_EffectObjects()))
 		return E_FAIL;
 
+	CEffectObject* pEffectObject = static_cast<CEffectObject*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::EFFECT), TEXT("Layer_Effect"), 0));
+	m_pEffectGUI->Add_EffeectObject(pEffectObject);
 
 	return S_OK;
 }
 
 void CLevel_Effect::Update(_float fTimeDelta)
 {
+	m_pEffectGUI->Update(fTimeDelta);
 }
 
 HRESULT CLevel_Effect::Render()
@@ -43,14 +46,15 @@ HRESULT CLevel_Effect::Ready_Prototypes()
 {
 	/* For.Prototype_Component_Shader_VtxEffect */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Shader_VtxEffect"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/ShaderFiles/Shader_VtxEffect.hlsl"), VTXMESH::Elements, VTXMESH::iNumElements))))
+		CShader::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/ShaderFiles/Shader_VtxEffect.hlsl"), VTXEFFMESH::Elements, VTXEFFMESH::iNumElements))))
 		return E_FAIL;
 
-	/* For.Prototype_Component_EffectModel_Tst */
+	/* For.Prototype_Component_EffectModel_Test */
 	_fmatrix PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_EffectModel_Test"),
 		CEffectModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/Effect/TestEffect.fbx", PreTransformMatrix))))
 		return E_FAIL;
+
 
 	/* For.Prototype_GameObject_EffectCamera */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_GameObject_EffectCamera"),
@@ -62,15 +66,29 @@ HRESULT CLevel_Effect::Ready_Prototypes()
 		CEffectObject::Create(m_pDevice, m_pContext, Client::OBJECTID::EFFECTOBJECT))))
 		return E_FAIL;
 
+#pragma region DIFFUSE
 	/* For.Prototype_Component_Texture_Effect */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Texture_Effect"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/Effect%d.png"), 1))))
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Texture_Effect_Diffuse"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/Diffuse/Diffuse%d.png"), 1))))
 		return E_FAIL;
+	m_pEffectGUI->Add_SRV(TEXT("../../Client/Bin/Resources/Textures/Effect/Diffuse/Diffuse%d.png"), 1, CEffect_GUI::TEXTURE_TYPE::DIFFUSE);
+#pragma endregion
 
+#pragma region MASK
 	/* For.Prototype_Component_Texture_Effect_Mask */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Texture_Effect_Mask"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Mask/Mask%d.png"), 1))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/Mask/Mask%d.png"), 1))))
 		return E_FAIL;
+	m_pEffectGUI->Add_SRV(TEXT("../../Client/Bin/Resources/Textures/Effect/Mask/Mask%d.png"), 1, CEffect_GUI::TEXTURE_TYPE::MASK);
+#pragma endregion
+
+#pragma region NOISE
+	/* For.Prototype_Component_Texture_Effect_Noise */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Texture_Effect_Noise"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/Noise/Noise%d.png"), 1))))
+		return E_FAIL;
+	m_pEffectGUI->Add_SRV(TEXT("../../Client/Bin/Resources/Textures/Effect/Noise/Noise%d.png"), 1, CEffect_GUI::TEXTURE_TYPE::NOISE);
+#pragma endregion
 
 	return S_OK;
 }
@@ -82,7 +100,7 @@ HRESULT CLevel_Effect::Ready_Camera()
 	CameraDesc.fFovy = XMConvertToRadians(60.0f);
 	CameraDesc.fNear = 0.1f;
 	CameraDesc.fFar = 1000.f;
-	CameraDesc.vEye = _float4(0.f, 30.f, -30.f, 1.f);
+	CameraDesc.vEye = _float4(0.f, 1.f, -1.f, 1.f);
 	CameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
 	CameraDesc.fSpeedPerSec = 20.f;
 	CameraDesc.fRotationPerSec = XMConvertToRadians(90.0f);

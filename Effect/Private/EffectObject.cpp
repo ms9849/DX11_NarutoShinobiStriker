@@ -36,6 +36,8 @@ void CEffectObject::Priority_Update(_float fTimeDelta)
 
 void CEffectObject::Update(_float fTimeDelta)
 {
+	Play_Sprite(fTimeDelta);
+	Check_LifeTime(fTimeDelta);
 }
 
 void CEffectObject::Late_Update(_float fTimeDelta)
@@ -51,11 +53,35 @@ HRESULT CEffectObject::Render()
 
 	for (_uint i = 0; i < m_iNumMeshes; ++i)
 	{
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_iNumWidth", &m_iNumWidth, sizeof(_uint))))
+			return E_FAIL;
+
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_iNumHeight", &m_iNumWidth, sizeof(_uint))))
+			return E_FAIL;
+
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_fDeltaU", &m_fDeltaU, sizeof(_float))))
+			return E_FAIL;
+
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_fDeltaV", &m_fDeltaV, sizeof(_float))))
+			return E_FAIL;
+
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_iCurrentIdx", &m_iCurrentIdx, sizeof(_uint))))
+			return E_FAIL;
+
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_fLifeTimeAcc", &m_fLifeTimeAcc, sizeof(_float))))
+			return E_FAIL;
+
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_fLifeTime", &m_fLifeTime, sizeof(_float))))
+			return E_FAIL;
+
 		/* 바인드 머테리얼이 아니라 내가 들고 있는 텍스쳐를 선택해서 바인딩 해줘야지. */
 		if (FAILED(m_pDiffuseTextureCom->Bind_ShaderResource(m_pShaderCom, "g_DiffuseTexture", m_iDiffuseTextureIdx)))
 			return E_FAIL;
 
 		if (FAILED(m_pMaskTextureCom->Bind_ShaderResource(m_pShaderCom, "g_MaskTexture", m_iMaskTextureIdx)))
+			return E_FAIL;
+
+		if (FAILED(m_pNoiseTextureCom->Bind_ShaderResource(m_pShaderCom, "g_NoiseTexture", m_iNoiseTextureIdx)))
 			return E_FAIL;
 
 		if (FAILED(m_pShaderCom->Begin(0)))
@@ -68,9 +94,45 @@ HRESULT CEffectObject::Render()
 	return S_OK;
 }
 
+void CEffectObject::Play_Sprite(_float fTimeDelta)
+{
+	m_fTimeAcc += fTimeDelta;
+
+	if (m_fTimeAcc >= m_fFrameTime)
+	{
+		m_fTimeAcc = 0.f;
+		m_iCurrentIdx++;
+
+		if (m_iCurrentIdx >= m_iMaxIdx)
+			m_iCurrentIdx = 0;
+	}
+}
+
+void CEffectObject::Check_LifeTime(_float fTimeDelta)
+{
+	m_fLifeTime += fTimeDelta;
+
+	if (m_fLifeTimeAcc >= m_fLifeTime)
+	{
+		m_fLifeTimeAcc = 0.f;
+		//사망처리 해줘야됨 원래
+	}
+}
+
 void CEffectObject::Set_Desc(void* pArg)
 {
 	EFFECT_OBJECT_DESC* pDesc = static_cast<EFFECT_OBJECT_DESC*>(pArg);
+
+	m_iNumHeight = pDesc->iNumHeight;
+	m_iNumWidth = pDesc->iNumWidth;
+	m_iCurrentIdx = pDesc->iCurrentIdx;
+	m_fFrameTime = pDesc->fFrameTime;
+	m_fLifeTime = pDesc->fFrameTime * m_iNumHeight * m_iNumWidth;
+
+	if (m_iNumHeight * m_iNumWidth > 0)
+		m_iMaxIdx = m_iNumHeight * m_iNumWidth - 1;
+	else
+		m_iMaxIdx = 0;
 
 	if(-1 != pDesc->iTextureNum)
 		m_iDiffuseTextureIdx = pDesc->iTextureNum;
@@ -78,12 +140,34 @@ void CEffectObject::Set_Desc(void* pArg)
 	if (-1 != pDesc->iMaskTextureNum)
 		m_iMaskTextureIdx = pDesc->iMaskTextureNum;
 
-	if (TEXT("") != pDesc->strMaskTextureTag)
+	if (-1 != pDesc->iNoiseTextureNum)
+		m_iNoiseTextureIdx = pDesc->iNoiseTextureNum;
+
+	/* Com_DiffuseTexture */
+	if (TEXT("") != pDesc->strTextureTag)
 	{
-		Safe_Release(m_p)
+		Safe_Release(m_pDiffuseTextureCom);
+
+		auto iter = m_Components.find(TEXT("Com_DiffuseTexture"));
+		m_Components.erase(iter);
+		Safe_Release(iter->second);
+
+		__super::Add_Component(ENUM_CLASS(LEVEL::EFFECT), pDesc->strTextureTag,
+			TEXT("Com_MaskTexture"), reinterpret_cast<CComponent**>(&m_pMaskTextureCom));
 	}
 
+	/* Com_MaskTexture */
+	if (TEXT("") != pDesc->strMaskTextureTag)
+	{
+		Safe_Release(m_pMaskTextureCom);
 
+		auto iter = m_Components.find(TEXT("Com_MaskTexture"));
+		m_Components.erase(iter);
+		Safe_Release(iter->second);
+
+		__super::Add_Component(ENUM_CLASS(LEVEL::EFFECT), pDesc->strMaskTextureTag,
+			TEXT("Com_MaskTexture"), reinterpret_cast<CComponent**>(&m_pMaskTextureCom));
+	}
 }
 
 HRESULT CEffectObject::Ready_Components()
@@ -99,13 +183,18 @@ HRESULT CEffectObject::Ready_Components()
 		return E_FAIL;
 
 	/* Com_DiffuseTexture */
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Texture_Effect"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Texture_Effect_Diffuse"),
 		TEXT("Com_DiffuseTexture"), reinterpret_cast<CComponent**>(&m_pDiffuseTextureCom))))
 		return E_FAIL;
 
 	/* Com_MaskTexture */
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Texture_Effect_Mask"),
 		TEXT("Com_MaskTexture"), reinterpret_cast<CComponent**>(&m_pMaskTextureCom))))
+		return E_FAIL;
+
+	/* Com_NoiseTexture */
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Texture_Effect_Noise"),
+		TEXT("Com_NoiseTexture"), reinterpret_cast<CComponent**>(&m_pNoiseTextureCom))))
 		return E_FAIL;
 
 	return S_OK;
@@ -159,4 +248,5 @@ void CEffectObject::Free()
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pDiffuseTextureCom);
 	Safe_Release(m_pMaskTextureCom);
+	Safe_Release(m_pNoiseTextureCom);
 }

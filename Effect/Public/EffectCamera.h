@@ -44,7 +44,7 @@ private:
 	_float m_fMouseSensivity = { 0.f };
 	_float m_fSpeedFactor = { 1.f };
 
-	_bool  m_IsCameraActivated = { true };
+	_bool  m_IsCameraActivated = { false };
 public:
 	static CEffectCamera* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, Client::OBJECTID eObjectID);
 	virtual CGameObject* Clone(void* pArg);
