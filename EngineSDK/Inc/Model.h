@@ -94,7 +94,7 @@ private:
 	_uint						m_iNumMaterials = {};
 	vector<class CMaterial*>	m_Materials;
 
-	MODEL						m_eType = {};
+	MODEL						m_eType = { MODEL::NONANIM };
 	_float4x4					m_PreTransformMatrix = {};
 	_bool						m_isBinary = { false };
 	_char						m_szModelName[MAX_PATH];

@@ -6,7 +6,7 @@
 #include "Shader.h"
 
 CMesh::CMesh(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-    : CVIBuffer { pDevice, pContext }
+	: CVIBuffer{ pDevice, pContext }
 {
 }
 
@@ -56,13 +56,6 @@ _bool CMesh::Picking(_fmatrix WolrdMatrixInverse, _float3* pOut)
     }
 
     return false;
-}
-
-_float CMesh::Compute_Height(_fvector vPosition, _fmatrix vWorldMatrix)
-{
-
-
-    return _float();
 }
 
 HRESULT CMesh::Initialize_Prototype(MODEL eType, const class CModel* pModel, const aiMesh* pAIMesh, _fmatrix PreTransformMatrix)
@@ -336,21 +329,6 @@ HRESULT CMesh::Load_Mesh_FromBinary(HANDLE hHandle, DWORD* dwByte, MODEL eType)
     if (FAILED(m_pDevice->CreateBuffer(&IBDesc, &InitialIBData, &m_pIB)))
         return E_FAIL;
 #pragma endregion
-
-    //D3D11_BUFFER_DESC StagingDesc{};
-    //m_pIB->GetDesc(&StagingDesc);
-    //StagingDesc.Usage = D3D11_USAGE_STAGING;
-    //StagingDesc.BindFlags = 0;
-    //StagingDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
-    //StagingDesc.MiscFlags = 0;
-
-    //if (FAILED(m_pDevice->CreateBuffer(&StagingDesc, nullptr, &m_pStagingIB)))
-    //    return E_FAIL;
-
-    //m_pContext->CopyResource(m_pStagingIB, m_pIB);
-
-    //if (FAILED(m_pContext->Map(m_pStagingIB, 0, D3D11_MAP_READ, 0, &m_StagingData)))
-    //    return E_FAIL;
 
     return S_OK;
 }

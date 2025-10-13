@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="02. EFFECT">
+      <UniqueIdentifier>{d90c022c-a160-4863-9aec-e997dcd303f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. GAMEOBJECT">
+      <UniqueIdentifier>{d7ced90e-b7c8-43a6-bde4-816fd128a8e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99. DEFINES">
+      <UniqueIdentifier>{4030d916-5faa-4dff-8192-b1762a2fb37f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. DEFAULTS">
+      <UniqueIdentifier>{0f2cc02c-e414-45de-9417-58766d8b9ba3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. LEVELS">
+      <UniqueIdentifier>{0e714864-b481-40c5-9084-17dd6d3adab1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00. MAINAPP">
+      <UniqueIdentifier>{a8c1200f-611d-432d-ac6f-76d34e5f2fdc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. LEVELS\Effect">
+      <UniqueIdentifier>{4bbf452b-95d0-4cb8-aca0-4f3a7f4f11ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. EFFECT\Manager">
+      <UniqueIdentifier>{162ddd17-85ec-426e-9460-c74d05b50cf9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. GAMEOBJECT\EFFECT">
+      <UniqueIdentifier>{e715ef40-1379-42f4-8ba7-37f9b75f002d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. GAMEOBJECT\CAMERA">
+      <UniqueIdentifier>{d9948501-1115-402b-9102-5cbd76db6adf}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="EffectTool.h">
+      <Filter>98. DEFAULTS</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>98. DEFAULTS</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>98. DEFAULTS</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>98. DEFAULTS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\EffectApp.h">
+      <Filter>00. MAINAPP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Effect_Defines.h">
+      <Filter>99. DEFINES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Level_Effect.h">
+      <Filter>01. LEVELS\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Effect_GUI.h">
+      <Filter>02. EFFECT\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\EffectObject.h">
+      <Filter>03. GAMEOBJECT\EFFECT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\EffectCamera.h">
+      <Filter>03. GAMEOBJECT\CAMERA</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Effect.ico">
+      <Filter>98. DEFAULTS</Filter>
+    </Image>
+    <Image Include="small.ico">
+      <Filter>98. DEFAULTS</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Effect.rc">
+      <Filter>98. DEFAULTS</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="EffectTool.cpp">
+      <Filter>98. DEFAULTS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\EffectApp.cpp">
+      <Filter>00. MAINAPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_Effect.cpp">
+      <Filter>01. LEVELS\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Effect_GUI.cpp">
+      <Filter>02. EFFECT\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\EffectObject.cpp">
+      <Filter>03. GAMEOBJECT\EFFECT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\EffectCamera.cpp">
+      <Filter>03. GAMEOBJECT\CAMERA</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

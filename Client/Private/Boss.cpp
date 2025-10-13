@@ -349,7 +349,7 @@ HRESULT CBoss::Ready_Position()
 
     else if (TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_BOSS == m_pGameManager->Get_CurrentTrigger())
     {
-        m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(-85.641, 28.7f, 59.220f, 1.f));
+        m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(-85.641f, 28.7f, 59.220f, 1.f));
         m_pTransformCom->Rotation(0.f, 180.f, 0.f);
     }
 
