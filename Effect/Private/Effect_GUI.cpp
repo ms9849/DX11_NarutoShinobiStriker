@@ -90,6 +90,7 @@ void CEffect_GUI::Effect_GUI()
 			ImGui::Text("");
 			ImGui::InputInt("TextureNum", (_int*)&m_iTextureNum);
 			ImGui::InputInt("MaskTextureNum", (_int*)&m_iMaskTextureNum);
+			ImGui::InputInt("NoiseTextureNum", (_int*)&m_iNoiseTextureNum);
 			ImGui::Text("");
 			ImGui::InputFloat("FrameTime", &m_fFrameTime);
 
@@ -110,6 +111,7 @@ void CEffect_GUI::Effect_GUI()
 					Desc.iCurrentIdx = m_iCurrentIdx;
 					Desc.iTextureNum = m_iTextureNum;
 					Desc.iMaskTextureNum = m_iMaskTextureNum;
+					Desc.iNoiseTextureNum = m_iNoiseTextureNum;
 					Desc.fFrameTime = m_fFrameTime;
 
 					m_pEffectObject->Set_Desc(&Desc);
@@ -134,10 +136,24 @@ void CEffect_GUI::Effect_GUI()
 			ImGui::EndTabItem();
 		}
 
-		if (ImGui::BeginTabItem("Dissolve"))
+		if (ImGui::BeginTabItem("Noise"))
 		{
+			_int iCount = 0;
+			
 			for (auto& pTexture : m_NoiseSRVs)
-				ImGui::Image((void*)pTexture, ImVec2(100, 100));
+			{
+				// Image 대신 ImageButton 사용
+				if (ImGui::ImageButton((string("NoiseNum") + to_string(iCount)).c_str(), (ID3D11ShaderResourceView*)pTexture, ImVec2(100.f, 100.f)))
+				{
+					m_iNoiseTextureNum = iCount;
+				}
+
+
+				if (iCount % 2 == 0)
+					ImGui::SameLine(0.0f, 10.f);
+
+				iCount++;
+			}
 
 			ImGui::EndTabItem();
 		}

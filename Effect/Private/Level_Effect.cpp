@@ -85,9 +85,9 @@ HRESULT CLevel_Effect::Ready_Prototypes()
 #pragma region NOISE
 	/* For.Prototype_Component_Texture_Effect_Noise */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Texture_Effect_Noise"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/Noise/Noise%d.png"), 1))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/Noise/Noise%d.png"), 3))))
 		return E_FAIL;
-	m_pEffectGUI->Add_SRV(TEXT("../../Client/Bin/Resources/Textures/Effect/Noise/Noise%d.png"), 1, CEffect_GUI::TEXTURE_TYPE::NOISE);
+	m_pEffectGUI->Add_SRV(TEXT("../../Client/Bin/Resources/Textures/Effect/Noise/Noise%d.png"), 3, CEffect_GUI::TEXTURE_TYPE::NOISE);
 #pragma endregion
 
 	return S_OK;

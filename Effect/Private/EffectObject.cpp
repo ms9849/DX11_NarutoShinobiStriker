@@ -110,7 +110,7 @@ void CEffectObject::Play_Sprite(_float fTimeDelta)
 
 void CEffectObject::Check_LifeTime(_float fTimeDelta)
 {
-	m_fLifeTime += fTimeDelta;
+	m_fLifeTimeAcc += fTimeDelta;
 
 	if (m_fLifeTimeAcc >= m_fLifeTime)
 	{

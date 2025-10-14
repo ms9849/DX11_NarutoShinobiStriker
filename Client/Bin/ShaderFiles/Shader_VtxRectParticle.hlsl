@@ -4,12 +4,13 @@ matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 
 texture2D g_Texture;
 
+
 struct VS_IN
 {
     float3 vPosition : POSITION;
     float2 vTexcoord : TEXCOORD0;
     
-    /* 인스턴스 하나의 행렬들과 LifeTime을 받아온다. */
+    /* 인스턴스 하나의 행렬과 lifetime을 받아온다. */
     float4 vRight : TEXCOORD1;
     float4 vUp : TEXCOORD2;
     float4 vLook : TEXCOORD3;
@@ -59,8 +60,6 @@ struct PS_OUT
 {
     float4 vColor : SV_TARGET0;
 };
-
-
 
 /* 픽셀 쉐이더 : 픽셀의 최종적인 색을 결정하낟. */
 PS_OUT PS_MAIN(PS_IN In)

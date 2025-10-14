@@ -11,7 +11,7 @@ CVIBuffer_Point_Instance::CVIBuffer_Point_Instance(const CVIBuffer_Point_Instanc
     : CVIBuffer_Instance{ Prototype }
     , m_pInstanceVertices{ Prototype.m_pInstanceVertices }
     , m_pSpeeds{ Prototype.m_pSpeeds }
-    , m_isLoop{ Prototype.m_isLoop }
+    , m_IsLoop{ Prototype.m_IsLoop }
 {
 }
 
@@ -64,7 +64,7 @@ Point 형태이므로 인스턴스는 사용하지 않는다.
 #pragma region INSTANCE_BUFFER
 	const POINT_INSTANCE_DESC* pDesc = static_cast<const POINT_INSTANCE_DESC*>(pInstanceDesc);
 	m_vPivot = pDesc->vPivot;
-	m_isLoop = pDesc->isLoop;
+	m_IsLoop = pDesc->isLoop;
 	m_iNumInstance = pDesc->iNumInstance;
 	m_iInstanceStride = sizeof(VTX_INSTANCE_PARTICLE);
 	m_iNumIndexPerInstance = 6;
@@ -151,6 +151,8 @@ HRESULT CVIBuffer_Point_Instance::Render()
 
 void CVIBuffer_Point_Instance::Drop(_float fTimeDelta)
 {
+	m_IsDead = true;
+
 	D3D11_MAPPED_SUBRESOURCE		SubResource{};
 
 	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
@@ -162,11 +164,16 @@ void CVIBuffer_Point_Instance::Drop(_float fTimeDelta)
 		pVertices[i].vTranslation.y -= m_pSpeeds[i] * fTimeDelta;
 		pVertices[i].vLifeTime.x += fTimeDelta;
 
-		if (true == m_isLoop &&
+		if (true == m_IsLoop &&
 			pVertices[i].vLifeTime.x >= pVertices[i].vLifeTime.y)
 		{
 			pVertices[i].vLifeTime.x = 0.f;
 			pVertices[i].vTranslation = m_pInstanceVertices[i].vTranslation;
+		}
+		else
+		{
+			if (false == m_IsLoop && pVertices[i].vLifeTime.x < pVertices[i].vLifeTime.y)
+				m_IsDead = false;
 		}
 	}
 
@@ -175,6 +182,44 @@ void CVIBuffer_Point_Instance::Drop(_float fTimeDelta)
 
 void CVIBuffer_Point_Instance::Spread(_float fTimeDelta)
 {
+	m_IsDead = true;
+
+	D3D11_MAPPED_SUBRESOURCE		SubResource{};
+
+	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
+
+	VTX_INSTANCE_PARTICLE* pVertices = static_cast<VTX_INSTANCE_PARTICLE*>(SubResource.pData);
+
+	for (size_t i = 0; i < m_iNumInstance; i++)
+	{
+		/*pVertices[i].vTranslation.y -= m_pSpeeds[i] * fTimeDelta;*/
+		_vector		vDir = XMVectorSetW(XMLoadFloat4(&pVertices[i].vTranslation) - XMLoadFloat3(&m_vPivot), 0.f);
+
+		XMStoreFloat4(&pVertices[i].vTranslation, XMLoadFloat4(&pVertices[i].vTranslation) + XMVector3Normalize(vDir) * m_pSpeeds[i] * fTimeDelta);
+
+		/* LifeTime의 X는 현재 나이, LifeTime의 y는 총 수명 */
+		pVertices[i].vLifeTime.x += fTimeDelta;
+
+		if (true == m_IsLoop &&
+			pVertices[i].vLifeTime.x >= pVertices[i].vLifeTime.y)
+		{
+			pVertices[i].vLifeTime.x = 0.f;
+			pVertices[i].vTranslation = m_pInstanceVertices[i].vTranslation;
+		}
+		else
+		{
+			if (false == m_IsLoop && pVertices[i].vLifeTime.x < pVertices[i].vLifeTime.y)
+				m_IsDead = false;
+		}
+	}
+
+	m_pContext->Unmap(m_pVBInstance, 0);
+}
+
+void CVIBuffer_Point_Instance::Explosion(_float fTimeDelta)
+{
+	m_IsDead = true;
+
 	D3D11_MAPPED_SUBRESOURCE		SubResource{};
 
 	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
@@ -190,11 +235,16 @@ void CVIBuffer_Point_Instance::Spread(_float fTimeDelta)
 
 		pVertices[i].vLifeTime.x += fTimeDelta;
 
-		if (true == m_isLoop &&
+		if (true == m_IsLoop &&
 			pVertices[i].vLifeTime.x >= pVertices[i].vLifeTime.y)
 		{
 			pVertices[i].vLifeTime.x = 0.f;
 			pVertices[i].vTranslation = m_pInstanceVertices[i].vTranslation;
+		}
+		else
+		{
+			if (pVertices[i].vLifeTime.x < pVertices[i].vLifeTime.y)
+				m_IsDead = false;
 		}
 	}
 

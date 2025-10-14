@@ -11,26 +11,39 @@ struct VS_IN
     
     row_major float4x4 TransformMatrix : WORLD;
     
-    float2 vLifeTime : TEXCOORD0;
+    float4 vColor    : COLOR;
+    float3 vRotation : TEXCOORD0;
+    float2 vLifeTime : TEXCOORD1;
+    float2 vDeltaAcc : TEXCOORD2;
 };
 
 struct VS_OUT
 {
     float4 vPosition : POSITION;
     float fSize : PSIZE;
+    
+    float4 vColor : COLOR;
+    float3 vRotation : TEXCOORD1;
     float2 vLifeTime : TEXCOORD0;
+    float2 vDeltaAcc : TEXCOORD2;
 };
 
 VS_OUT VS_MAIN(VS_IN In)
 {
     VS_OUT Out;
-   
+    
+    /* 로컬 좌표를 의미하는 vPosition */
     vector vPosition = mul(vector(In.vPosition, 1.f), In.TransformMatrix);
     
+    /* 월드 좌표를 의미하는 vPosition */
     Out.vPosition = mul(vPosition, g_WorldMatrix);
     Out.fSize = length(In.TransformMatrix._11_12_13);
+    
+    Out.vColor = In.vColor;
+    Out.vRotation = In.vRotation;
     Out.vLifeTime = In.vLifeTime;
-
+    Out.vDeltaAcc = In.vDeltaAcc;
+    
     return Out;
 }
 
@@ -38,7 +51,11 @@ struct GS_IN
 {
     float4 vPosition : POSITION;
     float fSize : PSIZE;
+    
+    float4 vColor : COLOR;
+    float3 vRotation : TEXCOORD1;
     float2 vLifeTime : TEXCOORD0;
+    float2 vDeltaAcc : TEXCOORD2;
 };
 
 struct GS_OUT
@@ -51,6 +68,7 @@ struct GS_OUT
 //GS_MAIN(triangle GS_INIn[3])
 //GS_MAIN(line GS_IN In[2])
 
+/* 점이니까 무조건 한개만 들어온다는 뜻으로, In[1]. */
 [maxvertexcount(6)]
 void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> OutStream)
 {
@@ -106,7 +124,6 @@ struct PS_OUT
 {
     float4 vColor : SV_TARGET0;
 };
-
 
 
 /* 픽셀 쉐이더 : 픽셀의 최종적인 색을 결정하낟. */

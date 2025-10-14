@@ -46,7 +46,7 @@ private:
 	_float m_fDeltaU = { 0.f }, m_fDeltaV = { 0.f };
 	_uint  m_iNumWidth = { 1 }, m_iNumHeight = { 1 };
 	_uint  m_iCurrentIdx = { 0 };
-	_uint  m_iTextureNum = { 0 }, m_iMaskTextureNum = { 0 };
+	_uint  m_iTextureNum = { 0 }, m_iMaskTextureNum = { 0 }, m_iNoiseTextureNum = { 0 };
 	_float m_fFrameTime = { 0.1f };
 
 public:
