@@ -11,7 +11,7 @@ CVIBuffer_Rect_Instance::CVIBuffer_Rect_Instance(const CVIBuffer_Rect_Instance& 
 	: CVIBuffer_Instance{ Prototype }
 	, m_pInstanceVertices{ Prototype.m_pInstanceVertices }
 	, m_pSpeeds{ Prototype.m_pSpeeds }
-	, m_isLoop{ Prototype.m_isLoop }
+	, m_IsLoop{ Prototype.m_IsLoop }
 {
 }
 
@@ -115,7 +115,7 @@ HRESULT CVIBuffer_Rect_Instance::Initialize_Prototype(const INSTANCE_DESC* pInst
 #pragma region INSTANCE_BUFFER
 	const RECT_INSTANCE_DESC* pDesc = static_cast<const RECT_INSTANCE_DESC*>(pInstanceDesc);
 
-	m_isLoop = pDesc->isLoop;
+	m_IsLoop = pDesc->isLoop;
 	m_iNumInstance = pDesc->iNumInstance;
 	m_iInstanceStride = sizeof(VTX_INSTANCE_PARTICLE);
 	m_iNumIndexPerInstance = 6;
@@ -181,7 +181,7 @@ void CVIBuffer_Rect_Instance::Drop(_float fTimeDelta)
 		pVertices[i].vTranslation.y -= m_pSpeeds[i] * fTimeDelta;
 		pVertices[i].vLifeTime.x += fTimeDelta;
 
-		if (true == m_isLoop &&
+		if (true == m_IsLoop &&
 			pVertices[i].vLifeTime.x >= pVertices[i].vLifeTime.y)
 		{
 			pVertices[i].vLifeTime.x = 0.f;

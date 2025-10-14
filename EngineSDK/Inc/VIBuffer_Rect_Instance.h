@@ -31,7 +31,7 @@ private:
 	VTX_INSTANCE_PARTICLE* m_pInstanceVertices = { nullptr };
 
 	_float* m_pSpeeds = { nullptr };
-	_bool	m_isLoop = { false };
+	_bool	m_IsLoop = { false };
 public:
 	static CVIBuffer_Rect_Instance* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const INSTANCE_DESC* pInstanceDesc);
 	virtual CComponent* Clone(void* pArg) override;

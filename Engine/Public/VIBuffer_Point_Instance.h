@@ -27,16 +27,20 @@ public:
 	virtual HRESULT Render() override;
 
 public:
+	_bool IsAllDead() { return m_IsDead; }
+
+public:
 	virtual void Drop(_float fTimeDelta);
 	virtual void Spread(_float fTimeDelta);
+	virtual void Explosion(_float fTimeDelta);
 
 private:
 	VTX_INSTANCE_PARTICLE* m_pInstanceVertices = { nullptr };
 
 	_float3 m_vPivot = {};
 	_float* m_pSpeeds = { nullptr };
-	_bool	m_isLoop = { false };
-
+	_bool	m_IsLoop = { false };
+	_bool   m_IsDead = { false };
 public:
 	static CVIBuffer_Point_Instance* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const INSTANCE_DESC* pInstanceDesc);
 	virtual CComponent* Clone(void* pArg) override;

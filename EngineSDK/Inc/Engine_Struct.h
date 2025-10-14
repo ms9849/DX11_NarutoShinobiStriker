@@ -119,7 +119,7 @@ namespace Engine
 
 	typedef struct tagVertexPosTexInstanceParticleDesc
 	{
-		static constexpr unsigned int					iNumElements = { 7 };
+		static constexpr unsigned int					iNumElements = { 10 };
 		static constexpr D3D11_INPUT_ELEMENT_DESC		Elements[] = {
 			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
 			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
@@ -128,14 +128,18 @@ namespace Engine
 			{ "TEXCOORD", 2, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 16, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
 			{ "TEXCOORD", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 32, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
 			{ "TEXCOORD", 4, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 48, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
-			{ "TEXCOORD", 5, DXGI_FORMAT_R32G32_FLOAT, 1, 64, D3D11_INPUT_PER_INSTANCE_DATA, 1 }
+
+			{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 64, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+			{ "TEXCOORD", 5, DXGI_FORMAT_R32G32B32_FLOAT, 1, 80, D3D11_INPUT_PER_INSTANCE_DATA, 1 }, // rotation
+			{ "TEXCOORD", 6, DXGI_FORMAT_R32G32_FLOAT,	  1, 92, D3D11_INPUT_PER_INSTANCE_DATA, 1 }, // lifetime
+			{ "TEXCOORD", 7, DXGI_FORMAT_R32G32_FLOAT,	  1, 100, D3D11_INPUT_PER_INSTANCE_DATA, 1 }, // DeltaAcc
 		};
 	}VTX_POSTEX_INSTANCE_PARTICLE;
 
 
 	typedef struct tagVertexPosInstanceParticleDesc
 	{
-		static constexpr unsigned int					iNumElements = { 6 };
+		static constexpr unsigned int					iNumElements = { 9 };
 		static constexpr D3D11_INPUT_ELEMENT_DESC		Elements[] = {
 			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
 
@@ -143,7 +147,11 @@ namespace Engine
 			{ "WORLD", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 16, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
 			{ "WORLD", 2, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 32, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
 			{ "WORLD", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 48, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
-			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 1, 64, D3D11_INPUT_PER_INSTANCE_DATA, 1 }
+
+			{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 64, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32B32_FLOAT, 1, 80, D3D11_INPUT_PER_INSTANCE_DATA, 1 }, // rotation
+			{ "TEXCOORD", 1, DXGI_FORMAT_R32G32_FLOAT,	  1, 92, D3D11_INPUT_PER_INSTANCE_DATA, 1 }, // lifetime
+			{ "TEXCOORD", 2, DXGI_FORMAT_R32G32_FLOAT,	  1, 100, D3D11_INPUT_PER_INSTANCE_DATA, 1 }, // DeltaAcc
 		};
 	}VTX_POS_INSTANCE_PARTICLE;
 
@@ -155,7 +163,7 @@ namespace Engine
 		XMFLOAT4			vLook;
 		XMFLOAT4			vTranslation;
 
-	}VTX_INSTANCE_MODEL;
+	} VTX_INSTANCE_MODEL;
 
 	/* 파티클 인스턴스용 정점 데이터 */
 	typedef struct tagVertexInstance_Particle
@@ -165,8 +173,12 @@ namespace Engine
 		XMFLOAT4			vLook;
 		XMFLOAT4			vTranslation;
 
+		XMFLOAT4			vColor;
+		XMFLOAT3			vRoation;
 		XMFLOAT2			vLifeTime;
-	}VTX_INSTANCE_PARTICLE;
+		XMFLOAT2			vDeltaAcc;
+
+	} VTX_INSTANCE_PARTICLE;
 	/* 
 	Channel에서 사용하는 키프레임 별 Scale, Rotation, Translation.
 	추후 선형 보간을 통해 키프레임 사이의 애니메이션을 직접 만들어줘야 한다.
