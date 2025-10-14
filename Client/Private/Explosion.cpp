@@ -34,7 +34,7 @@ void CExplosion::Priority_Update(_float fTimeDelta)
 
 void CExplosion::Update(_float fTimeDelta)
 {
-    m_pVIBufferCom->Spread(fTimeDelta);
+    m_pVIBufferCom->Explosion(fTimeDelta);
 }
 
 void CExplosion::Late_Update(_float fTimeDelta)
@@ -83,15 +83,15 @@ HRESULT CExplosion::Bind_ShaderResources()
 
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", m_pGameInstance->Get_PipeLine_Float4x4(D3DTS::VIEW))))
         return E_FAIL;
+
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_PipeLine_Float4x4(D3DTS::PROJ))))
         return E_FAIL;
 
-    if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
+    if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_DiffuseTexture", 0)))
         return E_FAIL;
 
     if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", m_pGameInstance->Get_CamState(STATE::POSITION), sizeof(_float3))))
         return E_FAIL;
-
 
     return S_OK;
 }

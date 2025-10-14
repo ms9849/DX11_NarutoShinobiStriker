@@ -31,6 +31,9 @@
     <Filter Include="03. GAMEOBJECT\CAMERA">
       <UniqueIdentifier>{d9948501-1115-402b-9102-5cbd76db6adf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. GAMEOBJECT\PARTICLE">
+      <UniqueIdentifier>{02eba8a8-fe6f-4bb8-b89e-d825625357dd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EffectTool.h">
@@ -62,6 +65,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\EffectCamera.h">
       <Filter>03. GAMEOBJECT\CAMERA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ParticleObject.h">
+      <Filter>03. GAMEOBJECT\PARTICLE</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -95,6 +101,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\EffectCamera.cpp">
       <Filter>03. GAMEOBJECT\CAMERA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ParticleObject.cpp">
+      <Filter>03. GAMEOBJECT\PARTICLE</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

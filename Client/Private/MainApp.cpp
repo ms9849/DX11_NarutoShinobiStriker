@@ -19,6 +19,7 @@
 #include "Tree.h"
 #include "Font.h"
 #include "TriggerBox.h"
+#include "ParticleObject.h"
 
 #pragma region Skill
 
@@ -151,6 +152,11 @@ HRESULT CMainApp::Ready_Prototypes()
 	/* For.Prototype_GameObject_MonsterSpawner*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_MonsterSpawner"),
 		CTriggerBox::Create(m_pDevice, m_pContext, OBJECTID::MONSTER_SPAWNER))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_ParticleObject */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"),
+		CParticleObject::Create(m_pDevice, m_pContext, OBJECTID::PARTICLE))))
 		return E_FAIL;
 
 #pragma endregion

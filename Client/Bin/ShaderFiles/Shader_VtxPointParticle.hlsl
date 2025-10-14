@@ -2,7 +2,7 @@
 
 matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 
-texture2D g_Texture;
+texture2D g_DiffuseTexture;
 vector g_vCamPosition;
 
 struct VS_IN
@@ -11,21 +11,21 @@ struct VS_IN
     
     row_major float4x4 TransformMatrix : WORLD;
     
-    float4 vColor    : COLOR;
     float3 vRotation : TEXCOORD0;
     float2 vLifeTime : TEXCOORD1;
     float2 vDeltaAcc : TEXCOORD2;
+    float3 vDirection : TEXCOORD3;
 };
 
 struct VS_OUT
 {
     float4 vPosition : POSITION;
-    float fSize : PSIZE;
+    float  fSize : PSIZE;
     
-    float4 vColor : COLOR;
-    float3 vRotation : TEXCOORD1;
-    float2 vLifeTime : TEXCOORD0;
+    float3 vRotation : TEXCOORD0;
+    float2 vLifeTime : TEXCOORD1;
     float2 vDeltaAcc : TEXCOORD2;
+    float3 vDirection : TEXCOORD3;
 };
 
 VS_OUT VS_MAIN(VS_IN In)
@@ -39,10 +39,10 @@ VS_OUT VS_MAIN(VS_IN In)
     Out.vPosition = mul(vPosition, g_WorldMatrix);
     Out.fSize = length(In.TransformMatrix._11_12_13);
     
-    Out.vColor = In.vColor;
     Out.vRotation = In.vRotation;
     Out.vLifeTime = In.vLifeTime;
     Out.vDeltaAcc = In.vDeltaAcc;
+    Out.vDirection = In.vDirection;
     
     return Out;
 }
@@ -50,12 +50,12 @@ VS_OUT VS_MAIN(VS_IN In)
 struct GS_IN
 {
     float4 vPosition : POSITION;
-    float fSize : PSIZE;
+    float  fSize : PSIZE;
     
-    float4 vColor : COLOR;
-    float3 vRotation : TEXCOORD1;
-    float2 vLifeTime : TEXCOORD0;
+    float3 vRotation : TEXCOORD0;
+    float2 vLifeTime : TEXCOORD1;
     float2 vDeltaAcc : TEXCOORD2;
+    float3 vDirection : TEXCOORD3;
 };
 
 struct GS_OUT
@@ -74,10 +74,13 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> OutStream)
 {
     GS_OUT Out[4];
     
-    float3 vLook = (g_vCamPosition - In[0].vPosition).xyz;
-    float3 vRight = normalize(cross(float3(0.f, 1.f, 0.f), vLook)) * In[0].fSize * 0.5f;
-    float3 vUp = normalize(cross(vLook, vRight)) * In[0].fSize * 0.5f;
+    float3 vLook = normalize(In[0].vDirection.xyz);
+    float3 vRight = normalize(cross(float3(0.f, 1.f, 0.f), vLook)) * In[0].fSize * 2.f;
     
+    float3 vUp = normalize(cross(vLook, vRight)) * In[0].fSize * 0.5f;
+   
+    vLook = vRight;
+    vRight = normalize(cross(vUp, vLook)) * In[0].fSize * 2.f;
     
     matrix matVP = mul(g_ViewMatrix, g_ProjMatrix);
     
@@ -131,13 +134,17 @@ PS_OUT PS_MAIN(PS_IN In)
 {
     PS_OUT Out;
     
-    Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
+    Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexcoord);
     
-    if (Out.vColor.a < 0.4f)
+    if (Out.vColor.r < 0.8f)
         discard;
     
-    Out.vColor.a = saturate(In.vLifeTime.y - In.vLifeTime.x);
-    
+    //Out.vColor.a = saturate(In.vLifeTime.y - In.vLifeTime.x);
+
+    /* 텍스 쿠드 둘 중 하나라도 크다면 */
+    if (In.vTexcoord.x > saturate(1 - In.vLifeTime.x / In.vLifeTime.y) || In.vTexcoord.x < saturate(In.vLifeTime.x / In.vLifeTime.y))
+        discard;
+
     return Out;
 }
 
@@ -145,7 +152,7 @@ technique11 DefaultTechnique
 {
     pass Explosion
     {
-        SetRasterizerState(RS_Default);
+        SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_Default, 0);
         SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
         VertexShader = compile vs_5_0 VS_MAIN();
