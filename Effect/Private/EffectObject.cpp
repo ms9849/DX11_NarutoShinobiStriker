@@ -12,6 +12,124 @@ CEffectObject::CEffectObject(const CEffectObject& rhs)
 {
 }
 
+HRESULT CEffectObject::Save_ToBinary(const _char* pEffectName)
+{
+	_char szEffectPath[MAX_PATH] = {};
+	_tchar szPerfectModelName[MAX_PATH] = {};
+
+	strcpy_s(szEffectPath, pEffectName);
+		
+	/* ../Bin/Resources/Fiona_eff.bin*/
+	strcat_s(szEffectPath, "_eff.bin");
+	/*  char to tchar */
+	MultiByteToWideChar(CP_ACP, 0, szEffectPath, (_int)strlen(szEffectPath), szPerfectModelName, MAX_PATH);
+
+	DWORD	dwByte(0);
+	HANDLE hHandle = CreateFile(szPerfectModelName,
+		GENERIC_WRITE,  // 파일 용도(GENERIC_WRITE : 쓰기(저장), GENERIC_READ : 읽기(불러오기))
+		NULL,			// 공유 방식(NULL인 경우 공유하지 않음)
+		NULL,			// 보안 설정(NULL인 경우 기본값으로 설정)
+		CREATE_ALWAYS,	// 생성 방식(CREATE_ALWAYS : 쓰기 전용, OPEN_EXISTING : 읽기 전용)
+		FILE_ATTRIBUTE_NORMAL, // 파일 속성(숨김, 읽기 전용 파일 등) : 아무런 속성이 없는 일반 형식
+		NULL);	// 생성될 파일의 속성을 제공할 템플릿 파일(안쓸것이기 때문에 NULL)
+
+	if (hHandle == INVALID_HANDLE_VALUE)
+		return E_FAIL;
+
+	_char* pExt = strrchr(szEffectPath, '_'); 
+	if (pExt)
+		*pExt = '\0';
+
+	/* 모델 태그 */
+	size_t StringSize = m_strModelName.size();
+	WriteFile(hHandle, &StringSize, sizeof(size_t), &dwByte, nullptr);
+	WriteFile(hHandle, m_strModelName.c_str(), static_cast<DWORD>(m_strModelName.size() * sizeof(wchar_t)), &dwByte, NULL);
+
+	/* 디퓨즈 텍스쳐 넘버*/
+	WriteFile(hHandle, &m_iDiffuseTextureIdx, sizeof(_uint), &dwByte, nullptr);
+
+	/* 마스크 텍스쳐 넘버 */
+	WriteFile(hHandle, &m_iMaskTextureIdx, sizeof(_uint), &dwByte, nullptr);
+
+	/* 노이즈 텍스쳐 넘버 */
+	WriteFile(hHandle, &m_iNoiseTextureIdx, sizeof(_uint), &dwByte, nullptr);
+
+	/* U,V 델타 */
+	WriteFile(hHandle, &m_fDeltaU, sizeof(_float), &dwByte, nullptr);
+	WriteFile(hHandle, &m_fDeltaV, sizeof(_float), &dwByte, nullptr);
+
+	/* 가로 세로 프레임 갯수 */
+	WriteFile(hHandle, &m_iNumWidth, sizeof(_uint), &dwByte, nullptr);
+	WriteFile(hHandle, &m_iNumHeight, sizeof(_uint), &dwByte, nullptr);
+
+	/* 최대 인덱스 */
+	WriteFile(hHandle, &m_iMaxIdx, sizeof(_uint), &dwByte, nullptr);
+
+	/* 프레임 타임 */
+	WriteFile(hHandle, &m_fFrameTime, sizeof(_float), &dwByte, nullptr);
+
+	/* 라이프 타임 */
+	WriteFile(hHandle, &m_fLifeTime, sizeof(_float), &dwByte, nullptr);
+
+	CloseHandle(hHandle);
+}
+
+HRESULT CEffectObject::Load_FromBinary(const _tchar* pBinaryFilePath)
+{
+	/* ../Bin/Resources/Models/Binary/Fiona_eff.bin */
+	_char szEffectFilePath[MAX_PATH];
+
+	WideCharToMultiByte(CP_ACP, 0, pBinaryFilePath, (_int)_tcslen(pBinaryFilePath), szEffectFilePath, MAX_PATH, NULL, NULL);
+
+	_char szEffectPath[MAX_PATH] = {};
+
+
+	DWORD	dwByte(0);
+	HANDLE hHandle = CreateFile(pBinaryFilePath,
+		GENERIC_READ,  // 파일 용도(GENERIC_WRITE : 쓰기(저장), GENERIC_READ : 읽기(불러오기))
+		NULL,			// 공유 방식(NULL인 경우 공유하지 않음)
+		NULL,			// 보안 설정(NULL인 경우 기본값으로 설정)
+		OPEN_EXISTING,	// 생성 방식(CREATE_ALWAYS : 쓰기 전용, OPEN_EXISTING : 읽기 전용)
+		FILE_ATTRIBUTE_NORMAL, // 파일 속성(숨김, 읽기 전용 파일 등) : 아무런 속성이 없는 일반 형식
+		NULL);	// 생성될 파일의 속성을 제공할 템플릿 파일(안쓸것이기 때문에 NULL)
+
+	if (hHandle == INVALID_HANDLE_VALUE)
+		return E_FAIL;
+
+	/* 모델 태그 */
+	size_t StringSize = {};
+	ReadFile(hHandle, &StringSize, sizeof(size_t), &dwByte, nullptr);
+	m_strModelName.resize(StringSize);
+
+	ReadFile(hHandle, &m_strModelName[0], static_cast<DWORD>(m_strModelName.size() * sizeof(wchar_t)), &dwByte, NULL);
+
+	/* 디퓨즈 텍스쳐 넘버*/
+	ReadFile(hHandle, &m_iDiffuseTextureIdx, sizeof(_uint), &dwByte, nullptr);
+
+	/* 마스크 텍스쳐 넘버 */
+	ReadFile(hHandle, &m_iMaskTextureIdx, sizeof(_uint), &dwByte, nullptr);
+
+	/* 노이즈 텍스쳐 넘버 */
+	ReadFile(hHandle, &m_iNoiseTextureIdx, sizeof(_uint), &dwByte, nullptr);
+
+	/* U,V 델타 */
+	ReadFile(hHandle, &m_fDeltaU, sizeof(_float), &dwByte, nullptr);
+	ReadFile(hHandle, &m_fDeltaV, sizeof(_float), &dwByte, nullptr);
+
+	/* 가로 세로 프레임 갯수 */
+	ReadFile(hHandle, &m_iNumWidth, sizeof(_uint), &dwByte, nullptr);
+	ReadFile(hHandle, &m_iNumHeight, sizeof(_uint), &dwByte, nullptr);
+
+	/* 최대 인덱스 */
+	ReadFile(hHandle, &m_iMaxIdx, sizeof(_uint), &dwByte, nullptr);
+
+	/* 프레임 타임 */
+	ReadFile(hHandle, &m_fFrameTime, sizeof(_float), &dwByte, nullptr);
+
+	/* 라이프 타임 */
+	ReadFile(hHandle, &m_fLifeTime, sizeof(_float), &dwByte, nullptr);
+}
+
 HRESULT CEffectObject::Initialize_Prototype()
 {
     return S_OK;
@@ -19,10 +137,14 @@ HRESULT CEffectObject::Initialize_Prototype()
 
 HRESULT CEffectObject::Initialize(void* pArg)
 {
+	EFFECT_OBJECT_DESC* pDesc = static_cast<EFFECT_OBJECT_DESC*>(pArg);
+
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
-    if (FAILED(Ready_Components()))
+	/* IsBinary가 True라면 여기서 다르게 세팅*/
+
+    if (FAILED(Ready_Components(pDesc->strModelTag)))
         return E_FAIL;
 
 	m_iNumMeshes = m_pModelCom->Get_NumMeshes();
@@ -36,12 +158,18 @@ void CEffectObject::Priority_Update(_float fTimeDelta)
 
 void CEffectObject::Update(_float fTimeDelta)
 {
+	if (false == m_IsVisible)
+		return;
+
 	Play_Sprite(fTimeDelta);
 	Check_LifeTime(fTimeDelta);
 }
 
 void CEffectObject::Late_Update(_float fTimeDelta)
 {
+	if (false == m_IsVisible)
+		return;
+
     /* 문제없나..?*/
 	m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
 }
@@ -122,15 +250,46 @@ void CEffectObject::Check_LifeTime(_float fTimeDelta)
 void CEffectObject::Set_Desc(void* pArg)
 {
 	EFFECT_OBJECT_DESC* pDesc = static_cast<EFFECT_OBJECT_DESC*>(pArg);
+	if (TEXT("") != pDesc->strModelTag)
+	{
+		Safe_Release(m_pModelCom);
+		m_pModelCom = { nullptr };
 
-	m_iNumHeight = pDesc->iNumHeight;
-	m_iNumWidth = pDesc->iNumWidth;
-	m_iCurrentIdx = pDesc->iCurrentIdx;
-	m_fFrameTime = pDesc->fFrameTime;
+		auto iter = m_Components.find(TEXT("Com_Model"));
+		Safe_Release(iter->second);
+		m_Components.erase(iter);
+
+		__super::Add_Component(ENUM_CLASS(LEVEL::EFFECT), pDesc->strModelTag,
+			TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom));
+		m_strModelName = pDesc->strModelTag;
+		m_iNumMeshes = m_pModelCom->Get_NumMeshes();
+	}
+
+	if(-1 != pDesc->iNumHeight)
+		m_iNumHeight = pDesc->iNumHeight;
+
+	if (-1 != pDesc->iNumWidth)
+		m_iNumWidth = pDesc->iNumWidth;
+
+	if (-1.f != pDesc->fDeltaU)
+		m_fDeltaU = pDesc->fDeltaU;
+
+	if (-1.f != pDesc->fDeltaV)
+		m_fDeltaV = pDesc->fDeltaV;
+
+	if (-1 != pDesc->iCurrentIdx)
+		m_iCurrentIdx = pDesc->iCurrentIdx;
+
+	if (-1.f != pDesc->fFrameTime)
+		m_fFrameTime = pDesc->fFrameTime;
+	else
+		m_fFrameTime = 0.1f;
+
 	m_fLifeTime = pDesc->fFrameTime * m_iNumHeight * m_iNumWidth;
 
 	if (m_iNumHeight * m_iNumWidth > 0)
 		m_iMaxIdx = m_iNumHeight * m_iNumWidth - 1;
+
 	else
 		m_iMaxIdx = 0;
 
@@ -146,11 +305,12 @@ void CEffectObject::Set_Desc(void* pArg)
 	/* Com_DiffuseTexture */
 	if (TEXT("") != pDesc->strTextureTag)
 	{
-		Safe_Release(m_pDiffuseTextureCom);
-
 		auto iter = m_Components.find(TEXT("Com_DiffuseTexture"));
-		m_Components.erase(iter);
 		Safe_Release(iter->second);
+		m_Components.erase(iter);
+
+		Safe_Release(m_pDiffuseTextureCom);
+		m_pDiffuseTextureCom = { nullptr };
 
 		__super::Add_Component(ENUM_CLASS(LEVEL::EFFECT), pDesc->strTextureTag,
 			TEXT("Com_MaskTexture"), reinterpret_cast<CComponent**>(&m_pMaskTextureCom));
@@ -159,18 +319,19 @@ void CEffectObject::Set_Desc(void* pArg)
 	/* Com_MaskTexture */
 	if (TEXT("") != pDesc->strMaskTextureTag)
 	{
-		Safe_Release(m_pMaskTextureCom);
-
 		auto iter = m_Components.find(TEXT("Com_MaskTexture"));
-		m_Components.erase(iter);
 		Safe_Release(iter->second);
+		m_Components.erase(iter);
+
+		Safe_Release(m_pMaskTextureCom);
+		m_pMaskTextureCom = { nullptr };
 
 		__super::Add_Component(ENUM_CLASS(LEVEL::EFFECT), pDesc->strMaskTextureTag,
 			TEXT("Com_MaskTexture"), reinterpret_cast<CComponent**>(&m_pMaskTextureCom));
 	}
 }
 
-HRESULT CEffectObject::Ready_Components()
+HRESULT CEffectObject::Ready_Components(const _wstring& strModelTag)
 {
 	/* Com_Shader */
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Shader_VtxEffect"),
@@ -178,7 +339,7 @@ HRESULT CEffectObject::Ready_Components()
 		return E_FAIL;
 
 	/* Com_Model */
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_EffectModel_Test"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::EFFECT), strModelTag,
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 

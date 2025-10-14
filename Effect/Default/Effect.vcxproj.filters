@@ -34,6 +34,9 @@
     <Filter Include="03. GAMEOBJECT\PARTICLE">
       <UniqueIdentifier>{02eba8a8-fe6f-4bb8-b89e-d825625357dd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. GAMEOBJECT\EFFECT\Container">
+      <UniqueIdentifier>{1c149023-4644-4ee4-ba53-36eaee69970e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EffectTool.h">
@@ -68,6 +71,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\ParticleObject.h">
       <Filter>03. GAMEOBJECT\PARTICLE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\EffectContainer.h">
+      <Filter>03. GAMEOBJECT\EFFECT\Container</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -104,6 +110,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\ParticleObject.cpp">
       <Filter>03. GAMEOBJECT\PARTICLE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\EffectContainer.cpp">
+      <Filter>03. GAMEOBJECT\EFFECT\Container</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

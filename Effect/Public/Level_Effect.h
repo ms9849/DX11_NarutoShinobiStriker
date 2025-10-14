@@ -25,11 +25,17 @@ public:
 
 public:
 	HRESULT Ready_Prototypes();
+	HRESULT Ready_FBXs();
+	HRESULT Ready_Binarys();
 	HRESULT Ready_Camera();
 	HRESULT Ready_EffectObjects();
 
 private:
 	class CEffect_GUI* m_pEffectGUI = { nullptr };
+	vector<pair<_wstring, _wstring>> m_strFBXModelTags = {};
+
+private:
+
 
 public:
 	static CLevel_Effect* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID);

@@ -81,6 +81,29 @@ void CEffect_GUI::Effect_GUI()
 	{
 		if (ImGui::BeginTabItem("Input"))
 		{
+			ImGui::Separator();
+
+			if (ImGui::Checkbox("Visible", (_bool*)&m_IsEffectVisible))
+			{
+				m_pEffectObject->Set_Visible(m_IsEffectVisible);
+			}
+
+			ImGui::BeginChild("EffectMesh List", ImVec2(0, 200), true);
+
+			for (_uint i = 0; i < m_EffectModelTags.size(); ++i)
+			{
+				if (ImGui::Selectable(m_pGameInstance->ToString(m_EffectModelTags[i]).c_str(), true)) {
+					// 선택 동작
+					m_strSelectedEffectModelTag = m_EffectModelTags[i];
+				}
+			}
+
+			ImGui::EndChild();
+
+			ImGui::Dummy(ImVec2(0.f, 5.f));
+			ImGui::Separator();
+			ImGui::Dummy(ImVec2(0.f, 5.f));
+
 			ImGui::InputFloat("DeltaU", &m_fDeltaU);
 			ImGui::InputFloat("DeltaV", &m_fDeltaV);
 			ImGui::Text("");
@@ -104,6 +127,7 @@ void CEffect_GUI::Effect_GUI()
 				else
 				{
 					CEffectObject::EFFECT_OBJECT_DESC Desc = {};
+					Desc.strModelTag = m_strSelectedEffectModelTag;
 					Desc.fDeltaU = m_fDeltaU;
 					Desc.fDeltaV = m_fDeltaV;
 					Desc.iNumWidth = m_iNumWidth;
@@ -156,6 +180,23 @@ void CEffect_GUI::Effect_GUI()
 			}
 
 			ImGui::EndTabItem();
+		}
+		ImGui::Dummy(ImVec2(0.0f, 5.0f));
+		ImGui::Separator();
+		ImGui::Dummy(ImVec2(0.0f, 5.0f));
+
+		ImGui::InputText("Save Effect", m_szSaveEffectName, MAX_PATH);
+
+		if (ImGui::Button("Save"))
+		{
+			m_pEffectObject->Save_ToBinary(m_szSaveEffectName);
+		}
+
+		ImGui::InputText("Load Effect", m_szLoadEffectName, MAX_PATH);
+
+		if (ImGui::Button("Load"))
+		{
+			m_pEffectObject->Load_FromBinary(m_pGameInstance->ToWstring(m_szLoadEffectName).c_str());
 		}
 
 		ImGui::EndTabBar();
