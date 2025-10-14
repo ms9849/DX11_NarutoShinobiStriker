@@ -33,12 +33,17 @@ public:
 
 	void Look_Target(_float fTimeDelta);
 	void Chase_Target(_float fTimeDelta);
+
+	void Rotate_Point(_float fTimeDelta);
+
 	void Mouse_Lock();
 
 private:
 	_float m_fTimeAcc = { 0.f };
 	_float m_fPhi = { 0.f };
 	_float m_fTheta = { 0.f };
+	_float3 m_vCameraPoint = {};
+
 	_float3 m_vCameraPos = {};
 	_float m_fRotateX = {};
 	_float m_fRotateY = {};

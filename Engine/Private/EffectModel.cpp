@@ -17,6 +17,8 @@ CEffectModel::CEffectModel(const CEffectModel& Prototype)
 	, m_Meshes{ Prototype.m_Meshes }
 	, m_PreTransformMatrix{ Prototype.m_PreTransformMatrix }
 {
+	for (auto& pMesh : m_Meshes)
+		Safe_AddRef(pMesh);
 }
 
 HRESULT CEffectModel::Save_Model_ToBinary(const _char* pModelSavePath)
@@ -30,10 +32,8 @@ HRESULT CEffectModel::Save_Model_ToBinary(const _char* pModelSavePath)
 	/* ../Bin/Resources/ */
 
 	strcpy_s(szModelPath, pModelSavePath);
-
-	/* ../Bin/Resources/Fiona.bin */
-	strcat_s(szModelPath, m_szModelName);
 	strcat_s(szModelPath, ".Bin");
+
 	/*  char to tchar */
 	MultiByteToWideChar(CP_ACP, 0, szModelPath, (_int)strlen(szModelPath), szPerefectModelName, MAX_PATH);
 
@@ -123,6 +123,14 @@ HRESULT CEffectModel::Initialize_Prototype(MODEL eType, const _char* pModelFileP
 
 	if (FAILED(Ready_Meshes()))
 		return E_FAIL;
+	
+	_char pModelSavePath[MAX_PATH];
+	strcpy_s(pModelSavePath, pModelFilePath);
+
+	if (char* pExt = strrchr(pModelSavePath, '.'))
+		*pExt = '\0';
+
+	Save_Model_ToBinary(pModelSavePath);
 
 	return S_OK;
 }

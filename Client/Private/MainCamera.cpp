@@ -76,44 +76,15 @@ void CMainCamera::OnChange(const _float4x4* pWorldMatrix)
 
 void CMainCamera::Look_Target(_float fTimeDelta)
 {
-    CTransform* pTargetTransform = m_pGameManager->Calc_Target(m_pPlayerTransform->Get_State(STATE::POSITION));
-
-    if (nullptr != pTargetTransform)
-    {
-        _vector vPlayerPos = m_pPlayerTransform->Get_State(STATE::POSITION);
-        _vector vPlayerLook = m_pPlayerTransform->Get_State(STATE::LOOK);
-        _vector vCameraPos = XMLoadFloat4(m_pGameInstance->Get_CamState(STATE::POSITION));
-        _vector vCameraLook = XMVectorSetY(XMLoadFloat4(m_pGameInstance->Get_CamState(STATE::LOOK)), 0.f);
-
-        _vector vTargetPos = pTargetTransform->Get_State(STATE::POSITION);
-
-        _float fPlayerDot = XMVectorGetX(XMVector3Dot(XMVector3Normalize(vPlayerLook), XMVector3Normalize(XMVectorSetY(vTargetPos - vPlayerPos, 0.f))));
-        _float fCameraDot = XMVectorGetX(XMVector3Dot(XMVector3Normalize(XMVectorSetY(vCameraLook, 0.f)), XMVector3Normalize(XMVectorSetY(vTargetPos - vCameraPos, 0.f))));
-        
-        if ((fPlayerDot > 0.f) && (fCameraDot > 0.f))
-        {
-            _vector vLookPos = m_pPlayerTransform->Get_State(STATE::POSITION) + 2.f * XMVector3Normalize(pTargetTransform->Get_State(STATE::POSITION) - m_pPlayerTransform->Get_State(STATE::POSITION)
-                + XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::UP)) * 1.f);
-            m_pTransformCom->LookAt_Lerp(vLookPos, 0.175f);
-        }
-        else
-        {
-            m_pTransformCom->LookAt_Lerp(
-                m_pPlayerTransform->Get_State(STATE::POSITION) +
-                XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::LOOK)) * 1.f +
-                XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::UP)) * 1.f, 0.175f);
-        }
-    }
-    else
-    {
-        m_pTransformCom->LookAt_Lerp(
-            m_pPlayerTransform->Get_State(STATE::POSITION) +
-            XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::LOOK)) * 1.f +
-            XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::UP)) * 1.f, 0.175f);
-    }
+    m_vCameraPoint 
 }
 
 void CMainCamera::Chase_Target(_float fTimeDelta)
+{
+
+}
+
+void CMainCamera::Rotate_Point(_float fTimeDelta)
 {
     _float fMouseMoveX = (_float)m_pGameInstance->Get_MouseMove(MOUSEMOVESTATE::X) / g_iWinSizeX;
     _float fMouseMoveY = (_float)m_pGameInstance->Get_MouseMove(MOUSEMOVESTATE::Y) / g_iWinSizeY;
@@ -121,7 +92,6 @@ void CMainCamera::Chase_Target(_float fTimeDelta)
     // 회전할 벡터와 각도
     _vector  StartVector = XMVectorSet(0.f, 2.5f, -3.0f, 0.f);
 
-    /* 스타트 벡터에 따라 다르게 제한이 들어가야 하는데.. */
     m_fRotateX += XMConvertToRadians(fMouseMoveX * 90.f);
     m_fRotateX = XMScalarModAngle(m_fRotateX);
 
@@ -131,7 +101,6 @@ void CMainCamera::Chase_Target(_float fTimeDelta)
     // 라디안 제한 ( -90  ~ +90 + 여기에 캐릭터의 Look 벡터까지. )
     _float fLimit = XMConvertToRadians(15.f);
 
-    /* Y 라디안 제한 */
     if (m_fRotateY > fLimit)
         m_fRotateY = fLimit;
 
@@ -195,3 +164,77 @@ void CMainCamera::Free()
     Safe_Release(m_pGameManager);
     Safe_Release(m_pPlayerTransform);
 }
+
+/*
+void CMainCamera::Look_Target(_float fTimeDelta)
+{
+    CTransform* pTargetTransform = m_pGameManager->Calc_Target(m_pPlayerTransform->Get_State(STATE::POSITION));
+
+    if (nullptr != pTargetTransform)
+    {
+        _vector vPlayerPos = m_pPlayerTransform->Get_State(STATE::POSITION);
+        _vector vPlayerLook = m_pPlayerTransform->Get_State(STATE::LOOK);
+        _vector vCameraPos = XMLoadFloat4(m_pGameInstance->Get_CamState(STATE::POSITION));
+        _vector vCameraLook = XMVectorSetY(XMLoadFloat4(m_pGameInstance->Get_CamState(STATE::LOOK)), 0.f);
+
+        _vector vTargetPos = pTargetTransform->Get_State(STATE::POSITION);
+
+        _float fPlayerDot = XMVectorGetX(XMVector3Dot(XMVector3Normalize(vPlayerLook), XMVector3Normalize(XMVectorSetY(vTargetPos - vPlayerPos, 0.f))));
+        _float fCameraDot = XMVectorGetX(XMVector3Dot(XMVector3Normalize(XMVectorSetY(vCameraLook, 0.f)), XMVector3Normalize(XMVectorSetY(vTargetPos - vCameraPos, 0.f))));
+
+        if ((fPlayerDot > 0.f) && (fCameraDot > 0.f))
+        {
+            _vector vLookPos = m_pPlayerTransform->Get_State(STATE::POSITION) + 2.f * XMVector3Normalize(pTargetTransform->Get_State(STATE::POSITION) - m_pPlayerTransform->Get_State(STATE::POSITION)
+                + XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::UP)) * 1.f);
+            m_pTransformCom->LookAt_Lerp(vLookPos, 0.175f);
+        }
+        else
+        {
+            m_pTransformCom->LookAt_Lerp(
+                m_pPlayerTransform->Get_State(STATE::POSITION) +
+                XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::LOOK)) * 1.f +
+                XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::UP)) * 1.f, 0.175f);
+        }
+    }
+    else
+    {
+        m_pTransformCom->LookAt_Lerp(
+            m_pPlayerTransform->Get_State(STATE::POSITION) +
+            XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::LOOK)) * 1.f +
+            XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::UP)) * 1.f, 0.175f);
+    }
+}
+
+void CMainCamera::Chase_Target(_float fTimeDelta)
+{
+    _float fMouseMoveX = (_float)m_pGameInstance->Get_MouseMove(MOUSEMOVESTATE::X) / g_iWinSizeX;
+    _float fMouseMoveY = (_float)m_pGameInstance->Get_MouseMove(MOUSEMOVESTATE::Y) / g_iWinSizeY;
+
+    // 회전할 벡터와 각도
+    _vector  StartVector = XMVectorSet(0.f, 2.5f, -3.0f, 0.f);
+
+m_fRotateX += XMConvertToRadians(fMouseMoveX * 90.f);
+m_fRotateX = XMScalarModAngle(m_fRotateX);
+
+m_fRotateY += XMConvertToRadians(fMouseMoveY * 45.f);
+m_fRotateY = XMScalarModAngle(m_fRotateY);
+
+// 라디안 제한 ( -90  ~ +90 + 여기에 캐릭터의 Look 벡터까지. )
+_float fLimit = XMConvertToRadians(15.f);
+
+if (m_fRotateY > fLimit)
+m_fRotateY = fLimit;
+
+if (m_fRotateY < -fLimit)
+    m_fRotateY = -fLimit;
+
+_vector		vQuternion = XMQuaternionRotationRollPitchYaw(m_fRotateY, m_fRotateX, 0.f);
+
+_matrix		RotationMatrix = XMMatrixRotationQuaternion(vQuternion);
+_vector     vCamPos = XMVector3Rotate(StartVector, vQuternion);
+_float      fLength = XMVectorGetX(XMVector3Length(vCamPos));
+
+m_pTransformCom->Chase_Lerp(m_pPlayerTransform->Get_State(STATE::POSITION) + vCamPos, fTimeDelta * 0.9f, 0.f);
+}
+
+*/

@@ -143,6 +143,9 @@ HRESULT CEffectMesh::Save_Mesh_ToBinary(HANDLE hHandle, DWORD* dwByte, const aiM
         return E_FAIL;
 
     WriteFile(hHandle, StagingData.pData, VBDesc.ByteWidth, dwByte, nullptr);
+
+    m_pContext->Unmap(pStagingVB, 0);
+
     Safe_Release(pStagingVB);
 
     /* 인덱스 정보 저장 */

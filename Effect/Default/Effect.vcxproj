@@ -135,6 +135,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\EffectCamera.h" />
+    <ClInclude Include="..\Public\EffectContainer.h" />
     <ClInclude Include="..\Public\EffectObject.h" />
     <ClInclude Include="..\Public\EffectApp.h" />
     <ClInclude Include="..\Public\Effect_Defines.h" />
@@ -148,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\EffectCamera.cpp" />
+    <ClCompile Include="..\Private\EffectContainer.cpp" />
     <ClCompile Include="..\Private\EffectObject.cpp" />
     <ClCompile Include="..\Private\EffectApp.cpp" />
     <ClCompile Include="..\Private\Effect_GUI.cpp" />

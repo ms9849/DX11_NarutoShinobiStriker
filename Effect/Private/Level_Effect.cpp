@@ -7,7 +7,6 @@
 #include "ParticleObject.h"
 #include "EffectCamera.h"
 
-
 CLevel_Effect::CLevel_Effect(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID)
 	: CLevel{ pDevice, pContext, ENUM_CLASS(eLevelID) }	
 {
@@ -18,6 +17,13 @@ HRESULT CLevel_Effect::Initialize()
 	m_pEffectGUI = CEffect_GUI::Create(m_pDevice, m_pContext);
 
 	if (FAILED(Ready_Prototypes()))
+		return E_FAIL;
+
+	/* FBX To Binary ÄÚµå */
+	//if (FAILED(Ready_FBXs()))
+	//	return E_FAIL;
+
+	if (FAILED(Ready_Binarys()))
 		return E_FAIL;
 
 	if (FAILED(Ready_Camera()))
@@ -54,12 +60,6 @@ HRESULT CLevel_Effect::Ready_Prototypes()
 	/* For.Prototype_Component_Shader_VtxPointParticle */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Shader_VtxPointParticle"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/ShaderFiles/Shader_VtxPointParticle.hlsl"), VTX_POS_INSTANCE_PARTICLE::Elements, VTX_POS_INSTANCE_PARTICLE::iNumElements))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_EffectModel_Test */
-	_fmatrix PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_EffectModel_Test"),
-		CEffectModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/Effect/TestEffect.fbx", PreTransformMatrix))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_EffectCamera */
@@ -114,6 +114,61 @@ HRESULT CLevel_Effect::Ready_Prototypes()
 	return S_OK;
 }
 
+HRESULT CLevel_Effect::Ready_FBXs()
+{
+	WIN32_FIND_DATA fd;
+	HANDLE hFind = FindFirstFile(L"../../Client/Bin/Resources/Models/Effect/*.fbx", &fd);
+	if (hFind == INVALID_HANDLE_VALUE) return E_FAIL;
+
+	do {
+		/* For.Prototype_Component_EffectModel_Test */
+		_fmatrix PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+		_string strFileName = m_pGameInstance->ToString(wstring(fd.cFileName));
+
+
+		strFileName.erase(strFileName.size() - 4);
+
+		_wstring strComponentTag = m_pGameInstance->ToWstring(string("Prototype_Component_EffectModel_") + strFileName);
+		_string strFilePath = _string("../../Client/Bin/Resources/Models/Effect/") + strFileName + _string(".fbx");
+
+		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), strComponentTag,
+			CEffectModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, strFilePath.c_str(), PreTransformMatrix))))
+			return E_FAIL;
+
+	} while (FindNextFile(hFind, &fd));
+
+	FindClose(hFind);
+
+	return S_OK;
+}
+
+HRESULT CLevel_Effect::Ready_Binarys()
+{
+	WIN32_FIND_DATA fd;
+	HANDLE hFind = FindFirstFile(L"../../Client/Bin/Resources/Models/Effect/*.bin", &fd);
+	if (hFind == INVALID_HANDLE_VALUE) return E_FAIL;
+
+	do {
+		/* For.Prototype_Component_EffectModel_Test */
+		_fmatrix PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+		_wstring strFileName = wstring(fd.cFileName);
+
+		strFileName.erase(strFileName.size() - 4);
+
+		_wstring strComponentTag = TEXT("Prototype_Component_EffectModel_") + strFileName;
+		_wstring strFilePath = TEXT("../../Client/Bin/Resources/Models/Effect/") + strFileName + TEXT(".bin");
+
+		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), strComponentTag,
+			CEffectModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, strFilePath.c_str(), PreTransformMatrix))))
+			return E_FAIL;
+
+		m_pEffectGUI->Add_EffectModelTag(strComponentTag);
+
+	} while (FindNextFile(hFind, &fd));
+
+	return S_OK;
+}
+
 HRESULT CLevel_Effect::Ready_Camera()
 {
 	CEffectCamera::EFFECT_CAMERA_DESC			CameraDesc{};
@@ -131,16 +186,16 @@ HRESULT CLevel_Effect::Ready_Camera()
 		ENUM_CLASS(LEVEL::EFFECT), TEXT("Layer_Camera"), &CameraDesc)))
 		return E_FAIL;
 
-
 	return S_OK;
 }
 
 HRESULT CLevel_Effect::Ready_EffectObjects()
 {
 	CEffectObject::EFFECT_OBJECT_DESC Desc;
+	Desc.strModelTag = m_pEffectGUI->Get_EffectModelTag(0);
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_GameObject_EffectObject"),
-		ENUM_CLASS(LEVEL::EFFECT), TEXT("Layer_Effect"), nullptr)))
+		ENUM_CLASS(LEVEL::EFFECT), TEXT("Layer_Effect"), &Desc)))
 		return E_FAIL;
 
 	return S_OK;

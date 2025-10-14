@@ -25,7 +25,8 @@ private:
 public:
 	HRESULT Add_SRV(const _tchar* pTextureFilePath, _uint iNumTextures, TEXTURE_TYPE eTextureType);
 	HRESULT Add_EffeectObject(class CEffectObject* pEffectObject);
-
+	void Add_EffectModelTag(const _wstring& strEffectModelTag) { m_EffectModelTags.push_back(strEffectModelTag); }
+	const _wstring& Get_EffectModelTag(_uint iIdx) { return m_EffectModelTags[iIdx]; }
 public:
 	HRESULT Initialize();
 	void Update(_float fTimeDelta);
@@ -43,8 +44,17 @@ private:
 	vector<ID3D11ShaderResourceView*> m_DiffuseSRVs = {};
 	vector<ID3D11ShaderResourceView*> m_MaskSRVs = {};
 	vector<ID3D11ShaderResourceView*> m_NoiseSRVs = {};
+
 private:
+	_char m_szSaveEffectName[MAX_PATH] = {};
+	_char m_szLoadEffectName[MAX_PATH] = {};
+	_int m_iCurrentTagIndex = {};
+	vector<_wstring> m_EffectModelTags = {};
+
+	_bool m_IsEffectVisible = { false };
+
 	/* EFFECT (MESH) */
+	_wstring m_strSelectedEffectModelTag = { TEXT("") };
 	_float m_fDeltaU = { 0.f }, m_fDeltaV = { 0.f };
 	_uint  m_iNumWidth = { 1 }, m_iNumHeight = { 1 };
 	_uint  m_iCurrentIdx = { 0 };
