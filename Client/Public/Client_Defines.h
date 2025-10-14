@@ -44,6 +44,7 @@ namespace Client
 
 		SKYBOX, 
 		
+		PARTICLE,
 		SNOW, EXPLOSION,
 
 		EFFECTOBJECT,

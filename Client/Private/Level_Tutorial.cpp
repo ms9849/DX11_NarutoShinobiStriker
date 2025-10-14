@@ -24,6 +24,7 @@
 
 #include "Player.h"
 #include "Props.h"
+#include "ParticleObject.h"
 
 CLevel_Tutorial::CLevel_Tutorial(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID)
 	: CLevel { pDevice, pContext, ENUM_CLASS(eLevelID)}
@@ -340,6 +341,16 @@ HRESULT CLevel_Tutorial::Ready_Layer_Effect(const _wstring& strLayerTag)
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Explosion"),
 		ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag)))
 		return E_FAIL;
+
+
+	//CParticleObject::PARTICLE_OBJECT_DESC Desc;
+	//Desc.eType = CParticleObject::PARTICLE_TYPE::EXPLOSION;
+	//Desc.iDiffuseTextureNum = 0;
+	//Desc.strDiffuseTextureTag = TEXT("Prototype_Component_Texture_Snow");
+
+	//if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"),
+	//	ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag, &Desc)))
+	//	return E_FAIL;
 
 	return S_OK;
 }

@@ -31,6 +31,11 @@ RasterizerState RS_Cull_Front
     CullMode = Front;
 };
 
+RasterizerState RS_Cull_None
+{
+    CullMode = None;
+};
+
 /* DepthStencil 디폴트 세팅 */
 DepthStencilState DSS_Default
 {

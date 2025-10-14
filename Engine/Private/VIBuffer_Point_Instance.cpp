@@ -42,8 +42,6 @@ HRESULT CVIBuffer_Point_Instance::Initialize_Prototype(const INSTANCE_DESC* pIns
 	m_pVertexPositions = new _float3[m_iNumVertices];
 	ZeroMemory(m_pVertexPositions, sizeof(_float3) * m_iNumVertices);
 
-	m_pVertexPositions[0] = pVertices[0].vPosition = _float3(0.0f, 0.0f, 0.f);
-
 	D3D11_SUBRESOURCE_DATA	InitialVBData{};
 	InitialVBData.pSysMem = pVertices;
 
@@ -180,42 +178,6 @@ void CVIBuffer_Point_Instance::Drop(_float fTimeDelta)
 	m_pContext->Unmap(m_pVBInstance, 0);
 }
 
-void CVIBuffer_Point_Instance::Spread(_float fTimeDelta)
-{
-	m_IsDead = true;
-
-	D3D11_MAPPED_SUBRESOURCE		SubResource{};
-
-	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
-
-	VTX_INSTANCE_PARTICLE* pVertices = static_cast<VTX_INSTANCE_PARTICLE*>(SubResource.pData);
-
-	for (size_t i = 0; i < m_iNumInstance; i++)
-	{
-		/*pVertices[i].vTranslation.y -= m_pSpeeds[i] * fTimeDelta;*/
-		_vector		vDir = XMVectorSetW(XMLoadFloat4(&pVertices[i].vTranslation) - XMLoadFloat3(&m_vPivot), 0.f);
-
-		XMStoreFloat4(&pVertices[i].vTranslation, XMLoadFloat4(&pVertices[i].vTranslation) + XMVector3Normalize(vDir) * m_pSpeeds[i] * fTimeDelta);
-
-		/* LifeTime의 X는 현재 나이, LifeTime의 y는 총 수명 */
-		pVertices[i].vLifeTime.x += fTimeDelta;
-
-		if (true == m_IsLoop &&
-			pVertices[i].vLifeTime.x >= pVertices[i].vLifeTime.y)
-		{
-			pVertices[i].vLifeTime.x = 0.f;
-			pVertices[i].vTranslation = m_pInstanceVertices[i].vTranslation;
-		}
-		else
-		{
-			if (false == m_IsLoop && pVertices[i].vLifeTime.x < pVertices[i].vLifeTime.y)
-				m_IsDead = false;
-		}
-	}
-
-	m_pContext->Unmap(m_pVBInstance, 0);
-}
-
 void CVIBuffer_Point_Instance::Explosion(_float fTimeDelta)
 {
 	m_IsDead = true;
@@ -232,6 +194,7 @@ void CVIBuffer_Point_Instance::Explosion(_float fTimeDelta)
 		_vector		vDir = XMVectorSetW(XMLoadFloat4(&pVertices[i].vTranslation) - XMLoadFloat3(&m_vPivot), 0.f);
 
 		XMStoreFloat4(&pVertices[i].vTranslation, XMLoadFloat4(&pVertices[i].vTranslation) + XMVector3Normalize(vDir) * m_pSpeeds[i] * fTimeDelta);
+		XMStoreFloat3(&pVertices[i].vDirection, vDir);
 
 		pVertices[i].vLifeTime.x += fTimeDelta;
 

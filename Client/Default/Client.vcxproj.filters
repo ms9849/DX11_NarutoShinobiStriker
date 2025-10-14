@@ -442,12 +442,6 @@
     <Filter Include="02. GameObjects\03. Effect\Particle">
       <UniqueIdentifier>{40d4ad0c-68d9-4df2-81e0-7aa4e5219f50}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\03. Effect\Particle\Snow">
-      <UniqueIdentifier>{5e4bb9d6-69a7-4284-9d12-f3bbec472f21}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\03. Effect\Particle\Explosion">
-      <UniqueIdentifier>{a64d9e11-17c5-4744-abf8-c20df6937be1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects\05. NPC">
       <UniqueIdentifier>{0bbc84b4-31a9-40ef-8e75-214c08d5d91e}</UniqueIdentifier>
     </Filter>
@@ -606,6 +600,12 @@
     </Filter>
     <Filter Include="02. GameObjects\04. Event\Trigger">
       <UniqueIdentifier>{02a59ba2-6cb6-44fa-bf58-ba50241009d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\03. Effect\Particle\AttackParticle">
+      <UniqueIdentifier>{a136cf40-017b-4094-bbc4-4db6580eadc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\03. Effect\Particle\Explosion">
+      <UniqueIdentifier>{a64d9e11-17c5-4744-abf8-c20df6937be1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -948,9 +948,6 @@
     <ClInclude Include="..\Public\WhiteJetsu_DeadState.h">
       <Filter>02. GameObjects\00. Character\01. Enemy\03. Jetsu\State\Dead</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Snow.h">
-      <Filter>02. GameObjects\03. Effect\Particle\Snow</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Bird_BeatenState.h">
       <Filter>02. GameObjects\00. Character\01. Enemy\04. Bird\State\Beaten</Filter>
     </ClInclude>
@@ -1178,6 +1175,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\Boss_StandState.h">
       <Filter>02. GameObjects\00. Character\01. Enemy\00. Boss\State\00. BASE\Stand</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ParticleObject.h">
+      <Filter>02. GameObjects\03. Effect\Particle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1518,9 +1518,6 @@
     <ClCompile Include="..\Private\WhiteJetsu_DeadState.cpp">
       <Filter>02. GameObjects\00. Character\01. Enemy\03. Jetsu\State\Dead</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Snow.cpp">
-      <Filter>02. GameObjects\03. Effect\Particle\Snow</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Bird_AttackState.cpp">
       <Filter>02. GameObjects\00. Character\01. Enemy\04. Bird\State\Attack</Filter>
     </ClCompile>
@@ -1748,6 +1745,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Boss_StandState.cpp">
       <Filter>02. GameObjects\00. Character\01. Enemy\00. Boss\State\00. BASE\Stand</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ParticleObject.cpp">
+      <Filter>02. GameObjects\03. Effect\Particle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

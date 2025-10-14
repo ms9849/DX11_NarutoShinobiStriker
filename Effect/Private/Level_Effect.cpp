@@ -4,7 +4,9 @@
 #include "Effect_GUI.h"
 #include "EffectModel.h"
 #include "EffectObject.h"
+#include "ParticleObject.h"
 #include "EffectCamera.h"
+
 
 CLevel_Effect::CLevel_Effect(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID)
 	: CLevel{ pDevice, pContext, ENUM_CLASS(eLevelID) }	
@@ -49,12 +51,16 @@ HRESULT CLevel_Effect::Ready_Prototypes()
 		CShader::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/ShaderFiles/Shader_VtxEffect.hlsl"), VTXEFFMESH::Elements, VTXEFFMESH::iNumElements))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Shader_VtxPointParticle */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Shader_VtxPointParticle"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/ShaderFiles/Shader_VtxPointParticle.hlsl"), VTX_POS_INSTANCE_PARTICLE::Elements, VTX_POS_INSTANCE_PARTICLE::iNumElements))))
+		return E_FAIL;
+
 	/* For.Prototype_Component_EffectModel_Test */
 	_fmatrix PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_EffectModel_Test"),
 		CEffectModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/Effect/TestEffect.fbx", PreTransformMatrix))))
 		return E_FAIL;
-
 
 	/* For.Prototype_GameObject_EffectCamera */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_GameObject_EffectCamera"),
@@ -64,6 +70,21 @@ HRESULT CLevel_Effect::Ready_Prototypes()
 	/* For.Prototype_GameObject_EffectObject */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_GameObject_EffectObject"),
 		CEffectObject::Create(m_pDevice, m_pContext, Client::OBJECTID::EFFECTOBJECT))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_ParticleObject */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_GameObject_ParticleObject"),
+		CParticleObject::Create(m_pDevice, m_pContext, Client::OBJECTID::PARTICLE))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_Snow */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Texture_Snow"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Snow/Snow.png"), 1))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_Particle */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Texture_Particle"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Particle/Particle%d.png"), 2))))
 		return E_FAIL;
 
 #pragma region DIFFUSE
