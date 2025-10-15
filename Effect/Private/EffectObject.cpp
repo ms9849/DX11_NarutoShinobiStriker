@@ -45,6 +45,9 @@ HRESULT CEffectObject::Save_ToBinary(const _char* pEffectName)
 	WriteFile(hHandle, &StringSize, sizeof(size_t), &dwByte, nullptr);
 	WriteFile(hHandle, m_strModelName.c_str(), static_cast<DWORD>(m_strModelName.size() * sizeof(wchar_t)), &dwByte, NULL);
 
+	/* 셰이더 패스 저장 */
+	WriteFile(hHandle, &m_iShaderPassIdx, sizeof(_uint), &dwByte, nullptr);
+
 	/* 디퓨즈 텍스쳐 넘버*/
 	WriteFile(hHandle, &m_iDiffuseTextureIdx, sizeof(_uint), &dwByte, nullptr);
 
@@ -87,7 +90,7 @@ HRESULT CEffectObject::Load_FromBinary(const _tchar* pBinaryFilePath)
 	DWORD	dwByte(0);
 	HANDLE hHandle = CreateFile(pBinaryFilePath,
 		GENERIC_READ,  // 파일 용도(GENERIC_WRITE : 쓰기(저장), GENERIC_READ : 읽기(불러오기))
-		NULL,			// 공유 방식(NULL인 경우 공유하지 않음)
+		FILE_SHARE_READ,			// 공유 방식(NULL인 경우 공유하지 않음)
 		NULL,			// 보안 설정(NULL인 경우 기본값으로 설정)
 		OPEN_EXISTING,	// 생성 방식(CREATE_ALWAYS : 쓰기 전용, OPEN_EXISTING : 읽기 전용)
 		FILE_ATTRIBUTE_NORMAL, // 파일 속성(숨김, 읽기 전용 파일 등) : 아무런 속성이 없는 일반 형식
@@ -102,6 +105,10 @@ HRESULT CEffectObject::Load_FromBinary(const _tchar* pBinaryFilePath)
 	m_strModelName.resize(StringSize);
 
 	ReadFile(hHandle, &m_strModelName[0], static_cast<DWORD>(m_strModelName.size() * sizeof(wchar_t)), &dwByte, NULL);
+
+
+	/* 셰이더 패스 로드 */
+	ReadFile(hHandle, &m_iShaderPassIdx, sizeof(_uint), &dwByte, nullptr);
 
 	/* 디퓨즈 텍스쳐 넘버*/
 	ReadFile(hHandle, &m_iDiffuseTextureIdx, sizeof(_uint), &dwByte, nullptr);
@@ -212,7 +219,7 @@ HRESULT CEffectObject::Render()
 		if (FAILED(m_pNoiseTextureCom->Bind_ShaderResource(m_pShaderCom, "g_NoiseTexture", m_iNoiseTextureIdx)))
 			return E_FAIL;
 
-		if (FAILED(m_pShaderCom->Begin(0)))
+		if (FAILED(m_pShaderCom->Begin(m_iShaderPassIdx)))
 			return E_FAIL;
 
 		if (FAILED(m_pModelCom->Render(i)))
@@ -301,6 +308,8 @@ void CEffectObject::Set_Desc(void* pArg)
 
 	if (-1 != pDesc->iNoiseTextureNum)
 		m_iNoiseTextureIdx = pDesc->iNoiseTextureNum;
+
+	m_iShaderPassIdx = pDesc->iShaderPassIdx;
 
 	/* Com_DiffuseTexture */
 	if (TEXT("") != pDesc->strTextureTag)

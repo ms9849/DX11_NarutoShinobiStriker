@@ -60,7 +60,7 @@ private:
 	_uint  m_iCurrentIdx = { 0 };
 	_uint  m_iTextureNum = { 0 }, m_iMaskTextureNum = { 0 }, m_iNoiseTextureNum = { 0 };
 	_float m_fFrameTime = { 0.1f };
-
+	_uint  m_iShaderPassIdx = {};
 	/* PARTICLE */
 	_int   m_iType = { 0 };
 	_bool	m_isLoop = { false };
@@ -73,6 +73,9 @@ private:
 	_float4 m_vColor = {};
 	_float3 m_vRotation = {};
 	_float2 m_vLifeTime = {};
+
+private:
+	void Change_Desc();
 
 public:
 	static CEffect_GUI* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

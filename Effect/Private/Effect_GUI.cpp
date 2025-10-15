@@ -95,6 +95,7 @@ void CEffect_GUI::Effect_GUI()
 				if (ImGui::Selectable(m_pGameInstance->ToString(m_EffectModelTags[i]).c_str(), true)) {
 					// 선택 동작
 					m_strSelectedEffectModelTag = m_EffectModelTags[i];
+					Change_Desc();
 				}
 			}
 
@@ -116,6 +117,7 @@ void CEffect_GUI::Effect_GUI()
 			ImGui::InputInt("NoiseTextureNum", (_int*)&m_iNoiseTextureNum);
 			ImGui::Text("");
 			ImGui::InputFloat("FrameTime", &m_fFrameTime);
+			ImGui::InputInt("Shader Pass", (_int*)&m_iShaderPassIdx);
 
 			if (ImGui::Button("Apply"))
 			{
@@ -125,55 +127,42 @@ void CEffect_GUI::Effect_GUI()
 					return;
 				}
 				else
-				{
-					CEffectObject::EFFECT_OBJECT_DESC Desc = {};
-					Desc.strModelTag = m_strSelectedEffectModelTag;
-					Desc.fDeltaU = m_fDeltaU;
-					Desc.fDeltaV = m_fDeltaV;
-					Desc.iNumWidth = m_iNumWidth;
-					Desc.iNumHeight = m_iNumHeight;
-					Desc.iCurrentIdx = m_iCurrentIdx;
-					Desc.iTextureNum = m_iTextureNum;
-					Desc.iMaskTextureNum = m_iMaskTextureNum;
-					Desc.iNoiseTextureNum = m_iNoiseTextureNum;
-					Desc.fFrameTime = m_fFrameTime;
-
-					m_pEffectObject->Set_Desc(&Desc);
-				}
+					Change_Desc();
 			}
+			ImGui::Dummy(ImVec2(0.0f, 5.0f));
+			ImGui::Separator();
+			ImGui::Dummy(ImVec2(0.0f, 5.0f));
+
+			ImGui::InputText("Save Effect", m_szSaveEffectName, MAX_PATH);
+
+			if (ImGui::Button("Save"))
+			{
+				m_pEffectObject->Save_ToBinary(m_szSaveEffectName);
+			}
+
+			ImGui::InputText("Load Effect", m_szLoadEffectName, MAX_PATH);
+
+			if (ImGui::Button("Load"))
+			{
+				m_pEffectObject->Load_FromBinary(m_pGameInstance->ToWstring(m_szLoadEffectName).c_str());
+			}
+
 			ImGui::EndTabItem();
 		}
 
 		if (ImGui::BeginTabItem("Diffuse"))
 		{
-			for (auto& pTexture : m_DiffuseSRVs)
-				ImGui::Image((void*)pTexture, ImVec2(100, 100));
-
-			ImGui::EndTabItem();
-		}
-
-		if (ImGui::BeginTabItem("Mask"))
-		{
-			for (auto& pTexture : m_MaskSRVs)	
-				ImGui::Image((void*)pTexture, ImVec2(100, 100));
-
-			ImGui::EndTabItem();
-		}
-
-		if (ImGui::BeginTabItem("Noise"))
-		{
 			_int iCount = 0;
-			
-			for (auto& pTexture : m_NoiseSRVs)
+			for (auto& pTexture : m_DiffuseSRVs)
 			{
 				// Image 대신 ImageButton 사용
-				if (ImGui::ImageButton((string("NoiseNum") + to_string(iCount)).c_str(), (ID3D11ShaderResourceView*)pTexture, ImVec2(100.f, 100.f)))
+				if (ImGui::ImageButton((string("DiffuseNum") + to_string(iCount)).c_str(), (ID3D11ShaderResourceView*)pTexture, ImVec2(100.f, 100.f)))
 				{
-					m_iNoiseTextureNum = iCount;
+					m_iTextureNum = iCount;
+					Change_Desc();
 				}
 
-
-				if (iCount % 2 == 0)
+				if (iCount % 3 != 0 && iCount != 0)
 					ImGui::SameLine(0.0f, 10.f);
 
 				iCount++;
@@ -181,24 +170,48 @@ void CEffect_GUI::Effect_GUI()
 
 			ImGui::EndTabItem();
 		}
-		ImGui::Dummy(ImVec2(0.0f, 5.0f));
-		ImGui::Separator();
-		ImGui::Dummy(ImVec2(0.0f, 5.0f));
 
-		ImGui::InputText("Save Effect", m_szSaveEffectName, MAX_PATH);
-
-		if (ImGui::Button("Save"))
+		if (ImGui::BeginTabItem("Mask"))
 		{
-			m_pEffectObject->Save_ToBinary(m_szSaveEffectName);
+			_int iCount = 0;
+			for (auto& pTexture : m_MaskSRVs)
+			{
+				// Image 대신 ImageButton 사용
+				if (ImGui::ImageButton((string("MaskNum") + to_string(iCount)).c_str(), (ID3D11ShaderResourceView*)pTexture, ImVec2(100.f, 100.f)))
+				{
+					m_iMaskTextureNum = iCount;
+					Change_Desc();
+				}
+
+				if (iCount % 3 != 0 && iCount != 0)
+					ImGui::SameLine(0.0f, 10.f);
+
+				iCount++;
+			}
+
+			ImGui::EndTabItem();
 		}
 
-		ImGui::InputText("Load Effect", m_szLoadEffectName, MAX_PATH);
-
-		if (ImGui::Button("Load"))
+		if (ImGui::BeginTabItem("Noise"))
 		{
-			m_pEffectObject->Load_FromBinary(m_pGameInstance->ToWstring(m_szLoadEffectName).c_str());
-		}
+			_int iCount = 0;
+			for (auto& pTexture : m_NoiseSRVs)
+			{
+				// Image 대신 ImageButton 사용
+				if (ImGui::ImageButton((string("NoiseNum") + to_string(iCount)).c_str(), (ID3D11ShaderResourceView*)pTexture, ImVec2(100.f, 100.f)))
+				{
+					m_iNoiseTextureNum = iCount;
+					Change_Desc();
+				}
 
+				if (iCount % 3 != 0 && iCount != 0)
+					ImGui::SameLine(0.0f, 10.f);
+
+				iCount++;
+			}
+
+			ImGui::EndTabItem();
+		}
 		ImGui::EndTabBar();
 	}
 
@@ -336,6 +349,24 @@ void CEffect_GUI::Particle_GUI()
 	}
 
 	ImGui::End();
+}
+
+void CEffect_GUI::Change_Desc()
+{
+	CEffectObject::EFFECT_OBJECT_DESC Desc = {};
+	Desc.strModelTag = m_strSelectedEffectModelTag;
+	Desc.fDeltaU = m_fDeltaU;
+	Desc.fDeltaV = m_fDeltaV;
+	Desc.iNumWidth = m_iNumWidth;
+	Desc.iNumHeight = m_iNumHeight;
+	Desc.iCurrentIdx = m_iCurrentIdx;
+	Desc.iTextureNum = m_iTextureNum;
+	Desc.iMaskTextureNum = m_iMaskTextureNum;
+	Desc.iNoiseTextureNum = m_iNoiseTextureNum;
+	Desc.fFrameTime = m_fFrameTime;
+	Desc.iShaderPassIdx = m_iShaderPassIdx;
+
+	m_pEffectObject->Set_Desc(&Desc);
 }
 
 CEffect_GUI* CEffect_GUI::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
