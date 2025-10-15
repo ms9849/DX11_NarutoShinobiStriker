@@ -38,7 +38,7 @@ public:
 		_int			iNumWidth = { -1 };
 		_int			iNumHeight = { -1 };
 		_int			iCurrentIdx = { -1 };
-
+		_int			iShaderPassIdx = { 0 };
 		_float			fFrameTime = { -1.f }; 
 
 	} EFFECT_OBJECT_DESC;
@@ -72,9 +72,11 @@ public:
 private:
 	CEffectModel*		m_pModelCom = { nullptr };
 	/* 모델 이름 저장.. */
+	
 	_wstring			m_strModelName = {};
 
 	CShader*			m_pShaderCom = { nullptr };
+	_uint				m_iShaderPassIdx = { 0 };
 	_uint				m_iNumMeshes = {};
 
 	CTexture*			m_pDiffuseTextureCom = { nullptr };

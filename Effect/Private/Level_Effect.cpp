@@ -90,25 +90,25 @@ HRESULT CLevel_Effect::Ready_Prototypes()
 #pragma region DIFFUSE
 	/* For.Prototype_Component_Texture_Effect */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Texture_Effect_Diffuse"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/Diffuse/Diffuse%d.png"), 1))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/Diffuse/Diffuse%d.png"), 28))))
 		return E_FAIL;
-	m_pEffectGUI->Add_SRV(TEXT("../../Client/Bin/Resources/Textures/Effect/Diffuse/Diffuse%d.png"), 1, CEffect_GUI::TEXTURE_TYPE::DIFFUSE);
+	m_pEffectGUI->Add_SRV(TEXT("../../Client/Bin/Resources/Textures/Effect/Diffuse/Diffuse%d.png"), 28, CEffect_GUI::TEXTURE_TYPE::DIFFUSE);
 #pragma endregion
 
 #pragma region MASK
 	/* For.Prototype_Component_Texture_Effect_Mask */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Texture_Effect_Mask"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/Mask/Mask%d.png"), 1))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/Mask/Mask%d.png"), 28))))
 		return E_FAIL;
-	m_pEffectGUI->Add_SRV(TEXT("../../Client/Bin/Resources/Textures/Effect/Mask/Mask%d.png"), 1, CEffect_GUI::TEXTURE_TYPE::MASK);
+	m_pEffectGUI->Add_SRV(TEXT("../../Client/Bin/Resources/Textures/Effect/Mask/Mask%d.png"), 28, CEffect_GUI::TEXTURE_TYPE::MASK);
 #pragma endregion
 
 #pragma region NOISE
 	/* For.Prototype_Component_Texture_Effect_Noise */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Texture_Effect_Noise"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/Noise/Noise%d.png"), 3))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/Noise/Noise%d.png"), 37))))
 		return E_FAIL;
-	m_pEffectGUI->Add_SRV(TEXT("../../Client/Bin/Resources/Textures/Effect/Noise/Noise%d.png"), 3, CEffect_GUI::TEXTURE_TYPE::NOISE);
+	m_pEffectGUI->Add_SRV(TEXT("../../Client/Bin/Resources/Textures/Effect/Noise/Noise%d.png"), 37, CEffect_GUI::TEXTURE_TYPE::NOISE);
 #pragma endregion
 
 	return S_OK;

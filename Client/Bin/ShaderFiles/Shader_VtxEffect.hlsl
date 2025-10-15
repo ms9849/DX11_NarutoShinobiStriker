@@ -70,7 +70,7 @@ struct PS_OUT
 };
 
 /* 픽셀 쉐이더 : 픽셀의 최종적인 색을 결정하낟. */
-PS_OUT PS_MAIN(PS_IN In)
+PS_OUT PS_FIRE(PS_IN In)
 {
     PS_OUT Out;
     
@@ -102,15 +102,43 @@ PS_OUT PS_MAIN(PS_IN In)
         Diffuse.rgb = float3(1.f, 0.9f, 0.f);
 
     Out.vDiffuse = Diffuse;
+ 
+    return Out;
+}
+
+PS_OUT PS_WIND(PS_IN In)
+{
+    PS_OUT Out;
+    
+    // diffuse 샘플
+    float4 Diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexcoord);
+
+    // mask 샘플 (같은 UV 사용)
+    float4 MaskSample = g_MaskTexture.Sample(DefaultSampler, In.vTexcoord);
    
-    
-    
+    float NoiseValue = g_NoiseTexture.Sample(DefaultSampler, In.vNoiseTexCoord).r;
+ 
+    /* 흑백 이미지라 rgb로 투명도 표현중인 것 같으니까 일단 이렇게.. */
+    /* 마스킹 수행 */
+    Diffuse.a *= MaskSample.r;
+
+    if (Diffuse.a < 0.01f)
+        discard;
+    else if (Diffuse.a < 0.6f)
+        Diffuse.rgb = float3(0.2f, 0.5f, 1.f);
+    else
+        Diffuse.rgb = float3(0.6f, 0.85f, 1.f);
+
+    Out.vDiffuse = Diffuse;
+    /* 살짝 투명하게 */
+    Out.vDiffuse.a *= 0.7f;
+ 
     return Out;
 }
 
 technique11 DefaultTechnique
 {
-    pass Default
+    pass Fire
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_Default, 0);
@@ -119,6 +147,18 @@ technique11 DefaultTechnique
        
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
-        PixelShader = compile ps_5_0 PS_MAIN();
+        PixelShader = compile ps_5_0 PS_FIRE();
+    }
+
+    pass Wind
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+       
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_WIND();
     }
 }
