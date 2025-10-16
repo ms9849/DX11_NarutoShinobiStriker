@@ -28,7 +28,6 @@ public:
 	HRESULT Ready_FBXs();
 	HRESULT Ready_Binarys();
 	HRESULT Ready_Camera();
-	HRESULT Ready_EffectObjects();
 
 private:
 	class CEffect_GUI* m_pEffectGUI = { nullptr };

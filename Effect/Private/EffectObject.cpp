@@ -47,34 +47,48 @@ HRESULT CEffectObject::Save_ToBinary(const _char* pEffectName)
 
 	/* 셰이더 패스 저장 */
 	WriteFile(hHandle, &m_iShaderPassIdx, sizeof(_uint), &dwByte, nullptr);
-
 	/* 디퓨즈 텍스쳐 넘버*/
 	WriteFile(hHandle, &m_iDiffuseTextureIdx, sizeof(_uint), &dwByte, nullptr);
-
 	/* 마스크 텍스쳐 넘버 */
 	WriteFile(hHandle, &m_iMaskTextureIdx, sizeof(_uint), &dwByte, nullptr);
-
 	/* 노이즈 텍스쳐 넘버 */
 	WriteFile(hHandle, &m_iNoiseTextureIdx, sizeof(_uint), &dwByte, nullptr);
-
 	/* U,V 델타 */
 	WriteFile(hHandle, &m_fDeltaU, sizeof(_float), &dwByte, nullptr);
 	WriteFile(hHandle, &m_fDeltaV, sizeof(_float), &dwByte, nullptr);
-
 	/* 가로 세로 프레임 갯수 */
 	WriteFile(hHandle, &m_iNumWidth, sizeof(_uint), &dwByte, nullptr);
 	WriteFile(hHandle, &m_iNumHeight, sizeof(_uint), &dwByte, nullptr);
-
 	/* 최대 인덱스 */
 	WriteFile(hHandle, &m_iMaxIdx, sizeof(_uint), &dwByte, nullptr);
-
 	/* 프레임 타임 */
 	WriteFile(hHandle, &m_fFrameTime, sizeof(_float), &dwByte, nullptr);
-
 	/* 라이프 타임 */
 	WriteFile(hHandle, &m_fLifeTime, sizeof(_float), &dwByte, nullptr);
 
+	/* 메인 컬러 */
+	WriteFile(hHandle, &m_vMainColor, sizeof(_float4), &dwByte, nullptr);
+	/* 서브 컬러 */
+	WriteFile(hHandle, &m_vSubColor, sizeof(_float4), &dwByte, nullptr);
+	/* 로테이션 */
+	WriteFile(hHandle, &m_vRotation, sizeof(_float3), &dwByte, nullptr);
+	/* 로테이션 여부 */
+	WriteFile(hHandle, &m_IsRotation, sizeof(_bool), &dwByte, nullptr);
+	/* 스케일 */
+	WriteFile(hHandle, &m_vScale, sizeof(_float3), &dwByte, nullptr);
+	/* 델타 스케일 */
+	WriteFile(hHandle, &m_vDeltaScale, sizeof(_float3), &dwByte, nullptr);
+	/* 루프 여부 */
+	WriteFile(hHandle, &m_IsLoop, sizeof(_bool), &dwByte, nullptr);
+	/* 시작 시간*/
+	WriteFile(hHandle, &m_fStartTime, sizeof(_float), &dwByte, nullptr);
+	/* 회전 속도*/
+	_float fRotationSpeed = m_pTransformCom->Get_RotationSpeed();
+	WriteFile(hHandle, &fRotationSpeed, sizeof(_float), &dwByte, nullptr);
+
 	CloseHandle(hHandle);
+
+	return S_OK;
 }
 
 HRESULT CEffectObject::Load_FromBinary(const _tchar* pBinaryFilePath)
@@ -103,38 +117,74 @@ HRESULT CEffectObject::Load_FromBinary(const _tchar* pBinaryFilePath)
 	size_t StringSize = {};
 	ReadFile(hHandle, &StringSize, sizeof(size_t), &dwByte, nullptr);
 	m_strModelName.resize(StringSize);
-
 	ReadFile(hHandle, &m_strModelName[0], static_cast<DWORD>(m_strModelName.size() * sizeof(wchar_t)), &dwByte, NULL);
+
+	if (TEXT("") != m_strModelName)
+	{
+		Safe_Release(m_pModelCom);
+		m_pModelCom = { nullptr };
+
+		auto iter = m_Components.find(TEXT("Com_Model"));
+		if (iter != m_Components.end())
+		{
+			Safe_Release(iter->second);
+			m_Components.erase(iter);
+		}
+
+		__super::Add_Component(ENUM_CLASS(LEVEL::EFFECT), m_strModelName,
+			TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom));
+		m_iNumMeshes = m_pModelCom->Get_NumMeshes();
+	}
 
 
 	/* 셰이더 패스 로드 */
 	ReadFile(hHandle, &m_iShaderPassIdx, sizeof(_uint), &dwByte, nullptr);
-
 	/* 디퓨즈 텍스쳐 넘버*/
 	ReadFile(hHandle, &m_iDiffuseTextureIdx, sizeof(_uint), &dwByte, nullptr);
-
 	/* 마스크 텍스쳐 넘버 */
 	ReadFile(hHandle, &m_iMaskTextureIdx, sizeof(_uint), &dwByte, nullptr);
-
 	/* 노이즈 텍스쳐 넘버 */
 	ReadFile(hHandle, &m_iNoiseTextureIdx, sizeof(_uint), &dwByte, nullptr);
-
 	/* U,V 델타 */
 	ReadFile(hHandle, &m_fDeltaU, sizeof(_float), &dwByte, nullptr);
 	ReadFile(hHandle, &m_fDeltaV, sizeof(_float), &dwByte, nullptr);
-
 	/* 가로 세로 프레임 갯수 */
 	ReadFile(hHandle, &m_iNumWidth, sizeof(_uint), &dwByte, nullptr);
 	ReadFile(hHandle, &m_iNumHeight, sizeof(_uint), &dwByte, nullptr);
-
 	/* 최대 인덱스 */
 	ReadFile(hHandle, &m_iMaxIdx, sizeof(_uint), &dwByte, nullptr);
-
 	/* 프레임 타임 */
 	ReadFile(hHandle, &m_fFrameTime, sizeof(_float), &dwByte, nullptr);
-
 	/* 라이프 타임 */
 	ReadFile(hHandle, &m_fLifeTime, sizeof(_float), &dwByte, nullptr);
+	/* 메인 컬러 */
+	ReadFile(hHandle, &m_vMainColor, sizeof(_float4), &dwByte, nullptr);
+	/* 서브 컬러 */
+	ReadFile(hHandle, &m_vSubColor, sizeof(_float4), &dwByte, nullptr);
+	/* 로테이션 */
+	ReadFile(hHandle, &m_vRotation, sizeof(_float3), &dwByte, nullptr);
+	m_pTransformCom->Rotation(m_vRotation.x, m_vRotation.y, m_vRotation.z);
+
+	/* 로테이션 여부 */
+	ReadFile(hHandle, &m_IsRotation, sizeof(_bool), &dwByte, nullptr);
+	m_pTransformCom->Set_Scale(m_vScale.x, m_vScale.y, m_vScale.z);
+
+	/* 스케일 */
+	ReadFile(hHandle, &m_vScale, sizeof(_float3), &dwByte, nullptr);
+	/* 델타 스케일 */
+	ReadFile(hHandle, &m_vDeltaScale, sizeof(_float3), &dwByte, nullptr);
+	/* 루프 여부 */
+	ReadFile(hHandle, &m_IsLoop, sizeof(_bool), &dwByte, nullptr);
+	/* 시작 시간 */
+	ReadFile(hHandle, &m_fStartTime, sizeof(_float), &dwByte, nullptr);
+	/* 회전 속도*/
+	_float fRotationSpeed = {};
+	ReadFile(hHandle, &fRotationSpeed, sizeof(_float), &dwByte, nullptr);
+	m_pTransformCom->Set_RotationSpeed(fRotationSpeed);
+
+	CloseHandle(hHandle);
+
+	return S_OK;
 }
 
 HRESULT CEffectObject::Initialize_Prototype()
@@ -151,10 +201,13 @@ HRESULT CEffectObject::Initialize(void* pArg)
 
 	/* IsBinary가 True라면 여기서 다르게 세팅*/
 
+	Set_Desc(pDesc);
+
     if (FAILED(Ready_Components(pDesc->strModelTag)))
         return E_FAIL;
 
 	m_iNumMeshes = m_pModelCom->Get_NumMeshes();
+	m_IsVisible = true;
 
     return S_OK;
 }
@@ -170,6 +223,15 @@ void CEffectObject::Update(_float fTimeDelta)
 
 	Play_Sprite(fTimeDelta);
 	Check_LifeTime(fTimeDelta);
+
+	if(true == m_IsRotation)
+		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta);
+
+	m_pTransformCom->Set_Scale(
+		m_vScale.x + (m_vDeltaScale.x - 1) * (m_fLifeTimeAcc / m_fLifeTime),
+		m_vScale.y + (m_vDeltaScale.y - 1) * (m_fLifeTimeAcc / m_fLifeTime),
+		m_vScale.z + (m_vDeltaScale.x - 1) * (m_fLifeTimeAcc / m_fLifeTime)
+	);
 }
 
 void CEffectObject::Late_Update(_float fTimeDelta)
@@ -207,6 +269,12 @@ HRESULT CEffectObject::Render()
 			return E_FAIL;
 
 		if (FAILED(m_pShaderCom->Bind_RawValue("g_fLifeTime", &m_fLifeTime, sizeof(_float))))
+			return E_FAIL;
+
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_vMainColor", &m_vMainColor, sizeof(_float4))))
+			return E_FAIL;
+
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_vSubColor", &m_vSubColor, sizeof(_float4))))
 			return E_FAIL;
 
 		/* 바인드 머테리얼이 아니라 내가 들고 있는 텍스쳐를 선택해서 바인딩 해줘야지. */
@@ -249,8 +317,10 @@ void CEffectObject::Check_LifeTime(_float fTimeDelta)
 
 	if (m_fLifeTimeAcc >= m_fLifeTime)
 	{
-		m_fLifeTimeAcc = 0.f;
-		//사망처리 해줘야됨 원래
+		if (m_IsLoop)
+			m_fLifeTimeAcc = 0.f;
+		else
+			m_IsVisible = false;
 	}
 }
 
@@ -263,8 +333,11 @@ void CEffectObject::Set_Desc(void* pArg)
 		m_pModelCom = { nullptr };
 
 		auto iter = m_Components.find(TEXT("Com_Model"));
-		Safe_Release(iter->second);
-		m_Components.erase(iter);
+		if (iter != m_Components.end())
+		{
+			Safe_Release(iter->second);
+			m_Components.erase(iter);
+		}
 
 		__super::Add_Component(ENUM_CLASS(LEVEL::EFFECT), pDesc->strModelTag,
 			TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom));
@@ -292,31 +365,50 @@ void CEffectObject::Set_Desc(void* pArg)
 	else
 		m_fFrameTime = 0.1f;
 
-	m_fLifeTime = pDesc->fFrameTime * m_iNumHeight * m_iNumWidth;
+	if (0.f == pDesc->fLifeTime)
+		m_fLifeTime = pDesc->fFrameTime * m_iNumHeight * m_iNumWidth;
+	else
+		m_fLifeTime = pDesc->fLifeTime;
 
 	if (m_iNumHeight * m_iNumWidth > 0)
 		m_iMaxIdx = m_iNumHeight * m_iNumWidth - 1;
-
 	else
 		m_iMaxIdx = 0;
 
-	if(-1 != pDesc->iTextureNum)
-		m_iDiffuseTextureIdx = pDesc->iTextureNum;
 
-	if (-1 != pDesc->iMaskTextureNum)
-		m_iMaskTextureIdx = pDesc->iMaskTextureNum;
+	m_iDiffuseTextureIdx = pDesc->iTextureNum;
 
-	if (-1 != pDesc->iNoiseTextureNum)
-		m_iNoiseTextureIdx = pDesc->iNoiseTextureNum;
+	m_iMaskTextureIdx = pDesc->iMaskTextureNum;
+
+	m_iNoiseTextureIdx = pDesc->iNoiseTextureNum;
 
 	m_iShaderPassIdx = pDesc->iShaderPassIdx;
+
+	m_vMainColor = pDesc->vMainColor;
+	m_vSubColor = pDesc->vSubColor;
+
+	m_vRotation = pDesc->vRotation;
+	m_pTransformCom->Rotation(m_vRotation.x, m_vRotation.y, m_vRotation.z);
+	m_IsRotation = pDesc->IsRotation;
+	m_vScale = pDesc->vScale;
+	m_pTransformCom->Set_Scale(m_vScale.x, m_vScale.y, m_vScale.z);
+	m_vDeltaScale = pDesc->vDeltaScale;
+	m_pTransformCom->Set_RotationSpeed(XMConvertToRadians(pDesc->fRotationPerSec));
+	m_IsLoop = pDesc->IsLoop;
+	if (true == m_IsLoop)
+		m_IsVisible = true;
+
+	m_fStartTime = pDesc->fStartTime;
 
 	/* Com_DiffuseTexture */
 	if (TEXT("") != pDesc->strTextureTag)
 	{
 		auto iter = m_Components.find(TEXT("Com_DiffuseTexture"));
-		Safe_Release(iter->second);
-		m_Components.erase(iter);
+		if (iter != m_Components.end())
+		{
+			Safe_Release(iter->second);
+			m_Components.erase(iter);
+		}
 
 		Safe_Release(m_pDiffuseTextureCom);
 		m_pDiffuseTextureCom = { nullptr };
@@ -329,8 +421,11 @@ void CEffectObject::Set_Desc(void* pArg)
 	if (TEXT("") != pDesc->strMaskTextureTag)
 	{
 		auto iter = m_Components.find(TEXT("Com_MaskTexture"));
-		Safe_Release(iter->second);
-		m_Components.erase(iter);
+		if (iter != m_Components.end())
+		{
+			Safe_Release(iter->second);
+			m_Components.erase(iter);
+		}
 
 		Safe_Release(m_pMaskTextureCom);
 		m_pMaskTextureCom = { nullptr };
@@ -338,6 +433,35 @@ void CEffectObject::Set_Desc(void* pArg)
 		__super::Add_Component(ENUM_CLASS(LEVEL::EFFECT), pDesc->strMaskTextureTag,
 			TEXT("Com_MaskTexture"), reinterpret_cast<CComponent**>(&m_pMaskTextureCom));
 	}
+}
+
+CEffectObject::EFFECT_OBJECT_DESC CEffectObject::Get_Desc()
+{
+	CEffectObject::EFFECT_OBJECT_DESC Desc = {};
+
+	Desc.strModelTag = m_strModelName;
+	Desc.fDeltaU = m_fDeltaU;
+	Desc.fDeltaV = m_fDeltaV;
+	Desc.iNumWidth = m_iNumWidth;
+	Desc.iNumHeight = m_iNumHeight;
+	Desc.iCurrentIdx = m_iCurrentIdx;
+	Desc.iTextureNum = m_iDiffuseTextureIdx;
+	Desc.iMaskTextureNum = m_iMaskTextureIdx;
+	Desc.iNoiseTextureNum = m_iNoiseTextureIdx;
+	Desc.fFrameTime = m_fFrameTime;
+	Desc.iShaderPassIdx = m_iShaderPassIdx;
+	Desc.fLifeTime = m_fLifeTime;
+	Desc.vMainColor = m_vMainColor;
+	Desc.vSubColor = m_vSubColor;
+	Desc.vRotation = m_vRotation;
+	Desc.IsRotation = m_IsRotation;
+	Desc.vScale = m_vScale;
+	Desc.vDeltaScale = m_vDeltaScale;
+	Desc.fRotationPerSec = XMConvertToDegrees(m_pTransformCom->Get_RotationSpeed());
+	Desc.fStartTime = m_fStartTime;
+	Desc.IsLoop = m_IsLoop;
+
+	return Desc;
 }
 
 HRESULT CEffectObject::Ready_Components(const _wstring& strModelTag)
@@ -348,9 +472,12 @@ HRESULT CEffectObject::Ready_Components(const _wstring& strModelTag)
 		return E_FAIL;
 
 	/* Com_Model */
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::EFFECT), strModelTag,
-		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
-		return E_FAIL;
+	if (nullptr == m_pModelCom)
+	{
+		if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::EFFECT), strModelTag,
+			TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
+			return E_FAIL;
+	}
 
 	/* Com_DiffuseTexture */
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Texture_Effect_Diffuse"),

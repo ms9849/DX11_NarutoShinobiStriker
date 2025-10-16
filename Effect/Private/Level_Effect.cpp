@@ -4,6 +4,8 @@
 #include "Effect_GUI.h"
 #include "EffectModel.h"
 #include "EffectObject.h"
+#include "EffectContainer.h"
+
 #include "ParticleObject.h"
 #include "EffectCamera.h"
 
@@ -29,11 +31,7 @@ HRESULT CLevel_Effect::Initialize()
 	if (FAILED(Ready_Camera()))
 		return E_FAIL;
 
-	if (FAILED(Ready_EffectObjects()))
-		return E_FAIL;
-
-	CEffectObject* pEffectObject = static_cast<CEffectObject*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::EFFECT), TEXT("Layer_Effect"), 0));
-	m_pEffectGUI->Add_EffeectObject(pEffectObject);
+	m_pEffectGUI->Initialize();
 
 	return S_OK;
 }
@@ -67,6 +65,11 @@ HRESULT CLevel_Effect::Ready_Prototypes()
 		CEffectCamera::Create(m_pDevice, m_pContext, Client::OBJECTID::MAIN_CAMERA))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_EffectContainer */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_GameObject_EffectContainer"),
+		CEffectContainer::Create(m_pDevice, m_pContext, Client::OBJECTID::EFFECTCONTAINER))))
+		return E_FAIL;
+
 	/* For.Prototype_GameObject_EffectObject */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_GameObject_EffectObject"),
 		CEffectObject::Create(m_pDevice, m_pContext, Client::OBJECTID::EFFECTOBJECT))))
@@ -90,17 +93,17 @@ HRESULT CLevel_Effect::Ready_Prototypes()
 #pragma region DIFFUSE
 	/* For.Prototype_Component_Texture_Effect */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Texture_Effect_Diffuse"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/Diffuse/Diffuse%d.png"), 28))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/Diffuse/Diffuse%d.png"), 36))))
 		return E_FAIL;
-	m_pEffectGUI->Add_SRV(TEXT("../../Client/Bin/Resources/Textures/Effect/Diffuse/Diffuse%d.png"), 28, CEffect_GUI::TEXTURE_TYPE::DIFFUSE);
+	m_pEffectGUI->Add_SRV(TEXT("../../Client/Bin/Resources/Textures/Effect/Diffuse/Diffuse%d.png"), 36, CEffect_GUI::TEXTURE_TYPE::DIFFUSE);
 #pragma endregion
 
 #pragma region MASK
 	/* For.Prototype_Component_Texture_Effect_Mask */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Texture_Effect_Mask"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/Mask/Mask%d.png"), 28))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/Mask/Mask%d.png"), 36))))
 		return E_FAIL;
-	m_pEffectGUI->Add_SRV(TEXT("../../Client/Bin/Resources/Textures/Effect/Mask/Mask%d.png"), 28, CEffect_GUI::TEXTURE_TYPE::MASK);
+	m_pEffectGUI->Add_SRV(TEXT("../../Client/Bin/Resources/Textures/Effect/Mask/Mask%d.png"), 36, CEffect_GUI::TEXTURE_TYPE::MASK);
 #pragma endregion
 
 #pragma region NOISE
@@ -184,18 +187,6 @@ HRESULT CLevel_Effect::Ready_Camera()
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_GameObject_EffectCamera"), 
 		ENUM_CLASS(LEVEL::EFFECT), TEXT("Layer_Camera"), &CameraDesc)))
-		return E_FAIL;
-
-	return S_OK;
-}
-
-HRESULT CLevel_Effect::Ready_EffectObjects()
-{
-	CEffectObject::EFFECT_OBJECT_DESC Desc;
-	Desc.strModelTag = m_pEffectGUI->Get_EffectModelTag(0);
-
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_GameObject_EffectObject"),
-		ENUM_CLASS(LEVEL::EFFECT), TEXT("Layer_Effect"), &Desc)))
 		return E_FAIL;
 
 	return S_OK;

@@ -58,7 +58,7 @@ void CParts_Mannequin::Update(_float fTimeDelta)
 
 void CParts_Mannequin::Late_Update(_float fTimeDelta)
 {
-	m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+	m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
 }
 
 HRESULT CParts_Mannequin::Render()

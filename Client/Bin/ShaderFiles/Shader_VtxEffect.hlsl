@@ -6,6 +6,7 @@ texture2D   g_DiffuseTexture;
 texture2D   g_MaskTexture;
 texture2D   g_NoiseTexture;
 
+float4 g_vMainColor, g_vSubColor;
 float       g_fDeltaU, g_fDeltaV;
 float       g_fLifeTime, g_fLifeTimeAcc;
 int         g_iNumWidth, g_iNumHeight;
@@ -70,7 +71,7 @@ struct PS_OUT
 };
 
 /* 픽셀 쉐이더 : 픽셀의 최종적인 색을 결정하낟. */
-PS_OUT PS_FIRE(PS_IN In)
+PS_OUT PS_DISSOLVE(PS_IN In)
 {
     PS_OUT Out;
     
@@ -84,9 +85,9 @@ PS_OUT PS_FIRE(PS_IN In)
     
     float DissolveThreshold = g_fLifeTimeAcc / g_fLifeTime; // 0 ~ 1
     /* 디졸브 먼저 수행 */
-    float alpha = smoothstep(DissolveThreshold - 0.1f, DissolveThreshold + 0.1f, NoiseValue);
+    float fAlpha = smoothstep(DissolveThreshold - 0.1f, DissolveThreshold + 0.1f, NoiseValue);
 
-    Diffuse.a *= alpha;
+    Diffuse.a *= fAlpha;
  
     /* 흑백 이미지라 rgb로 투명도 표현중인 것 같으니까 일단 이렇게.. */
     /* 마스킹 수행 */
@@ -96,69 +97,62 @@ PS_OUT PS_FIRE(PS_IN In)
         discard;
     
     else if (Diffuse.a < 0.6f)
-        Diffuse.rgb = float3(1.f, 0.5f, 0.f);
-    
+        Diffuse.rgb = g_vMainColor.xyz;
+  
     else
-        Diffuse.rgb = float3(1.f, 0.9f, 0.f);
+        Diffuse.rgb = g_vSubColor.xyz;
 
     Out.vDiffuse = Diffuse;
  
     return Out;
 }
 
-PS_OUT PS_WIND(PS_IN In)
+/* 픽셀 쉐이더 : 픽셀의 최종적인 색을 결정하낟. */
+PS_OUT PS_DELTAUV(PS_IN In)
 {
     PS_OUT Out;
     
     // diffuse 샘플
     float4 Diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexcoord);
-
     // mask 샘플 (같은 UV 사용)
+    In.vTexcoord -= float2(g_fDeltaU * g_fLifeTimeAcc, g_fDeltaV * g_fLifeTimeAcc);
     float4 MaskSample = g_MaskTexture.Sample(DefaultSampler, In.vTexcoord);
-   
-    float NoiseValue = g_NoiseTexture.Sample(DefaultSampler, In.vNoiseTexCoord).r;
- 
-    /* 흑백 이미지라 rgb로 투명도 표현중인 것 같으니까 일단 이렇게.. */
-    /* 마스킹 수행 */
+    
     Diffuse.a *= MaskSample.r;
-
+    
     if (Diffuse.a < 0.01f)
         discard;
     else if (Diffuse.a < 0.6f)
-        Diffuse.rgb = float3(0.2f, 0.5f, 1.f);
+        Diffuse.rgb = g_vMainColor.xyz;
     else
-        Diffuse.rgb = float3(0.6f, 0.85f, 1.f);
-
+        Diffuse.rgb = g_vSubColor.xyz;
+    
     Out.vDiffuse = Diffuse;
-    /* 살짝 투명하게 */
-    Out.vDiffuse.a *= 0.7f;
- 
+   
     return Out;
 }
 
 technique11 DefaultTechnique
 {
-    pass Fire
+    pass Dissolve
     {
-        SetRasterizerState(RS_Default);
+        SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_Default, 0);
         SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-
        
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
-        PixelShader = compile ps_5_0 PS_FIRE();
+        PixelShader = compile ps_5_0 PS_DISSOLVE();
     }
 
-    pass Wind
+    pass DeltaUV
     {
-        SetRasterizerState(RS_Default);
+        SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_Default, 0);
         SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-
        
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
-        PixelShader = compile ps_5_0 PS_WIND();
+        PixelShader = compile ps_5_0 PS_DELTAUV();
     }
 }

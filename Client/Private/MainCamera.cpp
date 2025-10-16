@@ -74,16 +74,6 @@ void CMainCamera::OnChange(const _float4x4* pWorldMatrix)
         m_pTransformCom->Set_WorldMatrix(XMLoadFloat4x4(pWorldMatrix));
 }
 
-void CMainCamera::Look_Target(_float fTimeDelta)
-{
-    m_vCameraPoint 
-}
-
-void CMainCamera::Chase_Target(_float fTimeDelta)
-{
-
-}
-
 void CMainCamera::Rotate_Point(_float fTimeDelta)
 {
     _float fMouseMoveX = (_float)m_pGameInstance->Get_MouseMove(MOUSEMOVESTATE::X) / g_iWinSizeX;
@@ -165,7 +155,7 @@ void CMainCamera::Free()
     Safe_Release(m_pPlayerTransform);
 }
 
-/*
+
 void CMainCamera::Look_Target(_float fTimeDelta)
 {
     CTransform* pTargetTransform = m_pGameManager->Calc_Target(m_pPlayerTransform->Get_State(STATE::POSITION));
@@ -236,5 +226,3 @@ _float      fLength = XMVectorGetX(XMVector3Length(vCamPos));
 
 m_pTransformCom->Chase_Lerp(m_pPlayerTransform->Get_State(STATE::POSITION) + vCamPos, fTimeDelta * 0.9f, 0.f);
 }
-
-*/

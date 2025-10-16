@@ -1,5 +1,6 @@
 #include "Effect_GUI.h"
 
+#include "EffectContainer.h"
 #include "EffectObject.h"
 #include "GameInstance.h"
 
@@ -53,16 +54,22 @@ HRESULT CEffect_GUI::Add_SRV(const _tchar* pTextureFilePath, _uint iNumTextures,
 	return S_OK;
 }
 
-HRESULT CEffect_GUI::Add_EffeectObject(CEffectObject* pEffectObject)
-{
-	m_pEffectObject = pEffectObject;
-	Safe_AddRef(m_pEffectObject);
-
-	return S_OK;
-}
-
 HRESULT CEffect_GUI::Initialize()
 {
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_GameObject_EffectContainer"),
+		ENUM_CLASS(LEVEL::EFFECT), TEXT("Layer_Effect"))))
+		return E_FAIL;
+
+	m_pEffectContainer = static_cast<CEffectContainer*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::EFFECT), TEXT("Layer_Effect"), 0));
+
+	CEffectObject::EFFECT_OBJECT_DESC Desc;
+	Desc.strModelTag = Get_EffectModelTag(0);
+	
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_GameObject_EffectObject"),
+		ENUM_CLASS(LEVEL::EFFECT), TEXT("Layer_Effect"), &Desc)))
+		return E_FAIL;
+
+	m_pEffectObject = static_cast<CEffectObject*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::EFFECT), TEXT("Layer_Effect"), 1));
 
 	return S_OK;
 }
@@ -71,6 +78,7 @@ void CEffect_GUI::Update(_float fTimeDelta)
 {
 	Effect_GUI();
 	Particle_GUI();
+	Container_GUI();
 }
 
 void CEffect_GUI::Effect_GUI()
@@ -119,6 +127,66 @@ void CEffect_GUI::Effect_GUI()
 			ImGui::InputFloat("FrameTime", &m_fFrameTime);
 			ImGui::InputInt("Shader Pass", (_int*)&m_iShaderPassIdx);
 
+			ImGui::PushItemWidth(60.f);
+
+			ImGui::Text("Main Color   ");
+			ImGui::SameLine();
+			ImGui::InputFloat("##MColorX", &m_vMainColor.x);
+			ImGui::SameLine();
+			ImGui::InputFloat("##MColorY", &m_vMainColor.y);
+			ImGui::SameLine();
+			ImGui::InputFloat("##MColorZ", &m_vMainColor.z);
+			ImGui::SameLine();
+			ImGui::InputFloat("##MColorW", &m_vMainColor.w);
+
+			ImGui::Text("Sub Color    ");
+			ImGui::SameLine();
+			ImGui::InputFloat("##SColorX", &m_vSubColor.x);
+			ImGui::SameLine();
+			ImGui::InputFloat("##SColorY", &m_vSubColor.y);
+			ImGui::SameLine();
+			ImGui::InputFloat("##SColorZ", &m_vSubColor.z);
+			ImGui::SameLine();
+			ImGui::InputFloat("##SColorW", &m_vSubColor.w);
+
+
+			ImGui::Text("Rotation     ");
+			ImGui::SameLine();
+			ImGui::InputFloat("##RotX", &m_vEffectRotation.x);
+			ImGui::SameLine();
+			ImGui::InputFloat("##RotY", &m_vEffectRotation.y);
+			ImGui::SameLine();
+			ImGui::InputFloat("##RotZ", &m_vEffectRotation.z);
+
+			ImGui::Text("Scale        ");
+			ImGui::SameLine();
+			ImGui::InputFloat("##ScaleX", &m_vScale.x);
+			ImGui::SameLine();
+			ImGui::InputFloat("##ScaleY", &m_vScale.y);
+			ImGui::SameLine();
+			ImGui::InputFloat("##ScaleZ", &m_vScale.z);
+
+			ImGui::Text("Delta Scale  ");
+			ImGui::SameLine();
+			ImGui::InputFloat("##DScaleX", &m_vDeltaScale.x);
+			ImGui::SameLine();
+			ImGui::InputFloat("##DScaleY", &m_vDeltaScale.y);
+			ImGui::SameLine();
+			ImGui::InputFloat("##DScaleZ", &m_vDeltaScale.z);
+
+			ImGui::Text("Start Time   ");
+			ImGui::SameLine();
+			ImGui::InputFloat("##EffStartTime", &m_fStartTime);
+
+			ImGui::PopItemWidth();
+
+			ImGui::Checkbox("Is Delta Rotation", &m_IsRotation);
+			ImGui::Text("Rotation Speed (Degree)  ");
+			ImGui::SameLine();
+			ImGui::InputFloat("##DRotate", &m_fRotationPerSec);
+
+			ImGui::Checkbox("Is Effect Loop", &m_IsEffectLoop);
+
 			if (ImGui::Button("Apply"))
 			{
 				if (nullptr == m_pEffectObject)
@@ -129,6 +197,28 @@ void CEffect_GUI::Effect_GUI()
 				else
 					Change_Desc();
 			}
+			ImGui::Dummy(ImVec2(0.0f, 5.0f));
+			ImGui::Separator();
+			ImGui::Dummy(ImVec2(0.0f, 5.0f));
+
+
+			if (ImGui::Button("Add Main To Container"))
+			{
+				/* Create Desc 이용해서 이펙트 객체 하나 만들어서 컨테이너에 넣어주기*/
+				CEffectObject::EFFECT_OBJECT_DESC Desc = m_pEffectObject->Get_Desc();
+				CEffectObject* pEffect = static_cast<CEffectObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_GameObject_EffectObject"), &Desc));
+				m_pEffectContainer->Add_MainEffect(pEffect);
+			}
+
+			if (ImGui::Button("Add Sub To Container"))
+			{
+				/* Create Desc 이용해서 이펙트 객체 하나 만들어서 컨테이너에 넣어주기*/
+				CEffectObject::EFFECT_OBJECT_DESC Desc = m_pEffectObject->Get_Desc();
+				CEffectObject* pEffect = static_cast<CEffectObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_GameObject_EffectObject"), &Desc));
+				m_pEffectContainer->Add_EffectObject(pEffect);
+
+			}
+
 			ImGui::Dummy(ImVec2(0.0f, 5.0f));
 			ImGui::Separator();
 			ImGui::Dummy(ImVec2(0.0f, 5.0f));
@@ -227,18 +317,7 @@ void CEffect_GUI::Particle_GUI()
 	{
 		if (ImGui::BeginTabItem("Input Desc"))
 		{
-			/*
-			_bool	m_isLoop = { false };
-			_uint	m_iNumInstance = {};
-			_float3 m_vCenter = {};
-			_float3 m_vRange = {};
-			_float3 m_vPivot = {};
 
-			_float2 m_vSpeed = {};
-			_float4 m_vColor = {};
-			_float3 m_vRotation = {};
-			_float2 m_vLifeTime = {};
-			*/
 			ImGui::Checkbox("Is Loop", &m_isLoop);
 			ImGui::InputInt("Instance Number", &m_iNumInstance);
 
@@ -351,7 +430,49 @@ void CEffect_GUI::Particle_GUI()
 	ImGui::End();
 }
 
+void CEffect_GUI::Container_GUI()
+{
+	ImGui::Begin("Container Tool");
+
+	if(ImGui::BeginTabBar("Container"))
+	{
+		if (ImGui::Checkbox("Visible", (_bool*)&m_IsMainEffectVisible))
+		{
+			m_pEffectContainer->Set_Visible(m_IsMainEffectVisible);
+		}
+
+		if (ImGui::BeginTabItem("Main Effect"))
+		{
+			ImGui::Text("Hello");
+			ImGui::EndTabItem();
+		}
+
+		if (ImGui::BeginTabItem("Effect List"))
+		{
+			ImGui::Text("Hello");
+			ImGui::EndTabItem();
+		}
+		ImGui::EndTabBar();
+	}
+
+	ImGui::End();
+}
+
+void CEffect_GUI::Add_To_Main()
+{
+}
+
+void CEffect_GUI::Add_To_Sub()
+{
+}
+
 void CEffect_GUI::Change_Desc()
+{
+	CEffectObject::EFFECT_OBJECT_DESC Desc = Create_Desc();
+	m_pEffectObject->Set_Desc(&Desc);
+}
+
+CEffectObject::EFFECT_OBJECT_DESC CEffect_GUI::Create_Desc()
 {
 	CEffectObject::EFFECT_OBJECT_DESC Desc = {};
 	Desc.strModelTag = m_strSelectedEffectModelTag;
@@ -365,19 +486,23 @@ void CEffect_GUI::Change_Desc()
 	Desc.iNoiseTextureNum = m_iNoiseTextureNum;
 	Desc.fFrameTime = m_fFrameTime;
 	Desc.iShaderPassIdx = m_iShaderPassIdx;
+	Desc.fLifeTime = m_fLifeTime;
+	Desc.vMainColor = m_vMainColor;
+	Desc.vSubColor = m_vSubColor;
+	Desc.vRotation = m_vEffectRotation;
+	Desc.IsRotation = m_IsRotation;
+	Desc.vScale = m_vScale;
+	Desc.vDeltaScale = m_vDeltaScale;
+	Desc.fRotationPerSec = m_fRotationPerSec;
+	Desc.fStartTime = m_fStartTime;
+	Desc.IsLoop = m_IsEffectLoop;
 
-	m_pEffectObject->Set_Desc(&Desc);
+	return Desc;
 }
 
 CEffect_GUI* CEffect_GUI::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CEffect_GUI* pInstance = new CEffect_GUI(pDevice, pContext);
-
-	if (FAILED(pInstance->Initialize()))
-	{
-		MSG_BOX("Create Failed : Effect Manager");
-		Safe_Release(pInstance);
-	}
 
 	return pInstance;
 }
@@ -386,7 +511,6 @@ void CEffect_GUI::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pEffectObject);
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);
 
@@ -403,4 +527,5 @@ void CEffect_GUI::Free()
 	m_NoiseSRVs.clear();
 
 	Safe_Release(m_pGameInstance);
+	Safe_Release(m_pEffectObject);
 }

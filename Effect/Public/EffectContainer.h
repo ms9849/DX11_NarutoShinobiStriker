@@ -24,11 +24,36 @@ private:
 
 public:
 	void Set_Visible(_bool bFlag) { m_IsVisible = bFlag; }
-
-	void Add_EffectObject(const _wstring& strEffectTag, class CEffectObject* pEffectObject)
+	
+	void Add_MainEffect(class CEffectObject* pEffectObject)
 	{
-		m_EffectObjects.emplace(strEffectTag, pEffectObject);
+		Safe_Release(m_pMainEffect);
+		m_pMainEffect = nullptr;
+
+		m_pMainEffect = pEffectObject;
 	}
+
+	/* 이펙트든 파티클이든 전부 컨테이너 내부에서 처리해준다. 오브젝트 매니저에서 제어 X */
+	void Add_EffectObject(class CEffectObject* pEffectObject)
+	{
+		m_EffectObjects.push_back(pEffectObject);
+	}
+
+	void Add_MainEffect(const _wstring& strEffectTag, class CEffectObject* pEffectObject)
+	{
+		m_pMainEffect = pEffectObject;
+	}
+
+	void Add_ParticleObject(class CParticleObject* pParticleObject)
+	{
+		m_ParticleObjects.push_back(pParticleObject);
+	}
+
+	vector<class CEffectObject*>& Get_Effects()
+	{
+		return m_EffectObjects;
+	}
+
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -39,8 +64,10 @@ public:
 	virtual HRESULT Render() override;
 
 private:
-	_bool m_IsVisible = { true };
-	map<_wstring, class CEffectObject*> m_EffectObjects = {};
+	_bool m_IsVisible = { false };
+	CEffectObject* m_pMainEffect = { nullptr };
+	vector<class CEffectObject*> m_EffectObjects = {};
+	vector<class CParticleObject*> m_ParticleObjects = {};
 
 private:
 	HRESULT Ready_Components();
