@@ -230,7 +230,7 @@ void CEffectObject::Update(_float fTimeDelta)
 	m_pTransformCom->Set_Scale(
 		m_vScale.x + (m_vDeltaScale.x - 1) * (m_fLifeTimeAcc / m_fLifeTime),
 		m_vScale.y + (m_vDeltaScale.y - 1) * (m_fLifeTimeAcc / m_fLifeTime),
-		m_vScale.z + (m_vDeltaScale.x - 1) * (m_fLifeTimeAcc / m_fLifeTime)
+		m_vScale.z + (m_vDeltaScale.z - 1) * (m_fLifeTimeAcc / m_fLifeTime)
 	);
 }
 

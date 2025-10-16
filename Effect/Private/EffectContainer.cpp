@@ -12,6 +12,35 @@ CEffectContainer::CEffectContainer(const CEffectContainer& rhs)
 {
 }
 
+void CEffectContainer::Add_EffectObject(const _wstring& strEffectTag, CEffectObject* pEffectObject)
+{
+    m_EffectObjects.emplace(strEffectTag, pEffectObject);
+    m_pMainEffect->Reset_LifeTime();
+    pEffectObject->Reset_LifeTime();
+
+    for (auto& Pair : m_EffectObjects)
+    {
+        Pair.second->Reset_LifeTime();
+    }
+}
+
+void CEffectContainer::Add_MainEffect(const _wstring& strEffectTag, CEffectObject* pEffectObject)
+{
+    m_pMainEffect = pEffectObject;
+    m_pMainEffect->Reset_LifeTime();
+    pEffectObject->Reset_LifeTime();
+
+    for (auto& Pair : m_EffectObjects)
+    {
+        Pair.second->Reset_LifeTime();
+    }
+}
+
+void CEffectContainer::Add_ParticleObject(CParticleObject* pParticleObject)
+{
+    m_ParticleObjects.push_back(pParticleObject);
+}
+
 HRESULT CEffectContainer::Initialize_Prototype()
 {
     return S_OK;
@@ -32,8 +61,8 @@ void CEffectContainer::Priority_Update(_float fTimeDelta)
 
     for (auto& pEffectObject : m_EffectObjects)
     {
-        if (pEffectObject->Get_StartTime() <= m_pMainEffect->Get_CurLifeTime())
-            pEffectObject->Priority_Update(fTimeDelta);
+        if (pEffectObject.second->Get_StartTime() <= m_pMainEffect->Get_CurLifeTime())
+            pEffectObject.second->Priority_Update(fTimeDelta);
     }
 
     m_pMainEffect->Priority_Update(fTimeDelta);
@@ -46,8 +75,8 @@ void CEffectContainer::Update(_float fTimeDelta)
 
     for (auto& pEffectObject : m_EffectObjects)
     {
-        if(pEffectObject->Get_StartTime() <= m_pMainEffect->Get_CurLifeTime())
-            pEffectObject->Update(fTimeDelta);
+        if(pEffectObject.second->Get_StartTime() <= m_pMainEffect->Get_CurLifeTime())
+            pEffectObject.second->Update(fTimeDelta);
     }
 
     m_pMainEffect->Update(fTimeDelta);
@@ -63,8 +92,8 @@ void CEffectContainer::Late_Update(_float fTimeDelta)
 
     for (auto& pEffectObject : m_EffectObjects)
     {
-        if (pEffectObject->Get_StartTime() <= m_pMainEffect->Get_CurLifeTime())
-            pEffectObject->Late_Update(fTimeDelta);
+        if (pEffectObject.second->Get_StartTime() <= m_pMainEffect->Get_CurLifeTime())
+            pEffectObject.second->Late_Update(fTimeDelta);
     }
 
     m_pMainEffect->Late_Update(fTimeDelta);
@@ -111,7 +140,7 @@ void CEffectContainer::Free()
     __super::Free();
 
 	for (auto& pEffectObject : m_EffectObjects)
-		Safe_Release(pEffectObject);
+		Safe_Release(pEffectObject.second);
 
     m_EffectObjects.clear();
 

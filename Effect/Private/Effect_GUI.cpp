@@ -201,6 +201,7 @@ void CEffect_GUI::Effect_GUI()
 			ImGui::Separator();
 			ImGui::Dummy(ImVec2(0.0f, 5.0f));
 
+			ImGui::InputText("Effect Tag", m_szEffectContainerTag, MAX_PATH);
 
 			if (ImGui::Button("Add Main To Container"))
 			{
@@ -215,8 +216,7 @@ void CEffect_GUI::Effect_GUI()
 				/* Create Desc 이용해서 이펙트 객체 하나 만들어서 컨테이너에 넣어주기*/
 				CEffectObject::EFFECT_OBJECT_DESC Desc = m_pEffectObject->Get_Desc();
 				CEffectObject* pEffect = static_cast<CEffectObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_GameObject_EffectObject"), &Desc));
-				m_pEffectContainer->Add_EffectObject(pEffect);
-
+				m_pEffectContainer->Add_EffectObject(m_pGameInstance->ToWstring(string(m_szEffectContainerTag)), pEffect);
 			}
 
 			ImGui::Dummy(ImVec2(0.0f, 5.0f));
@@ -434,24 +434,32 @@ void CEffect_GUI::Container_GUI()
 {
 	ImGui::Begin("Container Tool");
 
+	if (ImGui::Checkbox("Visible", (_bool*)&m_IsMainEffectVisible))
+	{
+		m_pEffectContainer->Set_Visible(m_IsMainEffectVisible);
+	}
+
 	if(ImGui::BeginTabBar("Container"))
 	{
-		if (ImGui::Checkbox("Visible", (_bool*)&m_IsMainEffectVisible))
+		if (ImGui::BeginTabItem("Effect Container"))
 		{
-			m_pEffectContainer->Set_Visible(m_IsMainEffectVisible);
-		}
+			map<_wstring, class CEffectObject*> Effects = m_pEffectContainer->Get_Effects();
 
-		if (ImGui::BeginTabItem("Main Effect"))
-		{
-			ImGui::Text("Hello");
+			ImGui::BeginChild("EffectMesh List", ImVec2(0, 200), true);
+
+			for (auto& Pair : Effects)
+			{
+				if (ImGui::Selectable(m_pGameInstance->ToString(Pair.first).c_str()))
+				{
+
+				}
+			}
+
+			ImGui::EndChild();
+
 			ImGui::EndTabItem();
 		}
 
-		if (ImGui::BeginTabItem("Effect List"))
-		{
-			ImGui::Text("Hello");
-			ImGui::EndTabItem();
-		}
 		ImGui::EndTabBar();
 	}
 

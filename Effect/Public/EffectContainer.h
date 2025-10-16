@@ -34,22 +34,13 @@ public:
 	}
 
 	/* 이펙트든 파티클이든 전부 컨테이너 내부에서 처리해준다. 오브젝트 매니저에서 제어 X */
-	void Add_EffectObject(class CEffectObject* pEffectObject)
-	{
-		m_EffectObjects.push_back(pEffectObject);
-	}
+	void Add_EffectObject(const _wstring& strEffectTag, class CEffectObject* pEffectObject);
 
-	void Add_MainEffect(const _wstring& strEffectTag, class CEffectObject* pEffectObject)
-	{
-		m_pMainEffect = pEffectObject;
-	}
+	void Add_MainEffect(const _wstring& strEffectTag, class CEffectObject* pEffectObject);
 
-	void Add_ParticleObject(class CParticleObject* pParticleObject)
-	{
-		m_ParticleObjects.push_back(pParticleObject);
-	}
+	void Add_ParticleObject(class CParticleObject* pParticleObject);
 
-	vector<class CEffectObject*>& Get_Effects()
+	map<_wstring, class CEffectObject*>& Get_Effects()
 	{
 		return m_EffectObjects;
 	}
@@ -66,7 +57,7 @@ public:
 private:
 	_bool m_IsVisible = { false };
 	CEffectObject* m_pMainEffect = { nullptr };
-	vector<class CEffectObject*> m_EffectObjects = {};
+	map<_wstring, class CEffectObject*> m_EffectObjects = {};
 	vector<class CParticleObject*> m_ParticleObjects = {};
 
 private:

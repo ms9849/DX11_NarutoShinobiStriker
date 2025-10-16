@@ -70,7 +70,7 @@ private:
 	_float m_fFrameTime = { 0.1f };
 	_uint  m_iShaderPassIdx = { 0 };
 	_float m_fLifeTime = { 0.f };
-	//
+
 	_float4	m_vMainColor = { 0.f, 0.f, 0.f, 0.f };
 	_float4	m_vSubColor = { 0.f, 0.f, 0.f, 0.f };
 
@@ -83,6 +83,7 @@ private:
 	_float  m_fRotationPerSec = { 30.f };
 	_float  m_fStartTime = {};
 
+	_char m_szEffectContainerTag[MAX_PATH] = {};
 	/* PARTICLE */
 	_int   m_iType = { 0 };
 	_bool	m_isLoop = { false };
