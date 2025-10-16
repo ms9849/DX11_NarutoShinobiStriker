@@ -83,6 +83,45 @@ PS_OUT PS_DISSOLVE(PS_IN In)
    
     float NoiseValue = g_NoiseTexture.Sample(DefaultSampler, In.vNoiseTexCoord).r;
     
+    float fAlpha = 1.0f;
+
+    if (g_fLifeTimeAcc / g_fLifeTime >= 0.5f)
+    {
+        float DissolveThreshold = (g_fLifeTimeAcc / g_fLifeTime - 0.5f) * 2.f; // 0 ~ 1
+        fAlpha = smoothstep(DissolveThreshold - 0.1f, DissolveThreshold + 0.1f, NoiseValue);
+    }
+
+    Diffuse.a *= fAlpha;
+
+    /* 마스킹 수행 */
+    Diffuse.a *= MaskSample.r;
+
+    if (Diffuse.a < 0.1f)
+        discard;
+    
+    else if (Diffuse.a < 0.6f)
+        Diffuse.rgb = g_vMainColor.xyz;
+  
+    else if(Diffuse.a > 0.6f)
+        Diffuse.rgb = g_vSubColor.xyz;
+
+    Out.vDiffuse = Diffuse;
+ 
+    return Out;
+}
+
+PS_OUT PS_DISSOLVE_IMMEDIATE(PS_IN In)
+{
+    PS_OUT Out;
+    
+    // diffuse 샘플
+    float4 Diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexcoord);
+
+    // mask 샘플 (같은 UV 사용)
+    float4 MaskSample = g_MaskTexture.Sample(DefaultSampler, In.vTexcoord);
+   
+    float NoiseValue = g_NoiseTexture.Sample(DefaultSampler, In.vNoiseTexCoord).r;
+    
     float DissolveThreshold = g_fLifeTimeAcc / g_fLifeTime; // 0 ~ 1
     /* 디졸브 먼저 수행 */
     float fAlpha = smoothstep(DissolveThreshold - 0.1f, DissolveThreshold + 0.1f, NoiseValue);
@@ -93,12 +132,10 @@ PS_OUT PS_DISSOLVE(PS_IN In)
     /* 마스킹 수행 */
     Diffuse.a *= MaskSample.r;
 
-    if (Diffuse.a < 0.01f)
+    if (Diffuse.a < 0.1f)
         discard;
-    
     else if (Diffuse.a < 0.6f)
         Diffuse.rgb = g_vMainColor.xyz;
-  
     else
         Diffuse.rgb = g_vSubColor.xyz;
 
@@ -120,7 +157,7 @@ PS_OUT PS_DELTAUV(PS_IN In)
     
     Diffuse.a *= MaskSample.r;
     
-    if (Diffuse.a < 0.01f)
+    if (Diffuse.a < 0.1f)
         discard;
     else if (Diffuse.a < 0.6f)
         Diffuse.rgb = g_vMainColor.xyz;
@@ -132,11 +169,49 @@ PS_OUT PS_DELTAUV(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_ALL(PS_IN In)
+{
+    PS_OUT Out;
+    
+    // diffuse 샘플
+    float4 Diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexcoord);
+
+    // mask 샘플 (같은 UV 사용)
+    In.vTexcoord -= float2(g_fDeltaU * g_fLifeTimeAcc, g_fDeltaV * g_fLifeTimeAcc);
+    float4 MaskSample = g_MaskTexture.Sample(DefaultSampler, In.vTexcoord);
+    
+    float NoiseValue = g_NoiseTexture.Sample(DefaultSampler, In.vNoiseTexCoord).r;
+    
+    float fAlpha = 1.0f;
+
+    if (g_fLifeTimeAcc / g_fLifeTime >= 0.5f)
+    {
+        float DissolveThreshold = (g_fLifeTimeAcc / g_fLifeTime - 0.5f) * 2.f; // 0 ~ 1
+        fAlpha = smoothstep(DissolveThreshold - 0.1f, DissolveThreshold + 0.1f, NoiseValue);
+    }
+
+    Diffuse.a *= fAlpha;
+
+    /* 마스킹 수행 */
+    Diffuse.a *= MaskSample.r;
+
+    if (Diffuse.a < 0.01f)
+        discard;
+    else if (Diffuse.a < 0.6f)
+        Diffuse.rgb = g_vMainColor.xyz;
+    else
+        Diffuse.rgb = g_vSubColor.xyz;
+
+    Out.vDiffuse = Diffuse;
+ 
+    return Out;
+}
+
 technique11 DefaultTechnique
 {
     pass Dissolve
     {
-        SetRasterizerState(RS_Cull_None);
+        SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_Default, 0);
         SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
        
@@ -145,7 +220,29 @@ technique11 DefaultTechnique
         PixelShader = compile ps_5_0 PS_DISSOLVE();
     }
 
+    pass DissolveImmediate
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+       
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_DISSOLVE_IMMEDIATE();
+    }
+
     pass DeltaUV
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+       
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_DELTAUV();
+    }
+
+    pass ALL
     {
         SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_Default, 0);
@@ -153,6 +250,6 @@ technique11 DefaultTechnique
        
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
-        PixelShader = compile ps_5_0 PS_DELTAUV();
+        PixelShader = compile ps_5_0 PS_ALL();
     }
 }
