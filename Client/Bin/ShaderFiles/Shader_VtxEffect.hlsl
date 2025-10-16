@@ -98,13 +98,11 @@ PS_OUT PS_DISSOLVE(PS_IN In)
 
     if (Diffuse.a < 0.1f)
         discard;
-    
     else if (Diffuse.a < 0.6f)
-        Diffuse.rgb = g_vMainColor.xyz;
-  
-    else if(Diffuse.a > 0.6f)
-        Diffuse.rgb = g_vSubColor.xyz;
-
+        Diffuse.rgba = g_vMainColor.xyzw;
+    else
+        Diffuse.rgba = g_vSubColor.xyzw;
+    
     Out.vDiffuse = Diffuse;
  
     return Out;
@@ -135,9 +133,9 @@ PS_OUT PS_DISSOLVE_IMMEDIATE(PS_IN In)
     if (Diffuse.a < 0.1f)
         discard;
     else if (Diffuse.a < 0.6f)
-        Diffuse.rgb = g_vMainColor.xyz;
+        Diffuse.rgba = g_vMainColor.xyzw;
     else
-        Diffuse.rgb = g_vSubColor.xyz;
+        Diffuse.rgba = g_vSubColor.xyzw;
 
     Out.vDiffuse = Diffuse;
  
@@ -160,9 +158,9 @@ PS_OUT PS_DELTAUV(PS_IN In)
     if (Diffuse.a < 0.1f)
         discard;
     else if (Diffuse.a < 0.6f)
-        Diffuse.rgb = g_vMainColor.xyz;
+        Diffuse.rgba = g_vMainColor.xyzw;
     else
-        Diffuse.rgb = g_vSubColor.xyz;
+        Diffuse.rgba = g_vSubColor.xyzw;
     
     Out.vDiffuse = Diffuse;
    
@@ -198,9 +196,9 @@ PS_OUT PS_ALL(PS_IN In)
     if (Diffuse.a < 0.01f)
         discard;
     else if (Diffuse.a < 0.6f)
-        Diffuse.rgb = g_vMainColor.xyz;
+        Diffuse.rgba = g_vMainColor.xyzw;
     else
-        Diffuse.rgb = g_vSubColor.xyz;
+        Diffuse.rgba = g_vSubColor.xyzw;
 
     Out.vDiffuse = Diffuse;
  

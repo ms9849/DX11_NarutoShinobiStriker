@@ -59,13 +59,13 @@ void CEffectContainer::Priority_Update(_float fTimeDelta)
 	if (false == m_IsVisible)
 		return;
 
+    m_pMainEffect->Priority_Update(fTimeDelta);
+
     for (auto& pEffectObject : m_EffectObjects)
     {
         if (pEffectObject.second->Get_StartTime() <= m_pMainEffect->Get_CurLifeTime())
             pEffectObject.second->Priority_Update(fTimeDelta);
     }
-
-    m_pMainEffect->Priority_Update(fTimeDelta);
 }
 
 void CEffectContainer::Update(_float fTimeDelta)
@@ -73,13 +73,13 @@ void CEffectContainer::Update(_float fTimeDelta)
     if (false == m_IsVisible)
         return;
 
+    m_pMainEffect->Update(fTimeDelta);
+
     for (auto& pEffectObject : m_EffectObjects)
     {
         if(pEffectObject.second->Get_StartTime() <= m_pMainEffect->Get_CurLifeTime())
             pEffectObject.second->Update(fTimeDelta);
     }
-
-    m_pMainEffect->Update(fTimeDelta);
 }
 
 void CEffectContainer::Late_Update(_float fTimeDelta)
@@ -90,13 +90,13 @@ void CEffectContainer::Late_Update(_float fTimeDelta)
     if (true == m_pMainEffect->IsDead())
         m_IsDead = true;
 
+    m_pMainEffect->Late_Update(fTimeDelta);
+
     for (auto& pEffectObject : m_EffectObjects)
     {
         if (pEffectObject.second->Get_StartTime() <= m_pMainEffect->Get_CurLifeTime())
             pEffectObject.second->Late_Update(fTimeDelta);
     }
-
-    m_pMainEffect->Late_Update(fTimeDelta);
 }
 
 HRESULT CEffectContainer::Render()

@@ -51,6 +51,14 @@ DepthStencilState DSS_None
     DepthWriteMask = zero;
 };
 
+/* 깊이쓰기만 끄기*/
+DepthStencilState DSS_DepthNonWrite
+{
+    DepthEnable = true;
+    DepthWriteMask = zero;
+    DepthFunc = less_equal;
+};
+
 /* 블렌더 끄기. 어떤 렌더타겟에 블렌드 스테이트를 넘겨줄 것인지 설정. */
 BlendState BS_None
 {
@@ -61,9 +69,7 @@ BlendState BS_None
 BlendState BS_AlphaBlend
 {
     BlendEnable[0] = true;
-    BlendEnable[1] = true;
-
     SrcBlend = Src_Alpha;
-    DestBlend = Inv_Src_Alpha;
+    DestBlend = One;
     BlendOp = Add;
 };
