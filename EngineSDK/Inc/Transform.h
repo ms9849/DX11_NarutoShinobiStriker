@@ -45,6 +45,13 @@ public:
 		XMStoreFloat4x4(&m_WorldMatrix, WorldMatrix);
 	}
 
+	_float Get_RotationSpeed() {
+		return m_fRotationPerSec;
+	}
+
+	void Set_RotationSpeed(_float fRotationPerSec) {
+		m_fRotationPerSec = fRotationPerSec;
+	}
 public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg);

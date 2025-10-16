@@ -42,10 +42,6 @@ void CParticleObject::Update(_float fTimeDelta)
 		m_pVIBufferCom->Drop(fTimeDelta);
 		break;
 
-	case PARTICLE_TYPE::SPREAD:
-		m_pVIBufferCom->Spread(fTimeDelta);
-		break;
-
 	case PARTICLE_TYPE::EXPLOSION:
 		m_pVIBufferCom->Explosion(fTimeDelta);
 		break;

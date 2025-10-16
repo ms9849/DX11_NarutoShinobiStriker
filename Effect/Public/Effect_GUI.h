@@ -2,6 +2,7 @@
 
 #include "Effect_Defines.h"
 #include "ParticleObject.h"
+#include "EffectObject.h"
 
 NS_BEGIN(Engine)
 class CGameInstance;
@@ -24,9 +25,9 @@ private:
 
 public:
 	HRESULT Add_SRV(const _tchar* pTextureFilePath, _uint iNumTextures, TEXTURE_TYPE eTextureType);
-	HRESULT Add_EffeectObject(class CEffectObject* pEffectObject);
 	void Add_EffectModelTag(const _wstring& strEffectModelTag) { m_EffectModelTags.push_back(strEffectModelTag); }
 	const _wstring& Get_EffectModelTag(_uint iIdx) { return m_EffectModelTags[iIdx]; }
+
 public:
 	HRESULT Initialize();
 	void Update(_float fTimeDelta);
@@ -34,6 +35,10 @@ public:
 public:
 	void Effect_GUI();
 	void Particle_GUI();
+	void Container_GUI();
+
+	void Add_To_Main();
+	void Add_To_Sub();
 
 private:
 	CGameInstance* m_pGameInstance = { nullptr };
@@ -41,6 +46,8 @@ private:
 	ID3D11DeviceContext* m_pContext = { nullptr };
 
 	class CEffectObject* m_pEffectObject = { nullptr };
+	class CEffectContainer* m_pEffectContainer = { nullptr };
+
 	vector<ID3D11ShaderResourceView*> m_DiffuseSRVs = {};
 	vector<ID3D11ShaderResourceView*> m_MaskSRVs = {};
 	vector<ID3D11ShaderResourceView*> m_NoiseSRVs = {};
@@ -51,7 +58,8 @@ private:
 	_int m_iCurrentTagIndex = {};
 	vector<_wstring> m_EffectModelTags = {};
 
-	_bool m_IsEffectVisible = { false };
+	_bool m_IsEffectVisible = { true };
+	_bool m_IsMainEffectVisible = { false };
 
 	/* EFFECT (MESH) */
 	_wstring m_strSelectedEffectModelTag = { TEXT("") };
@@ -60,7 +68,21 @@ private:
 	_uint  m_iCurrentIdx = { 0 };
 	_uint  m_iTextureNum = { 0 }, m_iMaskTextureNum = { 0 }, m_iNoiseTextureNum = { 0 };
 	_float m_fFrameTime = { 0.1f };
-	_uint  m_iShaderPassIdx = {};
+	_uint  m_iShaderPassIdx = { 0 };
+	_float m_fLifeTime = { 0.f };
+	//
+	_float4	m_vMainColor = { 0.f, 0.f, 0.f, 0.f };
+	_float4	m_vSubColor = { 0.f, 0.f, 0.f, 0.f };
+
+	_float3	m_vEffectRotation = { 0.f, 0.f, 0.f };
+	_bool	m_IsRotation = { false };
+
+	_float3	m_vScale = { 1.f, 1.f, 1.f };
+	_float3	m_vDeltaScale = { 1.f, 1.f, 1.f };
+	_bool	m_IsEffectLoop = { true };
+	_float  m_fRotationPerSec = { 30.f };
+	_float  m_fStartTime = {};
+
 	/* PARTICLE */
 	_int   m_iType = { 0 };
 	_bool	m_isLoop = { false };
@@ -74,9 +96,21 @@ private:
 	_float3 m_vRotation = {};
 	_float2 m_vLifeTime = {};
 
+
+	/*
+	_float4				m_vMainColor = {};
+	_float4				m_vSubColor = {}; 
+
+	_float3				m_vRotation = { 0.f, 0.f, 0.f };
+	_bool				m_IsRotation = { false };
+
+	_float3				m_vScale = { 1.f, 1.f, 1.f };
+	_float3				m_vDeltaScale = { 1.f, 1.f, 1.f};
+	_bool				m_IsLoop = { true };
+	*/
 private:
 	void Change_Desc();
-
+	CEffectObject::EFFECT_OBJECT_DESC Create_Desc();
 public:
 	static CEffect_GUI* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual void Free() override;

@@ -18,28 +18,40 @@ NS_BEGIN(EffectTool)
 class CEffectObject final : public CGameObject
 {
 public:
-	typedef struct tagEffectDesc
+	typedef struct tagEffectDesc : public GAMEOBJECT_DESC
 	{
 		_bool			IsBinary = { false };
 		/* 포지션 및 태그 변경은 아직 미구현. */
-		_float3			vPosition = {};
+		_float3			vPosition = { 0.f, 0.f, 0.f };
 		_wstring		strTextureTag = { TEXT("") };
-		_int			iTextureNum = { -1 };
+		_int			iTextureNum = { 0 };
 
 		_wstring		strMaskTextureTag = { TEXT("") };
-		_int			iMaskTextureNum = { -1 };
+		_int			iMaskTextureNum = { 0 };
 
 		_wstring		strNoiseTextureTag = { TEXT("") };
-		_int			iNoiseTextureNum = { -1 };
+		_int			iNoiseTextureNum = { 0 };
 
 		_wstring		strModelTag = { TEXT("") };
-		_float			fDeltaU = { -1.f };
-		_float			fDeltaV = { -1.f };
-		_int			iNumWidth = { -1 };
-		_int			iNumHeight = { -1 };
-		_int			iCurrentIdx = { -1 };
+		_float			fDeltaU = { 0.f };
+		_float			fDeltaV = { 0.f };
+		_int			iNumWidth = { 1 };
+		_int			iNumHeight = { 1 };
+		_int			iCurrentIdx = { 0 };
 		_int			iShaderPassIdx = { 0 };
-		_float			fFrameTime = { -1.f }; 
+		_float			fFrameTime = { 0.f }; 
+		_float			fLifeTime = { 0.1f };
+		//
+		_float			fStartTime = { 0.f };
+		_float4			vMainColor = {0.f, 0.f, 0.f, 1.f};
+		_float4			vSubColor = {0.f, 0.f, 0.f, 1.f};
+
+		_float3 		vRotation = { 0.f, 0.f, 0.f };	
+		_bool			IsRotation = { false };
+
+		_float3			vScale = { 1.f, 1.f, 1.f };
+		_float3			vDeltaScale = { 1.f, 1.f, 1.f };
+		_bool			IsLoop = { true };
 
 	} EFFECT_OBJECT_DESC;
 
@@ -64,11 +76,14 @@ public:
 public:
 	void Play_Sprite(_float fTimeDelta);
 	void Check_LifeTime(_float fTimeDelta);
+	_float Get_StartTime() { return m_fStartTime; }
+	_float Get_LifeTime() { return m_fLifeTime; }
+	_float Get_CurLifeTime() { return m_fLifeTimeAcc; }
+	_bool IsVisible() { return m_IsVisible; }
 
 public:
-
 	virtual void Set_Desc(void* pArg) override;
-
+	CEffectObject::EFFECT_OBJECT_DESC Get_Desc();
 private:
 	CEffectModel*		m_pModelCom = { nullptr };
 	/* 모델 이름 저장.. */
@@ -83,9 +98,9 @@ private:
 	CTexture*			m_pMaskTextureCom = { nullptr };
 	CTexture*			m_pNoiseTextureCom = { nullptr };
 
-	_uint				m_iDiffuseTextureIdx = {};
-	_uint				m_iMaskTextureIdx = {};
-	_uint				m_iNoiseTextureIdx = {};
+	_uint				m_iDiffuseTextureIdx = { 0 };
+	_uint				m_iMaskTextureIdx = { 0 };
+	_uint				m_iNoiseTextureIdx = { 0 };
 
 	_float				m_fDeltaU = { 0.f };
 	_float				m_fDeltaV = { 0.f };
@@ -96,16 +111,26 @@ private:
 	_uint				m_iMaxIdx = { 0 };
 	_float				m_fTimeAcc = { 0.f };
 	_float				m_fFrameTime = { 0.1f };
-
+	/* 컨테이너 안에서 나타나기 시작하는 순간. */
+	_float				m_fStartTime = { 0.f };
 	_float				m_fLifeTimeAcc = { 0.f };
 	_float				m_fLifeTime = { 0.1f };
+	
+	_float4				m_vMainColor = {};
+	_float4				m_vSubColor = {}; 
 
-	_bool				m_IsVisible = { false };
+	_float3				m_vRotation = { 0.f, 0.f, 0.f };
+	_bool				m_IsRotation = { false };
+
+	_float3				m_vScale = { 1.f, 1.f, 1.f };
+	_float3				m_vDeltaScale = { 1.f, 1.f, 1.f};
+	_bool				m_IsLoop = { true };
+	_bool				m_IsVisible = { true };
 
 private:
 	HRESULT Ready_Components(const _wstring& strModelTag);
 	HRESULT Bind_ShaderResources();
-
+	
 public:
 	static CEffectObject* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, Client::OBJECTID eObjectID);
 	CGameObject* Clone(void* pArg) override;

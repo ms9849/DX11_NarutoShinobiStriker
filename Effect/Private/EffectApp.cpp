@@ -44,7 +44,7 @@ void CEffectApp::Update(_float fTimeDelta)
 
 HRESULT CEffectApp::Render()
 {
-	_float4			vClearColor = _float4(0.f, 0.f, 0.8f, 1.f);
+	_float4			vClearColor = _float4(0.8f, 0.8f, 0.8f, 1.f);
 
 	m_pGameInstance->Render_Begin(&vClearColor);
 
