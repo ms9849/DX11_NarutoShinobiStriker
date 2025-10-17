@@ -64,7 +64,8 @@ public:
 	void Set_Visible(_bool bFlag) { m_IsVisible = bFlag; }
 	HRESULT Save_ToBinary(const _char* pEffectName);
 	HRESULT Load_FromBinary(const _tchar* pEffectName);
-
+	HRESULT Save_ToBinary(const _char* pEffectName, DWORD dwByte, HANDLE hHandle = nullptr);
+	HRESULT Load_FromBinary(const _tchar* pEffectName, DWORD dwByte, HANDLE hHandle = nullptr);
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;

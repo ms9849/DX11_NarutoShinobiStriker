@@ -203,7 +203,6 @@ void CEffect_GUI::Effect_GUI()
 			ImGui::Separator();
 			ImGui::Dummy(ImVec2(0.0f, 5.0f));
 
-			ImGui::InputText("Effect Tag", m_szEffectContainerTag, MAX_PATH);
 
 			if (ImGui::Button("Add Main To Container"))
 			{
@@ -213,7 +212,11 @@ void CEffect_GUI::Effect_GUI()
 				m_pEffectContainer->Add_MainEffect(pEffect);
 			}
 
-			ImGui::Dummy(ImVec2(0.0f, 10.0f));
+			ImGui::Dummy(ImVec2(0.f, 10.f));
+			ImGui::Separator();
+			ImGui::Dummy(ImVec2(0.f, 10.f));
+
+			ImGui::InputText("Effect Tag", m_szEffectContainerTag, MAX_PATH);
 
 			if (ImGui::Button("Add Sub To Container"))
 			{
@@ -455,13 +458,37 @@ void CEffect_GUI::Container_GUI()
 			{
 				if (ImGui::Selectable(m_pGameInstance->ToString(Pair.first).c_str()))
 				{
-
+					m_pEffectContainer->Pop(Pair.first);
 				}
 			}
 
 			ImGui::EndChild();
 
 			ImGui::EndTabItem();
+		}
+
+		/* 여기에 pop 만들어주면 됨*/
+
+		ImGui::Dummy(ImVec2(0.f, 10.f));
+		ImGui::Separator();
+		ImGui::Dummy(ImVec2(0.f, 10.f));
+
+		ImGui::InputText("Save Path", m_szEffectContainerSavePath, MAX_PATH);
+
+		if (ImGui::Button("Save Container"))
+		{
+			m_pEffectContainer->Save_Container_ToBinary(m_szEffectContainerSavePath);
+		}
+
+		ImGui::Dummy(ImVec2(0.f, 10.f));
+		ImGui::Separator();
+		ImGui::Dummy(ImVec2(0.f, 10.f));
+
+		ImGui::InputText("Load Path", m_szEffectContainerLoadPath, MAX_PATH);
+
+		if (ImGui::Button("Load Container"))
+		{
+			m_pEffectContainer->Load_Container_FromBinary(m_pGameInstance->ToWstring(string(m_szEffectContainerLoadPath)).c_str());
 		}
 
 		ImGui::EndTabBar();
