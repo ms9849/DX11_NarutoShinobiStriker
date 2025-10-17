@@ -103,7 +103,7 @@ void CMainCamera::Rotate_Point(_float fTimeDelta)
     _vector     vCamPos = XMVector3Rotate(StartVector, vQuternion);
     _float      fLength = XMVectorGetX(XMVector3Length(vCamPos));
 
-    m_pTransformCom->Chase_Lerp(m_pPlayerTransform->Get_State(STATE::POSITION) + vCamPos, fTimeDelta * 0.9f, 0.f);
+    m_pTransformCom->Chase_Lerp(m_pPlayerTransform->Get_State(STATE::POSITION) + vCamPos, fTimeDelta * 0.5f, 0.f);
 }
 
 void CMainCamera::Mouse_Lock()
@@ -188,10 +188,18 @@ void CMainCamera::Look_Target(_float fTimeDelta)
     }
     else
     {
-        m_pTransformCom->LookAt_Lerp(
-            m_pPlayerTransform->Get_State(STATE::POSITION) +
-            XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::LOOK)) * 1.f +
-            XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::UP)) * 1.f, 0.175f);
+        /* 플레이어의 look이 카메라의 look (xz 평면상)과 크게 차이날때만 lerp로 바라보게끔 처리 */
+        _vector PlayerLook = XMVectorSetY(m_pPlayerTransform->Get_State(STATE::LOOK), 0.f);
+        _vector CameraLook = XMVectorSetY(m_pTransformCom->Get_State(STATE::LOOK), 0.f);
+
+
+        if (!(XMVectorGetX(XMVector3Dot(CameraLook, PlayerLook)) >= 0.1f))
+        {
+            m_pTransformCom->LookAt_Lerp(
+                m_pPlayerTransform->Get_State(STATE::POSITION) +
+                XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::LOOK)) * 1.f +
+                XMVector3Normalize(m_pPlayerTransform->Get_State(STATE::UP)) * 1.f, 0.175f);
+        }
     }
 }
 
@@ -203,26 +211,28 @@ void CMainCamera::Chase_Target(_float fTimeDelta)
     // 회전할 벡터와 각도
     _vector  StartVector = XMVectorSet(0.f, 2.5f, -3.0f, 0.f);
 
-m_fRotateX += XMConvertToRadians(fMouseMoveX * 90.f);
-m_fRotateX = XMScalarModAngle(m_fRotateX);
+    m_fRotateX += XMConvertToRadians(fMouseMoveX * 90.f);
+    m_fRotateX = XMScalarModAngle(m_fRotateX);
 
-m_fRotateY += XMConvertToRadians(fMouseMoveY * 45.f);
-m_fRotateY = XMScalarModAngle(m_fRotateY);
+    m_fRotateY += XMConvertToRadians(fMouseMoveY * 45.f);
+    m_fRotateY = XMScalarModAngle(m_fRotateY);
 
-// 라디안 제한 ( -90  ~ +90 + 여기에 캐릭터의 Look 벡터까지. )
-_float fLimit = XMConvertToRadians(15.f);
+    // 라디안 제한 ( -90  ~ +90 + 여기에 캐릭터의 Look 벡터까지. )
+    _float fLimit = XMConvertToRadians(15.f);
 
-if (m_fRotateY > fLimit)
-m_fRotateY = fLimit;
+    if (m_fRotateY > fLimit)
+    m_fRotateY = fLimit;
 
-if (m_fRotateY < -fLimit)
-    m_fRotateY = -fLimit;
+    if (m_fRotateY < -fLimit)
+        m_fRotateY = -fLimit;
 
-_vector		vQuternion = XMQuaternionRotationRollPitchYaw(m_fRotateY, m_fRotateX, 0.f);
+    _vector		vQuternion = XMQuaternionRotationRollPitchYaw(m_fRotateY, m_fRotateX, 0.f);
 
-_matrix		RotationMatrix = XMMatrixRotationQuaternion(vQuternion);
-_vector     vCamPos = XMVector3Rotate(StartVector, vQuternion);
-_float      fLength = XMVectorGetX(XMVector3Length(vCamPos));
+    _matrix		RotationMatrix = XMMatrixRotationQuaternion(vQuternion);
+    _vector     vCamPos = XMVector3Rotate(StartVector, vQuternion);
+    _float      fLength = XMVectorGetX(XMVector3Length(vCamPos));
 
-m_pTransformCom->Chase_Lerp(m_pPlayerTransform->Get_State(STATE::POSITION) + vCamPos, fTimeDelta * 0.9f, 0.f);
+    _float fDist = XMVectorGetX(XMVector3Length(m_pPlayerTransform->Get_State(STATE::POSITION) - m_pTransformCom->Get_State(STATE::POSITION)));
+
+    m_pTransformCom->Chase_Lerp(m_pPlayerTransform->Get_State(STATE::POSITION) + vCamPos, 0.25f * fTimeDelta, 0.f);
 }
