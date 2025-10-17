@@ -86,6 +86,9 @@ HRESULT CEffectObject::Save_ToBinary(const _char* pEffectName)
 	_float fRotationSpeed = m_pTransformCom->Get_RotationSpeed();
 	WriteFile(hHandle, &fRotationSpeed, sizeof(_float), &dwByte, nullptr);
 
+	/* 블렌딩 여부 */
+	WriteFile(hHandle, &m_IsBlend, sizeof(_bool), &dwByte, nullptr);
+
 	CloseHandle(hHandle);
 
 	return S_OK;
@@ -181,6 +184,9 @@ HRESULT CEffectObject::Load_FromBinary(const _tchar* pBinaryFilePath)
 	_float fRotationSpeed = {};
 	ReadFile(hHandle, &fRotationSpeed, sizeof(_float), &dwByte, nullptr);
 	m_pTransformCom->Set_RotationSpeed(fRotationSpeed);
+	
+	/* 블렌딩 여부 */
+	ReadFile(hHandle, &m_IsBlend, sizeof(_bool), &dwByte, nullptr);
 
 	CloseHandle(hHandle);
 
@@ -240,7 +246,10 @@ void CEffectObject::Late_Update(_float fTimeDelta)
 		return;
 
     /* 문제없나..?*/
-	m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
+	if (m_IsBlend)
+		m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
+	else if(false == m_IsBlend)
+		m_pGameInstance->Add_RenderGroup(RENDER::NONLIGHT, this);
 }
 
 HRESULT CEffectObject::Render()
@@ -287,8 +296,16 @@ HRESULT CEffectObject::Render()
 		if (FAILED(m_pNoiseTextureCom->Bind_ShaderResource(m_pShaderCom, "g_NoiseTexture", m_iNoiseTextureIdx)))
 			return E_FAIL;
 
-		if (FAILED(m_pShaderCom->Begin(m_iShaderPassIdx)))
-			return E_FAIL;
+		if (false == m_IsBlend)
+		{
+			if (FAILED(m_pShaderCom->Begin(4)))
+				return E_FAIL;
+		}
+		else
+		{
+			if (FAILED(m_pShaderCom->Begin(m_iShaderPassIdx)))
+				return E_FAIL;
+		}
 
 		if (FAILED(m_pModelCom->Render(i)))
 			return E_FAIL;
@@ -399,6 +416,7 @@ void CEffectObject::Set_Desc(void* pArg)
 		m_IsVisible = true;
 
 	m_fStartTime = pDesc->fStartTime;
+	m_IsBlend = pDesc->IsBlend;
 
 	/* Com_DiffuseTexture */
 	if (TEXT("") != pDesc->strTextureTag)
@@ -460,6 +478,7 @@ CEffectObject::EFFECT_OBJECT_DESC CEffectObject::Get_Desc()
 	Desc.fRotationPerSec = XMConvertToDegrees(m_pTransformCom->Get_RotationSpeed());
 	Desc.fStartTime = m_fStartTime;
 	Desc.IsLoop = m_IsLoop;
+	Desc.IsBlend = m_IsBlend;
 
 	return Desc;
 }

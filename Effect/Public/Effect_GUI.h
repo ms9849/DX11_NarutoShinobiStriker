@@ -82,6 +82,7 @@ private:
 	_bool	m_IsEffectLoop = { true };
 	_float  m_fRotationPerSec = { 30.f };
 	_float  m_fStartTime = {};
+	_bool	m_IsBlend = { true };
 
 	_char m_szEffectContainerTag[MAX_PATH] = {};
 	/* PARTICLE */
