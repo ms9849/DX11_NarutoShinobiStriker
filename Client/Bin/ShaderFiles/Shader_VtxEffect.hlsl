@@ -97,6 +97,44 @@ PS_OUT PS_DISSOLVE(PS_IN In)
     Diffuse.a *= MaskSample.r;
 
     if (Diffuse.a < 0.1f)
+        Diffuse.a = 0;
+    else if (Diffuse.a < 0.6f)
+        Diffuse.rgba = g_vMainColor.xyzw;
+    else
+        Diffuse.rgba = g_vSubColor.xyzw;
+    
+    Out.vDiffuse = Diffuse;
+ 
+    return Out;
+}
+
+/* 픽셀 쉐이더 : 픽셀의 최종적인 색을 결정하낟. */
+PS_OUT PS_DISSOLVE_NONLIGHT(PS_IN In)
+{
+    PS_OUT Out;
+    
+    // diffuse 샘플
+    float4 Diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexcoord);
+
+    // mask 샘플 (같은 UV 사용)
+    float4 MaskSample = g_MaskTexture.Sample(DefaultSampler, In.vTexcoord);
+   
+    float NoiseValue = g_NoiseTexture.Sample(DefaultSampler, In.vNoiseTexCoord).r;
+    
+    float fAlpha = 1.0f;
+
+    if (g_fLifeTimeAcc / g_fLifeTime >= 0.5f)
+    {
+        float DissolveThreshold = (g_fLifeTimeAcc / g_fLifeTime - 0.5f) * 2.f; // 0 ~ 1
+        fAlpha = smoothstep(DissolveThreshold - 0.1f, DissolveThreshold + 0.1f, NoiseValue);
+    }
+
+    Diffuse.a *= fAlpha;
+
+    /* 마스킹 수행 */
+    Diffuse.a *= MaskSample.r;
+
+    if (Diffuse.a < 0.1f)
         discard;
     else if (Diffuse.a < 0.6f)
         Diffuse.rgba = g_vMainColor.xyzw;
@@ -131,7 +169,7 @@ PS_OUT PS_DISSOLVE_IMMEDIATE(PS_IN In)
     Diffuse.a *= MaskSample.r;
 
     if (Diffuse.a < 0.1f)
-        discard;
+        Diffuse.a = 0;
     else if (Diffuse.a < 0.6f)
         Diffuse.rgba = g_vMainColor.xyzw;
     else
@@ -156,7 +194,7 @@ PS_OUT PS_DELTAUV(PS_IN In)
     Diffuse.a *= MaskSample.r;
     
     if (Diffuse.a < 0.1f)
-        discard;
+        Diffuse.a = 0;
     else if (Diffuse.a < 0.6f)
         Diffuse.rgba = g_vMainColor.xyzw;
     else
@@ -194,7 +232,7 @@ PS_OUT PS_ALL(PS_IN In)
     Diffuse.a *= MaskSample.r;
 
     if (Diffuse.a < 0.01f)
-        discard;
+        Diffuse.a = 0;
     else if (Diffuse.a < 0.6f)
         Diffuse.rgba = g_vMainColor.xyzw;
     else
@@ -209,7 +247,7 @@ technique11 DefaultTechnique
 {
     pass Dissolve
     {
-        SetRasterizerState(RS_Default);
+        SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_Default, 0);
         SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
        
@@ -220,7 +258,7 @@ technique11 DefaultTechnique
 
     pass DissolveImmediate
     {
-        SetRasterizerState(RS_Default);
+        SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_Default, 0);
         SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
        
@@ -231,7 +269,7 @@ technique11 DefaultTechnique
 
     pass DeltaUV
     {
-        SetRasterizerState(RS_Default);
+        SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_Default, 0);
         SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
        
@@ -249,5 +287,15 @@ technique11 DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_ALL();
+    }
+
+    pass NONLIGHT
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_None, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_DISSOLVE_NONLIGHT();
     }
 }

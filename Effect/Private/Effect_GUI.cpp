@@ -185,7 +185,9 @@ void CEffect_GUI::Effect_GUI()
 			ImGui::SameLine();
 			ImGui::InputFloat("##DRotate", &m_fRotationPerSec);
 
-			ImGui::Checkbox("Is Effect Loop", &m_IsEffectLoop);
+			if (ImGui::Checkbox("Is Effect Loop", &m_IsEffectLoop)) {}
+
+			if (ImGui::Checkbox("Is Blend", &m_IsBlend)) {}
 
 			if (ImGui::Button("Apply"))
 			{
@@ -210,6 +212,8 @@ void CEffect_GUI::Effect_GUI()
 				CEffectObject* pEffect = static_cast<CEffectObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_GameObject_EffectObject"), &Desc));
 				m_pEffectContainer->Add_MainEffect(pEffect);
 			}
+
+			ImGui::Dummy(ImVec2(0.0f, 10.0f));
 
 			if (ImGui::Button("Add Sub To Container"))
 			{
@@ -504,6 +508,7 @@ CEffectObject::EFFECT_OBJECT_DESC CEffect_GUI::Create_Desc()
 	Desc.fRotationPerSec = m_fRotationPerSec;
 	Desc.fStartTime = m_fStartTime;
 	Desc.IsLoop = m_IsEffectLoop;
+	Desc.IsBlend = m_IsBlend;
 
 	return Desc;
 }

@@ -52,7 +52,7 @@ public:
 		_float3			vScale = { 1.f, 1.f, 1.f };
 		_float3			vDeltaScale = { 1.f, 1.f, 1.f };
 		_bool			IsLoop = { true };
-
+		_bool			IsBlend = { true };
 	} EFFECT_OBJECT_DESC;
 
 private:
@@ -127,7 +127,7 @@ private:
 	_float3				m_vDeltaScale = { 1.f, 1.f, 1.f};
 	_bool				m_IsLoop = { true };
 	_bool				m_IsVisible = { true };
-
+	_bool				m_IsBlend = { true };
 private:
 	HRESULT Ready_Components(const _wstring& strModelTag);
 	HRESULT Bind_ShaderResources();
