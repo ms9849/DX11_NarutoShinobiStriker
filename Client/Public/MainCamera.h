@@ -33,7 +33,6 @@ public:
 
 	void Look_Target(_float fTimeDelta);
 	void Chase_Target(_float fTimeDelta);
-
 	void Rotate_Point(_float fTimeDelta);
 
 	void Mouse_Lock();
