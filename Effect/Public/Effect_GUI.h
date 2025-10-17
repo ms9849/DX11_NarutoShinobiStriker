@@ -53,6 +53,9 @@ private:
 	vector<ID3D11ShaderResourceView*> m_NoiseSRVs = {};
 
 private:
+	_char m_szEffectContainerPopPath[MAX_PATH] = {};
+	_char m_szEffectContainerLoadPath[MAX_PATH] = {};
+	_char m_szEffectContainerSavePath[MAX_PATH] = {};
 	_char m_szSaveEffectName[MAX_PATH] = {};
 	_char m_szLoadEffectName[MAX_PATH] = {};
 	_int m_iCurrentTagIndex = {};

@@ -193,6 +193,171 @@ HRESULT CEffectObject::Load_FromBinary(const _tchar* pBinaryFilePath)
 	return S_OK;
 }
 
+HRESULT CEffectObject::Save_ToBinary(const _char* pEffectName, DWORD dwByte, HANDLE hHandle)
+{
+	/* 모델 태그 */
+	size_t StringSize = m_strModelName.size();
+	WriteFile(hHandle, &StringSize, sizeof(size_t), &dwByte, nullptr);
+	WriteFile(hHandle, m_strModelName.c_str(), static_cast<DWORD>(m_strModelName.size() * sizeof(wchar_t)), &dwByte, NULL);
+
+	/* 셰이더 패스 저장 */
+	WriteFile(hHandle, &m_iShaderPassIdx, sizeof(_uint), &dwByte, nullptr);
+	/* 디퓨즈 텍스쳐 넘버*/
+	WriteFile(hHandle, &m_iDiffuseTextureIdx, sizeof(_uint), &dwByte, nullptr);
+	/* 마스크 텍스쳐 넘버 */
+	WriteFile(hHandle, &m_iMaskTextureIdx, sizeof(_uint), &dwByte, nullptr);
+	/* 노이즈 텍스쳐 넘버 */
+	WriteFile(hHandle, &m_iNoiseTextureIdx, sizeof(_uint), &dwByte, nullptr);
+	/* U,V 델타 */
+	WriteFile(hHandle, &m_fDeltaU, sizeof(_float), &dwByte, nullptr);
+	WriteFile(hHandle, &m_fDeltaV, sizeof(_float), &dwByte, nullptr);
+	/* 가로 세로 프레임 갯수 */
+	WriteFile(hHandle, &m_iNumWidth, sizeof(_uint), &dwByte, nullptr);
+	WriteFile(hHandle, &m_iNumHeight, sizeof(_uint), &dwByte, nullptr);
+	/* 최대 인덱스 */
+	WriteFile(hHandle, &m_iMaxIdx, sizeof(_uint), &dwByte, nullptr);
+	/* 프레임 타임 */
+	WriteFile(hHandle, &m_fFrameTime, sizeof(_float), &dwByte, nullptr);
+	/* 라이프 타임 */
+	WriteFile(hHandle, &m_fLifeTime, sizeof(_float), &dwByte, nullptr);
+
+	/* 메인 컬러 */
+	WriteFile(hHandle, &m_vMainColor, sizeof(_float4), &dwByte, nullptr);
+	/* 서브 컬러 */
+	WriteFile(hHandle, &m_vSubColor, sizeof(_float4), &dwByte, nullptr);
+	/* 로테이션 */
+	WriteFile(hHandle, &m_vRotation, sizeof(_float3), &dwByte, nullptr);
+	/* 로테이션 여부 */
+	WriteFile(hHandle, &m_IsRotation, sizeof(_bool), &dwByte, nullptr);
+	/* 스케일 */
+	WriteFile(hHandle, &m_vScale, sizeof(_float3), &dwByte, nullptr);
+	/* 델타 스케일 */
+	WriteFile(hHandle, &m_vDeltaScale, sizeof(_float3), &dwByte, nullptr);
+	/* 루프 여부 */
+	WriteFile(hHandle, &m_IsLoop, sizeof(_bool), &dwByte, nullptr);
+	/* 시작 시간*/
+	WriteFile(hHandle, &m_fStartTime, sizeof(_float), &dwByte, nullptr);
+	/* 회전 속도*/
+	_float fRotationSpeed = m_pTransformCom->Get_RotationSpeed();
+	WriteFile(hHandle, &fRotationSpeed, sizeof(_float), &dwByte, nullptr);
+
+	/* 블렌딩 여부 */
+	WriteFile(hHandle, &m_IsBlend, sizeof(_bool), &dwByte, nullptr);
+
+	return S_OK;
+}
+
+HRESULT CEffectObject::Load_FromBinary(const _tchar* pEffectName, DWORD dwByte, HANDLE hHandle)
+{
+	/* 모델 태그 */
+	size_t StringSize = {};
+	ReadFile(hHandle, &StringSize, sizeof(size_t), &dwByte, nullptr);
+	m_strModelName.resize(StringSize);
+	ReadFile(hHandle, &m_strModelName[0], static_cast<DWORD>(m_strModelName.size() * sizeof(wchar_t)), &dwByte, NULL);
+	/* 셰이더 패스 로드 */
+	ReadFile(hHandle, &m_iShaderPassIdx, sizeof(_uint), &dwByte, nullptr);
+	/* 디퓨즈 텍스쳐 넘버*/
+	ReadFile(hHandle, &m_iDiffuseTextureIdx, sizeof(_uint), &dwByte, nullptr);
+	/* 마스크 텍스쳐 넘버 */
+	ReadFile(hHandle, &m_iMaskTextureIdx, sizeof(_uint), &dwByte, nullptr);
+	/* 노이즈 텍스쳐 넘버 */
+	ReadFile(hHandle, &m_iNoiseTextureIdx, sizeof(_uint), &dwByte, nullptr);
+	/* U,V 델타 */
+	ReadFile(hHandle, &m_fDeltaU, sizeof(_float), &dwByte, nullptr);
+	ReadFile(hHandle, &m_fDeltaV, sizeof(_float), &dwByte, nullptr);
+	/* 가로 세로 프레임 갯수 */
+	ReadFile(hHandle, &m_iNumWidth, sizeof(_uint), &dwByte, nullptr);
+	ReadFile(hHandle, &m_iNumHeight, sizeof(_uint), &dwByte, nullptr);
+	/* 최대 인덱스 */
+	ReadFile(hHandle, &m_iMaxIdx, sizeof(_uint), &dwByte, nullptr);
+	/* 프레임 타임 */
+	ReadFile(hHandle, &m_fFrameTime, sizeof(_float), &dwByte, nullptr);
+	/* 라이프 타임 */
+	ReadFile(hHandle, &m_fLifeTime, sizeof(_float), &dwByte, nullptr);
+	/* 메인 컬러 */
+	ReadFile(hHandle, &m_vMainColor, sizeof(_float4), &dwByte, nullptr);
+	/* 서브 컬러 */
+	ReadFile(hHandle, &m_vSubColor, sizeof(_float4), &dwByte, nullptr);
+	/* 로테이션 */
+	ReadFile(hHandle, &m_vRotation, sizeof(_float3), &dwByte, nullptr);
+	m_pTransformCom->Rotation(m_vRotation.x, m_vRotation.y, m_vRotation.z);
+
+	/* 로테이션 여부 */
+	ReadFile(hHandle, &m_IsRotation, sizeof(_bool), &dwByte, nullptr);
+	m_pTransformCom->Set_Scale(m_vScale.x, m_vScale.y, m_vScale.z);
+
+	/* 스케일 */
+	ReadFile(hHandle, &m_vScale, sizeof(_float3), &dwByte, nullptr);
+	/* 델타 스케일 */
+	ReadFile(hHandle, &m_vDeltaScale, sizeof(_float3), &dwByte, nullptr);
+	/* 루프 여부 */
+	ReadFile(hHandle, &m_IsLoop, sizeof(_bool), &dwByte, nullptr);
+	/* 시작 시간 */
+	ReadFile(hHandle, &m_fStartTime, sizeof(_float), &dwByte, nullptr);
+	/* 회전 속도*/
+	_float fRotationSpeed = {};
+	ReadFile(hHandle, &fRotationSpeed, sizeof(_float), &dwByte, nullptr);
+	m_pTransformCom->Set_RotationSpeed(fRotationSpeed);
+
+	/* 블렌딩 여부 */
+	ReadFile(hHandle, &m_IsBlend, sizeof(_bool), &dwByte, nullptr);
+
+	if (TEXT("") != m_strModelName)
+	{
+		Safe_Release(m_pModelCom);
+		m_pModelCom = { nullptr };
+
+		auto iter = m_Components.find(TEXT("Com_Model"));
+		if (iter != m_Components.end())
+		{
+			Safe_Release(iter->second);
+			m_Components.erase(iter);
+		}
+
+		__super::Add_Component(ENUM_CLASS(LEVEL::EFFECT), m_strModelName,
+			TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom));
+		m_iNumMeshes = m_pModelCom->Get_NumMeshes();
+	}
+
+	/* Com_DiffuseTexture */
+	auto iter = m_Components.find(TEXT("Com_DiffuseTexture"));
+	if (iter != m_Components.end())
+	{
+		Safe_Release(iter->second);
+		m_Components.erase(iter);
+	}
+	Safe_Release(m_pDiffuseTextureCom);
+	m_pDiffuseTextureCom = { nullptr };
+	__super::Add_Component(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Texture_Effect_Diffuse"),
+		TEXT("Com_MaskTexture"), reinterpret_cast<CComponent**>(&m_pDiffuseTextureCom));
+
+	/* Com_MaskTexture */
+	iter = m_Components.find(TEXT("Com_MaskTexture"));
+	if (iter != m_Components.end())
+	{
+		Safe_Release(iter->second);
+		m_Components.erase(iter);
+	}
+	Safe_Release(m_pMaskTextureCom);
+	m_pMaskTextureCom = { nullptr };
+	__super::Add_Component(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Texture_Effect_Mask"),
+		TEXT("Com_MaskTexture"), reinterpret_cast<CComponent**>(&m_pMaskTextureCom));
+
+	/* Com_Noise */
+	iter = m_Components.find(TEXT("Com_MaskTexture"));
+	if (iter != m_Components.end())
+	{
+		Safe_Release(iter->second);
+		m_Components.erase(iter);
+	}
+	Safe_Release(m_pNoiseTextureCom);
+	m_pNoiseTextureCom = { nullptr };
+	__super::Add_Component(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Texture_Effect_Noise"),
+		TEXT("Com_MaskTexture"), reinterpret_cast<CComponent**>(&m_pNoiseTextureCom));
+
+	return S_OK;
+}
+
 HRESULT CEffectObject::Initialize_Prototype()
 {
     return S_OK;
@@ -200,13 +365,12 @@ HRESULT CEffectObject::Initialize_Prototype()
 
 HRESULT CEffectObject::Initialize(void* pArg)
 {
-	EFFECT_OBJECT_DESC* pDesc = static_cast<EFFECT_OBJECT_DESC*>(pArg);
 
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
 	/* IsBinary가 True라면 여기서 다르게 세팅*/
-
+	EFFECT_OBJECT_DESC* pDesc = static_cast<EFFECT_OBJECT_DESC*>(pArg);
 	Set_Desc(pDesc);
 
     if (FAILED(Ready_Components(pDesc->strModelTag)))
@@ -343,6 +507,9 @@ void CEffectObject::Check_LifeTime(_float fTimeDelta)
 
 void CEffectObject::Set_Desc(void* pArg)
 {
+	if (nullptr == pArg)
+		return;
+
 	EFFECT_OBJECT_DESC* pDesc = static_cast<EFFECT_OBJECT_DESC*>(pArg);
 	if (TEXT("") != pDesc->strModelTag)
 	{

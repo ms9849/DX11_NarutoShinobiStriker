@@ -38,6 +38,7 @@ public:
 
 	void Add_MainEffect(const _wstring& strEffectTag, class CEffectObject* pEffectObject);
 
+	/* 임시로 구현. 쓸진 모름 */
 	void Add_ParticleObject(class CParticleObject* pParticleObject);
 
 	map<_wstring, class CEffectObject*>& Get_Effects()
@@ -45,6 +46,12 @@ public:
 		return m_EffectObjects;
 	}
 
+	/* tag에 맞는 녀석 날리는 함수 */
+	void Pop(const _wstring& strEffectTag);
+
+public:
+	void Save_Container_ToBinary(const _char* pFilePath);
+	void Load_Container_FromBinary(const _tchar* pFilePath);
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
