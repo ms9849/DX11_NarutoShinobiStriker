@@ -25,6 +25,8 @@
 #include "Player.h"
 #include "Props.h"
 #include "ParticleObject.h"
+#include "EffectContainer.h"
+#include "EffectObject.h"
 
 CLevel_Tutorial::CLevel_Tutorial(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID)
 	: CLevel { pDevice, pContext, ENUM_CLASS(eLevelID)}
@@ -342,6 +344,15 @@ HRESULT CLevel_Tutorial::Ready_Layer_Effect(const _wstring& strLayerTag)
 		ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag)))
 		return E_FAIL;
 
+
+	/* 이펙트 테스트 */
+	CEffectContainer::EFFECT_CONTAINER_DESC Desc;
+	Desc.IsBinary = true;
+	Desc.strFilePath = TEXT("../Bin/Resources/Effects/TestContainer_eff.bin");
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_EffectContainer"),
+		ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag, &Desc)))
+		return E_FAIL;
 
 	//CParticleObject::PARTICLE_OBJECT_DESC Desc;
 	//Desc.eType = CParticleObject::PARTICLE_TYPE::EXPLOSION;

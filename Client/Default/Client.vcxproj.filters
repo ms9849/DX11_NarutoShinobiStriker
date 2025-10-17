@@ -433,15 +433,6 @@
     <Filter Include="02. GameObjects\03. Effect">
       <UniqueIdentifier>{fd3144ba-221a-4729-9e60-5da79d058cf2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\03. Effect\CoolDown">
-      <UniqueIdentifier>{05515ed2-36d4-4a33-9575-5d1c93aacfea}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\03. Effect\Icon">
-      <UniqueIdentifier>{fe96f895-9657-4ec1-947b-d883e05b6788}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\03. Effect\Particle">
-      <UniqueIdentifier>{40d4ad0c-68d9-4df2-81e0-7aa4e5219f50}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects\05. NPC">
       <UniqueIdentifier>{0bbc84b4-31a9-40ef-8e75-214c08d5d91e}</UniqueIdentifier>
     </Filter>
@@ -601,11 +592,23 @@
     <Filter Include="02. GameObjects\04. Event\Trigger">
       <UniqueIdentifier>{02a59ba2-6cb6-44fa-bf58-ba50241009d6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\03. Effect\Particle\AttackParticle">
-      <UniqueIdentifier>{a136cf40-017b-4094-bbc4-4db6580eadc1}</UniqueIdentifier>
+    <Filter Include="02. GameObjects\03. Effect\00. Container">
+      <UniqueIdentifier>{892fff93-cf0a-43b6-8de4-9d51486c4bd1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\03. Effect\Particle\Explosion">
+    <Filter Include="02. GameObjects\03. Effect\01. Particle">
+      <UniqueIdentifier>{40d4ad0c-68d9-4df2-81e0-7aa4e5219f50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\03. Effect\01. Particle\Explosion">
       <UniqueIdentifier>{a64d9e11-17c5-4744-abf8-c20df6937be1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\03. Effect\02. etc">
+      <UniqueIdentifier>{8478a88b-08d2-4d7e-a09b-a2552b6fa048}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\03. Effect\02. etc\CoolDown">
+      <UniqueIdentifier>{05515ed2-36d4-4a33-9575-5d1c93aacfea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\03. Effect\02. etc\Icon">
+      <UniqueIdentifier>{fe96f895-9657-4ec1-947b-d883e05b6788}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -985,7 +988,7 @@
       <Filter>02. GameObjects\02. Camera\NPCTalk</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Explosion.h">
-      <Filter>02. GameObjects\03. Effect\Particle\Explosion</Filter>
+      <Filter>02. GameObjects\03. Effect\01. Particle\Explosion</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\EventObject.h">
       <Filter>02. GameObjects\04. Event</Filter>
@@ -1159,10 +1162,10 @@
       <Filter>02. GameObjects\09. Potion</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Effect_CoolDown.h">
-      <Filter>02. GameObjects\03. Effect\CoolDown</Filter>
+      <Filter>02. GameObjects\03. Effect\02. etc\CoolDown</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Effect_Icon.h">
-      <Filter>02. GameObjects\03. Effect\Icon</Filter>
+      <Filter>02. GameObjects\03. Effect\02. etc\Icon</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\OutfitBackGround.h">
       <Filter>02. GameObjects\01. BackGround\01. OutfitBackGround</Filter>
@@ -1177,7 +1180,13 @@
       <Filter>02. GameObjects\00. Character\01. Enemy\00. Boss\State\00. BASE\Stand</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\ParticleObject.h">
-      <Filter>02. GameObjects\03. Effect\Particle</Filter>
+      <Filter>02. GameObjects\03. Effect\01. Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\EffectContainer.h">
+      <Filter>02. GameObjects\03. Effect\00. Container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\EffectObject.h">
+      <Filter>02. GameObjects\03. Effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1558,7 +1567,7 @@
       <Filter>02. GameObjects\02. Camera\NPCTalk</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Explosion.cpp">
-      <Filter>02. GameObjects\03. Effect\Particle\Explosion</Filter>
+      <Filter>02. GameObjects\03. Effect\01. Particle\Explosion</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\EventObject.cpp">
       <Filter>02. GameObjects\04. Event</Filter>
@@ -1729,10 +1738,10 @@
       <Filter>02. GameObjects\09. Potion</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Effect_CoolDown.cpp">
-      <Filter>02. GameObjects\03. Effect\CoolDown</Filter>
+      <Filter>02. GameObjects\03. Effect\02. etc\CoolDown</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Effect_Icon.cpp">
-      <Filter>02. GameObjects\03. Effect\Icon</Filter>
+      <Filter>02. GameObjects\03. Effect\02. etc\Icon</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\OutfitBackGround.cpp">
       <Filter>02. GameObjects\01. BackGround\01. OutfitBackGround</Filter>
@@ -1747,7 +1756,13 @@
       <Filter>02. GameObjects\00. Character\01. Enemy\00. Boss\State\00. BASE\Stand</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\ParticleObject.cpp">
-      <Filter>02. GameObjects\03. Effect\Particle</Filter>
+      <Filter>02. GameObjects\03. Effect\01. Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\EffectContainer.cpp">
+      <Filter>02. GameObjects\03. Effect\00. Container</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\EffectObject.cpp">
+      <Filter>02. GameObjects\03. Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
