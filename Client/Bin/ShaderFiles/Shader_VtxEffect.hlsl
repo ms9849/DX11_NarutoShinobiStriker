@@ -82,16 +82,14 @@ PS_OUT PS_DISSOLVE(PS_IN In)
     float4 MaskSample = g_MaskTexture.Sample(DefaultSampler, In.vTexcoord);
    
     float NoiseValue = g_NoiseTexture.Sample(DefaultSampler, In.vNoiseTexCoord).r;
-    
-    float fAlpha = 1.0f;
-
+   
     if (g_fLifeTimeAcc / g_fLifeTime >= 0.5f)
     {
+        float fAlpha = 1.0f;
         float DissolveThreshold = (g_fLifeTimeAcc / g_fLifeTime - 0.5f) * 2.f; // 0 ~ 1
         fAlpha = smoothstep(DissolveThreshold - 0.1f, DissolveThreshold + 0.1f, NoiseValue);
+        Diffuse.a *= fAlpha;
     }
-
-    Diffuse.a *= fAlpha;
 
     /* 마스킹 수행 */
     Diffuse.a *= MaskSample.r;
@@ -247,7 +245,7 @@ technique11 DefaultTechnique
 {
     pass Dissolve
     {
-        SetRasterizerState(RS_Cull_None);
+        SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_Default, 0);
         SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
        
@@ -258,7 +256,7 @@ technique11 DefaultTechnique
 
     pass DissolveImmediate
     {
-        SetRasterizerState(RS_Cull_None);
+        SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_Default, 0);
         SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
        

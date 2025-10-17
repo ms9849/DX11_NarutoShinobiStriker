@@ -36,11 +36,20 @@
 
 #pragma endregion
 
+#pragma region EFFECT
+
+#include "EffectContainer.h"
+#include "EffectObject.h"
+
+#pragma endregion
+
 #include "Effect_CoolDown.h"
 #include "Snow.h"
 #include "Explosion.h"
 #include "Collider.h"
 #include "GameManager.h"
+
+
 
 /* 테스트 브랜치용 주석 */
 CMainApp::CMainApp()	
@@ -71,6 +80,9 @@ HRESULT CMainApp::Initialize()
 		return E_FAIL;
 
 	if (FAILED(Ready_Prototypes()))
+		return E_FAIL;
+
+	if(FAILED((Ready_Effects())))
 		return E_FAIL;
 
 	if (FAILED(Start_Level(LEVEL::LOGO)))
@@ -188,11 +200,11 @@ HRESULT CMainApp::Ready_Prototypes()
 		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Props/Props.fbx", PreTransformMatrix))))
 		return E_FAIL;
 
-	/* For.Prototype_Component_Model_Fiona */
-	PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_Fiona"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Fiona/Fiona.fbx", PreTransformMatrix))))
-		return E_FAIL;
+	///* For.Prototype_Component_Model_Fiona */
+	//PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_Fiona"),
+	//	CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Fiona/Fiona.fbx", PreTransformMatrix))))
+	//	return E_FAIL;
 
 	/* For.Prototype_Component_Model_Weapon_Player */
 	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(180.0f));
@@ -584,6 +596,76 @@ HRESULT CMainApp::Ready_Prototypes()
 
 
 #pragma endregion
+
+	return S_OK;
+}
+
+HRESULT CMainApp::Ready_Effects()
+{
+#pragma region SHADEREFFECT
+	/* For.Prototype_Component_Shader_VtxEffect */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxEffect"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxEffect.hlsl"), VTXEFFMESH::Elements, VTXEFFMESH::iNumElements))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region DIFFUSE
+	/* For.Prototype_Component_Texture_Effect */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Effect_Diffuse"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Diffuse/Diffuse%d.png"), 36))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region MASK
+	/* For.Prototype_Component_Texture_Effect_Mask */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Effect_Mask"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Mask/Mask%d.png"), 38))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region NOISE
+	/* For.Prototype_Component_Texture_Effect_Noise */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Effect_Noise"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Noise/Noise%d.png"), 37))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region BINARY
+	WIN32_FIND_DATA fd;
+	HANDLE hFind = FindFirstFile(L"../Bin/Resources/Models/Effect/*.bin", &fd);
+	if (hFind == INVALID_HANDLE_VALUE) return E_FAIL;
+
+	do {
+		/* For.Prototype_Component_EffectModel_Test */
+		_fmatrix PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+		_wstring strFileName = wstring(fd.cFileName);
+
+		strFileName.erase(strFileName.size() - 4);
+
+		_wstring strComponentTag = TEXT("Prototype_Component_EffectModel_") + strFileName;
+		_wstring strFilePath = TEXT("../Bin/Resources/Models/Effect/") + strFileName + TEXT(".bin");
+
+		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), strComponentTag,
+			CEffectModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, strFilePath.c_str(), PreTransformMatrix))))
+			return E_FAIL;
+	} while (FindNextFile(hFind, &fd));
+#pragma endregion
+
+	/* For.Prototype_GameObject_EffectContainer */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_EffectContainer"),
+		CEffectContainer::Create(m_pDevice, m_pContext, OBJECTID::EFFECTCONTAINER))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_EffectObject */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_EffectObject"),
+		CEffectObject::Create(m_pDevice, m_pContext, OBJECTID::EFFECTOBJECT))))
+		return E_FAIL;
+
+	/* 이미 위에서 로딩중 */
+	///* For.Prototype_GameObject_ParticleObject */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"),
+	//	CParticleObject::Create(m_pDevice, m_pContext, OBJECTID::PARTICLE))))
+	//	return E_FAIL;
 
 	return S_OK;
 }

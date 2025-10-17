@@ -191,6 +191,8 @@
     <ClInclude Include="..\Public\Col_TutorialMap.h" />
     <ClInclude Include="..\Public\CutSceneCamera.h" />
     <ClInclude Include="..\Public\CutScenePanel.h" />
+    <ClInclude Include="..\Public\EffectContainer.h" />
+    <ClInclude Include="..\Public\EffectObject.h" />
     <ClInclude Include="..\Public\Effect_Icon.h" />
     <ClInclude Include="..\Public\Icon.h" />
     <ClInclude Include="..\Public\Kunai.h" />
@@ -383,6 +385,8 @@
     <ClCompile Include="..\Private\Col_TutorialMap.cpp" />
     <ClCompile Include="..\Private\CutSceneCamera.cpp" />
     <ClCompile Include="..\Private\CutScenePanel.cpp" />
+    <ClCompile Include="..\Private\EffectContainer.cpp" />
+    <ClCompile Include="..\Private\EffectObject.cpp" />
     <ClCompile Include="..\Private\Effect_Icon.cpp" />
     <ClCompile Include="..\Private\Icon.cpp" />
     <ClCompile Include="..\Private\Kunai.cpp" />
