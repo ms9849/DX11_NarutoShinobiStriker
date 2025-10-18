@@ -35,6 +35,9 @@ public:
 		_int iMaskTextureNum = { 0 };
 		/* 파티클 시스템 하나당 사용되는 변수 */
 		_bool			isLoop;
+		_float4			vMainColor = { 1.f, 1.f, 1.f, 1.f };
+		_float4			vSubColor = { 1.f, 1.f, 1.f, 1.f };
+		_float			fMaxMasking = { 0.6f };
 
 		/* 중심으로부터 얼마나 떨어져있는지 */
 		_float3			vPivot;
@@ -48,6 +51,7 @@ public:
 		_float2			vSize = {};
 		_float3			vCenter = {};
 		_float3			vRange = {};
+		_uint			iShaderPass = {};
 
 	} PARTICLE_OBJECT_DESC;
 
@@ -70,13 +74,18 @@ public:
 private:
 	CVIBuffer_Point_Instance* m_pVIBufferCom = { nullptr };
 
-	CTexture* m_pDiffuseTexCom = { nullptr };
-	CTexture* m_pMaskTexCom = { nullptr };
-	CTexture* m_pNoiseTexCom = { nullptr };
+	CTexture*			m_pDiffuseTexCom = { nullptr };
+	CTexture*			m_pMaskTexCom = { nullptr };
+	CTexture*			m_pNoiseTexCom = { nullptr };
 
-	_uint m_iDiffuseTextureIdx = { 0 };
-	_uint m_iMaskTextureIdx = { 0 };
-	_uint m_iNoiseTextureIdx = { 0 };
+	_uint				m_iDiffuseTextureIdx = { 0 };
+	_uint				m_iMaskTextureIdx = { 0 };
+	_uint				m_iNoiseTextureIdx = { 0 };
+
+	_float4				m_vMainColor = {};
+	_float4				m_vSubColor = {};
+	_float				m_fMaxMasking = {};
+	_uint				m_iShaderPass = { 0 };
 
 	CShader* m_pShaderCom = { nullptr };
 	PARTICLE_TYPE m_eType = {};

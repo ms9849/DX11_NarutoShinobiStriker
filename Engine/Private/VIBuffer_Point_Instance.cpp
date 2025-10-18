@@ -61,6 +61,7 @@ Point 형태이므로 인스턴스는 사용하지 않는다.
 
 #pragma region INSTANCE_BUFFER
 	const POINT_INSTANCE_DESC* pDesc = static_cast<const POINT_INSTANCE_DESC*>(pInstanceDesc);
+
 	m_vPivot = pDesc->vPivot;
 	m_IsLoop = pDesc->isLoop;
 	m_iNumInstance = pDesc->iNumInstance;

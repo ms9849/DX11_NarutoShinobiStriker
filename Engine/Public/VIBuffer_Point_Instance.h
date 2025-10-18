@@ -10,14 +10,12 @@ public:
 	typedef struct tagPointInstanceDesc final : public CVIBuffer_Instance::INSTANCE_DESC
 	{
 		/* 파티클 시스템 하나당 사용되는 변수 */
-		_bool			isLoop;
-
+		_bool			isLoop = { false };
 		/* 중심으로부터 얼마나 떨어져있는지 */
-		_float3			vPivot;
-		_float2			vSpeed;
+		_float3			vPivot = { 0.f, 0.f, 0.f};
+		_float2			vSpeed = {};
 
 		/* 인스턴스 하나당 사용되는 변수 */
-		_float4			vColor;
 		_float3			vRotation;
 		_float2			vLifeTime;
 

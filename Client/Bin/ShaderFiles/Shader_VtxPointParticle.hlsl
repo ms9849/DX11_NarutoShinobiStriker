@@ -3,7 +3,11 @@
 matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 
 texture2D g_DiffuseTexture;
+texture2D g_MaskTexture;
+
 vector g_vCamPosition;
+float4 g_vMainColor, g_vSubColor;
+float g_fMaxMasking;
 
 struct VS_IN
 {

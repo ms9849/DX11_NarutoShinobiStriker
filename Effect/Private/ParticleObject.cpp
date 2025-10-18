@@ -69,7 +69,7 @@ HRESULT CParticleObject::Render()
 	if (FAILED(Bind_ShaderResources()))
 		return E_FAIL;
 
-	m_pShaderCom->Begin(ENUM_CLASS(m_eType));
+	m_pShaderCom->Begin(m_iShaderPass);
 
 	m_pVIBufferCom->Bind_Resources();
 
@@ -83,6 +83,10 @@ HRESULT CParticleObject::Ready_Components(void* pArg)
 	PARTICLE_OBJECT_DESC* pDesc = static_cast<PARTICLE_OBJECT_DESC*>(pArg);
 	m_eType = pDesc->eType;
 	m_iDiffuseTextureIdx = pDesc->iDiffuseTextureNum;
+	m_iMaskTextureIdx = pDesc->iMaskTextureNum;
+	m_iShaderPass = pDesc->iShaderPass;
+	m_vSubColor = pDesc->vSubColor;
+	m_vMainColor = pDesc->vMainColor;
 
 	/* Com_Texture */
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::EFFECT), pDesc->strDiffuseTextureTag,
@@ -119,7 +123,6 @@ HRESULT CParticleObject::Ready_VIBuffer(void* pArg)
 	Desc.isLoop = pParticleDesc->isLoop;
 	Desc.vPivot = pParticleDesc->vPivot;
 	Desc.vSpeed = pParticleDesc->vSpeed;
-	Desc.vColor = pParticleDesc->vColor;
 	Desc.vRotation = pParticleDesc->vRotation;
 	Desc.vLifeTime = pParticleDesc->vLifeTime;
 	Desc.iNumInstance = pParticleDesc->iNumInstance;
@@ -147,7 +150,19 @@ HRESULT CParticleObject::Bind_ShaderResources()
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_PipeLine_Float4x4(D3DTS::PROJ))))
 		return E_FAIL;
 
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_vMainColor", &m_vMainColor, sizeof(_float4))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_vSubColor", &m_vSubColor, sizeof(_float4))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fMaxMasking", &m_fMaxMasking, sizeof(_float))))
+		return E_FAIL;
+
 	if (FAILED(m_pDiffuseTexCom->Bind_ShaderResource(m_pShaderCom, "g_DiffuseTexture", m_iDiffuseTextureIdx)))
+		return E_FAIL;
+
+	if (FAILED(m_pMaskTexCom->Bind_ShaderResource(m_pShaderCom, "g_MaskTexture", m_iMaskTextureIdx)))
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", m_pGameInstance->Get_CamState(STATE::POSITION), sizeof(_float3))))
