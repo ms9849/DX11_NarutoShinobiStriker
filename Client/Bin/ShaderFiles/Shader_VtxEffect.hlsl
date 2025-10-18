@@ -203,6 +203,43 @@ PS_OUT PS_DELTAUV(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_ONLYMASK(PS_IN In)
+{
+    PS_OUT Out;
+    
+    // diffuse 샘플
+    float4 Diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexcoord);
+
+    // mask 샘플 (같은 UV 사용)
+    In.vTexcoord -= float2(g_fDeltaU * g_fLifeTimeAcc, g_fDeltaV * g_fLifeTimeAcc);
+    float4 MaskSample = g_MaskTexture.Sample(DefaultSampler, In.vTexcoord);
+
+    /* 마스킹 수행 */
+    Diffuse.a *= MaskSample.r;
+
+    if (Diffuse.a < 0.6f)
+        Diffuse.rgba = g_vMainColor.xyzw;
+    else
+        Diffuse.rgba = g_vSubColor.xyzw;
+
+    Out.vDiffuse = Diffuse;
+ 
+    return Out;
+}
+
+PS_OUT PS_NONE(PS_IN In)
+{    
+    PS_OUT Out;
+    Out.vDiffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexcoord);
+   
+    if (Out.vDiffuse.a < 0.6f)
+        Out.vDiffuse.rgba = g_vMainColor.xyzw;
+    else
+        Out.vDiffuse.rgba = g_vSubColor.xyzw;
+    
+    return Out;
+}
+
 PS_OUT PS_ALL(PS_IN In)
 {
     PS_OUT Out;
@@ -243,9 +280,9 @@ PS_OUT PS_ALL(PS_IN In)
 
 technique11 DefaultTechnique
 {
-    pass Dissolve
+    pass Dissolve //0
     {
-        SetRasterizerState(RS_Default);
+        SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_Default, 0);
         SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
        
@@ -254,9 +291,9 @@ technique11 DefaultTechnique
         PixelShader = compile ps_5_0 PS_DISSOLVE();
     }
 
-    pass DissolveImmediate
+    pass DissolveImmediate //1 
     {
-        SetRasterizerState(RS_Default);
+        SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_Default, 0);
         SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
        
@@ -265,7 +302,7 @@ technique11 DefaultTechnique
         PixelShader = compile ps_5_0 PS_DISSOLVE_IMMEDIATE();
     }
 
-    pass DeltaUV
+    pass DeltaUV //2
     {
         SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_Default, 0);
@@ -276,7 +313,36 @@ technique11 DefaultTechnique
         PixelShader = compile ps_5_0 PS_DELTAUV();
     }
 
-    pass ALL
+    pass NONLIGHT //3
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_DISSOLVE_NONLIGHT();
+    }
+
+    pass ONLYMASK //4
+    {
+        SetRasterizerState(RS_Cull_None);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_ONLYMASK();
+    }
+    pass NONE //5
+    {
+        SetRasterizerState(RS_Cull_None);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_NONE();
+    }
+
+    pass ALL //6
     {
         SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_Default, 0);
@@ -287,13 +353,25 @@ technique11 DefaultTechnique
         PixelShader = compile ps_5_0 PS_ALL();
     }
 
-    pass NONLIGHT
+    pass Dissolve_CULL //7
     {
-        SetRasterizerState(RS_Default);
+        SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_Default, 0);
-        SetBlendState(BS_None, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+       
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
-        PixelShader = compile ps_5_0 PS_DISSOLVE_NONLIGHT();
+        PixelShader = compile ps_5_0 PS_DISSOLVE();
+    }
+
+    pass DissolveImmediate__CULL //8 
+    {
+        SetRasterizerState(RS_Cull_None);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+       
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_DISSOLVE_IMMEDIATE();
     }
 }

@@ -30,7 +30,7 @@ HRESULT CLevel_Logo::Initialize()
 
 void CLevel_Logo::Update(_float fTimeDelta)
 {
-	Pooling_Test(fTimeDelta);
+	//Pooling_Test(fTimeDelta);
 
 	if (m_pGameInstance->Key_Down(DIK_F3))
 	{

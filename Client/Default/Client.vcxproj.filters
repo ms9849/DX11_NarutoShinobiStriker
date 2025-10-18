@@ -145,27 +145,6 @@
     <Filter Include="02. GameObjects\00. Character\00. Player\State\BASE\RopeActionState\Rope">
       <UniqueIdentifier>{a17817f6-b305-486c-9609-b5dddf076eb0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\00. Character\00. Player\Skills">
-      <UniqueIdentifier>{f9de02e3-299a-48d4-ba2d-b915b998d667}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\00. Character\00. Player\Skills\Rasengan">
-      <UniqueIdentifier>{38586899-a0d1-4ab5-b8fc-7ff57a54faee}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\00. Character\00. Player\Skills\RasenShuriken">
-      <UniqueIdentifier>{192749a4-5c75-461f-8287-47497d93040d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\00. Character\00. Player\Skills\Kamui">
-      <UniqueIdentifier>{37479a06-8498-4ce1-bf4a-bbc84273507c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\00. Character\00. Player\Skills\FireBall">
-      <UniqueIdentifier>{866d2bbc-6db4-4964-b51f-3800bcf1576a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\00. Character\00. Player\Skills\BigShark">
-      <UniqueIdentifier>{88db4649-0065-4c83-a608-d73c7b04947b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\00. Character\00. Player\Skills\Chidori">
-      <UniqueIdentifier>{abc23ad8-dc36-4b53-9e63-d010f6057a4f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects\00. Character\02. Parts">
       <UniqueIdentifier>{f147d662-5586-4b75-aba1-4624b3bf91b9}</UniqueIdentifier>
     </Filter>
@@ -610,6 +589,27 @@
     <Filter Include="02. GameObjects\03. Effect\02. etc\Icon">
       <UniqueIdentifier>{fe96f895-9657-4ec1-947b-d883e05b6788}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\000. Skills">
+      <UniqueIdentifier>{f9de02e3-299a-48d4-ba2d-b915b998d667}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\000. Skills\Rasengan">
+      <UniqueIdentifier>{38586899-a0d1-4ab5-b8fc-7ff57a54faee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\000. Skills\RasenShuriken">
+      <UniqueIdentifier>{192749a4-5c75-461f-8287-47497d93040d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\000. Skills\Kamui">
+      <UniqueIdentifier>{37479a06-8498-4ce1-bf4a-bbc84273507c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\000. Skills\FireBall">
+      <UniqueIdentifier>{866d2bbc-6db4-4964-b51f-3800bcf1576a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\000. Skills\BigShark">
+      <UniqueIdentifier>{88db4649-0065-4c83-a608-d73c7b04947b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\000. Skills\Chidori">
+      <UniqueIdentifier>{abc23ad8-dc36-4b53-9e63-d010f6057a4f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -928,25 +928,25 @@
       <Filter>02. GameObjects\00. Character\01. Enemy\03. Jetsu\State\Beaten\Blast</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Rasengan.h">
-      <Filter>02. GameObjects\00. Character\00. Player\Skills\Rasengan</Filter>
+      <Filter>02. GameObjects\000. Skills\Rasengan</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Skill.h">
-      <Filter>02. GameObjects\00. Character\00. Player\Skills</Filter>
+      <Filter>02. GameObjects\000. Skills</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\RasenShuriken.h">
-      <Filter>02. GameObjects\00. Character\00. Player\Skills\RasenShuriken</Filter>
+      <Filter>02. GameObjects\000. Skills\RasenShuriken</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Kamui.h">
-      <Filter>02. GameObjects\00. Character\00. Player\Skills\Kamui</Filter>
+      <Filter>02. GameObjects\000. Skills\Kamui</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\FireBall.h">
-      <Filter>02. GameObjects\00. Character\00. Player\Skills\FireBall</Filter>
+      <Filter>02. GameObjects\000. Skills\FireBall</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\BigShark.h">
-      <Filter>02. GameObjects\00. Character\00. Player\Skills\BigShark</Filter>
+      <Filter>02. GameObjects\000. Skills\BigShark</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Chidori.h">
-      <Filter>02. GameObjects\00. Character\00. Player\Skills\Chidori</Filter>
+      <Filter>02. GameObjects\000. Skills\Chidori</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\WhiteJetsu_DeadState.h">
       <Filter>02. GameObjects\00. Character\01. Enemy\03. Jetsu\State\Dead</Filter>
@@ -1069,7 +1069,7 @@
       <Filter>02. GameObjects\00. Character\01. Enemy\01. Pajama\State\Dead</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Skill_Table.h">
-      <Filter>02. GameObjects\00. Character\00. Player\Skills</Filter>
+      <Filter>02. GameObjects\000. Skills</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Boxer_BeatenBlastedState.h">
       <Filter>02. GameObjects\00. Character\01. Enemy\02. Boxer\State\Beaten\Blasted</Filter>
@@ -1504,25 +1504,25 @@
       <Filter>02. GameObjects\00. Character\01. Enemy\03. Jetsu\State\Beaten\Blast</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Rasengan.cpp">
-      <Filter>02. GameObjects\00. Character\00. Player\Skills\Rasengan</Filter>
+      <Filter>02. GameObjects\000. Skills\Rasengan</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Skill.cpp">
-      <Filter>02. GameObjects\00. Character\00. Player\Skills</Filter>
+      <Filter>02. GameObjects\000. Skills</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\RasenShuriken.cpp">
-      <Filter>02. GameObjects\00. Character\00. Player\Skills\RasenShuriken</Filter>
+      <Filter>02. GameObjects\000. Skills\RasenShuriken</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Kamui.cpp">
-      <Filter>02. GameObjects\00. Character\00. Player\Skills\Kamui</Filter>
+      <Filter>02. GameObjects\000. Skills\Kamui</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\FireBall.cpp">
-      <Filter>02. GameObjects\00. Character\00. Player\Skills\FireBall</Filter>
+      <Filter>02. GameObjects\000. Skills\FireBall</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\BigShark.cpp">
-      <Filter>02. GameObjects\00. Character\00. Player\Skills\BigShark</Filter>
+      <Filter>02. GameObjects\000. Skills\BigShark</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Chidori.cpp">
-      <Filter>02. GameObjects\00. Character\00. Player\Skills\Chidori</Filter>
+      <Filter>02. GameObjects\000. Skills\Chidori</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\WhiteJetsu_DeadState.cpp">
       <Filter>02. GameObjects\00. Character\01. Enemy\03. Jetsu\State\Dead</Filter>

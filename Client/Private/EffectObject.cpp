@@ -398,9 +398,9 @@ void CEffectObject::Update(_float fTimeDelta)
 		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta);
 
 	m_pTransformCom->Set_Scale(
-		m_vScale.x + (m_vDeltaScale.x - 1) * (m_fLifeTimeAcc / m_fLifeTime),
-		m_vScale.y + (m_vDeltaScale.y - 1) * (m_fLifeTimeAcc / m_fLifeTime),
-		m_vScale.z + (m_vDeltaScale.z - 1) * (m_fLifeTimeAcc / m_fLifeTime)
+		m_vScale.x + (m_vDeltaScale.x - m_vScale.x) * (m_fLifeTimeAcc / m_fLifeTime),
+		m_vScale.y + (m_vDeltaScale.y - m_vScale.y) * (m_fLifeTimeAcc / m_fLifeTime),
+		m_vScale.z + (m_vDeltaScale.z - m_vScale.z) * (m_fLifeTimeAcc / m_fLifeTime)
 	);
 }
 
@@ -503,6 +503,12 @@ void CEffectObject::Check_LifeTime(_float fTimeDelta)
 		else
 			m_IsVisible = false;
 	}
+}
+
+void CEffectObject::Set_ParentMatrix(_fmatrix pParentWorldMatrix)
+{
+	XMStoreFloat4x4(&m_CombinedMatrix, 
+		XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()) * pParentWorldMatrix);
 }
 
 void CEffectObject::Set_Desc(void* pArg)
@@ -685,7 +691,7 @@ HRESULT CEffectObject::Ready_Components(const _wstring& strModelTag)
 
 HRESULT CEffectObject::Bind_ShaderResources()
 {
-	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_CombinedMatrix)))
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", m_pGameInstance->Get_PipeLine_Float4x4(D3DTS::VIEW))))

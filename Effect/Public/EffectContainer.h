@@ -23,8 +23,6 @@ private:
 	virtual ~CEffectContainer() = default;
 
 public:
-	void Set_Visible(_bool bFlag) { m_IsVisible = bFlag; }
-	
 	void Add_MainEffect(class CEffectObject* pEffectObject)
 	{
 		Safe_Release(m_pMainEffect);
@@ -32,6 +30,9 @@ public:
 
 		m_pMainEffect = pEffectObject;
 	}
+
+	void Set_Visible(_bool bFlag);
+
 
 	/* 이펙트든 파티클이든 전부 컨테이너 내부에서 처리해준다. 오브젝트 매니저에서 제어 X */
 	void Add_EffectObject(const _wstring& strEffectTag, class CEffectObject* pEffectObject);

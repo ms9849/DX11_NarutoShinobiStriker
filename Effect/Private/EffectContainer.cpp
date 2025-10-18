@@ -12,6 +12,18 @@ CEffectContainer::CEffectContainer(const CEffectContainer& rhs)
 {
 }
 
+void CEffectContainer::Set_Visible(_bool bFlag)
+{
+    m_IsVisible = bFlag;
+
+    m_pMainEffect->Reset_LifeTime();
+
+    for (auto& Pair : m_EffectObjects)
+    {
+        Pair.second->Reset_LifeTime();
+    }
+}
+
 void CEffectContainer::Add_EffectObject(const _wstring& strEffectTag, CEffectObject* pEffectObject)
 {
     m_EffectObjects.emplace(strEffectTag, pEffectObject);

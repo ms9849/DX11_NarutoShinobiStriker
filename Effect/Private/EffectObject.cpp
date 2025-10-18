@@ -166,14 +166,15 @@ HRESULT CEffectObject::Load_FromBinary(const _tchar* pBinaryFilePath)
 	ReadFile(hHandle, &m_vSubColor, sizeof(_float4), &dwByte, nullptr);
 	/* 로테이션 */
 	ReadFile(hHandle, &m_vRotation, sizeof(_float3), &dwByte, nullptr);
-	m_pTransformCom->Rotation(m_vRotation.x, m_vRotation.y, m_vRotation.z);
+	m_pTransformCom->Rotation(XMConvertToRadians(m_vRotation.x), XMConvertToRadians(m_vRotation.y), XMConvertToRadians(m_vRotation.z));
 
 	/* 로테이션 여부 */
 	ReadFile(hHandle, &m_IsRotation, sizeof(_bool), &dwByte, nullptr);
-	m_pTransformCom->Set_Scale(m_vScale.x, m_vScale.y, m_vScale.z);
 
 	/* 스케일 */
 	ReadFile(hHandle, &m_vScale, sizeof(_float3), &dwByte, nullptr);
+	m_pTransformCom->Set_Scale(m_vScale.x, m_vScale.y, m_vScale.z);
+
 	/* 델타 스케일 */
 	ReadFile(hHandle, &m_vDeltaScale, sizeof(_float3), &dwByte, nullptr);
 	/* 루프 여부 */
@@ -280,7 +281,7 @@ HRESULT CEffectObject::Load_FromBinary(const _tchar* pEffectName, DWORD dwByte, 
 	ReadFile(hHandle, &m_vSubColor, sizeof(_float4), &dwByte, nullptr);
 	/* 로테이션 */
 	ReadFile(hHandle, &m_vRotation, sizeof(_float3), &dwByte, nullptr);
-	m_pTransformCom->Rotation(m_vRotation.x, m_vRotation.y, m_vRotation.z);
+	m_pTransformCom->Rotation(XMConvertToRadians(m_vRotation.x), XMConvertToRadians(m_vRotation.y), XMConvertToRadians(m_vRotation.z));
 
 	/* 로테이션 여부 */
 	ReadFile(hHandle, &m_IsRotation, sizeof(_bool), &dwByte, nullptr);
@@ -572,7 +573,7 @@ void CEffectObject::Set_Desc(void* pArg)
 	m_vSubColor = pDesc->vSubColor;
 
 	m_vRotation = pDesc->vRotation;
-	m_pTransformCom->Rotation(m_vRotation.x, m_vRotation.y, m_vRotation.z);
+	m_pTransformCom->Rotation(XMConvertToRadians(m_vRotation.x), XMConvertToRadians(m_vRotation.y), XMConvertToRadians(m_vRotation.z));
 	m_IsRotation = pDesc->IsRotation;
 	m_vScale = pDesc->vScale;
 	m_pTransformCom->Set_Scale(m_vScale.x, m_vScale.y, m_vScale.z);

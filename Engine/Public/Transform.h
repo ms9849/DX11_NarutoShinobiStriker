@@ -10,8 +10,7 @@ public:
 	typedef struct tagTransformDesc
 	{
 		_float		fSpeedPerSec;
-		_float		fRotationPerSec;
-
+		_float		fRotationPerSec = XMConvertToRadians(30.f);
 	}TRANSFORM_DESC;
 private:
 	CTransform(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

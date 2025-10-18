@@ -24,18 +24,8 @@ CPlayer_RasenShurikenState::CPlayer_RasenShurikenState(CPlayer* pPlayer)
 
 void CPlayer_RasenShurikenState::Start(_bool IsBlend)
 {
-    m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_TrueRasenShuriken", 1.2f);
-
-    CRasenShuriken::RASENSHURIKEN_DESC Desc;
-    Desc.fSpeedPerSec = 10.f;
-    Desc.pSocketMatrix = m_pPlayer->Get_BoneMatrix(TEXT("Part_Upper"), "RightHandMiddle1");
-    XMStoreFloat3(&Desc.vDir, m_pPlayer->Get_Transform()->Get_State(STATE::LOOK));
-
-    m_pRasenShuriken = static_cast<CRasenShuriken*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC),
-        TEXT("Prototype_GameObject_RasenShuriken"), &Desc));
-
-    m_pGameInstance->Add_Clone_ToLayer(m_pRasenShuriken, m_pGameInstance->Get_LevelID(), TEXT("Layer_Skill"));
-    Safe_AddRef(m_pRasenShuriken);
+    m_pPlayer->Set_Invincible(true);
+    m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_TrueRasenShuriken", 1.5f);
 }
 
 CPlayerState* CPlayer_RasenShurikenState::Update(_float fTimeDelta)
@@ -44,10 +34,27 @@ CPlayerState* CPlayer_RasenShurikenState::Update(_float fTimeDelta)
     _bool IsAnimFinished = m_pPlayer->Play_Animation(fTimeDelta);
     _float fAnimProgress = m_pPlayer->Get_AnimProgress();
 
-    if (fAnimProgress >= 0.7f && false == m_isShurikenThrow)
+    if (fAnimProgress >= 0.15f && false == m_IsShurikenCreate)
+    {
+        CRasenShuriken::RASENSHURIKEN_DESC Desc;
+        Desc.fSpeedPerSec = 10.f;
+        Desc.pSocketMatrix = m_pPlayer->Get_BoneMatrix(TEXT("Part_Upper"), "RightHandMiddle1");
+        XMStoreFloat3(&Desc.vDir, m_pPlayer->Get_Transform()->Get_State(STATE::LOOK));
+
+        m_pRasenShuriken = static_cast<CRasenShuriken*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC),
+            TEXT("Prototype_GameObject_RasenShuriken"), &Desc));
+
+        m_pGameInstance->Add_Clone_ToLayer(m_pRasenShuriken, m_pGameInstance->Get_LevelID(), TEXT("Layer_Skill"));
+        Safe_AddRef(m_pRasenShuriken);
+
+        m_IsShurikenCreate = true;
+    }
+
+    if (fAnimProgress >= 0.63f && false == m_IsShurikenThrow)
     {
         m_pRasenShuriken->Throw();
-        m_isShurikenThrow = true;
+        m_IsShurikenThrow = true;
+        m_pPlayer->Set_Invincible(false);
     }
 
     if (true == IsAnimFinished)
@@ -60,6 +67,7 @@ CPlayerState* CPlayer_RasenShurikenState::Update(_float fTimeDelta)
 
 _bool CPlayer_RasenShurikenState::End()
 {
+    m_pPlayer->Set_Invincible(false);
     return true;
 }
 

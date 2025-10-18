@@ -75,7 +75,7 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	void Reset_LifeTime() { m_fLifeTimeAcc = 0.f;  m_fTimeAcc = 0.f; m_iCurrentIdx = 0;  }
+	void Reset_LifeTime() { m_fLifeTimeAcc = 0.f;  m_fTimeAcc = 0.f; m_iCurrentIdx = 0; m_pTransformCom->Rotation(XMConvertToRadians(m_vRotation.x), XMConvertToRadians(m_vRotation.y), XMConvertToRadians(m_vRotation.z)); }
 	void Play_Sprite(_float fTimeDelta);
 	void Check_LifeTime(_float fTimeDelta);
 	_float Get_StartTime() { return m_fStartTime; }

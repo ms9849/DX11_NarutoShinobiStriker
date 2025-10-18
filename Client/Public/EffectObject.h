@@ -66,6 +66,7 @@ public:
 	HRESULT Load_FromBinary(const _tchar* pEffectName);
 	HRESULT Save_ToBinary(const _char* pEffectName, DWORD dwByte, HANDLE hHandle = nullptr);
 	HRESULT Load_FromBinary(const _tchar* pEffectName, DWORD dwByte, HANDLE hHandle = nullptr);
+
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
@@ -82,7 +83,7 @@ public:
 	_float Get_LifeTime() { return m_fLifeTime; }
 	_float Get_CurLifeTime() { return m_fLifeTimeAcc; }
 	_bool IsVisible() { return m_IsVisible; }
-
+	void Set_ParentMatrix(_fmatrix pParentWorldMatrix);
 public:
 	virtual void Set_Desc(void* pArg) override;
 	CEffectObject::EFFECT_OBJECT_DESC Get_Desc();
@@ -129,6 +130,8 @@ private:
 	_bool				m_IsLoop = { true };
 	_bool				m_IsVisible = { true };
 	_bool				m_IsBlend = { true };
+
+	_float4x4			m_CombinedMatrix = {};
 private:
 	HRESULT Ready_Components(const _wstring& strModelTag);
 	HRESULT Bind_ShaderResources();

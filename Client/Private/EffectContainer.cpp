@@ -12,6 +12,11 @@ CEffectContainer::CEffectContainer(const CEffectContainer& rhs)
 {
 }
 
+void CEffectContainer::Set_ParentMatrix(_fmatrix ParentMatrix)
+{
+    XMStoreFloat4x4(&m_ParentWorldMatrix, ParentMatrix);
+}
+
 void CEffectContainer::Add_EffectObject(const _wstring& strEffectTag, CEffectObject* pEffectObject)
 {
     m_EffectObjects.emplace(strEffectTag, pEffectObject);
@@ -148,6 +153,8 @@ void CEffectContainer::Load_Container_FromBinary(const _tchar* pFilePath)
 
 HRESULT CEffectContainer::Initialize_Prototype()
 {
+    XMStoreFloat4x4(&m_ParentWorldMatrix, XMMatrixIdentity());
+
     return S_OK;
 }
 
@@ -160,7 +167,7 @@ HRESULT CEffectContainer::Initialize(void* pArg)
 
     if (pDesc->IsBinary)
         Load_Container_FromBinary(pDesc->strFilePath.c_str());
-
+    
     return S_OK;
 }
 
@@ -199,6 +206,14 @@ void CEffectContainer::Late_Update(_float fTimeDelta)
 
     if (true == m_pMainEffect->IsDead())
         m_IsDead = true;
+
+    /* 부모 행렬 세팅. Late Update 단에서 수행해준다.*/
+    m_pMainEffect->Set_ParentMatrix(XMLoadFloat4x4(&m_ParentWorldMatrix));
+
+    for (auto& pEffectObject : m_EffectObjects)
+    {
+        pEffectObject.second->Set_ParentMatrix(XMLoadFloat4x4(&m_ParentWorldMatrix));
+    }
 
     m_pMainEffect->Late_Update(fTimeDelta);
 

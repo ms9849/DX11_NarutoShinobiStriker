@@ -29,6 +29,7 @@ private:
 	virtual ~CEffectContainer() = default;
 
 public:
+	void Set_ParentMatrix(_fmatrix ParentMatrix);
 	void Set_Visible(_bool bFlag) { m_IsVisible = bFlag; }
 	
 	void Add_MainEffect(class CEffectObject* pEffectObject)
@@ -68,6 +69,7 @@ public:
 	virtual HRESULT Render() override;
 
 private:
+	_float4x4 m_ParentWorldMatrix = {};
 	_bool m_IsVisible = { true };
 	CEffectObject* m_pMainEffect = { nullptr };
 	map<_wstring, class CEffectObject*> m_EffectObjects = {};

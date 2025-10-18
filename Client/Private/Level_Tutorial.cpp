@@ -346,22 +346,14 @@ HRESULT CLevel_Tutorial::Ready_Layer_Effect(const _wstring& strLayerTag)
 
 
 	/* 이펙트 테스트 */
-	CEffectContainer::EFFECT_CONTAINER_DESC Desc;
-	Desc.IsBinary = true;
-	Desc.strFilePath = TEXT("../Bin/Resources/Effects/TestContainer_eff.bin");
+	//CEffectContainer::EFFECT_CONTAINER_DESC Desc;
+	//Desc.IsBinary = true;
+	//Desc.strFilePath = TEXT("../Bin/Resources/Effects/TestContainer_eff.bin");
 
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_EffectContainer"),
-		ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag, &Desc)))
-		return E_FAIL;
-
-	//CParticleObject::PARTICLE_OBJECT_DESC Desc;
-	//Desc.eType = CParticleObject::PARTICLE_TYPE::EXPLOSION;
-	//Desc.iDiffuseTextureNum = 0;
-	//Desc.strDiffuseTextureTag = TEXT("Prototype_Component_Texture_Snow");
-
-	//if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"),
+	//if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_EffectContainer"),
 	//	ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag, &Desc)))
 	//	return E_FAIL;
+
 
 	return S_OK;
 }
