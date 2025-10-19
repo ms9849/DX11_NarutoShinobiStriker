@@ -34,6 +34,8 @@ private:
 	list<class CGameObject*>	m_RenderObjects[ENUM_CLASS(RENDER::END)];
 	list<class CFont*>			m_Fonts = {};
 
+	ID3D11DepthStencilView* m_pShadowDSV = { nullptr };
+
 #ifdef _DEBUG
 private:
 	list<class CComponent*>				m_DebugComponents;
@@ -48,6 +50,7 @@ private:
 
 private:
 	void Render_Priority();
+	void Render_Shadow();
 	void Render_NonBlend();
 	/* 디퍼드 셰이딩을 통해 조명 연산을 하기 위한 렌더 단계. */
 	void Render_LightAcc();
@@ -58,6 +61,9 @@ private:
 	void Render_WorldUI();
 	void Render_UI();
 	void Render_Font();
+
+private:
+	HRESULT Ready_DepthStencilView(_uint iSizeX, _uint iSizeY);
 
 #ifdef _DEBUG
 private:

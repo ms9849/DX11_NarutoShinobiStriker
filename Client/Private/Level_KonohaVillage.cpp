@@ -177,7 +177,7 @@ HRESULT CLevel_KonohaVillage::Ready_Layer_Camera(const _wstring& strLayerTag)
 
 	TestCameraDesc.fFovy = XMConvertToRadians(60.0f);
 	TestCameraDesc.fNear = 0.1f;
-	TestCameraDesc.fFar = 1000.f;
+	TestCameraDesc.fFar = 500.f;
 	TestCameraDesc.vEye = _float4(0.f, 30.f, -30.f, 1.f);
 	TestCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
 	TestCameraDesc.fSpeedPerSec = 20.f;
@@ -193,7 +193,7 @@ HRESULT CLevel_KonohaVillage::Ready_Layer_Camera(const _wstring& strLayerTag)
 
 	MainCameraDesc.fFovy = XMConvertToRadians(60.0f);
 	MainCameraDesc.fNear = 0.1f;
-	MainCameraDesc.fFar = 1000.f;
+	MainCameraDesc.fFar = 500.f;
 	MainCameraDesc.vEye = _float4(0.f, 30.f, -30.f, 1.f);
 	MainCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
 	MainCameraDesc.fSpeedPerSec = 15.f;
@@ -208,7 +208,7 @@ HRESULT CLevel_KonohaVillage::Ready_Layer_Camera(const _wstring& strLayerTag)
 	CActionCamera::ACTION_CAMERA_DESC		ActionCameraDesc{};
 	ActionCameraDesc.fFovy = XMConvertToRadians(60.0f);
 	ActionCameraDesc.fNear = 0.1f;
-	ActionCameraDesc.fFar = 1000.f;
+	ActionCameraDesc.fFar = 500.f;
 	ActionCameraDesc.vEye = _float4(0.f, 30.f, -30.f, 1.f);
 	ActionCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
 	ActionCameraDesc.fSpeedPerSec = 15.f;
@@ -223,7 +223,7 @@ HRESULT CLevel_KonohaVillage::Ready_Layer_Camera(const _wstring& strLayerTag)
 	CNPCTalkCamera::NPC_TALK_CAMERA_DESC NPCCameraDesc{};
 	NPCCameraDesc.fFovy = XMConvertToRadians(60.0f);
 	NPCCameraDesc.fNear = 0.1f;
-	NPCCameraDesc.fFar = 1000.f;
+	NPCCameraDesc.fFar = 500.f;
 	NPCCameraDesc.vEye = _float4(0.f, 30.f, -30.f, 1.f);
 	NPCCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
 	NPCCameraDesc.fSpeedPerSec = 15.f;
@@ -238,7 +238,7 @@ HRESULT CLevel_KonohaVillage::Ready_Layer_Camera(const _wstring& strLayerTag)
 	CSkillActionCamera::SKILL_ACTION_CAMERA_DESC SkillActionCameraDesc{};
 	SkillActionCameraDesc.fFovy = XMConvertToRadians(60.0f);
 	SkillActionCameraDesc.fNear = 0.1f;
-	SkillActionCameraDesc.fFar = 1000.f;
+	SkillActionCameraDesc.fFar = 500.f;
 	SkillActionCameraDesc.vEye = _float4(0.f, 30.f, -30.f, 1.f);
 	SkillActionCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
 	SkillActionCameraDesc.fSpeedPerSec = 15.f;

@@ -24,6 +24,12 @@ namespace Engine
 		float			fRange;
 	}LIGHT_DESC;
 
+	typedef struct tagShadowLight
+	{
+		XMFLOAT4		vEye, vAt;
+		float			fNear, fFar, fFovy, fAspect;
+	}SHADOW_LIGHT_DESC;
+
 	typedef struct tagVertexPositionTexcoord
 	{
 		XMFLOAT3				vPosition;
