@@ -22,7 +22,7 @@ private:
 
 public:
 	_bool IsColliderActive();
-
+	void Toggle_Effect();
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
@@ -32,7 +32,8 @@ public:
 	virtual HRESULT Render() override;
 
 private:
-	/* ¸â¹ö º¯¼öµé */
+	class CEffectContainer* m_pEffectCharge = { nullptr };
+	class CEffectContainer* m_pEffectRun = { nullptr };
 	const _float4x4* m_pSocketMatrix;
 	_float4x4		 m_CombinedWorldMatrix = {};
 	_float			 m_fLifeTime = { 1.2f };

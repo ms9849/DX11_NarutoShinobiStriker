@@ -13,18 +13,21 @@
 
 #pragma endregion
 
-CPlayer_RasenganState::CPlayer_RasenganState(CPlayer* pPlayer)
+CPlayer_RasenganState::CPlayer_RasenganState(CPlayer* pPlayer, CRasengan* pRasengan)
 	: m_pPlayer { pPlayer }
     , m_pGameManager { CGameManager::GetInstance() }
+    , m_pRasengan { pRasengan }
 {
 	Safe_AddRef(m_pPlayer);
     Safe_AddRef(m_pGameManager);
+    Safe_AddRef(m_pRasengan);
 }
 
 void CPlayer_RasenganState::Start(_bool IsBlend)
 {
 	m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Rasengun_Charge_Lv2toLv3_Conect_toRun", 1.5f, true);
 	m_eAnimState = ANIM_STATE::ATTACK_START;
+    m_pRasengan->Toggle_Effect();
 }
 
 CPlayerState* CPlayer_RasenganState::Update(_float fTimeDelta)
@@ -50,24 +53,15 @@ CPlayerState* CPlayer_RasenganState::Update(_float fTimeDelta)
         && ANIM_STATE::ATTACK_END != m_eAnimState)
     {
         if (m_pGameInstance->Key_Pressing(DIK_D))
-            m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * 0.25f);
+            m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * 0.5f);
 
         if (m_pGameInstance->Key_Pressing(DIK_A))
-            m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * -0.25f);
+            m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * -0.5f);
     }
 
     // 나선환 차징 -> 달리기 끝났다면
     if (true == IsAnimFinished && ANIM_STATE::ATTACK_START == m_eAnimState)
     {
-        CRasengan::RASENGAN_DESC Desc;
-        Desc.pSocketMatrix = m_pPlayer->Get_BoneMatrix(TEXT("Part_Upper"), "RightHandMiddle1");
-
-        m_pRasengan = static_cast<CRasengan*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC),
-            TEXT("Prototype_GameObject_Rasengan"), &Desc)); 
-
-        m_pGameInstance->Add_Clone_ToLayer(m_pRasengan, m_pGameInstance->Get_LevelID(), TEXT("Layer_Skill"));
-        Safe_AddRef(m_pRasengan);
-
         m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Rasengun_Run_Lv1_Loop", 1.5f, false, 0.f);
         m_eAnimState = ANIM_STATE::ATTACK;
         m_fTimeAcc = 0.f;
@@ -112,12 +106,13 @@ CPlayerState* CPlayer_RasenganState::Update(_float fTimeDelta)
 
 _bool CPlayer_RasenganState::End()
 {
+    m_pPlayer->Set_Invincible(false);
 	return true;
 }
 
-CPlayer_RasenganState* CPlayer_RasenganState::Create(CPlayer* pPlayer)
+CPlayer_RasenganState* CPlayer_RasenganState::Create(CPlayer* pPlayer, CRasengan* pRasengan)
 {
-	return new CPlayer_RasenganState(pPlayer);
+	return new CPlayer_RasenganState(pPlayer, pRasengan);
 }
 
 void CPlayer_RasenganState::Free()

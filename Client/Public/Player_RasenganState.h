@@ -13,7 +13,7 @@ public:
 	enum class ANIM_STATE { ATTACK_START, ATTACK, ATTACK_END };
 
 private:
-	CPlayer_RasenganState(class CPlayer* pPlayer);
+	CPlayer_RasenganState(class CPlayer* pPlayer, class CRasengan* pRasengan);
 	virtual ~CPlayer_RasenganState() = default;
 
 public:
@@ -31,7 +31,7 @@ private:
 	ANIM_STATE	   m_eAnimState = {};
 	_float		   m_fTimeAcc = { 0.f };
 public:
-	static CPlayer_RasenganState* Create(class CPlayer* pPlayer);
+	static CPlayer_RasenganState* Create(class CPlayer* pPlayer, class CRasengan* pRasengan);
 	virtual void Free() override;
 };
 

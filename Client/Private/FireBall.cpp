@@ -59,7 +59,7 @@ void CFireBall::Update(_float fTimeDelta)
     m_pTransformCom->Go_Backward(fTimeDelta, nullptr);
 
     m_pColliderCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
-    m_pEffectMain->Set_ParentMatrix(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
+    m_pEffectMain->Set_ParentMatrix(XMMatrixScaling(0.5f, 0.5f, 0.5f) *  XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
 }
 
 void CFireBall::Late_Update(_float fTimeDelta)

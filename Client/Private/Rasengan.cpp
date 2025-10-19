@@ -5,6 +5,9 @@
 #include "GameManager.h"
 #include "Player.h"
 
+#include "EffectContainer.h"
+#include "EffectObject.h"
+
 CRasengan::CRasengan(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CSkill{ pDevice, pContext, eObjectID }
 {
@@ -18,6 +21,12 @@ CRasengan::CRasengan(const CRasengan& rhs)
 _bool CRasengan::IsColliderActive()
 {
     return m_pColliderCom->Get_Active();
+}
+
+void CRasengan::Toggle_Effect()
+{
+    m_pEffectCharge->Set_Visible(false);
+    m_pEffectRun->Set_Visible(true);
 }
 
 HRESULT CRasengan::Initialize_Prototype()
@@ -36,6 +45,27 @@ HRESULT CRasengan::Initialize(void* pArg)
     RASENGAN_DESC* pDesc = static_cast<RASENGAN_DESC*>(pArg);
     m_pSocketMatrix = pDesc->pSocketMatrix;
 
+    /* 나선환 (차징) */
+    CEffectContainer::EFFECT_CONTAINER_DESC EffectDesc;
+    EffectDesc.IsBinary = true;
+    EffectDesc.strFilePath = TEXT("../Bin/Resources/Effects/Rasengan_Charge_eff.bin");
+
+    m_pEffectCharge = static_cast<CEffectContainer*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_EffectContainer"),
+        &EffectDesc));
+    Safe_AddRef(m_pEffectCharge);
+    m_pGameInstance->Add_Clone_ToLayer(m_pEffectCharge, m_pGameInstance->Get_LevelID(), TEXT("Layer_Effect"));
+
+
+    /* 나선환 (달리기) */
+    EffectDesc.IsBinary = true;
+    EffectDesc.strFilePath = TEXT("../Bin/Resources/Effects/Rasengan_Run_eff.bin");
+
+    m_pEffectRun = static_cast<CEffectContainer*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_EffectContainer"),
+        &EffectDesc));
+    Safe_AddRef(m_pEffectRun);
+    m_pGameInstance->Add_Clone_ToLayer(m_pEffectRun, m_pGameInstance->Get_LevelID(), TEXT("Layer_Effect"));
+    m_pEffectRun->Set_Visible(false);
+
     return S_OK;
 }
 
@@ -47,8 +77,11 @@ void CRasengan::Update(_float fTimeDelta)
 {
     m_fTimeAcc += fTimeDelta;
 
-    if (m_fTimeAcc >= 1.f)
+    if (m_fTimeAcc >= 5.f || false == m_pColliderCom->Get_Active())
+    {
         m_IsDead = true;
+        m_pEffectRun->Set_Dead(true);
+    }
 
     ///* 부모 행렬 적용 */
     //XMStoreFloat4x4(&m_CombinedWorldMatrix,
@@ -64,6 +97,8 @@ void CRasengan::Update(_float fTimeDelta)
 
     /* 컴바인드 매트릭스 던져주면서 자연스럽게 크기도 따라가게 됨. */
     m_pColliderCom->Update(XMLoadFloat4x4(&m_CombinedWorldMatrix));
+    m_pEffectCharge->Set_ParentMatrix(XMMatrixScaling(0.25f, 0.25f, 0.25f) * XMMatrixTranslation(0.f, 0.125f, 0.f) * XMLoadFloat4x4(&m_CombinedWorldMatrix));
+    m_pEffectRun->Set_ParentMatrix(XMMatrixScaling(0.25f, 0.25f, 0.25f) * XMMatrixTranslation(0.f, 0.125f, 0.f) * XMLoadFloat4x4(&m_CombinedWorldMatrix));
 }
 
 void CRasengan::Late_Update(_float fTimeDelta)
@@ -186,4 +221,13 @@ CGameObject* CRasengan::Clone(void* pArg)
 void CRasengan::Free()
 {
     __super::Free();
+
+    if (nullptr != m_pEffectCharge)
+        m_pEffectCharge->Set_Dead(true);
+    Safe_Release(m_pEffectCharge);
+
+
+    if (nullptr != m_pEffectRun)
+        m_pEffectRun->Set_Dead(true);
+    Safe_Release(m_pEffectRun);
 }

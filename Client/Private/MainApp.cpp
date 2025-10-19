@@ -619,7 +619,7 @@ HRESULT CMainApp::Ready_Effects()
 #pragma region MASK
 	/* For.Prototype_Component_Texture_Effect_Mask */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Effect_Mask"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Mask/Mask%d.png"), 83))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Mask/Mask%d.png"), 96))))
 		return E_FAIL;
 #pragma endregion
 
