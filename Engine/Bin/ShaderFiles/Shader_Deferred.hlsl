@@ -196,6 +196,7 @@ PS_OUT_BACKBUFFER PS_MAIN_COMBINED(PS_IN In)
     
     /* -1, 1 -> 0, 0  */
     /* 1, -1 -> 1, 1  */
+    
     float2 vTexcoord;
     
     vTexcoord.x = (vPosition.x / vPosition.w) * 0.5f + 0.5f;
@@ -205,6 +206,7 @@ PS_OUT_BACKBUFFER PS_MAIN_COMBINED(PS_IN In)
     
     if (vPosition.w - 0.1f > vShadowDepth.x * 500.0f)
         Out.vBackBuffer *= 0.5f;
+   
     
     return Out;
 }

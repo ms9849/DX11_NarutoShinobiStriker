@@ -4,6 +4,14 @@ vector g_vMtrlDiffuse = 1.f;
 vector g_vMtrlAmbient = 1.f;
 vector g_vMtrlSpecular = 1.f;
 
+/* 클램프 샘플러 */
+sampler ClampSampler = sampler_state
+{
+    Filter = MIN_MAG_MIP_POINT;
+    AddressU = clamp;
+    AddressV = clamp;
+};
+
 /* 디폴트 샘플러 세팅 */
 sampler DefaultSampler = sampler_state
 {
