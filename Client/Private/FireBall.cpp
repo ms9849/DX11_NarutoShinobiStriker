@@ -3,6 +3,8 @@
 #include "GameInstance.h"
 #include "GameManager.h"
 
+#include "EffectContainer.h"
+#include "EffectObject.h"
 CFireBall::CFireBall(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CSkill { pDevice, pContext, eObjectID }
 {
@@ -28,9 +30,19 @@ HRESULT CFireBall::Initialize(void* pArg)
 
     FIREBALL_DESC* pDesc = static_cast<FIREBALL_DESC*>(pArg);
     
-    m_pTransformCom->Set_State(STATE::POSITION, XMLoadFloat3(&pDesc->vPosition));
-    m_pTransformCom->LookAt(m_pTransformCom->Get_State(STATE::POSITION) + XMLoadFloat3(&pDesc->vLook));
+    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetW(XMLoadFloat3(&pDesc->vPosition), 1.f));
+    m_pTransformCom->LookAt(m_pTransformCom->Get_State(STATE::POSITION) - XMLoadFloat3(&pDesc->vLook));
     m_IsEnemy = pDesc->IsEnemy;
+
+    /* È­¿°±¸ */
+    CEffectContainer::EFFECT_CONTAINER_DESC EffectDesc;
+    EffectDesc.IsBinary = true;
+    EffectDesc.strFilePath = TEXT("../Bin/Resources/Effects/FireBall_eff.bin");
+
+    m_pEffectMain = static_cast<CEffectContainer*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_EffectContainer"),
+        &EffectDesc));
+    Safe_AddRef(m_pEffectMain);
+    m_pGameInstance->Add_Clone_ToLayer(m_pEffectMain, m_pGameInstance->Get_LevelID(), TEXT("Layer_Effect"));
 
     return S_OK;
 }
@@ -44,9 +56,10 @@ void CFireBall::Update(_float fTimeDelta)
     if (false == m_pColliderCom->Get_Active())
         m_IsDead = true;
 
-    m_pTransformCom->Go_Straight(fTimeDelta, nullptr);
+    m_pTransformCom->Go_Backward(fTimeDelta, nullptr);
 
     m_pColliderCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
+    m_pEffectMain->Set_ParentMatrix(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
 }
 
 void CFireBall::Late_Update(_float fTimeDelta)
@@ -155,4 +168,9 @@ CGameObject* CFireBall::Clone(void* pArg)
 void CFireBall::Free()
 {
     __super::Free();
+
+    if (nullptr != m_pEffectMain)
+        m_pEffectMain->Set_Dead(true);
+
+    Safe_Release(m_pEffectMain);
 }

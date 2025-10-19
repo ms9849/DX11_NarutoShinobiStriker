@@ -38,6 +38,7 @@ public:
 
 private:
 	/* ¸â¹ö º¯¼öµé */
+	class CEffectContainer* m_pEffectMain = { nullptr };
 	_float			 m_fLifeTime = { 1.2f };
 	_float			 m_fTimeAcc = { 0.f };
 	_bool			 m_IsHit = { false };

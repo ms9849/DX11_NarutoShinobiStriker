@@ -37,7 +37,8 @@ public:
 
 private:
 	/* ¸â¹ö º¯¼öµé */
-	_float			 m_fLifeTime = { 1.0f };
+	class CEffectContainer* m_pEffectMain = { nullptr };
+	_float			 m_fLifeTime = { 3.0f };
 	_float			 m_fTimeAcc = { 0.f };
 	_bool			 m_IsHit = { false };
 
