@@ -33,6 +33,7 @@ public:
 
 private:
 	/* ¸â¹ö º¯¼öµé */
+	class CEffectContainer* m_pEffectMain = { nullptr };
 	const _float4x4* m_pSocketMatrix;
 	_float4x4		 m_CombinedWorldMatrix = {};
 	_float			 m_fLifeTime = { 1.2f };

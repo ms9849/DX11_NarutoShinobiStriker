@@ -810,9 +810,6 @@
     <ClInclude Include="..\Public\Player_ChidoriAttackState.h">
       <Filter>02. GameObjects\00. Character\00. Player\State\SKILL\ChidoriState</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Player_ChidoriAerialReadyState.h">
-      <Filter>02. GameObjects\00. Character\00. Player\State\SKILL\ChidoriState\Ready</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Player_FireBallState.h">
       <Filter>02. GameObjects\00. Character\00. Player\State\SKILL\FireBallState</Filter>
     </ClInclude>
@@ -1387,9 +1384,6 @@
       <Filter>02. GameObjects\00. Character\00. Player\State\SKILL\ChidoriState</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Player_ChidoriReadyState.cpp">
-      <Filter>02. GameObjects\00. Character\00. Player\State\SKILL\ChidoriState\Ready</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Player_ChidoriAerialReadyState.cpp">
       <Filter>02. GameObjects\00. Character\00. Player\State\SKILL\ChidoriState\Ready</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Player_FireBallState.cpp">
