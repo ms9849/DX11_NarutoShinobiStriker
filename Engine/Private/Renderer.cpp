@@ -31,9 +31,7 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 
 	/* 
-	얼룩말 무늬 현상 방지 및, 
-	음수 단위의 깊이도 체크하기 위해 
-	픽셀 포맷을 다르게 세팅.
+	얼룩말 무늬 현상 방지 및, 음수 단위의 깊이도 체크하기 위해 픽셀 포맷을 다르게 세팅.
 	*/
 	/* Target_Depth */
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Depth"), Viewport.Width, Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.0f, 1.f, 0.f, 0.f))))
@@ -45,6 +43,13 @@ HRESULT CRenderer::Initialize()
 
 	/* Target_Specular */
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Specular"), Viewport.Width, Viewport.Height, DXGI_FORMAT_R16G16B16A16_UNORM, _float4(0.0f, 0.f, 0.f, 0.f))))
+		return E_FAIL;
+
+	/* Target_Shadow */
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Shadow"), g_iMaxWidth, g_iMaxHeight, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(1.0f, 1.f, 1.f, 1.f))))
+		return E_FAIL;
+
+	if (FAILED(Ready_DepthStencilView(g_iMaxWidth, g_iMaxHeight)))
 		return E_FAIL;
 
 	/* 게임 오브젝트로부터 뽑아와야하는 디퓨즈 노멀은 MRT_GameObjects로 세팅. */
@@ -62,6 +67,11 @@ HRESULT CRenderer::Initialize()
 	///* Specular는 LightAcc에서 쌓아서 계산한다. */
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_LightAcc"), TEXT("Target_Specular"))))
 		return E_FAIL;
+
+	/* MRT_Shadow */
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Shadow"), TEXT("Target_Shadow"))))
+		return E_FAIL;
+
 
 	m_pShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Deferred.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements);
 	if (nullptr == m_pShader)
@@ -83,6 +93,8 @@ HRESULT CRenderer::Initialize()
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Shade"), Viewport.Width - 225.f, 75.f, 150.f, 150.f)))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Specular"), Viewport.Width - 225.f, 225.f, 150.f, 150.f)))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Shadow"), Viewport.Width - 75.f, 375.f, 150.f, 150.f)))
 		return E_FAIL;
 #endif
 
@@ -116,6 +128,7 @@ HRESULT CRenderer::Add_Font(CFont* pRenderFont)
 void CRenderer::Render()
 {
 	Render_Priority();
+	Render_Shadow();
 	Render_NonBlend();
 	Render_LightAcc();
 	Render_Combined();
@@ -157,6 +170,49 @@ void CRenderer::Render_Priority()
 	}
 
 	m_RenderObjects[ENUM_CLASS(RENDER::PRIORITY)].clear();
+}
+
+void CRenderer::Render_Shadow()
+{
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Shadow"), m_pShadowDSV)))
+		return;
+
+	D3D11_VIEWPORT			ViewPortDesc;
+	ZeroMemory(&ViewPortDesc, sizeof(D3D11_VIEWPORT));
+	ViewPortDesc.TopLeftX = 0;
+	ViewPortDesc.TopLeftY = 0;
+	ViewPortDesc.Width = (_float)g_iMaxWidth;
+	ViewPortDesc.Height = (_float)g_iMaxHeight;
+	ViewPortDesc.MinDepth = 0.f;
+	ViewPortDesc.MaxDepth = 1.f;
+
+	m_pContext->RSSetViewports(1, &ViewPortDesc);
+
+
+	for (auto& pRenderObject : m_RenderObjects[ENUM_CLASS(RENDER::SHADOW)])
+	{
+		if (nullptr != pRenderObject)
+			pRenderObject->Render_Shadow();
+
+		Safe_Release(pRenderObject);
+	}
+
+	m_RenderObjects[ENUM_CLASS(RENDER::SHADOW)].clear();
+
+	/* 모든 렌더타겟을 비워. */
+	if (FAILED(m_pGameInstance->End_MRT()))
+		return;
+
+	ZeroMemory(&ViewPortDesc, sizeof(D3D11_VIEWPORT));
+	ViewPortDesc.TopLeftX = 0;
+	ViewPortDesc.TopLeftY = 0;
+	/* 임시로 하드코딩. 추후 클라이언트에서 받아와야 함. */
+	ViewPortDesc.Width = (_float)1280.0f;
+	ViewPortDesc.Height = (_float)720.0f;
+	ViewPortDesc.MinDepth = 0.f;
+	ViewPortDesc.MaxDepth = 1.f;
+
+	m_pContext->RSSetViewports(1, &ViewPortDesc);
 }
 
 void CRenderer::Render_NonBlend()
@@ -232,7 +288,15 @@ void CRenderer::Render_Combined()
 	m_pShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix);
 	m_pShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix);
 	m_pShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix);
+	m_pShader->Bind_Matrix("g_ViewMatrixInv", m_pGameInstance->Get_PipeLine_InverseFloat4x4(D3DTS::VIEW));
+	m_pShader->Bind_Matrix("g_ProjMatrixInv", m_pGameInstance->Get_PipeLine_InverseFloat4x4(D3DTS::PROJ));
 
+
+	/* 그림자용 뷰, 투영 행렬 세팅 */
+	if (FAILED(m_pGameInstance->Bind_Shadow_Resource(m_pShader, "g_LightViewMatrix", D3DTS::VIEW)))
+		return;
+	if (FAILED(m_pGameInstance->Bind_Shadow_Resource(m_pShader, "g_LightProjMatrix", D3DTS::PROJ)))
+		return;
 	/* 기록되어 있던 Diffuse 세팅 */
 	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Diffuse"), m_pShader, "g_DiffuseTexture")))
 		return;
@@ -242,10 +306,14 @@ void CRenderer::Render_Combined()
 
 	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Specular"), m_pShader, "g_SpecularTexture")))
 		return;
+	/* 뎁스와 섀도우도 기록 */
+	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Depth"), m_pShader, "g_DepthTexture")))
+		return;
+	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Shadow"), m_pShader, "g_ShadowTexture")))
+		return;
 
 	/* 셰이더에서 이 둘 곱해서 최종적인 계산값 뽑아냄. */
 	m_pShader->Begin(3);
-
 	/* 실질적으로 조명 연산이 끝난 NonBlend 객체들 렌더*/
 	m_pVIBuffer->Bind_Resources();
 	m_pVIBuffer->Render();
@@ -321,6 +389,47 @@ void CRenderer::Render_Font()
 	m_Fonts.clear();
 }
 
+HRESULT CRenderer::Ready_DepthStencilView(_uint iSizeX, _uint iSizeY)
+{
+	if (nullptr == m_pDevice)
+		return E_FAIL;
+
+	ID3D11Texture2D* pDepthStencilTexture = nullptr;
+
+	D3D11_TEXTURE2D_DESC	TextureDesc;
+	ZeroMemory(&TextureDesc, sizeof(D3D11_TEXTURE2D_DESC));
+
+	/* 깊이 버퍼의 픽셀은 백버퍼의 픽셀과 갯수가 동일해야만 깊이 텍스트가 가능해진다. */
+	/* 픽셀의 수가 다르면 아에 렌더링을 못함. */
+	TextureDesc.Width = iSizeX;
+	TextureDesc.Height = iSizeY;
+	TextureDesc.MipLevels = 1;
+	TextureDesc.ArraySize = 1;
+	TextureDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+
+	TextureDesc.SampleDesc.Quality = 0;
+	TextureDesc.SampleDesc.Count = 1;
+
+	/* 동적? 정적?  */
+	TextureDesc.Usage = D3D11_USAGE_DEFAULT /* 정적 */;
+	/* 추후에 어떤 용도로 바인딩 될 수 있는 View타입의 텍스쳐를 만들기위한 Texture2D입니까? */
+	TextureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL
+		/*| D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE*/;
+	TextureDesc.CPUAccessFlags = 0;
+	TextureDesc.MiscFlags = 0;
+
+	if (FAILED(m_pDevice->CreateTexture2D(&TextureDesc, nullptr, &pDepthStencilTexture)))
+		return E_FAIL;
+
+
+	if (FAILED(m_pDevice->CreateDepthStencilView(pDepthStencilTexture, nullptr, &m_pShadowDSV)))
+		return E_FAIL;
+
+	Safe_Release(pDepthStencilTexture);
+
+	return S_OK;
+}
+
 #ifdef _DEBUG
 
 void CRenderer::Render_Debug()
@@ -343,6 +452,8 @@ void CRenderer::Render_Debug()
 	if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_GameObjects"), m_pShader, m_pVIBuffer)))
 		return;
 	if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_LightAcc"), m_pShader, m_pVIBuffer)))
+		return;
+	if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Shadow"), m_pShader, m_pVIBuffer)))
 		return;
 }
 
@@ -382,4 +493,5 @@ void CRenderer::Free()
 	Safe_Release(m_pShader);
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pGameInstance);
+	Safe_Release(m_pShadowDSV);
 }

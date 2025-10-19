@@ -135,6 +135,8 @@ void CLevel_Tutorial::Update(_float fTimeDelta)
 	{
 		m_pGameManager->Clear();
 		m_pGameInstance->Clear_Geometry();
+		m_pGameInstance->Clear_Lights();
+
 		if (FAILED(m_pGameInstance->Change_Level(CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL::LOADING, LEVEL::KONOHA_VILLAGE))))
 			return;
 	}
@@ -155,8 +157,8 @@ HRESULT CLevel_Tutorial::Ready_Lights()
 	LIGHT_DESC			LightDesc{};
 
 	LightDesc.eType = LIGHT::DIRECTIONAL;
-	LightDesc.vDiffuse = _float4(0.8f, 0.8f, 0.8f, 1.f);
-	LightDesc.vAmbient = _float4(0.5f, 0.5f, 0.5f, 1.f);
+	LightDesc.vDiffuse = _float4(0.8f, 0.8f, 0.8f, 0.8f);
+	LightDesc.vAmbient = _float4(0.8f, 0.8f, 0.8f, 1.f);
 	LightDesc.vSpecular = _float4(0.f, 0.f, 0.f, 1.f);
 	LightDesc.vDirection = _float4(1.f, -1.f, 1.f, 0.f);
 				
@@ -165,12 +167,34 @@ HRESULT CLevel_Tutorial::Ready_Lights()
 
 	LightDesc.eType = LIGHT::POINT;
 	LightDesc.vDiffuse = _float4(1.f, 0.0f, 0.f, 1.f);
-	LightDesc.vAmbient = _float4(0.4f, 0.2f, 0.2f, 1.f);
+	LightDesc.vAmbient = _float4(0.5f, 0.5f, 0.5f, 1.f);
 	LightDesc.vSpecular = LightDesc.vDiffuse;
 	LightDesc.vPosition = _float4(0.f, 5.f, 0.f, 1.f);
-	LightDesc.fRange = 10.f;
+	LightDesc.fRange = 20.f;
 
 	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
+		return E_FAIL;
+
+	//SHADOW_LIGHT_DESC		ShadowDesc{};
+	//ShadowDesc.vEye = _float4(-70.f, 60.f, -70.f, 1.f);
+	//ShadowDesc.vAt = _float4(10.f, 0.f, 10.f, 1.f);
+	//ShadowDesc.fFovy = XMConvertToRadians(120.0f);
+	//ShadowDesc.fAspect = static_cast<_float>(g_iWinSizeX) / g_iWinSizeY;
+	//ShadowDesc.fNear = 0.1f;
+	//ShadowDesc.fFar = 500.f;
+
+	//if (FAILED(m_pGameInstance->Ready_Shadow_Light(ShadowDesc)))
+	//	return E_FAIL;
+
+	SHADOW_LIGHT_DESC		ShadowDesc{};
+	ShadowDesc.vEye = _float4(0.f, 15.f, 0.f, 1.f);
+	ShadowDesc.vAt = _float4(10.f, 0.f, 10.f, 1.f);
+	ShadowDesc.fFovy = XMConvertToRadians(120.0f);
+	ShadowDesc.fAspect = static_cast<_float>(g_iWinSizeX) / g_iWinSizeY;
+	ShadowDesc.fNear = 0.1f;
+	ShadowDesc.fFar = 500.f;
+
+	if (FAILED(m_pGameInstance->Ready_Shadow_Light(ShadowDesc)))
 		return E_FAIL;
 
 	return S_OK;
@@ -196,7 +220,7 @@ HRESULT CLevel_Tutorial::Ready_Layer_Camera(const _wstring& strLayerTag)
 
 	TestCameraDesc.fFovy = XMConvertToRadians(60.0f);
 	TestCameraDesc.fNear = 0.1f;
-	TestCameraDesc.fFar = 1000.f;
+	TestCameraDesc.fFar = 500.f;
 	TestCameraDesc.vEye = _float4(0.f, 30.f, -30.f, 1.f);
 	TestCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
 	TestCameraDesc.fSpeedPerSec = 20.f;
@@ -211,7 +235,7 @@ HRESULT CLevel_Tutorial::Ready_Layer_Camera(const _wstring& strLayerTag)
 	CMainCamera::MAIN_CAMERA_DESC			MainCameraDesc{};
 	MainCameraDesc.fFovy = XMConvertToRadians(60.0f);
 	MainCameraDesc.fNear = 0.1f;
-	MainCameraDesc.fFar = 1000.f;
+	MainCameraDesc.fFar = 500.f;
 	MainCameraDesc.vEye = _float4(0.f, 30.f, -30.f, 1.f);
 	MainCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
 	MainCameraDesc.fSpeedPerSec = 15.f;
@@ -225,7 +249,7 @@ HRESULT CLevel_Tutorial::Ready_Layer_Camera(const _wstring& strLayerTag)
 	CActionCamera::ACTION_CAMERA_DESC		ActionCameraDesc{};
 	ActionCameraDesc.fFovy = XMConvertToRadians(60.0f);
 	ActionCameraDesc.fNear = 0.1f;
-	ActionCameraDesc.fFar = 1000.f;
+	ActionCameraDesc.fFar = 500.f;
 	ActionCameraDesc.vEye = _float4(0.f, 30.f, -30.f, 1.f);
 	ActionCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
 	ActionCameraDesc.fSpeedPerSec = 15.f;
@@ -240,7 +264,7 @@ HRESULT CLevel_Tutorial::Ready_Layer_Camera(const _wstring& strLayerTag)
 	CNPCTalkCamera::NPC_TALK_CAMERA_DESC NPCCameraDesc{};
 	NPCCameraDesc.fFovy = XMConvertToRadians(60.0f);
 	NPCCameraDesc.fNear = 0.1f;
-	NPCCameraDesc.fFar = 1000.f;
+	NPCCameraDesc.fFar = 500.f;
 	NPCCameraDesc.vEye = _float4(0.f, 30.f, -30.f, 1.f);
 	NPCCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
 	NPCCameraDesc.fSpeedPerSec = 15.f;
@@ -255,7 +279,7 @@ HRESULT CLevel_Tutorial::Ready_Layer_Camera(const _wstring& strLayerTag)
 	CSkillActionCamera::SKILL_ACTION_CAMERA_DESC SkillActionCameraDesc{};
 	SkillActionCameraDesc.fFovy = XMConvertToRadians(60.0f);
 	SkillActionCameraDesc.fNear = 0.1f;
-	SkillActionCameraDesc.fFar = 1000.f;
+	SkillActionCameraDesc.fFar = 500.f;
 	SkillActionCameraDesc.vEye = _float4(0.f, 30.f, -30.f, 1.f);
 	SkillActionCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
 	SkillActionCameraDesc.fSpeedPerSec = 15.f;
@@ -342,6 +366,18 @@ HRESULT CLevel_Tutorial::Ready_Layer_Effect(const _wstring& strLayerTag)
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Explosion"),
 		ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag)))
+		return E_FAIL;
+
+
+	SHADOW_LIGHT_DESC		ShadowDesc{};
+	ShadowDesc.vEye = _float4(0.f, 15.f, 0.f, 1.f);
+	ShadowDesc.vAt = _float4(10.f, 0.f, 10.f, 1.f);
+	ShadowDesc.fFovy = XMConvertToRadians(120.0f);
+	ShadowDesc.fAspect = static_cast<_float>(g_iWinSizeX) / g_iWinSizeY;
+	ShadowDesc.fNear = 0.1f;
+	ShadowDesc.fFar = 500.f;
+
+	if (FAILED(m_pGameInstance->Ready_Shadow_Light(ShadowDesc)))
 		return E_FAIL;
 
 

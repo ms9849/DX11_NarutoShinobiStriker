@@ -238,6 +238,9 @@
     <ClInclude Include="..\Public\EffectMesh.h">
       <Filter>01.Utility\03.Components\EffectModel\Mesh</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Shadow.h">
+      <Filter>01.Utility\11. Shadow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -431,6 +434,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\EffectMesh.cpp">
       <Filter>01.Utility\03.Components\EffectModel\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Shadow.cpp">
+      <Filter>01.Utility\11. Shadow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -643,6 +649,9 @@
     </Filter>
     <Filter Include="01.Utility\03.Components\EffectModel\Mesh">
       <UniqueIdentifier>{65f96b82-0d31-4817-ac59-a55d47953dfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\11. Shadow">
+      <UniqueIdentifier>{c064247a-0720-4d34-8a6a-4d611545ec0d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

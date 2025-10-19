@@ -141,6 +141,7 @@ public:
 	const LIGHT_DESC* Get_LightDesc(_uint iIndex) const;
 	HRESULT Add_Light(const LIGHT_DESC& LightDesc);
 	HRESULT Render_Lights(class CShader* pShader, class CVIBuffer* pVIBuffer);
+	void Clear_Lights();
 #pragma endregion
 
 #pragma region Physx_Manager
@@ -159,7 +160,7 @@ public:
 #pragma region Target_Manager
 	HRESULT Add_RenderTarget(const _wstring& strTargetTag, _uint iSizeX, _uint iSizeY, DXGI_FORMAT ePixelFormat, const _float4& vClearColor);
 	HRESULT Add_MRT(const _wstring& strMRTTag, const _wstring& strTargetTag);
-	HRESULT Begin_MRT(const _wstring& strMRTTag);
+	HRESULT Begin_MRT(const _wstring& strMRTTag, ID3D11DepthStencilView* pDSV = nullptr);
 	HRESULT End_MRT();
 	HRESULT Bind_RenderTarget(const _wstring& strTargetTag, class CShader* pShader, const _char* pConstantName);
 #ifdef _DEBUG
@@ -168,6 +169,10 @@ public:
 #endif
 #pragma endregion
 
+#pragma region SHADOW 
+	HRESULT Ready_Shadow_Light(const SHADOW_LIGHT_DESC& Desc);
+	HRESULT Bind_Shadow_Resource(class CShader* pShader, const _char* pConstantName, D3DTS eType);
+#pragma endregion
 private:
 	class CGraphic_Device*			m_pGraphic_Device = { nullptr };
 	class CTimer_Manager*			m_pTimer_Manager = { nullptr };
@@ -184,6 +189,7 @@ private:
 	class CLight_Manager*			m_pLight_Manager = { nullptr };
 	class CPhysx_Manager*			m_pPhysxManager = { nullptr };
 	class CTarget_Manager*			m_pTarget_Manager = { nullptr };
+	class CShadow*					m_pShadow = { nullptr };
 
 private:
 	_uint m_iWinSizeX = {};

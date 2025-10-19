@@ -7,12 +7,25 @@ CLight_Manager::CLight_Manager()
 
 const LIGHT_DESC* CLight_Manager::Get_LightDesc(_uint iIndex) const
 {
+    if (iIndex >= m_Lights.size())
+        return nullptr;
+
     auto    iter = m_Lights.begin();
 
     for (size_t i = 0; i < iIndex; i++)
         ++iter;
-
+ 
     return (*iter)->Get_LightDesc();
+}
+
+void CLight_Manager::Clear()
+{
+    for (auto& pLight : m_Lights)
+    {
+        Safe_Release(pLight);
+    }
+    m_Lights.clear();
+
 }
 
 HRESULT CLight_Manager::Add_Light(const LIGHT_DESC& LightDesc)
