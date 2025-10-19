@@ -65,10 +65,10 @@ CPlayerState* CPlayer_ChidoriAttackState::Update(_float fTimeDelta)
         && ANIM_STATE::ATTACK_END != m_eAnimState)
     {
         if (m_pGameInstance->Key_Pressing(DIK_D))
-            m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * 0.25f);
+            m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * 0.5f);
 
         if (m_pGameInstance->Key_Pressing(DIK_A))
-            m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * -0.25f);
+            m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * -0.5f);
     }
     // 치도리 끝내는 동작 (ATTACK_END로 전환) 
     if (ANIM_STATE::ATTACK == m_eAnimState && (false == m_pChidori->IsColliderActive() || m_fTimeAcc >= 1.0f))
@@ -82,11 +82,15 @@ CPlayerState* CPlayer_ChidoriAttackState::Update(_float fTimeDelta)
         m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Aerial_Chidori_Run_Loop", 2.f, false, 0.f, true);
     }
 
+    if (ANIM_STATE::ATTACK_END == m_eAnimState && 0.3f <= fAnimProgress)
+    {
+        m_pChidori->Set_Dead(true);
+    }
+
     // IDLE 상태로 돌아가기. 
     if (true == IsAnimFinished && ANIM_STATE::ATTACK_END == m_eAnimState)
     {
         pNextState = CPlayer_IdleState::Create(m_pPlayer);
-        m_pChidori->Set_Dead(true);
     }
     m_fTimeAcc += fTimeDelta;
 

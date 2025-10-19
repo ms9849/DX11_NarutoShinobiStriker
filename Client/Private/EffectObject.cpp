@@ -166,14 +166,15 @@ HRESULT CEffectObject::Load_FromBinary(const _tchar* pBinaryFilePath)
 	ReadFile(hHandle, &m_vSubColor, sizeof(_float4), &dwByte, nullptr);
 	/* 로테이션 */
 	ReadFile(hHandle, &m_vRotation, sizeof(_float3), &dwByte, nullptr);
-	m_pTransformCom->Rotation(m_vRotation.x, m_vRotation.y, m_vRotation.z);
+	m_pTransformCom->Rotation(XMConvertToRadians(m_vRotation.x), XMConvertToRadians(m_vRotation.y), XMConvertToRadians(m_vRotation.z));
 
 	/* 로테이션 여부 */
 	ReadFile(hHandle, &m_IsRotation, sizeof(_bool), &dwByte, nullptr);
-	m_pTransformCom->Set_Scale(m_vScale.x, m_vScale.y, m_vScale.z);
 
 	/* 스케일 */
 	ReadFile(hHandle, &m_vScale, sizeof(_float3), &dwByte, nullptr);
+	m_pTransformCom->Set_Scale(m_vScale.x, m_vScale.y, m_vScale.z);
+
 	/* 델타 스케일 */
 	ReadFile(hHandle, &m_vDeltaScale, sizeof(_float3), &dwByte, nullptr);
 	/* 루프 여부 */
@@ -184,12 +185,11 @@ HRESULT CEffectObject::Load_FromBinary(const _tchar* pBinaryFilePath)
 	_float fRotationSpeed = {};
 	ReadFile(hHandle, &fRotationSpeed, sizeof(_float), &dwByte, nullptr);
 	m_pTransformCom->Set_RotationSpeed(fRotationSpeed);
-	
+
 	/* 블렌딩 여부 */
 	ReadFile(hHandle, &m_IsBlend, sizeof(_bool), &dwByte, nullptr);
 
 	CloseHandle(hHandle);
-
 	return S_OK;
 }
 
@@ -280,7 +280,7 @@ HRESULT CEffectObject::Load_FromBinary(const _tchar* pEffectName, DWORD dwByte, 
 	ReadFile(hHandle, &m_vSubColor, sizeof(_float4), &dwByte, nullptr);
 	/* 로테이션 */
 	ReadFile(hHandle, &m_vRotation, sizeof(_float3), &dwByte, nullptr);
-	m_pTransformCom->Rotation(m_vRotation.x, m_vRotation.y, m_vRotation.z);
+	m_pTransformCom->Rotation(XMConvertToRadians(m_vRotation.x), XMConvertToRadians(m_vRotation.y), XMConvertToRadians(m_vRotation.z));
 
 	/* 로테이션 여부 */
 	ReadFile(hHandle, &m_IsRotation, sizeof(_bool), &dwByte, nullptr);
@@ -365,7 +365,6 @@ HRESULT CEffectObject::Initialize_Prototype()
 
 HRESULT CEffectObject::Initialize(void* pArg)
 {
-
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
@@ -373,11 +372,12 @@ HRESULT CEffectObject::Initialize(void* pArg)
 	EFFECT_OBJECT_DESC* pDesc = static_cast<EFFECT_OBJECT_DESC*>(pArg);
 	Set_Desc(pDesc);
 
+	m_IsVisible = true;
+
     if (FAILED(Ready_Components(pDesc->strModelTag)))
         return E_FAIL;
 
 	m_iNumMeshes = m_pModelCom->Get_NumMeshes();
-	m_IsVisible = true;
 
     return S_OK;
 }
@@ -402,6 +402,8 @@ void CEffectObject::Update(_float fTimeDelta)
 		m_vScale.y + (m_vDeltaScale.y - 1.f) * (m_fLifeTimeAcc / m_fLifeTime),
 		m_vScale.z + (m_vDeltaScale.z - 1.f) * (m_fLifeTimeAcc / m_fLifeTime)
 	);
+
+
 }
 
 void CEffectObject::Late_Update(_float fTimeDelta)

@@ -240,6 +240,31 @@ PS_OUT PS_NONE(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_DELTAUV_MULT(PS_IN In)
+{
+    PS_OUT Out;
+    
+    // diffuse »ùÇÃ
+    float4 Diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexcoord);
+    // mask »ùÇÃ (°°Àº UV »ç¿ë)
+    In.vTexcoord -= float2(g_fDeltaU * g_fLifeTimeAcc, g_fDeltaV * g_fLifeTimeAcc);
+    float4 MaskSample = g_MaskTexture.Sample(DefaultSampler, In.vTexcoord) * 10.f;
+    
+    Diffuse.a *= MaskSample.r;
+    
+    if (Diffuse.a < 0.1f)
+        Diffuse.rgba = g_vSubColor.xyzw;
+    
+    else if (Diffuse.a < 0.6f)
+        Diffuse.rgba = g_vMainColor.xyzw;
+    else
+        Diffuse.rgba = g_vSubColor.xyzw;
+    
+    Out.vDiffuse = Diffuse;
+   
+    return Out;
+}
+
 PS_OUT PS_ALL(PS_IN In)
 {
     PS_OUT Out;
@@ -374,4 +399,16 @@ technique11 DefaultTechnique
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_DISSOLVE_IMMEDIATE();
     }
+
+    pass DeltaUVMult //9
+    {
+        SetRasterizerState(RS_Cull_None);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+       
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_DELTAUV_MULT();
+    }
+
 }

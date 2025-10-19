@@ -23,7 +23,7 @@ public:
 
 private:
 	class CPlayer*	m_pPlayer = { nullptr };
-
+	class CRasengan* m_pRasengan = { nullptr };
 public:
 	static CPlayer_RasenganReadyState* Create(class CPlayer* pPlayer);
 	virtual void Free() override;
