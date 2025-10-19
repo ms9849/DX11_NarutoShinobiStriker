@@ -3,6 +3,9 @@
 #include "GameInstance.h"
 #include "GameManager.h"
 
+#include "EffectContainer.h"
+#include "EffectObject.h"
+
 CBigShark::CBigShark(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 	: CSkill { pDevice, pContext, eObjectID }
 {
@@ -28,8 +31,18 @@ HRESULT CBigShark::Initialize(void* pArg)
 
 	BIGSHARK_DESC* pDesc = static_cast<BIGSHARK_DESC*>(pArg);
 
-	m_pTransformCom->Set_State(STATE::POSITION, XMLoadFloat3(&pDesc->vPosition));
-	m_pTransformCom->LookAt(m_pTransformCom->Get_State(STATE::POSITION) + XMLoadFloat3(&pDesc->vLook));
+	m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetW(XMLoadFloat3(&pDesc->vPosition), 1.f));
+	m_pTransformCom->LookAt(m_pTransformCom->Get_State(STATE::POSITION) - XMLoadFloat3(&pDesc->vLook));
+
+	/* ¾Æ±â»ó¾î¶Ñ·ç·ç¶Ñ·ç */
+	CEffectContainer::EFFECT_CONTAINER_DESC EffectDesc;
+	EffectDesc.IsBinary = true;
+	EffectDesc.strFilePath = TEXT("../Bin/Resources/Effects/BigSharkBomb_eff.bin");
+
+	m_pEffectMain = static_cast<CEffectContainer*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_EffectContainer"),
+		&EffectDesc));
+	Safe_AddRef(m_pEffectMain);
+	m_pGameInstance->Add_Clone_ToLayer(m_pEffectMain, m_pGameInstance->Get_LevelID(), TEXT("Layer_Effect"));
 
 	return S_OK;
 }
@@ -45,9 +58,10 @@ void CBigShark::Update(_float fTimeDelta)
 	if (m_fTimeAcc >= m_fLifeTime)
 		m_IsDead = true;
 
-	m_pTransformCom->Go_Straight(fTimeDelta, nullptr);
+	m_pTransformCom->Go_Backward(fTimeDelta, nullptr);
 
 	m_pColliderCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
+	m_pEffectMain->Set_ParentMatrix(XMMatrixTranslation(0.f, 0.02f, 0.f) * XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
 }
 
 void CBigShark::Late_Update(_float fTimeDelta)
@@ -152,4 +166,10 @@ CGameObject* CBigShark::Clone(void* pArg)
 void CBigShark::Free()
 {
 	__super::Free();
+	
+
+	if (nullptr != m_pEffectMain)
+		m_pEffectMain->Set_Dead(true);
+
+	Safe_Release(m_pEffectMain); 
 }
