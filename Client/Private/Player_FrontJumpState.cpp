@@ -8,7 +8,6 @@
 #include "Player_LandState.h"
 #include "Player_HandAerialAttackState.h"
 
-#include "Player_ChidoriAerialReadyState.h"
 #include "Player_AerialFireBallState.h"
 
 #include "Player_AerialRasenShurikenState.h"
@@ -142,8 +141,8 @@ CPlayerState* CPlayer_FrontJumpState::Update(_float fTimeDelta)
 	/* 1번 스킬 사용 */
 	else if (m_pGameInstance->Key_Down(DIK_1))
 	{
-		if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType() && m_pPlayer->Use_Skill(SKILLNUM::SECOND))
-			pNextState = CPlayer_ChidoriAerialReadyState::Create(m_pPlayer, m_fTimeAcc);
+		//if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType() && m_pPlayer->Use_Skill(SKILLNUM::SECOND))
+		//	pNextState = CPlayer_ChidoriAerialReadyState::Create(m_pPlayer, m_fTimeAcc);
 	}
 	/* 2번 스킬 사용 */
 	else if (m_pGameInstance->Key_Down(DIK_2) && m_pPlayer->Use_Skill(SKILLNUM::THIRD))

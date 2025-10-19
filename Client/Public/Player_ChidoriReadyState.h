@@ -24,7 +24,8 @@ public:
 private:
 	class CPlayer* m_pPlayer = { nullptr };
 	ANIM_STATE	   m_eAnimState = {};
-
+	class CChidori* m_pChidori = { nullptr };
+	_bool  m_IsChidoriCreated = { false }; 
 public:
 	static CPlayer_ChidoriReadyState* Create(class CPlayer* pPlayer);
 	virtual void Free() override;

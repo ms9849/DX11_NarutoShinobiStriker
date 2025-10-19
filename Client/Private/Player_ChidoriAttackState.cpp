@@ -17,27 +17,20 @@
 
 #pragma endregion
 
-CPlayer_ChidoriAttackState::CPlayer_ChidoriAttackState(CPlayer* pPlayer)
+CPlayer_ChidoriAttackState::CPlayer_ChidoriAttackState(CPlayer* pPlayer, CChidori* pChidori)
     : m_pPlayer { pPlayer }
     , m_pGameManager { CGameManager::GetInstance() }
+    , m_pChidori { pChidori }
 {
     Safe_AddRef(m_pPlayer);
     Safe_AddRef(m_pGameManager);
+    Safe_AddRef(m_pChidori);
 }
 
 void CPlayer_ChidoriAttackState::Start(_bool IsBlend)
 {
     m_pPlayer->Set_Invincible(true);
     m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Aerial_Chidori_Run_Loop", 2.f, IsBlend);
-
-    CChidori::CHIDORI_DESC Desc;
-    Desc.pSocketMatrix = m_pPlayer->Get_BoneMatrix(TEXT("Part_Upper"), "RightHandMiddle1");
-
-    m_pChidori = static_cast<CChidori*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC),
-        TEXT("Prototype_GameObject_Chidori"), &Desc));
-
-    m_pGameInstance->Add_Clone_ToLayer(m_pChidori, m_pGameInstance->Get_LevelID(), TEXT("Layer_Skill"));
-    Safe_AddRef(m_pChidori);
 
     m_eAnimState = ANIM_STATE::ATTACK;
     m_fTimeAcc = 0.f;
@@ -93,6 +86,7 @@ CPlayerState* CPlayer_ChidoriAttackState::Update(_float fTimeDelta)
     if (true == IsAnimFinished && ANIM_STATE::ATTACK_END == m_eAnimState)
     {
         pNextState = CPlayer_IdleState::Create(m_pPlayer);
+        m_pChidori->Set_Dead(true);
     }
     m_fTimeAcc += fTimeDelta;
 
@@ -102,12 +96,13 @@ CPlayerState* CPlayer_ChidoriAttackState::Update(_float fTimeDelta)
 _bool CPlayer_ChidoriAttackState::End()
 {
     m_pPlayer->Set_Invincible(false);
+
     return true;
 }
 
-CPlayer_ChidoriAttackState* CPlayer_ChidoriAttackState::Create(CPlayer* pPlayer)
+CPlayer_ChidoriAttackState* CPlayer_ChidoriAttackState::Create(CPlayer* pPlayer, CChidori* pChidori)
 {
-    return new CPlayer_ChidoriAttackState(pPlayer);
+    return new CPlayer_ChidoriAttackState(pPlayer, pChidori);
 }
 
 void CPlayer_ChidoriAttackState::Free()

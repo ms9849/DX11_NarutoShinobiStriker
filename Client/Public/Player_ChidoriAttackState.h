@@ -10,7 +10,7 @@ class CPlayer_ChidoriAttackState final : public CPlayerState
 public:
 	enum class ANIM_STATE { ATTACK, ATTACK_END };
 private:
-	CPlayer_ChidoriAttackState(class CPlayer* pPlayer);
+	CPlayer_ChidoriAttackState(class CPlayer* pPlayer, class CChidori* pChidori);
 	virtual ~CPlayer_ChidoriAttackState() = default;
 
 public:
@@ -29,7 +29,7 @@ private:
 	class CChidori* m_pChidori = { nullptr };
 
 public:
-	static CPlayer_ChidoriAttackState* Create(class CPlayer* pPlayer);
+	static CPlayer_ChidoriAttackState* Create(class CPlayer* pPlayer, class CChidori* pChidori);
 	virtual void Free() override;
 };
 

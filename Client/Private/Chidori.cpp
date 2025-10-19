@@ -4,6 +4,9 @@
 #include "GameManager.h"
 #include "Player.h"
 
+#include "EffectContainer.h"
+#include "EffectObject.h"
+
 CChidori::CChidori(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 	: CSkill { pDevice, pContext, eObjectID }
 {
@@ -35,6 +38,27 @@ HRESULT CChidori::Initialize(void* pArg)
 	CHIDORI_DESC* pDesc = static_cast<CHIDORI_DESC*>(pArg);
 	m_pSocketMatrix = pDesc->pSocketMatrix;
 
+	/* 치도리 차징 */
+	CEffectContainer::EFFECT_CONTAINER_DESC EffectDesc;
+	EffectDesc.IsBinary = true;
+	EffectDesc.strFilePath = TEXT("../Bin/Resources/Effects/Chidori_eff.bin");
+
+	m_pEffectMain = static_cast<CEffectContainer*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_EffectContainer"),
+		&EffectDesc));
+	Safe_AddRef(m_pEffectMain);
+	m_pGameInstance->Add_Clone_ToLayer(m_pEffectMain, m_pGameInstance->Get_LevelID(), TEXT("Layer_Effect"));
+
+	///* 치도리 트레일 */
+	//EffectDesc.IsBinary = true;
+	//EffectDesc.strFilePath = TEXT("../Bin/Resources/Effects/Chidori_Trail_eff.bin");
+
+	//m_pEffectTrail = static_cast<CEffectContainer*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_EffectContainer"),
+	//	&EffectDesc));
+	//Safe_AddRef(m_pEffectTrail);
+	//m_pGameInstance->Add_Clone_ToLayer(m_pEffectTrail, m_pGameInstance->Get_LevelID(), TEXT("Layer_Effect"));
+
+	//m_pEffectTrail->Set_Visible(false);
+
 	return S_OK;
 }
 
@@ -46,7 +70,7 @@ void CChidori::Update(_float fTimeDelta)
 {
 	m_fTimeAcc += fTimeDelta;
 
-	if (m_fTimeAcc >= 1.f)
+	if (m_fTimeAcc >= 5.f)
 		m_IsDead = true;
 
 	///* 부모 행렬 적용 */
@@ -63,6 +87,8 @@ void CChidori::Update(_float fTimeDelta)
 
 	/* 컴바인드 매트릭스 던져주면서 자연스럽게 크기도 따라가게 됨. */
 	m_pColliderCom->Update(XMLoadFloat4x4(&m_CombinedWorldMatrix));
+	m_pEffectMain->Set_ParentMatrix(XMMatrixScaling(1.8f, 1.8f, 1.8f) * XMLoadFloat4x4(&m_CombinedWorldMatrix));
+	//m_pEffectTrail->Set_ParentMatrix(XMLoadFloat4x4(&m_CombinedWorldMatrix));
 }
 
 void CChidori::Late_Update(_float fTimeDelta)
@@ -185,4 +211,10 @@ CGameObject* CChidori::Clone(void* pArg)
 void CChidori::Free()
 {
 	__super::Free();
+
+	if(nullptr != m_pEffectMain)
+		m_pEffectMain->Set_Dead(true);
+
+	Safe_Release(m_pEffectMain);
+	//Safe_Release(m_pEffectTrail);
 }
