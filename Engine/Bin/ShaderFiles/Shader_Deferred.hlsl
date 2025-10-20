@@ -196,16 +196,36 @@ PS_OUT_BACKBUFFER PS_MAIN_COMBINED(PS_IN In)
     
     /* -1, 1 -> 0, 0  */
     /* 1, -1 -> 1, 1  */
+   
+/*
+	const unsigned int g_iMaxWidth = 8192;
+	const unsigned int g_iMaxHeight = 4608;
+*/
+
+    int iShadowCount = 0;
     
-    float2 vTexcoord;
+    for (int i = -1; i <= 1; ++i)
+    {
+        for (int j = -1; j <= 1; ++j)
+        {
+            float2 vTexcoord;
     
-    vTexcoord.x = (vPosition.x / vPosition.w) * 0.5f + 0.5f;
-    vTexcoord.y = (vPosition.y / vPosition.w) * -0.5f + 0.5f;
+            vTexcoord.x = (vPosition.x / vPosition.w) * 0.5f + 0.5f;
+            vTexcoord.y = (vPosition.y / vPosition.w) * -0.5f + 0.5f;
     
-    vector vShadowDepth = g_ShadowTexture.Sample(DefaultSampler, vTexcoord);
+            vector vShadowDepth = g_ShadowTexture.Sample(DefaultSampler, vTexcoord + float2(i / (float)8192, j / (float)4608));
+            
+            if (vPosition.w - 0.1f > vShadowDepth.x * 500.0f)
+            {
+                iShadowCount++;
+            }
+        }
+    }
     
-    if (vPosition.w - 0.1f > vShadowDepth.x * 500.0f)
-        Out.vBackBuffer *= 0.5f;
+    float fShadowFactor = saturate(1.0f - (iShadowCount / 9.f) * 0.5f);
+    
+    // 여기서 알맞은 공식 써줘야함
+    Out.vBackBuffer *= fShadowFactor;
    
     
     return Out;

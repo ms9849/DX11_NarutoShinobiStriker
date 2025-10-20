@@ -196,38 +196,37 @@ PS_OUT_BACKBUFFER PS_MAIN_COMBINED(PS_IN In)
     
     /* -1, 1 -> 0, 0  */
     /* 1, -1 -> 1, 1  */
-    
-    //float2 vTexcoord;
-    
-    //vTexcoord.x = (vPosition.x / vPosition.w) * 0.5f + 0.5f;
-    //vTexcoord.y = (vPosition.y / vPosition.w) * -0.5f + 0.5f;
-    
-    //vector vShadowDepth = g_ShadowTexture.Sample(DefaultSampler, vTexcoord);
-    
-    //if (vPosition.w - 0.1f > vShadowDepth.x * 500.0f)
-    //    Out.vBackBuffer *= 0.5f;
-    
-    // PCF soft shadow 계산
-    float shadow = 0.0f;
+   
+/*
+	const unsigned int g_iMaxWidth = 8192;
+	const unsigned int g_iMaxHeight = 4608;
+*/
 
-    for (int y = -1; y <= 1; ++y)
+    int iShadowCount = 0;
+    
+    for (int i = -1; i <= 1; ++i)
     {
-        for (int x = -1; x <= 1; ++x)
+        for (int j = -1; j <= 1; ++j)
         {
             float2 vTexcoord;
     
             vTexcoord.x = (vPosition.x / vPosition.w) * 0.5f + 0.5f;
             vTexcoord.y = (vPosition.y / vPosition.w) * -0.5f + 0.5f;
     
-            vector vShadowDepth = g_ShadowTexture.Sample(DefaultSampler, vTexcoord);
+            vector vShadowDepth = g_ShadowTexture.Sample(DefaultSampler, vTexcoord + float2(i / (float)8192, j / (float)4608));
             
-            if (vPosition.w - 0.1f > vShadowDepth.x * 500.f)
-                shadow += 1.0f;
+            if (vPosition.w - 0.1f > vShadowDepth.x * 500.0f)
+            {
+                iShadowCount++;
+            }
         }
     }
     
-    shadow /= 9.0f; // 3x3 평균
-    Out.vBackBuffer *= 1.0f - 0.5f * shadow; // 그림자 강도 50% 적용
+    float fShadowFactor = saturate(1.0f - (iShadowCount / 9.f) * 0.5f);
+    
+    // 여기서 알맞은 공식 써줘야함
+    Out.vBackBuffer *= fShadowFactor;
+   
     
     return Out;
 }
