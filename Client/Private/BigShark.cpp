@@ -69,7 +69,8 @@ void CBigShark::Late_Update(_float fTimeDelta)
 	CGameManager::GetInstance()->Add_Collider_ToCollision(TEXT("Player_Skill"),
 		COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_BIGSHARK, m_pColliderCom);
 
-	m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+	//m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+	//m_pGameInstance->Add_RenderGroup(RENDER::BLUR, this);
 #ifdef _DEBUG
 	m_pGameInstance->Add_DebugComponent(m_pColliderCom);
 #endif

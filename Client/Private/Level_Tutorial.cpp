@@ -157,7 +157,7 @@ HRESULT CLevel_Tutorial::Ready_Lights()
 	LIGHT_DESC			LightDesc{};
 
 	LightDesc.eType = LIGHT::DIRECTIONAL;
-	LightDesc.vDiffuse = _float4(0.8f, 0.8f, 0.8f, 0.8f);
+	LightDesc.vDiffuse = _float4(0.5f, 0.5f, 0.5f, 0.5f);
 	LightDesc.vAmbient = _float4(0.8f, 0.8f, 0.8f, 1.f);
 	LightDesc.vSpecular = _float4(0.f, 0.f, 0.f, 1.f);
 	LightDesc.vDirection = _float4(1.f, -1.f, 1.f, 0.f);
@@ -166,7 +166,7 @@ HRESULT CLevel_Tutorial::Ready_Lights()
 		return E_FAIL;
 
 	LightDesc.eType = LIGHT::POINT;
-	LightDesc.vDiffuse = _float4(1.f, 0.0f, 0.f, 1.f);
+	LightDesc.vDiffuse = _float4(1.0f, 1.0f, 0.85f, 1.0f);
 	LightDesc.vAmbient = _float4(0.5f, 0.5f, 0.5f, 1.f);
 	LightDesc.vSpecular = LightDesc.vDiffuse;
 	LightDesc.vPosition = _float4(0.f, 5.f, 0.f, 1.f);

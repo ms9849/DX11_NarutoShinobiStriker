@@ -54,6 +54,7 @@ void CParticleObject::Update(_float fTimeDelta)
 void CParticleObject::Late_Update(_float fTimeDelta)
 {
 	m_pGameInstance->Add_RenderGroup(RENDER::NONLIGHT, this);
+	//m_pGameInstance->Add_RenderGroup(RENDER::BLUR, this);
 }
 
 HRESULT CParticleObject::Render()

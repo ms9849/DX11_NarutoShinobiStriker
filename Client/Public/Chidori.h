@@ -22,6 +22,7 @@ private:
 
 public:
 	_bool IsColliderActive();
+	void Set_Visible(_bool bFlag);
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -39,7 +40,6 @@ private:
 	_float			 m_fLifeTime = { 1.2f };
 	_float			 m_fTimeAcc = { 0.f };
 	_bool			 m_IsHit = { false };
-
 private:
 	HRESULT Ready_Components();
 	HRESULT Bind_ShaderResources();

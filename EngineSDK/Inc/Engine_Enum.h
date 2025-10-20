@@ -7,7 +7,7 @@ namespace Engine
 	enum class PROTOTYPE { GAMEOBJECT, COMPONENT };
 	enum class STATE { RIGHT, UP, LOOK, POSITION, END };
 	/* Shadow ∑ª¥ı≈∏∞Ÿ √ﬂ∞°. */
-	enum class RENDER { PRIORITY, SHADOW, NONBLEND, NONLIGHT, BLEND, WORLD_UI, UI, END};
+	enum class RENDER { PRIORITY, SHADOW, NONBLEND, NONLIGHT, BLUR, BLEND, WORLD_UI, UI, END};
 	enum class TEXTURE { PLANE, CUBE, END };
 	enum class MODEL { ANIM, NONANIM, COLLISION, END };
 	enum class RAY { LOCAL, WORLD, CENTER, END };

@@ -82,15 +82,11 @@ CPlayerState* CPlayer_ChidoriAttackState::Update(_float fTimeDelta)
         m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Aerial_Chidori_Run_Loop", 2.f, false, 0.f, true);
     }
 
-    if (ANIM_STATE::ATTACK_END == m_eAnimState && 0.3f <= fAnimProgress)
-    {
-        m_pChidori->Set_Dead(true);
-    }
-
     // IDLE 상태로 돌아가기. 
     if (true == IsAnimFinished && ANIM_STATE::ATTACK_END == m_eAnimState)
     {
         pNextState = CPlayer_IdleState::Create(m_pPlayer);
+        m_pChidori->Set_Visible(false);
     }
     m_fTimeAcc += fTimeDelta;
 

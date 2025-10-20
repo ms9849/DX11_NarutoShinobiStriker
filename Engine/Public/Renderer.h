@@ -57,6 +57,7 @@ private:
 	/* LightAcc에서 연산된 조명들과 디퓨즈를 합성하는 렌더 단계. */
 	void Render_Combined();
 	void Render_NonLight();
+	void Render_Blur();
 	void Render_Blend();
 	void Render_WorldUI();
 	void Render_UI();

@@ -106,7 +106,7 @@ void CRasengan::Late_Update(_float fTimeDelta)
     CGameManager::GetInstance()->Add_Collider_ToCollision(TEXT("Player_Skill"), 
         COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENGAN, m_pColliderCom);
 
-    m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+    //m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 #ifdef _DEBUG
     m_pGameInstance->Add_DebugComponent(m_pColliderCom);
 #endif

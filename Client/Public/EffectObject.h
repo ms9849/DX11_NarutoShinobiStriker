@@ -91,7 +91,7 @@ public:
 private:
 	CEffectModel*		m_pModelCom = { nullptr };
 	/* 모델 이름 저장.. */
-	
+	_bool				m_IsBlur = { false };
 	_wstring			m_strModelName = {};
 
 	CShader*			m_pShaderCom = { nullptr };

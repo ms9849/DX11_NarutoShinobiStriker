@@ -389,7 +389,7 @@ technique11 DefaultTechnique
         PixelShader = compile ps_5_0 PS_DISSOLVE();
     }
 
-    pass DissolveImmediate__CULL //8 
+    pass DissolveImmediate_CULL //8 
     {
         SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_Default, 0);

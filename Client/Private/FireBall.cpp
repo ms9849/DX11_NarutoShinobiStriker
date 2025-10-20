@@ -71,7 +71,7 @@ void CFireBall::Late_Update(_float fTimeDelta)
         CGameManager::GetInstance()->Add_Collider_ToCollision(TEXT("Monster_Skill"),
             COLLIDER_HANDLE_ID::ENEMY_JETSU_WOODHAND, m_pColliderCom);
 
-    m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+    //m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 #ifdef _DEBUG
     m_pGameInstance->Add_DebugComponent(m_pColliderCom);
 #endif

@@ -22,6 +22,11 @@ _bool CChidori::IsColliderActive()
 	return m_pColliderCom->Get_Active();
 }
 
+void CChidori::Set_Visible(_bool bFlag)
+{
+	m_pEffectMain->Set_Visible(bFlag);
+}
+
 HRESULT CChidori::Initialize_Prototype()
 {
 	return S_OK;
@@ -87,8 +92,7 @@ void CChidori::Update(_float fTimeDelta)
 
 	/* 컴바인드 매트릭스 던져주면서 자연스럽게 크기도 따라가게 됨. */
 	m_pColliderCom->Update(XMLoadFloat4x4(&m_CombinedWorldMatrix));
-	m_pEffectMain->Set_ParentMatrix(XMMatrixScaling(1.8f, 1.8f, 1.8f) * XMLoadFloat4x4(&m_CombinedWorldMatrix));
-	//m_pEffectTrail->Set_ParentMatrix(XMLoadFloat4x4(&m_CombinedWorldMatrix));
+	m_pEffectMain->Set_ParentMatrix(XMMatrixScaling(1.9f, 1.9f, 1.9f) * XMLoadFloat4x4(&m_CombinedWorldMatrix));
 }
 
 void CChidori::Late_Update(_float fTimeDelta)
@@ -96,9 +100,9 @@ void CChidori::Late_Update(_float fTimeDelta)
 	CGameManager::GetInstance()->Add_Collider_ToCollision(TEXT("Player_Skill"),
 		COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_CHIDORI, m_pColliderCom);
 
-	m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+	//m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 #ifdef _DEBUG
-	m_pGameInstance->Add_DebugComponent(m_pColliderCom);
+	//m_pGameInstance->Add_DebugComponent(m_pColliderCom);
 #endif
 }
 

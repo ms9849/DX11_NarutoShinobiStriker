@@ -200,7 +200,7 @@ void CRasenShuriken::Late_Update(_float fTimeDelta)
             COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENSHURIKEN_END, m_pColliderCom);
     }
 
-    m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+    //m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 #ifdef _DEBUG
     m_pGameInstance->Add_DebugComponent(m_pColliderCom);
 #endif
