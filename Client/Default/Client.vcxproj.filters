@@ -610,6 +610,9 @@
     <Filter Include="02. GameObjects\000. Skills\Chidori">
       <UniqueIdentifier>{abc23ad8-dc36-4b53-9e63-d010f6057a4f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\01. BackGround\00. SkyBox\SkyCube">
+      <UniqueIdentifier>{426099c5-4ddf-4730-8419-505f94629cf8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1185,6 +1188,9 @@
     <ClInclude Include="..\Public\EffectObject.h">
       <Filter>02. GameObjects\03. Effect</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\SkyCube.h">
+      <Filter>02. GameObjects\01. BackGround\00. SkyBox\SkyCube</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1758,6 +1764,9 @@
     <ClCompile Include="..\Private\EffectObject.cpp">
       <Filter>02. GameObjects\03. Effect</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\SkyCube.cpp">
+      <Filter>02. GameObjects\01. BackGround\00. SkyBox\SkyCube</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPosTex.hlsl">
@@ -1782,6 +1791,9 @@
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxEffect.hlsl">
+      <Filter>97. ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxCube.hlsl">
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

@@ -246,6 +246,7 @@
     <ClInclude Include="..\Public\Player_RopeActionState.h" />
     <ClInclude Include="..\Public\Potion.h" />
     <ClInclude Include="..\Public\Rope.h" />
+    <ClInclude Include="..\Public\SkyCube.h" />
     <ClInclude Include="..\Public\Trigger_Manager.h" />
     <ClInclude Include="..\Public\GameManager.h" />
     <ClInclude Include="..\Public\Gate.h" />
@@ -438,6 +439,7 @@
     <ClCompile Include="..\Private\Player_RopeActionState.cpp" />
     <ClCompile Include="..\Private\Potion.cpp" />
     <ClCompile Include="..\Private\Rope.cpp" />
+    <ClCompile Include="..\Private\SkyCube.cpp" />
     <ClCompile Include="..\Private\Trigger_Manager.cpp" />
     <ClCompile Include="..\Private\GameManager.cpp" />
     <ClCompile Include="..\Private\Gate.cpp" />
@@ -544,6 +546,7 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxCube.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxEffect.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
