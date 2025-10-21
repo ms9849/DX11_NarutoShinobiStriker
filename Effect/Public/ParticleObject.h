@@ -23,8 +23,7 @@ NS_BEGIN(EffectTool)
 class CParticleObject final : public CGameObject
 {
 public:
-	/* 셰이더 순서와 해당 enum의 순서는 맞춰줘야 한다. */
-	enum class PARTICLE_TYPE { EXPLOSION, DROP, END };
+	enum class PARTICLE_TYPE { EXPLOSION, DROP, FLOAT_DROP, EXPLOSION_FLOAT, EXPLOSION_NON_UV, END };
 
 	typedef struct tagParticleDesc : public GAMEOBJECT_DESC {
 		/* 파티클 시스템 하나당 사용되는 변수 */

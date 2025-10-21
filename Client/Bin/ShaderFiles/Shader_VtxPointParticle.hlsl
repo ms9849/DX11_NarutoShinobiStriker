@@ -77,13 +77,16 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> OutStream)
 {
     GS_OUT Out[4];
     
-    float3 vLook = normalize(In[0].vDirection.xyz);
-    float3 vRight = normalize(cross(float3(0.f, 1.f, 0.f), vLook)) * In[0].fSize * 2.f;
+    /* 수명따라 줄어들게 ㄱㄱ*/
+    float fScaleFactor = (1 - In[0].vLifeTime.x / In[0].vLifeTime.y);
     
-    float3 vUp = normalize(cross(vLook, vRight)) * In[0].fSize * 0.5f;
+    float3 vLook = normalize(In[0].vDirection.xyz);
+    float3 vRight = normalize(cross(float3(0.f, 1.f, 0.f), vLook)) * In[0].fSize * fScaleFactor * 2.f;
+    
+    float3 vUp = normalize(cross(vLook, vRight)) * In[0].fSize * fScaleFactor * 0.5f;
    
     vLook = vRight;
-    vRight = normalize(cross(vUp, vLook)) * In[0].fSize * 2.f;
+    vRight = normalize(cross(vUp, vLook)) * In[0].fSize * fScaleFactor * 2.f;
     
     matrix matVP = mul(g_ViewMatrix, g_ProjMatrix);
     
@@ -103,6 +106,88 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> OutStream)
     Out[3].vTexcoord = float2(0.f, 1.f);
     Out[3].vLifeTime = In[0].vLifeTime;
     
+    
+    OutStream.Append(Out[0]);
+    OutStream.Append(Out[1]);
+    OutStream.Append(Out[2]);
+    OutStream.RestartStrip();
+    
+    OutStream.Append(Out[0]);
+    OutStream.Append(Out[2]);
+    OutStream.Append(Out[3]);
+    OutStream.RestartStrip();
+}
+
+[maxvertexcount(6)]
+void GS_MAIN_NONUV(point GS_IN In[1], inout TriangleStream<GS_OUT> OutStream)
+{
+    GS_OUT Out[4];
+    
+    float3 vLook = normalize(In[0].vDirection.xyz);
+    float3 vRight = normalize(cross(float3(0.f, 1.f, 0.f), vLook)) * In[0].fSize;
+    
+    float3 vUp = normalize(cross(vLook, vRight)) * In[0].fSize;
+   
+    vLook = vRight;
+    vRight = normalize(cross(vUp, vLook)) * In[0].fSize ;
+    
+    matrix matVP = mul(g_ViewMatrix, g_ProjMatrix);
+    
+    Out[0].vPosition = mul(float4(In[0].vPosition.xyz + vRight + vUp, 1.f), matVP);
+    Out[0].vTexcoord = float2(0.f, 0.f);
+    Out[0].vLifeTime = In[0].vLifeTime;
+    
+    Out[1].vPosition = mul(float4(In[0].vPosition.xyz - vRight + vUp, 1.f), matVP);
+    Out[1].vTexcoord = float2(1.f, 0.f);
+    Out[1].vLifeTime = In[0].vLifeTime;
+    
+    Out[2].vPosition = mul(float4(In[0].vPosition.xyz - vRight - vUp, 1.f), matVP);
+    Out[2].vTexcoord = float2(1.f, 1.f);
+    Out[2].vLifeTime = In[0].vLifeTime;
+    
+    Out[3].vPosition = mul(float4(In[0].vPosition.xyz + vRight - vUp, 1.f), matVP);
+    Out[3].vTexcoord = float2(0.f, 1.f);
+    Out[3].vLifeTime = In[0].vLifeTime;
+    
+    
+    OutStream.Append(Out[0]);
+    OutStream.Append(Out[1]);
+    OutStream.Append(Out[2]);
+    OutStream.RestartStrip();
+    
+    OutStream.Append(Out[0]);
+    OutStream.Append(Out[2]);
+    OutStream.Append(Out[3]);
+    OutStream.RestartStrip();
+}
+
+
+[maxvertexcount(6)]
+void GS_BillBoard(point GS_IN In[1], inout TriangleStream<GS_OUT> OutStream)
+{
+    GS_OUT Out[4];
+    
+    float3 vLook = (g_vCamPosition - In[0].vPosition).xyz;
+    float3 vRight = normalize(cross(float3(0.f, 1.f, 0.f), vLook)) * In[0].fSize * 0.5f;
+    float3 vUp = normalize(cross(vLook, vRight)) * In[0].fSize * 0.5f;
+    
+    matrix matVP = mul(g_ViewMatrix, g_ProjMatrix);
+    
+    Out[0].vPosition = mul(float4(In[0].vPosition.xyz + vRight + vUp, 1.f), matVP);
+    Out[0].vTexcoord = float2(0.f, 0.f);
+    Out[0].vLifeTime = In[0].vLifeTime;
+    
+    Out[1].vPosition = mul(float4(In[0].vPosition.xyz - vRight + vUp, 1.f), matVP);
+    Out[1].vTexcoord = float2(1.f, 0.f);
+    Out[1].vLifeTime = In[0].vLifeTime;
+    
+    Out[2].vPosition = mul(float4(In[0].vPosition.xyz - vRight - vUp, 1.f), matVP);
+    Out[2].vTexcoord = float2(1.f, 1.f);
+    Out[2].vLifeTime = In[0].vLifeTime;
+    
+    Out[3].vPosition = mul(float4(In[0].vPosition.xyz + vRight - vUp, 1.f), matVP);
+    Out[3].vTexcoord = float2(0.f, 1.f);
+    Out[3].vLifeTime = In[0].vLifeTime;
     
     OutStream.Append(Out[0]);
     OutStream.Append(Out[1]);
@@ -140,10 +225,6 @@ PS_OUT PS_MAIN(PS_IN In)
     Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexcoord);
     Out.vColor *= g_MaskTexture.Sample(DefaultSampler, In.vTexcoord).r;
     
-    /* 텍스 쿠드 둘 중 하나라도 크다면 */
-    if (In.vTexcoord.x > saturate(1 - In.vLifeTime.x / In.vLifeTime.y) || In.vTexcoord.x < saturate(In.vLifeTime.x / In.vLifeTime.y))
-        discard;
-    
     if (Out.vColor.a >= 0.6f)
         Out.vColor.rgba = g_vMainColor;
     else
@@ -159,27 +240,49 @@ PS_OUT PS_FadeOut(PS_IN In)
     Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexcoord);
     Out.vColor *= g_MaskTexture.Sample(DefaultSampler, In.vTexcoord).r;
     
-    if (Out.vColor.r < 0.8f)
-        discard;
-
-    /* 텍스 쿠드 둘 중 하나라도 크다면 */
-    if (In.vTexcoord.x > saturate(1 - In.vLifeTime.x / In.vLifeTime.y) || In.vTexcoord.x < saturate(In.vLifeTime.x / In.vLifeTime.y))
-        discard;
-
     if(Out.vColor.a >= 0.6f)
         Out.vColor.rgb = g_vMainColor;
     else
         Out.vColor.rgb = g_vSubColor;
 
-    Out.vColor.a *= In.vLifeTime.x / In.vLifeTime.y;
+    Out.vColor.a *= (1 - In.vLifeTime.x / In.vLifeTime.y);
     
     return Out;
 }
 
+PS_OUT PS_FloatAndDrop(PS_IN In)
+{
+    PS_OUT Out;
+    
+    // diffuse 샘플
+    float4 Diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexcoord);
+    // mask 샘플 (같은 UV 사용)
+    float4 MaskSample = g_MaskTexture.Sample(DefaultSampler, In.vTexcoord);
+    float NoiseValue = g_NoiseTexture.Sample(DefaultSampler, In.vTexcoord).r;
+   
+    float fAlpha = 1.0f;
+    float DissolveThreshold = (In.vLifeTime.x / In.vLifeTime.y);
+    fAlpha = smoothstep(DissolveThreshold - 0.1f, DissolveThreshold + 0.1f, NoiseValue);
+    Diffuse.a *= fAlpha;
+
+    /* 마스킹 수행 */
+    Diffuse.a *= MaskSample.r;
+
+    if (Diffuse.a < 0.1f)
+        Diffuse.a = 0;
+    else if (Diffuse.a < 0.6f)
+        Diffuse.rgb = g_vMainColor.xyz;
+    else
+        Diffuse.rgb = g_vSubColor.xyz;
+    
+    Out.vColor = Diffuse;
+ 
+    return Out;
+}
 
 technique11 DefaultTechnique
 {
-    pass Default
+    pass Explosion
     {
         SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_Default, 0);
@@ -189,13 +292,43 @@ technique11 DefaultTechnique
         PixelShader = compile ps_5_0 PS_MAIN();
     }
 
-    pass FadeOut
+    pass Drop
     {
         SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_Default, 0);
         SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
         VertexShader = compile vs_5_0 VS_MAIN();
-        GeometryShader = compile gs_5_0 GS_MAIN();
+        GeometryShader = compile gs_5_0 GS_BillBoard();
+        PixelShader = compile ps_5_0 PS_MAIN();
+    }
+
+    pass FloatAndDrop
+    {
+        SetRasterizerState(RS_Cull_None);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_BillBoard();
+        PixelShader = compile ps_5_0 PS_FloatAndDrop();
+    }
+
+    pass ExplosionFloat
+    {
+        SetRasterizerState(RS_Cull_None);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_BillBoard();
+        PixelShader = compile ps_5_0 PS_MAIN();
+    }
+
+    pass ExplosionNonUV
+    {
+        SetRasterizerState(RS_Cull_None);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_BillBoard();
         PixelShader = compile ps_5_0 PS_FadeOut();
     }
 }

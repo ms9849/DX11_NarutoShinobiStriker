@@ -5,6 +5,7 @@
 
 #include "EffectContainer.h"
 #include "EffectObject.h"
+#include "ParticleObject.h"
 
 CBigShark::CBigShark(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 	: CSkill { pDevice, pContext, eObjectID }
@@ -44,6 +45,22 @@ HRESULT CBigShark::Initialize(void* pArg)
 	Safe_AddRef(m_pEffectMain);
 	m_pGameInstance->Add_Clone_ToLayer(m_pEffectMain, m_pGameInstance->Get_LevelID(), TEXT("Layer_Effect"));
 
+	CParticleObject::PARTICLE_LOAD_DESC ParticleDesc;
+	ParticleDesc.eType = CParticleObject::PARTICLE_TYPE::FLOAT_DROP;
+	ParticleDesc.strParticlePath = TEXT("../Bin/Resources/Particle/Shark_1_Particle.bin");
+
+	m_pParticleMain = static_cast<CParticleObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"),
+		&ParticleDesc));
+	Safe_AddRef(m_pParticleMain);
+	m_pGameInstance->Add_Clone_ToLayer(m_pParticleMain, m_pGameInstance->Get_LevelID(), TEXT("Layer_Particle"));
+
+	ParticleDesc.strParticlePath = TEXT("../Bin/Resources/Particle/Shark_2_Particle.bin");
+
+	m_pParticleSub = static_cast<CParticleObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"),
+		&ParticleDesc));
+	Safe_AddRef(m_pParticleSub);
+	m_pGameInstance->Add_Clone_ToLayer(m_pParticleSub, m_pGameInstance->Get_LevelID(), TEXT("Layer_Particle"));
+
 	return S_OK;
 }
 
@@ -62,6 +79,10 @@ void CBigShark::Update(_float fTimeDelta)
 
 	m_pColliderCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
 	m_pEffectMain->Set_ParentMatrix(XMMatrixTranslation(0.f, 0.02f, 0.f) * XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
+
+
+	m_pParticleMain->Set_Position(m_pTransformCom->Get_State(STATE::POSITION));
+	m_pParticleSub->Set_Position(m_pTransformCom->Get_State(STATE::POSITION));
 }
 
 void CBigShark::Late_Update(_float fTimeDelta)
@@ -172,5 +193,13 @@ void CBigShark::Free()
 	if (nullptr != m_pEffectMain)
 		m_pEffectMain->Set_Dead(true);
 
+	if (nullptr != m_pParticleMain)
+		m_pParticleMain->Set_Dead(true);
+
+	if (nullptr != m_pParticleSub)
+		m_pParticleSub->Set_Dead(true);
+
 	Safe_Release(m_pEffectMain); 
+	Safe_Release(m_pParticleMain);
+	Safe_Release(m_pParticleSub);
 }

@@ -580,15 +580,6 @@
     <Filter Include="02. GameObjects\03. Effect\01. Particle\Explosion">
       <UniqueIdentifier>{a64d9e11-17c5-4744-abf8-c20df6937be1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\03. Effect\02. etc">
-      <UniqueIdentifier>{8478a88b-08d2-4d7e-a09b-a2552b6fa048}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\03. Effect\02. etc\CoolDown">
-      <UniqueIdentifier>{05515ed2-36d4-4a33-9575-5d1c93aacfea}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\03. Effect\02. etc\Icon">
-      <UniqueIdentifier>{fe96f895-9657-4ec1-947b-d883e05b6788}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects\000. Skills">
       <UniqueIdentifier>{f9de02e3-299a-48d4-ba2d-b915b998d667}</UniqueIdentifier>
     </Filter>
@@ -612,6 +603,15 @@
     </Filter>
     <Filter Include="02. GameObjects\01. BackGround\00. SkyBox\SkyCube">
       <UniqueIdentifier>{426099c5-4ddf-4730-8419-505f94629cf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\03. Effect\02. Sprite">
+      <UniqueIdentifier>{8478a88b-08d2-4d7e-a09b-a2552b6fa048}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\03. Effect\02. Sprite\CoolDown">
+      <UniqueIdentifier>{05515ed2-36d4-4a33-9575-5d1c93aacfea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\03. Effect\02. Sprite\Icon">
+      <UniqueIdentifier>{fe96f895-9657-4ec1-947b-d883e05b6788}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -987,9 +987,6 @@
     <ClInclude Include="..\Public\NPCTalkCamera.h">
       <Filter>02. GameObjects\02. Camera\NPCTalk</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Explosion.h">
-      <Filter>02. GameObjects\03. Effect\01. Particle\Explosion</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\EventObject.h">
       <Filter>02. GameObjects\04. Event</Filter>
     </ClInclude>
@@ -1162,10 +1159,10 @@
       <Filter>02. GameObjects\09. Potion</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Effect_CoolDown.h">
-      <Filter>02. GameObjects\03. Effect\02. etc\CoolDown</Filter>
+      <Filter>02. GameObjects\03. Effect\02. Sprite\CoolDown</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Effect_Icon.h">
-      <Filter>02. GameObjects\03. Effect\02. etc\Icon</Filter>
+      <Filter>02. GameObjects\03. Effect\02. Sprite\Icon</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\OutfitBackGround.h">
       <Filter>02. GameObjects\01. BackGround\01. OutfitBackGround</Filter>
@@ -1566,9 +1563,6 @@
     <ClCompile Include="..\Private\NPCTalkCamera.cpp">
       <Filter>02. GameObjects\02. Camera\NPCTalk</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Explosion.cpp">
-      <Filter>02. GameObjects\03. Effect\01. Particle\Explosion</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\EventObject.cpp">
       <Filter>02. GameObjects\04. Event</Filter>
     </ClCompile>
@@ -1738,10 +1732,10 @@
       <Filter>02. GameObjects\09. Potion</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Effect_CoolDown.cpp">
-      <Filter>02. GameObjects\03. Effect\02. etc\CoolDown</Filter>
+      <Filter>02. GameObjects\03. Effect\02. Sprite\CoolDown</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Effect_Icon.cpp">
-      <Filter>02. GameObjects\03. Effect\02. etc\Icon</Filter>
+      <Filter>02. GameObjects\03. Effect\02. Sprite\Icon</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\OutfitBackGround.cpp">
       <Filter>02. GameObjects\01. BackGround\01. OutfitBackGround</Filter>

@@ -197,6 +197,28 @@ void CParticle_GUI::Particle_GUI()
 				}
 			}
 
+			ImGui::Dummy(ImVec2(0.f, 10.f));
+			ImGui::Separator();
+			ImGui::Dummy(ImVec2(0.f, 10.f));
+
+			ImGui::InputText("Save Path", m_szParticleName, MAX_PATH);
+
+			if (ImGui::Button("Save Container"))
+			{
+				Save_ToBinary();
+			}
+
+			ImGui::Dummy(ImVec2(0.f, 10.f));
+			ImGui::Separator();
+			ImGui::Dummy(ImVec2(0.f, 10.f));
+
+			ImGui::InputText("Load Path", m_szParticleLoadPath, MAX_PATH);
+
+			if (ImGui::Button("Load Container"))
+			{
+				Load_FromBinary();
+			}
+
 			ImGui::EndTabItem();
 		}
 
@@ -257,6 +279,112 @@ void CParticle_GUI::Particle_GUI()
 	}
 
 	ImGui::End();
+}
+
+HRESULT CParticle_GUI::Save_ToBinary()
+{
+	//_char szEffectPath[MAX_PATH] = {};
+	//_tchar szPerfectModelName[MAX_PATH] = {};
+
+	//strcpy_s(szEffectPath, pEffectName);
+
+	///* ../Bin/Resources/Fiona_eff.bin*/
+	//strcat_s(szEffectPath, "_eff.bin");
+	///*  char to tchar */
+	//MultiByteToWideChar(CP_ACP, 0, szEffectPath, (_int)strlen(szEffectPath), szPerfectModelName, MAX_PATH);
+
+
+	_char szParticlePath[MAX_PATH] = {};
+	_tchar szPerfectParticleName[MAX_PATH] = {};
+	strcpy_s(szParticlePath, m_szParticleName);
+
+	/* ../Bin/Resources/Fiona_Particle.bin*/
+	strcat_s(szParticlePath, "_Particle.bin");
+	/*  char to tchar */
+	MultiByteToWideChar(CP_ACP, 0, szParticlePath, (_int)strlen(szParticlePath), szPerfectParticleName, MAX_PATH);
+
+	DWORD	dwByte(0);
+	HANDLE hHandle = CreateFile(szPerfectParticleName,
+		GENERIC_WRITE,  // 파일 용도(GENERIC_WRITE : 쓰기(저장), GENERIC_READ : 읽기(불러오기))
+		NULL,			// 공유 방식(NULL인 경우 공유하지 않음)
+		NULL,			// 보안 설정(NULL인 경우 기본값으로 설정)
+		CREATE_ALWAYS,	// 생성 방식(CREATE_ALWAYS : 쓰기 전용, OPEN_EXISTING : 읽기 전용)
+		FILE_ATTRIBUTE_NORMAL, // 파일 속성(숨김, 읽기 전용 파일 등) : 아무런 속성이 없는 일반 형식
+		NULL);	// 생성될 파일의 속성을 제공할 템플릿 파일(안쓸것이기 때문에 NULL)
+
+	if (hHandle == INVALID_HANDLE_VALUE)
+		return E_FAIL;
+
+
+	CParticleObject::PARTICLE_OBJECT_DESC Desc = {};
+	Desc.eType = (static_cast<CParticleObject::PARTICLE_TYPE>(m_iType));
+	Desc.isLoop = m_isLoop;
+	Desc.iNumInstance = m_iNumInstance;
+	Desc.vCenter = m_vCenter;
+	Desc.vRange = m_vRange;
+	Desc.vPivot = m_vPivot;
+	Desc.vSize = m_vSize;
+	Desc.vSpeed = m_vSpeed;
+	Desc.vRotation = m_vRotation;
+	Desc.vLifeTime = m_vLifeTime;
+	Desc.vMainColor = m_vMainColor;
+	Desc.vSubColor = m_vSubColor;
+	Desc.fFrameTime = m_fFrameTime;
+	Desc.iShaderPassIdx = m_iShaderPassIdx;
+	Desc.iNoiseTextureNum = m_iNoiseTextureNum;
+	Desc.iDiffuseTextureNum = m_iTextureNum;
+	Desc.iMaskTextureNum = m_iMaskTextureNum;
+
+	WriteFile(hHandle, &Desc, sizeof(CParticleObject::PARTICLE_OBJECT_DESC), &dwByte, nullptr);
+
+	CloseHandle(hHandle);
+
+	return S_OK;
+}
+
+HRESULT CParticle_GUI::Load_FromBinary()
+{
+	_tchar m_strParticleLoadPath[MAX_PATH] = {};
+	MultiByteToWideChar(CP_ACP, 0, m_szParticleLoadPath, (_int)strlen(m_szParticleLoadPath), m_strParticleLoadPath, MAX_PATH);
+
+	DWORD	dwByte(0);
+	HANDLE hHandle = CreateFile(m_strParticleLoadPath,
+		GENERIC_READ,  // 파일 용도(GENERIC_WRITE : 쓰기(저장), GENERIC_READ : 읽기(불러오기))
+		FILE_SHARE_READ,			// 공유 방식(NULL인 경우 공유하지 않음)
+		NULL,			// 보안 설정(NULL인 경우 기본값으로 설정)
+		OPEN_EXISTING,	// 생성 방식(CREATE_ALWAYS : 쓰기 전용, OPEN_EXISTING : 읽기 전용)
+		FILE_ATTRIBUTE_NORMAL, // 파일 속성(숨김, 읽기 전용 파일 등) : 아무런 속성이 없는 일반 형식
+		NULL);	// 생성될 파일의 속성을 제공할 템플릿 파일(안쓸것이기 때문에 NULL)
+
+	if (hHandle == INVALID_HANDLE_VALUE)
+		return E_FAIL;
+
+	CParticleObject::PARTICLE_OBJECT_DESC Desc = {};
+
+	ReadFile(hHandle, &Desc, sizeof(CParticleObject::PARTICLE_OBJECT_DESC), &dwByte, nullptr);
+
+
+	m_isLoop = Desc.isLoop;
+	m_iType = static_cast<_int>(Desc.eType);
+	m_iNumInstance = Desc.iNumInstance;
+	m_vCenter = Desc.vCenter;
+	m_vRange = Desc.vRange;
+	m_vPivot = Desc.vPivot;
+	m_vSize = Desc.vSize;
+	m_vSpeed = Desc.vSpeed;
+	m_vRotation = Desc.vRotation;
+	m_vLifeTime = Desc.vLifeTime;
+	m_vMainColor = Desc.vMainColor;
+	m_vSubColor = Desc.vSubColor;
+	m_fFrameTime = Desc.fFrameTime;
+	m_iShaderPassIdx = Desc.iShaderPassIdx;
+	m_iNoiseTextureNum = Desc.iNoiseTextureNum;
+	m_iTextureNum = Desc.iDiffuseTextureNum;
+	m_iMaskTextureNum = Desc.iMaskTextureNum;
+
+	CloseHandle(hHandle);
+
+	return S_OK;
 }
 
 CParticle_GUI* CParticle_GUI::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

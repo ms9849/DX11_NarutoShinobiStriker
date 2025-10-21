@@ -5,6 +5,7 @@
 #include "GameInstance.h"
 #include "GameManager.h"
 
+#include "ParticleObject.h"
 /* 전이 가능한 상태들 */
 #pragma region TRANSFER_STATE
 
@@ -79,6 +80,14 @@ CPlayerState* CPlayer_RasenganState::Update(_float fTimeDelta)
     {
         m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Rasengun_Attack_Lv1_End", 1.f, false);
         m_eAnimState = ANIM_STATE::ATTACK_END;
+
+        CParticleObject::PARTICLE_LOAD_DESC Desc;
+        Desc.strParticlePath = TEXT("../Bin/Resources/Particle/RasenganHit_Particle.bin");
+        Desc.eType = CParticleObject::PARTICLE_TYPE::EXPLOSION_NON_UV;
+        XMStoreFloat3(&Desc.vPosition, m_pGameManager->Get_PlayerPtr()->Get_Transform()->Get_State(STATE::POSITION));
+
+        m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
+            TEXT("Layer_Particle"), &Desc);
     }
 
 

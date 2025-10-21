@@ -33,7 +33,7 @@ public:
 	virtual HRESULT Render() override;
 
 private:
-	/* ¸â¹ö º¯¼öµé */
+	class CParticleObject* m_pParticleMain = { nullptr };
 	class CEffectContainer* m_pEffectMain = { nullptr };
 	const _float4x4* m_pSocketMatrix;
 	_float4x4		 m_CombinedWorldMatrix = {};

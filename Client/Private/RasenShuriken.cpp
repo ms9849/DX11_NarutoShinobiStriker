@@ -6,6 +6,7 @@
 
 #include "EffectObject.h"
 #include "EffectContainer.h"
+#include "ParticleObject.h"
 
 CRasenShuriken::CRasenShuriken(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CSkill { pDevice, pContext, eObjectID }
@@ -99,6 +100,15 @@ void CRasenShuriken::Update(_float fTimeDelta)
     {
         m_IsDead = true;
         m_pEffectExplosion->Set_Dead(true);
+
+        /* 여기서 폭발 파티클 추가 */
+        CParticleObject::PARTICLE_LOAD_DESC Desc;
+        Desc.strParticlePath = TEXT("../Bin/Resources/Particle/RasenShurikenExplosion_Particle.bin");
+        Desc.eType = CParticleObject::PARTICLE_TYPE::EXPLOSION_NON_UV;
+        XMStoreFloat3(&Desc.vPosition, m_pTransformCom->Get_State(STATE::POSITION));
+
+        m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
+            TEXT("Layer_Particle"), &Desc);
     }
 
     if (false == m_pColliderCom->Get_Active() && true == m_isThrowing)

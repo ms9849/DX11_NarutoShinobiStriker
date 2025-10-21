@@ -44,12 +44,8 @@
 #pragma endregion
 
 #include "Effect_CoolDown.h"
-#include "Snow.h"
-#include "Explosion.h"
 #include "Collider.h"
 #include "GameManager.h"
-
-
 
 /* 테스트 브랜치용 주석 */
 CMainApp::CMainApp()	
@@ -83,6 +79,9 @@ HRESULT CMainApp::Initialize()
 		return E_FAIL;
 
 	if(FAILED((Ready_Effects())))
+		return E_FAIL;
+
+	if (FAILED(Ready_Particles()))
 		return E_FAIL;
 
 	if (FAILED(Start_Level(LEVEL::LOGO)))
@@ -164,11 +163,6 @@ HRESULT CMainApp::Ready_Prototypes()
 	/* For.Prototype_GameObject_MonsterSpawner*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_MonsterSpawner"),
 		CTriggerBox::Create(m_pDevice, m_pContext, OBJECTID::MONSTER_SPAWNER))))
-		return E_FAIL;
-
-	/* For.Prototype_GameObject_ParticleObject */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"),
-		CParticleObject::Create(m_pDevice, m_pContext, OBJECTID::PARTICLE))))
 		return E_FAIL;
 
 #pragma endregion
@@ -390,22 +384,6 @@ HRESULT CMainApp::Ready_Prototypes()
 		CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	/* For.Prototype_Component_VIBuffer_Particle_Explosion */
-	CVIBuffer_Point_Instance::POINT_INSTANCE_DESC		ExplosionDesc{};
-
-	ExplosionDesc.iNumInstance = 300;
-	ExplosionDesc.vCenter = _float3(0.0f, 0.f, 0.0f);
-	ExplosionDesc.vPivot = _float3(0.f, 0.f, 0.f);
-	ExplosionDesc.vRange = _float3(2.f, 2.f, 2.f);
-	ExplosionDesc.vSize = _float2(0.2f, 0.6f);
-	ExplosionDesc.vLifeTime = _float2(3.f, 7.f);
-	ExplosionDesc.vSpeed = _float2(2.f, 5.f);
-	ExplosionDesc.isLoop = true;
-
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_VIBuffer_Particle_Explosion"),
-		CVIBuffer_Point_Instance::Create(m_pDevice, m_pContext, &ExplosionDesc))))
-		return E_FAIL;
-
 	/* For.Prototype_Component_Collider_Sphere */ 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_Sphere"),
 		CCollider::Create(m_pDevice, m_pContext, COLLIDER::SPHERE))))
@@ -557,13 +535,6 @@ HRESULT CMainApp::Ready_Prototypes()
 		return E_FAIL;
 
 #pragma endregion
-	
-#pragma region PARTICLE 
-	/* For.Prototype_GameObject_Explosion */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Explosion"),
-		CExplosion::Create(m_pDevice, m_pContext, OBJECTID::EXPLOSION))))
-		return E_FAIL;
-#pragma endregion
 
 #pragma region PLAYER
 	/* For.Prototype_Component_Model_Upper_Player */
@@ -619,7 +590,7 @@ HRESULT CMainApp::Ready_Effects()
 #pragma region MASK
 	/* For.Prototype_Component_Texture_Effect_Mask */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Effect_Mask"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Mask/Mask%d.png"), 96))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Mask/Mask%d.png"), 102))))
 		return E_FAIL;
 #pragma endregion
 
@@ -661,11 +632,22 @@ HRESULT CMainApp::Ready_Effects()
 		CEffectObject::Create(m_pDevice, m_pContext, OBJECTID::EFFECTOBJECT))))
 		return E_FAIL;
 
-	/* 이미 위에서 로딩중 */
-	///* For.Prototype_GameObject_ParticleObject */
-	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"),
-	//	CParticleObject::Create(m_pDevice, m_pContext, OBJECTID::PARTICLE))))
-	//	return E_FAIL;
+	return S_OK;
+}
+
+HRESULT CMainApp::Ready_Particles()
+{
+	/* For.Prototype_Component_Texture_Particle */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Particle"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Particle/Particle%d.png"), 3))))
+		return E_FAIL;
+
+	/* 파티클 원형 생성 */
+	/* For.Prototype_GameObject_ParticleObject */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"),
+		CParticleObject::Create(m_pDevice, m_pContext, OBJECTID::PARTICLE))))
+		return E_FAIL;
+
 
 	return S_OK;
 }

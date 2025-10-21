@@ -40,12 +40,16 @@ public:
 public:
 	virtual void Drop(_float fTimeDelta);
 	virtual void Explosion(_float fTimeDelta);
+	virtual void FloatAndDrop(_float fTimeDelta);
+	virtual void ExplosionAndFloat(_float fTimeDelta);
 
 private:
 	VTX_INSTANCE_PARTICLE* m_pInstanceVertices = { nullptr };
 
+	_float  m_fTimeAcc = { 0.f };
 	_float3 m_vPivot = {};
 	_float* m_pSpeeds = { nullptr };
+	_float* m_pTimeAccs = { nullptr };
 	_bool	m_IsLoop = { false };
 	_bool   m_IsDead = { false };
 

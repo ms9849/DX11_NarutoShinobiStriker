@@ -83,10 +83,15 @@ CPlayerState* CPlayer_ChidoriAttackState::Update(_float fTimeDelta)
     }
 
     // IDLE 상태로 돌아가기. 
+    if (fAnimProgress >= 0.75f && ANIM_STATE::ATTACK_END == m_eAnimState)
+    {
+        m_pChidori->Set_Visible(false);
+    }
+
+    // IDLE 상태로 돌아가기. 
     if (true == IsAnimFinished && ANIM_STATE::ATTACK_END == m_eAnimState)
     {
         pNextState = CPlayer_IdleState::Create(m_pPlayer);
-        m_pChidori->Set_Visible(false);
     }
     m_fTimeAcc += fTimeDelta;
 

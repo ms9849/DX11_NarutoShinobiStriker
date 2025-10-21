@@ -26,6 +26,7 @@ public:
 
 private:
 	class CGameManager* m_pGameManager = { nullptr };
+	class CEffectContainer* m_pEffectMain = { nullptr };
 
 private:
 	HRESULT Ready_Components();

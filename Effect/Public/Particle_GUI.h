@@ -32,7 +32,8 @@ public:
 
 public:
 	void Particle_GUI();
-
+	HRESULT Save_ToBinary();
+	HRESULT Load_FromBinary();
 private:
 	CGameInstance* m_pGameInstance = { nullptr };
 	ID3D11Device* m_pDevice = { nullptr };
@@ -47,6 +48,9 @@ private:
 	_bool m_IsMainEffectVisible = { false };
 
 	/* PARTICLE */
+	_char		m_szParticleName[MAX_PATH] = {};
+	_char		m_szParticleLoadPath[MAX_PATH] = {};
+
 	_float2     m_vLifeTime = {1.f, 1.f};
 	_int		m_iType = { 0 };
 	_bool		m_isLoop = { false };

@@ -9,9 +9,10 @@ CVIBuffer_Point_Instance::CVIBuffer_Point_Instance(ID3D11Device* pDevice, ID3D11
 
 CVIBuffer_Point_Instance::CVIBuffer_Point_Instance(const CVIBuffer_Point_Instance& Prototype)
     : CVIBuffer_Instance{ Prototype }
-    , m_pInstanceVertices{ Prototype.m_pInstanceVertices }
-    , m_pSpeeds{ Prototype.m_pSpeeds }
-    , m_IsLoop{ Prototype.m_IsLoop }
+	, m_pInstanceVertices{ Prototype.m_pInstanceVertices }
+	, m_pSpeeds{ Prototype.m_pSpeeds }
+	, m_pTimeAccs { Prototype.m_pTimeAccs }
+	, m_IsLoop{ Prototype.m_IsLoop }
 {
 }
 
@@ -78,8 +79,10 @@ Point 형태이므로 인스턴스는 사용하지 않는다.
 	ZeroMemory(m_pInstanceVertices, sizeof(VTX_INSTANCE_PARTICLE) * m_iNumInstance);
 
 	m_pSpeeds = new _float[m_iNumInstance];
-	ZeroMemory(m_pSpeeds, sizeof(_float) * m_iNumInstance);
+	m_pTimeAccs = new _float[m_iNumInstance];
 
+	ZeroMemory(m_pSpeeds, sizeof(_float) * m_iNumInstance);
+	ZeroMemory(m_pTimeAccs, sizeof(_float) * m_iNumInstance);
 
 	for (size_t i = 0; i < m_iNumInstance; i++)
 	{
@@ -95,9 +98,6 @@ Point 형태이므로 인스턴스는 사용하지 않는다.
 			1.f);
 
 		m_pInstanceVertices[i].vLifeTime = _float2(0.0f, m_pGameInstance->Random(pDesc->vLifeTime.x, pDesc->vLifeTime.y));
-
-
-
 		m_pSpeeds[i] = m_pGameInstance->Random(pDesc->vSpeed.x, pDesc->vSpeed.y);
 	}
 
@@ -149,7 +149,8 @@ HRESULT CVIBuffer_Point_Instance::Render()
 
 void CVIBuffer_Point_Instance::Drop(_float fTimeDelta)
 {
-	m_IsDead = true;
+	if (false == m_IsLoop)
+		m_IsDead = true;
 
 	D3D11_MAPPED_SUBRESOURCE		SubResource{};
 
@@ -168,7 +169,7 @@ void CVIBuffer_Point_Instance::Drop(_float fTimeDelta)
 			pVertices[i].vLifeTime.x = 0.f;
 			pVertices[i].vTranslation = m_pInstanceVertices[i].vTranslation;
 		}
-		else
+		else if (false == m_IsLoop)
 		{
 			if (false == m_IsLoop && pVertices[i].vLifeTime.x < pVertices[i].vLifeTime.y)
 				m_IsDead = false;
@@ -180,7 +181,8 @@ void CVIBuffer_Point_Instance::Drop(_float fTimeDelta)
 
 void CVIBuffer_Point_Instance::Explosion(_float fTimeDelta)
 {
-	m_IsDead = true;
+	if (false == m_IsLoop)
+		m_IsDead = true;
 
 	D3D11_MAPPED_SUBRESOURCE		SubResource{};
 
@@ -204,7 +206,7 @@ void CVIBuffer_Point_Instance::Explosion(_float fTimeDelta)
 			pVertices[i].vLifeTime.x = 0.f;
 			pVertices[i].vTranslation = m_pInstanceVertices[i].vTranslation;
 		}
-		else
+		else if (false == m_IsLoop)
 		{
 			if (pVertices[i].vLifeTime.x < pVertices[i].vLifeTime.y)
 				m_IsDead = false;
@@ -212,6 +214,54 @@ void CVIBuffer_Point_Instance::Explosion(_float fTimeDelta)
 	}
 
 	m_pContext->Unmap(m_pVBInstance, 0);
+}
+
+void CVIBuffer_Point_Instance::FloatAndDrop(_float fTimeDelta)
+{
+	if(false == m_IsLoop)
+		m_IsDead = true;
+
+	D3D11_MAPPED_SUBRESOURCE		SubResource{};
+
+	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
+
+	VTX_INSTANCE_PARTICLE* pVertices = static_cast<VTX_INSTANCE_PARTICLE*>(SubResource.pData);
+
+	for (size_t i = 0; i < m_iNumInstance; i++)
+	{
+		m_pTimeAccs[i] += fTimeDelta;
+		/* X,Z 방향으로만 이동하고 저장. */
+		_vector	vDir = XMVectorSetY(XMVectorSetW(XMLoadFloat4(&pVertices[i].vTranslation) - XMLoadFloat3(&m_vPivot), 0.f), 0.f);
+		XMStoreFloat4(&pVertices[i].vTranslation, XMLoadFloat4(&pVertices[i].vTranslation) + XMVector3Normalize(vDir) * m_pSpeeds[i] * fTimeDelta);
+
+		/* 포물선 공식으로 y는 따로 움직여주기. 플레이어도 수정해야되는데.. */
+		_float fDeltaMove = (m_pSpeeds[i] * m_pTimeAccs[i]) - (4.9f * m_pTimeAccs[i] * m_pTimeAccs[i] * 0.5f);
+		if (fDeltaMove <= -0.1f)
+			fDeltaMove = -0.1;
+
+		pVertices[i].vTranslation.y += fDeltaMove;
+
+		pVertices[i].vLifeTime.x += fTimeDelta;
+
+		if (true == m_IsLoop &&
+			pVertices[i].vLifeTime.x >= pVertices[i].vLifeTime.y)
+		{
+			pVertices[i].vLifeTime.x = 0.f;
+			pVertices[i].vTranslation = m_pInstanceVertices[i].vTranslation;
+			m_pTimeAccs[i] = 0.f;
+		}
+		else if (false == m_IsLoop)
+		{
+			if (false == m_IsLoop && pVertices[i].vLifeTime.x < pVertices[i].vLifeTime.y)
+				m_IsDead = false;
+		}
+	}
+
+	m_pContext->Unmap(m_pVBInstance, 0);
+}
+
+void CVIBuffer_Point_Instance::ExplosionAndFloat(_float fTimeDelta)
+{
 }
 
 CVIBuffer_Point_Instance* CVIBuffer_Point_Instance::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const INSTANCE_DESC* pInstanceDesc)
@@ -248,5 +298,6 @@ void CVIBuffer_Point_Instance::Free()
 	{
 		Safe_Delete_Array(m_pInstanceVertices);
 		Safe_Delete_Array(m_pSpeeds);
+		Safe_Delete_Array(m_pTimeAccs);
 	}
 }

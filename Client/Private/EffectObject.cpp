@@ -670,8 +670,7 @@ HRESULT CEffectObject::Ready_Components(const _wstring& strModelTag)
 	/* Com_Model */
 	if (nullptr == m_pModelCom)
 	{
-		if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), strModelTag,
-			TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
+		if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), strModelTag, TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 			return E_FAIL;
 	}
 

@@ -10,7 +10,7 @@
 #include "Bird_BeatenBlastedState.h"
 #include "Bird_BeatenState.h"
 #include "Bird_DeadState.h"
-
+#include "ParticleObject.h"
 
 CBird::CBird(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CEnemy { pDevice, pContext, eObjectID }
@@ -61,19 +61,38 @@ void CBird::OnCollision(COLLIDER_HANDLE_ID eHandleID)
 
     if (COLLIDER_HANDLE_ID::PLAYER_HAND_ATTACK == eHandleID)
     {
-        m_fCurrentHP -= 1.f;
+        CParticleObject::PARTICLE_LOAD_DESC Desc;
+        Desc.strParticlePath = TEXT("../Bin/Resources/Particle/Player_Attack_Particle.bin");
+        XMStoreFloat3(&Desc.vPosition, m_pTransformCom->Get_State(STATE::POSITION));
 
+        m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
+            TEXT("Layer_Particle"), &Desc);
+
+        m_fCurrentHP -= 1.f;
         pNextState = CBird_BeatenState::Create(m_pNavigationCom, this, vDirection, 1.8f);
     }
     else if (COLLIDER_HANDLE_ID::PLAYER_HAND_ATTACK_FINAL == eHandleID)
     {
-        m_fCurrentHP -= 3.f;
+        CParticleObject::PARTICLE_LOAD_DESC Desc;
+        Desc.strParticlePath = TEXT("../Bin/Resources/Particle/Player_Attack_Particle.bin");
+        XMStoreFloat3(&Desc.vPosition, m_pTransformCom->Get_State(STATE::POSITION));
 
+        m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
+            TEXT("Layer_Particle"), &Desc);
+
+        m_fCurrentHP -= 3.f;
         pNextState = CBird_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection);
     }
 
     else if (COLLIDER_HANDLE_ID::PLAYER_SWORD_ATTACK == eHandleID)
     {
+        CParticleObject::PARTICLE_LOAD_DESC Desc;
+        Desc.strParticlePath = TEXT("../Bin/Resources/Particle/Player_Attack_Particle.bin");
+        XMStoreFloat3(&Desc.vPosition, m_pTransformCom->Get_State(STATE::POSITION));
+
+        m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
+            TEXT("Layer_Particle"), &Desc);
+
         m_fCurrentHP -= 3.f;
 
         pNextState = CBird_BeatenState::Create(m_pNavigationCom, this, vDirection, 1.5f);
@@ -81,6 +100,13 @@ void CBird::OnCollision(COLLIDER_HANDLE_ID eHandleID)
 
     else if (COLLIDER_HANDLE_ID::PLAYER_SWORD_ATTACK_FINAL == eHandleID)
     {
+        CParticleObject::PARTICLE_LOAD_DESC Desc;
+        Desc.strParticlePath = TEXT("../Bin/Resources/Particle/Player_Attack_Particle.bin");
+        XMStoreFloat3(&Desc.vPosition, m_pTransformCom->Get_State(STATE::POSITION));
+
+        m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
+            TEXT("Layer_Particle"), &Desc);
+
         m_fCurrentHP -= 3.f;
 
         pNextState = CBird_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection);

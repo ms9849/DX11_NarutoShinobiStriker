@@ -17,7 +17,6 @@ protected:
 	CPartObject(const CPartObject& Prototype);
 	virtual ~CPartObject() = default;
 
-
 public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg);

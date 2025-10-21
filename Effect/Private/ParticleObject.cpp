@@ -27,6 +27,7 @@ HRESULT CParticleObject::Initialize(void* pArg)
 	if (FAILED(Ready_VIBuffer(pArg)))
 		return E_FAIL;
 
+	m_eType = pDesc->eType;
 	m_vMainColor = pDesc->vMainColor;
 	m_vSubColor = pDesc->vSubColor;
 	m_iNumHeight = pDesc->iNumHeight;
@@ -61,6 +62,18 @@ void CParticleObject::Update(_float fTimeDelta)
 
 	case PARTICLE_TYPE::DROP:
 		m_pVIBufferCom->Drop(fTimeDelta);
+		break;
+
+	case PARTICLE_TYPE::FLOAT_DROP:
+		m_pVIBufferCom->FloatAndDrop(fTimeDelta);
+		break;
+
+	case PARTICLE_TYPE::EXPLOSION_FLOAT:
+		m_pVIBufferCom->ExplosionAndFloat(fTimeDelta);
+		break;
+
+	case PARTICLE_TYPE::EXPLOSION_NON_UV:
+		m_pVIBufferCom->Explosion(fTimeDelta);
 		break;
 
 	default:

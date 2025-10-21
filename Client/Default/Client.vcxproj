@@ -222,7 +222,6 @@
     <ClInclude Include="..\Public\Effect_CoolDown.h" />
     <ClInclude Include="..\Public\Enemy.h" />
     <ClInclude Include="..\Public\Enemy_HPBar.h" />
-    <ClInclude Include="..\Public\Explosion.h" />
     <ClInclude Include="..\Public\Face_Character.h" />
     <ClInclude Include="..\Public\FireBall.h" />
     <ClInclude Include="..\Public\OutfitBackGround.h" />
@@ -415,7 +414,6 @@
     <ClCompile Include="..\Private\Effect_CoolDown.cpp" />
     <ClCompile Include="..\Private\Enemy.cpp" />
     <ClCompile Include="..\Private\Enemy_HPBar.cpp" />
-    <ClCompile Include="..\Private\Explosion.cpp" />
     <ClCompile Include="..\Private\Face_Character.cpp" />
     <ClCompile Include="..\Private\FireBall.cpp" />
     <ClCompile Include="..\Private\OutfitBackGround.cpp" />
