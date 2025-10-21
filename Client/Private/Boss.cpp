@@ -20,6 +20,7 @@
 
 #include "BossHPPanel.h"
 #include "Icon.h"
+#include "ParticleObject.h"
 
 CBoss::CBoss(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CEnemy{ pDevice, pContext, eObjectID }
@@ -92,12 +93,23 @@ void CBoss::OnCollision(COLLIDER_HANDLE_ID eHandleID)
 
     if (COLLIDER_HANDLE_ID::PLAYER_HAND_ATTACK == eHandleID)
     {
-        m_fCurrentHP -= 1.f;
+        CParticleObject::PARTICLE_LOAD_DESC Desc;
+        Desc.strParticlePath = TEXT("../Bin/Resources/Particle/Player_Attack_Particle.bin");
 
+        m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
+            TEXT("Layer_Particle"), &Desc);
+
+        m_fCurrentHP -= 1.f;
         pNextState = CBoss_BeatenState::Create(m_pNavigationCom, this, vDirection, 1.5f);
     }
     else if (COLLIDER_HANDLE_ID::PLAYER_HAND_ATTACK_FINAL == eHandleID)
     {
+        CParticleObject::PARTICLE_LOAD_DESC Desc;
+        Desc.strParticlePath = TEXT("../Bin/Resources/Particle/Player_Attack_Particle.bin");
+
+        m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
+            TEXT("Layer_Particle"), &Desc);
+
         m_fCurrentHP -= 3.f;
 
         pNextState = CBoss_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection, 1.f);

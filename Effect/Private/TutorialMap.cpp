@@ -27,6 +27,8 @@ HRESULT CTutorialMap::Initialize(void* pArg)
 
 	m_iNumMeshes = m_pModelCom->Get_NumMeshes();
 
+	//m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(0.f, -5.f, 0.f, 1.f));
+
 	return S_OK;
 }
 

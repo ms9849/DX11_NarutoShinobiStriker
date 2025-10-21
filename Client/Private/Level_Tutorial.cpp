@@ -364,11 +364,6 @@ HRESULT CLevel_Tutorial::Ready_Layer_Effect(const _wstring& strLayerTag)
 			TEXT("Prototype_GameObject_Effect_Icon"), nullptr)));
 	}
 
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Explosion"),
-		ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag)))
-		return E_FAIL;
-
-
 	SHADOW_LIGHT_DESC		ShadowDesc{};
 	ShadowDesc.vEye = _float4(0.f, 15.f, 0.f, 1.f);
 	ShadowDesc.vAt = _float4(10.f, 0.f, 10.f, 1.f);

@@ -58,10 +58,10 @@ HRESULT CExplosion::Render()
 
 HRESULT CExplosion::Ready_Components()
 {
-    /* Com_Texture */
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Snow"),
-        TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
-        return E_FAIL;
+    ///* Com_Texture */
+    //if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Snow"),
+    //    TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
+    //    return E_FAIL;
 
     /* Com_VIBuffer */
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_VIBuffer_Particle_Explosion"),

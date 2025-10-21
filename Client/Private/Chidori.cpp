@@ -6,6 +6,7 @@
 
 #include "EffectContainer.h"
 #include "EffectObject.h"
+#include "ParticleObject.h"
 
 CChidori::CChidori(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 	: CSkill { pDevice, pContext, eObjectID }
@@ -25,6 +26,7 @@ _bool CChidori::IsColliderActive()
 void CChidori::Set_Visible(_bool bFlag)
 {
 	m_pEffectMain->Set_Visible(bFlag);
+	m_pParticleMain->Set_Visible(bFlag);
 }
 
 HRESULT CChidori::Initialize_Prototype()
@@ -52,6 +54,16 @@ HRESULT CChidori::Initialize(void* pArg)
 		&EffectDesc));
 	Safe_AddRef(m_pEffectMain);
 	m_pGameInstance->Add_Clone_ToLayer(m_pEffectMain, m_pGameInstance->Get_LevelID(), TEXT("Layer_Effect"));
+
+	CParticleObject::PARTICLE_LOAD_DESC ParticleDesc;
+	ParticleDesc.eType = CParticleObject::PARTICLE_TYPE::EXPLOSION;
+	ParticleDesc.strParticlePath = TEXT("../Bin/Resources/Particle/PurpleLightning_Particle.bin");
+
+	m_pParticleMain = static_cast<CParticleObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"),
+		&ParticleDesc));
+	Safe_AddRef(m_pParticleMain);
+	m_pGameInstance->Add_Clone_ToLayer(m_pParticleMain, m_pGameInstance->Get_LevelID(), TEXT("Layer_Particle"));
+
 
 	///* 치도리 트레일 */
 	//EffectDesc.IsBinary = true;
@@ -93,6 +105,9 @@ void CChidori::Update(_float fTimeDelta)
 	/* 컴바인드 매트릭스 던져주면서 자연스럽게 크기도 따라가게 됨. */
 	m_pColliderCom->Update(XMLoadFloat4x4(&m_CombinedWorldMatrix));
 	m_pEffectMain->Set_ParentMatrix(XMMatrixScaling(1.9f, 1.9f, 1.9f) * XMLoadFloat4x4(&m_CombinedWorldMatrix));
+	
+	_vector vPosition = XMLoadFloat4((_float4*)(&m_CombinedWorldMatrix.m[3]));
+	m_pParticleMain->Set_Position(vPosition);
 }
 
 void CChidori::Late_Update(_float fTimeDelta)
@@ -218,7 +233,11 @@ void CChidori::Free()
 
 	if(nullptr != m_pEffectMain)
 		m_pEffectMain->Set_Dead(true);
-
 	Safe_Release(m_pEffectMain);
+	
+
+	if (nullptr != m_pParticleMain)
+		m_pParticleMain->Set_Dead(true);
+	Safe_Release(m_pParticleMain);
 	//Safe_Release(m_pEffectTrail);
 }

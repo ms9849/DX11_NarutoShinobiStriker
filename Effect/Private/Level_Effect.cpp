@@ -132,9 +132,9 @@ HRESULT CLevel_Effect::Ready_Prototypes()
 
 	/* For.Prototype_Component_Texture_Particle */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Texture_Particle"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Particle/Particle%d.png"), 2))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Particle/Particle%d.png"), 3))))
 		return E_FAIL;
-	m_pParticleGUI->Add_SRV(TEXT("../../Client/Bin/Resources/Textures/Particle/Particle%d.png"), 2, CParticle_GUI::TEXTURE_TYPE::DIFFUSE);
+	m_pParticleGUI->Add_SRV(TEXT("../../Client/Bin/Resources/Textures/Particle/Particle%d.png"), 3, CParticle_GUI::TEXTURE_TYPE::DIFFUSE);
 
 #pragma region DIFFUSE
 	/* For.Prototype_Component_Texture_Effect */
@@ -147,10 +147,10 @@ HRESULT CLevel_Effect::Ready_Prototypes()
 #pragma region MASK
 	/* For.Prototype_Component_Texture_Effect_Mask */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Texture_Effect_Mask"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/Mask/Mask%d.png"), 96))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/Mask/Mask%d.png"), 102))))
 		return E_FAIL;
-	m_pEffectGUI->Add_SRV(TEXT("../../Client/Bin/Resources/Textures/Effect/Mask/Mask%d.png"), 96, CEffect_GUI::TEXTURE_TYPE::MASK);
-	m_pParticleGUI->Add_SRV(TEXT("../../Client/Bin/Resources/Textures/Effect/Mask/Mask%d.png"), 96, CParticle_GUI::TEXTURE_TYPE::MASK);
+	m_pEffectGUI->Add_SRV(TEXT("../../Client/Bin/Resources/Textures/Effect/Mask/Mask%d.png"), 102, CEffect_GUI::TEXTURE_TYPE::MASK);
+	m_pParticleGUI->Add_SRV(TEXT("../../Client/Bin/Resources/Textures/Effect/Mask/Mask%d.png"), 102, CParticle_GUI::TEXTURE_TYPE::MASK);
 
 #pragma endregion
 

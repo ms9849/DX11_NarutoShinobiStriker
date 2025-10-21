@@ -32,7 +32,7 @@ HRESULT CEventObject::Initialize(void* pArg)
 	m_vColliderCenter = pDesc->vCenter;
 	m_fColliderRadius = pDesc->fRadius;
 	m_eTriggerType = pDesc->eTriggerType;
-	m_pTransformCom->Set_State(STATE::POSITION, XMLoadFloat3(&pDesc->vPosition));
+	m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetW(XMLoadFloat3(&pDesc->vPosition), 1.f));
 
 	return S_OK;
 }

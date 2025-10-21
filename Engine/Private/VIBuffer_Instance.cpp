@@ -14,6 +14,7 @@ CVIBuffer_Instance::CVIBuffer_Instance(const CVIBuffer_Instance& rhs)
     , m_iNumInstance{ rhs.m_iNumInstance }
     , m_iNumIndexPerInstance{ rhs.m_iNumIndexPerInstance }
 {
+    Safe_AddRef(m_pVBInstance);
 }
 
 HRESULT CVIBuffer_Instance::Initialize_Prototype(const INSTANCE_DESC* pDesc)

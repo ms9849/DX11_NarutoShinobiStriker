@@ -3,6 +3,8 @@
 #include "GameInstance.h"
 #include "GameManager.h"
 #include "Icon.h"
+#include "EffectContainer.h"
+#include "EffectObject.h"
 
 CTriggerBox::CTriggerBox(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 	: CEventObject{ pDevice, pContext, eObjectID }
@@ -24,6 +26,16 @@ HRESULT CTriggerBox::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+	/* 미션 박스용 이펙트 */
+	CEffectContainer::EFFECT_CONTAINER_DESC EffectDesc;
+	EffectDesc.IsBinary = true;
+	EffectDesc.strFilePath = TEXT("../Bin/Resources/Effects/Mission_eff.bin");
+
+	m_pEffectMain = static_cast<CEffectContainer*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_EffectContainer"),
+		&EffectDesc));
+	Safe_AddRef(m_pEffectMain);
+	m_pGameInstance->Add_Clone_ToLayer(m_pEffectMain, m_pGameInstance->Get_LevelID(), TEXT("Layer_Effect"));
+
 	return S_OK;
 }
 
@@ -41,6 +53,7 @@ void CTriggerBox::Late_Update(_float fTimeDelta)
 	__super::Late_Update(fTimeDelta);
 
 	m_pGameManager->Add_Object_ToCollision(TEXT("TriggerBox"), this, m_pColliderCom);
+	m_pEffectMain->Set_ParentMatrix(XMMatrixScaling(5.f, 3.f, 5.f) * XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
 }
 
 HRESULT CTriggerBox::Render()
@@ -56,6 +69,8 @@ void CTriggerBox::OnCollision()
 	m_pGameManager->OnTrigger(m_eTriggerType);
 
 	m_pColliderCom->Set_Active(false);
+	m_pEffectMain->Set_Visible(false);
+
 	m_IsDead = true;
 	m_pIcon->Set_Dead(true);
 }
@@ -106,4 +121,5 @@ void CTriggerBox::Free()
 	__super::Free();
 
 	Safe_Release(m_pGameManager);
+	Safe_Release(m_pEffectMain);
 }

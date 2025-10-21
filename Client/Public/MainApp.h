@@ -31,7 +31,7 @@ private:
 	HRESULT Start_Level(LEVEL eLevelID);
 	HRESULT Ready_Prototypes();
 	HRESULT Ready_Effects();
-
+	HRESULT Ready_Particles();
 public:
 	static CMainApp* Create();
 	virtual void Free() override;

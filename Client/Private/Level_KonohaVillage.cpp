@@ -311,10 +311,6 @@ HRESULT CLevel_KonohaVillage::Ready_Layer_Effect(const _wstring& strLayerTag)
 			TEXT("Prototype_GameObject_Effect_Icon"), nullptr)));
 	}
 
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Explosion"),
-		ENUM_CLASS(LEVEL::KONOHA_VILLAGE), strLayerTag)))
-		return E_FAIL;
-
 	return S_OK;
 }
 

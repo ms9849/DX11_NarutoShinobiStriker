@@ -37,6 +37,8 @@ public:
 
 private:
 	/* ¸â¹ö º¯¼öµé */
+	class CParticleObject* m_pParticleMain = {};
+	class CParticleObject* m_pParticleSub = {};
 	class CEffectContainer* m_pEffectMain = { nullptr };
 	_float			 m_fLifeTime = { 3.0f };
 	_float			 m_fTimeAcc = { 0.f };

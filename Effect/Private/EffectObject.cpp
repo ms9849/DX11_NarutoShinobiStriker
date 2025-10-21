@@ -380,6 +380,8 @@ HRESULT CEffectObject::Initialize(void* pArg)
 	m_iNumMeshes = m_pModelCom->Get_NumMeshes();
 	m_IsVisible = true;
 
+	m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(0.f, 3.f, 0.f, 1.f));
+
     return S_OK;
 }
 
