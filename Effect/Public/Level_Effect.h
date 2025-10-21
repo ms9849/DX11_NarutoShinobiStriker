@@ -32,8 +32,8 @@ public:
 
 private:
 	class CEffect_GUI* m_pEffectGUI = { nullptr };
+	class CParticle_GUI* m_pParticleGUI = { nullptr };
 	vector<pair<_wstring, _wstring>> m_strFBXModelTags = {};
-	_float m_fTimeDelta = { 0.f };
 
 private:
 

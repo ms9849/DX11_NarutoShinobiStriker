@@ -142,6 +142,7 @@
     <ClInclude Include="..\Public\Effect_GUI.h" />
     <ClInclude Include="..\Public\Level_Effect.h" />
     <ClInclude Include="..\Public\ParticleObject.h" />
+    <ClInclude Include="..\Public\Particle_GUI.h" />
     <ClInclude Include="..\Public\TutorialMap.h" />
     <ClInclude Include="EffectTool.h" />
     <ClInclude Include="framework.h" />
@@ -156,6 +157,7 @@
     <ClCompile Include="..\Private\Effect_GUI.cpp" />
     <ClCompile Include="..\Private\Level_Effect.cpp" />
     <ClCompile Include="..\Private\ParticleObject.cpp" />
+    <ClCompile Include="..\Private\Particle_GUI.cpp" />
     <ClCompile Include="..\Private\TutorialMap.cpp" />
     <ClCompile Include="EffectTool.cpp" />
   </ItemGroup>

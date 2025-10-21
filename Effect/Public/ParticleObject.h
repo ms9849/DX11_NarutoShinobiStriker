@@ -27,21 +27,24 @@ public:
 	enum class PARTICLE_TYPE { EXPLOSION, DROP, END };
 
 	typedef struct tagParticleDesc : public GAMEOBJECT_DESC {
-		PARTICLE_TYPE eType;
-		wstring strDiffuseTextureTag = { TEXT("") };
-		_int iDiffuseTextureNum = { 0 };
-
-		wstring strMaskTextureTag = { TEXT("") };
-		_int iMaskTextureNum = { 0 };
 		/* 파티클 시스템 하나당 사용되는 변수 */
 		_bool			isLoop;
-
+		PARTICLE_TYPE	eType;
+		_int			iDiffuseTextureNum = { 0 };
+		_int			iMaskTextureNum = { 0 };
+		_int			iNoiseTextureNum = { 0 };
+		_float4			vMainColor = {0.f, 0.f, 0.f, 0.f};
+		_float4			vSubColor = {0.f, 0.f, 0.f, 0.f};
+		_float			fFrameTime = { 0.1f };
+		_int			iNumWidth = { 1 };
+		_int			iNumHeight = { 1 };
+		_int			iCurrentIdx = { 0 };
+		_int			iShaderPassIdx = { 0 };
 		/* 중심으로부터 얼마나 떨어져있는지 */
 		_float3			vPivot;
 		_float2			vSpeed;
 
 		/* 인스턴스 하나당 사용되는 변수 */
-		_float4			vColor;
 		_float3			vRotation;
 		_float2			vLifeTime;
 		_uint			iNumInstance = {};
@@ -66,23 +69,33 @@ public:
 
 public:
 	HRESULT Ready_VIBuffer(void* pArg);
-
+	void	Play_Sprite(_float fTimeDelta);
 private:
 	CVIBuffer_Point_Instance* m_pVIBufferCom = { nullptr };
 
-	CTexture* m_pDiffuseTexCom = { nullptr };
-	CTexture* m_pMaskTexCom = { nullptr };
-	CTexture* m_pNoiseTexCom = { nullptr };
+	CTexture*		m_pDiffuseTexCom = { nullptr };
+	CTexture*		m_pMaskTexCom = { nullptr };
+	CTexture*		m_pNoiseTexCom = { nullptr };
 
-	_uint m_iDiffuseTextureIdx = { 0 };
-	_uint m_iMaskTextureIdx = { 0 };
-	_uint m_iNoiseTextureIdx = { 0 };
+	_uint			m_iDiffuseTextureIdx = { 0 };
+	_uint			m_iMaskTextureIdx = { 0 };
+	_uint			m_iNoiseTextureIdx = { 0 };
 
-	CShader* m_pShaderCom = { nullptr };
-	PARTICLE_TYPE m_eType = {};
+	CShader*		m_pShaderCom = { nullptr };
+	PARTICLE_TYPE	m_eType = {};
+
+	_float4			m_vMainColor = {};
+	_float4			m_vSubColor = {};
+	_float			m_fFrameTime = { 0.1f };
+	_float			m_fTimeAcc = { 0.f };
+	_int			m_iNumWidth = { 1 };
+	_int			m_iNumHeight = { 1 };
+	_int			m_iMaxIdx = { 0 };
+	_int			m_iCurrentIdx = { 0 };
+	_int			m_iShaderPassIdx = { 0 };
 
 private:
-	HRESULT Ready_Components(void* pArg);
+	HRESULT Ready_Components();
 	HRESULT Bind_ShaderResources();
 
 public:

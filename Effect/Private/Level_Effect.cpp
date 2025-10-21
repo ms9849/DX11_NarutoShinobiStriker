@@ -2,6 +2,8 @@
 
 #include "GameInstance.h"
 #include "Effect_GUI.h"
+#include "Particle_GUI.h"
+
 #include "EffectModel.h"
 #include "EffectObject.h"
 #include "EffectContainer.h"
@@ -18,6 +20,7 @@ CLevel_Effect::CLevel_Effect(ID3D11Device* pDevice, ID3D11DeviceContext* pContex
 HRESULT CLevel_Effect::Initialize()
 {
 	m_pEffectGUI = CEffect_GUI::Create(m_pDevice, m_pContext);
+	m_pParticleGUI = CParticle_GUI::Create(m_pDevice, m_pContext);
 
 	if (FAILED(Ready_Lights()))
 		return E_FAIL;
@@ -36,6 +39,7 @@ HRESULT CLevel_Effect::Initialize()
 		return E_FAIL;
 
 	m_pEffectGUI->Initialize();
+	m_pParticleGUI->Initialize();
 
 	/* For.Prototype_GameObject_TutorialMap */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_GameObject_TutorialMap"),
@@ -51,8 +55,8 @@ HRESULT CLevel_Effect::Initialize()
 
 void CLevel_Effect::Update(_float fTimeDelta)
 {
-	m_fTimeDelta = fTimeDelta;
-	m_pEffectGUI->Update(m_fTimeDelta);
+	m_pEffectGUI->Update(fTimeDelta);
+	m_pParticleGUI->Update(fTimeDelta);
 }
 
 HRESULT CLevel_Effect::Render()
@@ -130,6 +134,7 @@ HRESULT CLevel_Effect::Ready_Prototypes()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Texture_Particle"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Particle/Particle%d.png"), 2))))
 		return E_FAIL;
+	m_pParticleGUI->Add_SRV(TEXT("../../Client/Bin/Resources/Textures/Particle/Particle%d.png"), 2, CParticle_GUI::TEXTURE_TYPE::DIFFUSE);
 
 #pragma region DIFFUSE
 	/* For.Prototype_Component_Texture_Effect */
@@ -145,6 +150,8 @@ HRESULT CLevel_Effect::Ready_Prototypes()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/Mask/Mask%d.png"), 96))))
 		return E_FAIL;
 	m_pEffectGUI->Add_SRV(TEXT("../../Client/Bin/Resources/Textures/Effect/Mask/Mask%d.png"), 96, CEffect_GUI::TEXTURE_TYPE::MASK);
+	m_pParticleGUI->Add_SRV(TEXT("../../Client/Bin/Resources/Textures/Effect/Mask/Mask%d.png"), 96, CParticle_GUI::TEXTURE_TYPE::MASK);
+
 #pragma endregion
 
 #pragma region NOISE
@@ -153,6 +160,8 @@ HRESULT CLevel_Effect::Ready_Prototypes()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/Noise/Noise%d.png"), 37))))
 		return E_FAIL;
 	m_pEffectGUI->Add_SRV(TEXT("../../Client/Bin/Resources/Textures/Effect/Noise/Noise%d.png"), 37, CEffect_GUI::TEXTURE_TYPE::NOISE);
+	m_pParticleGUI->Add_SRV(TEXT("../../Client/Bin/Resources/Textures/Effect/Noise/Noise%d.png"), 37, CParticle_GUI::TEXTURE_TYPE::NOISE);
+
 #pragma endregion
 
 	return S_OK;

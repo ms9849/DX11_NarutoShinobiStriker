@@ -77,7 +77,6 @@ HRESULT CEffect_GUI::Initialize()
 void CEffect_GUI::Update(_float fTimeDelta)
 {
 	Effect_GUI();
-	Particle_GUI();
 	Container_GUI();
 }
 
@@ -305,128 +304,6 @@ void CEffect_GUI::Effect_GUI()
 					ImGui::SameLine(0.0f, 10.f);
 
 				iCount++;
-			}
-
-			ImGui::EndTabItem();
-		}
-		ImGui::EndTabBar();
-	}
-
-	ImGui::End();
-}
-
-void CEffect_GUI::Particle_GUI()
-{
-	/* 파티클은 프로토타입 입력받게? */
-	ImGui::Begin("Particle Tool");
-
-	if (ImGui::BeginTabBar("Particle"))
-	{
-		if (ImGui::BeginTabItem("Input Desc"))
-		{
-
-			ImGui::Checkbox("Is Loop", &m_isLoop);
-			ImGui::InputInt("Instance Number", &m_iNumInstance);
-
-			ImGui::InputInt("Select Type", &m_iType);
-
-			ImGui::Text("Input Center Pos		");
-			
-			ImGui::PushItemWidth(80.0f);
-
-			ImGui::SameLine();
-			ImGui::InputFloat("##centerx", &m_vCenter.x);
-			ImGui::SameLine();
-			ImGui::InputFloat("##centery", &m_vCenter.y);
-			ImGui::SameLine();
-			ImGui::InputFloat("##centerz", &m_vCenter.z);
-
-			ImGui::Text("Input Range			");
-
-			ImGui::SameLine();
-			ImGui::InputFloat("##rangex", &m_vRange.x);
-			ImGui::SameLine();
-			ImGui::InputFloat("##rangey", &m_vRange.y);
-			ImGui::SameLine();
-			ImGui::InputFloat("##rangez", &m_vRange.z);
-
-			ImGui::Text("Input Size			");
-
-			ImGui::SameLine();
-			ImGui::InputFloat("##sizex", &m_vSize.x);
-			ImGui::SameLine();
-			ImGui::InputFloat("##sizey", &m_vSize.y);
-
-			ImGui::Text("Input Pivot			");
-
-			ImGui::SameLine();
-			ImGui::InputFloat("##pivotx", &m_vPivot.x);
-			ImGui::SameLine();
-			ImGui::InputFloat("##pivoty", &m_vPivot.y);
-			ImGui::SameLine();
-			ImGui::InputFloat("##pivotz", &m_vPivot.z);
-
-			ImGui::Text("Input Speed (Min, Max) ");
-
-			ImGui::SameLine();
-			ImGui::InputFloat("##speedx", &m_vSpeed.x);
-			ImGui::SameLine();
-			ImGui::InputFloat("##speedy", &m_vSpeed.y);
-
-			ImGui::Text("Input Color (RGBA)		");
-
-			ImGui::SameLine();
-			ImGui::InputFloat("##colorr", &m_vColor.x);
-			ImGui::SameLine();
-			ImGui::InputFloat("##colorg", &m_vColor.y);
-			ImGui::SameLine();
-			ImGui::InputFloat("##colorb", &m_vColor.z);
-			ImGui::SameLine();
-			ImGui::InputFloat("##colora", &m_vColor.w);
-
-			ImGui::Text("Input Rotation			");
-
-			ImGui::SameLine();
-			ImGui::InputFloat("##rotationx", &m_vRotation.x);
-			ImGui::SameLine();
-			ImGui::InputFloat("##rotationy", &m_vRotation.y);
-			ImGui::SameLine();
-			ImGui::InputFloat("##rotationz", &m_vRotation.z);
-
-			ImGui::Text("Input LifeTime			");
-
-			ImGui::SameLine();
-			ImGui::InputFloat("##lifetimex", &m_vLifeTime.x);
-			ImGui::SameLine();
-			ImGui::InputFloat("##lifetimey", &m_vLifeTime.y);
-
-			ImGui::PopItemWidth();
-
-			if (ImGui::Button("Apply"))
-			{
-				CParticleObject::PARTICLE_OBJECT_DESC Desc = {};
-				Desc.eType = (static_cast<CParticleObject::PARTICLE_TYPE>(m_iType));
-				Desc.isLoop = m_isLoop;
-				Desc.iNumInstance = m_iNumInstance;
-				Desc.vCenter = m_vCenter;
-				Desc.vRange = m_vRange;
-				Desc.vPivot = m_vPivot;
-				Desc.vSize = m_vSize;
-				Desc.vSpeed = m_vSpeed;
-				Desc.vColor = m_vColor;
-				Desc.vRotation = m_vRotation;
-				Desc.vLifeTime = m_vLifeTime;
-				Desc.iDiffuseTextureNum = 0; // 임시
-				Desc.strDiffuseTextureTag = TEXT("Prototype_Component_Texture_Particle");
-				Desc.iMaskTextureNum = 0;
-				Desc.strMaskTextureTag = TEXT("Prototype_Component_Texture_Effect_Mask");
-
-				if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_GameObject_ParticleObject"),
-					ENUM_CLASS(LEVEL::EFFECT), TEXT("Layer_Particle"), &Desc)))
-				{
-					MSG_BOX("Failed to Create Particle Object");
-					return;
-				}
 			}
 
 			ImGui::EndTabItem();
