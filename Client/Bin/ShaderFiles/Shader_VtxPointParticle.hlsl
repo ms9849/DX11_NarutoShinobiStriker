@@ -2,8 +2,11 @@
 
 matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 
-texture2D g_DiffuseTexture;
+texture2D g_DiffuseTexture, g_MaskTexture, g_NoiseTexture;
+vector g_vMainColor, g_vSubColor;
 vector g_vCamPosition;
+int g_iNumWidth, g_iNumHeight, g_iCurrentIdx;
+
 
 struct VS_IN
 {
@@ -135,22 +138,48 @@ PS_OUT PS_MAIN(PS_IN In)
     PS_OUT Out;
     
     Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexcoord);
+    Out.vColor *= g_MaskTexture.Sample(DefaultSampler, In.vTexcoord).r;
+    
+    /* 텍스 쿠드 둘 중 하나라도 크다면 */
+    if (In.vTexcoord.x > saturate(1 - In.vLifeTime.x / In.vLifeTime.y) || In.vTexcoord.x < saturate(In.vLifeTime.x / In.vLifeTime.y))
+        discard;
+    
+    if (Out.vColor.a >= 0.6f)
+        Out.vColor.rgba = g_vMainColor;
+    else
+        Out.vColor.rgb = g_vSubColor;
+    
+    return Out;
+}
+
+PS_OUT PS_FadeOut(PS_IN In)
+{
+    PS_OUT Out;
+    
+    Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexcoord);
+    Out.vColor *= g_MaskTexture.Sample(DefaultSampler, In.vTexcoord).r;
     
     if (Out.vColor.r < 0.8f)
         discard;
-    
-    //Out.vColor.a = saturate(In.vLifeTime.y - In.vLifeTime.x);
 
     /* 텍스 쿠드 둘 중 하나라도 크다면 */
     if (In.vTexcoord.x > saturate(1 - In.vLifeTime.x / In.vLifeTime.y) || In.vTexcoord.x < saturate(In.vLifeTime.x / In.vLifeTime.y))
         discard;
 
+    if(Out.vColor.a >= 0.6f)
+        Out.vColor.rgb = g_vMainColor;
+    else
+        Out.vColor.rgb = g_vSubColor;
+
+    Out.vColor.a *= In.vLifeTime.x / In.vLifeTime.y;
+    
     return Out;
 }
 
+
 technique11 DefaultTechnique
 {
-    pass Explosion
+    pass Default
     {
         SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_Default, 0);
@@ -158,5 +187,15 @@ technique11 DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = compile gs_5_0 GS_MAIN();
         PixelShader = compile ps_5_0 PS_MAIN();
+    }
+
+    pass FadeOut
+    {
+        SetRasterizerState(RS_Cull_None);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_FadeOut();
     }
 }

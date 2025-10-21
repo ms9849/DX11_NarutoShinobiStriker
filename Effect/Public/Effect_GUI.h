@@ -34,7 +34,6 @@ public:
 
 public:
 	void Effect_GUI();
-	void Particle_GUI();
 	void Container_GUI();
 
 	void Add_To_Main();

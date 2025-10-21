@@ -27,7 +27,19 @@ HRESULT CParticleObject::Initialize(void* pArg)
 	if (FAILED(Ready_VIBuffer(pArg)))
 		return E_FAIL;
 
-	if (FAILED(Ready_Components(pArg)))
+	m_vMainColor = pDesc->vMainColor;
+	m_vSubColor = pDesc->vSubColor;
+	m_iNumHeight = pDesc->iNumHeight;
+	m_iNumWidth = pDesc->iNumWidth;
+	m_fFrameTime = pDesc->fFrameTime;
+	m_iCurrentIdx = pDesc->iCurrentIdx;
+	m_iShaderPassIdx = pDesc->iShaderPassIdx;
+	m_iDiffuseTextureIdx = pDesc->iDiffuseTextureNum;
+	m_iMaskTextureIdx = pDesc->iMaskTextureNum;
+	m_iNoiseTextureIdx = pDesc->iNoiseTextureNum;
+	m_iMaxIdx = m_iNumHeight * m_iNumWidth - 1;
+
+	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
 	m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(0.f, 0.f, 0.f, 1.f));
@@ -57,11 +69,13 @@ void CParticleObject::Update(_float fTimeDelta)
 
 	if (true == m_pVIBufferCom->IsAllDead())
 		m_IsDead = true;	
+
+	Play_Sprite(fTimeDelta);
 }
 
 void CParticleObject::Late_Update(_float fTimeDelta)
 {
-	m_pGameInstance->Add_RenderGroup(RENDER::NONLIGHT, this);
+	m_pGameInstance->Add_RenderGroup(RENDER::BLUR, this);
 }
 
 HRESULT CParticleObject::Render()
@@ -78,20 +92,26 @@ HRESULT CParticleObject::Render()
 	return S_OK;
 }
 
-HRESULT CParticleObject::Ready_Components(void* pArg)
+HRESULT CParticleObject::Ready_Components()
 {
-	PARTICLE_OBJECT_DESC* pDesc = static_cast<PARTICLE_OBJECT_DESC*>(pArg);
-	m_eType = pDesc->eType;
-	m_iDiffuseTextureIdx = pDesc->iDiffuseTextureNum;
-
-	/* Com_Texture */
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::EFFECT), pDesc->strDiffuseTextureTag,
-		TEXT("Com_DiffuseTexture"), reinterpret_cast<CComponent**>(&m_pDiffuseTexCom))))
-		return E_FAIL;
-
 	/* Com_Shader */
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Shader_VtxPointParticle"),
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
+		return E_FAIL;
+
+	/* Com_DiffuseTexture */
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Texture_Particle"),
+		TEXT("Com_DiffuseTexture"), reinterpret_cast<CComponent**>(&m_pDiffuseTexCom))))
+		return E_FAIL;
+
+	/* Com_MaskTexture */
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Texture_Effect_Mask"),
+		TEXT("Com_MaskTexture"), reinterpret_cast<CComponent**>(&m_pMaskTexCom))))
+		return E_FAIL;
+
+	/* Com_NoiseTexture */
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Texture_Effect_Noise"),
+		TEXT("Com_NoiseTexture"), reinterpret_cast<CComponent**>(&m_pNoiseTexCom))))
 		return E_FAIL;
 
 	return S_OK;
@@ -103,23 +123,9 @@ HRESULT CParticleObject::Ready_VIBuffer(void* pArg)
 	PARTICLE_OBJECT_DESC* pParticleDesc = static_cast<PARTICLE_OBJECT_DESC*>(pArg);
 	CVIBuffer_Point_Instance::POINT_INSTANCE_DESC Desc;
 
-	/*
-	_bool			isLoop;
-	_float3			vPivot;
-	_float2			vSpeed;
-	_float4			vColor;
-	_float3			vRotation;
-	_float2			vLifeTime;
-	_uint			iNumInstance = {};
-	_float2			vSize = {};
-	_float3			vCenter = {};
-	_float3			vRange = {};
-	*/
-
 	Desc.isLoop = pParticleDesc->isLoop;
 	Desc.vPivot = pParticleDesc->vPivot;
 	Desc.vSpeed = pParticleDesc->vSpeed;
-	Desc.vColor = pParticleDesc->vColor;
 	Desc.vRotation = pParticleDesc->vRotation;
 	Desc.vLifeTime = pParticleDesc->vLifeTime;
 	Desc.iNumInstance = pParticleDesc->iNumInstance;
@@ -136,6 +142,20 @@ HRESULT CParticleObject::Ready_VIBuffer(void* pArg)
 	return S_OK;
 }
 
+void CParticleObject::Play_Sprite(_float fTimeDelta)
+{
+	m_fTimeAcc += fTimeDelta;
+
+	if (m_fTimeAcc >= m_fFrameTime)
+	{
+		m_fTimeAcc = 0.f;
+		m_iCurrentIdx++;
+
+		if (m_iCurrentIdx >= m_iMaxIdx)
+			m_iCurrentIdx = 0;
+	}
+}
+
 HRESULT CParticleObject::Bind_ShaderResources()
 {
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
@@ -150,7 +170,28 @@ HRESULT CParticleObject::Bind_ShaderResources()
 	if (FAILED(m_pDiffuseTexCom->Bind_ShaderResource(m_pShaderCom, "g_DiffuseTexture", m_iDiffuseTextureIdx)))
 		return E_FAIL;
 
+	if (FAILED(m_pMaskTexCom->Bind_ShaderResource(m_pShaderCom, "g_MaskTexture", m_iMaskTextureIdx)))
+		return E_FAIL;
+
+	if (FAILED(m_pNoiseTexCom->Bind_ShaderResource(m_pShaderCom, "g_NoiseTexture", m_iNoiseTextureIdx)))
+		return E_FAIL;
+
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", m_pGameInstance->Get_CamState(STATE::POSITION), sizeof(_float3))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_vMainColor", &m_vMainColor, sizeof(_float4))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_vSubColor", &m_vSubColor, sizeof(_float4))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_iCurrentIdx", &m_iCurrentIdx, sizeof(_uint))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_iNumWidth", &m_iNumWidth, sizeof(_uint))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_iNumHeight", &m_iNumWidth, sizeof(_uint))))
 		return E_FAIL;
 
 	return S_OK;

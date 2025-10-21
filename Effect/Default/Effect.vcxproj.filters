@@ -37,6 +37,12 @@
     <Filter Include="03. GAMEOBJECT\MAP">
       <UniqueIdentifier>{c084d09b-515b-4608-9351-ddef251e936d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. EFFECT_GUI\Effect">
+      <UniqueIdentifier>{bd88aae0-ea34-41d6-9988-2596de745348}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. EFFECT_GUI\Particle">
+      <UniqueIdentifier>{7c2b2bdc-43b3-4098-b3c9-79e2b023d924}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EffectTool.h">
@@ -72,11 +78,14 @@
     <ClInclude Include="..\Public\EffectContainer.h">
       <Filter>03. GAMEOBJECT\EFFECT\Container</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Effect_GUI.h">
-      <Filter>02. EFFECT_GUI</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\TutorialMap.h">
       <Filter>03. GAMEOBJECT\MAP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Effect_GUI.h">
+      <Filter>02. EFFECT_GUI\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Particle_GUI.h">
+      <Filter>02. EFFECT_GUI\Particle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -114,11 +123,14 @@
     <ClCompile Include="..\Private\EffectContainer.cpp">
       <Filter>03. GAMEOBJECT\EFFECT\Container</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Effect_GUI.cpp">
-      <Filter>02. EFFECT_GUI</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\TutorialMap.cpp">
       <Filter>03. GAMEOBJECT\MAP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Effect_GUI.cpp">
+      <Filter>02. EFFECT_GUI\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Particle_GUI.cpp">
+      <Filter>02. EFFECT_GUI\Particle</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
