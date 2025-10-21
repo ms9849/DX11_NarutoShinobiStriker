@@ -8,6 +8,7 @@
 
 #include "ParticleObject.h"
 #include "EffectCamera.h"
+#include "TutorialMap.h"
 
 CLevel_Effect::CLevel_Effect(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID)
 	: CLevel{ pDevice, pContext, ENUM_CLASS(eLevelID) }	
@@ -17,6 +18,9 @@ CLevel_Effect::CLevel_Effect(ID3D11Device* pDevice, ID3D11DeviceContext* pContex
 HRESULT CLevel_Effect::Initialize()
 {
 	m_pEffectGUI = CEffect_GUI::Create(m_pDevice, m_pContext);
+
+	if (FAILED(Ready_Lights()))
+		return E_FAIL;
 
 	if (FAILED(Ready_Prototypes()))
 		return E_FAIL;
@@ -33,17 +37,43 @@ HRESULT CLevel_Effect::Initialize()
 
 	m_pEffectGUI->Initialize();
 
+	/* For.Prototype_GameObject_TutorialMap */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_GameObject_TutorialMap"),
+		CTutorialMap::Create(m_pDevice, m_pContext, Client::OBJECTID::TUTORIAL_MAP))))
+		return E_FAIL;
+	
+	if(FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_GameObject_TutorialMap"),
+		ENUM_CLASS(LEVEL::EFFECT), TEXT("Layer_Map"))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
 void CLevel_Effect::Update(_float fTimeDelta)
 {
-	m_pEffectGUI->Update(fTimeDelta);
+	m_fTimeDelta = fTimeDelta;
+	m_pEffectGUI->Update(m_fTimeDelta);
 }
 
 HRESULT CLevel_Effect::Render()
 {
 	SetWindowText(g_hWnd, TEXT("ÀÌÆåÆ®·¹º§ÀÌºó´Ù."));
+
+	return S_OK;
+}
+
+HRESULT CLevel_Effect::Ready_Lights()
+{
+	LIGHT_DESC		LightDesc{};
+
+	LightDesc.eType = LIGHT::DIRECTIONAL;
+	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vAmbient = _float4(0.4f, 0.4f, 0.4f, 1.f);
+	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 0.f);
+	LightDesc.vDirection = _float4(1.f, -1.f, 1.f, 0.f);
+
+	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -58,6 +88,17 @@ HRESULT CLevel_Effect::Ready_Prototypes()
 	/* For.Prototype_Component_Shader_VtxPointParticle */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Shader_VtxPointParticle"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/ShaderFiles/Shader_VtxPointParticle.hlsl"), VTX_POS_INSTANCE_PARTICLE::Elements, VTX_POS_INSTANCE_PARTICLE::iNumElements))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Shader_VtxMesh */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Shader_VtxMesh"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/ShaderFiles/Shader_VtxMesh.hlsl"), VTXMESH::Elements, VTXMESH::iNumElements))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_TutorialMap */
+	_matrix PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Model_TutorialMap"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, TEXT("../../Client/Bin/Resources/Models/TutorialMap/TutorialMap.bin"), PreTransformMatrix))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_EffectCamera */

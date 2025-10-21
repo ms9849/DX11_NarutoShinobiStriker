@@ -24,6 +24,7 @@ public:
 	virtual HRESULT Render() override;
 
 public:
+	HRESULT Ready_Lights();
 	HRESULT Ready_Prototypes();
 	HRESULT Ready_FBXs();
 	HRESULT Ready_Binarys();
@@ -32,6 +33,7 @@ public:
 private:
 	class CEffect_GUI* m_pEffectGUI = { nullptr };
 	vector<pair<_wstring, _wstring>> m_strFBXModelTags = {};
+	_float m_fTimeDelta = { 0.f };
 
 private:
 

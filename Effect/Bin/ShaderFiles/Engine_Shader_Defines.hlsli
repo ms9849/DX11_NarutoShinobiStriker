@@ -4,6 +4,14 @@ vector g_vMtrlDiffuse = 1.f;
 vector g_vMtrlAmbient = 1.f;
 vector g_vMtrlSpecular = 1.f;
 
+/* 클램프 샘플러 */
+sampler ClampSampler = sampler_state
+{
+    Filter = MIN_MAG_MIP_POINT;
+    AddressU = clamp;
+    AddressV = clamp;
+};
+
 /* 디폴트 샘플러 세팅 */
 sampler DefaultSampler = sampler_state
 {
@@ -31,6 +39,11 @@ RasterizerState RS_Cull_Front
     CullMode = Front;
 };
 
+RasterizerState RS_Cull_None
+{
+    CullMode = None;
+};
+
 /* DepthStencil 디폴트 세팅 */
 DepthStencilState DSS_Default
 {
@@ -44,6 +57,14 @@ DepthStencilState DSS_None
 {
     DepthEnable = false;
     DepthWriteMask = zero;
+};
+
+/* 깊이쓰기만 끄기*/
+DepthStencilState DSS_DepthNonWrite
+{
+    DepthEnable = true;
+    DepthWriteMask = zero;
+    DepthFunc = less_equal;
 };
 
 /* 블렌더 끄기. 어떤 렌더타겟에 블렌드 스테이트를 넘겨줄 것인지 설정. */
@@ -60,5 +81,15 @@ BlendState BS_AlphaBlend
 
     SrcBlend = Src_Alpha;
     DestBlend = Inv_Src_Alpha;
+    BlendOp = Add;
+};
+
+BlendState BS_Blend
+{
+    BlendEnable[0] = true;
+    BlendEnable[1] = true;
+
+    SrcBlend = one;
+    DestBlend = one;
     BlendOp = Add;
 };

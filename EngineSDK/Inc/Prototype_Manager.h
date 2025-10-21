@@ -13,6 +13,7 @@
 #include "Font.h"
 #include "Navigation.h"
 #include "Collider.h"
+#include "VIBuffer_Cube.h"
 #include "VIBuffer_Rect_Instance.h"
 #include "VIBuffer_Point_Instance.h"
 #include "Pooling.h"

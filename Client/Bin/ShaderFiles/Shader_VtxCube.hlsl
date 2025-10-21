@@ -1,7 +1,8 @@
 #include "Engine_Shader_Defines.hlsli"
 
+
 matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
-texture2D g_DiffuseTexture;
+textureCUBE g_Texture;
 
 
 /* 정점 쉐이더 : */
@@ -10,31 +11,32 @@ texture2D g_DiffuseTexture;
 struct VS_IN
 {
     float3 vPosition : POSITION;
-    float3 vNormal : NORMAL;
-    float2 vTexcoord : TEXCOORD0;
+    float3 vTexcoord : TEXCOORD0;
 };
 
 struct VS_OUT
 {
     float4 vPosition : SV_POSITION;
-    float4 vNormal : NORMAL;
-    float2 vTexcoord : TEXCOORD0;
-    float4 vWorldPos : TEXCOORD1;
+    float3 vTexcoord : TEXCOORD0;
 };
 
 VS_OUT VS_MAIN(VS_IN In)
 {
     VS_OUT Out;
-  
+    
+    
+    /* In.vPosition * 월드 * 뷰 * 투영 */    
+    //float4x4 == matrix
     matrix matWV, matWVP;
     
     matWV = mul(g_WorldMatrix, g_ViewMatrix);
     matWVP = mul(matWV, g_ProjMatrix);
     
     Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);
+    
+    /* Out.vPosition.xy => 시야각에 있는 점들을 90에 맞춰준다 */ 
+    /* Out.vPosition.z => n~f사이에 있는 점들의 z를 0 ~ f로 바꿔준다. */     
     Out.vTexcoord = In.vTexcoord;
-    Out.vNormal = normalize(mul(vector(In.vNormal, 0.f), g_WorldMatrix));
-    Out.vWorldPos = mul(vector(In.vPosition, 1.f), g_WorldMatrix);
 
     return Out;
 }
@@ -46,40 +48,34 @@ VS_OUT VS_MAIN(VS_IN In)
 struct PS_IN
 {
     float4 vPosition : SV_POSITION;
-    float4 vNormal : NORMAL;
-    float2 vTexcoord : TEXCOORD0;
-    float4 vWorldPos : TEXCOORD1;
+    float3 vTexcoord : TEXCOORD0;
 };
 
 struct PS_OUT
 {
-    float4 vDiffuse : SV_TARGET0;
-    float4 vNormal : SV_TARGET1;
+    float4 vColor : SV_TARGET0;
 };
+
+
 
 /* 픽셀 쉐이더 : 픽셀의 최종적인 색을 결정하낟. */
 PS_OUT PS_MAIN(PS_IN In)
 {
     PS_OUT Out;
     
-    vector vMtrlDiffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexcoord * 30.f);
+    Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
 
-    Out.vDiffuse = vMtrlDiffuse;
-    
-    /* -1 ~ 1 -> 0 ~ 1 */
-    Out.vNormal = float4(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
-    
     return Out;
 }
 
+
 technique11 DefaultTechnique
 {
-    pass Terrain
+    pass Sky
     {
-        SetRasterizerState(RS_Default);
+        SetRasterizerState(RS_Cull_Front);
         SetDepthStencilState(DSS_Default, 0);
         SetBlendState(BS_None, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-      
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN();

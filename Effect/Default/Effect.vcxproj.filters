@@ -34,6 +34,9 @@
     <Filter Include="02. EFFECT_GUI">
       <UniqueIdentifier>{d90c022c-a160-4863-9aec-e997dcd303f2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. GAMEOBJECT\MAP">
+      <UniqueIdentifier>{c084d09b-515b-4608-9351-ddef251e936d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EffectTool.h">
@@ -71,6 +74,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\Effect_GUI.h">
       <Filter>02. EFFECT_GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\TutorialMap.h">
+      <Filter>03. GAMEOBJECT\MAP</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -110,6 +116,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Effect_GUI.cpp">
       <Filter>02. EFFECT_GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TutorialMap.cpp">
+      <Filter>03. GAMEOBJECT\MAP</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

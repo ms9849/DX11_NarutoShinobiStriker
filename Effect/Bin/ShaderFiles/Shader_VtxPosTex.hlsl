@@ -1,3 +1,4 @@
+#include "Engine_Shader_Defines.hlsli"
 
 matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 
@@ -6,11 +7,12 @@ texture2D g_Texture, g_Texture_Skill;
 float   g_Alpha;
 float   g_ProgressRate;
 int     g_iProgressBarTextureNum;
-
-sampler DefaultSampler = sampler_state
-{
-    Filter = MIN_MAG_MIP_LINEAR;
-};
+float   g_MaxSkillCoolDown;
+float   g_SkillCoolDown;
+float   g_CurrentHP;
+float   g_MaxHP;
+float   g_iWinSizeX;
+float   g_iWinSizeY;
 
 struct VS_IN
 {
@@ -58,10 +60,37 @@ PS_OUT PS_MAIN(PS_IN In)
     PS_OUT Out;
     
     Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
+     
+    return Out;
+}
+
+PS_OUT PS_MASK(PS_IN In)
+{
+    PS_OUT Out;
     
-    /* 알파 테스팅. 블렌딩은 서치가 더 필요하다. */ 
-    //if (Out.vColor.a < 0.3)
-    //   discard;
+    Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
+    
+    if (Out.vColor.r < 0.5)
+        discard;
+    
+    return Out;
+}
+
+PS_OUT PS_ENEMY_HPBAR(PS_IN In)
+{
+    PS_OUT Out;
+    
+    Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
+       
+    if (Out.vColor.r == 0 && Out.vColor.g == 0 && Out.vColor.b == 0)
+        discard;
+    else if (g_CurrentHP / g_MaxHP > In.vTexcoord.x)
+    {
+        Out.vColor.r = 1;
+        Out.vColor.gb = 0;
+    }
+    else
+        Out.vColor.rgb = 0;
     
     return Out;
 }
@@ -69,15 +98,13 @@ PS_OUT PS_MAIN(PS_IN In)
 PS_OUT PS_ProgressBar(PS_IN In)
 {
     PS_OUT Out;
-    
-    /* 필살기 게이지 */
+  
+    /* 체력바 */
     if(g_iProgressBarTextureNum == 2)
-    {
-        float fSlope = 0.05f;
-        
+    {        
         Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
         
-        if (In.vTexcoord.x < g_ProgressRate - fSlope * (In.vTexcoord.y - 0.5f))
+        if (In.vTexcoord.x < g_ProgressRate)
         {
             Out.vColor = float4(0.0f, 0.9f, 0.f, Out.vColor.a);
         }
@@ -108,29 +135,49 @@ PS_OUT PS_FadeInOut(PS_IN In)
 PS_OUT PS_Skill(PS_IN In)
 {
     PS_OUT Out;
+
     float2 vCenter = float2(0.5, 0.5);
-    float fDist = length(In.vTexcoord - vCenter);
-    
-    /* 스킬 아이콘 그려짐 */
-    if (fDist < 0.4)
+    float fRadius = 0.4f;
+
+    float2 vDiff = In.vTexcoord - vCenter;
+    float fDist = length(vDiff);
+
+    Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
+
+    // 스킬 아이콘 영역 안일 때만 처리
+    if (fDist <= fRadius)
     {
-        float fScale = 1.2;
-        // 중심 0.5 0.5에서 떨어진 거리 구하고, 그만큼 스케일링 해줌.
-        float2 vUV = vCenter + (In.vTexcoord - vCenter) * fScale;
+        float fScale = 1.2f;
+
+        float2 vTextureCenter = float2(0.5, 0.5);
+        float2 vUV = vTextureCenter + vDiff * fScale;
 
         Out.vColor = g_Texture_Skill.Sample(DefaultSampler, vUV);
+
+        float fTop = vCenter.y + fRadius; 
+        float fBottom = vCenter.y - fRadius;
+
+        float fRatio = g_SkillCoolDown / g_MaxSkillCoolDown;
+
+        float fCut = lerp(fBottom, fTop, fRatio);
+
+        if (In.vTexcoord.y >= fCut)
+        {
+            Out.vColor.rgb *= 0.2f;
+            Out.vColor.a = 1.f;
+        }
     }
-    
-    else
-        Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
-    
+
     return Out;
 }
-
 PS_OUT PS_SpecialSkill(PS_IN In)
 {
     PS_OUT Out;
-    float2 vCenter = float2(0.2, 0.55);
+    
+    float fCenterY = 0.55f;
+    float fRadius = 0.3f;
+    
+    float2 vCenter = float2(0.2, fCenterY);
     float2 vTextureCenter = float2(0.5, 0.5);
     float fRatio = 4.0f;
     
@@ -138,14 +185,29 @@ PS_OUT PS_SpecialSkill(PS_IN In)
     vDiff.x *= fRatio;
     
     float fDist = length(vDiff);
+    
     /* 스킬 아이콘 그려짐 */
-    if (fDist < 0.30)
+    if (fDist <= fRadius)
     {
         float fScale = 1.8f;
         // 중심 0.5 0.5에서 떨어진 거리 구하고, 그만큼 스케일링 해줌.
         float2 vUV = vTextureCenter + vDiff * fScale;
 
         Out.vColor = g_Texture_Skill.Sample(DefaultSampler, vUV);
+        
+        float fTop = fCenterY + fRadius; // 아이콘 위쪽 Y
+        float fBottom = fCenterY - fRadius; // 아이콘 아래쪽 Y
+
+        float fRatio = g_SkillCoolDown / g_MaxSkillCoolDown; // 0~1
+        float fCut = lerp(fBottom, fTop, fRatio);
+
+        /* 스킬 아이콘이 표현되는 최소 최대 y의 texcoord 구한뒤, fRatio를 이용하여 */
+        /* 보간을 통해 어느 지점부터 밝게 표현할 것인지 설정 */
+        if (In.vTexcoord.y >= fCut)
+        {
+            Out.vColor *= 0.2f;
+            Out.vColor.a = 1.f;
+        }
     }
     else
         Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
@@ -157,31 +219,89 @@ technique11 DefaultTechnique
 {
     pass UI
     {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
         VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN();
+    }
+
+    pass UI_MASK
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MASK();
+    }
+
+    pass UI_ENEMYHPBAR
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_ENEMY_HPBAR();
     }
 
     pass UI_ProgressBar
     {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
         VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_ProgressBar();
     }
 
     pass UI_FadeInOut
     {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
         VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_FadeInOut();
     }
 
     pass UI_Skill
     {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
         VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_Skill();
     }
 
     pass UI_SpecialSkill
     {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
         VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_SpecialSkill();
+    }
+
+    pass Outfit_BackGround
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_None, 0);
+        SetBlendState(BS_None, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN();
     }
 }
