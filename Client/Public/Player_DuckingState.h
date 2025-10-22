@@ -24,9 +24,12 @@ public:
 	virtual _bool	End() override;
 
 private:
+	class CEffectContainer* m_pEffectMain = { nullptr };
+	class CEffectContainer* m_pEffectSub = { nullptr };
 	class CPlayer*	m_pPlayer = { nullptr };
 	ANIM_STATE		m_eAnimState = {};
 	_float			m_fTimeAcc = { 0.f };
+	_bool			m_IsChargeEnd = { false };
 
 public:
 	static CPlayer_DuckingState* Create(class CPlayer* pPlayer);
