@@ -18,7 +18,7 @@ CTrail::CTrail(const CTrail& rhs)
 
 HRESULT CTrail::Initialize_Prototype()
 {
-	m_iNumVertices = 36;
+	m_iNumVertices = 44;
 	m_iNumIndices = ((m_iNumVertices / 2) - 1) * 6;
 
 #pragma region IDX_BUFFER
@@ -102,102 +102,9 @@ void CTrail::Update(_float fTimeDelta)
 
 void CTrail::Late_Update(_float fTimeDelta)
 {
-	if(true == m_IsBlur)
-		m_pGameInstance->Add_RenderGroup(RENDER::BLUR, this);
-	else
-		m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
+	m_pGameInstance->Add_RenderGroup(RENDER::BLUR, this);
+	m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
 }
-
-//void CTrail::Update_Trail(_fmatrix matCurrentWorld, _bool IsMakeTrail)
-//{
-//	_float3 vCurHightPos, vCurLowPos;
-//
-//	if (false == IsMakeTrail)
-//	{
-//		if (0 != m_iNumPresent) {
-//			m_iNumPresent -= 2;
-//			memmove(m_pVTXPOSTEXs, m_pVTXPOSTEXs + 2, sizeof(VTXPOSTEX) * m_iNumPresent);
-//		}
-//
-//		return;
-//	}
-//
-//	XMStoreFloat3(&vCurHightPos, XMVector3TransformCoord(XMLoadFloat4(&m_vHigh), matCurrentWorld));
-//	XMStoreFloat3(&vCurLowPos, XMVector3TransformCoord(XMLoadFloat4(&m_vLow), matCurrentWorld));
-//
-//	m_vPreHighPositions[0] = m_vPreHighPositions[1];
-//	m_vPreHighPositions[1] = m_vPreHighPositions[2];
-//	XMStoreFloat3(&m_vPreHighPositions[2], XMLoadFloat3(&vCurHightPos));
-//
-//	m_vPreLowPositions[0] = m_vPreLowPositions[1];
-//	m_vPreLowPositions[1] = m_vPreLowPositions[2];
-//	XMStoreFloat3(&m_vPreLowPositions[2], XMLoadFloat3(&vCurLowPos));
-//
-//	/* 
-//	스플라인이 곡선 형태로 보간해주는건 맞지만 
-//	결국 정점 갯수가 늘어나야 자연스러움.
-//
-//	XMVectorCatmullRom에 들어가는 P0, P3은 예측을 위한 값.
-//	P1과 P2가 실제 보간에 사용되는 값.
-//
-//	해당 함수로 생성되는 값은 보간이 없더라도 
-//	실제 함수를 통과하는 값임이 보장됨.
-//	*/
-//	for (_uint i = 0; i < 4; ++i)
-//	{
-//		_float fValue = (_float)i / 3;
-//
-//		_vector vFirstHighPoint{}, vSecondHighPoint{}, vThirdHighPoint{};
-//		_vector vFirstLowPoint{}, vSecondLowPoint{}, vThirdLowPoint{};
-//
-//		vFirstHighPoint = XMVectorSetW(XMLoadFloat3(&m_vPreHighPositions[0]), 1.f);
-//		vSecondHighPoint = XMVectorSetW(XMLoadFloat3(&m_vPreHighPositions[1]), 1.f);
-//		vThirdHighPoint = XMVectorSetW(XMLoadFloat3(&m_vPreHighPositions[2]), 1.f);
-//
-//		vFirstLowPoint = XMVectorSetW(XMLoadFloat3(&m_vPreLowPositions[0]), 1.f);
-//		vSecondLowPoint = XMVectorSetW(XMLoadFloat3(&m_vPreLowPositions[1]), 1.f);
-//		vThirdLowPoint = XMVectorSetW(XMLoadFloat3(&m_vPreLowPositions[2]), 1.f);
-//
-//		_vector vHighInterp = XMVectorCatmullRom(vFirstHighPoint, vSecondHighPoint, vThirdHighPoint, vThirdHighPoint + (vThirdHighPoint - vFirstHighPoint), fValue);
-//		_vector vLowInterp = XMVectorCatmullRom(vFirstLowPoint, vSecondLowPoint, vThirdLowPoint, vThirdLowPoint + (vThirdLowPoint - vSecondHighPoint), fValue);
-//
-//		// 정점 버퍼가 넘치면 memmove로 빠르게 옮겨주기
-//		if (m_iNumPresent + 2 >= m_iNumVertices)
-//		{
-//			m_iNumPresent -= 2;
-//			memmove(m_pVTXPOSTEXs, m_pVTXPOSTEXs + 2, sizeof(VTXPOSTEX) * m_iNumPresent);
-//		}
-//
-//		XMStoreFloat3(&m_pVTXPOSTEXs[m_iNumPresent + 1].vPosition, vHighInterp);
-//		XMStoreFloat3(&m_pVTXPOSTEXs[m_iNumPresent].vPosition, vLowInterp);
-//		m_iNumPresent += 2;
-//	}
-//
-//	_uint iNumActivatedPairs = m_iNumPresent >> 1;
-//	if (iNumActivatedPairs < 2) 
-//		return; // 시작한지 얼마 안돼서 정점 갯수가 4 미만인 경우 얼리 리턴
-//
-//	// UV 매핑
-//	for (_uint iIndex = 0; iIndex < iNumActivatedPairs; ++iIndex) {
-//		_float u = (_float)iIndex / (_float)(iNumActivatedPairs - 1);
-//		// 전체 UV에서 현재 노트가 위치한 u구하기 ( uv 늘이기 )
-//
-//		_uint iIndexLow = iIndex << 1;
-//		_uint iIndexHigh = iIndexLow + 1;
-//
-//		m_pVTXPOSTEXs[iIndexHigh].vTexCoord = { u, 0.f };
-//		m_pVTXPOSTEXs[iIndexLow].vTexCoord = { u, 1.f };
-//	}
-//
-//	D3D11_MAPPED_SUBRESOURCE SubResource{};
-//	m_pContext->Map(m_pVB, 0, D3D11_MAP_WRITE_DISCARD, 0, &SubResource);
-//
-//	VTXPOSTEX* pVertices = static_cast<VTXPOSTEX*>(SubResource.pData);
-//	for (_uint i = 0; i < m_iNumPresent; ++i) {
-//		pVertices[i] = m_pVTXPOSTEXs[i];
-//	}
-//	m_pContext->Unmap(m_pVB, 0);
-//}
 
 void CTrail::Update_Trail(_fmatrix matCurrentWorld, _bool IsMakeTrail)
 {
@@ -234,7 +141,7 @@ void CTrail::Update_Trail(_fmatrix matCurrentWorld, _bool IsMakeTrail)
 		m_vPreLowPositions[1] = vCurLowPos;
 	}
 
-	const _uint InterpSteps = 8; // 보간점 수
+	_uint InterpSteps = 8; // 보간점 수
 	for (_uint i = 0; i < InterpSteps; ++i)
 	{
 		_float t = (_float)i / (_float)(InterpSteps - 1);
@@ -276,7 +183,6 @@ void CTrail::Update_Trail(_fmatrix matCurrentWorld, _bool IsMakeTrail)
 		m_pVTXPOSTEXs[iLow].vTexCoord = { u, 1.f };
 	}
 
-	// GPU에 전송
 	D3D11_MAPPED_SUBRESOURCE SubResource{};
 	m_pContext->Map(m_pVB, 0, D3D11_MAP_WRITE_DISCARD, 0, &SubResource);
 	memcpy(SubResource.pData, m_pVTXPOSTEXs, sizeof(VTXPOSTEX) * m_iNumPresent);

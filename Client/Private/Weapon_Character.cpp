@@ -120,7 +120,7 @@ HRESULT CWeapon_Character::Initialize(void* pArg)
 
     CTrail::TRAIL_DESC Desc;
     XMStoreFloat4(&Desc.vHighPosition, XMVectorSet(0.f, -1.3f, 0.f, 1.f));
-    XMStoreFloat4(&Desc.vLowPosition, XMVectorSet(0.f, -0.8f, 0.f, 1.f));
+    XMStoreFloat4(&Desc.vLowPosition, XMVectorSet(0.f, -0.5f, 0.f, 1.f));
 
     m_pSwordTrail = static_cast<CTrail*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_SwordTrail"), &Desc));
 
