@@ -7,7 +7,6 @@ NS_BEGIN(Engine)
 class CGameInstance;
 class CModel;
 class CShader;
-class CTrail;
 class CTexture;
 class CCollider;
 NS_END
@@ -47,7 +46,6 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 	virtual HRESULT Render_Shadow() override;
-	virtual HRESULT Render_Trail();
 
 private:
 	_float		m_fTimeAcc = { 0.f };
@@ -62,9 +60,8 @@ private:
 
 	CCollider* m_pColliderCom = { nullptr };
 
-	CShader* m_pTrailShader = { nullptr };
-	CTrail* m_pSwordTrail = { nullptr };
-	CTexture* m_pTrailTexture = { nullptr };
+	class CTrail* m_pSwordTrail = { nullptr };
+
 private:
 	HRESULT Ready_Components();
 	HRESULT Bind_ShaderResources();

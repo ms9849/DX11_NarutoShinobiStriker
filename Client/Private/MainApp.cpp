@@ -405,9 +405,9 @@ HRESULT CMainApp::Ready_Prototypes()
 		CCollider::Create(m_pDevice, m_pContext, COLLIDER::AABB))))
 		return E_FAIL;
 
-	/* For.Prototype_Component_SwordTrail */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_SwordTrail"),
-		CTrail::Create(m_pDevice, m_pContext))))
+	/* For.Prototype_GameObject_SwordTrail */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_SwordTrail"),
+		CTrail::Create(m_pDevice, m_pContext, OBJECTID::TRAIL))))
 		return E_FAIL;
 
 #pragma endregion

@@ -17,7 +17,6 @@
 #include "VIBuffer_Rect_Instance.h"
 #include "VIBuffer_Point_Instance.h"
 #include "Pooling.h"
-#include "Trail.h"
 /* 1. 객체들의 원형을 레벨별로 보관한다. */
 /* 1. 컴포넌트들의 원형을 레벨별로 보관한다. */
 

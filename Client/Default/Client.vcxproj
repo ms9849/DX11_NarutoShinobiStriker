@@ -246,6 +246,7 @@
     <ClInclude Include="..\Public\Potion.h" />
     <ClInclude Include="..\Public\Rope.h" />
     <ClInclude Include="..\Public\SkyCube.h" />
+    <ClInclude Include="..\Public\Trail.h" />
     <ClInclude Include="..\Public\Trigger_Manager.h" />
     <ClInclude Include="..\Public\GameManager.h" />
     <ClInclude Include="..\Public\Gate.h" />
@@ -438,6 +439,7 @@
     <ClCompile Include="..\Private\Potion.cpp" />
     <ClCompile Include="..\Private\Rope.cpp" />
     <ClCompile Include="..\Private\SkyCube.cpp" />
+    <ClCompile Include="..\Private\Trail.cpp" />
     <ClCompile Include="..\Private\Trigger_Manager.cpp" />
     <ClCompile Include="..\Private\GameManager.cpp" />
     <ClCompile Include="..\Private\Gate.cpp" />

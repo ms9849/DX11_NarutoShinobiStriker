@@ -81,8 +81,8 @@ _bool CWeapon_Character::Play_Animation(_float fTimeDelta)
 
 
     if ((0 == m_strCurrentAnimName.compare("CustomMan_Attack_SnakeSword_cmb_01") && m_pUpper_Player->Get_AnimProgress() >= 0.2f && m_pUpper_Player->Get_AnimProgress() <= 0.6f) ||
-        (0 == m_strCurrentAnimName.compare("CustomMan_Attack_SnakeSword_cmb_02") && m_pUpper_Player->Get_AnimProgress() <= 0.6f) ||
-        (0 == m_strCurrentAnimName.compare("CustomMan_Attack_SnakeSword_cmb_03") && m_pUpper_Player->Get_AnimProgress() <= 0.55f))
+        (0 == m_strCurrentAnimName.compare("CustomMan_Attack_SnakeSword_cmb_02") && m_pUpper_Player->Get_AnimProgress() <= 0.6f && m_pUpper_Player->Get_AnimProgress() >= 0.1f) ||
+        (0 == m_strCurrentAnimName.compare("CustomMan_Attack_SnakeSword_cmb_03") && m_pUpper_Player->Get_AnimProgress() <= 0.55f && m_pUpper_Player->Get_AnimProgress() >= 0.15f))
         m_IsCreateTrail = true;
     else
         m_IsCreateTrail = false;
@@ -118,6 +118,12 @@ HRESULT CWeapon_Character::Initialize(void* pArg)
 
     Safe_AddRef(m_pUpper_Player);
 
+    CTrail::TRAIL_DESC Desc;
+    XMStoreFloat4(&Desc.vHighPosition, XMVectorSet(0.f, -1.3f, 0.f, 1.f));
+    XMStoreFloat4(&Desc.vLowPosition, XMVectorSet(0.f, -0.8f, 0.f, 1.f));
+
+    m_pSwordTrail = static_cast<CTrail*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_SwordTrail"), &Desc));
+
     return S_OK;
 }
 
@@ -143,6 +149,7 @@ void CWeapon_Character::Update(_float fTimeDelta)
 
     /* 컴바인드 매트릭스 던져주면서 자연스럽게 크기도 따라가게 됨. */
     m_pColliderCom->Update(XMLoadFloat4x4(&m_CombinedWorldMatrix));
+    m_pSwordTrail->Set_CombinedWorldMatrix(XMLoadFloat4x4(&m_CombinedWorldMatrix));
 
     m_fTimeAcc += fTimeDelta;
 
@@ -155,6 +162,8 @@ void CWeapon_Character::Late_Update(_float fTimeDelta)
     m_pGameInstance->Add_RenderGroup(RENDER::SHADOW, this);
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 
+    if(true == m_IsCreateTrail)
+        m_pSwordTrail->Late_Update(fTimeDelta);
 #ifdef _DEBUG
     /* 검일때만 렌더링 */
     if(m_eType == WEAPON_TYPE::SWORD)
@@ -180,34 +189,6 @@ HRESULT CWeapon_Character::Render()
         if (FAILED(m_pModelCom->Render(i)))
             return E_FAIL;
     }
-
-    if (true == m_IsCreateTrail)
-    {
-        if (FAILED(Render_Trail()))
-            return E_FAIL;
-    }
-    return S_OK;
-}
-
-HRESULT CWeapon_Character::Render_Trail()
-{
-    if (FAILED(m_pTrailShader->Bind_Matrix("g_WorldMatrix", m_pTransformCom->Get_WorldMatrixPtr())))
-        return E_FAIL;
-
-    if (FAILED(m_pTrailShader->Bind_Matrix("g_ViewMatrix", m_pGameInstance->Get_PipeLine_Float4x4(D3DTS::VIEW))))
-        return E_FAIL;
-
-    if (FAILED(m_pTrailShader->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_PipeLine_Float4x4(D3DTS::PROJ))))
-        return E_FAIL;
-
-    if (FAILED(m_pTrailTexture->Bind_ShaderResource(m_pTrailShader, "g_Texture", 0)))
-        return E_FAIL;
-
-    if (FAILED(m_pTrailShader->Begin(ENUM_CLASS(SHADER_VTXPOSTEX_IDX::TRAIL))))
-        return E_FAIL;
-
-    if(FAILED(m_pSwordTrail->Render()))
-        return E_FAIL;
 
     return S_OK;
 }
@@ -257,28 +238,6 @@ HRESULT CWeapon_Character::Ready_Components()
         OBBDesc.vAngles = _float3(0.f, 0.f/*XMConvertToRadians(45.0f)*/, 0.f);
         if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_OBB"),
             TEXT("Com_Collider_OBB"), reinterpret_cast<CComponent**>(&m_pColliderCom), &OBBDesc)))
-            return E_FAIL;
-
-        /* Com_TrailShader */
-        if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxPosTex"),
-            TEXT("Com_TrailShader"), reinterpret_cast<CComponent**>(&m_pTrailShader))))
-            return E_FAIL;
-
-        /* Com_Texture */
-        if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_SwordTrail"),
-            TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTrailTexture))))
-            return E_FAIL;
-
-
-        //_vector vHigh = XMVectorSet(0.f, -1.f, 0.f, 1.f);
-        //_vector vLow = XMVectorSet(0.f, 0.f, 0.f, 1.f);
-
-        CTrail::TRAIL_DESC Desc;
-        XMStoreFloat4(&Desc.vHighPosition, XMVectorSet(0.f, -1.3f, 0.f, 1.f));
-        XMStoreFloat4(&Desc.vLowPosition, XMVectorSet(0.f, -0.8f, 0.f, 1.f));
-        /* Com_SwordTrail */
-        if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_SwordTrail"),
-            TEXT("Com_SwordTrail"), reinterpret_cast<CComponent**>(&m_pSwordTrail), &Desc)))
             return E_FAIL;
     }
 
@@ -344,7 +303,5 @@ void CWeapon_Character::Free()
 
     Safe_Release(m_pUpper_Player);
     Safe_Release(m_pColliderCom);
-    Safe_Release(m_pTrailTexture);
     Safe_Release(m_pSwordTrail);
-    Safe_Release(m_pTrailShader);
 }

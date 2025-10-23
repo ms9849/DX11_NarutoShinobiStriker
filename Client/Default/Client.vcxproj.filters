@@ -613,6 +613,9 @@
     <Filter Include="02. GameObjects\03. Effect\02. Sprite\Icon">
       <UniqueIdentifier>{fe96f895-9657-4ec1-947b-d883e05b6788}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\13. Trail">
+      <UniqueIdentifier>{e0e34469-e2f1-4f4d-918d-d5aa7efc3b61}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1188,6 +1191,9 @@
     <ClInclude Include="..\Public\SkyCube.h">
       <Filter>02. GameObjects\01. BackGround\00. SkyBox\SkyCube</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Trail.h">
+      <Filter>02. GameObjects\13. Trail</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1760,6 +1766,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\SkyCube.cpp">
       <Filter>02. GameObjects\01. BackGround\00. SkyBox\SkyCube</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Trail.cpp">
+      <Filter>02. GameObjects\13. Trail</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

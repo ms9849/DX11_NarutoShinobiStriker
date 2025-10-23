@@ -222,14 +222,17 @@ PS_OUT PS_TRAIL(PS_IN In)
     Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
     
     // RGB 평균값 (밝기)
-    float fLuminance = dot(Out.vColor.rgb, float3(0.299, 0.587, 0.114));
+    //float fLuminance = dot(Out.vColor.rgb, float3(0.299, 0.587, 0.114));
 
     // 너무 어두운 부분은 버림
-    if (fLuminance < 0.2f)
+    //if (fLuminance < 0.2f)
+    //    discard;
+    //    Out.vColor.rgb = float3(1.f, 1.f, 1.f); 
+    float fColorSum = Out.vColor.r + Out.vColor.g + Out.vColor.b;
+    
+    if(fColorSum <= 1.5f)
         discard;
-    
-    Out.vColor.rgb += float3(0.5f, 0.5f, 0.5f);
-    
+   
     return Out;
 }
 
