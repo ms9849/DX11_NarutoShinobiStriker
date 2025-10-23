@@ -43,7 +43,7 @@ void CEventObject::Priority_Update(_float fTimeDelta)
 
 void CEventObject::Update(_float fTimeDelta)
 {
-	m_pIcon->Set_Position(m_pTransformCom->Get_State(STATE::POSITION) + XMVectorSet(0.f, 1.5f, 0.f, 1.f));
+	m_pIcon->Set_Position(m_pTransformCom->Get_State(STATE::POSITION) + XMVectorSet(0.f, 1.5f, 0.f, 0.f));
 	m_pColliderCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
 }
 

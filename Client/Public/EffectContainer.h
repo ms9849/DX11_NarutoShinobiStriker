@@ -59,8 +59,10 @@ public:
 public:
 	void Save_Container_ToBinary(const _char* pFilePath);
 	void Load_Container_FromBinary(const _tchar* pFilePath);
+	void Set_Blur(_bool bFlag) { m_IsBlur = bFlag; }
 
 public:
+
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Priority_Update(_float fTimeDelta) override;
@@ -69,8 +71,9 @@ public:
 	virtual HRESULT Render() override;
 
 private:
-	_float4x4 m_ParentWorldMatrix = {};
-	_bool m_IsVisible = { true };
+	_bool		m_IsBlur = { false };
+	_float4x4	m_ParentWorldMatrix = {};
+	_bool		m_IsVisible = { true };
 	CEffectObject* m_pMainEffect = { nullptr };
 	map<_wstring, class CEffectObject*> m_EffectObjects = {};
 	vector<class CParticleObject*> m_ParticleObjects = {};

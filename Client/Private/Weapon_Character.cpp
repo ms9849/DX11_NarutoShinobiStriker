@@ -1,6 +1,7 @@
 #include "Weapon_Character.h"
 
 #include "GameInstance.h"
+#include "Trail.h"
 
 CWeapon_Character::CWeapon_Character(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CParts_Character { pDevice, pContext, eObjectID }
@@ -27,23 +28,29 @@ void CWeapon_Character::Set_AnimIndex(const _char* pAnimName, _float fAnimationP
         && m_pUpper_Player->Get_AnimProgress() >= 0.1f
         && m_pUpper_Player->Get_AnimProgress() <= 0.75f)
     {
+        m_IsCreateTrail = true;
         IsAttached = false;
     }
 
     else if (0 == m_strCurrentAnimName.compare("CustomMan_Attack_SnakeSword_cmb_02")
         && m_pUpper_Player->Get_AnimProgress() <= 0.8f)
     {
+        m_IsCreateTrail = true;
         IsAttached = false;
     }
 
     else if (0 == m_strCurrentAnimName.compare("CustomMan_Attack_SnakeSword_cmb_03")
         && m_pUpper_Player->Get_AnimProgress() <= 0.75f)
     {
+        m_IsCreateTrail = true;
         IsAttached = false;
     }
 
     else
+    {
+        m_IsCreateTrail = false;
         IsAttached = true;
+    }
 }
 
 _bool CWeapon_Character::Play_Animation(_float fTimeDelta)
@@ -53,18 +60,30 @@ _bool CWeapon_Character::Play_Animation(_float fTimeDelta)
     if (0 == m_strCurrentAnimName.compare("CustomMan_Attack_SnakeSword_cmb_01")
         && m_pUpper_Player->Get_AnimProgress() >= 0.1f
         && m_pUpper_Player->Get_AnimProgress() <= 0.75f)
+    {
+        m_IsCreateTrail = true;
         IsAttached = false;
+    }
 
     else if (0 == m_strCurrentAnimName.compare("CustomMan_Attack_SnakeSword_cmb_02")
         && m_pUpper_Player->Get_AnimProgress() <= 0.8f)
+    {
+        m_IsCreateTrail = true;
         IsAttached = false;
+    }
 
     else if (0 == m_strCurrentAnimName.compare("CustomMan_Attack_SnakeSword_cmb_03")
         && m_pUpper_Player->Get_AnimProgress() <= 0.75f)
+    {
+        m_IsCreateTrail = true;
         IsAttached = false;
+    }
 
     else
+    {
+        m_IsCreateTrail = false;
         IsAttached = true;
+    }
 
     return true;
 }
@@ -122,6 +141,7 @@ void CWeapon_Character::Update(_float fTimeDelta)
 
     /* 컴바인드 매트릭스 던져주면서 자연스럽게 크기도 따라가게 됨. */
     m_pColliderCom->Update(XMLoadFloat4x4(&m_CombinedWorldMatrix));
+    m_pSwordTrail->Update_Trail(XMLoadFloat4x4(&m_CombinedWorldMatrix), true);
 }
 
 void CWeapon_Character::Late_Update(_float fTimeDelta)
@@ -154,6 +174,35 @@ HRESULT CWeapon_Character::Render()
         if (FAILED(m_pModelCom->Render(i)))
             return E_FAIL;
     }
+
+    if (true == m_IsCreateTrail)
+    {
+        if (FAILED(Render_Trail()))
+            return E_FAIL;
+    }
+
+    return S_OK;
+}
+
+HRESULT CWeapon_Character::Render_Trail()
+{
+    if (FAILED(m_pTrailShader->Bind_Matrix("g_WorldMatrix", m_pTransformCom->Get_WorldMatrixPtr())))
+        return E_FAIL;
+
+    if (FAILED(m_pTrailShader->Bind_Matrix("g_ViewMatrix", m_pGameInstance->Get_PipeLine_Float4x4(D3DTS::VIEW))))
+        return E_FAIL;
+
+    if (FAILED(m_pTrailShader->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_PipeLine_Float4x4(D3DTS::PROJ))))
+        return E_FAIL;
+
+    if (FAILED(m_pTrailTexture->Bind_ShaderResource(m_pTrailShader, "g_Texture", 0)))
+        return E_FAIL;
+
+    if (FAILED(m_pTrailShader->Begin(ENUM_CLASS(SHADER_VTXPOSTEX_IDX::TRAIL))))
+        return E_FAIL;
+
+    if(FAILED(m_pSwordTrail->Render()))
+        return E_FAIL;
 
     return S_OK;
 }
@@ -205,6 +254,27 @@ HRESULT CWeapon_Character::Ready_Components()
             TEXT("Com_Collider_OBB"), reinterpret_cast<CComponent**>(&m_pColliderCom), &OBBDesc)))
             return E_FAIL;
 
+        /* Com_TrailShader */
+        if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxPosTex"),
+            TEXT("Com_TrailShader"), reinterpret_cast<CComponent**>(&m_pTrailShader))))
+            return E_FAIL;
+
+        /* Com_Texture */
+        if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_SwordTrail"),
+            TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTrailTexture))))
+            return E_FAIL;
+
+
+        //_vector vHigh = XMVectorSet(0.f, -1.f, 0.f, 1.f);
+        //_vector vLow = XMVectorSet(0.f, 0.f, 0.f, 1.f);
+
+        CTrail::TRAIL_DESC Desc;
+        XMStoreFloat4(&Desc.vHighPosition, XMVectorSet(0.f, -1.3f, 0.f, 1.f));
+        XMStoreFloat4(&Desc.vLowPosition, XMVectorSet(0.f, -0.3f, 0.f, 1.f));
+        /* Com_SwordTrail */
+        if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_SwordTrail"),
+            TEXT("Com_SwordTrail"), reinterpret_cast<CComponent**>(&m_pSwordTrail), &Desc)))
+            return E_FAIL;
     }
 
     else if(WEAPON_TYPE::GLOVE == m_eType)
@@ -269,4 +339,7 @@ void CWeapon_Character::Free()
 
     Safe_Release(m_pUpper_Player);
     Safe_Release(m_pColliderCom);
+    Safe_Release(m_pTrailTexture);
+    Safe_Release(m_pSwordTrail);
+    Safe_Release(m_pTrailShader);
 }

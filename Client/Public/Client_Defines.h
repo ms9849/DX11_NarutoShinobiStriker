@@ -66,6 +66,7 @@ namespace Client
 		UI_SKILL,
 		UI_SPECIALSKILL,
 		OUTFIT_BACKGROUND,
+		TRAIL, 
 		END
 	};
 

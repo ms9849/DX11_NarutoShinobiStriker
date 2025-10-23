@@ -108,7 +108,8 @@ void CParticleObject::Late_Update(_float fTimeDelta)
 {
 	if (false == m_IsVisible)
 		return;
-
+	
+	m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
 	m_pGameInstance->Add_RenderGroup(RENDER::BLUR, this);
 }
 

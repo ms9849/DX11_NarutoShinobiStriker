@@ -40,6 +40,7 @@
 
 #include "EffectContainer.h"
 #include "EffectObject.h"
+#include "Trail.h"
 
 #pragma endregion
 
@@ -326,6 +327,11 @@ HRESULT CMainApp::Ready_Prototypes()
 #pragma endregion
 
 #pragma region TEXTURE
+	/* For.Prototype_Component_Texture_SwordTrail */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_SwordTrail"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Noise/Noise28.png"), 1))))
+		return E_FAIL;
+
 	/* For.Prototype_Component_Texture_SkillCoolDownEffect */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_SkillCoolDownEffect"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/SkillSlot/SkillCoolDownEffect.png"), 1))))
@@ -397,6 +403,11 @@ HRESULT CMainApp::Ready_Prototypes()
 	/* For.Prototype_Component_Collider_AABB */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_AABB"),
 		CCollider::Create(m_pDevice, m_pContext, COLLIDER::AABB))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_SwordTrail */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_SwordTrail"),
+		CTrail::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion

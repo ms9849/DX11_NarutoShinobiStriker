@@ -4,8 +4,11 @@
 #include "Parts_Character.h"
 
 NS_BEGIN(Engine)
+class CGameInstance;
 class CModel;
 class CShader;
+class CTrail;
+class CTexture;
 class CCollider;
 NS_END
 
@@ -44,7 +47,10 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 	virtual HRESULT Render_Shadow() override;
+	virtual HRESULT Render_Trail();
+
 private:
+	_bool		m_IsCreateTrail = { false };
 	_string		m_strCurrentAnimName = {};
 	const _float4x4* m_pAttachMatrix = { nullptr };
 	const _float4x4* m_pHandMatrix = { nullptr };
@@ -54,6 +60,9 @@ private:
 
 	CCollider* m_pColliderCom = { nullptr };
 
+	CShader* m_pTrailShader = { nullptr };
+	CTrail* m_pSwordTrail = { nullptr };
+	CTexture* m_pTrailTexture = { nullptr };
 private:
 	HRESULT Ready_Components();
 	HRESULT Bind_ShaderResources();

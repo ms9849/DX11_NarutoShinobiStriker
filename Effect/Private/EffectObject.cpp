@@ -413,10 +413,10 @@ void CEffectObject::Late_Update(_float fTimeDelta)
 		return;
 
     /* 문제없나..?*/
-	//if (m_IsBlend)
-	//	m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
-	//else if(false == m_IsBlend)
-	//	m_pGameInstance->Add_RenderGroup(RENDER::NONLIGHT, this);
+	if (m_IsBlend)
+		m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
+	else if(false == m_IsBlend)
+		m_pGameInstance->Add_RenderGroup(RENDER::NONLIGHT, this);
 	m_pGameInstance->Add_RenderGroup(RENDER::BLUR, this);
 
 }

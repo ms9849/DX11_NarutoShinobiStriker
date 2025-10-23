@@ -244,6 +244,9 @@
     <ClInclude Include="..\Public\VIBuffer_Cube.h">
       <Filter>01.Utility\03.Components\VIBuffer\Cube</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Trail.h">
+      <Filter>01.Utility\03.Components\Trail</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -443,6 +446,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\VIBuffer_Cube.cpp">
       <Filter>01.Utility\03.Components\VIBuffer\Cube</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Trail.cpp">
+      <Filter>01.Utility\03.Components\Trail</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -661,6 +667,9 @@
     </Filter>
     <Filter Include="01.Utility\03.Components\VIBuffer\Cube">
       <UniqueIdentifier>{24e44c9f-c631-4d87-a830-7688f2ffa0a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Trail">
+      <UniqueIdentifier>{9a4c32c0-d296-417e-ab7c-e7d20ed936df}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

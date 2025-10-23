@@ -222,6 +222,15 @@ void CEffectContainer::Late_Update(_float fTimeDelta)
         if (pEffectObject.second->Get_StartTime() <= m_pMainEffect->Get_CurLifeTime())
             pEffectObject.second->Late_Update(fTimeDelta);
     }
+
+    if (true == m_IsBlur)
+    {
+        m_pMainEffect->Set_Blur(true);
+        for (auto& pEffectObject : m_EffectObjects)
+        {
+            pEffectObject.second->Set_Blur(true);
+        }
+    }
 }
 
 HRESULT CEffectContainer::Render()

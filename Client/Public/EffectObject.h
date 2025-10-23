@@ -61,6 +61,7 @@ private:
 	virtual ~CEffectObject() = default;
 
 public:
+	void Set_Blur(_bool bFlag) { m_IsBlur = bFlag;  }
 	void Set_Visible(_bool bFlag) { m_IsVisible = bFlag; }
 	HRESULT Save_ToBinary(const _char* pEffectName);
 	HRESULT Load_FromBinary(const _tchar* pEffectName);

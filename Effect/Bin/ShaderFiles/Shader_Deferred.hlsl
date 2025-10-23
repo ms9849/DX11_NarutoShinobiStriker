@@ -155,11 +155,36 @@ PS_OUT_LIGHT PS_MAIN_POINT(PS_IN In)
     return Out;
 }
 
+
+float g_fWeights[25] =
+{
+    0.0001, 0.0003, 0.0008, 0.0021, 0.0052, 0.0131, 0.0316, 0.0750,
+    0.155, 0.295, 0.440, 0.560, 0.590,
+    0.560, 0.440, 0.295, 0.155, 0.0750, 0.0316, 0.0131, 0.0052,
+    0.0021, 0.0008, 0.0003, 0.0001
+};
+
+
+/*
 float g_fWeights[13] =
 {
     0.000526, 0.00158, 0.00421, 0.01052, 0.03156, 0.08412, 0.7355,
     0.08412, 0.03156, 0.01052, 0.00421, 0.00158, 0.000526
 };
+*/
+
+
+/*
+float g_fWeights[37] =
+{
+    0.056135, 0.076621, 0.102740, 0.135335, 0.175131, 0.222635, 0.278037, 0.341108, 0.411112,
+    0.486752, 0.566154, 0.646905, 0.726149, 0.800737, 0.867428, 0.923116, 0.965069, 0.991151,
+    1.000000, 0.991151, 0.965069, 0.923116, 0.867428, 0.800737, 0.726149, 0.646905, 0.566154,
+    0.486752, 0.411112, 0.341108, 0.278037, 0.222635, 0.175131, 0.135335, 0.102740, 0.076621,
+    0.056135
+};
+*/
+
 
 PS_OUT_BACKBUFFER PS_MAIN_COMBINED(PS_IN In)
 {
@@ -209,15 +234,23 @@ PS_OUT_BACKBUFFER PS_MAIN_COMBINED(PS_IN In)
     if (vPosition.w - 0.1f > vShadowDepth.x * 500.0f)
         Out.vBackBuffer *= 0.5f;
    
-    float4 vColor = 0.f;
     
-    for (int i = -6; i <= 6; ++i)
+    /* 블러 후처리 */
+    float4 vColor = 0.f;
+    float4 fWeightSum = 0.f;
+    
+    for (int i = -12; i <= 12; ++i)
     {
-        vTexcoord.x = In.vTexcoord.x;
-        vTexcoord.y = In.vTexcoord.y + i / 720.f;
-        
-        vColor += g_fWeights[i + 6] * g_BlurXTexture.Sample(ClampSampler, vTexcoord);
+        vTexcoord = float2(In.vTexcoord.x , In.vTexcoord.y + (float) i / 720.f);
+
+        vColor += g_fWeights[i + 12] * g_BlurTexture.Sample(ClampSampler, vTexcoord);
+        fWeightSum += g_fWeights[i + 12];
     }
+   
+    vColor /= fWeightSum;
+    
+    //vColor.rgb *= 0.05f;
+    //vColor.a *= 0.1f;
     
     Out.vBackBuffer += vColor;
      
@@ -237,14 +270,17 @@ PS_OUT_BLUR_X PS_MAIN_X(PS_IN In)
     float2 vTexcoord;
     
     float4 vColor = 0.f;
+    float4 fWeightSum = 0.f;
     
-    for (int i = -6; i <= 6; ++i)
+    for (int i = -12; i <= 12; ++i)
     {
-        vTexcoord.x = In.vTexcoord.x + (float) i / 1280.f;
-        vTexcoord.y = In.vTexcoord.y;
-        vColor += g_fWeights[i + 6] * g_BlurTexture.Sample(ClampSampler, In.vTexcoord);
+        vTexcoord = float2(In.vTexcoord.x + (float) i / 1280.f, In.vTexcoord.y);
+
+        vColor += g_fWeights[i + 12] * g_BlurTexture.Sample(ClampSampler, vTexcoord);
+        fWeightSum += g_fWeights[i + 12];
     }
-   
+    
+    vColor /= fWeightSum;
     Out.vBlurX = vColor;
     
     return Out;
