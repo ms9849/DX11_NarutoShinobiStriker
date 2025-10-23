@@ -50,12 +50,14 @@ public:
 	virtual HRESULT Render_Trail();
 
 private:
+	_float		m_fTimeAcc = { 0.f };
 	_bool		m_IsCreateTrail = { false };
 	_string		m_strCurrentAnimName = {};
 	const _float4x4* m_pAttachMatrix = { nullptr };
 	const _float4x4* m_pHandMatrix = { nullptr };
 	CParts_Character* m_pUpper_Player = { nullptr };
-	_bool IsAttached = { true };
+	/* 등 본에 붙어 있는가 */
+	_bool m_IsAttached = { true };
 	WEAPON_TYPE m_eType = {};
 
 	CCollider* m_pColliderCom = { nullptr };

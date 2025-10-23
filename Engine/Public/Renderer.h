@@ -24,7 +24,7 @@ public:
 #ifdef _DEBUG
 public:
 	HRESULT Add_DebugComponent(class CComponent* pDebugComponent);
-
+	
 #endif
 private:
 	ID3D11Device*				m_pDevice = { nullptr };
@@ -38,6 +38,7 @@ private:
 
 #ifdef _DEBUG
 private:
+	list<class CComponent*>				m_BlurComponents;
 	list<class CComponent*>				m_DebugComponents;
 #endif
 private:

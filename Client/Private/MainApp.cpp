@@ -329,7 +329,7 @@ HRESULT CMainApp::Ready_Prototypes()
 #pragma region TEXTURE
 	/* For.Prototype_Component_Texture_SwordTrail */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_SwordTrail"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Noise/Noise28.png"), 1))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/SwordTrail.png"), 1))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Texture_SkillCoolDownEffect */

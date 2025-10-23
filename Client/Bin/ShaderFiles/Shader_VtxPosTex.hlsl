@@ -221,6 +221,15 @@ PS_OUT PS_TRAIL(PS_IN In)
     
     Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
     
+    // RGB 평균값 (밝기)
+    float fLuminance = dot(Out.vColor.rgb, float3(0.299, 0.587, 0.114));
+
+    // 너무 어두운 부분은 버림
+    if (fLuminance < 0.2f)
+        discard;
+    
+    Out.vColor.rgb += float3(0.5f, 0.5f, 0.5f);
+    
     return Out;
 }
 
@@ -316,9 +325,9 @@ technique11 DefaultTechnique
 
     pass SwordTrail
     {
-        SetRasterizerState(RS_Default);
+        SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_Default, 0);
-        SetBlendState(BS_None, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;

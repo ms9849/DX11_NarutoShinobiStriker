@@ -2,6 +2,11 @@
 
 #include "Component.h"
 
+
+/*
+트레일 게임 오브젝트로 바꿀 것
+*/
+
 NS_BEGIN(Engine)
 
 class ENGINE_DLL CTrail final : public CComponent
@@ -10,6 +15,8 @@ public:
 	typedef struct tagTrail {
 		_float4 vHighPosition = {};
 		_float4 vLowPosition = {};
+		class CTexture* pTextureCom = { nullptr };
+		class CShader* pShaderCom = { nullptr };
 	} TRAIL_DESC;
 private:
 	CTrail(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -27,6 +34,10 @@ public:
 	virtual HRESULT Render() override;
 
 private:
+	class CTexture* m_pTextureCom = { nullptr };
+	class CShader* m_pShaderCom = { nullptr };
+
+	_float m_fTimeAcc = { 0.f };
 	ID3D11Buffer* m_pVB = { nullptr };
 	ID3D11Buffer* m_pIB = { nullptr };
 	VTXPOSTEX* m_pVTXPOSTEXs = {};
@@ -37,6 +48,9 @@ private:
 	_uint			m_iNumVertices = {};
 	_uint			m_iNumIndices = {};
 
+	/* 이전 프레임 2개까지의 컴바인드 월드매트릭스 저장 */
+	_float3			m_vPreHighPositions[3];
+	_float3			m_vPreLowPositions[3];
 public:
 	static CTrail* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CComponent* Clone(void* pArg) override;

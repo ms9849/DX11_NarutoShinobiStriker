@@ -372,6 +372,16 @@ void CRenderer::Render_Blur()
 
 	m_RenderObjects[ENUM_CLASS(RENDER::BLUR)].clear();
 
+
+	for (auto& pBlurComponent : m_BlurComponents)
+	{
+		if (nullptr != pBlurComponent)
+			pBlurComponent->Render();
+
+		Safe_Release(pBlurComponent);
+	}
+
+
 	if (FAILED(m_pGameInstance->End_MRT()))
 		return;
 
@@ -562,4 +572,10 @@ void CRenderer::Free()
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pGameInstance);
 	Safe_Release(m_pShadowDSV);
+
+	for (auto& BlurComponents : m_BlurComponents)
+	{
+		Safe_Release(BlurComponents);
+	}
+	m_BlurComponents.clear();
 }

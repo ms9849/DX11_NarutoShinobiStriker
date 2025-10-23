@@ -28,29 +28,35 @@ void CWeapon_Character::Set_AnimIndex(const _char* pAnimName, _float fAnimationP
         && m_pUpper_Player->Get_AnimProgress() >= 0.1f
         && m_pUpper_Player->Get_AnimProgress() <= 0.75f)
     {
-        m_IsCreateTrail = true;
-        IsAttached = false;
+        m_IsAttached = false;
     }
 
     else if (0 == m_strCurrentAnimName.compare("CustomMan_Attack_SnakeSword_cmb_02")
         && m_pUpper_Player->Get_AnimProgress() <= 0.8f)
     {
-        m_IsCreateTrail = true;
-        IsAttached = false;
+        m_IsAttached = false;
     }
 
     else if (0 == m_strCurrentAnimName.compare("CustomMan_Attack_SnakeSword_cmb_03")
         && m_pUpper_Player->Get_AnimProgress() <= 0.75f)
     {
-        m_IsCreateTrail = true;
-        IsAttached = false;
+        m_IsAttached = false;
     }
 
     else
     {
         m_IsCreateTrail = false;
-        IsAttached = true;
+        m_IsAttached = true;
     }
+
+
+    if ((0 == m_strCurrentAnimName.compare("CustomMan_Attack_SnakeSword_cmb_01") && m_pUpper_Player->Get_AnimProgress() >= 0.2f && m_pUpper_Player->Get_AnimProgress() <= 0.6f) ||
+        (0 == m_strCurrentAnimName.compare("CustomMan_Attack_SnakeSword_cmb_02") && m_pUpper_Player->Get_AnimProgress() <= 0.6f) ||
+        (0 == m_strCurrentAnimName.compare("CustomMan_Attack_SnakeSword_cmb_03") && m_pUpper_Player->Get_AnimProgress() <= 0.55f))
+        m_IsCreateTrail = true;
+    else 
+        m_IsCreateTrail = false;
+
 }
 
 _bool CWeapon_Character::Play_Animation(_float fTimeDelta)
@@ -60,30 +66,26 @@ _bool CWeapon_Character::Play_Animation(_float fTimeDelta)
     if (0 == m_strCurrentAnimName.compare("CustomMan_Attack_SnakeSword_cmb_01")
         && m_pUpper_Player->Get_AnimProgress() >= 0.1f
         && m_pUpper_Player->Get_AnimProgress() <= 0.75f)
-    {
-        m_IsCreateTrail = true;
-        IsAttached = false;
-    }
+        m_IsAttached = false;
 
     else if (0 == m_strCurrentAnimName.compare("CustomMan_Attack_SnakeSword_cmb_02")
         && m_pUpper_Player->Get_AnimProgress() <= 0.8f)
-    {
-        m_IsCreateTrail = true;
-        IsAttached = false;
-    }
+        m_IsAttached = false;
 
     else if (0 == m_strCurrentAnimName.compare("CustomMan_Attack_SnakeSword_cmb_03")
         && m_pUpper_Player->Get_AnimProgress() <= 0.75f)
-    {
-        m_IsCreateTrail = true;
-        IsAttached = false;
-    }
+        m_IsAttached = false;
 
     else
-    {
+        m_IsAttached = true;
+
+
+    if ((0 == m_strCurrentAnimName.compare("CustomMan_Attack_SnakeSword_cmb_01") && m_pUpper_Player->Get_AnimProgress() >= 0.2f && m_pUpper_Player->Get_AnimProgress() <= 0.6f) ||
+        (0 == m_strCurrentAnimName.compare("CustomMan_Attack_SnakeSword_cmb_02") && m_pUpper_Player->Get_AnimProgress() <= 0.6f) ||
+        (0 == m_strCurrentAnimName.compare("CustomMan_Attack_SnakeSword_cmb_03") && m_pUpper_Player->Get_AnimProgress() <= 0.55f))
+        m_IsCreateTrail = true;
+    else
         m_IsCreateTrail = false;
-        IsAttached = true;
-    }
 
     return true;
 }
@@ -127,7 +129,7 @@ void CWeapon_Character::Update(_float fTimeDelta)
 {
     _matrix		SocketMatrix;
 
-    if (true == IsAttached)
+    if (true == m_IsAttached)
         SocketMatrix = XMLoadFloat4x4(m_pAttachMatrix);
     else
         SocketMatrix = XMLoadFloat4x4(m_pHandMatrix);
@@ -141,7 +143,11 @@ void CWeapon_Character::Update(_float fTimeDelta)
 
     /* 컴바인드 매트릭스 던져주면서 자연스럽게 크기도 따라가게 됨. */
     m_pColliderCom->Update(XMLoadFloat4x4(&m_CombinedWorldMatrix));
-    m_pSwordTrail->Update_Trail(XMLoadFloat4x4(&m_CombinedWorldMatrix), true);
+
+    m_fTimeAcc += fTimeDelta;
+
+    if(m_fTimeAcc >= 0.01f)
+        m_pSwordTrail->Update_Trail(XMLoadFloat4x4(&m_CombinedWorldMatrix), true);
 }
 
 void CWeapon_Character::Late_Update(_float fTimeDelta)
@@ -180,7 +186,6 @@ HRESULT CWeapon_Character::Render()
         if (FAILED(Render_Trail()))
             return E_FAIL;
     }
-
     return S_OK;
 }
 
@@ -270,7 +275,7 @@ HRESULT CWeapon_Character::Ready_Components()
 
         CTrail::TRAIL_DESC Desc;
         XMStoreFloat4(&Desc.vHighPosition, XMVectorSet(0.f, -1.3f, 0.f, 1.f));
-        XMStoreFloat4(&Desc.vLowPosition, XMVectorSet(0.f, -0.3f, 0.f, 1.f));
+        XMStoreFloat4(&Desc.vLowPosition, XMVectorSet(0.f, -0.8f, 0.f, 1.f));
         /* Com_SwordTrail */
         if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_SwordTrail"),
             TEXT("Com_SwordTrail"), reinterpret_cast<CComponent**>(&m_pSwordTrail), &Desc)))
