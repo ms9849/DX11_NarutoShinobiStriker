@@ -9,6 +9,7 @@ CTrail::CTrail(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eO
 
 CTrail::CTrail(const CTrail& rhs)
     : CGameObject{ rhs } ,
+	m_eType { rhs.m_eType },
     m_pIB { rhs.m_pIB },
     m_iNumVertices { rhs.m_iNumVertices },
     m_iNumIndices { rhs.m_iNumIndices }
@@ -16,9 +17,12 @@ CTrail::CTrail(const CTrail& rhs)
 	Safe_AddRef(m_pIB);
 }
 
-HRESULT CTrail::Initialize_Prototype()
+HRESULT CTrail::Initialize_Prototype(void* pArg)
 {
-	m_iNumVertices = 44;
+	PROTOTYPE_TRAIL_DESC* pDesc = static_cast<PROTOTYPE_TRAIL_DESC*>(pArg);
+
+	m_eType = pDesc->eType;
+	m_iNumVertices = pDesc->iNumVertices;
 	m_iNumIndices = ((m_iNumVertices / 2) - 1) * 6;
 
 #pragma region IDX_BUFFER
@@ -63,7 +67,14 @@ HRESULT CTrail::Initialize_Prototype()
 
 HRESULT CTrail::Initialize(void* pArg)
 {
-	if (FAILED(Ready_Components()))
+	TRAIL_DESC* pDesc = static_cast<TRAIL_DESC*>(pArg);
+	XMStoreFloat4(&m_vHigh, XMLoadFloat4(&pDesc->vHighPosition));
+	XMStoreFloat4(&m_vLow, XMLoadFloat4(&pDesc->vLowPosition));
+
+	m_iNumPresent = 0;
+	m_iEndIndex = 0;
+
+	if (FAILED(Ready_Components(pDesc->strTrailTextureTag)))
 		return E_FAIL;
 
 #pragma region VTX_BUFFER
@@ -75,19 +86,14 @@ HRESULT CTrail::Initialize(void* pArg)
 	VBDesc.MiscFlags = 0;
 	VBDesc.StructureByteStride = sizeof(VTXPOSTEX);
 
-	m_pVTXPOSTEXs = new VTXPOSTEX[m_iNumVertices]{};
+	m_pVTXPOSTEXs = new VTXPOSTEX[m_iNumVertices];
+	memset(m_pVTXPOSTEXs, 0, sizeof(VTXPOSTEX) * m_iNumVertices);
+
 	if (FAILED(m_pDevice->CreateBuffer(&VBDesc, nullptr, &m_pVB))) {
 		return E_FAIL;
 	}
+
 #pragma endregion
-
-	TRAIL_DESC* pDesc = static_cast<TRAIL_DESC*>(pArg);
-	XMStoreFloat4(&m_vHigh, XMLoadFloat4(&pDesc->vHighPosition));
-	XMStoreFloat4(&m_vLow, XMLoadFloat4(&pDesc->vLowPosition));
-
-	m_iNumPresent = 0;
-	m_iEndIndex = 0;
-	memset(m_pVTXPOSTEXs, 0, sizeof(VTXPOSTEX) * m_iNumVertices);
 
 	return S_OK;
 }
@@ -215,8 +221,16 @@ HRESULT CTrail::Render()
 	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Begin(ENUM_CLASS(SHADER_VTXPOSTEX_IDX::TRAIL))))
-		return E_FAIL;
+	if (TRAIL_TYPE::SWORD == m_eType)
+	{
+		if (FAILED(m_pShaderCom->Begin(ENUM_CLASS(SHADER_VTXPOSTEX_IDX::TRAIL))))
+			return E_FAIL;
+	}
+	else if (TRAIL_TYPE::FOOT == m_eType)
+	{
+		if (FAILED(m_pShaderCom->Begin(ENUM_CLASS(SHADER_VTXPOSTEX_IDX::FOOT_TRAIL))))
+			return E_FAIL;
+	}
 
 	ID3D11Buffer* VertexBuffers[] = { m_pVB };
 	_uint		  VertexStrides[] = { sizeof(VTXPOSTEX) };
@@ -237,13 +251,13 @@ HRESULT CTrail::Render()
 	return S_OK;
 }
 
-HRESULT CTrail::Ready_Components()
+HRESULT CTrail::Ready_Components(const _wstring& strTextureTag)
 {
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxPosTex"),
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_SwordTrail"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), strTextureTag,
 		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 		return E_FAIL;
 
@@ -255,11 +269,11 @@ _bool CTrail::IsRenderable()
 	return (m_iNumPresent < 4);
 }
 
-CTrail* CTrail::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
+CTrail* CTrail::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID, void* pArg)
 {
 	CTrail* pInstance = new CTrail(pDevice, pContext, eObjectID);
 
-	if (FAILED(pInstance->Initialize_Prototype()))
+	if (FAILED(pInstance->Initialize_Prototype(pArg)))
 	{
 		MSG_BOX("Failed to Created : CTrail");
 		Safe_Release(pInstance);

@@ -19,6 +19,7 @@ texture2D g_ShadowTexture;
 texture2D g_BlurTexture;
 texture2D g_BlurXTexture;
 texture2D g_LightLampTexture;
+texture2D g_OutlineTexture;
 
 vector g_vLightDiffuse;
 vector g_vLightAmbient;
@@ -186,6 +187,7 @@ float g_fWeights[13] =
 */
 
 
+
 /*
 float g_fWeights[37] =
 {
@@ -196,7 +198,6 @@ float g_fWeights[37] =
     0.056135
 };
 */
-
 
 /*
 툰 셰이딩을 기본으로 적용한다. 
@@ -261,6 +262,7 @@ PS_OUT_BACKBUFFER PS_MAIN_COMBINED(PS_IN In)
         vTexcoord = float2(In.vTexcoord.x , In.vTexcoord.y + (float) i / 720.f);
 
         vColor += g_fWeights[i + 12] * g_BlurTexture.Sample(ClampSampler, vTexcoord);
+        
         fWeightSum += g_fWeights[i + 12];
     }
    
@@ -271,6 +273,8 @@ PS_OUT_BACKBUFFER PS_MAIN_COMBINED(PS_IN In)
     
     Out.vBackBuffer += vColor;
      
+    Out.vBackBuffer *= g_OutlineTexture.Sample(DefaultSampler, In.vTexcoord);
+    
     return Out;
 }
 
@@ -285,31 +289,77 @@ PS_OUT_BLUR_X PS_MAIN_X(PS_IN In)
     PS_OUT_BLUR_X Out;
     
     float2 vTexcoord;
-    
+    float4 vTextureColor;
     float4 vColor = 0.f;
     float4 fWeightSum = 0.f;
     
     for (int i = -12; i <= 12; ++i)
     {
         vTexcoord = float2(In.vTexcoord.x + (float) i / 1280.f, In.vTexcoord.y);
-
-        vColor += g_fWeights[i + 12] * g_BlurTexture.Sample(ClampSampler, vTexcoord);
+        vTextureColor = g_BlurTexture.Sample(ClampSampler, vTexcoord);
+        vTextureColor.a = 1.f;
+        vColor.rgb += g_fWeights[i + 12] * vTextureColor.rgb;
         fWeightSum += g_fWeights[i + 12];
     }
     
     vColor /= fWeightSum;
+    
     Out.vBlurX = vColor;
     
     return Out;
 }
 
+float Laplacian_Mask[9] =
+{
+    -1, -1, -1,
+    -1, 8, -1,
+    -1, -1, -1,
+};
 
-PS_OUT_BACKBUFFER PS_Shade_Aliasing(PS_IN In)
+float PixelsX[9] = { 
+    -1.f, 0.f, 1.f,
+    -1.f, 0.f, 1.f,
+    -1.f, 0.f, 1.f
+};
+float PixelsY[9] = { 
+    -1.f, -1.f, -1.f,
+    0.f, 0.f, 0.f,
+    1.f, 1.f, 1.f
+};
+
+PS_OUT_BACKBUFFER PS_MAIN_Outline(PS_IN In)
 {
     PS_OUT_BACKBUFFER Out;
+  
+    Out.vBackBuffer = float4(0.f, 0.f, 0.f, 0.f);
     
-    Out.vBackBuffer = g_ShadeTexture.Sample(DefaultSampler, In.vTexcoord);
+    for (int iIdxY = 0; iIdxY < 3; ++iIdxY)
+    {
+        for (int iIdxX = 0; iIdxX < 3; ++iIdxX)
+        {
+            Out.vBackBuffer += Laplacian_Mask[iIdxY * 3 + iIdxX] * (g_NormalTexture.Sample(ShadeSampler, In.vTexcoord +
+            float2(PixelsX[iIdxY * 3 + iIdxX] * 1.25f / 1280.f, PixelsY[iIdxY * 3 + iIdxX] * 1.25f / 720.f)));
+        }
+    }
     
+    /* 
+    float3(0.3f, 0.59f, 0.11f)) 가 가지는 의미
+    -> 인간이 느끼는 색상 별 예민도. 이 값으로 내적하면 그레이스케일 형태의 (rgb가 같은)
+    색이 뽑혀나온다고 한다.
+    */
+    float GrayColor = 1 - dot(Out.vBackBuffer.rgb, float3(0.3f, 0.59f, 0.11f));
+    //float GrayColor = 1 - length(Out.vBackBuffer.rgb);
+    
+    /*
+    다 살리면 너무 민감하니까 성분이 약한 부분은 바로 죽여주기.
+    */
+    if(GrayColor > 0.5f)
+        GrayColor = 1.f;
+    else
+        GrayColor = 0.f;
+    
+    Out.vBackBuffer = float4(GrayColor, GrayColor, GrayColor, 1.f);
+
     return Out;
 }
 
@@ -365,14 +415,14 @@ technique11 DefaultTechnique
         PixelShader = compile ps_5_0 PS_MAIN_X();
     }
 
-    pass ShadeAliasing
+    pass Outline
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_None, 0);
         SetBlendState(BS_None, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
-        PixelShader = compile ps_5_0 PS_Shade_Aliasing();
+        PixelShader = compile ps_5_0 PS_MAIN_Outline();
     }
  
 }

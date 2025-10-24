@@ -215,7 +215,7 @@ PS_OUT PS_SpecialSkill(PS_IN In)
     return Out;
 }
 
-PS_OUT PS_TRAIL(PS_IN In)
+PS_OUT PS_SWORD_TRAIL(PS_IN In)
 {
     PS_OUT Out;
     
@@ -234,6 +234,18 @@ PS_OUT PS_TRAIL(PS_IN In)
         discard;
    
     return Out;
+}
+
+PS_OUT PS_FOOT_TRAIL(PS_IN In)
+{
+    PS_OUT Out;
+    
+    Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
+    Out.vColor.rgb = float3(0.1f, 0.5f, 1.f);
+    Out.vColor.a *= 0.7f;
+    
+    return Out;
+
 }
 
 technique11 DefaultTechnique
@@ -334,6 +346,17 @@ technique11 DefaultTechnique
 
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
-        PixelShader = compile ps_5_0 PS_TRAIL();
+        PixelShader = compile ps_5_0 PS_SWORD_TRAIL();
+    }
+
+    pass FootTrail
+    {
+        SetRasterizerState(RS_Cull_None);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_FOOT_TRAIL();
     }
 }

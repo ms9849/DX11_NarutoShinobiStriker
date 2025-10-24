@@ -30,6 +30,10 @@ HRESULT CRenderer::Initialize()
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Normal"), Viewport.Width, Viewport.Height, DXGI_FORMAT_R16G16B16A16_UNORM, _float4(0.0f, 0.f, 0.f, 1.f))))
 		return E_FAIL;
 
+	/* Target_Outline*/
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Outline"), Viewport.Width, Viewport.Height, DXGI_FORMAT_R16G16B16A16_UNORM, _float4(0.0f, 0.f, 0.f, 1.f))))
+		return E_FAIL;
+
 	/* 
 	얼룩말 무늬 현상 방지 및, 음수 단위의 깊이도 체크하기 위해 픽셀 포맷을 다르게 세팅.
 	*/
@@ -60,18 +64,19 @@ HRESULT CRenderer::Initialize()
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Blur_X"), Viewport.Width, Viewport.Height, DXGI_FORMAT_R8G8B8A8_UNORM, _float4(0.0f, 0.0f, 0.0f, 0.0f))))
 		return E_FAIL;
 
-	/* Target_Shade_Final */
-	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Shade_Final"), Viewport.Width, Viewport.Height, DXGI_FORMAT_R8G8B8A8_UNORM, _float4(0.0f, 0.0f, 0.0f, 0.0f))))
-		return E_FAIL;
-
 
 	/* 게임 오브젝트로부터 뽑아와야하는 디퓨즈 노멀은 MRT_GameObjects로 세팅. */
 	/* MRT_GameObjects */
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_GameObjects"), TEXT("Target_Diffuse"))))
 		return E_FAIL;
+	
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_GameObjects"), TEXT("Target_Normal"))))
 		return E_FAIL;
+
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_GameObjects"), TEXT("Target_Depth"))))
+		return E_FAIL;
+	/* MRT_Outline */
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Outline"), TEXT("Target_Outline"))))
 		return E_FAIL;
 
 	/* MRT_LightAcc */
@@ -81,10 +86,6 @@ HRESULT CRenderer::Initialize()
 	/////* Specular는 LightAcc에서 쌓아서 계산한다. */
 	//if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_LightAcc"), TEXT("Target_Specular"))))
 	//	return E_FAIL;
-
-	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_LightAcc_Final"), TEXT("Target_Shade_Final"))))
-		return E_FAIL;
-
 
 	/* MRT_Shadow */
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Shadow"), TEXT("Target_Shadow"))))
@@ -116,23 +117,17 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Normal"), Viewport.Width - 75.f, 225.f, 150.f, 150.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Shade"), Viewport.Width - 225.f, 75.f, 300.f, 300.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Shade"), Viewport.Width - 225.f, 75.f, 150.f, 150.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Shade_Final"), 150.f, 150.f, 300.f, 300.f)))
-		return E_FAIL;
-
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Specular"), Viewport.Width - 225.f, 225.f, 150.f, 150.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Outline"), Viewport.Width - 225.f, Viewport.Height -225.f, 150.f, 150.f)))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Shadow"), Viewport.Width - 75.f, 375.f, 150.f, 150.f)))
 		return E_FAIL;
-
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Blur"), Viewport.Width - 75.f, 75.f, 150.f, 150.f)))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Blur_X"), Viewport.Width - 75.f, 225.f, 150.f, 150.f)))
 		return E_FAIL;
 #endif
-
-
 	//m_pLampTextureCom->Bind_ShaderResource(m_pShader, "g_LightLampTexture", 0);
 
     return S_OK;
@@ -263,6 +258,12 @@ void CRenderer::Render_NonBlend()
 	Normal과 조명간의 연산을 통해 명암을 뽑아내어 MRT_LightAcc에 그려낸뒤, 
 	MRT_GameObject와 MRT_LightAcc을 합성하여 Shade를 뽑아내는 식으로 수행할 것.
 	*/
+
+	/*
+	노말 정보 어디서 가져오는데? 
+	-> 클라 셰이더에서..
+	*/
+
 	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_GameObjects"))))
 		return;
 
@@ -275,6 +276,25 @@ void CRenderer::Render_NonBlend()
 	}
 
 	m_RenderObjects[ENUM_CLASS(RENDER::NONBLEND)].clear();
+
+	if (FAILED(m_pGameInstance->End_MRT()))
+		return;
+
+	/* normal 정보 가져왔으면 바로 outline도 세팅하기. */
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Outline"))))
+		return;
+
+	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Normal"), m_pShader, "g_NormalTexture")))
+		return;
+
+	m_pShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix);
+	m_pShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix);
+	m_pShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix);
+
+	m_pShader->Begin(5);
+
+	m_pVIBuffer->Bind_Resources();
+	m_pVIBuffer->Render();
 
 	if (FAILED(m_pGameInstance->End_MRT()))
 		return;
@@ -302,10 +322,11 @@ void CRenderer::Render_LightAcc()
 	/* -> g_NormalTexture라는 이름으로 올라가게 된다. */
 	/* -> PS_MAIN_DIRECTIONAL & PS_MAIN_POINT 에서 사용된다. */
 	/* 또한 여기서 실질적인 조명 연산이 이루어지게 된다. */
+
+	/* 렌더링이 끝난 Target_Normal의 내용물을 g_NormalTexture에 올려준다.*/
 	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Normal"), m_pShader, "g_NormalTexture")))
 		return;
 
-	/* 추후 조명 연산 풀어야 함. */
 	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Depth"), m_pShader, "g_DepthTexture")))
 		return;
 
@@ -315,30 +336,9 @@ void CRenderer::Render_LightAcc()
 	m_pVIBuffer->Bind_Resources();
 
 	/* 셰이더에 조명 정보 바인딩. */
+	/* 여기서 빛들 쌓아서 계산해. */
  	if (FAILED(m_pGameInstance->Render_Lights(m_pShader, m_pVIBuffer)))
 		return;
-
-	if (FAILED(m_pGameInstance->End_MRT()))
-		return;
-
-	/* 다운샘플링 */
-	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_LightAcc_Final"))))
-		return;
-
-	m_pShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix);
-	m_pShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix);
-	m_pShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix);
-
-	/* Shade 텍스쳐 바인딩. */
-	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Shade"), m_pShader, "g_FinalShadeTexture")))
-		return;
-
-	/* pass 아직 안만들었고 */
-	m_pShader->Begin(5);
-
-	m_pVIBuffer->Bind_Resources();
-
-	m_pVIBuffer->Render();
 
 	if (FAILED(m_pGameInstance->End_MRT()))
 		return;
@@ -367,6 +367,10 @@ void CRenderer::Render_Combined()
 
 	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Specular"), m_pShader, "g_SpecularTexture")))
 		return;
+	///* 아웃라인 텍스쳐도 셰이더에 넘겨줘 */
+	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Outline"), m_pShader, "g_OutlineTexture")))
+		return;
+
 	/* 뎁스와 섀도우도 기록 */
 	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Depth"), m_pShader, "g_DepthTexture")))
 		return;
@@ -555,14 +559,14 @@ void CRenderer::Render_Debug()
 		return;
 	if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_LightAcc"), m_pShader, m_pVIBuffer)))
 		return;
-	//if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_LightAcc_Final"), m_pShader, m_pVIBuffer)))
+	if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Outline"), m_pShader, m_pVIBuffer)))
+		return;
+	//if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Shadow"), m_pShader, m_pVIBuffer)))
 	//	return;
-	if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Shadow"), m_pShader, m_pVIBuffer)))
-		return;
-	if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Blur"), m_pShader, m_pVIBuffer)))
-		return;
-	if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Blur_X"), m_pShader, m_pVIBuffer)))
-		return;
+	//if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Blur"), m_pShader, m_pVIBuffer)))
+	//	return;
+	//if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Blur_X"), m_pShader, m_pVIBuffer)))
+	//	return;
 }
 
 #endif

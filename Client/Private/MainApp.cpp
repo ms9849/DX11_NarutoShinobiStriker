@@ -332,6 +332,12 @@ HRESULT CMainApp::Ready_Prototypes()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/SwordTrail.png"), 1))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Texture_FootTrail */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_FootTrail_Blue"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/FootTrail_Blue.png"), 1))))
+		return E_FAIL;
+
+
 	/* For.Prototype_Component_Texture_SkillCoolDownEffect */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_SkillCoolDownEffect"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/SkillSlot/SkillCoolDownEffect.png"), 1))))
@@ -406,10 +412,20 @@ HRESULT CMainApp::Ready_Prototypes()
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_SwordTrail */
+	CTrail::PROTOTYPE_TRAIL_DESC Desc;
+	Desc.iNumVertices = 44;
+	Desc.eType = CTrail::TRAIL_TYPE::SWORD;
+
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_SwordTrail"),
-		CTrail::Create(m_pDevice, m_pContext, OBJECTID::TRAIL))))
+		CTrail::Create(m_pDevice, m_pContext, OBJECTID::TRAIL, &Desc))))
 		return E_FAIL;
 
+	Desc.iNumVertices = 880;
+	Desc.eType = CTrail::TRAIL_TYPE::FOOT;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_FootTrail"),
+		CTrail::Create(m_pDevice, m_pContext, OBJECTID::TRAIL, &Desc))))
+		return E_FAIL;
 #pragma endregion
 
 #pragma region SHADER

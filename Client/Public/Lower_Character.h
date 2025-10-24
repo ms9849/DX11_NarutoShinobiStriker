@@ -32,6 +32,9 @@ public:
 	virtual HRESULT Render_Shadow() override;
 
 private:
+	class CTrail* m_pFootTrail[2] = { nullptr }; 
+	_float m_fTimeAcc = { 0.f };
+private:
 	HRESULT Ready_Components();
 	HRESULT Bind_ShaderResources();
 

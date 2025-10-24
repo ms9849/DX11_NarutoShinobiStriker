@@ -15,7 +15,14 @@ NS_BEGIN(Client)
 class CTrail final : public CGameObject
 {
 public:
+	enum class TRAIL_TYPE { SWORD, FOOT, END };
+	typedef struct tagTrailPrototype {
+		TRAIL_TYPE eType = {};
+		_uint iNumVertices = {};
+	} PROTOTYPE_TRAIL_DESC;
+
 	typedef struct tagTrail {
+		_wstring strTrailTextureTag = {};
 		_float4 vHighPosition = {};
 		_float4 vLowPosition = {};
 	} TRAIL_DESC;
@@ -29,7 +36,7 @@ public:
 	void Update_Trail(_fmatrix TargetWorldMatrix, _bool bMakeTrail = false);
 	void Set_CombinedWorldMatrix(_fmatrix TargetWorldMatrix);
 public:
-	virtual HRESULT Initialize_Prototype() override;
+	virtual HRESULT Initialize_Prototype(void* pArg);
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Priority_Update(_float fTimeDelta) override;
 	virtual void Update(_float fTimeDelta) override;
@@ -37,9 +44,11 @@ public:
 	virtual HRESULT Render() override;
 
 private:
-	HRESULT Ready_Components();
+	HRESULT Ready_Components(const _wstring& strTextureTag);
 
 private:
+	/* 기본적으론 소드 */
+	TRAIL_TYPE m_eType = { TRAIL_TYPE::SWORD };
 	_float4x4 m_TargetWorldMatrix;
 	CTexture* m_pTextureCom = { nullptr };
 	CShader* m_pShaderCom = { nullptr };
@@ -64,7 +73,7 @@ private:
 
 
 public:
-	static CTrail* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
+	static CTrail* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID, void* pArg);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 };

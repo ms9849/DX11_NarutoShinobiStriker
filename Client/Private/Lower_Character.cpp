@@ -1,6 +1,7 @@
 #include "Lower_Character.h"
 
 #include "GameInstance.h"
+#include "Trail.h"
 
 CLower_Character::CLower_Character(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 	: CParts_Character { pDevice, pContext, eObjectID }
@@ -27,6 +28,15 @@ HRESULT CLower_Character::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+	CTrail::TRAIL_DESC Desc;
+	XMStoreFloat4(&Desc.vHighPosition, XMVectorSet(-0.02f, 0.f, 0.f, 1.f));
+	XMStoreFloat4(&Desc.vLowPosition, XMVectorSet(0.f, 0.f, 0.02f, 1.f));
+	Desc.strTrailTextureTag = TEXT("Prototype_Component_Texture_FootTrail_Blue");
+	//Desc.strTrailTextureTag = TEXT("Prototype_Component_Texture_SwordTrail");
+
+	m_pFootTrail[0] = static_cast<CTrail*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_FootTrail"), &Desc));
+	m_pFootTrail[1] = static_cast<CTrail*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_FootTrail"), &Desc));
+
 	return S_OK;
 }
 
@@ -36,15 +46,27 @@ void CLower_Character::Priority_Update(_float fTimeDelta)
 
 void CLower_Character::Update(_float fTimeDelta)
 {
+	m_fTimeAcc += fTimeDelta;
 	/* 부모 행렬 적용 */
 	XMStoreFloat4x4(&m_CombinedWorldMatrix,
 		XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()) * XMLoadFloat4x4(m_pParentTransformCom->Get_WorldMatrixPtr()));
+
+
+	if (m_fTimeAcc >= 0.01f)
+	{
+		m_pFootTrail[0]->Update_Trail(XMLoadFloat4x4(m_pModelCom->Get_BoneMatrixPtr("LeftFoot")) * XMLoadFloat4x4(&m_CombinedWorldMatrix), true);
+		m_pFootTrail[1]->Update_Trail(XMLoadFloat4x4(m_pModelCom->Get_BoneMatrixPtr("RightFoot")) * XMLoadFloat4x4(&m_CombinedWorldMatrix), true);
+		m_fTimeAcc = 0.f;
+	}
 }
 
 void CLower_Character::Late_Update(_float fTimeDelta)
 {
 	m_pGameInstance->Add_RenderGroup(RENDER::SHADOW, this);
 	m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+
+	m_pFootTrail[0]->Late_Update(fTimeDelta);
+	m_pFootTrail[1]->Late_Update(fTimeDelta);
 }
 
 HRESULT CLower_Character::Render()
@@ -159,4 +181,7 @@ CGameObject* CLower_Character::Clone(void* pArg)
 void CLower_Character::Free()
 {
 	__super::Free();
+
+	Safe_Release(m_pFootTrail[0]);
+	Safe_Release(m_pFootTrail[1]);
 }

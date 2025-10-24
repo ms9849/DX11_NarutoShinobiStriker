@@ -121,6 +121,7 @@ HRESULT CWeapon_Character::Initialize(void* pArg)
     CTrail::TRAIL_DESC Desc;
     XMStoreFloat4(&Desc.vHighPosition, XMVectorSet(0.f, -1.3f, 0.f, 1.f));
     XMStoreFloat4(&Desc.vLowPosition, XMVectorSet(0.f, -0.5f, 0.f, 1.f));
+    Desc.strTrailTextureTag = TEXT("Prototype_Component_Texture_SwordTrail");
 
     m_pSwordTrail = static_cast<CTrail*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_SwordTrail"), &Desc));
 
@@ -153,8 +154,11 @@ void CWeapon_Character::Update(_float fTimeDelta)
 
     m_fTimeAcc += fTimeDelta;
 
-    if(m_fTimeAcc >= 0.01f)
+    if (m_fTimeAcc >= 0.01f)
+    {
         m_pSwordTrail->Update_Trail(XMLoadFloat4x4(&m_CombinedWorldMatrix), true);
+        m_fTimeAcc = 0.f;
+    }
 }
 
 void CWeapon_Character::Late_Update(_float fTimeDelta)
