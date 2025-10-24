@@ -12,6 +12,14 @@ sampler ClampSampler = sampler_state
     AddressV = clamp;
 };
 
+/* 빌리니어 샘플러 */
+sampler ShadeSampler = sampler_state
+{
+    Filter = MIN_MAG_MIP_LINEAR;
+    AddressU = wrap;
+    AddressV = wrap;
+
+};
 /* 디폴트 샘플러 세팅 */
 sampler DefaultSampler = sampler_state
 {

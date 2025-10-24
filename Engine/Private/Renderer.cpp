@@ -60,6 +60,10 @@ HRESULT CRenderer::Initialize()
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Blur_X"), Viewport.Width, Viewport.Height, DXGI_FORMAT_R8G8B8A8_UNORM, _float4(0.0f, 0.0f, 0.0f, 0.0f))))
 		return E_FAIL;
 
+	/* Target_Shade_Final */
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Shade_Final"), Viewport.Width, Viewport.Height, DXGI_FORMAT_R8G8B8A8_UNORM, _float4(0.0f, 0.0f, 0.0f, 0.0f))))
+		return E_FAIL;
+
 
 	/* 게임 오브젝트로부터 뽑아와야하는 디퓨즈 노멀은 MRT_GameObjects로 세팅. */
 	/* MRT_GameObjects */
@@ -73,9 +77,14 @@ HRESULT CRenderer::Initialize()
 	/* MRT_LightAcc */
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_LightAcc"), TEXT("Target_Shade"))))
 		return E_FAIL;
-	///* Specular는 LightAcc에서 쌓아서 계산한다. */
-	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_LightAcc"), TEXT("Target_Specular"))))
+
+	/////* Specular는 LightAcc에서 쌓아서 계산한다. */
+	//if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_LightAcc"), TEXT("Target_Specular"))))
+	//	return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_LightAcc_Final"), TEXT("Target_Shade_Final"))))
 		return E_FAIL;
+
 
 	/* MRT_Shadow */
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Shadow"), TEXT("Target_Shadow"))))
@@ -107,18 +116,24 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Normal"), Viewport.Width - 75.f, 225.f, 150.f, 150.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Shade"), Viewport.Width - 225.f, 75.f, 150.f, 150.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Shade"), Viewport.Width - 225.f, 75.f, 300.f, 300.f)))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Shade_Final"), 150.f, 150.f, 300.f, 300.f)))
+		return E_FAIL;
+
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Specular"), Viewport.Width - 225.f, 225.f, 150.f, 150.f)))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Shadow"), Viewport.Width - 75.f, 375.f, 150.f, 150.f)))
 		return E_FAIL;
 
-	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Blur"), Viewport.Width - 75.f, 75.f, 150.f, 150.f)))
-	//	return E_FAIL;
-	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Blur_X"), Viewport.Width - 75.f, 225.f, 150.f, 150.f)))
-	//	return E_FAIL;
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Blur"), Viewport.Width - 75.f, 75.f, 150.f, 150.f)))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Blur_X"), Viewport.Width - 75.f, 225.f, 150.f, 150.f)))
+		return E_FAIL;
 #endif
+
+
+	//m_pLampTextureCom->Bind_ShaderResource(m_pShader, "g_LightLampTexture", 0);
 
     return S_OK;
 }
@@ -272,6 +287,7 @@ void CRenderer::Render_LightAcc()
 
 	/* MRT_LightAcc (Shade 렌더타겟) 을 세팅. */
 	/* -> 우선적으로 조명 연산의 결과가 Shade에 기록된다. */
+
 	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_LightAcc"))))
 		return;
 
@@ -301,6 +317,28 @@ void CRenderer::Render_LightAcc()
 	/* 셰이더에 조명 정보 바인딩. */
  	if (FAILED(m_pGameInstance->Render_Lights(m_pShader, m_pVIBuffer)))
 		return;
+
+	if (FAILED(m_pGameInstance->End_MRT()))
+		return;
+
+	/* 다운샘플링 */
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_LightAcc_Final"))))
+		return;
+
+	m_pShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix);
+	m_pShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix);
+	m_pShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix);
+
+	/* Shade 텍스쳐 바인딩. */
+	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Shade"), m_pShader, "g_FinalShadeTexture")))
+		return;
+
+	/* pass 아직 안만들었고 */
+	m_pShader->Begin(5);
+
+	m_pVIBuffer->Bind_Resources();
+
+	m_pVIBuffer->Render();
 
 	if (FAILED(m_pGameInstance->End_MRT()))
 		return;
@@ -372,16 +410,6 @@ void CRenderer::Render_Blur()
 
 	m_RenderObjects[ENUM_CLASS(RENDER::BLUR)].clear();
 
-
-	for (auto& pBlurComponent : m_BlurComponents)
-	{
-		if (nullptr != pBlurComponent)
-			pBlurComponent->Render();
-
-		Safe_Release(pBlurComponent);
-	}
-
-
 	if (FAILED(m_pGameInstance->End_MRT()))
 		return;
 
@@ -392,6 +420,7 @@ void CRenderer::Render_Blur()
 	m_pShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix);
 	m_pShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix);
 
+	/* Blur 텍스쳐 바인딩. */
 	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Blur"), m_pShader, "g_BlurTexture")))
 		return;
 
@@ -403,7 +432,6 @@ void CRenderer::Render_Blur()
 
 	if (FAILED(m_pGameInstance->End_MRT()))
 		return;
-
 }
 
 void CRenderer::Render_Blend()
@@ -527,6 +555,8 @@ void CRenderer::Render_Debug()
 		return;
 	if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_LightAcc"), m_pShader, m_pVIBuffer)))
 		return;
+	//if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_LightAcc_Final"), m_pShader, m_pVIBuffer)))
+	//	return;
 	if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Shadow"), m_pShader, m_pVIBuffer)))
 		return;
 	if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Blur"), m_pShader, m_pVIBuffer)))
@@ -572,6 +602,7 @@ void CRenderer::Free()
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pGameInstance);
 	Safe_Release(m_pShadowDSV);
+	Safe_Release(m_pLampTextureCom);
 
 	for (auto& BlurComponents : m_BlurComponents)
 	{

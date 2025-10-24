@@ -12,11 +12,13 @@ vector g_vCamPosition;
 texture2D g_NormalTexture;
 texture2D g_DiffuseTexture;
 texture2D g_ShadeTexture;
+texture2D g_FinalShadeTexture;
 texture2D g_DepthTexture;
 texture2D g_SpecularTexture;
 texture2D g_ShadowTexture;
 texture2D g_BlurTexture;
 texture2D g_BlurXTexture;
+texture2D g_LightLampTexture;
 
 vector g_vLightDiffuse;
 vector g_vLightAmbient;
@@ -82,7 +84,15 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
     
     float4 vNormal = vector(vNormalDesc.xyz * 2.f - 1.f, 0.0f);
     
-    Out.vShade = g_vLightDiffuse * saturate(max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient));
+    float fNdotL = dot(normalize(g_vLightDir) * -1.f, vNormal);
+    fNdotL = ceil(fNdotL * 6.f) / 6.f;
+
+    if(fNdotL <= 0.2f)
+        fNdotL = 0.05f;
+    else
+        fNdotL = 1.f;
+
+    Out.vShade = g_vLightDiffuse * saturate(max(fNdotL, 0.f) + (g_vLightAmbient * g_vMtrlAmbient));
     
     vector vDepthDesc = g_DepthTexture.Sample(DefaultSampler, In.vTexcoord);
     float fViewZ = vDepthDesc.y * 500.f;
@@ -145,8 +155,10 @@ PS_OUT_LIGHT PS_MAIN_POINT(PS_IN In)
     
     float fAtt = saturate((g_fLightRange - fDistance) / g_fLightRange);
     
-    Out.vShade = fAtt * (g_vLightDiffuse * saturate(max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)));
+    float fNdotL = dot(normalize(vLightDir) * -1.f, vNormal);
     
+    Out.vShade = fAtt * (g_vLightDiffuse * saturate(max(fNdotL, 0.f) + (g_vLightAmbient * g_vMtrlAmbient)));
+ 
     vector vLook = vPosition - g_vCamPosition;
     vector vReflect = reflect(normalize(vLightDir), vNormal);
     
@@ -186,6 +198,11 @@ float g_fWeights[37] =
 */
 
 
+/*
+툰 셰이딩을 기본으로 적용한다. 
+인자 줘서 설정 가능하게 하는게 이상적이겠지만 일단은 제외...
+*/
+
 PS_OUT_BACKBUFFER PS_MAIN_COMBINED(PS_IN In)
 {
     PS_OUT_BACKBUFFER Out;
@@ -193,11 +210,11 @@ PS_OUT_BACKBUFFER PS_MAIN_COMBINED(PS_IN In)
     vector vDiffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexcoord);
     if (0.0f == vDiffuse.a)
         discard;
-    vector vShade = g_ShadeTexture.Sample(DefaultSampler, In.vTexcoord);
+    vector vShade = g_ShadeTexture.Sample(ShadeSampler, In.vTexcoord);
     
     vector vSpecular = g_SpecularTexture.Sample(DefaultSampler, In.vTexcoord);
-    
-    Out.vBackBuffer = vDiffuse * vShade;
+   
+    Out.vBackBuffer = vDiffuse * vShade; //+ vSpecular;
     
     vector vDepthDesc = g_DepthTexture.Sample(DefaultSampler, In.vTexcoord);
     float fViewZ = vDepthDesc.y * 500.f;
@@ -286,6 +303,16 @@ PS_OUT_BLUR_X PS_MAIN_X(PS_IN In)
     return Out;
 }
 
+
+PS_OUT_BACKBUFFER PS_Shade_Aliasing(PS_IN In)
+{
+    PS_OUT_BACKBUFFER Out;
+    
+    Out.vBackBuffer = g_ShadeTexture.Sample(DefaultSampler, In.vTexcoord);
+    
+    return Out;
+}
+
 technique11 DefaultTechnique
 {
     pass Debug
@@ -336,6 +363,16 @@ technique11 DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN_X();
+    }
+
+    pass ShadeAliasing
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_None, 0);
+        SetBlendState(BS_None, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_Shade_Aliasing();
     }
  
 }
