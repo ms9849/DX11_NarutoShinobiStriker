@@ -83,6 +83,8 @@ public:
 #pragma region RENDERER
 	HRESULT Add_RenderGroup(RENDER eRenderGroup, class CGameObject* pRenderObject);
 	HRESULT Add_Font(class CFont* pRenderFont);
+	/* 맵을 위한 스태틱 섀도우 함수. 부를때마다 초기화되니까 조심할 것.*/
+	void	Add_StaticShadow(class CGameObject* pGameObject);
 #ifdef _DEBUG
 	HRESULT Add_DebugComponent(class CComponent* pDebugComponent);
 #endif

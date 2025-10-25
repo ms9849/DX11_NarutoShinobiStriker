@@ -1,7 +1,5 @@
 #include "Col_KonohaVillage.h"
-
 #include "GameInstance.h"
-
 
 CCol_KonohaVillage::CCol_KonohaVillage(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CGameObject { pDevice, pContext, ENUM_CLASS(eObjectID )}
@@ -42,7 +40,7 @@ void CCol_KonohaVillage::Update(_float fTimeDelta)
 
 void CCol_KonohaVillage::Late_Update(_float fTimeDelta)
 {
-    //m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+    //m_pGameInstance->Add_RenderGroup(RENDER::SHADOW, this);
 }
 
 HRESULT CCol_KonohaVillage::Render()
@@ -62,6 +60,30 @@ HRESULT CCol_KonohaVillage::Render()
             return E_FAIL;
     }
 
+    return S_OK;
+}
+
+HRESULT CCol_KonohaVillage::Render_Shadow()
+{
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", m_pTransformCom->Get_WorldMatrixPtr())))
+        return E_FAIL;
+
+    if (FAILED(m_pGameInstance->Bind_Shadow_Resource(m_pShaderCom, "g_ViewMatrix", D3DTS::VIEW)))
+        return E_FAIL;
+
+    if (FAILED(m_pGameInstance->Bind_Shadow_Resource(m_pShaderCom, "g_ProjMatrix", D3DTS::PROJ)))
+        return E_FAIL;
+
+    _uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+    for (size_t i = 0; i < iNumMeshes; i++)
+    {
+        if (FAILED(m_pShaderCom->Begin(1)))
+            return E_FAIL;
+
+        if (FAILED(m_pModelCom->Render(i)))
+            return E_FAIL;
+    }
     return S_OK;
 }
 

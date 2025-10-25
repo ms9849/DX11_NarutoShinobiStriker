@@ -323,7 +323,7 @@ HRESULT CLevel_Edit::Ready_Layer_Camera(const _wstring& strLayerTag)
 
     CameraDesc.fFovy = XMConvertToRadians(60.0f);
     CameraDesc.fNear = 0.1f;
-    CameraDesc.fFar = 1000.f;
+    CameraDesc.fFar = 500.f;
     CameraDesc.vEye = _float4(0.f, 30.f, -30.f, 1.f);
     CameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
     CameraDesc.fSpeedPerSec = 20.f;

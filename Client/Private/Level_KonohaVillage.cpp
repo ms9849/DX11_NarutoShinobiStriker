@@ -19,6 +19,7 @@
 #include "CutScenePanel.h"
 
 #include "Player.h"
+#include "SkyMesh.h"
 
 CLevel_KonohaVillage::CLevel_KonohaVillage(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID)
 	: CLevel{ pDevice, pContext, ENUM_CLASS(eLevelID) }
@@ -159,8 +160,12 @@ HRESULT CLevel_KonohaVillage::Ready_Lights()
 
 HRESULT CLevel_KonohaVillage::Ready_Layer_BackGround(const _wstring& strLayerTag)
 {
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_SkyBox"),
-		ENUM_CLASS(LEVEL::KONOHA_VILLAGE), strLayerTag)))
+	CSkyMesh::SKYMESH_DESC Desc;
+	Desc.IsNight = true;
+	Desc.fRotationPerSec = XMConvertToRadians(10.f);
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_SkyMesh"),
+		ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag, &Desc)))
 		return E_FAIL;
 
 	return S_OK;

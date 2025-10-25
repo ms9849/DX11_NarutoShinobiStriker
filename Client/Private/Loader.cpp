@@ -1,7 +1,6 @@
 #include "Loader.h"
 
 #include "Dummy.h"
-#include "Terrain.h"
 #include "TestCamera.h"
 
 #include "TestPanel.h"
@@ -417,11 +416,6 @@ HRESULT CLoader::Loading_For_Tutorial()
 		CIcon::Create(m_pDevice, m_pContext, OBJECTID::ICON))))
 		return E_FAIL;
 
-	/* For.Prototype_GameObject_Terrain */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Terrain"),
-		CTerrain::Create(m_pDevice, m_pContext, OBJECTID::TERRAIN))))
-		return E_FAIL;
-
 	/* For.Prototype_GameObject_TutorialMap */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_TutorialMap"),
 		CTutorialMap::Create(m_pDevice, m_pContext, OBJECTID::TUTORIAL_MAP))))
@@ -629,11 +623,7 @@ HRESULT CLoader::Loading_For_Tutorial()
 HRESULT CLoader::Loading_For_KonohaVillage()
 {
 	m_fLoadingProgress += 0.4f;
-	m_strMessage = TEXT("텍스쳐를(을) 로딩 중 입니다.");
-	/* For.Prototype_Component_Texture_Terrain */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_Component_Texture_Terrain"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Tile0.jpg"), 1))))
-		return E_FAIL;
+	m_strMessage = TEXT("텍스쳐를(을) 로딩 중 입니다.");;
 
 	/* For.Prototype_Component_Texture_SkillSlotUI*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_Component_Texture_SkillSlotUI"),
@@ -677,10 +667,6 @@ HRESULT CLoader::Loading_For_KonohaVillage()
 
 	m_fLoadingProgress += 0.3f;
 	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
-	/* For.Prototype_Component_VIBuffer_Terrain */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_Component_VIBuffer_Terrain"),
-		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Height1.bmp")))))
-		return E_FAIL;
 
 	///* For.Prototype_Component_VIBuffer_Cube */
 	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_Component_VIBuffer_Cube"),
@@ -704,11 +690,6 @@ HRESULT CLoader::Loading_For_KonohaVillage()
 #pragma endregion
 
 	m_strMessage = TEXT("객체원형를(을) 로딩 중 입니다.");
-
-	/* For.Prototype_GameObject_Terrain */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_Terrain"),
-		CTerrain::Create(m_pDevice, m_pContext, OBJECTID::TERRAIN))))
-		return E_FAIL;
 
 	/* For.Prototype_GameObject_Icon */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_Icon"),

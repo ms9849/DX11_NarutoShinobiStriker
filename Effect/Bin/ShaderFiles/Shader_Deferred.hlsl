@@ -20,6 +20,7 @@ texture2D g_BlurTexture;
 texture2D g_BlurXTexture;
 texture2D g_LightLampTexture;
 texture2D g_OutlineTexture;
+texture2D g_StaticShadowTexture;
 
 vector g_vLightDiffuse;
 vector g_vLightAmbient;
@@ -62,6 +63,7 @@ struct PS_OUT_BACKBUFFER
 {
     float4 vBackBuffer : SV_TARGET0;
 };
+
 PS_OUT_BACKBUFFER PS_MAIN_DEBUG(PS_IN In)
 {
     PS_OUT_BACKBUFFER Out;
@@ -168,7 +170,7 @@ PS_OUT_LIGHT PS_MAIN_POINT(PS_IN In)
     return Out;
 }
 
-
+/*
 float g_fWeights[25] =
 {
     0.0001, 0.0003, 0.0008, 0.0021, 0.0052, 0.0131, 0.0316, 0.0750,
@@ -176,7 +178,7 @@ float g_fWeights[25] =
     0.560, 0.440, 0.295, 0.155, 0.0750, 0.0316, 0.0131, 0.0052,
     0.0021, 0.0008, 0.0003, 0.0001
 };
-
+*/
 
 /*
 float g_fWeights[13] =
@@ -185,8 +187,6 @@ float g_fWeights[13] =
     0.08412, 0.03156, 0.01052, 0.00421, 0.00158, 0.000526
 };
 */
-
-
 
 /*
 float g_fWeights[37] =
@@ -203,6 +203,16 @@ float g_fWeights[37] =
 툰 셰이딩을 기본으로 적용한다. 
 인자 줘서 설정 가능하게 하는게 이상적이겠지만 일단은 제외...
 */
+
+float g_fWeights[41] =
+{
+    0.01688, 0.02513, 0.03666, 0.05239, 0.07337, 0.10067, 0.13534, 0.17826, 0.23007, 0.29092,
+    0.36045, 0.43756, 0.52045, 0.60653, 0.69257, 0.77484, 0.84937, 0.91225, 0.96001, 0.98985,
+    1.0,
+    0.98985, 0.96001, 0.91225, 0.84937, 0.77484, 0.69257, 0.60653, 0.52045, 0.43756, 0.36045,
+    0.29092, 0.23007, 0.17826, 0.13534, 0.10067, 0.07337, 0.05239, 0.03666, 0.02513, 0.01688
+};
+
 
 PS_OUT_BACKBUFFER PS_MAIN_COMBINED(PS_IN In)
 {
@@ -242,37 +252,53 @@ PS_OUT_BACKBUFFER PS_MAIN_COMBINED(PS_IN In)
     
     /* -1, 1 -> 0, 0  */
     /* 1, -1 -> 1, 1  */
+    
     float2 vTexcoord;
     
     vTexcoord.x = (vPosition.x / vPosition.w) * 0.5f + 0.5f;
     vTexcoord.y = (vPosition.y / vPosition.w) * -0.5f + 0.5f;
     
-    vector vShadowDepth = g_ShadowTexture.Sample(DefaultSampler, vTexcoord);
+    vector vStaticShadowDepth = g_StaticShadowTexture.Sample(DefaultSampler, vTexcoord);
+    bool IsStatic = false;
     
-    if (vPosition.w - 0.1f > vShadowDepth.x * 500.0f)
-        Out.vBackBuffer *= 0.5f;
-   
+    if (vPosition.w - 0.1f > vStaticShadowDepth.x * 3000.0f)
+    {
+        Out.vBackBuffer.rgb *= 0.4f;
+        Out.vBackBuffer.a *= 0.5f;
+        IsStatic = true;
+    }
     
+    if(false == IsStatic)
+    {
+        int iCount = 0;
+        for (int i = -1; i <= 1; ++i)
+        {
+            for (int j = -1; j <= 1; ++j)
+            {
+                vector vShadowDepth = g_ShadowTexture.Sample(DefaultSampler, vTexcoord + float2( i* 1 / 1280.f, j*1 / 720.f) * 0.1f);
+
+                if (vPosition.w - 0.1f > vShadowDepth.x * 3000.0f)
+                    iCount++;
+            }
+        }
+        
+        Out.vBackBuffer.rgb *= lerp(1.0f, 0.4f, iCount / 9.0f);
+        Out.vBackBuffer.a *= 0.5f;
+    }
+    
+     
     /* 블러 후처리 */
     float4 vColor = 0.f;
     float4 fWeightSum = 0.f;
     
-    for (int i = -12; i <= 12; ++i)
+    for (int i = -20; i <= 20; ++i)
     {
-        vTexcoord = float2(In.vTexcoord.x , In.vTexcoord.y + (float) i / 720.f);
-
-        vColor += g_fWeights[i + 12] * g_BlurTexture.Sample(ClampSampler, vTexcoord);
-        
-        fWeightSum += g_fWeights[i + 12];
+        vTexcoord = float2(In.vTexcoord.x, In.vTexcoord.y + (float) i / 720.f);
+        vColor.rgb += g_fWeights[i + 20] * g_BlurTexture.Sample(ClampSampler, vTexcoord);
     }
-   
-    vColor /= fWeightSum;
+  
+    Out.vBackBuffer += vColor / 12.5f;
     
-    //vColor.rgb *= 0.05f;
-    //vColor.a *= 0.1f;
-    
-    Out.vBackBuffer += vColor;
-     
     Out.vBackBuffer *= g_OutlineTexture.Sample(DefaultSampler, In.vTexcoord);
     
     return Out;
@@ -291,18 +317,14 @@ PS_OUT_BLUR_X PS_MAIN_X(PS_IN In)
     float2 vTexcoord;
     float4 vTextureColor;
     float4 vColor = 0.f;
-    float4 fWeightSum = 0.f;
     
-    for (int i = -12; i <= 12; ++i)
+    for (int i = -20; i <= 20; ++i)
     {
         vTexcoord = float2(In.vTexcoord.x + (float) i / 1280.f, In.vTexcoord.y);
-        vTextureColor = g_BlurTexture.Sample(ClampSampler, vTexcoord);
-        vTextureColor.a = 1.f;
-        vColor.rgb += g_fWeights[i + 12] * vTextureColor.rgb;
-        fWeightSum += g_fWeights[i + 12];
+        vColor.rgb += g_fWeights[i + 20] * g_BlurTexture.Sample(ClampSampler, vTexcoord);
     }
     
-    vColor /= fWeightSum;
+    vColor /= 12.5f;
     
     Out.vBlurX = vColor;
     
@@ -424,5 +446,4 @@ technique11 DefaultTechnique
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN_Outline();
     }
- 
 }

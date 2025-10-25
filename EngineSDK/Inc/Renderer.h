@@ -27,7 +27,6 @@ public:
 	
 #endif
 private:
-	class CTexture*				m_pLampTextureCom = { nullptr };
 	ID3D11Device*				m_pDevice = { nullptr };
 	ID3D11DeviceContext*		m_pContext = { nullptr };
 	class CGameInstance*		m_pGameInstance = { nullptr };
@@ -35,13 +34,15 @@ private:
 	list<class CGameObject*>	m_RenderObjects[ENUM_CLASS(RENDER::END)];
 	list<class CFont*>			m_Fonts = {};
 
-	ID3D11DepthStencilView* m_pShadowDSV = { nullptr };
+	ID3D11DepthStencilView*		m_pShadowDSV = { nullptr };
+	ID3D11DepthStencilView*		m_pStaticShadowDSV = { nullptr };
 
 #ifdef _DEBUG
 private:
-	list<class CComponent*>				m_BlurComponents;
-	list<class CComponent*>				m_DebugComponents;
+	list<class CGameObject*>			m_StaticShadowObjects = {}; 
+	list<class CComponent*>				m_DebugComponents = {};
 #endif
+
 private:
 	class CShader*				m_pShader = { nullptr };
 	class CVIBuffer_Rect*		m_pVIBuffer = { nullptr };
@@ -49,6 +50,10 @@ private:
 private:
 	_float4x4					m_WorldMatrix{}, m_ViewMatrix{}, m_ProjMatrix{};
 
+
+public:
+	/* 맵을 위한 스태틱 섀도우용 함수, 불러줄때마다 초기화되므로 주의 */
+	void Add_StaticShadow(class CGameObject* pGameObject);
 
 private:
 	void Render_Priority();
@@ -71,7 +76,6 @@ private:
 #ifdef _DEBUG
 private:
 	void Render_Debug();
-
 #endif
 
 public:
