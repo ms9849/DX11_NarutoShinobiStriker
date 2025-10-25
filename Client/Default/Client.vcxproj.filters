@@ -379,9 +379,6 @@
     <Filter Include="02. GameObjects\01. BackGround">
       <UniqueIdentifier>{a275f7e0-9ccb-43e4-9d90-c1f1c2ac43ba}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\01. BackGround\00. SkyBox">
-      <UniqueIdentifier>{a51f9c92-5103-4bca-92ee-7fb3cb8bb86a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects\01. BackGround\01. OutfitBackGround">
       <UniqueIdentifier>{8dd45cc8-d394-4698-9e41-5f9e1e33c1c1}</UniqueIdentifier>
     </Filter>
@@ -601,9 +598,6 @@
     <Filter Include="02. GameObjects\000. Skills\Chidori">
       <UniqueIdentifier>{abc23ad8-dc36-4b53-9e63-d010f6057a4f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\01. BackGround\00. SkyBox\SkyCube">
-      <UniqueIdentifier>{426099c5-4ddf-4730-8419-505f94629cf8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects\03. Effect\02. Sprite">
       <UniqueIdentifier>{8478a88b-08d2-4d7e-a09b-a2552b6fa048}</UniqueIdentifier>
     </Filter>
@@ -615,6 +609,15 @@
     </Filter>
     <Filter Include="02. GameObjects\13. Trail">
       <UniqueIdentifier>{e0e34469-e2f1-4f4d-918d-d5aa7efc3b61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\01. BackGround\00. Sky">
+      <UniqueIdentifier>{a51f9c92-5103-4bca-92ee-7fb3cb8bb86a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\01. BackGround\00. Sky\SkyCube">
+      <UniqueIdentifier>{426099c5-4ddf-4730-8419-505f94629cf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\01. BackGround\00. Sky\SkyMesh">
+      <UniqueIdentifier>{99d10e8e-26b3-4901-bbe5-beaae5e85ade}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -915,9 +918,6 @@
     <ClInclude Include="..\Public\Parts_WoodHand.h">
       <Filter>02. GameObjects\00. Character\01. Enemy\03. Jetsu\Skill\Part</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\SkyBox.h">
-      <Filter>02. GameObjects\01. BackGround\00. SkyBox</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Camera_Manager.h">
       <Filter>96. GameManager\Managers\Camera</Filter>
     </ClInclude>
@@ -1189,10 +1189,13 @@
       <Filter>02. GameObjects\03. Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\SkyCube.h">
-      <Filter>02. GameObjects\01. BackGround\00. SkyBox\SkyCube</Filter>
+      <Filter>02. GameObjects\01. BackGround\00. Sky\SkyCube</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Trail.h">
       <Filter>02. GameObjects\13. Trail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SkyMesh.h">
+      <Filter>02. GameObjects\01. BackGround\00. Sky\SkyMesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1491,9 +1494,6 @@
     <ClCompile Include="..\Private\Parts_WoodHand.cpp">
       <Filter>02. GameObjects\00. Character\01. Enemy\03. Jetsu\Skill\Part</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\SkyBox.cpp">
-      <Filter>02. GameObjects\01. BackGround\00. SkyBox</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Camera_Manager.cpp">
       <Filter>96. GameManager\Managers\Camera</Filter>
     </ClCompile>
@@ -1765,10 +1765,13 @@
       <Filter>02. GameObjects\03. Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\SkyCube.cpp">
-      <Filter>02. GameObjects\01. BackGround\00. SkyBox\SkyCube</Filter>
+      <Filter>02. GameObjects\01. BackGround\00. Sky\SkyCube</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Trail.cpp">
       <Filter>02. GameObjects\13. Trail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SkyMesh.cpp">
+      <Filter>02. GameObjects\01. BackGround\00. Sky\SkyMesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1797,6 +1800,9 @@
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxCube.hlsl">
+      <Filter>97. ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxMesh_NonLight.hlsl">
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

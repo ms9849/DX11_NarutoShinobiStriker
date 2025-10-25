@@ -27,6 +27,7 @@
 #include "ParticleObject.h"
 #include "EffectContainer.h"
 #include "EffectObject.h"
+#include "SKyMesh.h"
 
 CLevel_Tutorial::CLevel_Tutorial(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID)
 	: CLevel { pDevice, pContext, ENUM_CLASS(eLevelID)}
@@ -202,16 +203,15 @@ HRESULT CLevel_Tutorial::Ready_Lights()
 
 HRESULT CLevel_Tutorial::Ready_Layer_BackGround(const _wstring& strLayerTag)
 {
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Terrain"),
-		ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag)))
-		return E_FAIL;
+	CSkyMesh::SKYMESH_DESC Desc;
+	Desc.IsNight = false;
+	Desc.fRotationPerSec = XMConvertToRadians(10.f);
 
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_SkyBox"),
-		ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag)))
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_SkyMesh"),
+		ENUM_CLASS(LEVEL::TUTORIAL), strLayerTag, &Desc)))
 		return E_FAIL;
 
 	return S_OK;
-
 }
 
 HRESULT CLevel_Tutorial::Ready_Layer_Camera(const _wstring& strLayerTag)

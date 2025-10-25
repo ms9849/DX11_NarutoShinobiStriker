@@ -113,6 +113,7 @@ struct PS_OUT_SHADOW
     float4 vShadowLightDepth : SV_TARGET0;
 };
 
+
 PS_OUT_SHADOW PS_MAIN_SHADOW(PS_IN_SHADOW In)
 {
     PS_OUT_SHADOW Out = (PS_OUT_SHADOW) 0;

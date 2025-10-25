@@ -57,6 +57,34 @@ PS_OUT PS_MAIN(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_MAIN_SKY(PS_IN In)
+{
+     PS_OUT Out;
+    
+    vector vMtrlDiffuse = g_Texture.Sample(DefaultSampler, In.vTexcoord);
+    if (vMtrlDiffuse.a < 0.4f)
+        discard;
+    
+    vMtrlDiffuse.rgb = (float3(1.f, 1.f, 1.f) - vMtrlDiffuse.rgb) * float3(0.6667, 0.8157, 0.988f) + vMtrlDiffuse.rgb;
+    Out.vColor = vMtrlDiffuse;  
+    
+    return Out;
+}
+
+PS_OUT PS_MAIN_SKYNIGHT(PS_IN In)
+{
+    PS_OUT Out;
+    
+    vector vMtrlDiffuse = g_Texture.Sample(DefaultSampler, In.vTexcoord);
+    if (vMtrlDiffuse.a < 0.4f)
+        discard;
+    
+    vMtrlDiffuse.rgb = (float3(1.f, 1.f, 1.f) - vMtrlDiffuse.rgb) * float3(0.1176, 0.1490, 0.3333) + vMtrlDiffuse.rgb;
+    Out.vColor = vMtrlDiffuse;
+    
+    return Out;
+}
+
 technique11 DefaultTechnique
 {
     pass Default
@@ -69,4 +97,26 @@ technique11 DefaultTechnique
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN();
     }
+
+    ///1¹ø, ³· 
+    pass Sky
+    {
+        SetRasterizerState(RS_Cull_Front);
+        SetDepthStencilState(DSS_None, 0);
+        SetBlendState(BS_None, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_SKY();
+    }
+    //2¹ø, ¹ã 
+    pass SkyNight
+    {
+        SetRasterizerState(RS_Cull_Front);
+        SetDepthStencilState(DSS_None, 0);
+        SetBlendState(BS_None, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_SKYNIGHT();
+    }
+
 }

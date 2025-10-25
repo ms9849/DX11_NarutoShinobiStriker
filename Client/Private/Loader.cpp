@@ -77,7 +77,8 @@
 
 #include "NPC_KaKashi.h"
 
-#include "SkyBox.h"
+#include "SkyMesh.h"
+#include "SkyCube.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice { pDevice }
@@ -348,10 +349,6 @@ HRESULT CLoader::Loading_For_Tutorial()
 {
 	m_fLoadingProgress += 0.4f;
 	m_strMessage = TEXT("텍스쳐를(을) 로딩 중 입니다.");
-	/* For.Prototype_Component_Texture_Terrain */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_Component_Texture_Terrain"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Tile0.jpg"), 1))))
-		return E_FAIL;
 
 	/* For.Prototype_Component_Texture_SkillSlotUI*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_Component_Texture_SkillSlotUI"),
@@ -395,15 +392,8 @@ HRESULT CLoader::Loading_For_Tutorial()
 
 	m_fLoadingProgress += 0.3f;
 	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
-	/* For.Prototype_Component_VIBuffer_Terrain */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_Component_VIBuffer_Terrain"),
-		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Height1.bmp")))))
-		return E_FAIL;
 
-	///* For.Prototype_Component_VIBuffer_Cube */
-	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_Component_VIBuffer_Cube"),
-	//	CVIBuffer_Cube::Create(m_pDevice, m_pContext))))
-	//	return E_FAIL;
+
 	m_fLoadingProgress += 0.3f;
 	m_strMessage = TEXT("셰이더를(을) 로딩 중 입니다.");
 
@@ -422,11 +412,6 @@ HRESULT CLoader::Loading_For_Tutorial()
 #pragma endregion
 
 	m_strMessage = TEXT("객체원형를(을) 로딩 중 입니다.");
-	/* For.Prototype_GameObject_SkyBox */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_SkyBox"),
-		CSkyBox::Create(m_pDevice, m_pContext, OBJECTID::SKYBOX))))
-		return E_FAIL;
-
 	/* For.Prototype_GameObject_Icon */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Icon"),
 		CIcon::Create(m_pDevice, m_pContext, OBJECTID::ICON))))
@@ -628,6 +613,12 @@ HRESULT CLoader::Loading_For_Tutorial()
 		CNPC_KaKashi::Create(m_pDevice, m_pContext, OBJECTID::NPC_KAKASHI))))
 		return E_FAIL;
 
+
+	//Prototype_GameObject_SkyCube
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_SkyCube"),
+		CSkyCube::Create(m_pDevice, m_pContext, OBJECTID::SKYBOX))))
+		return E_FAIL;
+
 	m_strMessage = TEXT("로딩이 완료되었습니다..");
 	Sleep(500);
 	m_isFinished = true;
@@ -713,10 +704,6 @@ HRESULT CLoader::Loading_For_KonohaVillage()
 #pragma endregion
 
 	m_strMessage = TEXT("객체원형를(을) 로딩 중 입니다.");
-	/* For.Prototype_GameObject_SkyBox */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_SkyBox"),
-		CSkyBox::Create(m_pDevice, m_pContext, OBJECTID::SKYBOX))))
-		return E_FAIL;
 
 	/* For.Prototype_GameObject_Terrain */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_Terrain"),
@@ -941,6 +928,11 @@ HRESULT CLoader::Loading_For_KonohaVillage()
 	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_Component_Model_COL_KonohaVillage"),
 		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/KonohaVillage/COL_KonohaVillage.fbx", PreTransformMatrix))))
+		return E_FAIL;
+
+	//Prototype_GameObject_SkyCube
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_SkyCube"),
+		CSkyCube::Create(m_pDevice, m_pContext, OBJECTID::SKYBOX))))
 		return E_FAIL;
 
 	m_strMessage = TEXT("로딩이 완료되었습니다..");

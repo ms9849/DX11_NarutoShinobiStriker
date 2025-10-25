@@ -316,7 +316,7 @@
     <ClInclude Include="..\Public\SkillSlotUI.h" />
     <ClInclude Include="..\Public\SkillSlotPanel.h" />
     <ClInclude Include="..\Public\Skill_Table.h" />
-    <ClInclude Include="..\Public\SkyBox.h" />
+    <ClInclude Include="..\Public\SkyMesh.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\TestButton.h" />
     <ClInclude Include="..\Public\TestCamera.h" />
@@ -510,7 +510,7 @@
     <ClCompile Include="..\Private\SkillActionCamera.cpp" />
     <ClCompile Include="..\Private\SkillSlotUI.cpp" />
     <ClCompile Include="..\Private\SkillSlotPanel.cpp" />
-    <ClCompile Include="..\Private\SkyBox.cpp" />
+    <ClCompile Include="..\Private\SkyMesh.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\TestButton.cpp" />
     <ClCompile Include="..\Private\TestCamera.cpp" />
@@ -560,6 +560,7 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Cell.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxAnimMesh.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxMesh.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxMesh_NonLight.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxNorTex.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPointParticle.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPosTex.hlsl" />

@@ -47,6 +47,7 @@
 #include "Effect_CoolDown.h"
 #include "Collider.h"
 #include "GameManager.h"
+#include "SkyMesh.h"
 
 /* 테스트 브랜치용 주석 */
 CMainApp::CMainApp()	
@@ -327,6 +328,16 @@ HRESULT CMainApp::Ready_Prototypes()
 #pragma endregion
 
 #pragma region TEXTURE
+	/* For.Prototype_Component_Texture_Sky_Day */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Sky_Day"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/BackGround/SkyBox%d.dds"), 2))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_VIBuffer_Cube */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_VIBuffer_Cube"),
+		CVIBuffer_Cube::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	/* For.Prototype_Component_Texture_SwordTrail */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_SwordTrail"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/SwordTrail.png"), 1))))
@@ -429,6 +440,10 @@ HRESULT CMainApp::Ready_Prototypes()
 #pragma endregion
 
 #pragma region SHADER
+	/* For.Prototype_Component_Shader_VtxCube */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxCube"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxCube.hlsl"), VTXCUBE::Elements, VTXCUBE::iNumElements))))
+		return E_FAIL;
 
 	/* For.Prototype_Component_Shader_VtxPosTex */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxPosTex"),
@@ -657,6 +672,11 @@ HRESULT CMainApp::Ready_Effects()
 	/* For.Prototype_GameObject_EffectObject */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_EffectObject"),
 		CEffectObject::Create(m_pDevice, m_pContext, OBJECTID::EFFECTOBJECT))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_SkyMesh */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_SkyMesh"),
+		CSkyMesh::Create(m_pDevice, m_pContext, OBJECTID::SKYBOX))))
 		return E_FAIL;
 
 	return S_OK;

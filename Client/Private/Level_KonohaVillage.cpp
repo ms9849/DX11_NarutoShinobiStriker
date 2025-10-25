@@ -159,11 +159,6 @@ HRESULT CLevel_KonohaVillage::Ready_Lights()
 
 HRESULT CLevel_KonohaVillage::Ready_Layer_BackGround(const _wstring& strLayerTag)
 {
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_Terrain"),
-		ENUM_CLASS(LEVEL::KONOHA_VILLAGE), strLayerTag)))
-		return E_FAIL;
-
-
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_SkyBox"),
 		ENUM_CLASS(LEVEL::KONOHA_VILLAGE), strLayerTag)))
 		return E_FAIL;

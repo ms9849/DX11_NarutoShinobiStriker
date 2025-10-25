@@ -54,6 +54,7 @@ struct PS_IN
 struct PS_OUT
 {
     float4 vColor : SV_TARGET0;
+    float fDepth : SV_Depth; // <- Ãß°¡!
 };
 
 
@@ -64,7 +65,7 @@ PS_OUT PS_MAIN(PS_IN In)
     PS_OUT Out;
     
     Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
-
+    Out.fDepth = 0.99999f;
     return Out;
 }
 
@@ -80,4 +81,5 @@ technique11 DefaultTechnique
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN();
     }
+
 }
