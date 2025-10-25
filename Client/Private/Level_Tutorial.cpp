@@ -161,39 +161,18 @@ HRESULT CLevel_Tutorial::Ready_Lights()
 	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
 	LightDesc.vAmbient = _float4(0.4f, 0.4f, 0.4f, 1.f);
 	LightDesc.vSpecular = _float4(0.f, 0.f, 0.f, 1.f);
-	LightDesc.vDirection = _float4(0.5f, -1.f, 1.f, 0.f);
+	LightDesc.vDirection = _float4(1.f, -1.f, 1.f, 1.f);
 				
 	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
 		return E_FAIL;
 
-	//LightDesc.eType = LIGHT::POINT;
-	//LightDesc.vDiffuse = _float4(1.0f, 1.0f, 0.85f, 1.0f);
-	//LightDesc.vAmbient = _float4(0.5f, 0.5f, 0.5f, 1.f);
-	//LightDesc.vSpecular = LightDesc.vDiffuse;
-	//LightDesc.vPosition = _float4(0.f, 5.f, 0.f, 1.f);
-	//LightDesc.fRange = 20.f;
-
-	//if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
-	//	return E_FAIL;
-
-	//SHADOW_LIGHT_DESC		ShadowDesc{};
-	//ShadowDesc.vEye = _float4(-70.f, 60.f, -70.f, 1.f);
-	//ShadowDesc.vAt = _float4(10.f, 0.f, 10.f, 1.f);
-	//ShadowDesc.fFovy = XMConvertToRadians(120.0f);
-	//ShadowDesc.fAspect = static_cast<_float>(g_iWinSizeX) / g_iWinSizeY;
-	//ShadowDesc.fNear = 0.1f;
-	//ShadowDesc.fFar = 500.f;
-
-	//if (FAILED(m_pGameInstance->Ready_Shadow_Light(ShadowDesc)))
-	//	return E_FAIL;
-
 	SHADOW_LIGHT_DESC		ShadowDesc{};
-	ShadowDesc.vEye = _float4(0.f, 15.f, 0.f, 1.f);
-	ShadowDesc.vAt = _float4(10.f, 0.f, 10.f, 1.f);
-	ShadowDesc.fFovy = XMConvertToRadians(120.0f);
+	ShadowDesc.vEye = _float4(2.9f, 87.1f, -91.9f, 1.f);
+	ShadowDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
+	ShadowDesc.fFovy = XMConvertToRadians(60.0f);
 	ShadowDesc.fAspect = static_cast<_float>(g_iWinSizeX) / g_iWinSizeY;
 	ShadowDesc.fNear = 0.1f;
-	ShadowDesc.fFar = 500.f;
+	ShadowDesc.fFar = 3000.f;
 
 	if (FAILED(m_pGameInstance->Ready_Shadow_Light(ShadowDesc)))
 		return E_FAIL;
@@ -363,17 +342,6 @@ HRESULT CLevel_Tutorial::Ready_Layer_Effect(const _wstring& strLayerTag)
 		m_pGameInstance->Add_GameObject_ToPool(ENUM_CLASS(LEVEL::TUTORIAL), static_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::TUTORIAL),
 			TEXT("Prototype_GameObject_Effect_Icon"), nullptr)));
 	}
-
-	SHADOW_LIGHT_DESC		ShadowDesc{};
-	ShadowDesc.vEye = _float4(0.f, 15.f, 0.f, 1.f);
-	ShadowDesc.vAt = _float4(10.f, 0.f, 10.f, 1.f);
-	ShadowDesc.fFovy = XMConvertToRadians(120.0f);
-	ShadowDesc.fAspect = static_cast<_float>(g_iWinSizeX) / g_iWinSizeY;
-	ShadowDesc.fNear = 0.1f;
-	ShadowDesc.fFar = 500.f;
-
-	if (FAILED(m_pGameInstance->Ready_Shadow_Light(ShadowDesc)))
-		return E_FAIL;
 
 
 	/* 이펙트 테스트 */

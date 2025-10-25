@@ -34,9 +34,7 @@ HRESULT CRenderer::Initialize()
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Outline"), Viewport.Width, Viewport.Height, DXGI_FORMAT_R16G16B16A16_UNORM, _float4(0.0f, 0.f, 0.f, 1.f))))
 		return E_FAIL;
 
-	/* 
-	얼룩말 무늬 현상 방지 및, 음수 단위의 깊이도 체크하기 위해 픽셀 포맷을 다르게 세팅.
-	*/
+	/* 얼룩말 무늬 현상 방지 및, 음수 단위의 깊이도 체크하기 위해 픽셀 포맷을 다르게 세팅 */
 	/* Target_Depth */
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Depth"), Viewport.Width, Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.0f, 1.f, 0.f, 0.f))))
 		return E_FAIL;
@@ -51,6 +49,10 @@ HRESULT CRenderer::Initialize()
 
 	/* Target_Shadow */
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Shadow"), g_iMaxWidth, g_iMaxHeight, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(1.0f, 1.f, 1.f, 1.f))))
+		return E_FAIL;
+
+	/* Target_StaticShadow */
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_StaticShadow"), g_iMaxWidth * 2, g_iMaxHeight * 2, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(1.0f, 1.f, 1.f, 1.f))))
 		return E_FAIL;
 
 	if (FAILED(Ready_DepthStencilView(g_iMaxWidth, g_iMaxHeight)))
@@ -91,6 +93,10 @@ HRESULT CRenderer::Initialize()
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Shadow"), TEXT("Target_Shadow"))))
 		return E_FAIL;
 
+	/* MRT_StaticShadow */
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_StaticShadow"), TEXT("Target_StaticShadow"))))
+		return E_FAIL;
+
 	/* 블러는 렌더타겟 다 따로 둬야한다. */
 	/* MRT_Blur */
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Blur"), TEXT("Target_Blur"))))
@@ -119,16 +125,17 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Shade"), Viewport.Width - 225.f, 75.f, 150.f, 150.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Outline"), Viewport.Width - 225.f, Viewport.Height -225.f, 150.f, 150.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Outline"), Viewport.Width - 225.f, 225.f, 150.f, 150.f)))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Shadow"), Viewport.Width - 75.f, 375.f, 150.f, 150.f)))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_StaticShadow"), Viewport.Width - 225.f, 375.f, 150.f, 150.f)))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Blur"), Viewport.Width - 75.f, 75.f, 150.f, 150.f)))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Blur_X"), Viewport.Width - 75.f, 225.f, 150.f, 150.f)))
 		return E_FAIL;
 #endif
-	//m_pLampTextureCom->Bind_ShaderResource(m_pShader, "g_LightLampTexture", 0);
 
     return S_OK;
 }
@@ -191,6 +198,42 @@ HRESULT CRenderer::Add_DebugComponent(CComponent* pDebugComponent)
 }
 
 #endif
+
+void CRenderer::Add_StaticShadow(CGameObject* pGameObject)
+{
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_StaticShadow"), m_pStaticShadowDSV)))
+		return;
+
+	D3D11_VIEWPORT			ViewPortDesc;
+	ZeroMemory(&ViewPortDesc, sizeof(D3D11_VIEWPORT));
+	ViewPortDesc.TopLeftX = 0;
+	ViewPortDesc.TopLeftY = 0;
+	ViewPortDesc.Width = (_float)g_iMaxWidth * 2.f;
+	ViewPortDesc.Height = (_float)g_iMaxHeight * 2.f;
+	ViewPortDesc.MinDepth = 0.f;
+	ViewPortDesc.MaxDepth = 1.f;
+
+	m_pContext->RSSetViewports(1, &ViewPortDesc);
+
+	/* 스태틱 섀도우 렌더. */
+	if (nullptr != pGameObject)
+		pGameObject->Render_Shadow();
+
+	/* 모든 렌더타겟을 비워. */
+	if (FAILED(m_pGameInstance->End_MRT()))
+		return;
+
+	ZeroMemory(&ViewPortDesc, sizeof(D3D11_VIEWPORT));
+	ViewPortDesc.TopLeftX = 0;
+	ViewPortDesc.TopLeftY = 0;
+	/* 임시로 하드코딩. 추후 클라이언트에서 받아와야 함. */
+	ViewPortDesc.Width = (_float)1280.0f;
+	ViewPortDesc.Height = (_float)720.0f;
+	ViewPortDesc.MinDepth = 0.f;
+	ViewPortDesc.MaxDepth = 1.f;
+
+	m_pContext->RSSetViewports(1, &ViewPortDesc);
+}
 
 void CRenderer::Render_Priority()
 {
@@ -376,6 +419,8 @@ void CRenderer::Render_Combined()
 		return;
 	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Shadow"), m_pShader, "g_ShadowTexture")))
 		return;
+	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_StaticShadow"), m_pShader, "g_StaticShadowTexture")))
+		return;
 	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Blur_X"), m_pShader, "g_BlurXTexture")))
 		return;
 
@@ -500,8 +545,8 @@ HRESULT CRenderer::Ready_DepthStencilView(_uint iSizeX, _uint iSizeY)
 	if (nullptr == m_pDevice)
 		return E_FAIL;
 
-	ID3D11Texture2D* pDepthStencilTexture = nullptr;
-
+	ID3D11Texture2D* pDepthStencilTexture = { nullptr } ;
+	ID3D11Texture2D* pStaticDepthStencilTexture = { nullptr };
 	D3D11_TEXTURE2D_DESC	TextureDesc;
 	ZeroMemory(&TextureDesc, sizeof(D3D11_TEXTURE2D_DESC));
 
@@ -527,11 +572,20 @@ HRESULT CRenderer::Ready_DepthStencilView(_uint iSizeX, _uint iSizeY)
 	if (FAILED(m_pDevice->CreateTexture2D(&TextureDesc, nullptr, &pDepthStencilTexture)))
 		return E_FAIL;
 
+	TextureDesc.Width = iSizeX * 2;
+	TextureDesc.Height = iSizeY * 2;
+
+	if (FAILED(m_pDevice->CreateTexture2D(&TextureDesc, nullptr, &pStaticDepthStencilTexture)))
+		return E_FAIL;
 
 	if (FAILED(m_pDevice->CreateDepthStencilView(pDepthStencilTexture, nullptr, &m_pShadowDSV)))
 		return E_FAIL;
 
+	if (FAILED(m_pDevice->CreateDepthStencilView(pStaticDepthStencilTexture, nullptr, &m_pStaticShadowDSV)))
+		return E_FAIL;
+
 	Safe_Release(pDepthStencilTexture);
+	Safe_Release(pStaticDepthStencilTexture);
 
 	return S_OK;
 }
@@ -561,8 +615,10 @@ void CRenderer::Render_Debug()
 		return;
 	if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Outline"), m_pShader, m_pVIBuffer)))
 		return;
-	//if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Shadow"), m_pShader, m_pVIBuffer)))
-	//	return;
+	if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Shadow"), m_pShader, m_pVIBuffer)))
+		return;
+	if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_StaticShadow"), m_pShader, m_pVIBuffer)))
+		return;
 	//if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Blur"), m_pShader, m_pVIBuffer)))
 	//	return;
 	//if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Blur_X"), m_pShader, m_pVIBuffer)))
@@ -606,11 +662,5 @@ void CRenderer::Free()
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pGameInstance);
 	Safe_Release(m_pShadowDSV);
-	Safe_Release(m_pLampTextureCom);
-
-	for (auto& BlurComponents : m_BlurComponents)
-	{
-		Safe_Release(BlurComponents);
-	}
-	m_BlurComponents.clear();
+	Safe_Release(m_pStaticShadowDSV);
 }

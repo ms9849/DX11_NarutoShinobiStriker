@@ -122,7 +122,7 @@ HRESULT CLevel_OutfitSelect::Ready_Layer_Camera(const _wstring& strLayerTag)
 
     TestCameraDesc.fFovy = XMConvertToRadians(60.0f);
     TestCameraDesc.fNear = 0.1f;
-    TestCameraDesc.fFar = 1000.f;
+    TestCameraDesc.fFar = 500.f;
     TestCameraDesc.vEye = _float4(0.f, 1.f, -1.f, 1.f);
     TestCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
     TestCameraDesc.fSpeedPerSec = 20.f;
@@ -138,7 +138,7 @@ HRESULT CLevel_OutfitSelect::Ready_Layer_Camera(const _wstring& strLayerTag)
 
     TestCameraDesc.fFovy = XMConvertToRadians(60.0f);
     TestCameraDesc.fNear = 0.1f;
-    TestCameraDesc.fFar = 1000.f;
+    TestCameraDesc.fFar = 500.f;
     TestCameraDesc.vEye = _float4(0.f, 10.f, 10.f, 1.f);
     TestCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
     TestCameraDesc.fSpeedPerSec = 1.f;

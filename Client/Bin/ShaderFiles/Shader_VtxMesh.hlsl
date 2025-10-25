@@ -86,8 +86,6 @@ struct PS_OUT
     float4 vDepth : SV_TARGET2;
 };
 
-
-
 /* «»ºø Ω¶¿Ã¥ı : «»ºø¿« √÷¡æ¿˚¿Œ ªˆ¿ª ∞·¡§«œ≥Æ. */
 PS_OUT PS_MAIN(PS_IN In)
 {
@@ -116,9 +114,9 @@ struct PS_OUT_SHADOW
 
 PS_OUT_SHADOW PS_MAIN_SHADOW(PS_IN_SHADOW In)
 {
-    PS_OUT_SHADOW Out = (PS_OUT_SHADOW) 0;
+    PS_OUT_SHADOW Out;
     
-    Out.vShadowLightDepth.x = In.vProjPos.w / 500.0f;;
+    Out.vShadowLightDepth.x = In.vProjPos.w / 3000.0f;
     
     return Out;
 }

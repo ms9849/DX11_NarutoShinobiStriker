@@ -26,6 +26,7 @@ HRESULT CKonohaVillage::Initialize(void* pArg)
 
 	m_iNumMeshes = m_pModelCom->Get_NumMeshes();
 	m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(0.f, 0.7f, 0.f, 1.f));
+	m_pGameInstance->Add_StaticShadow(this);
 
 	return S_OK;
 }

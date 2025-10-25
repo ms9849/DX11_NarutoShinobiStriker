@@ -453,6 +453,11 @@ HRESULT CGameInstance::Add_Font(CFont* pRenderFont)
 	return m_pRenderer->Add_Font(pRenderFont);
 }
 
+void CGameInstance::Add_StaticShadow(CGameObject* pGameObject)
+{
+	m_pRenderer->Add_StaticShadow(pGameObject);
+}
+
 #ifdef _DEBUG
 HRESULT CGameInstance::Add_DebugComponent(CComponent* pDebugComponent)
 {

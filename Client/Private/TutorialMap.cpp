@@ -27,6 +27,8 @@ HRESULT CTutorialMap::Initialize(void* pArg)
 
 	m_iNumMeshes = m_pModelCom->Get_NumMeshes();
 	m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(0.f, 0.7f, 0.f, 1.f));
+	/* 그림자 세팅 최초 1회에만. */
+	m_pGameInstance->Add_StaticShadow(this);
 
 	return S_OK;
 }

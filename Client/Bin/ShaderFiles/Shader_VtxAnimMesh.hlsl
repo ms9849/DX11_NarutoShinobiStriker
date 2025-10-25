@@ -145,9 +145,9 @@ struct PS_OUT_SHADOW
 
 PS_OUT_SHADOW PS_MAIN_SHADOW(PS_IN_SHADOW In)
 {
-    PS_OUT_SHADOW Out = (PS_OUT_SHADOW) 0;
+    PS_OUT_SHADOW Out;
     
-    Out.vShadowLightDepth.x = In.vProjPos.w / 500.0f;
+    Out.vShadowLightDepth.x = In.vProjPos.w / 3000.0f;
     
     return Out;
 }
@@ -166,19 +166,11 @@ technique11 DefaultTechnique
 
     pass Shadow
     {
-        SetRasterizerState(RS_Default);
+        SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_Default, 0);
         SetBlendState(BS_None, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
         VertexShader = compile vs_5_0 VS_MAIN_SHADOW();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN_SHADOW();
     }
-
-   
-
-
- 
-    
-
- 
 }
