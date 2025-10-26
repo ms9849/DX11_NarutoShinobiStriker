@@ -61,6 +61,7 @@ private:
 	virtual ~CEffectObject() = default;
 
 public:
+	void Set_Position(_fvector vPos) { m_pTransformCom->Set_State(STATE::POSITION, vPos); }
 	void Set_Blur(_bool bFlag) { m_IsBlur = bFlag;  }
 	void Set_Visible(_bool bFlag) { m_IsVisible = bFlag; }
 	HRESULT Save_ToBinary(const _char* pEffectName);

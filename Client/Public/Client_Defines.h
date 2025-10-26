@@ -68,6 +68,7 @@ namespace Client
 		OUTFIT_BACKGROUND,
 		TRAIL, 
 		FOOT_TRAIL,
+		ROPE_TRAIL,
 		END
 	};
 

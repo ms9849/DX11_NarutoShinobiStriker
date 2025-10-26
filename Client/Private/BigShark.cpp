@@ -40,9 +40,12 @@ HRESULT CBigShark::Initialize(void* pArg)
 	EffectDesc.IsBinary = true;
 	EffectDesc.strFilePath = TEXT("../Bin/Resources/Effects/BigSharkBomb_eff.bin");
 
+
 	m_pEffectMain = static_cast<CEffectContainer*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_EffectContainer"),
 		&EffectDesc));
 	Safe_AddRef(m_pEffectMain);
+	m_pEffectMain->Set_Blur(true);
+
 	m_pGameInstance->Add_Clone_ToLayer(m_pEffectMain, m_pGameInstance->Get_LevelID(), TEXT("Layer_Effect"));
 
 	CParticleObject::PARTICLE_LOAD_DESC ParticleDesc;

@@ -21,6 +21,8 @@ public:
 	typedef struct tagEffectContainerDesc : public GAMEOBJECT_DESC {
 		_bool IsBinary = {};
 		_wstring strFilePath = {};
+		_float fLifeTime = { 300.f };
+		_float fSpeedRatio = { 1.f };
 	} EFFECT_CONTAINER_DESC;
 
 private:
@@ -30,8 +32,11 @@ private:
 
 public:
 	void Set_ParentMatrix(_fmatrix ParentMatrix);
+	void Set_Position(_fvector vPos);
+	void LookAt(_fvector vPos);
+	void Rotation(_float fRadianX, _float fRadianY, _float fRadianZ);
 	void Set_Visible(_bool bFlag) { m_IsVisible = bFlag; }
-	
+
 	void Add_MainEffect(class CEffectObject* pEffectObject)
 	{
 		Safe_Release(m_pMainEffect);
@@ -59,7 +64,7 @@ public:
 public:
 	void Save_Container_ToBinary(const _char* pFilePath);
 	void Load_Container_FromBinary(const _tchar* pFilePath);
-	void Set_Blur(_bool bFlag) { m_IsBlur = bFlag; }
+	void Set_Blur(_bool bFlag);
 
 public:
 
@@ -71,6 +76,9 @@ public:
 	virtual HRESULT Render() override;
 
 private:
+	_float		m_fSpeedRatio = { 0.f };
+	_float		m_fLifeTimeAcc = { 0.f };
+	_float		m_fLifeTime = { 300.f };
 	_bool		m_IsBlur = { false };
 	_float4x4	m_ParentWorldMatrix = {};
 	_bool		m_IsVisible = { true };

@@ -5,6 +5,8 @@
 
 #include "EffectContainer.h"
 #include "EffectObject.h"
+#include "ParticleObject.h"
+
 CFireBall::CFireBall(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CSkill { pDevice, pContext, eObjectID }
 {
@@ -30,7 +32,7 @@ HRESULT CFireBall::Initialize(void* pArg)
 
     FIREBALL_DESC* pDesc = static_cast<FIREBALL_DESC*>(pArg);
     
-    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetW(XMLoadFloat3(&pDesc->vPosition), 1.f) + XMVectorSet(0.f, 2.f, 0.f, 0.f));
+    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetW(XMLoadFloat3(&pDesc->vPosition), 1.f) + XMVectorSet(0.f, 0.7f, 0.f, 0.f));
     m_pTransformCom->LookAt(m_pTransformCom->Get_State(STATE::POSITION) - XMLoadFloat3(&pDesc->vLook));
     m_IsEnemy = pDesc->IsEnemy;
 
@@ -38,10 +40,12 @@ HRESULT CFireBall::Initialize(void* pArg)
     CEffectContainer::EFFECT_CONTAINER_DESC EffectDesc;
     EffectDesc.IsBinary = true;
     EffectDesc.strFilePath = TEXT("../Bin/Resources/Effects/FireBall_eff.bin");
-
+    
     m_pEffectMain = static_cast<CEffectContainer*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_EffectContainer"),
         &EffectDesc));
     Safe_AddRef(m_pEffectMain);
+    
+    m_pEffectMain->Set_Blur(true);
     m_pGameInstance->Add_Clone_ToLayer(m_pEffectMain, m_pGameInstance->Get_LevelID(), TEXT("Layer_Effect"));
 
     return S_OK;
@@ -53,8 +57,38 @@ void CFireBall::Priority_Update(_float fTimeDelta)
 
 void CFireBall::Update(_float fTimeDelta)
 {
+    m_fEffectTimeAcc += fTimeDelta;
+
+    if (m_fEffectTimeAcc >= 0.15f)
+    {
+        CParticleObject::PARTICLE_LOAD_DESC ParticleDesc;
+        ParticleDesc.eType = CParticleObject::PARTICLE_TYPE::DROP;
+        ParticleDesc.strParticlePath = TEXT("../Bin/Resources/Particle/Fireball_Dust_Particle.bin");
+        XMStoreFloat3(&ParticleDesc.vPosition , m_pTransformCom->Get_State(STATE::POSITION));
+
+        m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"),
+            m_pGameInstance->Get_LevelID(), TEXT("Layer_Particle"), &ParticleDesc);
+
+        ParticleDesc.strParticlePath = TEXT("../Bin/Resources/Particle/Fireball_Smoke_Particle.bin");
+        m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"),
+            m_pGameInstance->Get_LevelID(), TEXT("Layer_Particle"), &ParticleDesc);
+
+        m_fEffectTimeAcc = 0.f;
+    }
+
     if (false == m_pColliderCom->Get_Active())
+    {
         m_IsDead = true;
+
+        CParticleObject::PARTICLE_LOAD_DESC ParticleDesc;
+        ParticleDesc.eType = CParticleObject::PARTICLE_TYPE::EXPLOSION;
+        ParticleDesc.strParticlePath = TEXT("../Bin/Resources/Particle/Fireball_Hit_Particle.bin");
+        XMStoreFloat3(&ParticleDesc.vPosition, m_pTransformCom->Get_State(STATE::POSITION));
+
+        m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"),
+            m_pGameInstance->Get_LevelID(), TEXT("Layer_Particle"), &ParticleDesc);
+
+    }
 
     m_pTransformCom->Go_Backward(fTimeDelta, nullptr);
 

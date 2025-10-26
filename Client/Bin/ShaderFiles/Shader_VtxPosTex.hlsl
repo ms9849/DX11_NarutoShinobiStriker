@@ -1,6 +1,7 @@
 #include "Engine_Shader_Defines.hlsli"
 
 matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
+matrix g_RopeSocketMatrix, g_RopeWorldMatrix;
 
 texture2D g_Texture, g_Texture_Skill;
 
@@ -42,6 +43,71 @@ VS_OUT VS_MAIN(VS_IN In)
     Out.vTexcoord = In.vTexcoord;
     
     return Out;
+}
+
+struct GS_IN
+{
+    float4 vPosition : SV_POSITION;
+    float2 vTexcoord : TEXCOORD0;
+};
+
+struct GS_OUT
+{
+    float4 vPosition : SV_POSITION;
+    float2 vTexcoord : TEXCOORD0;
+};
+
+[maxvertexcount(6)]
+void GS_ROPE(point GS_IN In[1], inout TriangleStream<GS_OUT> OutStream)
+{
+    GS_OUT Out[4];
+
+    // 수업에서 한것처럼 내외적으로 해볼까?
+    float3 vRopeStart = mul(float4(0, 0, 0, 1), g_RopeSocketMatrix).xyz;
+    float3 vRopeEnd = mul(float4(0, 0, 0, 1), g_RopeWorldMatrix).xyz;
+
+    // 방향 벡터
+    float3 vDir = vRopeEnd - vRopeStart;
+    float fLength = length(vDir);
+    vDir = normalize(vDir);
+
+    // Up 벡터 고정 ㄱㄱ
+    float3 up = float3(0, 1, 0);
+
+    float3 vRight = normalize(cross(up, vDir));
+    
+    up = normalize(cross(vDir, vRight));
+
+    // 로프 폭 0.02로 
+    float fHalfWidth = 0.004f;
+    up *= fHalfWidth;
+
+    // 4개의 꼭짓점
+    float3 P0 = vRopeStart + up;
+    float3 P1 = vRopeStart - up;
+    float3 P2 = vRopeEnd - up;
+    float3 P3 = vRopeEnd + up;
+
+    matrix matVP = mul(g_ViewMatrix, g_ProjMatrix);
+    Out[0].vPosition = mul(float4(P0, 1.f), matVP);
+    Out[1].vPosition = mul(float4(P1, 1.f), matVP);
+    Out[2].vPosition = mul(float4(P2, 1.f), matVP);
+    Out[3].vPosition = mul(float4(P3, 1.f), matVP);
+
+    Out[0].vTexcoord = float2(0, 0);
+    Out[1].vTexcoord = float2(1, 0);
+    Out[2].vTexcoord = float2(1, 1);
+    Out[3].vTexcoord = float2(0, 1);
+
+    OutStream.Append(Out[0]);
+    OutStream.Append(Out[1]);
+    OutStream.Append(Out[2]);
+    OutStream.RestartStrip();
+
+    OutStream.Append(Out[0]);
+    OutStream.Append(Out[2]);
+    OutStream.Append(Out[3]);
+    OutStream.RestartStrip();
 }
 
 struct PS_IN
@@ -248,6 +314,17 @@ PS_OUT PS_FOOT_TRAIL(PS_IN In)
 
 }
 
+PS_OUT PS_ROPE_TRAIL(PS_IN In)
+{
+    PS_OUT Out;
+    
+    Out.vColor.rgb = float3(1.f, 1.f, 1.f);
+    Out.vColor.a = 0.7f;
+    
+    return Out;
+
+}
+
 technique11 DefaultTechnique
 {
     pass UI
@@ -358,5 +435,16 @@ technique11 DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_FOOT_TRAIL();
+    }
+
+    pass RopeTrail
+    {
+        SetRasterizerState(RS_Cull_None);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_ROPE();
+        PixelShader = compile ps_5_0 PS_ROPE_TRAIL();
     }
 }

@@ -25,6 +25,7 @@ protected:
 public:
 	void Calc_HitEffectTime(_float fTimeDelta);
 	void Set_HitEffect(_float fEffectTime, _float fIntensity = 1.f);
+	const   _float4x4* Get_CombinedMatrix(const _char* pBoneName);
 	const	_float4x4*	Get_BoneMatrixPtr(const _char* pBoneName);
 	_float				Get_AnimProgress();
 	virtual void		Set_AnimProgress(_float fProgress);

@@ -49,7 +49,6 @@ CPlayerState* CPlayer_RopeActionState::Update(_float fTimeDelta)
         CRope::ROPE_DESC Desc;
         Desc.vStartPos = m_vStartPos;
         Desc.vTargetPos = m_vTargetPos;
-
         m_eAnimState = ANIM_STATE::WAIT;
         
         m_pRope = static_cast<CRope*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC),

@@ -3,6 +3,9 @@
 #include "Player.h"
 #include "GameInstance.h"
 
+#include "EffectContainer.h"
+#include "EffectObject.h"
+
 /* 전이 가능한 상태들 */
 #pragma region TRANSFER_STATE
 
@@ -104,6 +107,19 @@ CPlayerState* CPlayer_JumpState::Update(_float fTimeDelta)
 		m_eAnimState = ANIM_STATE::DOUBLE_JUMP;
 		m_fTimeAcc = 0.f;
 		m_bCanDoubleJump = false;
+
+		/* 아기상어뚜루루뚜루 */
+		CEffectContainer::EFFECT_CONTAINER_DESC EffectDesc;
+		EffectDesc.IsBinary = true;
+		EffectDesc.strFilePath = TEXT("../Bin/Resources/Effects/Player_Jump_eff.bin");
+		EffectDesc.fLifeTime = 0.6f;
+
+		CEffectContainer* pCloneEffect = static_cast<CEffectContainer*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_EffectContainer"),
+			&EffectDesc));
+		pCloneEffect->Set_Position(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
+
+		m_pGameInstance->Add_Clone_ToLayer(pCloneEffect, m_pGameInstance->Get_LevelID(), TEXT("Layer_Effect"));
+
 	}
 
 	// 낙하

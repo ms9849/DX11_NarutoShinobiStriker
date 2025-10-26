@@ -17,6 +17,37 @@ void CEffectContainer::Set_ParentMatrix(_fmatrix ParentMatrix)
     XMStoreFloat4x4(&m_ParentWorldMatrix, ParentMatrix);
 }
 
+void CEffectContainer::Set_Position(_fvector vPos)
+{
+    m_pMainEffect->Set_Position(vPos);
+
+    for (auto& Pair : m_EffectObjects)
+    {
+        static_cast<CEffectObject*>(Pair.second)->Set_Position(vPos);
+    }
+
+}
+
+void CEffectContainer::LookAt(_fvector vPos)
+{
+    m_pMainEffect->Get_Transform()->LookAt(vPos);
+
+    for (auto& Pair : m_EffectObjects)
+    {
+        static_cast<CEffectObject*>(Pair.second)->Get_Transform()->LookAt(vPos);
+    }
+}
+
+void CEffectContainer::Rotation(_float fRadianX, _float fRadianY, _float fRadianZ)
+{
+    m_pMainEffect->Get_Transform()->Rotation(fRadianX, fRadianY, fRadianZ);
+
+    for (auto& Pair : m_EffectObjects)
+    {
+        static_cast<CEffectObject*>(Pair.second)->Get_Transform()->Rotation(fRadianX, fRadianY, fRadianZ);
+    }
+}
+
 void CEffectContainer::Add_EffectObject(const _wstring& strEffectTag, CEffectObject* pEffectObject)
 {
     m_EffectObjects.emplace(strEffectTag, pEffectObject);
@@ -151,19 +182,33 @@ void CEffectContainer::Load_Container_FromBinary(const _tchar* pFilePath)
     CloseHandle(hHandle);
 }
 
+void CEffectContainer::Set_Blur(_bool bFlag) 
+{
+    m_IsBlur = bFlag;
+    m_pMainEffect->Set_Blur(bFlag);
+
+    for (auto& pEffectObject : m_EffectObjects)
+    {
+        static_cast<CEffectObject*>(pEffectObject.second)->Set_Blur(bFlag);
+    }
+}
+
 HRESULT CEffectContainer::Initialize_Prototype()
 {
-    XMStoreFloat4x4(&m_ParentWorldMatrix, XMMatrixIdentity());
-
     return S_OK;
 }
 
 HRESULT CEffectContainer::Initialize(void* pArg)
 {
+    XMStoreFloat4x4(&m_ParentWorldMatrix, XMMatrixIdentity());
+
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
     EFFECT_CONTAINER_DESC* pDesc = static_cast<EFFECT_CONTAINER_DESC*>(pArg);
+
+    m_fLifeTime = pDesc->fLifeTime;
+    m_fSpeedRatio = pDesc->fSpeedRatio;
 
     if (pDesc->IsBinary)
         Load_Container_FromBinary(pDesc->strFilePath.c_str());
@@ -176,26 +221,31 @@ void CEffectContainer::Priority_Update(_float fTimeDelta)
 	if (false == m_IsVisible)
 		return;
 
-    m_pMainEffect->Priority_Update(fTimeDelta);
+    m_pMainEffect->Priority_Update(fTimeDelta * m_fSpeedRatio);
 
     for (auto& pEffectObject : m_EffectObjects)
     {
         if (pEffectObject.second->Get_StartTime() <= m_pMainEffect->Get_CurLifeTime())
-            pEffectObject.second->Priority_Update(fTimeDelta);
+            pEffectObject.second->Priority_Update(fTimeDelta * m_fSpeedRatio);
     }
 }
 
 void CEffectContainer::Update(_float fTimeDelta)
 {
+    m_fLifeTimeAcc += fTimeDelta* m_fSpeedRatio;
+
+    if (m_fLifeTimeAcc >= m_fLifeTime)
+        m_IsDead = true;
+
     if (false == m_IsVisible)
         return;
 
-    m_pMainEffect->Update(fTimeDelta);
+    m_pMainEffect->Update(fTimeDelta * m_fSpeedRatio);
 
     for (auto& pEffectObject : m_EffectObjects)
     {
         if(pEffectObject.second->Get_StartTime() <= m_pMainEffect->Get_CurLifeTime())
-            pEffectObject.second->Update(fTimeDelta);
+            pEffectObject.second->Update(fTimeDelta * m_fSpeedRatio);
     }
 }
 
@@ -215,12 +265,12 @@ void CEffectContainer::Late_Update(_float fTimeDelta)
         pEffectObject.second->Set_ParentMatrix(XMLoadFloat4x4(&m_ParentWorldMatrix));
     }
 
-    m_pMainEffect->Late_Update(fTimeDelta);
+    m_pMainEffect->Late_Update(fTimeDelta * m_fSpeedRatio);
 
     for (auto& pEffectObject : m_EffectObjects)
     {
         if (pEffectObject.second->Get_StartTime() <= m_pMainEffect->Get_CurLifeTime())
-            pEffectObject.second->Late_Update(fTimeDelta);
+            pEffectObject.second->Late_Update(fTimeDelta * m_fSpeedRatio);
     }
 
     if (true == m_IsBlur)

@@ -1,15 +1,21 @@
 #include "Rope.h"
 
+#include "GameManager.h"
 #include "GameInstance.h"
+#include "Player.h"
 
 CRope::CRope(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID) 
 	: CGameObject { pDevice, pContext, ENUM_CLASS(eObjectID) }
+	, m_pGameManager { CGameManager::GetInstance()}
 {
+	Safe_AddRef(m_pGameManager);
 }
 
 CRope::CRope(const CRope& rhs)
 	: CGameObject { rhs }
+	, m_pGameManager{ CGameManager::GetInstance() }
 {
+	Safe_AddRef(m_pGameManager);
 }
 
 HRESULT CRope::Initialize_Prototype()
@@ -30,12 +36,18 @@ HRESULT CRope::Initialize(void* pArg)
 	ROPE_DESC* pDesc = static_cast<ROPE_DESC*>(pArg);
 	pDesc->fSpeedPerSec = 40.f;
 
+
+	/* 손 본의 컴바인드 매트릭스를 가져오게 하자.*/
+	/* 그리고 start pos로 세팅, end pos는 현재 로프의 월드 위치로 세팅.*/
+	/* 그걸 지오메트리에서 그려낸다. */
+
 	m_pTransformCom->Set_State(STATE::POSITION, XMLoadFloat3(&pDesc->vStartPos));
 	m_vTargetPos = pDesc->vTargetPos;
 	/* 방향은 타겟 위치에서 내 위치 뺴서 구해줄 것 */
 	XMStoreFloat3(&m_vTargetDir, XMVector3Normalize(XMLoadFloat3(&pDesc->vTargetPos) - m_pTransformCom->Get_State(STATE::POSITION)));
 
 	m_pTransformCom->LookAt(XMLoadFloat3(&m_vTargetPos));
+	m_pTransformCom->Set_Scale(0.3f, 0.3f, 0.3f); 
 
 	return S_OK;
 }
@@ -59,7 +71,8 @@ void CRope::Update(_float fTimeDelta)
 
 void CRope::Late_Update(_float fTimeDelta)
 {
-	m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+	m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
+	m_pGameInstance->Add_RenderGroup(RENDER::BLUR, this);
 }
 
 HRESULT CRope::Render()
@@ -72,7 +85,7 @@ HRESULT CRope::Render()
 		if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_Texture", aiTextureType_DIFFUSE, 0)))
 			return E_FAIL;
 
-		if (FAILED(m_pShaderCom->Begin(0)))
+		if (FAILED(m_pShaderCom->Begin(ENUM_CLASS(SHADER_VTXPOSTEX_IDX::ROPE_TRAIL))))
 			return E_FAIL;
 
 		if (FAILED(m_pModelCom->Render(i)))
@@ -89,7 +102,7 @@ HRESULT CRope::Render()
 HRESULT CRope::Ready_Components()
 {
 	/* Com_Shader */
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxMesh_NonLight"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxPosTex"),
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 
@@ -112,6 +125,12 @@ HRESULT CRope::Ready_Components()
 
 HRESULT CRope::Bind_ShaderResources()
 {
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_RopeSocketMatrix", m_pGameManager->Get_PlayerPtr()->Get_CombinedMatrix(TEXT("Part_Upper"), "RightHandMiddle1"))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_RopeWorldMatrix", m_pTransformCom->Get_WorldMatrixPtr())))
+		return E_FAIL;
+
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
 
@@ -157,4 +176,5 @@ void CRope::Free()
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pColliderCom);
+	Safe_Release(m_pGameManager);
 }

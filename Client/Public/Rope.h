@@ -17,7 +17,7 @@ public:
 	typedef struct tagRopeDesc : public GAMEOBJECT_DESC {
 		_float3 vStartPos;
 		_float3 vTargetPos;
-		_float4x4 SocketMatrix;
+		class CTransform* pSocketTransform;
 
 	} ROPE_DESC;
 
@@ -40,6 +40,7 @@ public:
 	virtual HRESULT Render() override;
 
 private:
+	class CGameManager* m_pGameManager = { nullptr };
 	_bool		m_IsArrive = { false };
 	_float3		m_vTargetPos = {};
 	_float3		m_vTargetDir = {};

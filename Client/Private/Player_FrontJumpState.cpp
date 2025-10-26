@@ -2,6 +2,9 @@
 
 #include "Player.h"
 #include "GameInstance.h"
+#include "EffectObject.h"
+#include "EffectContainer.h"
+
 /* 전이 가능한 상태들 */
 #pragma region TRANSFER_STATE
 
@@ -43,6 +46,19 @@ void CPlayer_FrontJumpState::Start(_bool IsBlend)
 		m_eAnimState = ANIM_STATE::DOUBLE_JUMP;
 		m_fTimeAcc = 0.f;
 		m_bCanDoubleJump = false;
+
+
+		/* 아기상어뚜루루뚜루 */
+		CEffectContainer::EFFECT_CONTAINER_DESC EffectDesc;
+		EffectDesc.IsBinary = true;
+		EffectDesc.strFilePath = TEXT("../Bin/Resources/Effects/Player_Jump_eff.bin");
+		EffectDesc.fLifeTime = 0.6f;
+
+		CEffectContainer* pCloneEffect = static_cast<CEffectContainer*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_EffectContainer"),
+			&EffectDesc));
+		pCloneEffect->Set_Position(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
+
+		m_pGameInstance->Add_Clone_ToLayer(pCloneEffect, m_pGameInstance->Get_LevelID(), TEXT("Layer_Effect"));
 	}
 }
 
@@ -110,6 +126,18 @@ CPlayerState* CPlayer_FrontJumpState::Update(_float fTimeDelta)
 		m_eAnimState = ANIM_STATE::DOUBLE_JUMP;
 		m_fTimeAcc = 0.f;
 		m_bCanDoubleJump = false;
+
+		/* 아기상어뚜루루뚜루 */
+		CEffectContainer::EFFECT_CONTAINER_DESC EffectDesc;
+		EffectDesc.IsBinary = true;
+		EffectDesc.strFilePath = TEXT("../Bin/Resources/Effects/Player_Jump_eff.bin");
+		EffectDesc.fLifeTime = 0.8f;
+
+		CEffectContainer* pCloneEffect = static_cast<CEffectContainer*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_EffectContainer"),
+			&EffectDesc));
+		pCloneEffect->Set_Position(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
+
+		m_pGameInstance->Add_Clone_ToLayer(pCloneEffect, m_pGameInstance->Get_LevelID(), TEXT("Layer_Effect"));
 	}
 
 	// 낙하
@@ -137,20 +165,6 @@ CPlayerState* CPlayer_FrontJumpState::Update(_float fTimeDelta)
 			pNextState = CPlayer_HandAerialAttackState::Create(m_pPlayer, m_fTimeAcc);
 		else if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
 			pNextState = CPlayer_HandAerialAttackState::Create(m_pPlayer, m_fTimeAcc);
-	}
-	/* 1번 스킬 사용 */
-	else if (m_pGameInstance->Key_Down(DIK_1))
-	{
-		//if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType() && m_pPlayer->Use_Skill(SKILLNUM::SECOND))
-		//	pNextState = CPlayer_ChidoriAerialReadyState::Create(m_pPlayer, m_fTimeAcc);
-	}
-	/* 2번 스킬 사용 */
-	else if (m_pGameInstance->Key_Down(DIK_2) && m_pPlayer->Use_Skill(SKILLNUM::THIRD))
-	{
-		if (ATTACK_TYPE::NINJUTSU == m_pPlayer->Get_AttackType())
-			pNextState = CPlayer_AerialFireBallState::Create(m_pPlayer, m_fTimeAcc);
-		else if (ATTACK_TYPE::MELEE == m_pPlayer->Get_AttackType())
-			pNextState = CPlayer_AerialRasenShurikenState::Create(m_pPlayer, m_fTimeAcc);
 	}
 	else if (m_pGameInstance->Key_Up(DIK_Q))
 	{

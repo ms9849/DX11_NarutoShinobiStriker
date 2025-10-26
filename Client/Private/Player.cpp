@@ -18,6 +18,9 @@
 #include "Player_BeatenState.h"
 #include "Player_BeatenBlastedState.h"
 #include "Player_LandState.h"
+
+#include "EffectContainer.h"
+#include "EffectObject.h"
 #include "ParticleObject.h"
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
@@ -32,6 +35,11 @@ CPlayer::CPlayer(const CPlayer& rhs)
 	, m_pGameManager{ CGameManager::GetInstance() }
 {
 	Safe_AddRef(m_pGameManager);
+}
+
+const _float4x4* CPlayer::Get_CombinedMatrix(const _wstring strPartTag, const _char* pBoneName)
+{
+	return static_cast<CParts_Character*>(Find_PartObject(strPartTag))->Get_CombinedMatrix(pBoneName);
 }
 
 const _float4x4* CPlayer::Get_BoneMatrix(const _wstring strPartTag, const _char* pBoneName)
@@ -148,7 +156,23 @@ _bool CPlayer::Use_Skill(SKILLNUM eSlotNum)
 			TEXT("Layer_Particle"), &Desc);
 
 		pInfo->fTimeAcc = 0.f;
+
+		CEffectContainer::EFFECT_CONTAINER_DESC EffectDesc;
+		EffectDesc.IsBinary = true;
+		EffectDesc.strFilePath = TEXT("../Bin/Resources/Effects/UseSkill_Bottom_eff.bin");
+		EffectDesc.fLifeTime = 0.5f;
+		EffectDesc.fSpeedRatio = 1.2f;
+
+		CEffectContainer* pCloneEffect = static_cast<CEffectContainer*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_EffectContainer"),
+			&EffectDesc));
+		pCloneEffect->Set_Position(m_pTransformCom->Get_State(STATE::POSITION) + XMVectorSet(0.f, 0.01f, 0.f, 0.f));
+		pCloneEffect->Set_Blur(true);
+		
+		m_pGameInstance->Add_Clone_ToLayer(pCloneEffect, m_pGameInstance->Get_LevelID(), TEXT("Layer_Effect"));
+
+
 		return true;
+
 	}
 
 	return false;

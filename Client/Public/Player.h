@@ -37,6 +37,7 @@ public:
 	_float Get_CurrentHp() { return m_fCurrentHp; }
 	_float Get_MaxHp() { return m_fMaxHp; }
 
+	const _float4x4* Get_CombinedMatrix(const _wstring strPartTag, const _char* pBoneName);
 	const _float4x4* Get_BoneMatrix(const _wstring strPartTag, const _char* pBoneName);
 	CCollider*	Get_WeaponCollider();
 	void		Set_WeaponCollider_Active(_bool bFlag);
@@ -75,7 +76,6 @@ public:
 
 private:
 	class CGameManager*		m_pGameManager = { nullptr };
-
 	CCollider*				m_pColliderCom = { nullptr };
 	CCollider*				m_pHandAttackColliderCom = { nullptr };
 

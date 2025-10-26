@@ -619,6 +619,9 @@
     <Filter Include="02. GameObjects\01. BackGround\00. Sky\SkyMesh">
       <UniqueIdentifier>{99d10e8e-26b3-4901-bbe5-beaae5e85ade}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\14. Rope">
+      <UniqueIdentifier>{ce0a2b40-3da2-4527-b86f-303e528871a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">

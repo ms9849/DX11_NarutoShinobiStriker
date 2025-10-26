@@ -31,6 +31,16 @@ void CParts_Character::Set_HitEffect(_float fEffectTime, _float fIntensity)
 	m_fEffectTime = fEffectTime;
 }
 
+const _float4x4* CParts_Character::Get_CombinedMatrix(const _char* pBoneName)
+{
+	const _float4x4* pSocketMatrix =  m_pModelCom->Get_BoneMatrixPtr(pBoneName);
+
+	_float4x4 ResultMatrix = {};
+	XMStoreFloat4x4(&ResultMatrix, XMLoadFloat4x4(pSocketMatrix) * XMLoadFloat4x4(&m_CombinedWorldMatrix));
+
+	return &ResultMatrix;
+}
+
 const _float4x4* CParts_Character::Get_BoneMatrixPtr(const _char* pBoneName)
 {
 	return m_pModelCom->Get_BoneMatrixPtr(pBoneName);
