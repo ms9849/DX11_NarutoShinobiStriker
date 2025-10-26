@@ -65,6 +65,7 @@ private:
 	void Render_Combined();
 	void Render_NonLight();
 	void Render_Blur();
+	void Render_Blur_Small();
 	void Render_Blend();
 	void Render_WorldUI();
 	void Render_UI();

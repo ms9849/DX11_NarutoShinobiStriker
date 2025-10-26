@@ -12,6 +12,25 @@ CParts_Character::CParts_Character(const CParts_Character& rhs)
 {
 }
 
+void CParts_Character::Calc_HitEffectTime(_float fTimeDelta)
+{
+	m_fEffectTimeAcc += fTimeDelta;
+
+	if (m_fEffectTimeAcc >= m_fEffectTime)
+	{
+		m_fEffectTimeAcc = 0.f;
+		m_iShaderPassIdx = 0;
+		m_fEffectTime = 0.f;
+	}
+}
+
+void CParts_Character::Set_HitEffect(_float fEffectTime, _float fIntensity)
+{
+	m_iShaderPassIdx = 2;
+	m_fIntensity = fIntensity;
+	m_fEffectTime = fEffectTime;
+}
+
 const _float4x4* CParts_Character::Get_BoneMatrixPtr(const _char* pBoneName)
 {
 	return m_pModelCom->Get_BoneMatrixPtr(pBoneName);
@@ -65,6 +84,8 @@ void CParts_Character::Priority_Update(_float fTimeDelta)
 
 void CParts_Character::Update(_float fTimeDelta)
 {
+	if(2 == m_iShaderPassIdx)
+		Calc_HitEffectTime(fTimeDelta);
 }
 
 void CParts_Character::Late_Update(_float fTimeDelta)

@@ -29,15 +29,29 @@ HRESULT CLevel_Edit::Initialize()
     /* DX11은 Dx9과 다르게 기본적인 광원 정보를 저장해주지 않는다. */
     /* 광원은 후처리 연산이 훨씬 유리하다고 하심 */
     /* Desc 세팅해서 라이트 매니저에 넣어줌. */
-    LIGHT_DESC		LightDesc{};
+    /* DX11은 Dx9과 다르게 기본적인 광원 정보를 저장해주지 않는다. */
+    /* 광원은 후처리 연산이 훨씬 유리하다고 하심 */
+    /* Desc 세팅해서 라이트 매니저에 넣어줌. */
+    LIGHT_DESC			LightDesc{};
 
     LightDesc.eType = LIGHT::DIRECTIONAL;
     LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
     LightDesc.vAmbient = _float4(0.4f, 0.4f, 0.4f, 1.f);
-    LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 0.f);
-    LightDesc.vDirection = _float4(1.f, -1.f, 1.f, 0.f);
+    LightDesc.vSpecular = _float4(0.f, 0.f, 0.f, 1.f);
+    LightDesc.vDirection = _float4(1.f, -1.f, 1.f, 1.f);
 
     if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
+        return E_FAIL;
+
+    SHADOW_LIGHT_DESC		ShadowDesc{};
+    ShadowDesc.vEye = _float4(2.9f, 87.1f, -91.9f, 1.f);
+    ShadowDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
+    ShadowDesc.fFovy = XMConvertToRadians(60.0f);
+    ShadowDesc.fAspect = static_cast<_float>(g_iWinSizeX) / g_iWinSizeY;
+    ShadowDesc.fNear = 0.1f;
+    ShadowDesc.fFar = 3000.f;
+
+    if (FAILED(m_pGameInstance->Ready_Shadow_Light(ShadowDesc)))
         return E_FAIL;
 
     if (FAILED(Ready_Prototypes()))

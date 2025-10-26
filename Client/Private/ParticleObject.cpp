@@ -110,7 +110,7 @@ void CParticleObject::Late_Update(_float fTimeDelta)
 		return;
 	
 	m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
-	m_pGameInstance->Add_RenderGroup(RENDER::BLUR, this);
+	m_pGameInstance->Add_RenderGroup(RENDER::BLUR_SMALL, this);
 }
 
 HRESULT CParticleObject::Render()

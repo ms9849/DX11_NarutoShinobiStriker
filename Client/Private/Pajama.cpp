@@ -170,6 +170,9 @@ void CPajama::OnCollision(COLLIDER_HANDLE_ID eHandleID)
 
     Change_State(pNextState, false);
 
+    for (auto& iter : m_PartObjects)
+        static_cast<CParts_Character*>(iter.second)->Set_HitEffect(0.3f, 1.f);
+
     m_fCurrentHP -= 1.f;
 }
 

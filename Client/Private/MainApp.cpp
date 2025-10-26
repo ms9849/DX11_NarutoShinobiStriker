@@ -684,6 +684,11 @@ HRESULT CMainApp::Ready_Effects()
 
 HRESULT CMainApp::Ready_Particles()
 {
+	/* For.Prototype_Component_Texture_Dissolve */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Dissolve"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Dissolve/Dissolve.png"), 3))))
+		return E_FAIL;
+
 	/* For.Prototype_Component_Texture_Particle */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Particle"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Particle/Particle%d.png"), 3))))
@@ -695,6 +700,13 @@ HRESULT CMainApp::Ready_Particles()
 		CParticleObject::Create(m_pDevice, m_pContext, OBJECTID::PARTICLE))))
 		return E_FAIL;
 
+	/* 바인딩만 수행하고 사라지게 해. */
+	CTexture* pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Dissolve")));
+	CShader* pShaderCom = static_cast<CShader*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxPointParticle")));
+
+	pTextureCom->Bind_ShaderResource(pShaderCom, "g_DissolveTexture", 0);
+	Safe_Release(pTextureCom);
+	Safe_Release(pShaderCom);
 
 	return S_OK;
 }

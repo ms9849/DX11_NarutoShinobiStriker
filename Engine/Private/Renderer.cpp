@@ -59,13 +59,22 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 
 	/* Target_Blur */
-	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Blur"), Viewport.Width, Viewport.Height, DXGI_FORMAT_R8G8B8A8_UNORM, _float4(0.0f, 0.0f, 0.0f, 0.0f))))
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Blur"), Viewport.Width, Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.0f, 0.0f, 0.0f, 0.0f))))
 		return E_FAIL;
 
 	/* Target_Blur_X */
-	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Blur_X"), Viewport.Width, Viewport.Height, DXGI_FORMAT_R8G8B8A8_UNORM, _float4(0.0f, 0.0f, 0.0f, 0.0f))))
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Blur_X"), Viewport.Width, Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.0f, 0.0f, 0.0f, 0.0f))))
 		return E_FAIL;
 
+
+	/* Target_Blur */
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Blur_Small"), Viewport.Width, Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.0f, 0.0f, 0.0f, 0.0f))))
+		return E_FAIL;
+
+	/* Target_Blur_X */
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Blur_Small_X"), Viewport.Width, Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.0f, 0.0f, 0.0f, 0.0f))))
+
+		return E_FAIL;
 
 	/* 게임 오브젝트로부터 뽑아와야하는 디퓨즈 노멀은 MRT_GameObjects로 세팅. */
 	/* MRT_GameObjects */
@@ -102,8 +111,18 @@ HRESULT CRenderer::Initialize()
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Blur"), TEXT("Target_Blur"))))
 		return E_FAIL;
 
+	/* MRT_Blur_Small */
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Blur_Small"), TEXT("Target_Blur_Small"))))
+		return E_FAIL;
+
+
 	/* MRT_Blur_X */
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Blur_X"), TEXT("Target_Blur_X"))))
+		return E_FAIL;
+
+
+	/* MRT_Blur_Small_X */
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Blur_Small_X"), TEXT("Target_Blur_Small_X"))))
 		return E_FAIL;
 
 	m_pShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Deferred.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements);
@@ -131,9 +150,9 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_StaticShadow"), Viewport.Width - 225.f, 375.f, 150.f, 150.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Blur"), Viewport.Width - 75.f, 75.f, 150.f, 150.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Blur_Small"), Viewport.Width - 150.f, 150.f, 300.f, 300.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Blur_X"), Viewport.Width - 75.f, 225.f, 150.f, 150.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Blur_Small_X"), Viewport.Width - 150.f, 450.f, 300.f, 300.f)))
 		return E_FAIL;
 #endif
 
@@ -171,6 +190,7 @@ void CRenderer::Render()
 	Render_NonBlend();
 	Render_LightAcc();
 	Render_Blur();
+	Render_Blur_Small();
 	Render_Combined();
 	Render_NonLight();
 	Render_Blend();
@@ -424,6 +444,9 @@ void CRenderer::Render_Combined()
 	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Blur_X"), m_pShader, "g_BlurXTexture")))
 		return;
 
+	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Blur_Small_X"), m_pShader, "g_BlurSmallXTexture")))
+		return;
+
 	/* 셰이더에서 이 둘 곱해서 최종적인 계산값 뽑아냄. */
 	m_pShader->Begin(3);
 	/* 실질적으로 조명 연산이 끝난 NonBlend 객체들 렌더*/
@@ -474,6 +497,45 @@ void CRenderer::Render_Blur()
 		return;
 
 	m_pShader->Begin(4);
+
+	m_pVIBuffer->Bind_Resources();
+
+	m_pVIBuffer->Render();
+
+	if (FAILED(m_pGameInstance->End_MRT()))
+		return;
+}
+
+void CRenderer::Render_Blur_Small()
+{
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Blur_Small"))))
+		return;
+
+	for (auto& pRenderObject : m_RenderObjects[ENUM_CLASS(RENDER::BLUR_SMALL)])
+	{
+		if (nullptr != pRenderObject)
+			pRenderObject->Render();
+
+		Safe_Release(pRenderObject);
+	}
+
+	m_RenderObjects[ENUM_CLASS(RENDER::BLUR_SMALL)].clear();
+
+	if (FAILED(m_pGameInstance->End_MRT()))
+		return;
+
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Blur_Small_X"))))
+		return;
+
+	m_pShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix);
+	m_pShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix);
+	m_pShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix);
+
+	/* Blur 텍스쳐 바인딩. */
+	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Blur_Small"), m_pShader, "g_BlurSmallTexture")))
+		return;
+
+	m_pShader->Begin(6);
 
 	m_pVIBuffer->Bind_Resources();
 
@@ -609,8 +671,8 @@ void CRenderer::Render_Debug()
 		return;
 
 	/* 렌더타겟을 디버그로 직교투영을 통해 그려라. */
-	if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_GameObjects"), m_pShader, m_pVIBuffer)))
-		return;
+	//if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_GameObjects"), m_pShader, m_pVIBuffer)))
+	//	return;
 	if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_LightAcc"), m_pShader, m_pVIBuffer)))
 		return;
 	if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Outline"), m_pShader, m_pVIBuffer)))
@@ -619,10 +681,10 @@ void CRenderer::Render_Debug()
 		return;
 	if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_StaticShadow"), m_pShader, m_pVIBuffer)))
 		return;
-	//if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Blur"), m_pShader, m_pVIBuffer)))
-	//	return;
-	//if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Blur_X"), m_pShader, m_pVIBuffer)))
-	//	return;
+	if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Blur_Small"), m_pShader, m_pVIBuffer)))
+		return;
+	if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Blur_Small_X"), m_pShader, m_pVIBuffer)))
+		return;
 }
 
 #endif

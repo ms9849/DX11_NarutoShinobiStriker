@@ -46,6 +46,8 @@ void CLower_Character::Priority_Update(_float fTimeDelta)
 
 void CLower_Character::Update(_float fTimeDelta)
 {
+	__super::Update(fTimeDelta);
+
 	m_fTimeAcc += fTimeDelta;
 	/* 부모 행렬 적용 */
 	XMStoreFloat4x4(&m_CombinedWorldMatrix,
@@ -84,7 +86,7 @@ HRESULT CLower_Character::Render()
 		if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", aiTextureType_DIFFUSE, 0)))
 			return E_FAIL;
 
-		if (FAILED(m_pShaderCom->Begin(0)))
+		if (FAILED(m_pShaderCom->Begin(m_iShaderPassIdx)))
 			return E_FAIL;
 
 
@@ -139,6 +141,13 @@ HRESULT CLower_Character::Ready_Components()
 
 HRESULT CLower_Character::Bind_ShaderResources()
 {
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fIntensity", &m_fIntensity, sizeof(_float))))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fEffectTimeAcc", &m_fEffectTimeAcc, sizeof(_float))))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fEffectTime", &m_fEffectTime, sizeof(_float))))
+		return E_FAIL;
+
 	/*m_pShaderCom->Bind_Matrix("g_WorldMatrix", );*/
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_CombinedWorldMatrix)))
 		return E_FAIL;

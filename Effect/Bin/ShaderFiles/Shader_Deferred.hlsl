@@ -16,8 +16,12 @@ texture2D g_FinalShadeTexture;
 texture2D g_DepthTexture;
 texture2D g_SpecularTexture;
 texture2D g_ShadowTexture;
+
 texture2D g_BlurTexture;
+texture2D g_BlurSmallTexture;
 texture2D g_BlurXTexture;
+texture2D g_BlurSmallXTexture;
+
 texture2D g_LightLampTexture;
 texture2D g_OutlineTexture;
 texture2D g_StaticShadowTexture;
@@ -180,13 +184,6 @@ float g_fWeights[25] =
 };
 */
 
-/*
-float g_fWeights[13] =
-{
-    0.000526, 0.00158, 0.00421, 0.01052, 0.03156, 0.08412, 0.7355,
-    0.08412, 0.03156, 0.01052, 0.00421, 0.00158, 0.000526
-};
-*/
 
 /*
 float g_fWeights[37] =
@@ -204,6 +201,7 @@ float g_fWeights[37] =
 인자 줘서 설정 가능하게 하는게 이상적이겠지만 일단은 제외...
 */
 
+/*
 float g_fWeights[41] =
 {
     0.01688, 0.02513, 0.03666, 0.05239, 0.07337, 0.10067, 0.13534, 0.17826, 0.23007, 0.29092,
@@ -212,7 +210,21 @@ float g_fWeights[41] =
     0.98985, 0.96001, 0.91225, 0.84937, 0.77484, 0.69257, 0.60653, 0.52045, 0.43756, 0.36045,
     0.29092, 0.23007, 0.17826, 0.13534, 0.10067, 0.07337, 0.05239, 0.03666, 0.02513, 0.01688
 };
+*/
 
+
+float g_fWeights[21] =
+{
+    0.5520, 0.6065, 0.6669, 0.7318, 0.7993, 0.8676, 0.9353, 0.9999, 1.0561, 1.0902, 1.0,
+    1.0902, 1.0561, 0.9999, 0.9353, 0.8676, 0.7993, 0.7318, 0.6669, 0.6065, 0.5520
+};
+
+
+float g_fSmallWeights[13] =
+{
+    0.39965, 0.4338, 0.46765, 0.49995, 0.52805, 0.5451, 0.5,
+    0.5451, 0.52805, 0.49995, 0.46765, 0.4338, 0.39965
+};
 
 PS_OUT_BACKBUFFER PS_MAIN_COMBINED(PS_IN In)
 {
@@ -275,7 +287,7 @@ PS_OUT_BACKBUFFER PS_MAIN_COMBINED(PS_IN In)
         {
             for (int j = -1; j <= 1; ++j)
             {
-                vector vShadowDepth = g_ShadowTexture.Sample(DefaultSampler, vTexcoord + float2( i* 1 / 1280.f, j*1 / 720.f) * 0.1f);
+                vector vShadowDepth = g_ShadowTexture.Sample(DefaultSampler, vTexcoord + float2( i* 1 / 1280.f, j *1 / 720.f) * 0.1f);
 
                 if (vPosition.w - 0.1f > vShadowDepth.x * 3000.0f)
                     iCount++;
@@ -286,18 +298,32 @@ PS_OUT_BACKBUFFER PS_MAIN_COMBINED(PS_IN In)
         Out.vBackBuffer.a *= 0.5f;
     }
     
-     
     /* 블러 후처리 */
-    float4 vColor = 0.f;
-    float4 fWeightSum = 0.f;
+    float4 vColor = float4(0.f, 0.f, 0.f, 0.f);
     
-    for (int i = -20; i <= 20; ++i)
+    for (int i = -10; i <= 10; ++i)
     {
-        vTexcoord = float2(In.vTexcoord.x, In.vTexcoord.y + (float) i / 720.f);
-        vColor.rgb += g_fWeights[i + 20] * g_BlurTexture.Sample(ClampSampler, vTexcoord);
+        vTexcoord.x = In.vTexcoord.x;
+        vTexcoord.y = In.vTexcoord.y + i / 720.f;
+        
+        vColor += g_fWeights[i + 10] * g_BlurXTexture.Sample(ClampSampler, vTexcoord);
     }
   
-    Out.vBackBuffer += vColor / 12.5f;
+    Out.vBackBuffer += vColor / 8.f;
+    
+    /* 약한 블러 후처리 */
+    vColor = float4(0.f, 0.f, 0.f, 0.f);
+    
+    for (int i = -6; i <= 6; ++i)
+    {
+        vTexcoord.x = In.vTexcoord.x;
+        vTexcoord.y = In.vTexcoord.y + i / 720.f;
+        
+        vColor += g_fSmallWeights[i + 6] * g_BlurSmallXTexture.Sample(ClampSampler, vTexcoord);
+    }
+    
+    Out.vBackBuffer += vColor / 6.5f;
+    
     
     Out.vBackBuffer *= g_OutlineTexture.Sample(DefaultSampler, In.vTexcoord);
     
@@ -315,18 +341,37 @@ PS_OUT_BLUR_X PS_MAIN_X(PS_IN In)
     PS_OUT_BLUR_X Out;
     
     float2 vTexcoord;
-    float4 vTextureColor;
     float4 vColor = 0.f;
     
-    for (int i = -20; i <= 20; ++i)
+    for (int i = -10; i <= 10; ++i)
     {
-        vTexcoord = float2(In.vTexcoord.x + (float) i / 1280.f, In.vTexcoord.y);
-        vColor.rgb += g_fWeights[i + 20] * g_BlurTexture.Sample(ClampSampler, vTexcoord);
+        vTexcoord.x = In.vTexcoord.x + (float) i / 1280.f;
+        vTexcoord.y = In.vTexcoord.y;
+        
+        vColor += g_fWeights[i + 10] * g_BlurTexture.Sample(ClampSampler, vTexcoord);
     }
     
-    vColor /= 12.5f;
+    Out.vBlurX = vColor / 12.5f;
     
-    Out.vBlurX = vColor;
+    return Out;
+}
+
+PS_OUT_BLUR_X PS_MAIN_SMALL_X(PS_IN In)
+{
+    PS_OUT_BLUR_X Out;
+    
+    float2 vTexcoord;
+    float4 vColor = 0.f;
+    
+    for (int i = -6; i <= 6; ++i)
+    {
+        vTexcoord.x = In.vTexcoord.x + (float) i / 1280.f;
+        vTexcoord.y = In.vTexcoord.y;
+        
+        vColor += g_fSmallWeights[i + 6] * g_BlurSmallTexture.Sample(ClampSampler, vTexcoord);
+    }
+    
+    Out.vBlurX = vColor / 10.f;
     
     return Out;
 }
@@ -360,7 +405,7 @@ PS_OUT_BACKBUFFER PS_MAIN_Outline(PS_IN In)
         for (int iIdxX = 0; iIdxX < 3; ++iIdxX)
         {
             Out.vBackBuffer += Laplacian_Mask[iIdxY * 3 + iIdxX] * (g_NormalTexture.Sample(ShadeSampler, In.vTexcoord +
-            float2(PixelsX[iIdxY * 3 + iIdxX] * 1.25f / 1280.f, PixelsY[iIdxY * 3 + iIdxX] * 1.25f / 720.f)));
+            float2(PixelsX[iIdxY * 3 + iIdxX] * 1.1f / 1280.f, PixelsY[iIdxY * 3 + iIdxX] * 1.1f / 720.f)));
         }
     }
     
@@ -445,5 +490,15 @@ technique11 DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN_Outline();
+    }
+
+    pass Blur_Small_X
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_None, 0);
+        SetBlendState(BS_None, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_SMALL_X();
     }
 }

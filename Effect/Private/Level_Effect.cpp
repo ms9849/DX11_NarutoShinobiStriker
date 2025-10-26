@@ -68,13 +68,16 @@ HRESULT CLevel_Effect::Render()
 
 HRESULT CLevel_Effect::Ready_Lights()
 {
-	LIGHT_DESC		LightDesc{};
+	/* DX11은 Dx9과 다르게 기본적인 광원 정보를 저장해주지 않는다. */
+	/* 광원은 후처리 연산이 훨씬 유리하다고 하심 */
+	/* Desc 세팅해서 라이트 매니저에 넣어줌. */
+	LIGHT_DESC			LightDesc{};
 
 	LightDesc.eType = LIGHT::DIRECTIONAL;
 	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
 	LightDesc.vAmbient = _float4(0.4f, 0.4f, 0.4f, 1.f);
-	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 0.f);
-	LightDesc.vDirection = _float4(1.f, -1.f, 1.f, 0.f);
+	LightDesc.vSpecular = _float4(0.f, 0.f, 0.f, 1.f);
+	LightDesc.vDirection = _float4(1.f, -1.f, 1.f, 1.f);
 
 	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
 		return E_FAIL;
@@ -163,6 +166,19 @@ HRESULT CLevel_Effect::Ready_Prototypes()
 	m_pParticleGUI->Add_SRV(TEXT("../../Client/Bin/Resources/Textures/Effect/Noise/Noise%d.png"), 37, CParticle_GUI::TEXTURE_TYPE::NOISE);
 
 #pragma endregion
+
+	/* For.Prototype_Component_Texture_Dissolve */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Texture_Dissolve"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Dissolve/Dissolve.png"), 3))))
+		return E_FAIL;
+
+	/* 바인딩만 수행하고 사라지게 해. */
+	CTexture* pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Texture_Dissolve")));
+	CShader* pShaderCom = static_cast<CShader*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Shader_VtxPointParticle")));
+
+	pTextureCom->Bind_ShaderResource(pShaderCom, "g_DissolveTexture", 0);
+	Safe_Release(pTextureCom);
+	Safe_Release(pShaderCom);
 
 	return S_OK;
 }

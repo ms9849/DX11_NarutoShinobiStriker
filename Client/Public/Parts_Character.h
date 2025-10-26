@@ -23,12 +23,15 @@ protected:
 	virtual ~CParts_Character() = default;
 
 public:
+	void Calc_HitEffectTime(_float fTimeDelta);
+	void Set_HitEffect(_float fEffectTime, _float fIntensity = 1.f);
 	const	_float4x4*	Get_BoneMatrixPtr(const _char* pBoneName);
 	_float				Get_AnimProgress();
 	virtual void		Set_AnimProgress(_float fProgress);
 	virtual _wstring	Get_CurrentAnim();
 	virtual void		Set_AnimIndex(const _char* pAnimName, _float fAnimationPlayRate = 1.f, _bool IsBlend = true, _float fBlendRatio = 0.15f, _bool IsLoop = false);
 	virtual _bool		Play_Animation(_float fTimeDelta);
+
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
@@ -41,6 +44,11 @@ protected:
 	CModel* m_pModelCom = { nullptr };
 	CShader* m_pShaderCom = { nullptr };
 	_wstring m_strModelName = {};
+	_uint  m_iShaderPassIdx = { 0 };
+
+	_float m_fEffectTime = { 0.f };
+	_float m_fEffectTimeAcc = { 0.f };
+	_float m_fIntensity = { 0.f }; 
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;

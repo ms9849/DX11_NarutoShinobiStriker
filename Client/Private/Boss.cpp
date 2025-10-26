@@ -191,6 +191,9 @@ void CBoss::OnCollision(COLLIDER_HANDLE_ID eHandleID)
         m_pIcon->Set_Dead(true);
     }
 
+    for (auto& iter : m_PartObjects)
+        static_cast<CParts_Character*>(iter.second)->Set_HitEffect(0.3f, 1.f);
+
     Change_State(pNextState, false);
 
     m_fCurrentHP -= 1.f;

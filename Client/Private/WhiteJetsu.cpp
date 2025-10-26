@@ -58,6 +58,25 @@ CCollider* CWhiteJetsu::Get_Collider(const _wstring& strColliderTag)
     return static_cast<CCollider*>(Find_Component(strColliderTag));
 }
 
+void CWhiteJetsu::Calc_HitEffectTime(_float fTimeDelta)
+{
+    m_fEffectTimeAcc += fTimeDelta;
+
+    if (m_fEffectTimeAcc >= m_fEffectTime)
+    {
+        m_fEffectTimeAcc = 0.f;
+        m_iShaderPassIdx = 0;
+        m_fEffectTime = 0.f;
+    }
+}
+
+void CWhiteJetsu::Set_HitEffect(_float fEffectTime, _float fIntensity)
+{
+    m_iShaderPassIdx = 2;
+    m_fIntensity = fIntensity;
+    m_fEffectTime = fEffectTime;
+}
+
 void CWhiteJetsu::OnCollision(COLLIDER_HANDLE_ID eHandleID)
 {
     if (true == m_IsInvincible || true == m_IsPlayingDeadAnim)
@@ -182,6 +201,8 @@ void CWhiteJetsu::OnCollision(COLLIDER_HANDLE_ID eHandleID)
         }
         pNextState = CWhiteJetsu_DeadState::Create(m_pNavigationCom, this);
     }
+    
+    Set_HitEffect(0.3f, 1.f);
 
     Change_State(pNextState, false);
 }
@@ -242,6 +263,7 @@ void CWhiteJetsu::Update(_float fTimeDelta)
 {
     __super::Update(fTimeDelta);
 
+    Calc_HitEffectTime(fTimeDelta);
     /* 스테이트 업데이트. */
     Update_State(fTimeDelta);
     /* 스킬 쿨타임 업데이트*/
@@ -289,7 +311,7 @@ HRESULT CWhiteJetsu::Render()
         if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", aiTextureType_DIFFUSE, 0)))
             return E_FAIL;
 
-        if (FAILED(m_pShaderCom->Begin(0)))
+        if (FAILED(m_pShaderCom->Begin(m_iShaderPassIdx)))
             return E_FAIL;
 
         if (FAILED(m_pModelCom->Render(i)))
@@ -386,7 +408,13 @@ HRESULT CWhiteJetsu::Ready_Position()
 
 HRESULT CWhiteJetsu::Bind_ShaderResources()
 {
-    /*m_pShaderCom->Bind_Matrix("g_WorldMatrix", );*/
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_fIntensity", &m_fIntensity, sizeof(_float))))
+        return E_FAIL;
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_fEffectTimeAcc", &m_fEffectTimeAcc, sizeof(_float))))
+        return E_FAIL;
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_fEffectTime", &m_fEffectTime, sizeof(_float))))
+        return E_FAIL;
+
     if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
         return E_FAIL;
 
