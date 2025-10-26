@@ -23,7 +23,7 @@ NS_BEGIN(EffectTool)
 class CParticleObject final : public CGameObject
 {
 public:
-	enum class PARTICLE_TYPE { EXPLOSION, DROP, FLOAT_DROP, EXPLOSION_FLOAT, EXPLOSION_NON_UV, END };
+	enum class PARTICLE_TYPE { EXPLOSION, DROP, FLOAT_DROP, EXPLOSION_FLOAT, EXPLOSION_NON_UV, SPRITE, END };
 
 	typedef struct tagParticleDesc : public GAMEOBJECT_DESC {
 		/* 파티클 시스템 하나당 사용되는 변수 */

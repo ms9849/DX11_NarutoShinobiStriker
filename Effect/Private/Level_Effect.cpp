@@ -169,7 +169,7 @@ HRESULT CLevel_Effect::Ready_Prototypes()
 
 	/* For.Prototype_Component_Texture_Dissolve */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_Component_Texture_Dissolve"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Dissolve/Dissolve.png"), 3))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Dissolve/Dissolve%d.png"), 3))))
 		return E_FAIL;
 
 	/* 바인딩만 수행하고 사라지게 해. */

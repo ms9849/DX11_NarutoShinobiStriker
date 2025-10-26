@@ -263,7 +263,8 @@ void CWhiteJetsu::Update(_float fTimeDelta)
 {
     __super::Update(fTimeDelta);
 
-    Calc_HitEffectTime(fTimeDelta);
+    if(m_iShaderPassIdx != 0)
+        Calc_HitEffectTime(fTimeDelta);
     /* 스테이트 업데이트. */
     Update_State(fTimeDelta);
     /* 스킬 쿨타임 업데이트*/

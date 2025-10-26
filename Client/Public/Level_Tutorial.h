@@ -31,6 +31,9 @@ private:
 private:
 	class CGameManager* m_pGameManager = { nullptr };
 	_float				m_fTimeAcc = { 0.f };
+
+	_float				m_fTestTimeAcc = { 0.f };
+
 public:
 	static CLevel_Tutorial* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID);
 	virtual void Free() override;

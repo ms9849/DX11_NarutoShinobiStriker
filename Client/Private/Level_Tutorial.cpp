@@ -142,6 +142,21 @@ void CLevel_Tutorial::Update(_float fTimeDelta)
 			return;
 	}
 #pragma endregion
+
+	m_fTestTimeAcc += fTimeDelta;
+
+	if (m_fTestTimeAcc > 1.f)
+	{
+		CParticleObject::PARTICLE_LOAD_DESC ParticleDesc;
+		ParticleDesc.eType = CParticleObject::PARTICLE_TYPE::EXPLOSION;
+		ParticleDesc.strParticlePath = TEXT("../Bin/Resources/Particle/Smoke_Particle.bin");
+		ParticleDesc.IsBlur = false;
+
+		m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"),
+			ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_Effect"), &ParticleDesc);
+
+		m_fTestTimeAcc = 0.f;
+	}
 }
 
 HRESULT CLevel_Tutorial::Render()

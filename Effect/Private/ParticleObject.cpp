@@ -40,6 +40,7 @@ HRESULT CParticleObject::Initialize(void* pArg)
 	m_iNoiseTextureIdx = pDesc->iNoiseTextureNum;
 	m_iMaxIdx = m_iNumHeight * m_iNumWidth - 1;
 
+
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
@@ -89,7 +90,7 @@ void CParticleObject::Update(_float fTimeDelta)
 void CParticleObject::Late_Update(_float fTimeDelta)
 {
 	m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
-	m_pGameInstance->Add_RenderGroup(RENDER::BLUR_SMALL, this);
+	//m_pGameInstance->Add_RenderGroup(RENDER::BLUR_SMALL, this);
 }
 
 HRESULT CParticleObject::Render()
@@ -97,7 +98,7 @@ HRESULT CParticleObject::Render()
 	if (FAILED(Bind_ShaderResources()))
 		return E_FAIL;
 
-	m_pShaderCom->Begin(ENUM_CLASS(m_eType));
+	m_pShaderCom->Begin(m_iShaderPassIdx);
 
 	m_pVIBufferCom->Bind_Resources();
 
@@ -205,7 +206,7 @@ HRESULT CParticleObject::Bind_ShaderResources()
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_iNumWidth", &m_iNumWidth, sizeof(_uint))))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_iNumHeight", &m_iNumWidth, sizeof(_uint))))
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_iNumHeight", &m_iNumHeight, sizeof(_uint))))
 		return E_FAIL;
 
 	return S_OK;

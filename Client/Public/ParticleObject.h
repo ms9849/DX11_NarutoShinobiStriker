@@ -60,6 +60,7 @@ public:
 		/* 트랜스폼 조정용*/
 		_float3 vPosition = {};
 		PARTICLE_TYPE eType = { PARTICLE_TYPE::EXPLOSION };
+		_bool IsBlur = { true };
 	} PARTICLE_LOAD_DESC;
 private:
 	CParticleObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, Client::OBJECTID eObjectID);
@@ -105,7 +106,7 @@ private:
 	_int			m_iMaxIdx = { 0 };
 	_int			m_iCurrentIdx = { 0 };
 	_int			m_iShaderPassIdx = { 0 };
-
+	_bool			m_IsBlur = { true }; 
 private:
 	HRESULT Ready_Components();
 	HRESULT Bind_ShaderResources();
