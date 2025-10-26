@@ -39,6 +39,8 @@ void CFace_Character::Priority_Update(_float fTimeDelta)
 
 void CFace_Character::Update(_float fTimeDelta)
 {
+	__super::Update(fTimeDelta);
+
 	//_matrix		SocketMatrix = XMLoadFloat4x4(m_pSocketMatrix);
 
 	//for (size_t i = 0; i < 3; i++)
@@ -69,7 +71,7 @@ HRESULT CFace_Character::Render()
 		if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", aiTextureType_DIFFUSE, 0)))
 			return E_FAIL;
 
-		if (FAILED(m_pShaderCom->Begin(0)))
+		if (FAILED(m_pShaderCom->Begin(m_iShaderPassIdx)))
 			return E_FAIL;
 
 		if (FAILED(m_pModelCom->Render(i)))
@@ -123,7 +125,12 @@ HRESULT CFace_Character::Ready_Components()
 
 HRESULT CFace_Character::Bind_ShaderResources()
 {
-	/*m_pShaderCom->Bind_Matrix("g_WorldMatrix", );*/
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fIntensity", &m_fIntensity, sizeof(_float))))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fEffectTimeAcc", &m_fEffectTimeAcc, sizeof(_float))))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fEffectTime", &m_fEffectTime, sizeof(_float))))
+		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_CombinedWorldMatrix)))
 		return E_FAIL;

@@ -29,6 +29,8 @@ public:
 	CCollider* Get_Collider(const _wstring& strColliderTag);
 
 public:
+	void Calc_HitEffectTime(_float fTimeDelta);
+	void Set_HitEffect(_float fEffectTime, _float fIntensity = 1.f);
 	virtual void OnCollision(COLLIDER_HANDLE_ID eHandleID) override;
 	
 	void Change_State(class CWhiteJetsuState* pNextState, _bool bBlend = true); 
@@ -51,6 +53,12 @@ private:
 	CShader* m_pShaderCom = { nullptr };
 	CCollider* m_pColliderCom = { nullptr };
 	CCollider* m_pHandAttackColliderCom = { nullptr };
+
+	_uint  m_iShaderPassIdx = { 0 };
+
+	_float m_fEffectTime = { 0.f };
+	_float m_fEffectTimeAcc = { 0.f };
+	_float m_fIntensity = { 0.f };
 
 	_bool m_IsPlayingDeadAnim = { false };
 	_uint m_iNumMeshes = {};

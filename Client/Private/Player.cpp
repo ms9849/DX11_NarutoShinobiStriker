@@ -316,6 +316,9 @@ void CPlayer::OnCollision(COLLIDER_HANDLE_ID eHandleID, _float3 vColliderPos)
 	m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
 		TEXT("Layer_Particle"), &Desc);
 
+	for (auto& iter : m_PartObjects)
+		static_cast<CParts_Character*>(iter.second)->Set_HitEffect(0.3f, 1.f);
+
 	Change_State(pNextState, false);
 }
 

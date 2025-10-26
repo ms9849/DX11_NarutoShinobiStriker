@@ -7,6 +7,7 @@
 
 #include "EffectContainer.h"
 #include "EffectObject.h"
+#include "ParticleObject.h"
 
 CRasengan::CRasengan(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CSkill{ pDevice, pContext, eObjectID }
@@ -66,6 +67,16 @@ HRESULT CRasengan::Initialize(void* pArg)
     m_pGameInstance->Add_Clone_ToLayer(m_pEffectRun, m_pGameInstance->Get_LevelID(), TEXT("Layer_Effect"));
     m_pEffectRun->Set_Visible(false);
 
+    CParticleObject::PARTICLE_LOAD_DESC ParticleDesc;
+    ParticleDesc.eType = CParticleObject::PARTICLE_TYPE::DROP;
+    //ParticleDesc.strParticlePath = TEXT("../Bin/Resources/Particle/RasenganFollow_Particle.bin");
+    ParticleDesc.strParticlePath = TEXT("../Bin/Resources/Particle/RasenganFollow_Particle.bin");
+
+    m_pParticleMain = static_cast<CParticleObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"),
+        &ParticleDesc));
+    Safe_AddRef(m_pParticleMain);
+    m_pGameInstance->Add_Clone_ToLayer(m_pParticleMain, m_pGameInstance->Get_LevelID(), TEXT("Layer_Particle"));
+
     return S_OK;
 }
 
@@ -99,6 +110,7 @@ void CRasengan::Update(_float fTimeDelta)
     m_pColliderCom->Update(XMLoadFloat4x4(&m_CombinedWorldMatrix));
     m_pEffectCharge->Set_ParentMatrix(XMMatrixScaling(0.25f, 0.25f, 0.25f) * XMMatrixTranslation(0.f, 0.125f, 0.f) * XMLoadFloat4x4(&m_CombinedWorldMatrix));
     m_pEffectRun->Set_ParentMatrix(XMMatrixScaling(0.25f, 0.25f, 0.25f) * XMMatrixTranslation(0.f, 0.125f, 0.f) * XMLoadFloat4x4(&m_CombinedWorldMatrix));
+    m_pParticleMain->Set_Position(XMLoadFloat4(reinterpret_cast<_float4*>(&m_CombinedWorldMatrix.m[3])));
 }
 
 void CRasengan::Late_Update(_float fTimeDelta)
@@ -170,25 +182,6 @@ HRESULT CRasengan::Bind_ShaderResources()
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_PipeLine_Float4x4(D3DTS::PROJ))))
         return E_FAIL;
 
-    const LIGHT_DESC* pLightDesc = m_pGameInstance->Get_LightDesc(0);
-    if (nullptr == pLightDesc)
-        return E_FAIL;
-
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDir", &pLightDesc->vDirection, sizeof(_float4))))
-        return E_FAIL;
-
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDiffuse", &pLightDesc->vDiffuse, sizeof(_float4))))
-        return E_FAIL;
-
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightAmbient", &pLightDesc->vAmbient, sizeof(_float4))))
-        return E_FAIL;
-
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightSpecular", &pLightDesc->vSpecular, sizeof(_float4))))
-        return E_FAIL;
-
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", m_pGameInstance->Get_CamState(STATE::POSITION), sizeof(_float4))))
-        return E_FAIL;
-
     return S_OK;
 }
 
@@ -230,4 +223,8 @@ void CRasengan::Free()
     if (nullptr != m_pEffectRun)
         m_pEffectRun->Set_Dead(true);
     Safe_Release(m_pEffectRun);
+
+    if (nullptr != m_pParticleMain)
+        m_pParticleMain->Set_Dead(true);
+    Safe_Release(m_pParticleMain);
 }

@@ -4,6 +4,10 @@
 matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 texture2D g_DiffuseTexture;
 
+float g_fIntensity;
+float g_fEffectTimeAcc;
+float g_fEffectTime;
+
 /* ¸Þ½Ã´Ù ¤·¿µÇâÀ» ÁÖ´Â »ÀµéÀÇ ÁýÇÕ*/
 matrix g_BoneMatrices[512];
 
@@ -113,8 +117,6 @@ struct PS_OUT
     float4 vDepth : SV_TARGET2;
 };
 
-
-
 /* ÇÈ¼¿ ½¦ÀÌ´õ : ÇÈ¼¿ÀÇ ÃÖÁ¾ÀûÀÎ »öÀ» °áÁ¤ÇÏ³®. */
 PS_OUT PS_MAIN(PS_IN In)
 {
@@ -152,6 +154,23 @@ PS_OUT_SHADOW PS_MAIN_SHADOW(PS_IN_SHADOW In)
     return Out;
 }
 
+/* ÇÈ¼¿ ½¦ÀÌ´õ : ÇÈ¼¿ÀÇ ÃÖÁ¾ÀûÀÎ »öÀ» °áÁ¤ÇÏ³®. */
+PS_OUT PS_HIT(PS_IN In)
+{
+    PS_OUT Out;
+    
+    vector vMtrlDiffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexcoord);
+    if (vMtrlDiffuse.a < 0.4f)
+        discard;
+    
+   
+    Out.vDiffuse = saturate(vMtrlDiffuse + float4(1.f, 1.f, 1.f, 1.f) * (g_fEffectTimeAcc / g_fEffectTime));
+    Out.vNormal = float4(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
+    Out.vDepth = float4(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 500.0f, 0.0f, 0.0f);
+    
+    return Out;
+}
+
 technique11 DefaultTechnique
 {
     pass Default
@@ -172,5 +191,15 @@ technique11 DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN_SHADOW();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN_SHADOW();
+    }
+
+    pass HitEffect
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_None, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_HIT();
     }
 }

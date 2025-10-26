@@ -2,6 +2,7 @@
 
 matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 
+texture2D g_DissolveTexture;
 texture2D g_DiffuseTexture, g_MaskTexture, g_NoiseTexture;
 vector g_vMainColor, g_vSubColor;
 vector g_vCamPosition;
@@ -230,6 +231,9 @@ PS_OUT PS_MAIN(PS_IN In)
     else
         Out.vColor.rgb = g_vSubColor;
     
+    if (Out.vColor.a < 0.2f)
+        discard;
+    
     return Out;
 }
 
@@ -244,8 +248,16 @@ PS_OUT PS_FadeOut(PS_IN In)
         Out.vColor.rgb = g_vMainColor;
     else
         Out.vColor.rgb = g_vSubColor;
-
-    Out.vColor.a *= (1 - In.vLifeTime.x / In.vLifeTime.y);
+    
+    float4 vDissolveColor = g_DissolveTexture.Sample(DefaultSampler, In.vTexcoord).r;
+    
+    float fAlpha = 1.0f;
+    float DissolveThreshold = (In.vLifeTime.x / In.vLifeTime.y);
+    fAlpha = smoothstep(DissolveThreshold - 0.05f, DissolveThreshold + 0.05f, vDissolveColor);
+    Out.vColor.a *= fAlpha;
+    
+    if (Out.vColor.a < 0.2f)
+        discard;
     
     return Out;
 }
@@ -257,13 +269,7 @@ PS_OUT PS_FloatAndDrop(PS_IN In)
     // diffuse 샘플
     float4 Diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexcoord);
     // mask 샘플 (같은 UV 사용)
-    float4 MaskSample = g_MaskTexture.Sample(DefaultSampler, In.vTexcoord);
-    float NoiseValue = g_NoiseTexture.Sample(DefaultSampler, In.vTexcoord).r;
-   
-    float fAlpha = 1.0f;
-    float DissolveThreshold = (In.vLifeTime.x / In.vLifeTime.y);
-    fAlpha = smoothstep(DissolveThreshold - 0.1f, DissolveThreshold + 0.1f, NoiseValue);
-    Diffuse.a *= fAlpha;
+    float4 MaskSample = g_MaskTexture.Sample(DefaultSampler, In.vTexcoord);  
 
     /* 마스킹 수행 */
     Diffuse.a *= MaskSample.r;
@@ -274,8 +280,19 @@ PS_OUT PS_FloatAndDrop(PS_IN In)
         Diffuse.rgb = g_vMainColor.xyz;
     else
         Diffuse.rgb = g_vSubColor.xyz;
+  
+    
+    float4 vDissolveColor = g_DissolveTexture.Sample(DefaultSampler, In.vTexcoord).r;
+    
+    float fAlpha = 1.0f;
+    float DissolveThreshold = (In.vLifeTime.x / In.vLifeTime.y);
+    fAlpha = smoothstep(DissolveThreshold - 0.05f, DissolveThreshold + 0.05f, vDissolveColor);
+    Diffuse *= fAlpha;
     
     Out.vColor = Diffuse;
+    
+    if(Out.vColor.a < 0.2f)
+        discard;
  
     return Out;
 }
@@ -299,7 +316,7 @@ technique11 DefaultTechnique
         SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = compile gs_5_0 GS_BillBoard();
-        PixelShader = compile ps_5_0 PS_MAIN();
+        PixelShader = compile ps_5_0 PS_FadeOut();
     }
 
     pass FloatAndDrop
@@ -319,7 +336,7 @@ technique11 DefaultTechnique
         SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = compile gs_5_0 GS_BillBoard();
-        PixelShader = compile ps_5_0 PS_MAIN();
+        PixelShader = compile ps_5_0 PS_FadeOut();
     }
 
     pass ExplosionNonUV

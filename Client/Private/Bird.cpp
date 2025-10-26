@@ -170,6 +170,8 @@ void CBird::OnCollision(COLLIDER_HANDLE_ID eHandleID)
         }
         pNextState = CBird_DeadState::Create(m_pNavigationCom, this);
     }
+    
+    Set_HitEffect(0.3f, 1.f);
 
     Change_State(pNextState, false);
 }
@@ -181,6 +183,25 @@ void CBird::Change_State(CBirdState* pNextState, _bool bBlend)
 
     pNextState->Start(bBlend);
     m_pState = pNextState;
+}
+
+void CBird::Calc_HitEffectTime(_float fTimeDelta)
+{
+    m_fEffectTimeAcc += fTimeDelta;
+
+    if (m_fEffectTimeAcc >= m_fEffectTime)
+    {
+        m_fEffectTimeAcc = 0.f;
+        m_iShaderPassIdx = 0;
+        m_fEffectTime = 0.f;
+    }
+}
+
+void CBird::Set_HitEffect(_float fEffectTime, _float fIntensity)
+{
+    m_iShaderPassIdx = 2;
+    m_fIntensity = fIntensity;
+    m_fEffectTime = fEffectTime;
 }
 
 _bool CBird::Use_Skill()
@@ -352,6 +373,13 @@ HRESULT CBird::Ready_Position()
 
 HRESULT CBird::Bind_ShaderResources()
 {
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_fIntensity", &m_fIntensity, sizeof(_float))))
+        return E_FAIL;
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_fEffectTimeAcc", &m_fEffectTimeAcc, sizeof(_float))))
+        return E_FAIL;
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_fEffectTime", &m_fEffectTime, sizeof(_float))))
+        return E_FAIL;
+
     /*m_pShaderCom->Bind_Matrix("g_WorldMatrix", );*/
     if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
         return E_FAIL;

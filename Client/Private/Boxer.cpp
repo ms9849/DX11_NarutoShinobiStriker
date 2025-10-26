@@ -164,6 +164,9 @@ void CBoxer::OnCollision(COLLIDER_HANDLE_ID eHandleID)
 		pNextState = CBoxer_DeadState::Create(m_pNavigationCom, this);
 	}
 
+	for (auto& iter : m_PartObjects)
+		static_cast<CParts_Character*>(iter.second)->Set_HitEffect(0.3f, 1.f);
+
 	Change_State(pNextState, false);
 
 	m_fCurrentHP -= 10.f;

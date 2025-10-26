@@ -40,6 +40,7 @@ protected:
 	HRESULT Ready_HPBar();
 
 protected:
+	_uint  m_iShaderPassIdx = { 0 };
 	_bool  m_IsInvincible = { false };
 	_float m_fInvincibleTime = { 0.f };
 	_float m_fCurrentHP = { 100 };

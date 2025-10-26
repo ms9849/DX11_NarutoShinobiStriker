@@ -32,6 +32,7 @@ public:
 	virtual HRESULT Render() override;
 
 private:
+	class CParticleObject*  m_pParticleMain = { nullptr };
 	class CEffectContainer* m_pEffectCharge = { nullptr };
 	class CEffectContainer* m_pEffectRun = { nullptr };
 	const _float4x4* m_pSocketMatrix;
