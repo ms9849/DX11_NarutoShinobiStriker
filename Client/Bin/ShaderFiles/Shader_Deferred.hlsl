@@ -405,7 +405,7 @@ PS_OUT_BACKBUFFER PS_MAIN_Outline(PS_IN In)
         for (int iIdxX = 0; iIdxX < 3; ++iIdxX)
         {
             Out.vBackBuffer += Laplacian_Mask[iIdxY * 3 + iIdxX] * (g_NormalTexture.Sample(ShadeSampler, In.vTexcoord +
-            float2(PixelsX[iIdxY * 3 + iIdxX] * 1.1f / 1280.f, PixelsY[iIdxY * 3 + iIdxX] * 1.1f / 720.f)));
+            float2(PixelsX[iIdxY * 3 + iIdxX] * 1.15f / 1280.f, PixelsY[iIdxY * 3 + iIdxX] * 1.15f / 720.f)));
         }
     }
     
@@ -420,7 +420,7 @@ PS_OUT_BACKBUFFER PS_MAIN_Outline(PS_IN In)
     /*
     다 살리면 너무 민감하니까 성분이 약한 부분은 바로 죽여주기.
     */
-    if(GrayColor > 0.5f)
+    if(GrayColor > 0.1f)
         GrayColor = 1.f;
     else
         GrayColor = 0.f;
