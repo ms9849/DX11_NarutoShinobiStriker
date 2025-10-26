@@ -151,23 +151,15 @@ void CLevel_Edit::Edit_NavPoint()
 
 HRESULT CLevel_Edit::Ready_Prototypes()
 {
-#pragma region TEXTURE
-    /* For.Prototype_Component_Texture_Terrain */
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Texture_Terrain"),
-        CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Terrain/Tile0.jpg"), 1))))
-        return E_FAIL;
-
-#pragma endregion
-
 #pragma region MODEL_FBX
     _matrix			PreTransformMatrix = XMMatrixIdentity();
 
-    /* For.Prototype_Component_Model_Props */
-    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Props"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/Props/Props.fbx", PreTransformMatrix))))
-        return E_FAIL;
-    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Props"));
+    ///* For.Prototype_Component_Model_Props */
+    //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Props"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/Props/Props.fbx", PreTransformMatrix))))
+    //    return E_FAIL;
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Props"));
 
     ///* For.Prototype_Component_Model_KonohaVillage */
     //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_KonohaVillage"),
@@ -176,24 +168,24 @@ HRESULT CLevel_Edit::Ready_Prototypes()
     //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_KonohaVillage"));
 
     /* For.Prototype_Component_Model_TutorialMap */
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_TutorialMap"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/TutorialMap/TutorialMap.fbx", PreTransformMatrix))))
-        return E_FAIL;
-    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_TutorialMap"));
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_TutorialMap"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/TutorialMap/TutorialMap.fbx", PreTransformMatrix))))
+    //    return E_FAIL;
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_TutorialMap"));
 
-    /* For.Prototype_Component_Model_Tree */
-    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Tree"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/Tree/Tree.fbx", PreTransformMatrix))))
-        return E_FAIL;
-    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Tree"));
+    ///* For.Prototype_Component_Model_Tree */
+    //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Tree"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/Tree/Tree.fbx", PreTransformMatrix))))
+    //    return E_FAIL;
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Tree"));
 
-    /* For.Prototype_Component_Model_Gate */
-    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Gate"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/Gate/Gate.fbx", PreTransformMatrix))))
-        return E_FAIL;
-    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Gate"));
+    ///* For.Prototype_Component_Model_Gate */
+    //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Gate"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/Gate/Gate.fbx", PreTransformMatrix))))
+    //    return E_FAIL;
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Gate"));
 
     /* For.Prototype_Component_Model_WhiteJetsu */
     PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
@@ -208,15 +200,79 @@ HRESULT CLevel_Edit::Ready_Prototypes()
         CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Monster/Bird/Bird.fbx", PreTransformMatrix))))
         return E_FAIL;
     m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Bird"));
+
+    /* 파자마 3종 */
+    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Face_Pajama"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Monster/Pajama/Face_Pajama.fbx", PreTransformMatrix))))
+        return E_FAIL;
+    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Face_Pajama"));
+
+    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Head_Pajama"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Monster/Pajama/Head_Pajama.fbx", PreTransformMatrix))))
+        return E_FAIL;
+    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Head_Pajama"));
+
+    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Upper_Pajama"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Monster/Pajama/Upper_Pajama.fbx", PreTransformMatrix))))
+        return E_FAIL;
+    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Upper_Pajama"));
+
+    /* 복서 5종 */
+    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Face_Boxer"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Monster/Boxer/Face_Boxer.fbx", PreTransformMatrix))))
+        return E_FAIL;
+    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Face_Boxer"));
+
+    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Head_Boxer"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Monster/Boxer/Head_Boxer.fbx", PreTransformMatrix))))
+        return E_FAIL;
+    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Head_Boxer"));
+
+    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Upper_Boxer"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Monster/Boxer/Upper_Boxer.fbx", PreTransformMatrix))))
+        return E_FAIL;
+    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Upper_Boxer"));
+
+    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_L_Boxer_Glove"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Monster/Boxer/L_Boxer_Glove.fbx", PreTransformMatrix))))
+        return E_FAIL;
+    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_L_Boxer_Glove"));
+
+    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_R_Boxer_Glove"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Monster/Boxer/R_Boxer_Glove.fbx", PreTransformMatrix))))
+        return E_FAIL;
+    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_R_Boxer_Glove"));
+
+    /* 보스 3종 */
+    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Upper_Boss"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Monster/Boss/Upper_Boss.fbx", PreTransformMatrix))))
+        return E_FAIL;
+    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Upper_Boss"));
+
+    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Face_Boss"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Monster/Boss/Face_Boss.fbx", PreTransformMatrix))))
+        return E_FAIL;
+    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Face_Boss"));
+
+    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Head_Boss"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Monster/Boss/Head_Boss.fbx", PreTransformMatrix))))
+        return E_FAIL;
+    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Head_Boss"));
+
 #pragma endregion
 
 #pragma region MODEL_BINARY
-
-    /* For.Prototype_Component_Model_Fiona_Binary */
-    PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Fiona_Binary"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, TEXT("../../Client/Bin/Resources/Models/Fiona/Fiona.bin"), PreTransformMatrix))))
-        return E_FAIL;
 
 
     PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
@@ -224,13 +280,6 @@ HRESULT CLevel_Edit::Ready_Prototypes()
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_KonohaVillage"),
         CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, TEXT("../../Client/Bin/Resources/Models/KonohaVillage/KonohaVillage.bin"), PreTransformMatrix))))
         return E_FAIL;
-    //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
-    ///* For.Prototype_Component_Model_KonohaVillage */
-    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_KonohaVillage"),
-    //    CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/KonohaVillage/KonohaVillage.fbx", PreTransformMatrix))))
-    //    return E_FAIL;
-    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_KonohaVillage"));
-#pragma endregion
 
 #pragma region COMPONENT
     /* For.Prototype_Component_Pooling*/
@@ -247,11 +296,6 @@ HRESULT CLevel_Edit::Ready_Prototypes()
 #pragma endregion
 
 #pragma region BUFFER 
-    /* For.Prototype_Component_VIBuffer_Terrain */
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_VIBuffer_Terrain"),
-        CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Terrain/Height1.bmp")))))
-        return E_FAIL;
-
     /* For.Prototype_Component_VIBuffer_Rect */
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_VIBuffer_Rect"),
         CVIBuffer_Rect::Create(m_pDevice, m_pContext))))

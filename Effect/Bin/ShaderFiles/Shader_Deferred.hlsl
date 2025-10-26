@@ -273,7 +273,7 @@ PS_OUT_BACKBUFFER PS_MAIN_COMBINED(PS_IN In)
     vector vStaticShadowDepth = g_StaticShadowTexture.Sample(DefaultSampler, vTexcoord);
     bool IsStatic = false;
     
-    if (vPosition.w - 0.1f > vStaticShadowDepth.x * 3000.0f)
+    if (vPosition.w - 0.2f > vStaticShadowDepth.x * 3000.0f)
     {
         Out.vBackBuffer.rgb *= 0.4f;
         Out.vBackBuffer.a *= 0.5f;
@@ -289,7 +289,7 @@ PS_OUT_BACKBUFFER PS_MAIN_COMBINED(PS_IN In)
             {
                 vector vShadowDepth = g_ShadowTexture.Sample(DefaultSampler, vTexcoord + float2( i* 1 / 1280.f, j *1 / 720.f) * 0.1f);
 
-                if (vPosition.w - 0.1f > vShadowDepth.x * 3000.0f)
+                if (vPosition.w - 0.2f > vShadowDepth.x * 3000.0f)
                     iCount++;
             }
         }
