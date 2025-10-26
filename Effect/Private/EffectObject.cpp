@@ -417,7 +417,7 @@ void CEffectObject::Late_Update(_float fTimeDelta)
 		m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
 	else if(false == m_IsBlend)
 		m_pGameInstance->Add_RenderGroup(RENDER::NONLIGHT, this);
-	//m_pGameInstance->Add_RenderGroup(RENDER::BLUR, this);
+	m_pGameInstance->Add_RenderGroup(RENDER::BLUR, this);
 
 }
 

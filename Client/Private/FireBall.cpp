@@ -30,7 +30,7 @@ HRESULT CFireBall::Initialize(void* pArg)
 
     FIREBALL_DESC* pDesc = static_cast<FIREBALL_DESC*>(pArg);
     
-    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetW(XMLoadFloat3(&pDesc->vPosition), 1.f));
+    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetW(XMLoadFloat3(&pDesc->vPosition), 1.f) + XMVectorSet(0.f, 2.f, 0.f, 0.f));
     m_pTransformCom->LookAt(m_pTransformCom->Get_State(STATE::POSITION) - XMLoadFloat3(&pDesc->vLook));
     m_IsEnemy = pDesc->IsEnemy;
 
