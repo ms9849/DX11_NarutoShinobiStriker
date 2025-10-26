@@ -66,7 +66,8 @@ private:
 	_uint		m_iTextureNum = { 0 }, m_iMaskTextureNum = { 0 }, m_iNoiseTextureNum = { 0 };
 	_uint		m_iShaderPassIdx = { 0 };
 	_float		m_fFrameTime = { 0.1f };
-
+	_int		m_iNumWidth = { 1 };
+	_int		m_iNumHeight = { 1 };
 
 public:
 	static CParticle_GUI* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -159,6 +159,14 @@ void CParticle_GUI::Particle_GUI()
 			ImGui::SameLine();
 			ImGui::InputFloat("##lifetimey", &m_vLifeTime.y);
 
+			ImGui::Text("Input Width		");
+			ImGui::SameLine();
+			ImGui::InputInt("##iWidth", &m_iNumWidth);
+			
+			ImGui::Text("Input Height		");
+			ImGui::SameLine();
+			ImGui::InputInt("##iHeight", &m_iNumHeight);
+
 			ImGui::Text("Input FrameTime		");
 			ImGui::SameLine();
 			ImGui::InputFloat("##frametime", &m_fFrameTime);
@@ -188,6 +196,9 @@ void CParticle_GUI::Particle_GUI()
 				Desc.iNoiseTextureNum = m_iNoiseTextureNum;
 				Desc.iDiffuseTextureNum = m_iTextureNum; // 임시
 				Desc.iMaskTextureNum = m_iMaskTextureNum;
+				/* 시발시발시발시발시발시발시발 */
+				Desc.iNumWidth = m_iNumWidth;
+				Desc.iNumHeight = m_iNumHeight;
 
 				if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::EFFECT), TEXT("Prototype_GameObject_ParticleObject"),
 					ENUM_CLASS(LEVEL::EFFECT), TEXT("Layer_Particle"), &Desc)))
@@ -334,6 +345,8 @@ HRESULT CParticle_GUI::Save_ToBinary()
 	Desc.iNoiseTextureNum = m_iNoiseTextureNum;
 	Desc.iDiffuseTextureNum = m_iTextureNum;
 	Desc.iMaskTextureNum = m_iMaskTextureNum;
+	Desc.iNumWidth = m_iNumWidth;
+	Desc.iNumHeight = m_iNumHeight;
 
 	WriteFile(hHandle, &Desc, sizeof(CParticleObject::PARTICLE_OBJECT_DESC), &dwByte, nullptr);
 
@@ -381,6 +394,8 @@ HRESULT CParticle_GUI::Load_FromBinary()
 	m_iNoiseTextureNum = Desc.iNoiseTextureNum;
 	m_iTextureNum = Desc.iDiffuseTextureNum;
 	m_iMaskTextureNum = Desc.iMaskTextureNum;
+	m_iNumWidth = Desc.iNumWidth;
+	m_iNumHeight = Desc.iNumHeight;
 
 	CloseHandle(hHandle);
 

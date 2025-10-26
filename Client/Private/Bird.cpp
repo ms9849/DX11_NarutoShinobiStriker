@@ -171,7 +171,7 @@ void CBird::OnCollision(COLLIDER_HANDLE_ID eHandleID)
         pNextState = CBird_DeadState::Create(m_pNavigationCom, this);
     }
     
-    Set_HitEffect(0.3f, 1.f);
+    Set_HitEffect(0.2f, 1.f);
 
     Change_State(pNextState, false);
 }
@@ -273,6 +273,9 @@ void CBird::Update(_float fTimeDelta)
     /* 스킬 쿨타임 업데이트*/
     Update_SkillCoolDown(fTimeDelta);
 
+    if (m_iShaderPassIdx != 0)
+        Calc_HitEffectTime(fTimeDelta);
+
 	m_pColliderCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
 }
 
@@ -306,7 +309,7 @@ HRESULT CBird::Render()
         if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", aiTextureType_DIFFUSE, 0)))
             return E_FAIL;
 
-        if (FAILED(m_pShaderCom->Begin(0)))
+        if (FAILED(m_pShaderCom->Begin(m_iShaderPassIdx)))
             return E_FAIL;
 
         if (FAILED(m_pModelCom->Render(i)))

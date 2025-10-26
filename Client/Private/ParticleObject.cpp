@@ -36,6 +36,8 @@ HRESULT CParticleObject::Initialize(void* pArg)
 	if (hHandle == INVALID_HANDLE_VALUE)
 		return E_FAIL;
 
+	m_IsBlur = pLoadDesc->IsBlur;
+
 	CParticleObject::PARTICLE_OBJECT_DESC Desc = {};
 	ReadFile(hHandle, &Desc, sizeof(CParticleObject::PARTICLE_OBJECT_DESC), &dwByte, nullptr);
 	CloseHandle(hHandle);
@@ -110,15 +112,21 @@ void CParticleObject::Late_Update(_float fTimeDelta)
 		return;
 	
 	m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
-	m_pGameInstance->Add_RenderGroup(RENDER::BLUR_SMALL, this);
+
+	if(true == m_IsBlur)
+		m_pGameInstance->Add_RenderGroup(RENDER::BLUR_SMALL, this);
 }
 
 HRESULT CParticleObject::Render()
 {
 	if (FAILED(Bind_ShaderResources()))
 		return E_FAIL;
-
-	m_pShaderCom->Begin(ENUM_CLASS(m_eType));
+	
+	/* 타입으로 지정하다가 안돼서 임시 하드코딩 */
+	if (m_iShaderPassIdx >= 5)
+		m_pShaderCom->Begin(m_iShaderPassIdx);
+	else
+		m_pShaderCom->Begin(ENUM_CLASS(m_eType));
 
 	m_pVIBufferCom->Bind_Resources();
 
@@ -232,10 +240,10 @@ HRESULT CParticleObject::Bind_ShaderResources()
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_iCurrentIdx", &m_iCurrentIdx, sizeof(_uint))))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_iNumWidth", &m_iNumWidth, sizeof(_uint))))
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_iNumWidth", &m_iNumWidth, sizeof(_int))))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_iNumHeight", &m_iNumWidth, sizeof(_uint))))
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_iNumHeight", &m_iNumHeight, sizeof(_int))))
 		return E_FAIL;
 
 	return S_OK;
