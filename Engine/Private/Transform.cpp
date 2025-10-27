@@ -30,6 +30,22 @@ void CTransform::Set_Scale(_float fX, _float fY, _float fZ)
 	Set_State(STATE::LOOK, XMVector3Normalize(Get_State(STATE::LOOK))* fZ);
 }
 
+void CTransform::Set_Position(_fvector vPosition, CNavigation* pNavigation)
+{
+	_vector		vOriginPos = Get_State(STATE::POSITION);
+
+	_vector		vDiff =  vPosition - vOriginPos;
+
+	_float3 vSliding = {};
+
+	if ((nullptr == pNavigation) ||
+		(true == pNavigation->isMove(vPosition, &vSliding)))
+		Set_State(STATE::POSITION, vPosition);
+
+	else if (true == pNavigation->isMove(vOriginPos + vDiff, nullptr))
+		Set_State(STATE::POSITION, vOriginPos + 0.2f * m_fSpeedPerSec * XMVector3Normalize(XMLoadFloat3(&vSliding)));
+}
+
 HRESULT CTransform::Initialize_Prototype()
 {
 

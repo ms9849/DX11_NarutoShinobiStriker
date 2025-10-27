@@ -21,6 +21,7 @@
 #include "BossHPPanel.h"
 #include "Icon.h"
 #include "ParticleObject.h"
+#include "Trail.h"
 
 CBoss::CBoss(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CEnemy{ pDevice, pContext, eObjectID }
@@ -259,6 +260,17 @@ HRESULT CBoss::Initialize(void* pArg)
     m_fCurrentHP = 200.f;
     m_fMaxHP = 200.f;
 
+    Fade_Particle();
+
+    CTrail::TRAIL_DESC TrailDesc;
+    TrailDesc.vFootTrailColor = _float4(1.0f, 0.6f, 0.2f, 1.f);
+    TrailDesc.strTrailTextureTag = TEXT("Prototype_Component_Texture_FootTrail_Blue");
+    XMStoreFloat4(&TrailDesc.vHighPosition, XMVectorSet(-0.02f, 0.f, 0.f, 1.f));
+    XMStoreFloat4(&TrailDesc.vLowPosition, XMVectorSet(0.f, 0.f, 0.02f, 1.f));
+
+    m_pFootTrail[0] = static_cast<CTrail*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_FootTrail"), &TrailDesc));
+    m_pFootTrail[1] = static_cast<CTrail*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_FootTrail"), &TrailDesc));
+
     return S_OK;
 }
 
@@ -274,6 +286,7 @@ void CBoss::Update(_float fTimeDelta)
 
     Update_State(fTimeDelta);
     Update_SkillCoolDown(fTimeDelta);
+    Update_FootTrail(fTimeDelta);
 
     if (false == m_IsFlying)
         m_pNavigationCom->Compute_Height(m_pTransformCom);
@@ -316,6 +329,8 @@ void CBoss::Late_Update(_float fTimeDelta)
     m_pGameInstance->Add_DebugComponent(m_pSpinKickColliderCom);
     m_pGameInstance->Add_DebugComponent(m_pRushColliderCom);
 #endif
+
+    LateUpdate_FootTrail(fTimeDelta);
 }
 
 HRESULT CBoss::Render()

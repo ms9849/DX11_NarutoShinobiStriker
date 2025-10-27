@@ -30,7 +30,10 @@ CPajamaState* CPajama_DeadState::Update(_float fTimeDelta)
     _float fAnimProgress = m_pPajama->Get_AnimProgress();
 
     if (true == IsAnimFinished)
+    {
+        m_pPajama->Fade_Particle();
         m_pPajama->Set_Dead(true);
+    }
 
     return nullptr;
 }

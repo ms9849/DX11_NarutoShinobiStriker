@@ -70,6 +70,7 @@ HRESULT CTrail::Initialize(void* pArg)
 	TRAIL_DESC* pDesc = static_cast<TRAIL_DESC*>(pArg);
 	XMStoreFloat4(&m_vHigh, XMLoadFloat4(&pDesc->vHighPosition));
 	XMStoreFloat4(&m_vLow, XMLoadFloat4(&pDesc->vLowPosition));
+	m_vFootTrailColor = pDesc->vFootTrailColor;
 
 	m_iNumPresent = 0;
 	m_iEndIndex = 0;
@@ -94,6 +95,7 @@ HRESULT CTrail::Initialize(void* pArg)
 	}
 
 #pragma endregion
+
 
 	return S_OK;
 }
@@ -208,6 +210,9 @@ HRESULT CTrail::Render()
 
 	_float4x4 IdentityMatrix = {};
 	XMStoreFloat4x4(&IdentityMatrix, XMMatrixIdentity());
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_vFootTrailColor", &m_vFootTrailColor, sizeof(_float4))))
+		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &IdentityMatrix)))
 		return E_FAIL;

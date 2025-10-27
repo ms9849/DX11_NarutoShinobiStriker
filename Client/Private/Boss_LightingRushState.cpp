@@ -75,6 +75,8 @@ CBossState* CBoss_LightingRushState::Update(_float fTimeDelta)
                     + vOffset,
                     1.f)
             );
+
+            m_pNavigationCom->Find_CurrentCell(m_pBoss->Get_Transform()->Get_State(STATE::POSITION));
         }
     }
 
@@ -86,6 +88,7 @@ CBossState* CBoss_LightingRushState::Update(_float fTimeDelta)
         {
             m_pBoss->Get_Transform()->Set_State(STATE::POSITION, XMLoadFloat4(&m_RushPoints[m_iRushCount]) + XMVectorSet(0.f, 0.3f, 0.f, 0.f) * (m_iRushCount + 1));
             m_pNavigationCom->Compute_Height(m_pBoss->Get_Transform());
+            m_pNavigationCom->Find_CurrentCell(m_pBoss->Get_Transform()->Get_State(STATE::POSITION));
             pNextState = CBoss_LandState::Create(m_pNavigationCom, m_pBoss);
         }
        

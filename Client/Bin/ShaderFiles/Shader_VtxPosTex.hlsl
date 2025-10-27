@@ -2,6 +2,7 @@
 
 matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 matrix g_RopeSocketMatrix, g_RopeWorldMatrix;
+vector g_vFootTrailColor;
 
 texture2D g_Texture, g_Texture_Skill;
 
@@ -306,8 +307,7 @@ PS_OUT PS_FOOT_TRAIL(PS_IN In)
 {
     PS_OUT Out;
     
-    Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
-    Out.vColor.rgb = float3(0.1f, 0.5f, 1.f);
+    Out.vColor.rgba = g_vFootTrailColor;
     Out.vColor.a *= 0.7f;
     
     return Out;

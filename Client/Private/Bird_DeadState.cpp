@@ -25,7 +25,10 @@ CBirdState* CBird_DeadState::Update(_float fTimeDelta)
 	_float fAnimProgress = m_pBird->Get_AnimProgress();
 
 	if (true == IsAnimFinished)
+	{
+		m_pBird->Fade_Particle();
 		m_pBird->Set_Dead(true);
+	}
 
 	return nullptr;
 }

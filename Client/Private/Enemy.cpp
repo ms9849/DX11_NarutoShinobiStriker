@@ -5,6 +5,11 @@
 #include "Enemy_HPBar.h"
 #include "Parts_Character.h"
 
+#include "ParticleObject.h"
+#include "GameInstance.h"
+
+#include "Trail.h"
+
 CEnemy::CEnemy(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CContainerObject{  pDevice, pContext, ENUM_CLASS(eObjectID) }
     , m_pGameManager { CGameManager::GetInstance() }
@@ -82,6 +87,18 @@ _bool CEnemy::Play_Animation(_float fTimeDelta)
     return isAnimFinished;
 }
 
+void CEnemy::Fade_Particle()
+{
+    CParticleObject::PARTICLE_LOAD_DESC Desc;
+    Desc.strParticlePath = TEXT("../Bin/Resources/Particle/EnemyFade_Particle.bin");
+    Desc.eType = CParticleObject::PARTICLE_TYPE::EXPLOSION;
+    Desc.IsBlur = false;
+    XMStoreFloat3(&Desc.vPosition, XMVectorSet(0.f, 0.2f, 0.f, 0.f) + m_pTransformCom->Get_State(STATE::POSITION));
+
+    m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
+        TEXT("Layer_Particle"), &Desc);
+}
+
 HRESULT CEnemy::Initialize_Prototype()
 {
     return S_OK;
@@ -144,6 +161,29 @@ HRESULT CEnemy::Ready_HPBar()
 
     m_pHPBar->Initialize(&Desc);
 
+    return S_OK;
+}
+
+HRESULT CEnemy::Update_FootTrail(_float fTimeDelta)
+{
+    m_fFootTrailTimeAcc += fTimeDelta;
+    if (m_fFootTrailTimeAcc >= 0.01f)
+    {
+        CParts_Character* pUpperParts = static_cast<CParts_Character*>(Find_PartObject(TEXT("Part_Upper"))); 
+
+    	m_pFootTrail[0]->Update_Trail(XMLoadFloat4x4(pUpperParts->Get_BoneMatrixPtr("LeftFoot")) * XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()), true);
+    	m_pFootTrail[1]->Update_Trail(XMLoadFloat4x4(pUpperParts->Get_BoneMatrixPtr("RightFoot")) * XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()), true);
+        m_fFootTrailTimeAcc = 0.f;
+    }
+
+    return S_OK;
+}
+
+HRESULT CEnemy::LateUpdate_FootTrail(_float fTimeDelta)
+{
+    m_pFootTrail[0]->Late_Update(fTimeDelta);
+    m_pFootTrail[1]->Late_Update(fTimeDelta);
+    
     return S_OK;
 }
 

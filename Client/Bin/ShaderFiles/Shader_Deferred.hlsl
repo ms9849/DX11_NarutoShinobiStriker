@@ -297,7 +297,7 @@ PS_OUT_BACKBUFFER PS_MAIN_COMBINED(PS_IN In)
     if(true == g_IsRadialBlur)
     {
         float2 center = float2(0.5f, 0.5f); // (UV 가운데)
-        float strength = 0.09f; //* (1 - g_fRadialBlurTimeAcc / g_fRadialBlurTime);
+        float strength = 0.08f; //* (1 - g_fRadialBlurTimeAcc / g_fRadialBlurTime);
         int samples = 12; //* (1 - g_fRadialBlurTimeAcc / g_fRadialBlurTime); // 샘플 개수
         
         if(samples < 1)

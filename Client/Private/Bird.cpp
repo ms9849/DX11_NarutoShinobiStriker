@@ -261,6 +261,8 @@ HRESULT CBird::Initialize(void* pArg)
     m_fCurrentHP = 100.f;
     m_fMaxHP = 100.f;
 
+    Fade_Particle();
+
     return S_OK;
 }
 

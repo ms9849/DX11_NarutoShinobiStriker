@@ -26,6 +26,9 @@ public:
 	virtual _bool	Play_Animation(_float fTimeDelta);
 
 public:
+	void Fade_Particle();
+
+public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Priority_Update(_float fTimeDelta) override;
@@ -38,8 +41,11 @@ public:
 
 protected:
 	HRESULT Ready_HPBar();
-
+	HRESULT Update_FootTrail(_float fTimeDelta);
+	HRESULT LateUpdate_FootTrail(_float fTimeDelta);
 protected:
+	_float m_fFootTrailTimeAcc = { 0.f };
+	class CTrail* m_pFootTrail[2] = { nullptr };
 	_uint  m_iShaderPassIdx = { 0 };
 	_bool  m_IsInvincible = { false };
 	_float m_fInvincibleTime = { 0.f };

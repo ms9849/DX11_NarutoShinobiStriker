@@ -51,6 +51,8 @@ public:
 	void Set_RotationSpeed(_float fRotationPerSec) {
 		m_fRotationPerSec = fRotationPerSec;
 	}
+
+	void Set_Position(_fvector vPosition, class CNavigation* pNavigation);
 public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg);

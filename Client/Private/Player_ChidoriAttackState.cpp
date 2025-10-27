@@ -70,6 +70,12 @@ CPlayerState* CPlayer_ChidoriAttackState::Update(_float fTimeDelta)
         if (m_pGameInstance->Key_Pressing(DIK_A))
             m_pPlayer->Get_Transform()->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * -0.5f);
     }
+
+    if (0.8f <= fAnimProgress && ANIM_STATE::ATTACK_END == m_eAnimState)
+    {
+        m_pChidori->Set_Visible(false);
+    }
+
     // 치도리 끝내는 동작 (ATTACK_END로 전환) 
     if (ANIM_STATE::ATTACK == m_eAnimState && (false == m_pChidori->IsColliderActive() || m_fTimeAcc >= 1.0f))
     {
@@ -80,12 +86,6 @@ CPlayerState* CPlayer_ChidoriAttackState::Update(_float fTimeDelta)
     else if (true == IsAnimFinished && m_fTimeAcc < 1.0f && ANIM_STATE::ATTACK == m_eAnimState)
     {
         m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Aerial_Chidori_Run_Loop", 2.f, false, 0.f, true);
-    }
-
-    // IDLE 상태로 돌아가기. 
-    if (fAnimProgress >= 0.75f && ANIM_STATE::ATTACK_END == m_eAnimState)
-    {
-        m_pChidori->Set_Visible(false);
     }
 
     // IDLE 상태로 돌아가기. 
@@ -101,6 +101,7 @@ CPlayerState* CPlayer_ChidoriAttackState::Update(_float fTimeDelta)
 _bool CPlayer_ChidoriAttackState::End()
 {
     m_pPlayer->Set_Invincible(false);
+    m_pChidori->Set_Visible(false);
 
     return true;
 }

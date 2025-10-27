@@ -29,7 +29,10 @@ CBossState* CBoss_DeadState::Update(_float fTimeDelta)
 	_float fAnimProgress = m_pBoss->Get_AnimProgress();
 
 	if (true == IsAnimFinished)
+	{
+		m_pBoss->Fade_Particle();
 		m_pBoss->Set_Dead(true);
+	}
 
 	return nullptr;
 }

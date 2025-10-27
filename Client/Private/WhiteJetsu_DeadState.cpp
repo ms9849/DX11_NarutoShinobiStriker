@@ -32,7 +32,10 @@ CWhiteJetsuState* CWhiteJetsu_DeadState::Update(_float fTimeDelta)
 	_float fAnimProgress = m_pJetsu->Get_AnimProgress();
 
 	if (true == IsAnimFinished)
+	{
 		m_pJetsu->Set_Dead(true);
+		m_pJetsu->Fade_Particle();
+	}
 
 	return nullptr;
 }

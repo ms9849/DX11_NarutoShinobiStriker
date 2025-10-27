@@ -29,6 +29,7 @@ HRESULT CLower_Character::Initialize(void* pArg)
 		return E_FAIL;
 
 	CTrail::TRAIL_DESC Desc;
+	Desc.vFootTrailColor = _float4(0.1f, 0.5f, 1.f, 1.f);
 	XMStoreFloat4(&Desc.vHighPosition, XMVectorSet(-0.02f, 0.f, 0.f, 1.f));
 	XMStoreFloat4(&Desc.vLowPosition, XMVectorSet(0.f, 0.f, 0.02f, 1.f));
 	Desc.strTrailTextureTag = TEXT("Prototype_Component_Texture_FootTrail_Blue");

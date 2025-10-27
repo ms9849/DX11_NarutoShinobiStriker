@@ -88,7 +88,7 @@ void CChidori::Update(_float fTimeDelta)
 {
 	m_fTimeAcc += fTimeDelta;
 
-	if (m_fTimeAcc >= 5.f)
+	if (m_fTimeAcc >= 15.f)
 		m_IsDead = true;
 
 	///* 부모 행렬 적용 */

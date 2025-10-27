@@ -29,7 +29,10 @@ CBoxerState* CBoxer_DeadState::Update(_float fTimeDelta)
 	_float fAnimProgress = m_pBoxer->Get_AnimProgress();
 
 	if (true == IsAnimFinished)
+	{
+		m_pBoxer->Fade_Particle();
 		m_pBoxer->Set_Dead(true);
+	}
 
 	return nullptr;
 }

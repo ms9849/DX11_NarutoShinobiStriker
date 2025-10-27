@@ -48,7 +48,6 @@ public:
 	void  Update_SkillCoolDown(_float fTimeDelta);
 private:
 	/* 추후 상태 추가해야함*/
-	//class CWhiteJetsuState* m_pState = { nullptr };
 	CNavigation* m_pNavigationCom = { nullptr };
 	CCollider*	 m_pColliderCom = { nullptr };
 	CCollider*	 m_pHandAttackColliderCom = { nullptr };
@@ -57,6 +56,7 @@ private:
 
 	class CBoxerState* m_pState = { nullptr };
 
+	_float		 m_fTimeAcc = { 0.f };
 	_float		 m_fSkillTimeAcc = { 0.f };
 	_float		 m_fMaxSkillCoolDown = { 10.f };
 	_float		 m_fSpinKickTimeAcc = { 3.f };
