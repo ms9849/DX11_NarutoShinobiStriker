@@ -154,132 +154,203 @@ HRESULT CLevel_Edit::Ready_Prototypes()
 #pragma region MODEL_FBX
     _matrix			PreTransformMatrix = XMMatrixIdentity();
 
-    ///* For.Prototype_Component_Model_Props */
+
+#pragma region PLAYER_HEAD
+    ///* 얼굴 3종*/
     //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
-    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Props"),
-    //    CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/Props/Props.fbx", PreTransformMatrix))))
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Face_Player_Bandage"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Player/Face_Player.fbx", PreTransformMatrix))))
     //    return E_FAIL;
-    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Props"));
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Face_Player_Bandage"));
 
-    ///* For.Prototype_Component_Model_KonohaVillage */
-    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_KonohaVillage"),
-    //    CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/KonohaVillage/KonohaVillage.fbx", PreTransformMatrix))))
-    //    return E_FAIL;
-    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_KonohaVillage"));
-
-    /* For.Prototype_Component_Model_TutorialMap */
-    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_TutorialMap"),
-    //    CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/TutorialMap/TutorialMap.fbx", PreTransformMatrix))))
-    //    return E_FAIL;
-    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_TutorialMap"));
-
-    ///* For.Prototype_Component_Model_Tree */
     //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
-    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Tree"),
-    //    CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/Tree/Tree.fbx", PreTransformMatrix))))
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Face_Player_Default"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Player/Face_Player_Default.fbx", PreTransformMatrix))))
     //    return E_FAIL;
-    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Tree"));
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Face_Player_Default"));
 
-    ///* For.Prototype_Component_Model_Gate */
+
     //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
-    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Gate"),
-    //    CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/Gate/Gate.fbx", PreTransformMatrix))))
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Face_Player_Mask"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Player/Face_Player_Mask.fbx", PreTransformMatrix))))
     //    return E_FAIL;
-    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Gate"));
-
-    /* For.Prototype_Component_Model_WhiteJetsu */
-    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_WhiteJetsu"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Monster/WhiteJetsu/WhiteJetsu.fbx", PreTransformMatrix))))
-        return E_FAIL;
-    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_WhiteJetsu"));
-
-    /* For.Prototype_Component_Model_Bird */
-    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Bird"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Monster/Bird/Bird.fbx", PreTransformMatrix))))
-        return E_FAIL;
-    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Bird"));
-
-    /* 파자마 3종 */
-    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Face_Pajama"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Monster/Pajama/Face_Pajama.fbx", PreTransformMatrix))))
-        return E_FAIL;
-    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Face_Pajama"));
-
-    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Head_Pajama"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Monster/Pajama/Head_Pajama.fbx", PreTransformMatrix))))
-        return E_FAIL;
-    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Head_Pajama"));
-
-    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Upper_Pajama"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Monster/Pajama/Upper_Pajama.fbx", PreTransformMatrix))))
-        return E_FAIL;
-    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Upper_Pajama"));
-
-    /* 복서 5종 */
-    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Face_Boxer"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Monster/Boxer/Face_Boxer.fbx", PreTransformMatrix))))
-        return E_FAIL;
-    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Face_Boxer"));
-
-    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Head_Boxer"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Monster/Boxer/Head_Boxer.fbx", PreTransformMatrix))))
-        return E_FAIL;
-    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Head_Boxer"));
-
-    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Upper_Boxer"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Monster/Boxer/Upper_Boxer.fbx", PreTransformMatrix))))
-        return E_FAIL;
-    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Upper_Boxer"));
-
-    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_L_Boxer_Glove"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Monster/Boxer/L_Boxer_Glove.fbx", PreTransformMatrix))))
-        return E_FAIL;
-    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_L_Boxer_Glove"));
-
-    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_R_Boxer_Glove"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Monster/Boxer/R_Boxer_Glove.fbx", PreTransformMatrix))))
-        return E_FAIL;
-    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_R_Boxer_Glove"));
-
-    /* 보스 3종 */
-    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Upper_Boss"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Monster/Boss/Upper_Boss.fbx", PreTransformMatrix))))
-        return E_FAIL;
-    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Upper_Boss"));
-
-    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Face_Boss"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Monster/Boss/Face_Boss.fbx", PreTransformMatrix))))
-        return E_FAIL;
-    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Face_Boss"));
-
-    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Head_Boss"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Monster/Boss/Head_Boss.fbx", PreTransformMatrix))))
-        return E_FAIL;
-    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Head_Boss"));
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Face_Player_Mask"));
 
 #pragma endregion
 
-#pragma region MODEL_BINARY
 
+#pragma region PLAYER_FACE
+    /* 머리 */
+    //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Head_Player"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Player/Head_Player.fbx", PreTransformMatrix))))
+    //    return E_FAIL;
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Head_Player"));
+
+    //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Head_Player_Allback"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Player/Head_Player_Allback.fbx", PreTransformMatrix))))
+    //    return E_FAIL;
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Head_Player_Allback"));
+
+    //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Head_Player_Hat"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Player/Head_Player_Hat.fbx", PreTransformMatrix))))
+    //    return E_FAIL;
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Head_Player_Hat"));
+
+    //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Head_Player_Sanbal"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Player/Head_Player_Sanbal.fbx", PreTransformMatrix))))
+    //    return E_FAIL;
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Head_Player_Sanbal"));
+
+    //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Head_Player_SnowMan"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Player/Head_Player_SnowMan.fbx", PreTransformMatrix))))
+    //    return E_FAIL;
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Head_Player_SnowMan"));
+#pragma endregion
+
+
+#pragma region PLAYER_LOWER
+    //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Lower_Player"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Player/Lower_Player.fbx", PreTransformMatrix))))
+    //    return E_FAIL;
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Lower_Player"));
+
+    //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Lower_Ambu"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Player/Lower_Player_Ambu.fbx", PreTransformMatrix))))
+    //    return E_FAIL;
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Lower_Ambu"));
+
+    //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Lower_Durumari"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Player/Lower_Player_Durumari.fbx", PreTransformMatrix))))
+    //    return E_FAIL;
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Lower_Durumari"));
+
+    //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Lower_Orochimaru"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Player/Lower_Player_Orochimaru.fbx", PreTransformMatrix))))
+    //    return E_FAIL;
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Lower_Orochimaru"));
+
+    //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Lower_Sasuke"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Player/Lower_Player_Sasuke.fbx", PreTransformMatrix))))
+    //    return E_FAIL;
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Lower_Sasuke"));
+
+    //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Lower_Shoichi"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Player/Lower_Player_Shoichi.fbx", PreTransformMatrix))))
+    //    return E_FAIL;
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Lower_Shoichi"));
+
+    //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Lower_Stone"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Player/Lower_Player_Stone.fbx", PreTransformMatrix))))
+    //    return E_FAIL;
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Lower_Stone"));
+
+#pragma endregion
+
+
+#pragma region PLAYER_ONECLOTH
+
+    //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_OneCloth_Akastuki"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Player/OneCloth_Player_Akastuki.fbx", PreTransformMatrix))))
+    //    return E_FAIL;
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_OneCloth_Akastuki"));
+
+    //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_OneCloth_Player_Beach"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Player/OneCloth_Player_Beach.fbx", PreTransformMatrix))))
+    //    return E_FAIL;
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_OneCloth_Player_Beach"));
+
+    //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_OneCloth_Player_SnowMan"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Player/OneCloth_Player_SnowMan.fbx", PreTransformMatrix))))
+    //    return E_FAIL;
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_OneCloth_Player_SnowMan"));
+
+    //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_OneCloth_Player_Training"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Player/OneCloth_Player_Training.fbx", PreTransformMatrix))))
+    //    return E_FAIL;
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_OneCloth_Player_Training"));
+
+    //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_OneCloth_Player_Tuxedo"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Player/OneCloth_Player_Tuxedo.fbx", PreTransformMatrix))))
+    //    return E_FAIL;
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_OneCloth_Player_Tuxedo"));
+
+
+#pragma endregion
+
+
+#pragma region PLAYER_UPPER
 
     PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
-    /* For.Prototype_Component_Model_KonohaVillage */
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_KonohaVillage"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, TEXT("../../Client/Bin/Resources/Models/KonohaVillage/KonohaVillage.bin"), PreTransformMatrix))))
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Upper_Player"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Player/Upper_Player.fbx", PreTransformMatrix))))
         return E_FAIL;
+    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Upper_Player"));
+
+    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Upper_Player_Ambu"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Player/Upper_Player_Ambu.fbx", PreTransformMatrix))))
+        return E_FAIL;
+    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Upper_Player_Ambu"));
+
+    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Upper_Player_Konoha"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Player/Upper_Player_Konoha.fbx", PreTransformMatrix))))
+        return E_FAIL;
+    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Upper_Player_Konoha"));
+
+    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Upper_Player_Racer"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Player/Upper_Player_Racer.fbx", PreTransformMatrix))))
+        return E_FAIL;
+    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Upper_Player_Racer"));
+
+    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Upper_Player_Shoichi"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Player/Upper_Player_Shoichi.fbx", PreTransformMatrix))))
+        return E_FAIL;
+    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Upper_Player_Shoichi"));
+
+    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Upper_Player_Stone"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Player/Upper_Player_Stone.fbx", PreTransformMatrix))))
+        return E_FAIL;
+    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Upper_Player_Stone"));
+
+    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Upper_Player_Yuljung"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Player/Upper_Player_Yuljung.fbx", PreTransformMatrix))))
+        return E_FAIL;
+    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Upper_Player_Yuljung"));
+#pragma endregion
+
+#pragma region PLAYER_WEAPON
+    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Weapon_Player"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/Player/Weapon_Player.fbx", PreTransformMatrix))))
+        return E_FAIL;
+    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Weapon_Player"));
+#pragma endregion 
+
+
+#pragma region MODEL_BINARY
+
 
 #pragma region COMPONENT
     /* For.Prototype_Component_Pooling*/

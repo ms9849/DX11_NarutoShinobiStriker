@@ -120,7 +120,7 @@ HRESULT CWeapon_Character::Initialize(void* pArg)
 
     CTrail::TRAIL_DESC Desc;
     XMStoreFloat4(&Desc.vHighPosition, XMVectorSet(0.f, -1.3f, 0.f, 1.f));
-    XMStoreFloat4(&Desc.vLowPosition, XMVectorSet(0.f, -0.5f, 0.f, 1.f));
+    XMStoreFloat4(&Desc.vLowPosition, XMVectorSet(0.f, -0.2f, 0.f, 1.f));
     Desc.strTrailTextureTag = TEXT("Prototype_Component_Texture_SwordTrail");
 
     m_pSwordTrail = static_cast<CTrail*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_SwordTrail"), &Desc));
@@ -239,7 +239,7 @@ HRESULT CWeapon_Character::Ready_Components()
     {
         CBounding_OBB::BOUNDING_OBB_DESC		OBBDesc{};
 
-        OBBDesc.vSize = _float3(0.5f, 1.2f, 0.5f);
+        OBBDesc.vSize = _float3(0.5f, 1.4f, 0.5f);
         OBBDesc.vCenter = _float3(0.f, OBBDesc.vSize.y * -0.5f, 0.f);
         OBBDesc.vAngles = _float3(0.f, 0.f/*XMConvertToRadians(45.0f)*/, 0.f);
         if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Collider_OBB"),

@@ -84,7 +84,10 @@ void CFireBall::Update(_float fTimeDelta)
         ParticleDesc.eType = CParticleObject::PARTICLE_TYPE::EXPLOSION;
         ParticleDesc.strParticlePath = TEXT("../Bin/Resources/Particle/Fireball_Hit_Particle.bin");
         XMStoreFloat3(&ParticleDesc.vPosition, m_pTransformCom->Get_State(STATE::POSITION));
+        m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"),
+            m_pGameInstance->Get_LevelID(), TEXT("Layer_Particle"), &ParticleDesc);
 
+        ParticleDesc.strParticlePath = TEXT("../Bin/Resources/Particle/Fireball_Hit_Smoke_Particle.bin");
         m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"),
             m_pGameInstance->Get_LevelID(), TEXT("Layer_Particle"), &ParticleDesc);
 

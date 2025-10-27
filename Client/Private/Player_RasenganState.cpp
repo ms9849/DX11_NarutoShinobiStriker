@@ -88,6 +88,13 @@ CPlayerState* CPlayer_RasenganState::Update(_float fTimeDelta)
 
         m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
             TEXT("Layer_Particle"), &Desc);
+
+        Desc.strParticlePath = TEXT("../Bin/Resources/Particle/Rasengan_Explosion_Smoke_Particle.bin");
+        Desc.eType = CParticleObject::PARTICLE_TYPE::EXPLOSION;
+        Desc.IsBlur = false;
+
+        m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
+            TEXT("Layer_Particle"), &Desc);
     }
 
 
