@@ -25,7 +25,6 @@ public:
 
 private:
 	class CEffectContainer* m_pEffectMain = { nullptr };
-	class CEffectContainer* m_pEffectSub = { nullptr };
 	class CPlayer*	m_pPlayer = { nullptr };
 	ANIM_STATE		m_eAnimState = {};
 	_float			m_fTimeAcc = { 0.f };
