@@ -6,6 +6,7 @@
 #include "EffectContainer.h"
 #include "EffectObject.h"
 #include "ParticleObject.h"
+#include "Effect_HitSprite.h"
 
 CFireBall::CFireBall(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CSkill { pDevice, pContext, eObjectID }
@@ -92,6 +93,18 @@ void CFireBall::Update(_float fTimeDelta)
         m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"),
             m_pGameInstance->Get_LevelID(), TEXT("Layer_Particle"), &ParticleDesc);
 
+        CEffect_HitSprite::EFFECT_HIT_SPRITE_DESC HitDesc;
+
+        HitDesc.fDeltaScale = 20.f;
+        HitDesc.fLifeTime = 0.6f;
+        HitDesc.IsBlur = false;
+        HitDesc.iTextureNum = 0;
+        HitDesc.vMainColor = _float4(1.f, 0.6f, 0.2f, 1.f);
+        HitDesc.vSubColor = _float4(1.f, 0.6f, 0.2f, 1.f);
+        XMStoreFloat4(&HitDesc.vPosition, m_pTransformCom->Get_State(STATE::POSITION));
+
+        m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_HitEffect"), 
+            m_pGameInstance->Get_LevelID(), TEXT("Layer_Effect"), &HitDesc); 
     }
 
     m_pTransformCom->Go_Backward(fTimeDelta, nullptr);

@@ -27,18 +27,20 @@ HRESULT CKunai::Initialize(void* pArg)
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
-    if (FAILED(Ready_Components()))
-        return E_FAIL;
-
     /* 위치 & 포지션 세팅 */
     KUNAI_DESC* pDesc = static_cast<KUNAI_DESC*>(pArg);
     m_vDirection = pDesc->vDirection;
 
-    m_pTransformCom->Set_State(STATE::POSITION, XMLoadFloat3(&pDesc->vPosition));
+    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(0.f, 0.5f, 0.f, 0.f) + XMVectorSetW(XMLoadFloat3(&pDesc->vPosition), 1.f));
 
     m_pTransformCom->LookAt(m_pTransformCom->Get_State(STATE::POSITION) + XMLoadFloat3(&m_vDirection));
 
-    //m_iNumMeshes = m_pModelCom->Get_NumMeshes();
+    m_eType = pDesc->eType;
+
+    if (FAILED(Ready_Components()))
+        return E_FAIL;
+
+    m_iNumMeshes = m_pModelCom->Get_NumMeshes();
 
     return S_OK;
 }
@@ -75,41 +77,46 @@ void CKunai::Late_Update(_float fTimeDelta)
 
 HRESULT CKunai::Render()
 {
-    //if (FAILED(Bind_ShaderResources()))
-    //    return E_FAIL;
+    if (FAILED(Bind_ShaderResources()))
+        return E_FAIL;
 
-    //for (_uint i = 0; i < m_iNumMeshes; ++i)
-    //{
-    //    if (FAILED(m_pModelCom->Bind_BoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
-    //        return E_FAIL;
+    for (_uint i = 0; i < m_iNumMeshes; ++i)
+    {
+        if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", aiTextureType_DIFFUSE, 0)))
+            return E_FAIL;
 
-    //    if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", aiTextureType_DIFFUSE, 0)))
-    //        return E_FAIL;
+        if (FAILED(m_pShaderCom->Begin(0)))
+            return E_FAIL;
 
-    //    if (FAILED(m_pShaderCom->Begin(0)))
-    //        return E_FAIL;
-
-    //    if (FAILED(m_pModelCom->Render(i)))
-    //        return E_FAIL;
-    //}
+        if (FAILED(m_pModelCom->Render(i)))
+            return E_FAIL;
+    }
 
     return S_OK;
 }
 
 HRESULT CKunai::Ready_Components()
 {
-    ///* Com_Shader */
-    //if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxMesh"),
-    //    TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
-    //    return E_FAIL;
+    /* Com_Shader */
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxMesh"),
+        TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
+        return E_FAIL;
 
-    ///* Com_Model */
-    //if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_BirdThrow"),
-    //    TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
-    //    return E_FAIL;
+    /* Com_Model */
+    if (m_eType == KUNAI_TYPE::KUNAI)
+    {
+        if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_Kunai"),
+            TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
+            return E_FAIL;
+    }
+    else
+    {
+        if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_Kunai_Diff"),
+            TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
+            return E_FAIL;
+    }
 
     CBounding_Sphere::BOUNDING_SPHERE_DESC ColliderDesc{};
-
     ColliderDesc.fRadius = 0.7f;
     ColliderDesc.vCenter = _float3{ 0.f, 0.7f, 0.f };
 
@@ -130,26 +137,6 @@ HRESULT CKunai::Bind_ShaderResources()
         return E_FAIL;
 
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_PipeLine_Float4x4(D3DTS::PROJ))))
-        return E_FAIL;
-
-    const LIGHT_DESC* pLightDesc = m_pGameInstance->Get_LightDesc(0);
-    if (nullptr == pLightDesc)
-        return E_FAIL;
-
-    /* 셰이더 & Constant anem 끌고 들어가서 다 세팅? */
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDir", &pLightDesc->vDirection, sizeof(_float4))))
-        return E_FAIL;
-
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDiffuse", &pLightDesc->vDiffuse, sizeof(_float4))))
-        return E_FAIL;
-
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightAmbient", &pLightDesc->vAmbient, sizeof(_float4))))
-        return E_FAIL;
-
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightSpecular", &pLightDesc->vSpecular, sizeof(_float4))))
-        return E_FAIL;
-
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", m_pGameInstance->Get_CamState(STATE::POSITION), sizeof(_float4))))
         return E_FAIL;
 
     return S_OK;

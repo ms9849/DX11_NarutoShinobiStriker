@@ -15,10 +15,11 @@ NS_BEGIN(Client)
 class CKunai : public CGameObject
 {
 public:
-	typedef struct tagBirdThrowObject : public GAMEOBJECT_DESC {
+	enum class KUNAI_TYPE { KUNAI, BIRD };
+	typedef struct tagKunaiDesc : public GAMEOBJECT_DESC {
 		_float3 vPosition;
 		_float3 vDirection;
-
+		KUNAI_TYPE eType = { KUNAI_TYPE::KUNAI };
 	} KUNAI_DESC;
 
 private:
@@ -42,6 +43,7 @@ private:
 	_uint		m_iNumMeshes = {};
 	_float3		m_vDirection = {};
 	_float		m_fTimeAcc = { 0.f };
+	KUNAI_TYPE  m_eType = {};
 
 private:
 	HRESULT Ready_Components();

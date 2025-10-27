@@ -5,6 +5,8 @@
 #include "Parts_WoodHand.h"
 #include "Player.h"
 
+#include "Effect_HitSprite.h"
+
 CWoodHand::CWoodHand(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CContainerObject { pDevice, pContext, ENUM_CLASS(eObjectID) }
     , m_pGameManager { CGameManager::GetInstance() }
@@ -100,6 +102,20 @@ void CWoodHand::Update(_float fTimeDelta)
     /* 콜라이더 켰다가 */
     if (false == m_isAttackOn && true == m_IsMoveFinished && (0.55f <= Get_AnimProgress()))
     {
+        CEffect_HitSprite::EFFECT_HIT_SPRITE_DESC HitDesc;
+
+        HitDesc.fStartScale = 10.f;
+        HitDesc.fDeltaScale = 50.f;
+        HitDesc.fLifeTime = 0.2f;
+        HitDesc.IsBlur = true;
+        HitDesc.iTextureNum = 0;
+        HitDesc.vMainColor = _float4(0.f, 0.f, 0.f, 0.8f);
+        HitDesc.vSubColor = _float4(0.f, 0.f, 0.f, 0.8f);
+        XMStoreFloat4(&HitDesc.vPosition, m_pTransformCom->Get_State(STATE::POSITION));
+
+        m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_HitEffect"),
+            m_pGameInstance->Get_LevelID(), TEXT("Layer_Effect"), &HitDesc);
+
         m_pColliderCom->Set_Active(true);
         m_isAttackOn = true;
     }

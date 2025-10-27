@@ -44,7 +44,7 @@
 
 #pragma endregion
 
-#include "Effect_CoolDown.h"
+#include "Effect_HitSprite.h"
 #include "Collider.h"
 #include "GameManager.h"
 #include "SkyMesh.h"
@@ -201,6 +201,19 @@ HRESULT CMainApp::Ready_Prototypes()
 	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(180.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_NPC_Kakashi"),
 		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/NPC/NPC_Kakashi.fbx", PreTransformMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Kunai*/
+	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(90.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_Kunai"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Kunai/Kunai.fbx", PreTransformMatrix))))
+		return E_FAIL;
+
+
+	/* For.Prototype_Component_Model_Kunai_Diff*/
+	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(90.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_Kunai_Diff"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Kunai/Kunai2.fbx", PreTransformMatrix))))
 		return E_FAIL;
 
 #pragma endregion
@@ -389,6 +402,11 @@ HRESULT CMainApp::Ready_Prototypes()
 	/* For.Prototype_Component_Texture_Icon */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Icon"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Icon/Icon%d.png"), 3))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_HitEffect */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_HitEffect"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/HitEffect/HitEffect%d.png"), 3))))
 		return E_FAIL;
 
 #pragma endregion
@@ -595,6 +613,12 @@ HRESULT CMainApp::Ready_Prototypes()
 
 HRESULT CMainApp::Ready_Effects()
 {
+#pragma region HITEFFECT
+	/* For.Prototype_GameObject_HitEffect */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_HitEffect"),
+		CEffect_HitSprite::Create(m_pDevice, m_pContext, OBJECTID::EFFECT))))
+		return E_FAIL;
+#pragma endregion
 #pragma region SHADEREFFECT
 	/* For.Prototype_Component_Shader_VtxEffect */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxEffect"),

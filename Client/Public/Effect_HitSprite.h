@@ -20,11 +20,13 @@ class CEffect_HitSprite : public CGameObject
 public:
 	typedef struct tagEffectHitSpriteDesc : public GAMEOBJECT_DESC {
 		_float4 vPosition = {};
-		_float  fLifeTime = {};
-		_float  fStartScale = {};
-		_float	fDeltaScale = {};
-		_float4 vColor = {};
-		_bool	IsBlur = {};
+		_float  fLifeTime = {2.f};
+		_float  fStartScale = {1.f};
+		_float	fDeltaScale = {1.f};
+		_float4 vMainColor = {1.f,1.f,1.f,1.f};
+		_float4 vSubColor = {1.f,1.f,1.f,1.f};
+		_bool	IsBlur = {false};
+		_uint   iTextureNum = { 0};
 	} EFFECT_HIT_SPRITE_DESC;
 private:
 	CEffect_HitSprite(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
@@ -44,6 +46,7 @@ public:
 
 
 private:
+	_uint			m_iTextureNum = { 0 };
 	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 	CTexture*		m_pTextureCom = { nullptr };
 	CShader*		m_pShaderCom = { nullptr };
@@ -52,7 +55,8 @@ private:
 	_float			m_fLifeTime = { 0.f };
 	_float			m_fStartScale = { 1.f };
 	_float			m_fDeltaScale = { 1.f };
-	_float4			m_vColor = { 0.f, 0.f, 0.f, 1.f };
+	_float4			m_vMainColor = { 0.f, 0.f, 0.f, 1.f };
+	_float4			m_vSubColor = { 0.f, 0.f, 0.f, 1.f };
 	_bool			m_IsBlur = { false };
 
 private:

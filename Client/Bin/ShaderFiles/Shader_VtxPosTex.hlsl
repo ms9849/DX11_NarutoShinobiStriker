@@ -16,6 +16,11 @@ float   g_MaxHP;
 float   g_iWinSizeX;
 float   g_iWinSizeY;
 
+float g_fHitSpriteLifeTime;
+float g_fHitSpriteLifeTimeAcc;
+vector g_vHitSpriteMainColor;
+vector g_vHitSpriteSubColor;
+
 struct VS_IN
 {
     float3 vPosition : POSITION;
@@ -325,6 +330,28 @@ PS_OUT PS_ROPE_TRAIL(PS_IN In)
 
 }
 
+PS_OUT PS_HIT_EFFECT(PS_IN In)
+{
+    PS_OUT Out;
+    
+    //여기서 스플래팅
+    Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
+    
+    float fValue = Out.vColor.r;
+    
+    if (fValue <= 0.2f)
+        Out.vColor.rgba = 0.f;
+    
+    else
+        Out.vColor = g_vHitSpriteMainColor * fValue + g_vHitSpriteSubColor * (1 - fValue);
+    
+    //Out.vColor = float4(1.f, 1.f, 1.f, 1.f);
+    
+    Out.vColor.a *= (1 - g_fHitSpriteLifeTimeAcc / g_fHitSpriteLifeTime);
+    
+    return Out;
+}
+
 technique11 DefaultTechnique
 {
     pass UI
@@ -446,5 +473,16 @@ technique11 DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = compile gs_5_0 GS_ROPE();
         PixelShader = compile ps_5_0 PS_ROPE_TRAIL();
+    }
+    //idx 11
+    pass HitEffect
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_HIT_EFFECT();
     }
 }

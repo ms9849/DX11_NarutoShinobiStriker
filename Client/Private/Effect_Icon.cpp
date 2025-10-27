@@ -165,5 +165,6 @@ void CEffect_Icon::Free()
     Safe_Release(m_pVIBufferCom);
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pPoolingCom);
-    Safe_Release(m_pTargetTransform);
+    if(nullptr != m_pTargetTransform)
+        Safe_Release(m_pTargetTransform);
 }
