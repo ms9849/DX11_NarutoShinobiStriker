@@ -4,6 +4,13 @@
 matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 texture2D g_DiffuseTexture;
 
+//idx 0
+texture2D g_SplattingMaskTexture;
+//idx 1
+texture2D g_SplattingGrassTexture;
+//idx2
+texture2D g_SplattingSoilTexture;
+
 float g_fIntensity;
 float g_fEffectTimeAcc;
 float g_fEffectTime;
@@ -140,6 +147,29 @@ PS_OUT PS_HIT(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_SPLATTING(PS_IN In)
+{
+    PS_OUT Out;
+    
+    vector vSourDiffuse = g_SplattingSoilTexture.Sample(DefaultSampler, In.vTexcoord);
+    vector vDestDiffuse = g_SplattingGrassTexture.Sample(DefaultSampler, In.vTexcoord);
+    float fMask = g_SplattingMaskTexture.Sample(DefaultSampler, In.vTexcoord * 0.05f).r;
+    
+    vector vMtrlDiffuse;
+    
+    if(fMask.r < 0.45f)
+        vMtrlDiffuse = vDestDiffuse;
+    else  
+        vMtrlDiffuse = vSourDiffuse;
+    //vMtrlDiffuse = vDestDiffuse * fMask + vSourDiffuse * (1.f - fMask);
+    
+    Out.vDiffuse = vMtrlDiffuse;
+    /* -1 ~ 1 -> 0 ~ 1 */
+    Out.vNormal = float4(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
+    Out.vDepth = float4(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 500.0f, 0.0f, 1.0f);
+    
+    return Out;
+}
 
 technique11 DefaultTechnique
 {
@@ -171,5 +201,15 @@ technique11 DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_HIT();
+    }
+
+    pass Splatting
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_None, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_SPLATTING();
     }
 }

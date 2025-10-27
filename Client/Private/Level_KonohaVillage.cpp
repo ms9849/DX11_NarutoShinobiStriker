@@ -389,8 +389,7 @@ HRESULT CLevel_KonohaVillage::Ready_Layer_StaticObjects(const _wstring& strLayer
 }
 
 HRESULT CLevel_KonohaVillage::Ready_Layer_NPC(const _wstring& strLayerTag)
-{
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_NPC_Kakashi"),
+{	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_NPC_Kakashi"),
 		ENUM_CLASS(LEVEL::KONOHA_VILLAGE), strLayerTag)))
 		return E_FAIL;
 

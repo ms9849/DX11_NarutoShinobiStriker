@@ -1,6 +1,8 @@
 #include "KonohaVillage.h"
 #include "GameInstance.h"
 
+#include "Mesh.h"
+
 CKonohaVillage::CKonohaVillage(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 	: CGameObject{ pDevice, pContext, ENUM_CLASS(eObjectID) }
 {
@@ -58,7 +60,27 @@ HRESULT CKonohaVillage::Render()
 		if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", aiTextureType_DIFFUSE, 0)))
 			return E_FAIL;
 
-		if (FAILED(m_pShaderCom->Begin(0)))
+		_uint iShaderPassIdx = { 0 };
+		_wstring strMeshName = m_pModelCom->Get_Mesh(i)->Get_Name();
+		if (
+			TEXT("SM_ENV_KNVLLG_ground_01.md") == strMeshName || 
+			TEXT("SM_ENV_KNVLLG_ground_02.md") == strMeshName || 
+			TEXT("SM_ENV_KNVLLG_ground_03.md") == strMeshName || 
+			TEXT("SM_ENV_KNVLLG_ground_04.md") == strMeshName || 
+			TEXT("SM_ENV_KNVLLG_ground_05.md") == strMeshName ||
+			TEXT("SM_ENV_KNVLLG_ground_06.md") == strMeshName ||
+			TEXT("SM_ENV_KNVLLG_ground_07.md") == strMeshName ||
+			TEXT("SM_ENV_KNVLLG_ground_08.md") == strMeshName ||
+			TEXT("SM_ENV_KNVLLG_ground_09.md") == strMeshName ||
+			TEXT("SM_ENV_KNVLLG_ground_10.md") == strMeshName ||
+			TEXT("SM_ENV_KNVLLG_ground_11.md") == strMeshName ||
+			TEXT("SM_ENV_KNVLLG_ground_12.md") == strMeshName ||
+			TEXT("SM_ENV_KNVLLG_ground_13.md") == strMeshName ||
+			TEXT("SM_ENV_KNVLLG_ground_14.md") == strMeshName
+			)
+			iShaderPassIdx = 3;
+
+		if (FAILED(m_pShaderCom->Begin(iShaderPassIdx)))
 			return E_FAIL;
 
 		if (FAILED(m_pModelCom->Render(i)))

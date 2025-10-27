@@ -33,6 +33,7 @@ private:
 	HRESULT Ready_Effects();
 	HRESULT Ready_Particles();
 	HRESULT Ready_PlayerOutfits();
+	HRESULT Bind_PreSRVS();
 public:
 	static CMainApp* Create();
 	virtual void Free() override;

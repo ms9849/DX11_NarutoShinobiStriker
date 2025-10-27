@@ -89,6 +89,9 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(Ready_Particles()))
 		return E_FAIL;
 
+	if (FAILED(Bind_PreSRVS()))
+		return E_FAIL;
+
 	if (FAILED(Start_Level(LEVEL::LOGO)))
 		return E_FAIL;
 
@@ -886,6 +889,25 @@ HRESULT CMainApp::Ready_PlayerOutfits()
 #pragma endregion 
 
 	return S_OK;
+}
+
+HRESULT CMainApp::Bind_PreSRVS()
+{
+	/* For.Prototype_Component_Texture_Splatting */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Splatting"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Splatting/Splatting%d.png"), 3))))
+		return E_FAIL;
+
+	/* 바인딩만 수행하고 사라지게 해. */
+	CTexture* pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Splatting")));
+	CShader* pShaderCom = static_cast<CShader*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VtxMesh")));
+
+	pTextureCom->Bind_ShaderResource(pShaderCom, "g_SplattingMaskTexture", 0);
+	pTextureCom->Bind_ShaderResource(pShaderCom, "g_SplattingGrassTexture", 1);
+	pTextureCom->Bind_ShaderResource(pShaderCom, "g_SplattingSoilTexture", 2);
+
+	Safe_Release(pTextureCom);
+	Safe_Release(pShaderCom);
 }
 
 CMainApp* CMainApp::Create()

@@ -1,6 +1,7 @@
 #include "TutorialMap.h"
 
 #include "GameInstance.h"
+#include "Mesh.h"
 
 CTutorialMap::CTutorialMap(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
 	: CGameObject{ pDevice, pContext, ENUM_CLASS(eObjectID) }
@@ -57,7 +58,11 @@ HRESULT CTutorialMap::Render()
 		if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", aiTextureType_DIFFUSE, 0)))
 			return E_FAIL;
 
-		if (FAILED(m_pShaderCom->Begin(0)))
+		_uint iShaderPassIdx = { 0 };
+		if (TEXT("SM_ENV_TCHEXA_ArenaGround_Aa.md") == m_pModelCom->Get_Mesh(i)->Get_Name())
+			iShaderPassIdx = 3;
+
+		if (FAILED(m_pShaderCom->Begin(iShaderPassIdx)))
 			return E_FAIL;
 
 		if (FAILED(m_pModelCom->Render(i)))

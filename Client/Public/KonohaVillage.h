@@ -4,6 +4,7 @@
 #include "GameObject.h"
 
 NS_BEGIN(Engine)
+class CMesh;
 class CModel;
 NS_END 
 
