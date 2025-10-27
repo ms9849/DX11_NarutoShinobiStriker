@@ -56,8 +56,12 @@ void CBird::OnCollision(COLLIDER_HANDLE_ID eHandleID)
 
     m_pGameManager->Active_Combo();
 
+
     _vector vDirection = m_pTransformCom->Get_State(STATE::POSITION) -
         CGameManager::GetInstance()->Get_PlayerPtr()->Get_Transform()->Get_State(STATE::POSITION);
+
+
+    _float fHitTime = { 0.3f };
 
     if (COLLIDER_HANDLE_ID::PLAYER_HAND_ATTACK == eHandleID)
     {
@@ -154,7 +158,8 @@ void CBird::OnCollision(COLLIDER_HANDLE_ID eHandleID)
     {
         m_pGameManager->Change_Camera(static_cast<LEVEL>(m_pGameInstance->Get_LevelID()),
             TEXT("Chidori_Action_Camera"), nullptr);
-
+        
+        fHitTime = 2.f;
         m_fCurrentHP -= 15.f;
         pNextState = CBird_ElectricShockState::Create(m_pNavigationCom, this);
         Set_Invincible(1.f);
@@ -171,7 +176,7 @@ void CBird::OnCollision(COLLIDER_HANDLE_ID eHandleID)
         pNextState = CBird_DeadState::Create(m_pNavigationCom, this);
     }
     
-    Set_HitEffect(0.2f, 1.f);
+    Set_HitEffect(fHitTime, 1.f);
 
     Change_State(pNextState, false);
 }

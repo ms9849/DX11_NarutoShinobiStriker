@@ -81,6 +81,7 @@ public:
 #pragma endregion
 
 #pragma region RENDERER
+	void	Set_RadialBlur(_float fTime);
 	HRESULT Add_RenderGroup(RENDER eRenderGroup, class CGameObject* pRenderObject);
 	HRESULT Add_Font(class CFont* pRenderFont);
 	/* 맵을 위한 스태틱 섀도우 함수. 부를때마다 초기화되니까 조심할 것.*/

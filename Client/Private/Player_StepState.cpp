@@ -54,6 +54,8 @@ void CPlayer_StepState::Start(_bool IsBlend)
 
 	else if (ANIM_STATE::FRONT == m_eAnimState)
 	{
+		m_pGameInstance->Set_RadialBlur(0.8f);
+
 		m_pPlayer->Set_AnimIndex("CustomMan_DashStep_Front", 1.4f, IsBlend);
 
 		CEffectContainer::EFFECT_CONTAINER_DESC EffectDesc;

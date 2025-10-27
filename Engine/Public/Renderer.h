@@ -19,12 +19,13 @@ public:
 	HRESULT Initialize();
 	HRESULT Add_RenderGroup(RENDER eRenderGroup, class CGameObject* pRenderObject);
 	HRESULT Add_Font(class CFont* pRenderFont);
+	void Update(_float fTimeDelta);
 	void Render();
 
 #ifdef _DEBUG
 public:
 	HRESULT Add_DebugComponent(class CComponent* pDebugComponent);
-	
+	void Set_RadialBlur(_float fTime);
 #endif
 private:
 	ID3D11Device*				m_pDevice = { nullptr };
@@ -49,6 +50,9 @@ private:
 
 private:
 	_float4x4					m_WorldMatrix{}, m_ViewMatrix{}, m_ProjMatrix{};
+	_bool						m_IsRadialBlur = { false };
+	_float						m_fRadialBlurTime = { 0.f };
+	_float						m_fRadialBlurTimeAcc = { 0.f };
 
 
 public:

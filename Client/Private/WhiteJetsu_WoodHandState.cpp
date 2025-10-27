@@ -17,6 +17,8 @@
 
 #pragma endregion
 
+#include "ParticleObject.h"
+
 CWhiteJetsu_WoodHandState::CWhiteJetsu_WoodHandState(CNavigation* pNavigation, CWhiteJetsu* pJetsu)
 	: m_pJetsu{ pJetsu }
 	, m_pNavigationCom{ pNavigation }
@@ -49,8 +51,17 @@ CWhiteJetsuState* CWhiteJetsu_WoodHandState::Update(_float fTimeDelta)
 
 		 XMStoreFloat3(&Desc.vJetsuPos, m_pJetsu->Get_Transform()->Get_State(STATE::POSITION));
 
-		m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_WoodHand"), 
-			ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_Skills"), &Desc);
+		m_pGameInstance->Add_GameObject_ToLayer(m_pGameInstance->Get_LevelID(), TEXT("Prototype_GameObject_WoodHand"),
+			m_pGameInstance->Get_LevelID(), TEXT("Layer_Skills"), &Desc);
+
+		CParticleObject::PARTICLE_LOAD_DESC ParticleDesc;
+		ParticleDesc.strParticlePath = TEXT("../Bin/Resources/Particle/WoodHand_Particle.bin");
+		ParticleDesc.eType = CParticleObject::PARTICLE_TYPE::EXPLOSION;
+		XMStoreFloat3(&ParticleDesc.vPosition, XMVectorSet(0.f, 0.35f, 0.f, 0.f) + CGameManager::GetInstance()->Get_PlayerPtr()->Get_Transform()->Get_State(STATE::POSITION));
+		ParticleDesc.IsBlur = false;
+
+		m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
+			TEXT("Layer_Particle"), &ParticleDesc);
 
 		_float fDist = XMVectorGetX(XMVector3Length(m_pJetsu->Get_Transform()->Get_State(STATE::POSITION) - m_pPlayerTransformCom->Get_State(STATE::POSITION)));
 

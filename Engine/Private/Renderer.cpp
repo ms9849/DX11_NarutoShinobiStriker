@@ -183,6 +183,20 @@ HRESULT CRenderer::Add_Font(CFont* pRenderFont)
 	return S_OK;
 }
 
+void CRenderer::Update(_float fTimeDelta)
+{
+	if (false == m_IsRadialBlur)
+		return;
+
+	m_fRadialBlurTimeAcc += fTimeDelta;
+
+	if (m_fRadialBlurTimeAcc >= m_fRadialBlurTime)
+	{
+		m_IsRadialBlur = false;
+		m_fRadialBlurTimeAcc = 0.f;
+	}
+}
+
 void CRenderer::Render()
 {
 	Render_Priority();
@@ -215,6 +229,13 @@ HRESULT CRenderer::Add_DebugComponent(CComponent* pDebugComponent)
 	Safe_AddRef(pDebugComponent);
 
 	return S_OK;
+}
+
+void CRenderer::Set_RadialBlur(_float fTime)
+{
+	m_fRadialBlurTimeAcc = 0.f;
+	m_fRadialBlurTime = fTime;
+	m_IsRadialBlur = true;
 }
 
 #endif
@@ -414,7 +435,9 @@ void CRenderer::Render_Combined()
 	m_pShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix);
 	m_pShader->Bind_Matrix("g_ViewMatrixInv", m_pGameInstance->Get_PipeLine_InverseFloat4x4(D3DTS::VIEW));
 	m_pShader->Bind_Matrix("g_ProjMatrixInv", m_pGameInstance->Get_PipeLine_InverseFloat4x4(D3DTS::PROJ));
-
+	m_pShader->Bind_RawValue("g_IsRadialBlur", &m_IsRadialBlur, sizeof(_bool));
+	m_pShader->Bind_RawValue("g_fRadialBlurTime", &m_fRadialBlurTime, sizeof(_float));
+	m_pShader->Bind_RawValue("g_fRadialBlurTimeAcc", &m_fRadialBlurTimeAcc, sizeof(_float));
 
 	/* 그림자용 뷰, 투영 행렬 세팅 */
 	if (FAILED(m_pGameInstance->Bind_Shadow_Resource(m_pShader, "g_LightViewMatrix", D3DTS::VIEW)))
@@ -446,6 +469,8 @@ void CRenderer::Render_Combined()
 
 	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Blur_Small_X"), m_pShader, "g_BlurSmallXTexture")))
 		return;
+
+	
 
 	/* 셰이더에서 이 둘 곱해서 최종적인 계산값 뽑아냄. */
 	m_pShader->Begin(3);

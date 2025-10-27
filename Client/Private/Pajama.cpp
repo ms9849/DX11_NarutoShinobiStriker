@@ -81,6 +81,8 @@ void CPajama::OnCollision(COLLIDER_HANDLE_ID eHandleID)
     _vector vDirection = m_pTransformCom->Get_State(STATE::POSITION) -
         CGameManager::GetInstance()->Get_PlayerPtr()->Get_Transform()->Get_State(STATE::POSITION);
 
+    _float fHitTime = { 0.3f };
+
     if (COLLIDER_HANDLE_ID::PLAYER_HAND_ATTACK == eHandleID)
     {
         m_fCurrentHP -= 1.f;
@@ -152,6 +154,7 @@ void CPajama::OnCollision(COLLIDER_HANDLE_ID eHandleID)
         m_pGameManager->Change_Camera(static_cast<LEVEL>(m_pGameInstance->Get_LevelID()),
             TEXT("Chidori_Action_Camera"), nullptr);
 
+        fHitTime = 2.f;
         m_fCurrentHP -= 15.f;
         pNextState = CPajama_ElectricShockState::Create(m_pNavigationCom, this);
         Set_Invincible(1.f);
@@ -171,7 +174,7 @@ void CPajama::OnCollision(COLLIDER_HANDLE_ID eHandleID)
     Change_State(pNextState, false);
 
     for (auto& iter : m_PartObjects)
-        static_cast<CParts_Character*>(iter.second)->Set_HitEffect(0.3f, 1.f);
+        static_cast<CParts_Character*>(iter.second)->Set_HitEffect(fHitTime, 1.f);
 
     m_fCurrentHP -= 1.f;
 }

@@ -30,6 +30,10 @@ vector g_vLightDiffuse;
 vector g_vLightAmbient;
 vector g_vLightSpecular;
 
+
+bool g_IsRadialBlur;
+float g_fRadialBlurTime, g_fRadialBlurTimeAcc;
+
 struct VS_IN
 {
     float3 vPosition : POSITION;
@@ -174,45 +178,6 @@ PS_OUT_LIGHT PS_MAIN_POINT(PS_IN In)
     return Out;
 }
 
-/*
-float g_fWeights[25] =
-{
-    0.0001, 0.0003, 0.0008, 0.0021, 0.0052, 0.0131, 0.0316, 0.0750,
-    0.155, 0.295, 0.440, 0.560, 0.590,
-    0.560, 0.440, 0.295, 0.155, 0.0750, 0.0316, 0.0131, 0.0052,
-    0.0021, 0.0008, 0.0003, 0.0001
-};
-*/
-
-
-/*
-float g_fWeights[37] =
-{
-    0.056135, 0.076621, 0.102740, 0.135335, 0.175131, 0.222635, 0.278037, 0.341108, 0.411112,
-    0.486752, 0.566154, 0.646905, 0.726149, 0.800737, 0.867428, 0.923116, 0.965069, 0.991151,
-    1.000000, 0.991151, 0.965069, 0.923116, 0.867428, 0.800737, 0.726149, 0.646905, 0.566154,
-    0.486752, 0.411112, 0.341108, 0.278037, 0.222635, 0.175131, 0.135335, 0.102740, 0.076621,
-    0.056135
-};
-*/
-
-/*
-툰 셰이딩을 기본으로 적용한다. 
-인자 줘서 설정 가능하게 하는게 이상적이겠지만 일단은 제외...
-*/
-
-/*
-float g_fWeights[41] =
-{
-    0.01688, 0.02513, 0.03666, 0.05239, 0.07337, 0.10067, 0.13534, 0.17826, 0.23007, 0.29092,
-    0.36045, 0.43756, 0.52045, 0.60653, 0.69257, 0.77484, 0.84937, 0.91225, 0.96001, 0.98985,
-    1.0,
-    0.98985, 0.96001, 0.91225, 0.84937, 0.77484, 0.69257, 0.60653, 0.52045, 0.43756, 0.36045,
-    0.29092, 0.23007, 0.17826, 0.13534, 0.10067, 0.07337, 0.05239, 0.03666, 0.02513, 0.01688
-};
-*/
-
-
 float g_fWeights[21] =
 {
     0.5520, 0.6065, 0.6669, 0.7318, 0.7993, 0.8676, 0.9353, 0.9999, 1.0561, 1.0902, 1.0,
@@ -324,8 +289,42 @@ PS_OUT_BACKBUFFER PS_MAIN_COMBINED(PS_IN In)
     
     Out.vBackBuffer += vColor / 6.5f;
     
-    
+    // 아웃라인 (툰셰이딩 처리)
     Out.vBackBuffer *= g_OutlineTexture.Sample(DefaultSampler, In.vTexcoord);
+   
+    
+    // 방사형 블러
+    if(true == g_IsRadialBlur)
+    {
+        float2 center = float2(0.5f, 0.5f); // (UV 가운데)
+        float strength = 0.08f; //* (1 - g_fRadialBlurTimeAcc / g_fRadialBlurTime);
+        int samples = 12; //* (1 - g_fRadialBlurTimeAcc / g_fRadialBlurTime); // 샘플 개수
+        
+        if(samples < 1)
+            return Out;
+        
+        float2 dir = center - In.vTexcoord;
+        float dist = length(dir);
+        dir = normalize(center - In.vTexcoord);
+        dir.x *= 1280.f / 720.f;
+
+        float3 zoomColor = float3(0, 0, 0);
+        float total = 0.0f;
+
+        for (int i = 0; i < samples; ++i)
+        {
+            float weight = 1.0f - (float) i / samples; // 가까울수록 강하게
+            float scale = (float) i / samples * strength;
+            float2 uv = In.vTexcoord + -1.f * dir * dist * scale;
+            zoomColor += g_DiffuseTexture.Sample(ClampSampler, uv).rgb * weight;
+            total += weight;
+        }
+
+        zoomColor /= total;
+
+    // 강도 조절 (기존 백버퍼와 섞기)
+        Out.vBackBuffer.rgb = lerp(Out.vBackBuffer.rgb, zoomColor, 0.4f * (1 - g_fRadialBlurTimeAcc / g_fRadialBlurTime));
+    }
     
     return Out;
 }

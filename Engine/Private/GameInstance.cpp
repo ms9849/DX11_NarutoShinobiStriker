@@ -123,6 +123,8 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 	/* IMGUI 업데이트 */
 	m_pIMGUI_Manager->Update(fTimeDelta);
 
+	m_pRenderer->Update(fTimeDelta);
+
 }
 
 HRESULT CGameInstance::Draw()
@@ -442,6 +444,11 @@ HRESULT CGameInstance::Add_PoolingObject_ToLayer(const _wstring& strPoolingTag, 
 #pragma endregion
 
 #pragma region RENDERER
+
+void CGameInstance::Set_RadialBlur(_float fTime)
+{
+	m_pRenderer->Set_RadialBlur(fTime);
+}
 
 HRESULT CGameInstance::Add_RenderGroup(RENDER eRenderGroup, CGameObject* pRenderObject)
 {
