@@ -193,6 +193,7 @@
     <ClInclude Include="..\Public\CutScenePanel.h" />
     <ClInclude Include="..\Public\EffectContainer.h" />
     <ClInclude Include="..\Public\EffectObject.h" />
+    <ClInclude Include="..\Public\Effect_HitSprite.h" />
     <ClInclude Include="..\Public\Effect_Icon.h" />
     <ClInclude Include="..\Public\Icon.h" />
     <ClInclude Include="..\Public\Kunai.h" />
@@ -224,6 +225,7 @@
     <ClInclude Include="..\Public\Enemy_HPBar.h" />
     <ClInclude Include="..\Public\Face_Character.h" />
     <ClInclude Include="..\Public\FireBall.h" />
+    <ClInclude Include="..\Public\Light_GUI.h" />
     <ClInclude Include="..\Public\OutfitBackGround.h" />
     <ClInclude Include="..\Public\Pajama.h" />
     <ClInclude Include="..\Public\PajamaState.h" />
@@ -387,6 +389,7 @@
     <ClCompile Include="..\Private\CutScenePanel.cpp" />
     <ClCompile Include="..\Private\EffectContainer.cpp" />
     <ClCompile Include="..\Private\EffectObject.cpp" />
+    <ClCompile Include="..\Private\Effect_HitSprite.cpp" />
     <ClCompile Include="..\Private\Effect_Icon.cpp" />
     <ClCompile Include="..\Private\Icon.cpp" />
     <ClCompile Include="..\Private\Kunai.cpp" />
@@ -417,6 +420,7 @@
     <ClCompile Include="..\Private\Enemy_HPBar.cpp" />
     <ClCompile Include="..\Private\Face_Character.cpp" />
     <ClCompile Include="..\Private\FireBall.cpp" />
+    <ClCompile Include="..\Private\Light_GUI.cpp" />
     <ClCompile Include="..\Private\OutfitBackGround.cpp" />
     <ClCompile Include="..\Private\Pajama.cpp" />
     <ClCompile Include="..\Private\PajamaState.cpp" />

@@ -28,6 +28,21 @@ void CLight_Manager::Clear()
 
 }
 
+const LIGHT_DESC* CLight_Manager::Get_Desc(_int iIdx)
+{
+    auto iter = m_Lights.begin();
+
+    advance(iter, iIdx);
+
+    return (*iter)->Get_LightDesc();
+}
+
+void CLight_Manager::Pop_Light()
+{   
+    Safe_Release(m_Lights.back());
+    m_Lights.pop_back();
+}
+
 HRESULT CLight_Manager::Add_Light(const LIGHT_DESC& LightDesc)
 {
     CLight* pLight = CLight::Create(LightDesc);

@@ -2,6 +2,16 @@
 
 #include "Base.h"
 
+/*
+		LIGHT			eType;
+		XMFLOAT4		vDiffuse;
+		XMFLOAT4		vAmbient;
+		XMFLOAT4		vSpecular;
+
+		XMFLOAT4		vDirection;
+		XMFLOAT4		vPosition;
+		float			fRange;
+*/
 NS_BEGIN(Engine)
 
 class CLight final : public CBase

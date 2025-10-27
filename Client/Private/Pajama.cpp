@@ -475,4 +475,6 @@ void CPajama::Free()
     Safe_Release(m_pNavigationCom);
     Safe_Release(m_pColliderCom);
     Safe_Release(m_pHandAttackColliderCom);
+    Safe_Release(m_pFootTrail[0]);
+    Safe_Release(m_pFootTrail[1]);
 }

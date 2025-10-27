@@ -668,6 +668,21 @@ void CGameInstance::Clear_Lights()
 	m_pLight_Manager->Clear();
 }
 
+const LIGHT_DESC* CGameInstance::Get_Desc(_int iIdx)
+{
+	return m_pLight_Manager->Get_Desc(iIdx);
+}
+
+_int CGameInstance::Get_LightSize()
+{
+	return m_pLight_Manager->Get_Size();
+}
+
+void CGameInstance::Pop_Light()
+{
+	m_pLight_Manager->Pop_Light();
+}
+
 #pragma endregion
 
 #pragma region Physx_MANAGER 

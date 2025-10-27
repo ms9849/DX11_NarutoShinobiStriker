@@ -145,6 +145,10 @@ public:
 	HRESULT Add_Light(const LIGHT_DESC& LightDesc);
 	HRESULT Render_Lights(class CShader* pShader, class CVIBuffer* pVIBuffer);
 	void Clear_Lights();
+
+	const LIGHT_DESC* Get_Desc(_int iIdx);
+	_int Get_LightSize();
+	void Pop_Light();
 #pragma endregion
 
 #pragma region Physx_Manager

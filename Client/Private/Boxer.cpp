@@ -497,4 +497,6 @@ void CBoxer::Free()
 	Safe_Release(m_pHandAttackColliderCom);
 	Safe_Release(m_pLeafHurricaneColliderCom);
 	Safe_Release(m_pSpinKickColliderCom);
+	Safe_Release(m_pFootTrail[0]);
+	Safe_Release(m_pFootTrail[1]);
 }

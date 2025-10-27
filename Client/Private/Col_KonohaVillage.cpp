@@ -18,6 +18,7 @@ HRESULT CCol_KonohaVillage::Initialize_Prototype()
 
 HRESULT CCol_KonohaVillage::Initialize(void* pArg)
 {
+
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
@@ -26,6 +27,10 @@ HRESULT CCol_KonohaVillage::Initialize(void* pArg)
 
     m_iNumMeshes = m_pModelCom->Get_NumMeshes();
     m_pGameInstance->Add_Geometry_ToPhysx(this, m_pModelCom);
+
+    /* 영상 촬영, 테스트떄 반드시 지워야함 */
+    m_pGameInstance->Add_GameObject_ToPicking(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), this, m_pModelCom);
+
 
     return S_OK;
 }

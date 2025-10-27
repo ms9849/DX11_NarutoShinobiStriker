@@ -18,6 +18,9 @@ public:
 	HRESULT Render_Lights(class CShader* pShader, class CVIBuffer* pVIBuffer);
 	void Clear();
 
+	const LIGHT_DESC* Get_Desc(_int iIdx);
+	_int Get_Size() { return m_Lights.size(); }
+	void Pop_Light();
 private:
 	list<class CLight*>				m_Lights;
 

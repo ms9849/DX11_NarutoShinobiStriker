@@ -573,4 +573,6 @@ void CBoss::Free()
     Safe_Release(m_pState);
     Safe_Release(m_pIcon);
     Safe_Release(m_pHPBar);
+    Safe_Release(m_pFootTrail[0]);
+    Safe_Release(m_pFootTrail[1]);
 }
