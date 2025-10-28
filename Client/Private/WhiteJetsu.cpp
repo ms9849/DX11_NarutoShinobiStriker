@@ -93,52 +93,23 @@ void CWhiteJetsu::OnCollision(COLLIDER_HANDLE_ID eHandleID)
 
     if (COLLIDER_HANDLE_ID::PLAYER_HAND_ATTACK == eHandleID)
     {
-        CParticleObject::PARTICLE_LOAD_DESC Desc;
-        Desc.strParticlePath = TEXT("../Bin/Resources/Particle/Player_Attack_Particle.bin");
-        XMStoreFloat3(&Desc.vPosition, m_pTransformCom->Get_State(STATE::POSITION));
-
-        m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
-            TEXT("Layer_Particle"), &Desc);
-
         m_fCurrentHP -= 1.f;
         pNextState = CWhiteJetsu_BeatenState::Create(m_pNavigationCom, this, vDirection, 1.8f);
     }
     else if (COLLIDER_HANDLE_ID::PLAYER_HAND_ATTACK_FINAL == eHandleID)
     {
-        CParticleObject::PARTICLE_LOAD_DESC Desc;
-        Desc.strParticlePath = TEXT("../Bin/Resources/Particle/Player_Attack_Particle.bin");
-        XMStoreFloat3(&Desc.vPosition, m_pTransformCom->Get_State(STATE::POSITION));
-
-        m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
-            TEXT("Layer_Particle"), &Desc);
-
         m_fCurrentHP -= 3.f;
         pNextState = CWhiteJetsu_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection);
     }
 
     else if (COLLIDER_HANDLE_ID::PLAYER_SWORD_ATTACK== eHandleID)
     {
-        CParticleObject::PARTICLE_LOAD_DESC Desc;
-        Desc.strParticlePath = TEXT("../Bin/Resources/Particle/Player_Attack_Particle.bin");
-        XMStoreFloat3(&Desc.vPosition, m_pTransformCom->Get_State(STATE::POSITION));
-
-        m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
-            TEXT("Layer_Particle"), &Desc);
-
         m_fCurrentHP -= 3.f;
-
         pNextState = CWhiteJetsu_BeatenState::Create(m_pNavigationCom, this, vDirection, 1.75f);
     }
 
     else if (COLLIDER_HANDLE_ID::PLAYER_SWORD_ATTACK_FINAL == eHandleID)
     {
-        CParticleObject::PARTICLE_LOAD_DESC Desc;
-        Desc.strParticlePath = TEXT("../Bin/Resources/Particle/Player_Attack_Particle.bin");
-        XMStoreFloat3(&Desc.vPosition, m_pTransformCom->Get_State(STATE::POSITION));
-
-        m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
-            TEXT("Layer_Particle"), &Desc);
-
         m_fCurrentHP -= 3.f;
 
         pNextState = CWhiteJetsu_BeatenBlastedState::Create(m_pNavigationCom, this, vDirection);
@@ -205,6 +176,14 @@ void CWhiteJetsu::OnCollision(COLLIDER_HANDLE_ID eHandleID)
         pNextState = CWhiteJetsu_DeadState::Create(m_pNavigationCom, this);
     }
     
+    CParticleObject::PARTICLE_LOAD_DESC Desc;
+    Desc.strParticlePath = TEXT("../Bin/Resources/Particle/Player_Attack_Particle.bin");
+    XMStoreFloat3(&Desc.vPosition, m_pTransformCom->Get_State(STATE::POSITION));
+
+    m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
+        TEXT("Layer_Particle"), &Desc);
+
+
     Set_HitEffect(fHitTime, 1.f);
 
     Change_State(pNextState, false);

@@ -84,7 +84,7 @@ void CEffect_HitSprite::Late_Update(_float fTimeDelta)
     m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
 
     if (true == m_IsBlur)
-        m_pGameInstance->Add_RenderGroup(RENDER::BLUR_SMALL, this);
+        m_pGameInstance->Add_RenderGroup(RENDER::BLUR, this);
 }
 
 HRESULT CEffect_HitSprite::Render()

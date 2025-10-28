@@ -11,6 +11,10 @@
 
 #pragma endregion
 
+#include "Player.h"
+#include "ParticleObject.h"
+#include "Effect_HitSprite.h"
+
 CBoxer_LeafHurricaneState::CBoxer_LeafHurricaneState(CNavigation* pNavigation, CBoxer* pBoxer)
 	: m_pNavigationCom{ pNavigation }
 	, m_pBoxer{ pBoxer }
@@ -55,6 +59,36 @@ CBoxerState* CBoxer_LeafHurricaneState::Update(_float fTimeDelta)
 		m_pBoxer->Set_AnimIndex("CustomMan_Ninjutsu_LeafHurricane_Start", 1.f, false, 0.1f, false);
 		m_pBoxer->Set_AnimProgress(1.0f);
 	}
+	// 콜라이더 On 기능 됐는데 꺼져있고, 파티클 만들어진적 없으면
+	if (true == m_IsOnCollider && false == m_pBoxer->Get_Collider(TEXT("Com_Collider_LeafHurricane"))->Get_Active() && false == m_IsParticleCreated)
+	{
+		/* 여기서 파티클 추가 */
+		CParticleObject::PARTICLE_LOAD_DESC Desc;
+		Desc.strParticlePath = TEXT("../Bin/Resources/Particle/BoxerSkill_Particle.bin");
+		Desc.eType = CParticleObject::PARTICLE_TYPE::EXPLOSION;
+
+		XMStoreFloat3(&Desc.vPosition, m_pGameManager->Get_PlayerPtr()->Get_Transform()->Get_State(STATE::POSITION));
+
+		m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
+			TEXT("Layer_Particle"), &Desc);
+
+		CEffect_HitSprite::EFFECT_HIT_SPRITE_DESC HitDesc;
+
+		HitDesc.fStartScale = 1.f;
+		HitDesc.fDeltaScale = 40.f;
+		HitDesc.fLifeTime = 0.2f;
+		HitDesc.IsBlur = true;
+		HitDesc.iTextureNum = 0;
+		HitDesc.vMainColor = _float4(0.5f, 1.f, 0.5f, 0.5f);
+		HitDesc.vSubColor = _float4(0.5f, 1.f, 0.5f, 0.5f);
+		XMStoreFloat4(&HitDesc.vPosition, m_pGameManager->Get_PlayerPtr()->Get_Transform()->Get_State(STATE::POSITION));
+
+		m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_HitEffect"),
+			m_pGameInstance->Get_LevelID(), TEXT("Layer_Effect"), &HitDesc);
+
+		m_IsParticleCreated = true;
+	}
+
 	else if (ANIM_STATE::ATTACK_END == m_eAnimState
 		&& true == IsAnimFinished)
 	{

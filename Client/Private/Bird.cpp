@@ -176,6 +176,14 @@ void CBird::OnCollision(COLLIDER_HANDLE_ID eHandleID)
         pNextState = CBird_DeadState::Create(m_pNavigationCom, this);
     }
     
+    CParticleObject::PARTICLE_LOAD_DESC Desc;
+    Desc.strParticlePath = TEXT("../Bin/Resources/Particle/Player_Attack_Particle.bin");
+    XMStoreFloat3(&Desc.vPosition, m_pTransformCom->Get_State(STATE::POSITION));
+
+    m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
+        TEXT("Layer_Particle"), &Desc);
+
+
     Set_HitEffect(fHitTime, 1.f);
 
     Change_State(pNextState, false);

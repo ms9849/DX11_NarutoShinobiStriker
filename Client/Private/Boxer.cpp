@@ -17,6 +17,7 @@
 #include "Boxer_DeadState.h"
 #include "Boxer_ElectricShockState.h"
 
+#include "ParticleObject.h"
 #include "Trail.h"
 
 CBoxer::CBoxer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
@@ -171,6 +172,14 @@ void CBoxer::OnCollision(COLLIDER_HANDLE_ID eHandleID)
 
 	for (auto& iter : m_PartObjects)
 		static_cast<CParts_Character*>(iter.second)->Set_HitEffect(fHitTime, 1.f);
+
+	CParticleObject::PARTICLE_LOAD_DESC Desc;
+	Desc.strParticlePath = TEXT("../Bin/Resources/Particle/Player_Attack_Particle.bin");
+	XMStoreFloat3(&Desc.vPosition, m_pTransformCom->Get_State(STATE::POSITION));
+
+	m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
+		TEXT("Layer_Particle"), &Desc);
+
 
 	Change_State(pNextState, false);
 

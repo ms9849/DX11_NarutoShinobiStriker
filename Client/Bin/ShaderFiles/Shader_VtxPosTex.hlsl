@@ -365,6 +365,11 @@ PS_OUT PS_HIT_EFFECT(PS_IN In)
     
     Out.vColor.a *= (1 - g_fHitSpriteLifeTimeAcc / g_fHitSpriteLifeTime);
     
+    
+    //Out.vColor.rgba = g_vHitSpriteMainColor;
+    
+    //Out.vColor.a *= g_Texture.Sample(DefaultSampler, In.vTexcoord).r;
+    
     return Out;
 }
 

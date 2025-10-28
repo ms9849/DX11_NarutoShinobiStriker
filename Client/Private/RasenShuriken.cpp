@@ -7,6 +7,7 @@
 #include "EffectObject.h"
 #include "EffectContainer.h"
 #include "ParticleObject.h"
+#include "Effect_HitSprite.h"
 
 CRasenShuriken::CRasenShuriken(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CSkill { pDevice, pContext, eObjectID }
@@ -69,6 +70,7 @@ HRESULT CRasenShuriken::Initialize(void* pArg)
 
     m_pTransformCom->Set_Scale(0.1f, 0.1f, 0.1f);
     m_pEffectExplosion->Set_Visible(false);
+
 
     return S_OK;
 }

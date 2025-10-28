@@ -15,6 +15,7 @@
 
 #pragma endregion
 
+#include "ParticleObject.h"
 
 CBoss_WoodHandState::CBoss_WoodHandState(CNavigation* pNavigation, CBoss* pBoss)
 	: m_pBoss{ pBoss }
@@ -44,10 +45,17 @@ CBossState* CBoss_WoodHandState::Update(_float fTimeDelta)
 
 		XMStoreFloat3(&Desc.vJetsuPos, m_pBoss->Get_Transform()->Get_State(STATE::POSITION));
 
-		m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_WoodHand"),
-			ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_Skills"), &Desc);
+		m_pGameInstance->Add_GameObject_ToLayer(m_pGameInstance->Get_LevelID(), TEXT("Prototype_GameObject_WoodHand"),
+			m_pGameInstance->Get_LevelID(), TEXT("Layer_Skills"), &Desc);
 
-		_float fDist = XMVectorGetX(XMVector3Length(m_pBoss->Get_Transform()->Get_State(STATE::POSITION) - m_pPlayerTransformCom->Get_State(STATE::POSITION)));
+		CParticleObject::PARTICLE_LOAD_DESC ParticleDesc;
+		ParticleDesc.strParticlePath = TEXT("../Bin/Resources/Particle/WoodHand_Particle.bin");
+		ParticleDesc.eType = CParticleObject::PARTICLE_TYPE::EXPLOSION;
+		XMStoreFloat3(&ParticleDesc.vPosition, XMVectorSet(0.f, 0.35f, 0.f, 0.f) + CGameManager::GetInstance()->Get_PlayerPtr()->Get_Transform()->Get_State(STATE::POSITION));
+		ParticleDesc.IsBlur = false;
+
+		m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
+			TEXT("Layer_Particle"), &ParticleDesc);
 
 		pNextState = CBoss_IdleState::Create(m_pNavigationCom, m_pBoss);
 	}

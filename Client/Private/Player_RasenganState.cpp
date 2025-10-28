@@ -14,6 +14,8 @@
 
 #pragma endregion
 
+#include "Effect_HitSprite.h"
+
 CPlayer_RasenganState::CPlayer_RasenganState(CPlayer* pPlayer, CRasengan* pRasengan)
 	: m_pPlayer { pPlayer }
     , m_pGameManager { CGameManager::GetInstance() }
