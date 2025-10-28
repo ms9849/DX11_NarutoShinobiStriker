@@ -37,7 +37,7 @@ HRESULT CNPC_KaKashi::Initialize(void* pArg)
 
 	m_iNumMeshes = m_pModelCom->Get_NumMeshes();
 
-	m_pModelCom->Set_AnimIndex("KakashiNext_Idle_Loop", 1.f, true, 0.05f);
+	m_pModelCom->Set_AnimIndex("KakashiNext_Idle_", 1.f, true, 0.05f);
 	m_eAnimState = ANIM_STATE::ANIM_IDLE;
 
 	m_pPlayerTransform = m_pGameManager->Get_PlayerPtr()->Get_Transform();
@@ -70,7 +70,7 @@ void CNPC_KaKashi::Update(_float fTimeDelta)
 
 	if (ANIM_STATE::ANIM_GREET == m_eAnimState && true == isAnimFinished)
 	{
-		m_pModelCom->Set_AnimIndex("KakashiNext_Idle_Loop", 1.f, true, 0.05f);
+		m_pModelCom->Set_AnimIndex("KakashiNext_Idle_", 1.f, true, 0.05f);
 		m_eAnimState = ANIM_STATE::ANIM_IDLE; 
 	}
 	
@@ -102,6 +102,33 @@ HRESULT CNPC_KaKashi::Render()
 			return E_FAIL;
 	}
 
+	return S_OK;
+}
+
+HRESULT CNPC_KaKashi::Render_Shadow()
+{
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", m_pTransformCom->Get_WorldMatrixPtr())))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Bind_Shadow_Resource(m_pShaderCom, "g_ViewMatrix", D3DTS::VIEW)))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Bind_Shadow_Resource(m_pShaderCom, "g_ProjMatrix", D3DTS::PROJ)))
+		return E_FAIL;
+
+	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+	for (size_t i = 0; i < iNumMeshes; i++)
+	{
+		if (FAILED(m_pModelCom->Bind_BoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
+			return E_FAIL;
+
+		if (FAILED(m_pShaderCom->Begin(1)))
+			return E_FAIL;
+
+		if (FAILED(m_pModelCom->Render(i)))
+			return E_FAIL;
+	}
 	return S_OK;
 }
 
@@ -145,7 +172,7 @@ void CNPC_KaKashi::Start_Dialog()
 {
 	/* 카메라도 NPC 전용으로 교체할 것. */
 	m_pIcon->Set_Dead(true);
-	m_pModelCom->Set_AnimIndex("KakashiNext_Reaction3", 1.f, true);
+	m_pModelCom->Set_AnimIndex("KakashiNext_R.001", 1.f, true);
 	m_pGameManager->Change_Camera(static_cast<LEVEL>(m_pGameInstance->Get_LevelID()), TEXT("NPC_Talk_Caemra"));
 	m_pGameManager->Get_PlayerPtr()->Set_Visible(false);
 	m_eAnimState = ANIM_STATE::ANIM_GREET;

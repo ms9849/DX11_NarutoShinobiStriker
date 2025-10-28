@@ -175,49 +175,6 @@ HRESULT CMainApp::Ready_Prototypes()
 
 #pragma endregion
 
-#pragma region MODEL_FBX
-	_matrix			PreTransformMatrix = XMMatrixIdentity();
-
-	/* For.Prototype_Component_Model_SkyBox */
-	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_SkyBox"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/SkyBox/SkyBox.fbx", PreTransformMatrix))))
-		return E_FAIL;
-
-	/* ¸ñµÐ ¹Ú¼ö */
-	/* For.Prototype_Component_Model_WoodHand_L */
-	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(270.0f)) * XMMatrixTranslation(-2.65f, 0.f, 0.f);
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_WoodHand_L"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/WoodHand/WoodHand_L.fbx", PreTransformMatrix))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Model_WoodHand_R */
-	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(180.0f)) * XMMatrixTranslation(2.65f, 0.f, 0.f);
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_WoodHand_R"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/WoodHand/WoodHand_R.fbx", PreTransformMatrix))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Model_NPC_Kakashi*/
-	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(180.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_NPC_Kakashi"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/NPC/NPC_Kakashi.fbx", PreTransformMatrix))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Model_Kunai*/
-	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(90.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_Kunai"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Kunai/Kunai.fbx", PreTransformMatrix))))
-		return E_FAIL;
-
-
-	/* For.Prototype_Component_Model_Kunai_Diff*/
-	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(270.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_Kunai_Diff"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Kunai/Kunai2.fbx", PreTransformMatrix))))
-		return E_FAIL;
-
-#pragma endregion
-
 #pragma region PLAYER
 	///* For.Prototype_Component_Model_Upper_Player */
 	//PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(180.0f));
@@ -256,6 +213,45 @@ HRESULT CMainApp::Ready_Prototypes()
 
 
 #pragma region MODEL_BINARY
+	_matrix			PreTransformMatrix = XMMatrixIdentity();
+
+	/* For.Prototype_Component_Model_SkyBox */
+	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_SkyBox"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, TEXT("../Bin/Resources/Models/SkyBox/SkyBox.bin"), PreTransformMatrix))))
+		return E_FAIL;
+
+	/* ¸ñµÐ ¹Ú¼ö */
+	/* For.Prototype_Component_Model_WoodHand_L */
+	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(270.0f)) * XMMatrixTranslation(-2.65f, 0.f, 0.f);
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_WoodHand_L"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, TEXT("../Bin/Resources/Models/WoodHand/WoodHand_L.bin"), PreTransformMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_WoodHand_R */
+	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(180.0f)) * XMMatrixTranslation(2.65f, 0.f, 0.f);
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_WoodHand_R"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, TEXT("../Bin/Resources/Models/WoodHand/WoodHand_R.bin"), PreTransformMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_NPC_Kakashi*/
+	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_NPC_Kakashi"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, TEXT("../Bin/Resources/Models/NPC/NPC_Kakashi.Bin"), PreTransformMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Kunai*/
+	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(90.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_Kunai"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, TEXT("../Bin/Resources/Models/Kunai/Kunai.bin"), PreTransformMatrix))))
+		return E_FAIL;
+
+
+	/* For.Prototype_Component_Model_Kunai_Diff*/
+	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(270.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_Kunai_Diff"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, TEXT("../Bin/Resources/Models/Kunai/Kunai2.bin"), PreTransformMatrix))))
+		return E_FAIL;
 
 	/* For.Prototype_Component_Model_TutorialMap */
 	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(180.0f));
