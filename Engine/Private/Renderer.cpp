@@ -48,11 +48,11 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 
 	/* Target_Shadow */
-	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Shadow"), g_iMaxWidth, g_iMaxHeight, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(1.0f, 1.f, 1.f, 1.f))))
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Shadow"), g_iMaxWidth * m_fShadowFactor, g_iMaxHeight * m_fShadowFactor, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(1.0f, 1.f, 1.f, 1.f))))
 		return E_FAIL;
 
 	/* Target_StaticShadow */
-	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_StaticShadow"), g_iMaxWidth * 2, g_iMaxHeight * 2, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(1.0f, 1.f, 1.f, 1.f))))
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_StaticShadow"), g_iMaxWidth * 2.f , g_iMaxHeight * 2.f, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(1.0f, 1.f, 1.f, 1.f))))
 		return E_FAIL;
 
 	if (FAILED(Ready_DepthStencilView(g_iMaxWidth, g_iMaxHeight)))
@@ -298,8 +298,8 @@ void CRenderer::Render_Shadow()
 	ZeroMemory(&ViewPortDesc, sizeof(D3D11_VIEWPORT));
 	ViewPortDesc.TopLeftX = 0;
 	ViewPortDesc.TopLeftY = 0;
-	ViewPortDesc.Width = (_float)g_iMaxWidth;
-	ViewPortDesc.Height = (_float)g_iMaxHeight;
+	ViewPortDesc.Width = (_float)g_iMaxWidth * m_fShadowFactor;
+	ViewPortDesc.Height = (_float)g_iMaxHeight * m_fShadowFactor;
 	ViewPortDesc.MinDepth = 0.f;
 	ViewPortDesc.MaxDepth = 1.f;
 
@@ -470,8 +470,6 @@ void CRenderer::Render_Combined()
 	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Blur_Small_X"), m_pShader, "g_BlurSmallXTexture")))
 		return;
 
-	
-
 	/* 셰이더에서 이 둘 곱해서 최종적인 계산값 뽑아냄. */
 	m_pShader->Begin(3);
 	/* 실질적으로 조명 연산이 끝난 NonBlend 객체들 렌더*/
@@ -639,8 +637,8 @@ HRESULT CRenderer::Ready_DepthStencilView(_uint iSizeX, _uint iSizeY)
 
 	/* 깊이 버퍼의 픽셀은 백버퍼의 픽셀과 갯수가 동일해야만 깊이 텍스트가 가능해진다. */
 	/* 픽셀의 수가 다르면 아에 렌더링을 못함. */
-	TextureDesc.Width = iSizeX;
-	TextureDesc.Height = iSizeY;
+	TextureDesc.Width = iSizeX * m_fShadowFactor;
+	TextureDesc.Height = iSizeY * m_fShadowFactor;
 	TextureDesc.MipLevels = 1;
 	TextureDesc.ArraySize = 1;
 	TextureDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -659,8 +657,8 @@ HRESULT CRenderer::Ready_DepthStencilView(_uint iSizeX, _uint iSizeY)
 	if (FAILED(m_pDevice->CreateTexture2D(&TextureDesc, nullptr, &pDepthStencilTexture)))
 		return E_FAIL;
 
-	TextureDesc.Width = iSizeX * 2;
-	TextureDesc.Height = iSizeY * 2;
+	TextureDesc.Width = iSizeX * 2.f;
+	TextureDesc.Height = iSizeY * 2.f;
 
 	if (FAILED(m_pDevice->CreateTexture2D(&TextureDesc, nullptr, &pStaticDepthStencilTexture)))
 		return E_FAIL;
@@ -702,10 +700,10 @@ void CRenderer::Render_Debug()
 	//	return;
 	//if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Outline"), m_pShader, m_pVIBuffer)))
 	//	return;
-	//if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Shadow"), m_pShader, m_pVIBuffer)))
-	//	return;
-	//if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_StaticShadow"), m_pShader, m_pVIBuffer)))
-	//	return;
+	if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Shadow"), m_pShader, m_pVIBuffer)))
+		return;
+	if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_StaticShadow"), m_pShader, m_pVIBuffer)))
+		return;
 	//if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Blur_Small"), m_pShader, m_pVIBuffer)))
 	//	return;
 	//if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Blur_Small_X"), m_pShader, m_pVIBuffer)))

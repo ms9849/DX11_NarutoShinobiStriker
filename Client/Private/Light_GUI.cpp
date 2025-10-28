@@ -61,8 +61,8 @@ void CLight_GUI::Update(_float fTimeDelta)
 	//{
 	//	//여기서 빛 추가
 	//	LIGHT_DESC Desc;
-	//	Desc.vDiffuse = _float4(m_fAmbientX, m_fAmbientY, m_fAmbientZ, m_fAmbientW);
-	//	Desc.vAmbient = _float4(m_fDiffuseX, m_fDiffuseY, m_fDiffuseZ, m_fDiffuseW);
+	//	Desc.vDiffuse = _float4(m_fDiffuseX, m_fDiffuseY, m_fDiffuseZ, m_fDiffuseW);
+	//	Desc.vAmbient = _float4(m_fAmbientX, m_fAmbientY, m_fAmbientZ, m_fAmbientW);
 	//	Desc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
 	//	Desc.fRange = m_fRange;
 	//	Desc.eType = LIGHT::SPOT;

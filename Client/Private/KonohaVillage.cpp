@@ -28,6 +28,8 @@ HRESULT CKonohaVillage::Initialize(void* pArg)
 
 	m_iNumMeshes = m_pModelCom->Get_NumMeshes();
 	m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(0.f, 0.7f, 0.f, 1.f));
+
+	/* 그림자 세팅 최초 1회에만. */
 	m_pGameInstance->Add_StaticShadow(this);
 
 	return S_OK;
@@ -96,6 +98,30 @@ HRESULT CKonohaVillage::Render()
 
 	return S_OK;
 }
+HRESULT CKonohaVillage::Render_Shadow()
+{
+	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Bind_Shadow_Resource(m_pShaderCom, "g_ViewMatrix", D3DTS::VIEW)))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Bind_Shadow_Resource(m_pShaderCom, "g_ProjMatrix", D3DTS::PROJ)))
+		return E_FAIL;
+
+	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+	for (size_t i = 0; i < iNumMeshes; i++)
+	{
+		if (FAILED(m_pShaderCom->Begin(1)))
+			return E_FAIL;
+
+		if (FAILED(m_pModelCom->Render(i)))
+			return E_FAIL;
+	}
+	return S_OK;
+}
+
 HRESULT CKonohaVillage::Ready_Components()
 {
 	/* Com_Shader */

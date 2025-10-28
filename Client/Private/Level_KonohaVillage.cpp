@@ -168,6 +168,17 @@ HRESULT CLevel_KonohaVillage::Ready_Lights()
 	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
 		return E_FAIL;
 
+
+	SHADOW_LIGHT_DESC		ShadowDesc{};
+	ShadowDesc.vEye = _float4(-126.5f, 139.215, -79.592, 1.f);
+	ShadowDesc.vAt = _float4(0.f, 15.f, 0.f, 1.f);
+	ShadowDesc.fFovy = XMConvertToRadians(90.0f);
+	ShadowDesc.fAspect = static_cast<_float>(g_iWinSizeX) / g_iWinSizeY;
+	ShadowDesc.fNear = 0.1f;
+	ShadowDesc.fFar = 50000.f;
+
+	if (FAILED(m_pGameInstance->Ready_Shadow_Light(ShadowDesc)))
+		return E_FAIL;
 	/* 핸들 열어서 여기서 저장 */
 /* 로드는 반대로 */
 

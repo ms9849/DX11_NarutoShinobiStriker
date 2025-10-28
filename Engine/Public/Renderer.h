@@ -76,8 +76,11 @@ private:
 	void Render_Font();
 
 private:
+	_float m_fShadowFactor = { 1.2f };
+	
+private:
 	HRESULT Ready_DepthStencilView(_uint iSizeX, _uint iSizeY);
-
+	
 #ifdef _DEBUG
 private:
 	void Render_Debug();

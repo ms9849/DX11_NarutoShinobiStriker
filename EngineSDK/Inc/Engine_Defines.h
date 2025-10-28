@@ -67,8 +67,8 @@ namespace Engine
 	const static wstring g_strTransformTag = { TEXT("Com_Transform") };
 	const static wstring g_strPoolingTag = { TEXT("Com_Pooling")};
 
-	const unsigned int g_iMaxWidth = 8192;
-	const unsigned int g_iMaxHeight = 4608;
+	const unsigned int g_iMaxWidth = 8192;//8192;
+	const unsigned int g_iMaxHeight = 4608; // 4608;
 }
 
 #pragma warning(disable : 4251)
