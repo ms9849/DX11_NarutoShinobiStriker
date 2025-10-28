@@ -47,7 +47,7 @@ HRESULT CTarget_Manager::Add_MRT(const _wstring& strMRTTag, const _wstring& strT
 }
 
 /* 멀티 렌더 타겟의 렌더를 시작할 때, 실행하는 함수. */
-HRESULT CTarget_Manager::Begin_MRT(const _wstring& strMRTTag, ID3D11DepthStencilView* pDSV)
+HRESULT CTarget_Manager::Begin_MRT(const _wstring& strMRTTag, ID3D11DepthStencilView* pDSV, _bool IsDepthOn)
 {
     /* 현재 돌고 있는 백버퍼와 깊이 스텐실 버퍼를 꺼내온다. */
     m_pContext->OMGetRenderTargets(1, &m_pBackBufferRTV, &m_pOriginalDSV);
@@ -72,7 +72,10 @@ HRESULT CTarget_Manager::Begin_MRT(const _wstring& strMRTTag, ID3D11DepthStencil
     if (nullptr != pDSV)
         m_pContext->ClearDepthStencilView(pDSV, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
 
-    m_pContext->OMSetRenderTargets(iNumRenderTargets, pRenderTargets, nullptr == pDSV ? m_pOriginalDSV : pDSV);
+    if (true == IsDepthOn)
+        m_pContext->OMSetRenderTargets(iNumRenderTargets, pRenderTargets, nullptr == pDSV ? m_pOriginalDSV : pDSV);
+    else if (false == IsDepthOn)
+        m_pContext->OMSetRenderTargets(iNumRenderTargets, pRenderTargets, nullptr);
 
     return S_OK;
 }

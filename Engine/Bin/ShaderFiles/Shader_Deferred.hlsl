@@ -26,6 +26,8 @@ texture2D g_LightLampTexture;
 texture2D g_OutlineTexture;
 texture2D g_StaticShadowTexture;
 
+texture2D g_SceneTexture;
+
 vector g_vLightDiffuse;
 vector g_vLightAmbient;
 vector g_vLightSpecular;
@@ -328,40 +330,6 @@ PS_OUT_BACKBUFFER PS_MAIN_COMBINED(PS_IN In)
         Out.vBackBuffer.rgb = lerp(Out.vBackBuffer.rgb, zoomColor, 0.4f * (1 - g_fRadialBlurTimeAcc / g_fRadialBlurTime));
     }
     
-    // 디스토션 세팅
-    if(true == g_IsDistortion)
-    {
-        vector vDistortion = g_DistortionTexture.Sample(ClampSampler, In.vTexcoord);
-
-        // 검은색이면 왜곡 없음
-        if (vDistortion.r > 0.f)
-        {
-            // 하얀색이면 최대 오프셋, 검은색이면 0
-            float maxOffset = 0.05f; // 원하는 왜곡 세기
-            float2 distortionOffset = float2(maxOffset, maxOffset) * vDistortion.r;
-
-            // 시간 기반 흔들림 추가
-            distortionOffset *= sin(g_fDistortionTimeAcc * 2.0f); // -1~1 진동
-
-            // 기존 UV에 오프셋 적용
-            float2 distortedUV = In.vTexcoord + distortionOffset;
-
-            // Out.vBackBuffer 자체를 샘플링하지 못하므로
-            // 이미 계산된 RGB를 오프셋 UV 근처 픽셀에서 보간
-            // 여기서는 단순히 Offset만 적용, 실제로는 주변 Blur X/Y를 활용 가능
-            // UV가 화면을 넘어가지 않게 Clamp
-            distortedUV = clamp(distortedUV, 0.f, 1.f);
-
-            // 기존 Out.vBackBuffer와 오프셋을 섞어서 최종 색상
-            // 화면 내에서 단순 이동 효과처럼
-            float4 sampleColor = g_DiffuseTexture.Sample(ClampSampler, distortedUV);
-            Out.vBackBuffer.rgb = lerp(Out.vBackBuffer.rgb, sampleColor.rgb, 0.8f);
-            Out.vBackBuffer.a = sampleColor.a;
-        }
-
-        return Out;
-    }
-    
     return Out;
 }
 
@@ -465,6 +433,64 @@ PS_OUT_BACKBUFFER PS_MAIN_Outline(PS_IN In)
     return Out;
 }
 
+PS_OUT_BACKBUFFER PS_DISTORTION(PS_IN In)
+{
+    PS_OUT_BACKBUFFER Out;
+
+    Out.vBackBuffer = g_SceneTexture.Sample(DefaultSampler, In.vTexcoord);
+
+    // 완전히 투명하면 discard
+    if (Out.vBackBuffer.r == 0 && Out.vBackBuffer.g == 0 && Out.vBackBuffer.b == 0 && Out.vBackBuffer.a == 0)
+        discard;
+
+    if (g_IsDistortion)
+    {
+        float2 uv = In.vTexcoord;
+
+        // 디스토션 텍스처 샘플링
+        float vDistortion = g_DistortionTexture.Sample(ClampSampler, uv).r;
+
+        if (vDistortion > 0.5f)
+        {
+            // 화면 중심 기준 UV (-0.5 ~ 0.5)
+            float2 centeredUV = uv - 0.5;
+
+            // 중심에서 거리
+            float r = length(centeredUV);
+
+            // 기본 배럴 왜곡 강도
+            float k = 0.8;
+            float distortionFactor = 1.0 + k * (r) * (r);
+
+            // 방향 유지하면서 왜곡 적용
+            centeredUV *= distortionFactor;
+
+            // 시간 기반 물결 흔들림 추가
+            float waveStrength = 0.02; // 흔들림 세기
+            float angle = atan2(centeredUV.y, centeredUV.x); // 방향
+            float radius = length(centeredUV);
+
+            // sine/cosine으로 원형 흔들림
+            float wave = sin(g_fDistortionTimeAcc * 5.0 + radius * 20.0) * waveStrength;
+
+            // 흔들림을 방향 벡터에 따라 적용
+            centeredUV += normalize(centeredUV) * wave;
+
+            // 다시 UV로 변환
+            float2 distortedUV = centeredUV + 0.5;
+            distortedUV = clamp(distortedUV, 0.0, 1.0);
+
+            // 씬 텍스처 샘플링
+            float4 sampleColor = g_SceneTexture.Sample(ClampSampler, distortedUV);
+
+            // 원래 색과 섞기
+            Out.vBackBuffer.rgb = lerp(Out.vBackBuffer.rgb, sampleColor.rgb, 0.8f);
+            Out.vBackBuffer.a = sampleColor.a;
+        }
+    }
+
+    return Out;
+}
 technique11 DefaultTechnique
 {
     pass Debug
@@ -535,5 +561,25 @@ technique11 DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN_SMALL_X();
+    }
+
+    pass Distortion
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_None, 0);
+        SetBlendState(BS_None, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_DISTORTION();
+    }
+    //idx 8
+    pass Priority
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_None, 0);
+        SetBlendState(BS_None, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_DEBUG();
     }
 }

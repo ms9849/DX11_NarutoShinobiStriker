@@ -78,6 +78,10 @@ HRESULT CRenderer::Initialize()
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Distortion"), Viewport.Width, Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.0f, 0.0f, 0.0f, 0.0f))))
 		return E_FAIL;
 
+	/* Target_Scene */
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Scene"), Viewport.Width, Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.0f, 0.0f, 0.0f, 0.0f))))
+		return E_FAIL;
+
 	/* 게임 오브젝트로부터 뽑아와야하는 디퓨즈 노멀은 MRT_GameObjects로 세팅. */
 	/* MRT_GameObjects */
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_GameObjects"), TEXT("Target_Diffuse"))))
@@ -94,6 +98,10 @@ HRESULT CRenderer::Initialize()
 
 	/* MRT_LightAcc */
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_LightAcc"), TEXT("Target_Shade"))))
+		return E_FAIL;
+
+	/* MRT_Scene */
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Scene"), TEXT("Target_Scene"))))
 		return E_FAIL;
 
 	/////* Specular는 LightAcc에서 쌓아서 계산한다. */
@@ -125,8 +133,8 @@ HRESULT CRenderer::Initialize()
 
 	/* MRT_Distortion */
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Distortion"), TEXT("Target_Distortion"))))
-
 		return E_FAIL;
+
 	m_pShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Deferred.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements);
 	if (nullptr == m_pShader)
 		return E_FAIL;
@@ -301,6 +309,7 @@ void CRenderer::Add_StaticShadow(CGameObject* pGameObject)
 
 void CRenderer::Render_Priority()
 {
+	/* MRT 씬이 아니라 백버퍼에 그려. */
 	for (auto& pRenderObject : m_RenderObjects[ENUM_CLASS(RENDER::PRIORITY)])
 	{
 		if (nullptr != pRenderObject)
@@ -453,6 +462,9 @@ void CRenderer::Render_LightAcc()
 
 void CRenderer::Render_Combined()
 {
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Scene"))))
+		return;
+
 	m_pShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix);
 	m_pShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix);
 	m_pShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix);
@@ -462,10 +474,6 @@ void CRenderer::Render_Combined()
 	m_pShader->Bind_RawValue("g_IsRadialBlur", &m_IsRadialBlur, sizeof(_bool));
 	m_pShader->Bind_RawValue("g_fRadialBlurTime", &m_fRadialBlurTime, sizeof(_float));
 	m_pShader->Bind_RawValue("g_fRadialBlurTimeAcc", &m_fRadialBlurTimeAcc, sizeof(_float));
-
-	m_pShader->Bind_RawValue("g_IsDistortion", &m_IsDistortion, sizeof(_bool));
-	m_pShader->Bind_RawValue("g_fDistortionTime", &m_fDistortionTime, sizeof(_float));
-	m_pShader->Bind_RawValue("g_fDistortionTimeAcc", &m_fDistortionTimeAcc, sizeof(_float));
 
 	/* 그림자용 뷰, 투영 행렬 세팅 */
 	if (FAILED(m_pGameInstance->Bind_Shadow_Resource(m_pShader, "g_LightViewMatrix", D3DTS::VIEW)))
@@ -497,12 +505,25 @@ void CRenderer::Render_Combined()
 	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Blur_Small_X"), m_pShader, "g_BlurSmallXTexture")))
 		return;
 
-	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Distortion"), m_pShader, "g_DistortionTexture")))
-		return;
-
 	/* 셰이더에서 이 둘 곱해서 최종적인 계산값 뽑아냄. */
 	m_pShader->Begin(3);
 	/* 실질적으로 조명 연산이 끝난 NonBlend 객체들 렌더*/
+	m_pVIBuffer->Bind_Resources();
+	m_pVIBuffer->Render();
+
+	if (FAILED(m_pGameInstance->End_MRT()))
+		return;
+
+	m_pShader->Bind_RawValue("g_IsDistortion", &m_IsDistortion, sizeof(_bool));
+	m_pShader->Bind_RawValue("g_fDistortionTime", &m_fDistortionTime, sizeof(_float));
+	m_pShader->Bind_RawValue("g_fDistortionTimeAcc", &m_fDistortionTimeAcc, sizeof(_float));
+
+	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Scene"), m_pShader, "g_SceneTexture")))
+		return;
+	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Distortion"), m_pShader, "g_DistortionTexture")))
+		return;
+
+	m_pShader->Begin(7);
 	m_pVIBuffer->Bind_Resources();
 	m_pVIBuffer->Render();
 }
@@ -682,6 +703,7 @@ HRESULT CRenderer::Ready_DepthStencilView(_uint iSizeX, _uint iSizeY)
 
 	ID3D11Texture2D* pDepthStencilTexture = { nullptr } ;
 	ID3D11Texture2D* pStaticDepthStencilTexture = { nullptr };
+	ID3D11Texture2D* pSceneDepthStencilTexture = { nullptr };
 	D3D11_TEXTURE2D_DESC	TextureDesc;
 	ZeroMemory(&TextureDesc, sizeof(D3D11_TEXTURE2D_DESC));
 
@@ -700,7 +722,7 @@ HRESULT CRenderer::Ready_DepthStencilView(_uint iSizeX, _uint iSizeY)
 	TextureDesc.Usage = D3D11_USAGE_DEFAULT /* 정적 */;
 	/* 추후에 어떤 용도로 바인딩 될 수 있는 View타입의 텍스쳐를 만들기위한 Texture2D입니까? */
 	TextureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL
-		/*| D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE*/;
+	/*| D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE*/;
 	TextureDesc.CPUAccessFlags = 0;
 	TextureDesc.MiscFlags = 0;
 
@@ -713,14 +735,25 @@ HRESULT CRenderer::Ready_DepthStencilView(_uint iSizeX, _uint iSizeY)
 	if (FAILED(m_pDevice->CreateTexture2D(&TextureDesc, nullptr, &pStaticDepthStencilTexture)))
 		return E_FAIL;
 
+	TextureDesc.Width = 1280.f;
+	TextureDesc.Height = 72.0f;
+
+	if (FAILED(m_pDevice->CreateTexture2D(&TextureDesc, nullptr, &pSceneDepthStencilTexture)))
+		return E_FAIL;
+
 	if (FAILED(m_pDevice->CreateDepthStencilView(pDepthStencilTexture, nullptr, &m_pShadowDSV)))
 		return E_FAIL;
 
 	if (FAILED(m_pDevice->CreateDepthStencilView(pStaticDepthStencilTexture, nullptr, &m_pStaticShadowDSV)))
 		return E_FAIL;
 
+
+	if (FAILED(m_pDevice->CreateDepthStencilView(pSceneDepthStencilTexture, nullptr, &m_pSceneDSV)))
+		return E_FAIL;
+
 	Safe_Release(pDepthStencilTexture);
 	Safe_Release(pStaticDepthStencilTexture);
+	Safe_Release(pSceneDepthStencilTexture);
 
 	return S_OK;
 }
@@ -800,4 +833,5 @@ void CRenderer::Free()
 	Safe_Release(m_pGameInstance);
 	Safe_Release(m_pShadowDSV);
 	Safe_Release(m_pStaticShadowDSV);
+	Safe_Release(m_pSceneDSV);
 }

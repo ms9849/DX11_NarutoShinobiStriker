@@ -43,7 +43,7 @@ private:
 	_float						m_fAttackCoolDown = { 0.f };
 	_float						m_fAttackMaxCoolDown = { 0.15f };
 	_float4x4					m_ColliderWorldMatrix = {};
-
+	_float						m_fParticleTimeAcc = { 0.f };
 private:
 	HRESULT Ready_Components();
 	HRESULT Bind_ShaderResources();

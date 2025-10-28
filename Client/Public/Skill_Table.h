@@ -48,6 +48,7 @@ namespace Client
 		/* 필살기들. 일단은 이대로 세팅 */
 		{ SKILL::BIG_RASENGAN, 0.f, 0.f, true },
 		{ SKILL::BIG_SHARK, 10.f, 0.f, true },
-		{ SKILL::KAMUI, 20.f, 0.f, true }
+		//20초임
+		{ SKILL::KAMUI, 2.f, 0.f, true }
 	};
 }

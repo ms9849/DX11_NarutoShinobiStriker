@@ -5,6 +5,7 @@
 
 #include "EffectContainer.h"
 #include "EffectObject.h"
+#include "ParticleObject.h"
 
 CKamui::CKamui(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CSkill {pDevice, pContext, eObjectID }
@@ -42,8 +43,9 @@ HRESULT CKamui::Initialize(void* pArg)
     /* ¾Æ±â»ó¾î¶Ñ·ç·ç¶Ñ·ç */
     CEffectContainer::EFFECT_CONTAINER_DESC EffectDesc;
     EffectDesc.IsBinary = true;
-    EffectDesc.strFilePath = TEXT("../Bin/Resources/Effects/Kamui_Ver2_eff.bin");
+    EffectDesc.strFilePath = TEXT("../Bin/Resources/Effects/Kamui_Ver1_eff.bin");
     EffectDesc.IsDistortion = true;
+    EffectDesc.fSpeedRatio = 2.0f;
 
     m_pEffectContainer = static_cast<CEffectContainer*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_EffectContainer"),
         &EffectDesc));
@@ -61,19 +63,35 @@ void CKamui::Priority_Update(_float fTimeDelta)
 
 void CKamui::Update(_float fTimeDelta)
 {
-    _float4x4 CameraWorld = *m_pGameInstance->Get_PipeLine_InverseFloat4x4(D3DTS::VIEW);
+    m_fParticleTimeAcc += fTimeDelta;
 
-    m_pTransformCom->Set_State(STATE::RIGHT, *reinterpret_cast<_vector*>(&CameraWorld.m[0]));
-    m_pTransformCom->Set_State(STATE::UP, *reinterpret_cast<_vector*>(&CameraWorld.m[1]));
-    m_pTransformCom->Set_State(STATE::LOOK, *reinterpret_cast<_vector*>(&CameraWorld.m[2]));
+    if (m_fParticleTimeAcc >= 0.1f && ((m_fLifeTime - m_fParticleTimeAcc) >= 0.1f))
+    {
+        CParticleObject::PARTICLE_LOAD_DESC ParticleDesc;
+        ParticleDesc.eType = CParticleObject::PARTICLE_TYPE::EXPLOSION;
+        ParticleDesc.strParticlePath = TEXT("../Bin/Resources/Particle/Kamui_Particle.bin");
+        XMStoreFloat3(&ParticleDesc.vPosition, m_pTransformCom->Get_State(STATE::POSITION));
 
-    m_pTransformCom->Set_Scale(6.f, 6.f, 6.f);
+        m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"),
+            m_pGameInstance->Get_LevelID(), TEXT("Layer_Particle"), &ParticleDesc);
+        m_fParticleTimeAcc = 0.f;
+    }
 
     m_fTimeAcc += fTimeDelta;
     m_fAttackCoolDown += fTimeDelta;
 
     if (true == m_isFinal)
+    {
         m_IsDead = true;
+
+        CParticleObject::PARTICLE_LOAD_DESC ParticleDesc;
+        ParticleDesc.eType = CParticleObject::PARTICLE_TYPE::EXPLOSION;
+        ParticleDesc.strParticlePath = TEXT("../Bin/Resources/Particle/Kamui_Explosion_Particle.bin");
+        XMStoreFloat3(&ParticleDesc.vPosition, m_pTransformCom->Get_State(STATE::POSITION));
+
+        m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"),
+            m_pGameInstance->Get_LevelID(), TEXT("Layer_Particle"), &ParticleDesc);
+    }
 
     if (m_fTimeAcc >= m_fLifeTime)
         m_isFinal = true;
@@ -98,6 +116,13 @@ void CKamui::Late_Update(_float fTimeDelta)
 #ifdef _DEBUG
     m_pGameInstance->Add_DebugComponent(m_pColliderCom);
 #endif
+
+    _float4x4 CameraWorld = *m_pGameInstance->Get_PipeLine_InverseFloat4x4(D3DTS::VIEW);
+
+    m_pTransformCom->Set_State(STATE::RIGHT, *reinterpret_cast<_vector*>(&CameraWorld.m[0]));
+    m_pTransformCom->Set_State(STATE::UP, *reinterpret_cast<_vector*>(&CameraWorld.m[1]));
+    m_pTransformCom->Set_State(STATE::LOOK, *reinterpret_cast<_vector*>(&CameraWorld.m[2]));
+    m_pTransformCom->Set_Scale(6.f, 6.f, 6.f);
 
     m_pEffectContainer->Set_ParentMatrix(XMMatrixRotationY(90.f) * XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
     m_pEffectContainer->Late_Update(fTimeDelta);

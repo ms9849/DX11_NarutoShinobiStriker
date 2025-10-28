@@ -38,7 +38,7 @@ private:
 
 	ID3D11DepthStencilView*		m_pShadowDSV = { nullptr };
 	ID3D11DepthStencilView*		m_pStaticShadowDSV = { nullptr };
-
+	ID3D11DepthStencilView*		m_pSceneDSV = { nullptr };
 #ifdef _DEBUG
 private:
 	list<class CGameObject*>			m_StaticShadowObjects = {}; 
