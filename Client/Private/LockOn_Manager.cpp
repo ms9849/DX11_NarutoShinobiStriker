@@ -31,14 +31,29 @@ CTransform* CLockOn_Manager::Calc_Target(_fvector vPos)
     if (m_fAttackTimeAcc <= m_fAttackTime)
         return nullptr;
 
-    /* 현재 레벨의 모든 몬스터 순회 */
-    _int iNumTargets = m_pGameInstance->Get_LayerSize(m_pGameInstance->Get_LevelID(), TEXT("Layer_Monster"));
-
     _float      fDist, fMinDist = { FLT_MAX };
     CTransform* pNearestTransform = {};
     _float4     vPosition;
-
     XMStoreFloat4(&vPosition, vPos);
+
+    _int iBossCnt = m_pGameInstance->Get_LayerSize(m_pGameInstance->Get_LevelID(), TEXT("Layer_Boss"));
+
+    if (0 != iBossCnt)
+    {
+        for (_int i = 0; i < iBossCnt; ++i)
+        {
+            CTransform* pSourTransform = m_pGameInstance->Get_GameObject(m_pGameInstance->Get_LevelID(), TEXT("Layer_Boss"), i)->Get_Transform();
+
+            fDist = XMVectorGetX(XMVector4Length(XMLoadFloat4(&vPosition) - pSourTransform->Get_State(STATE::POSITION)));
+            if (fDist < fMinDist)
+            {
+                pNearestTransform = pSourTransform;
+                fMinDist = fDist;
+            }
+        }
+    }
+    /* 현재 레벨의 모든 몬스터 순회 */
+    _int iNumTargets = m_pGameInstance->Get_LayerSize(m_pGameInstance->Get_LevelID(), TEXT("Layer_Monster"));
 
     for (_int i = 0; i < iNumTargets; ++i)
     {

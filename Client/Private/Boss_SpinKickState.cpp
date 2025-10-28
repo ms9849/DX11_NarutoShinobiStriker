@@ -12,6 +12,10 @@
 
 #pragma endregion	
 
+#include "ParticleObject.h"
+#include "Effect_HitSprite.h"
+#include "Player.h"
+
 CBoss_SpinKickState::CBoss_SpinKickState(CNavigation* pNavigation, CBoss* pBoss)
 	: m_pBoss { pBoss}
 	, m_pNavigationCom{ pNavigation }
@@ -59,6 +63,36 @@ CBossState* CBoss_SpinKickState::Update(_float fTimeDelta)
 		&& true == IsAnimFinished)
 	{
 		pNextState = CBoss_StepState::Create(m_pNavigationCom, m_pBoss, CBoss_StepState::ANIM_STATE::BACK);
+	}
+
+	// 콜라이더 On 기능 됐는데 꺼져있고, 파티클 만들어진적 없으면
+	if (true == m_IsOnCollider && false == m_pBoss->Get_Collider(TEXT("Com_Collider_SpinKick"))->Get_Active() && false == m_IsParticleCreated)
+	{
+		/* 여기서 파티클 추가 */
+		CParticleObject::PARTICLE_LOAD_DESC Desc;
+		Desc.strParticlePath = TEXT("../Bin/Resources/Particle/BossSkill_Particle.bin");
+		Desc.eType = CParticleObject::PARTICLE_TYPE::EXPLOSION;
+
+		XMStoreFloat3(&Desc.vPosition, m_pGameManager->Get_PlayerPtr()->Get_Transform()->Get_State(STATE::POSITION));
+
+		m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
+			TEXT("Layer_Particle"), &Desc);
+
+		CEffect_HitSprite::EFFECT_HIT_SPRITE_DESC HitDesc;
+
+		HitDesc.fStartScale = 1.f;
+		HitDesc.fDeltaScale = 40.f;
+		HitDesc.fLifeTime = 0.f;
+		HitDesc.IsBlur = true;
+		HitDesc.iTextureNum = 0;
+		HitDesc.vMainColor = _float4(1.0f, 0.6f, 0.2f, 0.5f);
+		HitDesc.vSubColor = _float4(1.0f, 0.6f, 0.2f, 0.5f);
+		XMStoreFloat4(&HitDesc.vPosition, m_pGameManager->Get_PlayerPtr()->Get_Transform()->Get_State(STATE::POSITION));
+
+		m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_HitEffect"),
+			m_pGameInstance->Get_LevelID(), TEXT("Layer_Effect"), &HitDesc);
+
+		m_IsParticleCreated = true;
 	}
 
 	return pNextState;

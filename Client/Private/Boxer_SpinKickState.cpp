@@ -66,7 +66,7 @@ CBoxerState* CBoxer_SpinKickState::Update(_float fTimeDelta)
 	}
 
 	// 콜라이더 On 기능 됐는데 꺼져있고, 파티클 만들어진적 없으면
-	if (true == m_IsOnCollider && false == m_pBoxer->Get_Collider(TEXT("Com_Collider_LeafHurricane"))->Get_Active() && false == m_IsParticleCreated)
+	if (true == m_IsOnCollider && false == m_pBoxer->Get_Collider(TEXT("Com_Collider_SpinKick"))->Get_Active() && false == m_IsParticleCreated)
 	{
 		/* 여기서 파티클 추가 */
 		CParticleObject::PARTICLE_LOAD_DESC Desc;
