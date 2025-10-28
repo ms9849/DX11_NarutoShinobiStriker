@@ -74,6 +74,7 @@ HRESULT CTrail::Initialize(void* pArg)
 
 	m_iNumPresent = 0;
 	m_iEndIndex = 0;
+	m_IsBlend = pDesc->IsBlend;
 
 	if (FAILED(Ready_Components(pDesc->strTrailTextureTag)))
 		return E_FAIL;
@@ -111,7 +112,12 @@ void CTrail::Update(_float fTimeDelta)
 void CTrail::Late_Update(_float fTimeDelta)
 {
 	m_pGameInstance->Add_RenderGroup(RENDER::BLUR, this);
-	m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
+
+	if(true == m_IsBlend)
+		m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
+	else
+		m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+
 }
 
 void CTrail::Update_Trail(_fmatrix matCurrentWorld, _bool IsMakeTrail)

@@ -211,7 +211,7 @@ HRESULT CMainApp::Ready_Prototypes()
 
 
 	/* For.Prototype_Component_Model_Kunai_Diff*/
-	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(90.0f));
+	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(270.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_Kunai_Diff"),
 		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Kunai/Kunai2.fbx", PreTransformMatrix))))
 		return E_FAIL;
@@ -465,6 +465,13 @@ HRESULT CMainApp::Ready_Prototypes()
 	Desc.eType = CTrail::TRAIL_TYPE::FOOT;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_FootTrail"),
+		CTrail::Create(m_pDevice, m_pContext, OBJECTID::TRAIL, &Desc))))
+		return E_FAIL;
+
+	Desc.iNumVertices = 220;
+	Desc.eType = CTrail::TRAIL_TYPE::FOOT;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_KunaiTrail"),
 		CTrail::Create(m_pDevice, m_pContext, OBJECTID::TRAIL, &Desc))))
 		return E_FAIL;
 #pragma endregion
@@ -908,7 +915,7 @@ HRESULT CMainApp::Ready_PlayerOutfits()
 #pragma region PLAYER_WEAPON
 	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(180.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_Weapon_Player"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, TEXT("../../Client/Bin/Resources/Models/Player/Weapon_Player.bin"), PreTransformMatrix))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, TEXT("../../Client/Bin/Resources/Models/Player/Weapon_Player.bin"), PreTransformMatrix))))
 		return E_FAIL;
 #pragma endregion 
 

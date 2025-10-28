@@ -38,7 +38,8 @@ CPajamaState* CPajama_ThrowKunaiState::Update(_float fTimeDelta)
 
         XMStoreFloat3(&Desc.vPosition, m_pPajama->Get_Transform()->Get_State(STATE::POSITION));
         XMStoreFloat3(&Desc.vDirection, m_pPajama->Get_Transform()->Get_State(STATE::LOOK));
-        Desc.fSpeedPerSec = 20.f;
+        Desc.fSpeedPerSec = 30.f;
+        Desc.eType = CKunai::KUNAI_TYPE::KUNAI;
 
         m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_Kunai"),
             ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_Skill"), &Desc);

@@ -166,5 +166,5 @@ void CEffect_Icon::Free()
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pPoolingCom);
     if(nullptr != m_pTargetTransform)
-        Safe_Release(m_pTargetTransform);
+        (m_pTargetTransform);
 }

@@ -15,7 +15,7 @@ NS_END
 
 NS_BEGIN(Client)
 
-class CEffect_Icon : public CGameObject
+class CEffect_Icon final : public CGameObject
 {
 public:
 	typedef struct tagEffectIconDesc : public GAMEOBJECT_DESC {
@@ -27,7 +27,7 @@ private:
 	virtual ~CEffect_Icon() = default;
 
 public:
-	virtual void Set_Desc(void* pArg) override;
+	virtual void Set_Desc(void* pArg) override;	
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -53,7 +53,7 @@ private:
 public:
 	static CEffect_Icon* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	virtual CGameObject* Clone(void* pArg) override;
-	virtual void Free() override;
+ 	virtual void Free() override;
 };
 
 NS_END

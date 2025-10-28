@@ -36,14 +36,18 @@ public:
 	virtual HRESULT Render() override;
 
 private:
+	KUNAI_TYPE  m_eType = {};
+
+	class CTrail* m_pTrail = { nullptr };
 	class CGameManager* m_pGameManager = { nullptr };
+	_float		m_fTimeAcc = {};
 	CCollider*	m_pColliderCom = { nullptr };
 	CModel*		m_pModelCom = { nullptr };
 	CShader*	m_pShaderCom = { nullptr };
 	_uint		m_iNumMeshes = {};
 	_float3		m_vDirection = {};
-	_float		m_fTimeAcc = { 0.f };
-	KUNAI_TYPE  m_eType = {};
+	_float		m_fTrailTimeAcc = { 0.f };
+	_float		m_fTrailTime = { 0.01f };
 
 private:
 	HRESULT Ready_Components();

@@ -3,6 +3,8 @@
 #include "GameInstance.h"
 #include "GameManager.h"
 
+#include "Trail.h"
+
 CKunai::CKunai(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CGameObject { pDevice, pContext, ENUM_CLASS(eObjectID) }
     , m_pGameManager { CGameManager::GetInstance() }
@@ -31,16 +33,25 @@ HRESULT CKunai::Initialize(void* pArg)
     KUNAI_DESC* pDesc = static_cast<KUNAI_DESC*>(pArg);
     m_vDirection = pDesc->vDirection;
 
+    m_pTransformCom->Set_Scale(1.2f, 1.2f, 1.2f);
     m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(0.f, 0.5f, 0.f, 0.f) + XMVectorSetW(XMLoadFloat3(&pDesc->vPosition), 1.f));
-
     m_pTransformCom->LookAt(m_pTransformCom->Get_State(STATE::POSITION) + XMLoadFloat3(&m_vDirection));
-
     m_eType = pDesc->eType;
 
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
     m_iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+
+    CTrail::TRAIL_DESC TrailDesc;
+    TrailDesc.IsBlend = true;
+    TrailDesc.vFootTrailColor = _float4(1.0f, 0.3f, 0.3f, 1.f);
+    TrailDesc.strTrailTextureTag = TEXT("Prototype_Component_Texture_FootTrail_Blue");
+    XMStoreFloat4(&TrailDesc.vHighPosition, XMVectorSet(-0.02f, 0.f, 0.f, 1.f));
+    XMStoreFloat4(&TrailDesc.vLowPosition, XMVectorSet(0.f, 0.f, 0.02f, 1.f));
+
+    m_pTrail = static_cast<CTrail*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_KunaiTrail"), &TrailDesc));
 
     return S_OK;
 }
@@ -62,17 +73,26 @@ void CKunai::Update(_float fTimeDelta)
     m_pTransformCom->Go_Straight(fTimeDelta);
 
     m_pColliderCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
+
+    m_fTrailTimeAcc += fTimeDelta;
+
+    if (m_fTrailTimeAcc >= m_fTrailTime)
+    {
+        m_pTrail->Update_Trail(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()), true);
+        m_fTrailTimeAcc = 0.f;
+    }
 }
 
 void CKunai::Late_Update(_float fTimeDelta)
 {
     m_pGameManager->Add_Collider_ToCollision(TEXT("Monster_Attack"), COLLIDER_HANDLE_ID::ENEMY_THROW, m_pColliderCom);
 
-    m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+    m_pGameInstance->Add_RenderGroup(RENDER::NONLIGHT, this);
+
+    m_pTrail->Late_Update(fTimeDelta);
 #ifdef _DEBUG
     m_pGameInstance->Add_DebugComponent(m_pColliderCom);
 #endif
-
 }
 
 HRESULT CKunai::Render()

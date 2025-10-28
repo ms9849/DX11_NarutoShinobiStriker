@@ -440,7 +440,7 @@ void CGameInstance::Add_GameObject_ToPool(_uint iLevelIndex, CGameObject* pGameO
 HRESULT CGameInstance::Add_PoolingObject_ToLayer(const _wstring& strPoolingTag, _uint iPoolingOjbectLevelIndex, CGameObject::GAMEOBJECT_DESC* pDesc,_uint iLayerLevelIndex, const _wstring& strLayerTag)
 {
 	return m_pPooling_Manager->Add_PoolingObject_ToLayer(strPoolingTag, iPoolingOjbectLevelIndex, pDesc, iLayerLevelIndex, strLayerTag);
-}
+ }
 #pragma endregion
 
 #pragma region RENDERER

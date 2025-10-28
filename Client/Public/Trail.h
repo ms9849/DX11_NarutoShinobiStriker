@@ -26,7 +26,7 @@ public:
 		_float4 vHighPosition = {};
 		_float4 vLowPosition = {};
 		_float4 vFootTrailColor = {0.f, 0.f, 0.f, 1.f};
-
+		_bool   IsBlend = { true };
 	} TRAIL_DESC;
 private:
 	CTrail(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
@@ -71,7 +71,7 @@ private:
 	_float3			m_vPreHighPositions[3] = {};
 	_float3			m_vPreLowPositions[3] = {};
 	_float4			m_vFootTrailColor = {};
-
+	_bool			m_IsBlend = { true };
 private:
 
 
