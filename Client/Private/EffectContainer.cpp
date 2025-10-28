@@ -1,6 +1,7 @@
 #include "EffectContainer.h"
 
 #include "EffectObject.h"
+#include "GameInstance.h"
 
 CEffectContainer::CEffectContainer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, Client::OBJECTID eObjectID)
     : CGameObject { pDevice, pContext, ENUM_CLASS(eObjectID) }
@@ -10,6 +11,16 @@ CEffectContainer::CEffectContainer(ID3D11Device* pDevice, ID3D11DeviceContext* p
 CEffectContainer::CEffectContainer(const CEffectContainer& rhs)
     : CGameObject{ rhs }
 {
+}
+
+void CEffectContainer::Add_To_Distortion()
+{
+    m_pGameInstance->Add_RenderGroup(RENDER::DISTORTION, m_pMainEffect);
+
+    for (auto& Pair : m_EffectObjects)
+    {
+        m_pGameInstance->Add_RenderGroup(RENDER::DISTORTION, Pair.second);
+    }
 }
 
 void CEffectContainer::Set_ParentMatrix(_fmatrix ParentMatrix)
@@ -209,6 +220,7 @@ HRESULT CEffectContainer::Initialize(void* pArg)
 
     m_fLifeTime = pDesc->fLifeTime;
     m_fSpeedRatio = pDesc->fSpeedRatio;
+    m_IsDistortion = pDesc->IsDistortion;
 
     if (pDesc->IsBinary)
         Load_Container_FromBinary(pDesc->strFilePath.c_str());
@@ -264,6 +276,9 @@ void CEffectContainer::Late_Update(_float fTimeDelta)
     {
         pEffectObject.second->Set_ParentMatrix(XMLoadFloat4x4(&m_ParentWorldMatrix));
     }
+    /* 디스토션이라면 업데이트는 알아서 할게*/
+    if (true == m_IsDistortion)
+        return;
 
     m_pMainEffect->Late_Update(fTimeDelta * m_fSpeedRatio);
 

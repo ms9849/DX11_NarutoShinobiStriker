@@ -26,6 +26,7 @@ public:
 public:
 	HRESULT Add_DebugComponent(class CComponent* pDebugComponent);
 	void Set_RadialBlur(_float fTime);
+	void Set_Distortion(_float fTime);
 #endif
 private:
 	ID3D11Device*				m_pDevice = { nullptr };
@@ -54,6 +55,9 @@ private:
 	_float						m_fRadialBlurTime = { 0.f };
 	_float						m_fRadialBlurTimeAcc = { 0.f };
 
+	_bool						m_IsDistortion = { false };
+	_float						m_fDistortionTime = { 0.f };
+	_float						m_fDistortionTimeAcc = { 0.f };
 
 public:
 	/* 맵을 위한 스태틱 섀도우용 함수, 불러줄때마다 초기화되므로 주의 */
@@ -70,6 +74,7 @@ private:
 	void Render_NonLight();
 	void Render_Blur();
 	void Render_Blur_Small();
+	void Render_Distortion();
 	void Render_Blend();
 	void Render_WorldUI();
 	void Render_UI();

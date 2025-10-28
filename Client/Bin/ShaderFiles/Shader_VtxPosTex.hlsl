@@ -16,6 +16,8 @@ float   g_MaxHP;
 float   g_iWinSizeX;
 float   g_iWinSizeY;
 
+float   g_fKamuiLifeTime;
+
 float g_fHitSpriteLifeTime;
 float g_fHitSpriteLifeTimeAcc;
 vector g_vHitSpriteMainColor;
@@ -373,6 +375,30 @@ PS_OUT PS_HIT_EFFECT(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_KAMUI(PS_IN In)
+{
+    PS_OUT Out;
+    
+    //Out.vColor = float4(1.f, 1.f, 1.f, 1.f);
+    
+    //float fDist = length(float2(0.5f, 0.5f) - float2(In.vTexcoord.x, In.vTexcoord.y));
+    
+    //if(fDist > 0.5f)
+    //    discard;
+    /* 알파가 0~1사이로 바뀜*/
+    //else
+    //    Out.vColor.a *= 1 - (fDist / 0.5f);
+    
+    float fDist = length(float2(0.5f, 0.5f) - float2(In.vTexcoord.x, In.vTexcoord.y));
+    if (fDist > 0.5f)
+        discard;
+    
+    Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord + float2(g_fKamuiLifeTime, g_fKamuiLifeTime));
+    
+   
+    return Out;
+}
+
 technique11 DefaultTechnique
 {
     pass UI
@@ -505,5 +531,16 @@ technique11 DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_HIT_EFFECT();
+    }
+    //idx 12
+    pass Kamui
+    {
+        SetRasterizerState(RS_Cull_None);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_KAMUI();
     }
 }

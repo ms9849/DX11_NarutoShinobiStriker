@@ -5,6 +5,9 @@
 
 NS_BEGIN(Engine)
 class CCollider;
+class CVIBuffer_Rect;
+class CShader;
+class CTexture;
 NS_END
 
 NS_BEGIN(Client)
@@ -32,11 +35,15 @@ public:
 
 private:
 	/* ¸â¹ö º¯¼öµé */
-	_float			 m_fLifeTime = { 2.0f };
-	_float			 m_fTimeAcc = { 0.f };
-	_bool			 m_isFinal = { false };
-	_float			 m_fAttackCoolDown = { 0.f };
-	_float			 m_fAttackMaxCoolDown = { 0.15f };
+	class CEffectContainer*		m_pEffectContainer = { nullptr };
+	class CVIBuffer_Rect*		m_pVIBufferCom = { nullptr }; 
+	_float						m_fLifeTime = { 2.0f };
+	_float						m_fTimeAcc = { 0.f };
+	_bool						m_isFinal = { false };
+	_float						m_fAttackCoolDown = { 0.f };
+	_float						m_fAttackMaxCoolDown = { 0.15f };
+	_float4x4					m_ColliderWorldMatrix = {};
+
 private:
 	HRESULT Ready_Components();
 	HRESULT Bind_ShaderResources();

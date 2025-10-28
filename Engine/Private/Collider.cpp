@@ -81,25 +81,25 @@ void CCollider::Update(_fmatrix WorldMatrix)
 
 HRESULT CCollider::Render()
 {
-	//if (nullptr == m_pBounding)
-	//	return E_FAIL;
+	if (nullptr == m_pBounding)
+		return E_FAIL;
 
-	//m_pContext->GSSetShader(nullptr, nullptr, 0);
+	m_pContext->GSSetShader(nullptr, nullptr, 0);
 
-	//m_pEffect->SetWorld(XMMatrixIdentity());
-	//m_pEffect->SetView(m_pGameInstance->Get_PipeLine_Matrix(D3DTS::VIEW));
-	//m_pEffect->SetProjection(m_pGameInstance->Get_PipeLine_Matrix(D3DTS::PROJ));
+	m_pEffect->SetWorld(XMMatrixIdentity());
+	m_pEffect->SetView(m_pGameInstance->Get_PipeLine_Matrix(D3DTS::VIEW));
+	m_pEffect->SetProjection(m_pGameInstance->Get_PipeLine_Matrix(D3DTS::PROJ));
 
-	//m_pContext->IASetInputLayout(m_pInputLayout);
-	//m_pEffect->Apply(m_pContext);
+	m_pContext->IASetInputLayout(m_pInputLayout);
+	m_pEffect->Apply(m_pContext);
 
-	///* 렌더 결과 리턴. */
-	///* 
-	//만약 충돌하지 않았다면 초록색,
-	//충돌했다면 붉은색으로 표시한다.
-	//*/
-	//return m_pBounding->Render(m_pBatch, 
-	//	false == m_pBounding->Get_Active() ? DirectX::Colors::Yellow : false == m_isColl ? XMVectorSet(0.f, 1.f, 0.f, 1.f) : XMVectorSet(1.f, 0.f, 0.f, 1.f));
+	/* 렌더 결과 리턴. */
+	/* 
+	만약 충돌하지 않았다면 초록색,
+	충돌했다면 붉은색으로 표시한다.
+	*/
+	return m_pBounding->Render(m_pBatch, 
+		false == m_pBounding->Get_Active() ? DirectX::Colors::Yellow : false == m_isColl ? XMVectorSet(0.f, 1.f, 0.f, 1.f) : XMVectorSet(1.f, 0.f, 0.f, 1.f));
 	return S_OK;
 }
 

@@ -19,6 +19,7 @@ class CEffectContainer final : public CGameObject
 {
 public:
 	typedef struct tagEffectContainerDesc : public GAMEOBJECT_DESC {
+		_bool IsDistortion = { false };
 		_bool IsBinary = {};
 		_wstring strFilePath = {};
 		_float fLifeTime = { 300.f };
@@ -31,6 +32,7 @@ private:
 	virtual ~CEffectContainer() = default;
 
 public:
+	void Add_To_Distortion();
 	void Set_ParentMatrix(_fmatrix ParentMatrix);
 	void Set_Position(_fvector vPos);
 	void LookAt(_fvector vPos);
@@ -76,6 +78,7 @@ public:
 	virtual HRESULT Render() override;
 
 private:
+	_bool		m_IsDistortion = { false };
 	_float		m_fSpeedRatio = { 0.f };
 	_float		m_fLifeTimeAcc = { 0.f };
 	_float		m_fLifeTime = { 300.f };

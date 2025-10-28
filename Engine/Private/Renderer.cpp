@@ -66,14 +66,16 @@ HRESULT CRenderer::Initialize()
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Blur_X"), Viewport.Width, Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.0f, 0.0f, 0.0f, 0.0f))))
 		return E_FAIL;
 
-
-	/* Target_Blur */
+	/* Target_Blur_Small */
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Blur_Small"), Viewport.Width, Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.0f, 0.0f, 0.0f, 0.0f))))
 		return E_FAIL;
 
-	/* Target_Blur_X */
+	/* Target_Blur_Small_X */
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Blur_Small_X"), Viewport.Width, Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.0f, 0.0f, 0.0f, 0.0f))))
+		return E_FAIL;
 
+	/* Target_Distortion */
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Distortion"), Viewport.Width, Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.0f, 0.0f, 0.0f, 0.0f))))
 		return E_FAIL;
 
 	/* 게임 오브젝트로부터 뽑아와야하는 디퓨즈 노멀은 MRT_GameObjects로 세팅. */
@@ -110,21 +112,21 @@ HRESULT CRenderer::Initialize()
 	/* MRT_Blur */
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Blur"), TEXT("Target_Blur"))))
 		return E_FAIL;
-
-	/* MRT_Blur_Small */
-	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Blur_Small"), TEXT("Target_Blur_Small"))))
-		return E_FAIL;
-
-
 	/* MRT_Blur_X */
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Blur_X"), TEXT("Target_Blur_X"))))
 		return E_FAIL;
 
-
+	/* MRT_Blur_Small */
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Blur_Small"), TEXT("Target_Blur_Small"))))
+		return E_FAIL;
 	/* MRT_Blur_Small_X */
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Blur_Small_X"), TEXT("Target_Blur_Small_X"))))
 		return E_FAIL;
 
+	/* MRT_Distortion */
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Distortion"), TEXT("Target_Distortion"))))
+
+		return E_FAIL;
 	m_pShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Deferred.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements);
 	if (nullptr == m_pShader)
 		return E_FAIL;
@@ -153,6 +155,8 @@ HRESULT CRenderer::Initialize()
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Blur_Small"), Viewport.Width - 150.f, 150.f, 300.f, 300.f)))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Blur_Small_X"), Viewport.Width - 150.f, 450.f, 300.f, 300.f)))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Distortion"), Viewport.Width - 150.f, 150.f, 300.f, 300.f)))
 		return E_FAIL;
 #endif
 
@@ -185,15 +189,26 @@ HRESULT CRenderer::Add_Font(CFont* pRenderFont)
 
 void CRenderer::Update(_float fTimeDelta)
 {
-	if (false == m_IsRadialBlur)
-		return;
-
-	m_fRadialBlurTimeAcc += fTimeDelta;
-
-	if (m_fRadialBlurTimeAcc >= m_fRadialBlurTime)
+	if (true == m_IsRadialBlur)
 	{
-		m_IsRadialBlur = false;
-		m_fRadialBlurTimeAcc = 0.f;
+		m_fRadialBlurTimeAcc += fTimeDelta;
+
+		if (m_fRadialBlurTimeAcc >= m_fRadialBlurTime)
+		{
+			m_IsRadialBlur = false;
+			m_fRadialBlurTimeAcc = 0.f;
+		}
+	}
+
+	if (true == m_IsDistortion)
+	{
+		m_fDistortionTimeAcc += fTimeDelta;
+
+		if (m_fDistortionTimeAcc >= m_fDistortionTime)
+		{
+			m_IsDistortion = false;
+			m_fDistortionTimeAcc = 0.f;
+		}
 	}
 }
 
@@ -205,6 +220,7 @@ void CRenderer::Render()
 	Render_LightAcc();
 	Render_Blur();
 	Render_Blur_Small();
+	Render_Distortion();
 	Render_Combined();
 	Render_NonLight();
 	Render_Blend();
@@ -236,6 +252,13 @@ void CRenderer::Set_RadialBlur(_float fTime)
 	m_fRadialBlurTimeAcc = 0.f;
 	m_fRadialBlurTime = fTime;
 	m_IsRadialBlur = true;
+}
+
+void CRenderer::Set_Distortion(_float fTime)
+{
+	m_fDistortionTimeAcc = 0.f;
+	m_fDistortionTime = fTime;
+	m_IsDistortion = true;
 }
 
 #endif
@@ -435,9 +458,14 @@ void CRenderer::Render_Combined()
 	m_pShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix);
 	m_pShader->Bind_Matrix("g_ViewMatrixInv", m_pGameInstance->Get_PipeLine_InverseFloat4x4(D3DTS::VIEW));
 	m_pShader->Bind_Matrix("g_ProjMatrixInv", m_pGameInstance->Get_PipeLine_InverseFloat4x4(D3DTS::PROJ));
+
 	m_pShader->Bind_RawValue("g_IsRadialBlur", &m_IsRadialBlur, sizeof(_bool));
 	m_pShader->Bind_RawValue("g_fRadialBlurTime", &m_fRadialBlurTime, sizeof(_float));
 	m_pShader->Bind_RawValue("g_fRadialBlurTimeAcc", &m_fRadialBlurTimeAcc, sizeof(_float));
+
+	m_pShader->Bind_RawValue("g_IsDistortion", &m_IsDistortion, sizeof(_bool));
+	m_pShader->Bind_RawValue("g_fDistortionTime", &m_fDistortionTime, sizeof(_float));
+	m_pShader->Bind_RawValue("g_fDistortionTimeAcc", &m_fDistortionTimeAcc, sizeof(_float));
 
 	/* 그림자용 뷰, 투영 행렬 세팅 */
 	if (FAILED(m_pGameInstance->Bind_Shadow_Resource(m_pShader, "g_LightViewMatrix", D3DTS::VIEW)))
@@ -466,8 +494,10 @@ void CRenderer::Render_Combined()
 		return;
 	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Blur_X"), m_pShader, "g_BlurXTexture")))
 		return;
-
 	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Blur_Small_X"), m_pShader, "g_BlurSmallXTexture")))
+		return;
+
+	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Distortion"), m_pShader, "g_DistortionTexture")))
 		return;
 
 	/* 셰이더에서 이 둘 곱해서 최종적인 계산값 뽑아냄. */
@@ -563,6 +593,26 @@ void CRenderer::Render_Blur_Small()
 	m_pVIBuffer->Bind_Resources();
 
 	m_pVIBuffer->Render();
+
+	if (FAILED(m_pGameInstance->End_MRT()))
+		return;
+}
+
+/* 디스토션은 그냥 받아와서 처리만 해주면 된다. */
+void CRenderer::Render_Distortion()
+{
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Distortion"))))
+		return;
+
+	for (auto& pRenderObject : m_RenderObjects[ENUM_CLASS(RENDER::DISTORTION)])
+	{
+		if (nullptr != pRenderObject)
+			pRenderObject->Render();
+
+		Safe_Release(pRenderObject);
+	}
+
+	m_RenderObjects[ENUM_CLASS(RENDER::DISTORTION)].clear();
 
 	if (FAILED(m_pGameInstance->End_MRT()))
 		return;
@@ -700,14 +750,16 @@ void CRenderer::Render_Debug()
 	//	return;
 	//if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Outline"), m_pShader, m_pVIBuffer)))
 	//	return;
-	if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Shadow"), m_pShader, m_pVIBuffer)))
-		return;
-	if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_StaticShadow"), m_pShader, m_pVIBuffer)))
-		return;
+	//if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Shadow"), m_pShader, m_pVIBuffer)))
+	//	return;
+	//if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_StaticShadow"), m_pShader, m_pVIBuffer)))
+	//	return;
 	//if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Blur_Small"), m_pShader, m_pVIBuffer)))
 	//	return;
 	//if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Blur_Small_X"), m_pShader, m_pVIBuffer)))
 	//	return;
+	if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_Distortion"), m_pShader, m_pVIBuffer)))
+		return;
 }
 
 #endif

@@ -81,6 +81,7 @@ public:
 #pragma endregion
 
 #pragma region RENDERER
+	void	Set_Distortion(_float fTime);
 	void	Set_RadialBlur(_float fTime);
 	HRESULT Add_RenderGroup(RENDER eRenderGroup, class CGameObject* pRenderObject);
 	HRESULT Add_Font(class CFont* pRenderFont);

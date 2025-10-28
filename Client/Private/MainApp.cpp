@@ -939,6 +939,8 @@ HRESULT CMainApp::Bind_PreSRVS()
 
 	Safe_Release(pTextureCom);
 	Safe_Release(pShaderCom);
+
+	return S_OK;
 }
 
 CMainApp* CMainApp::Create()

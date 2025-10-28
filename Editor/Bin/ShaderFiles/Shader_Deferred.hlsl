@@ -16,7 +16,7 @@ texture2D g_FinalShadeTexture;
 texture2D g_DepthTexture;
 texture2D g_SpecularTexture;
 texture2D g_ShadowTexture;
-
+texture2D g_DistortionTexture;
 texture2D g_BlurTexture;
 texture2D g_BlurSmallTexture;
 texture2D g_BlurXTexture;
@@ -33,6 +33,9 @@ vector g_vLightSpecular;
 
 bool g_IsRadialBlur;
 float g_fRadialBlurTime, g_fRadialBlurTimeAcc;
+
+bool g_IsDistortion;
+float g_fDistortionTime, g_fDistortionTimeAcc;
 
 struct VS_IN
 {
@@ -292,7 +295,6 @@ PS_OUT_BACKBUFFER PS_MAIN_COMBINED(PS_IN In)
     // 아웃라인 (툰셰이딩 처리)
     Out.vBackBuffer *= g_OutlineTexture.Sample(DefaultSampler, In.vTexcoord);
    
-    
     // 방사형 블러
     if(true == g_IsRadialBlur)
     {
@@ -324,6 +326,40 @@ PS_OUT_BACKBUFFER PS_MAIN_COMBINED(PS_IN In)
 
     // 강도 조절 (기존 백버퍼와 섞기)
         Out.vBackBuffer.rgb = lerp(Out.vBackBuffer.rgb, zoomColor, 0.4f * (1 - g_fRadialBlurTimeAcc / g_fRadialBlurTime));
+    }
+    
+    // 디스토션 세팅
+    if(true == g_IsDistortion)
+    {
+        vector vDistortion = g_DistortionTexture.Sample(ClampSampler, In.vTexcoord);
+
+        // 검은색이면 왜곡 없음
+        if (vDistortion.r > 0.f)
+        {
+            // 하얀색이면 최대 오프셋, 검은색이면 0
+            float maxOffset = 0.05f; // 원하는 왜곡 세기
+            float2 distortionOffset = float2(maxOffset, maxOffset) * vDistortion.r;
+
+            // 시간 기반 흔들림 추가
+            distortionOffset *= sin(g_fDistortionTimeAcc * 2.0f); // -1~1 진동
+
+            // 기존 UV에 오프셋 적용
+            float2 distortedUV = In.vTexcoord + distortionOffset;
+
+            // Out.vBackBuffer 자체를 샘플링하지 못하므로
+            // 이미 계산된 RGB를 오프셋 UV 근처 픽셀에서 보간
+            // 여기서는 단순히 Offset만 적용, 실제로는 주변 Blur X/Y를 활용 가능
+            // UV가 화면을 넘어가지 않게 Clamp
+            distortedUV = clamp(distortedUV, 0.f, 1.f);
+
+            // 기존 Out.vBackBuffer와 오프셋을 섞어서 최종 색상
+            // 화면 내에서 단순 이동 효과처럼
+            float4 sampleColor = g_DiffuseTexture.Sample(ClampSampler, distortedUV);
+            Out.vBackBuffer.rgb = lerp(Out.vBackBuffer.rgb, sampleColor.rgb, 0.8f);
+            Out.vBackBuffer.a = sampleColor.a;
+        }
+
+        return Out;
     }
     
     return Out;

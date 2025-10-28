@@ -445,6 +445,11 @@ HRESULT CGameInstance::Add_PoolingObject_ToLayer(const _wstring& strPoolingTag, 
 
 #pragma region RENDERER
 
+void CGameInstance::Set_Distortion(_float fTime)
+{
+	m_pRenderer->Set_Distortion(fTime);
+}
+
 void CGameInstance::Set_RadialBlur(_float fTime)
 {
 	m_pRenderer->Set_RadialBlur(fTime);
