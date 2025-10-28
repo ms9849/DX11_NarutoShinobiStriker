@@ -182,6 +182,22 @@ PS_OUT PS_ProgressBar(PS_IN In)
         }
     }
     
+        /* Ã¼·Â¹Ù */
+    else if (g_iProgressBarTextureNum == 3)
+    {
+        Out.vColor = g_Texture.Sample(DefaultSampler, In.vTexcoord);
+        
+        if (In.vTexcoord.x < g_ProgressRate)
+        {
+            if (Out.vColor.a == 0)
+                discard;
+            
+            Out.vColor = float4(1.0f, 0.3f, 0.f, Out.vColor.a);
+        }
+        else 
+            discard;
+    }
+    
     else
     {
         if (In.vTexcoord.x < g_ProgressRate)

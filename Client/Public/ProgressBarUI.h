@@ -13,6 +13,10 @@ NS_BEGIN(Client)
 
 class CProgressBarUI final : public CUIObject
 {
+public:
+	typedef struct tagProgressBarUI : public CUIObject::UIOBJECT_DESC {
+		_bool IsBlur = { false };
+	} PROGRESSBAR_DESC;
 private:
 	CProgressBarUI(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
 	CProgressBarUI(const CProgressBarUI& rhs);
@@ -39,7 +43,7 @@ private:
 	_float3 m_vOriginPos = {};
 	_float m_fMaxSize = {};
 	_bool  m_IsVisible = { true };
-
+	_bool  m_IsBlur = { false };
 private:
 	HRESULT Ready_Components();
 	virtual HRESULT Bind_ShaderResources() override;

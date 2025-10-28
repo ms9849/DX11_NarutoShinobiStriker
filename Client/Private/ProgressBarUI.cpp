@@ -27,6 +27,7 @@ HRESULT CProgressBarUI::Initialize(void* pArg)
 
 	m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_PROGRESSBAR);
 	m_fMaxSize = static_cast<UIOBJECT_DESC*>(pArg)->fSizeX;
+	m_IsBlur = static_cast<PROGRESSBAR_DESC*>(pArg)->IsBlur;
 
 	XMStoreFloat3(&m_vOriginPos, m_pTransformCom->Get_State(STATE::POSITION));
 
@@ -45,6 +46,9 @@ void CProgressBarUI::Late_Update(_float fTimeDelta)
 {
 	if (false == m_IsVisible)
 		return;
+
+	if(true == m_IsBlur)
+		m_pGameInstance->Add_RenderGroup(RENDER::BLUR_SMALL, this);
 
 	m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
 }

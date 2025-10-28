@@ -78,20 +78,11 @@ HRESULT CTutorialMap::Render()
 
 HRESULT CTutorialMap::Render_Shadow()
 {
-	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
-		return E_FAIL;
-
-	if (FAILED(m_pGameInstance->Bind_Shadow_Resource(m_pShaderCom, "g_ViewMatrix", D3DTS::VIEW)))
-		return E_FAIL;
-
-	if (FAILED(m_pGameInstance->Bind_Shadow_Resource(m_pShaderCom, "g_ProjMatrix", D3DTS::PROJ)))
+	if (FAILED(Bind_ShaderResources()))
 		return E_FAIL;
 
 	for (size_t i = 0; i < m_iNumMeshes; i++)
 	{
-		if (FAILED(m_pModelCom->Bind_BoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
-			return E_FAIL;
-
 		if (FAILED(m_pShaderCom->Begin(1)))
 			return E_FAIL;
 
