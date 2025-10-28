@@ -296,9 +296,10 @@ void CBird::Late_Update(_float fTimeDelta)
     m_pNavigationCom->Compute_Height(m_pTransformCom);
 
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+    m_pGameInstance->Add_RenderGroup(RENDER::SHADOW, this);
 
 #ifdef _DEBUG
-    m_pGameInstance->Add_DebugComponent(m_pColliderCom);
+    //m_pGameInstance->Add_DebugComponent(m_pColliderCom);
 #endif
 
 }
@@ -323,6 +324,33 @@ HRESULT CBird::Render()
             return E_FAIL;
     }
 
+    return S_OK;
+}
+
+HRESULT CBird::Render_Shadow()
+{
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", m_pTransformCom->Get_WorldMatrixPtr())))
+        return E_FAIL;
+
+    if (FAILED(m_pGameInstance->Bind_Shadow_Resource(m_pShaderCom, "g_ViewMatrix", D3DTS::VIEW)))
+        return E_FAIL;
+
+    if (FAILED(m_pGameInstance->Bind_Shadow_Resource(m_pShaderCom, "g_ProjMatrix", D3DTS::PROJ)))
+        return E_FAIL;
+
+    _uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+    for (size_t i = 0; i < iNumMeshes; i++)
+    {
+        if (FAILED(m_pModelCom->Bind_BoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
+            return E_FAIL;
+
+        if (FAILED(m_pShaderCom->Begin(1)))
+            return E_FAIL;
+
+        if (FAILED(m_pModelCom->Render(i)))
+            return E_FAIL;
+    }
     return S_OK;
 }
 

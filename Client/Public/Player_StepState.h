@@ -25,9 +25,9 @@ public:
 	virtual _bool	End() override;
 
 private:
-	class CPlayer* m_pPlayer = { nullptr };
-	ANIM_STATE m_eAnimState = { };
-
+	class CPlayer*	m_pPlayer = { nullptr };
+	ANIM_STATE		m_eAnimState = { };
+	_bool			m_IsCreatedEffect = { false };
 public:
 	static CPlayer_StepState* Create(class CPlayer* pPlayer, ANIM_STATE eAnimState);
 	virtual void Free() override;

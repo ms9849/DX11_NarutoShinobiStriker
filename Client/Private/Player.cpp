@@ -14,6 +14,7 @@
 #include "Weapon_Character.h"
 
 #include "PlayerState.h"
+#include "Player_IdleState.h"
 #include "Player_FrontJumpState.h"
 #include "Player_BeatenState.h"
 #include "Player_BeatenBlastedState.h"
@@ -205,7 +206,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 		return E_FAIL;
 
 	/* 상태 초기화 및 시작. */
-	m_pState = CPlayer_FrontJumpState::Create(this, 1.23f, CPlayer_FrontJumpState::ANIM_STATE::FALL);
+	m_pState = CPlayer_IdleState::Create(this);
 	m_pState->Start(true);
 
 	if (LEVEL::TUTORIAL == m_pGameManager->Get_NextLevel())
@@ -219,7 +220,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 
 	else if (LEVEL::KONOHA_VILLAGE == m_pGameManager->Get_NextLevel())
 	{
-		m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(-101.82f, 22.24f, -91.05f, 1.f));
+		m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(-101.82f, 17.7f, -91.05f, 1.f));
 		/* 게임 매니저에 현재 플레이어 정보 세팅. 레벨 변경되도 안전할거니까.. */
 		m_pGameManager->Set_PlayerPtr(this);
 

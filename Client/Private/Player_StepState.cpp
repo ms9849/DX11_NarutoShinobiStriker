@@ -57,19 +57,6 @@ void CPlayer_StepState::Start(_bool IsBlend)
 		m_pGameInstance->Set_RadialBlur(0.8f);
 
 		m_pPlayer->Set_AnimIndex("CustomMan_DashStep_Front", 1.4f, IsBlend);
-
-		CEffectContainer::EFFECT_CONTAINER_DESC EffectDesc;
-		EffectDesc.IsBinary = true;
-		EffectDesc.strFilePath = TEXT("../Bin/Resources/Effects/Player_Dash_Eff.bin");
-		EffectDesc.fLifeTime = 0.6f;
-
-		CEffectContainer* pCloneEffect = static_cast<CEffectContainer*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_EffectContainer"),
-			&EffectDesc));
-		pCloneEffect->Set_Position(XMVectorSet(0.f, 0.6f, 0.f, 1.f));
-		pCloneEffect->Set_ParentMatrix(XMMatrixScaling(0.8f, 0.8f, 0.8f) * XMLoadFloat4x4(m_pPlayer->Get_Transform()->Get_WorldMatrixPtr()));
-		pCloneEffect->Rotation(XMConvertToRadians(270.f), XMConvertToRadians(90.f), XMConvertToRadians(270.f));
-
-		m_pGameInstance->Add_Clone_ToLayer(pCloneEffect, m_pGameInstance->Get_LevelID(), TEXT("Layer_Effect"));
 	}
 
 	m_pPlayer->Get_Transform()->Change_Look_Force(vPlayerLook);
@@ -361,6 +348,24 @@ CPlayerState* CPlayer_StepState::Update(_float fTimeDelta)
 			m_pPlayer->Get_Transform()->Go_Straight(fTimeDelta * fStepSpeed);
 		}
 		
+
+		if (false == m_IsCreatedEffect)
+		{
+			CEffectContainer::EFFECT_CONTAINER_DESC EffectDesc;
+			EffectDesc.IsBinary = true;
+			EffectDesc.strFilePath = TEXT("../Bin/Resources/Effects/Player_Dash_Eff.bin");
+			EffectDesc.fLifeTime = 0.6f;
+
+			CEffectContainer* pCloneEffect = static_cast<CEffectContainer*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_EffectContainer"),
+				&EffectDesc));
+			pCloneEffect->Set_Position(XMVectorSet(0.f, 0.6f, 0.f, 1.f));
+			pCloneEffect->Set_ParentMatrix(XMMatrixScaling(0.8f, 0.8f, 0.8f)* XMLoadFloat4x4(m_pPlayer->Get_Transform()->Get_WorldMatrixPtr()));
+			pCloneEffect->Rotation(XMConvertToRadians(270.f), XMConvertToRadians(90.f), XMConvertToRadians(270.f));
+
+			m_pGameInstance->Add_Clone_ToLayer(pCloneEffect, m_pGameInstance->Get_LevelID(), TEXT("Layer_Effect"));
+			
+			m_IsCreatedEffect = true;
+		}
 	}
 
 	return pNextState;
