@@ -44,12 +44,13 @@ CPlayerState* CPlayer_RasenShurikenState::Update(_float fTimeDelta)
         _vector vPosition = {};
         CTransform* pTargetTransform = CGameManager::GetInstance()->Calc_Target(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
 
-        /* 타겟이 없을때만 플레이어가 바라보는 방향으로 날아가게끔 한다. */
-        if (nullptr != pTargetTransform)
-            XMStoreFloat3(&Desc.vDir, vPosition - m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
+
         /* 타겟이 있다면 타겟 방향으로 날아가게끔 한다. */
+        if (nullptr != pTargetTransform)
+            XMStoreFloat3(&Desc.vDir, XMVector3Normalize(XMVectorSetY(pTargetTransform->Get_State(STATE::POSITION) - m_pPlayer->Get_Transform()->Get_State(STATE::POSITION), 0.f)));
+        /* 타겟이 없을때만 플레이어가 바라보는 방향으로 날아가게끔 한다. */
         else
-            XMStoreFloat3(&Desc.vDir, m_pPlayer->Get_Transform()->Get_State(STATE::LOOK));
+            XMStoreFloat3(&Desc.vDir, XMVector3Normalize(XMVectorSetY(m_pPlayer->Get_Transform()->Get_State(STATE::LOOK), 0.f)));
 
         m_pRasenShuriken = static_cast<CRasenShuriken*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC),
             TEXT("Prototype_GameObject_RasenShuriken"), &Desc));

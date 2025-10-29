@@ -57,6 +57,7 @@ void CWoodArm::Update(_float fTimeDelta)
             CParticleObject::PARTICLE_LOAD_DESC Desc;
             Desc.strParticlePath = TEXT("../Bin/Resources/Particle/ThousandArm_Particle.bin");
             Desc.eType = CParticleObject::PARTICLE_TYPE::EXPLOSION;
+            Desc.IsBlur = false;
             XMStoreFloat3(&Desc.vPosition, m_pTransformCom->Get_State(STATE::POSITION));
 
             m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),

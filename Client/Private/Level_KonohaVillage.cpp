@@ -410,7 +410,7 @@ HRESULT CLevel_KonohaVillage::Ready_Layer_UI(const _wstring& strLayerTag)
 
 	m_pGameManager->Set_Dialog(static_cast<CDialogUI*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), strLayerTag, m_pGameInstance->Get_LayerSize(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), strLayerTag) - 1)));
 
-	Desc = CUIObject::CreateDesc(g_iWinSizeX / 2.f, g_iWinSizeY / 2.f, 0.01f, g_iWinSizeX / 2.f, g_iWinSizeY / 2.f - 80.f, 0, 0.f);
+	Desc = CUIObject::CreateDesc(g_iWinSizeX / 2.f, g_iWinSizeY / 2.f - 110.f, 0.01f, g_iWinSizeX * 0.8f, g_iWinSizeY / 3.5f, 0, 0.f);
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_WinPanel"),
 		ENUM_CLASS(LEVEL::KONOHA_VILLAGE), strLayerTag, &Desc)))
