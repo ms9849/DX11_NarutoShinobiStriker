@@ -125,6 +125,8 @@ CPlayerState* CPlayer_RasenganState::Update(_float fTimeDelta)
 _bool CPlayer_RasenganState::End()
 {
     m_pPlayer->Set_Invincible(false);
+    m_pRasengan->Set_Dead(true);
+
 	return true;
 }
 

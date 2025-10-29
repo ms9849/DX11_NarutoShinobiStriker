@@ -101,7 +101,7 @@ CPlayerState* CPlayer_ChidoriAttackState::Update(_float fTimeDelta)
 _bool CPlayer_ChidoriAttackState::End()
 {
     m_pPlayer->Set_Invincible(false);
-    m_pChidori->Set_Visible(false);
+    m_pChidori->Set_Dead(true); 
 
     return true;
 }

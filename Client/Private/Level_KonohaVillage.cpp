@@ -157,7 +157,7 @@ HRESULT CLevel_KonohaVillage::Ready_Temp()
 
 HRESULT CLevel_KonohaVillage::Ready_Lights()
 {
-	LIGHT_DESC		LightDesc{};
+/*	LIGHT_DESC		LightDesc{};
 
 	LightDesc.eType = LIGHT::DIRECTIONAL;
 	LightDesc.vDiffuse = _float4(0.6f, 0.6f, 0.6f, 1.f);
@@ -166,8 +166,18 @@ HRESULT CLevel_KonohaVillage::Ready_Lights()
 	LightDesc.vDirection = _float4(1.f, -1.f, 1.f, 0.f);
 
 	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
-		return E_FAIL;
+		return E_FAIL*/
 
+	LIGHT_DESC			LightDesc{};
+
+	LightDesc.eType = LIGHT::DIRECTIONAL;
+	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vAmbient = _float4(0.4f, 0.4f, 0.4f, 1.f);
+	LightDesc.vSpecular = _float4(0.f, 0.f, 0.f, 1.f);
+	LightDesc.vDirection = _float4(1.f, -1.f, 1.f, 1.f);
+
+	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
+		return E_FAIL;
 
 	SHADOW_LIGHT_DESC		ShadowDesc{};
 	ShadowDesc.vEye = _float4(-126.5f, 139.215, -79.592, 1.f);
@@ -179,35 +189,6 @@ HRESULT CLevel_KonohaVillage::Ready_Lights()
 
 	if (FAILED(m_pGameInstance->Ready_Shadow_Light(ShadowDesc)))
 		return E_FAIL;
-	/* 핸들 열어서 여기서 저장 */
-/* 로드는 반대로 */
-
-	//DWORD	dwByte(0);
-	//HANDLE hHandle = CreateFile(TEXT("../Bin/LightInfo.bin"),
-	//	GENERIC_READ,  // 파일 용도(GENERIC_WRITE : 쓰기(저장), GENERIC_READ : 읽기(불러오기))
-	//	FILE_SHARE_READ,			// 공유 방식(NULL인 경우 공유하지 않음)
-	//	NULL,			// 보안 설정(NULL인 경우 기본값으로 설정)
-	//	OPEN_EXISTING,	// 생성 방식(CREATE_ALWAYS : 쓰기 전용, OPEN_EXISTING : 읽기 전용)
-	//	FILE_ATTRIBUTE_NORMAL, // 파일 속성(숨김, 읽기 전용 파일 등) : 아무런 속성이 없는 일반 형식
-	//	NULL);	// 생성될 파일의 속성을 제공할 템플릿 파일(안쓸것이기 때문에 NULL)
-
-	//if (hHandle == INVALID_HANDLE_VALUE)
-	//	return S_OK;
-
-	//_int iSize;
-
-	//ReadFile(hHandle, &iSize, sizeof(_uint), &dwByte, nullptr);
-
-	//for (_int i = 0; i < iSize; ++i)
-	//{
-	//	LIGHT_DESC LightDesc = {};
-	//	ReadFile(hHandle, &LightDesc, sizeof(LIGHT_DESC), &dwByte, nullptr);
-
-	//	if(LightDesc.eType == LIGHT::SPOT)
-	//		m_pGameInstance->Add_Light(LightDesc);
-	//}
-
-	//CloseHandle(hHandle);
 
 	return S_OK;
 }
@@ -215,7 +196,7 @@ HRESULT CLevel_KonohaVillage::Ready_Lights()
 HRESULT CLevel_KonohaVillage::Ready_Layer_BackGround(const _wstring& strLayerTag)
 {
 	CSkyMesh::SKYMESH_DESC Desc;
-	Desc.IsNight = true;
+	Desc.IsNight = false;
 	Desc.fRotationPerSec = XMConvertToRadians(10.f);
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_SkyMesh"),
@@ -485,3 +466,34 @@ void CLevel_KonohaVillage::Free()
 	Safe_Release(m_pGameManager);
 	Safe_Release(m_pLightGUI); 
 }
+
+/* 빛 추가하는 임시용 테스트코드 */
+/* 핸들 열어서 여기서 저장 */
+/* 로드는 반대로 */
+
+	//DWORD	dwByte(0);
+	//HANDLE hHandle = CreateFile(TEXT("../Bin/LightInfo.bin"),
+	//	GENERIC_READ,  // 파일 용도(GENERIC_WRITE : 쓰기(저장), GENERIC_READ : 읽기(불러오기))
+	//	FILE_SHARE_READ,			// 공유 방식(NULL인 경우 공유하지 않음)
+	//	NULL,			// 보안 설정(NULL인 경우 기본값으로 설정)
+	//	OPEN_EXISTING,	// 생성 방식(CREATE_ALWAYS : 쓰기 전용, OPEN_EXISTING : 읽기 전용)
+	//	FILE_ATTRIBUTE_NORMAL, // 파일 속성(숨김, 읽기 전용 파일 등) : 아무런 속성이 없는 일반 형식
+	//	NULL);	// 생성될 파일의 속성을 제공할 템플릿 파일(안쓸것이기 때문에 NULL)
+
+	//if (hHandle == INVALID_HANDLE_VALUE)
+	//	return S_OK;
+
+	//_int iSize;
+
+	//ReadFile(hHandle, &iSize, sizeof(_uint), &dwByte, nullptr);
+
+	//for (_int i = 0; i < iSize; ++i)
+	//{
+	//	LIGHT_DESC LightDesc = {};
+	//	ReadFile(hHandle, &LightDesc, sizeof(LIGHT_DESC), &dwByte, nullptr);
+
+	//	if(LightDesc.eType == LIGHT::SPOT)
+	//		m_pGameInstance->Add_Light(LightDesc);
+	//}
+
+	//CloseHandle(hHandle);

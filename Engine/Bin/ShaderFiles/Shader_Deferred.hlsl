@@ -459,7 +459,7 @@ PS_OUT_BACKBUFFER PS_DISTORTION(PS_IN In)
             float r = length(centeredUV);
 
             // 기본 배럴 왜곡 강도
-            float k = 0.8;
+            float k = 1.5;
             float distortionFactor = 1.0 + k * (r) * (r);
 
             // 방향 유지하면서 왜곡 적용
