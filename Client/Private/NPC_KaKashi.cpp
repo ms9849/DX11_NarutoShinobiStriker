@@ -209,7 +209,7 @@ void CNPC_KaKashi::Check_Talkable()
 	_float fDist = XMVectorGetX(XMVector3Length(vPlayerPos - m_pTransformCom->Get_State(STATE::POSITION)));
 
 	/* 이미 대화중이여도 대화를 하면 안됨. */
-	if (fDist <= 1.5f && false == m_IsTalking)
+	if (fDist <= 2.f && false == m_IsTalking)
 		m_IsTalkable = true;
 
 	else
@@ -227,6 +227,8 @@ void CNPC_KaKashi::Talk()
 		Start_Dialog();
 		m_pGameManager->Set_Dialog_Visible(true);
 		m_pGameManager->Set_Dialog_Text(m_DialogTexts[m_iCurrentDialog]);
+
+		m_pGameInstance->PlaySoundOnce(TEXT("NPC_Talk_UI.wav"), CHANNELID::UI, 0.3f);
 	}
 
 	/* 이미 대화중이라면 */
@@ -239,6 +241,8 @@ void CNPC_KaKashi::Talk()
 		{
 			m_iCurrentDialog++;
 			m_pGameManager->Set_Dialog_Text(m_DialogTexts[m_iCurrentDialog]);
+	
+			m_pGameInstance->PlaySoundOnce(TEXT("NPC_Talk_UI.wav"), CHANNELID::UI, 0.3f);
 		}
 	}
 }

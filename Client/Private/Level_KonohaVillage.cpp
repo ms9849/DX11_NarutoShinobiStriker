@@ -32,9 +32,6 @@ CLevel_KonohaVillage::CLevel_KonohaVillage(ID3D11Device* pDevice, ID3D11DeviceCo
 
 HRESULT CLevel_KonohaVillage::Initialize()
 {
-	if (FAILED(Ready_Temp()))
-		return E_FAIL;
-
 	if (FAILED(Ready_Lights()))
 		return E_FAIL;
 
@@ -126,6 +123,12 @@ void CLevel_KonohaVillage::Update(_float fTimeDelta)
 	if (TRIGGER_TYPE::KONOHA_VILLAGE_BOSS_CUTSCENE_END == m_pGameManager->Get_CurrentTrigger()
 		&& 0 == m_pGameInstance->Get_LayerSize(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Layer_Boss")))
 	{
+		if (false == m_IsSoundPlayed)
+		{
+			m_pGameInstance->PlaySoundOnce(TEXT("WinPanel.wav"), CHANNELID::UI, 0.9f);
+			m_IsSoundPlayed = true;
+		}
+
 		m_pGameManager->WinPanel_Start_FadeIn();
 		m_fTimeAcc += fTimeDelta;
 
@@ -146,13 +149,6 @@ void CLevel_KonohaVillage::Update(_float fTimeDelta)
 HRESULT CLevel_KonohaVillage::Render()
 {
 	SetWindowText(g_hWnd, TEXT("³ª¹µÀÙ ¸¶À»"));
-	return S_OK;
-}
-
-HRESULT CLevel_KonohaVillage::Ready_Temp()
-{
-	m_pLightGUI = CLight_GUI::Create(m_pDevice, m_pContext);
-
 	return S_OK;
 }
 

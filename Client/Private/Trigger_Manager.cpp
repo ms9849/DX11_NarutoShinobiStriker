@@ -31,6 +31,7 @@ HRESULT CTrigger_Manager::OnTrigger(TRIGGER_TYPE eTriggerType)
             return E_FAIL;
 
         m_IsTriggerActivated[ENUM_CLASS(TRIGGER_TYPE::TUTORIAL_KAKASHI_TALK)] = true;
+
     }
 
     else if (TRIGGER_TYPE::TUTORIAL_SPAWNER_01 == eTriggerType && false == m_IsTriggerActivated[ENUM_CLASS(TRIGGER_TYPE::TUTORIAL_SPAWNER_01)])
@@ -49,13 +50,14 @@ HRESULT CTrigger_Manager::OnTrigger(TRIGGER_TYPE eTriggerType)
             return E_FAIL;
 
         m_pGameManager->AlertPanel_Start_FadeIn(TEXT("적을 쓰러뜨려라!"));
+        m_pGameInstance->PlaySoundOnce(TEXT("MissionAlert.wav"), CHANNELID::UI, 0.9f);
+
         m_IsTriggerActivated[ENUM_CLASS(TRIGGER_TYPE::TUTORIAL_SPAWNER_01)] = true;
     }
 
     else if (TRIGGER_TYPE::TUTORIAL_CLEAR == eTriggerType &&  false == m_IsTriggerActivated[ENUM_CLASS(TRIGGER_TYPE::TUTORIAL_CLEAR)])
     {
         m_pGameInstance->Request_LevelChange();
-
         m_IsTriggerActivated[ENUM_CLASS(TRIGGER_TYPE::TUTORIAL_CLEAR)] = true;
     }
 
@@ -72,6 +74,7 @@ HRESULT CTrigger_Manager::OnTrigger(TRIGGER_TYPE eTriggerType)
             return E_FAIL;
 
         m_pGameManager->AlertPanel_Start_FadeIn(TEXT("정해진 구역으로 이동하라!"));
+        m_pGameInstance->PlaySoundOnce(TEXT("MissionAlert.wav"), CHANNELID::UI, 0.9f);
         m_IsTriggerActivated[ENUM_CLASS(TRIGGER_TYPE::KONOHA_VILLAGE_KAKASHI_TALK_1)] = true;
     }
 
@@ -86,6 +89,7 @@ HRESULT CTrigger_Manager::OnTrigger(TRIGGER_TYPE eTriggerType)
             return E_FAIL;
 
         m_pGameManager->AlertPanel_Start_FadeIn(TEXT("적을 쓰러뜨려라!"));
+        m_pGameInstance->PlaySoundOnce(TEXT("MissionAlert.wav"), CHANNELID::UI, 0.9f);
         m_IsTriggerActivated[ENUM_CLASS(TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_01)] = true;
     }
     /* 중간 보스 스포너 생성*/
@@ -102,6 +106,7 @@ HRESULT CTrigger_Manager::OnTrigger(TRIGGER_TYPE eTriggerType)
             return E_FAIL;
 
         m_pGameManager->AlertPanel_Start_FadeIn(TEXT("정해진 구역으로 이동하라!"));
+        m_pGameInstance->PlaySoundOnce(TEXT("MissionAlert.wav"), CHANNELID::UI, 0.9f);
         m_IsTriggerActivated[ENUM_CLASS(TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_01_CLEAR)] = true;
 
     }
@@ -117,6 +122,7 @@ HRESULT CTrigger_Manager::OnTrigger(TRIGGER_TYPE eTriggerType)
             return E_FAIL;
 
         m_pGameManager->AlertPanel_Start_FadeIn(TEXT("적을 쓰러뜨려라!"));
+        m_pGameInstance->PlaySoundOnce(TEXT("MissionAlert.wav"), CHANNELID::UI, 0.9f);
         m_IsTriggerActivated[ENUM_CLASS(TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_02)] = true;
     }
     /* 중간보스 클리어 */
@@ -133,6 +139,7 @@ HRESULT CTrigger_Manager::OnTrigger(TRIGGER_TYPE eTriggerType)
             return E_FAIL;
 
         m_pGameManager->AlertPanel_Start_FadeIn(TEXT("정해진 구역으로 이동하라!"));
+        m_pGameInstance->PlaySoundOnce(TEXT("MissionAlert.wav"), CHANNELID::UI, 0.9f);
         m_IsTriggerActivated[ENUM_CLASS(TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_02_CLEAR)] = true;
     }
     /* 보스 스포너. 건드리면 컷씬 출력 */
@@ -152,6 +159,7 @@ HRESULT CTrigger_Manager::OnTrigger(TRIGGER_TYPE eTriggerType)
     {
         static_cast<CBoss*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Layer_Boss"), 0))->Start_Battle();
         m_pGameManager->AlertPanel_Start_FadeIn(TEXT("시연회를 위해 적을 쓰러뜨려라!"));
+        m_pGameInstance->PlaySoundOnce(TEXT("MissionAlert.wav"), CHANNELID::UI, 0.9f);
         m_IsTriggerActivated[ENUM_CLASS(TRIGGER_TYPE::KONOHA_VILLAGE_BOSS_CUTSCENE_END)] = true;
     }
     /* 끝..*/

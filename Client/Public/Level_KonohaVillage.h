@@ -17,8 +17,6 @@ public:
 	virtual HRESULT Render() override;
 
 private:
-	// 시연회 끝나면 삭제
-	HRESULT Ready_Temp();
 	HRESULT Ready_Lights();
 	HRESULT Ready_Layer_BackGround(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_Camera(const _wstring& strLayerTag);
@@ -34,7 +32,7 @@ private:
 	class CLight_GUI* m_pLightGUI = { nullptr };
 	class CGameManager* m_pGameManager = { nullptr };
 	_float				m_fTimeAcc = { 0.f };
-
+	_bool				m_IsSoundPlayed = { false };
 public:
 	static CLevel_KonohaVillage* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID);
 	virtual void Free() override;

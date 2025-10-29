@@ -120,10 +120,16 @@ void CLevel_Tutorial::Update(_float fTimeDelta)
 	if (TRIGGER_TYPE::TUTORIAL_SPAWNER_01 == m_pGameManager->Get_CurrentTrigger()
 		&& (0 == m_pGameInstance->Get_LayerSize(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_Monster"))))
 	{
+		if (false == m_IsSoundPlayed)
+		{
+			m_pGameInstance->PlaySoundOnce(TEXT("WinPanel.wav"), CHANNELID::UI, 0.9f);
+			m_IsSoundPlayed = true;
+		}
+
 		m_pGameManager->WinPanel_Start_FadeIn();
 		m_fTimeAcc += fTimeDelta;
 
-		if (m_fTimeAcc >= 5.f)
+		if (m_fTimeAcc >= 7.f)
 			m_pGameManager->OnTrigger(TRIGGER_TYPE::TUTORIAL_CLEAR);
 	}
 
