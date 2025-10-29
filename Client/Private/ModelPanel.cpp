@@ -266,11 +266,13 @@ void CModelPanel::Key_Input()
     if (m_pGameInstance->Key_Down(DIK_DOWN))
     {
         Change_FocusedButton(m_iFocusedNum + 1);
+        m_pGameInstance->PlaySoundOnce(TEXT("OutfitSelect_BtnHover.wav"), CHANNELID::UI, 2.f);
     }
 
     if (m_pGameInstance->Key_Down(DIK_UP))
     {
         Change_FocusedButton(m_iFocusedNum - 1);
+        m_pGameInstance->PlaySoundOnce(TEXT("OutfitSelect_BtnHover.wav"), CHANNELID::UI, 2.f);
     }
 
     if (m_pGameInstance->Key_Down(DIK_SPACE) && m_iFocusedNum != m_iDecideButtonNum)
@@ -278,8 +280,10 @@ void CModelPanel::Key_Input()
         if (m_iFocusedNum < 0 || m_IsFadeIn || m_IsFadeOut)
             return;
 
+
         if (SELECT_TYPE::PARTS == m_eSelectType)
         {
+            m_pGameInstance->PlaySoundOnce(TEXT("OutfitSelect_BtnClick.wav"), CHANNELID::UI, 1.0f);
             m_IsFadeOut = true;
             m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT);
 
@@ -296,15 +300,23 @@ void CModelPanel::Key_Input()
         }
 
         else
+        {
+            m_pGameInstance->PlaySoundOnce(TEXT("OutfitSelect_BtnClick_2.wav"), CHANNELID::UI, 1.0f);
             m_pMannequin->Activate_Parts(m_eSelectType, m_iFocusedNum);
+        }
     }
     else if (m_pGameInstance->Key_Down(DIK_SPACE) && m_iFocusedNum == m_iDecideButtonNum)
+    {
         m_pGameInstance->Request_LevelChange();
+        m_pGameInstance->PlaySoundOnce(TEXT("OutfitSelect_StartGame.wav"), CHANNELID::UI, 0.8f);
+    }
 
     if (m_pGameInstance->Key_Down(DIK_ESCAPE))
     {
         if (m_eSelectType == SELECT_TYPE::PARTS || m_IsFadeIn || m_IsFadeOut)
             return;
+
+        m_pGameInstance->PlaySoundOnce(TEXT("OutfitSelect_BackSpace.wav"), CHANNELID::UI, 1.0f);
 
         m_IsFadeOut = true;
         m_iShaderPassIdx = ENUM_CLASS(SHADER_VTXPOSTEX_IDX::UI_FADEINOUT);
