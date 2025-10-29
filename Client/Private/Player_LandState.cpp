@@ -32,6 +32,8 @@ CPlayer_LandState::CPlayer_LandState(CPlayer* pPlayer)
 void CPlayer_LandState::Start(_bool IsBlend)
 {
 	m_pPlayer->Set_AnimIndex("CustomMan_Land", 1.f, IsBlend, 0.4f);
+
+	m_pGameInstance->PlaySoundOnce(TEXT("Landing.wav"), CHANNELID::EFFECT2, 0.45f);
 }
 
 CPlayerState* CPlayer_LandState::Update(_float fTimeDelta)

@@ -38,6 +38,8 @@ void CPlayer_DuckingState::Start(_bool IsBlend)
 	m_pEffectMain->Set_Blur(true);
 	Safe_AddRef(m_pEffectMain);
 
+	m_pGameInstance->PlaySoundLoop(TEXT("SuperJump_Charging.wav"), CHANNELID::EFFECT10, 0.5f);
+
 	m_pGameInstance->Add_Clone_ToLayer(m_pEffectMain, m_pGameInstance->Get_LevelID(), TEXT("Layer_Effect"));
 }
 
@@ -71,6 +73,9 @@ CPlayerState* CPlayer_DuckingState::Update(_float fTimeDelta)
 
 				m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
 					TEXT("Layer_Particle"), &Desc);
+
+
+				m_pGameInstance->PlaySoundOnce(TEXT("SuperJump_ChargingEnd.wav"), CHANNELID::EFFECT, 0.5f);
 			}
 		}
 	}
@@ -98,6 +103,7 @@ CPlayerState* CPlayer_DuckingState::Update(_float fTimeDelta)
 _bool CPlayer_DuckingState::End()
 {
 	m_pEffectMain->Set_Dead(true);
+	m_pGameInstance->StopSound(CHANNELID::EFFECT10);
 
 	return true;
 }

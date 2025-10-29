@@ -99,7 +99,6 @@ void CWoodHand::Update(_float fTimeDelta)
 
         if (false == m_IsSoundPlayed)
         {
-            m_pGameInstance->PlaySoundOnce(TEXT("WoodHand_Clap.wav"), CHANNELID::EFFECT2, 0.9f);
             m_IsSoundPlayed = true;
         }
 
@@ -128,6 +127,8 @@ void CWoodHand::Update(_float fTimeDelta)
 
         m_pColliderCom->Set_Active(true);
         m_isAttackOn = true;
+
+        m_pGameInstance->PlaySoundOnce(TEXT("WoodHand_Clap.wav"), CHANNELID::EFFECT2, 0.9f);
     }
     /* 콜라이더 다시 꺼지게 */
     if (true == m_isAttackOn && true == m_IsMoveFinished && (0.7f <= Get_AnimProgress()))

@@ -27,6 +27,8 @@ void CPlayer_SuperJumpState::Start(_bool IsBlend)
 	m_pPlayer->Set_AnimIndex("CustomMan_ChakraJump_Charge_End", 0.7f, false);
 	m_pGameInstance->Set_RadialBlur(0.8f);
 
+	m_pGameInstance->PlaySoundOnce(TEXT("SuperJump_Start.wav"), CHANNELID::EFFECT2, 0.5f);
+
 	m_eAnimState = ANIM_STATE::START;
 }
 

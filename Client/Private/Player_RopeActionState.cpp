@@ -103,7 +103,7 @@ _bool CPlayer_RopeActionState::End()
     m_pPlayer->Get_Transform()->Set_State(STATE::LOOK, XMVector3Cross(m_pPlayer->Get_Transform()->Get_State(STATE::RIGHT), XMVectorSet(0.f, 1.f, 0.f, 0.f)));
     m_pPlayer->Set_Pickable(true);
     m_pPlayer->Set_Ground(true);
-    m_pGameInstance->Set_RadialBlur(0.f);
+    //m_pGameInstance->Set_RadialBlur(0.f);
 
     return true;
 }
