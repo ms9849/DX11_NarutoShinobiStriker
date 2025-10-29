@@ -46,7 +46,18 @@ CPlayerState* CPlayer_BigSharkState::Update(_float fTimeDelta)
 
 		Desc.fSpeedPerSec = 20.f;
 		XMStoreFloat3(&Desc.vPosition, m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
-		XMStoreFloat3(&Desc.vLook, m_pPlayer->Get_Transform()->Get_State(STATE::LOOK));
+
+		_vector vPosition = {};
+		CTransform* pTargetTransform = CGameManager::GetInstance()->Calc_Target(m_pPlayer->Get_Transform()->Get_State(STATE::POSITION));
+
+		/* 타겟이 없을때만 플레이어가 바라보는 방향으로 날아가게끔 한다. */
+		if (nullptr == pTargetTransform)
+			vPosition = m_pPlayer->Get_Transform()->Get_State(STATE::LOOK);
+		/* 타겟이 있다면 타겟 방향으로 날아가게끔 한다. */
+		else
+			vPosition = pTargetTransform->Get_State(STATE::POSITION) - m_pPlayer->Get_Transform()->Get_State(STATE::POSITION);
+
+		XMStoreFloat3(&Desc.vLook, vPosition);
 
 		m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_BigShark"),
 			m_pGameInstance->Get_LevelID(), TEXT("Layer_Skill"), &Desc);
