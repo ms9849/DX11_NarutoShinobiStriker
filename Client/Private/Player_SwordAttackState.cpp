@@ -32,6 +32,9 @@ void CPlayer_SwordAttackState::Start(_bool IsBlend)
     m_IsOnCollider = false;
     m_pPlayer->Set_AnimIndex("CustomMan_Attack_SnakeSword_cmb_01", 2.f, true );
     m_eAnimState = ANIM_STATE::ATTACK_01;
+
+    m_pGameInstance->PlaySoundOnce(TEXT("SwordSwing_Voice1.wav"), CHANNELID::EFFECT3, 0.5f);
+    m_pGameInstance->PlaySoundOnce(TEXT("SwordSwing1.wav"), CHANNELID::EFFECT3, 0.2f);
 }
 
 CPlayerState* CPlayer_SwordAttackState::Update(_float fTimeDelta)
@@ -81,6 +84,8 @@ CPlayerState* CPlayer_SwordAttackState::Update(_float fTimeDelta)
         m_IsOnCollider = false;
         m_pPlayer->Set_AnimIndex("CustomMan_Attack_SnakeSword_cmb_02", 2.f, true);
         m_eAnimState = ANIM_STATE::ATTACK_02;
+        m_pGameInstance->PlaySoundOnce(TEXT("SwordSwing_Voice2.wav"), CHANNELID::EFFECT3, 0.6f);
+        m_pGameInstance->PlaySoundOnce(TEXT("SwordSwing2.wav"), CHANNELID::EFFECT3, 0.2f);
     }
 
     else if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON)
@@ -92,6 +97,8 @@ CPlayerState* CPlayer_SwordAttackState::Update(_float fTimeDelta)
         m_IsOnCollider = false;
         m_pPlayer->Set_AnimIndex("CustomMan_Attack_SnakeSword_cmb_03", 3.f, true);
         m_eAnimState = ANIM_STATE::ATTACK_03;
+        m_pGameInstance->PlaySoundOnce(TEXT("SwordSwing_Voice3.wav"), CHANNELID::EFFECT3, 0.6f);
+        m_pGameInstance->PlaySoundOnce(TEXT("SwordSwing1.wav"), CHANNELID::EFFECT3, 0.2f);
     }
 
 

@@ -171,9 +171,9 @@ _bool CPlayer::Use_Skill(SKILLNUM eSlotNum)
 		
 		m_pGameInstance->Add_Clone_ToLayer(pCloneEffect, m_pGameInstance->Get_LevelID(), TEXT("Layer_Effect"));
 
+		m_pGameInstance->PlaySoundOnce(TEXT("UseSkill.wav"), CHANNELID::EFFECT, 0.4f);
 
 		return true;
-
 	}
 
 	return false;

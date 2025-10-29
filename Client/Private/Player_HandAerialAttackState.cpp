@@ -24,6 +24,8 @@ void CPlayer_HandAerialAttackState::Start(_bool IsBlend)
 {
 	m_pPlayer->Set_Ground(false);
 	m_pPlayer->Set_AnimIndex("CustomMan_Attack_Aerial_cmb01", 1.5f, IsBlend);
+	m_pGameInstance->PlaySoundOnce(TEXT("HandAttack_Voice1.wav"), CHANNELID::EFFECT2, 0.6f);
+
 	m_eAnimState = ANIM_STATE::ATTACK_01;
 }
 
@@ -52,6 +54,7 @@ CPlayerState* CPlayer_HandAerialAttackState::Update(_float fTimeDelta)
     if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON)
         && m_eAnimState == ANIM_STATE::ATTACK_01 && fAnimProgress >= 0.7f)
     {
+		m_pGameInstance->PlaySoundOnce(TEXT("HandAttack_Voice2.wav"), CHANNELID::EFFECT2, 0.6f);
         m_pPlayer->Set_AnimIndex("CustomMan_Attack_Aerial_cmb04", 1.8f, true);
         m_eAnimState = ANIM_STATE::ATTACK_02;
     }

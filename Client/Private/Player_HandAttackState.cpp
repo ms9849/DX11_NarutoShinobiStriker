@@ -42,6 +42,10 @@ void CPlayer_HandAttackState::Start(_bool IsBlend)
     if (nullptr != pTargetTransform)
         m_pPlayer->Get_Transform()->LookAt_XZ(pTargetTransform->Get_State(STATE::POSITION));
 
+
+    m_pGameInstance->PlaySoundOnce(TEXT("HandAttack_Voice1.wav"), CHANNELID::EFFECT2, 0.6f);
+    m_pGameInstance->PlaySoundOnce(TEXT("HandAttack1.wav"), CHANNELID::EFFECT3, 0.2f);
+
     m_eAnimState = ANIM_STATE::LEFT_PUNCH;
 }
 
@@ -84,6 +88,8 @@ CPlayerState* CPlayer_HandAttackState::Update(_float fTimeDelta)
 
         m_IsOnCollider = false;
         m_eAnimState = ANIM_STATE::STRAIGHT_PUNCH;
+        m_pGameInstance->PlaySoundOnce(TEXT("HandAttack_Voice2.wav"), CHANNELID::EFFECT2, 0.6f);
+        m_pGameInstance->PlaySoundOnce(TEXT("HandAttack1.wav"), CHANNELID::EFFECT3, 0.2f);
     }
 
     else if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON)
@@ -96,6 +102,8 @@ CPlayerState* CPlayer_HandAttackState::Update(_float fTimeDelta)
 
         m_IsOnCollider = false;
         m_eAnimState = ANIM_STATE::KICK;
+        m_pGameInstance->PlaySoundOnce(TEXT("HandAttack_Voice3.wav"), CHANNELID::EFFECT2, 0.6f);
+        m_pGameInstance->PlaySoundOnce(TEXT("HandAttack1.wav"), CHANNELID::EFFECT3, 0.2f);
     }
 
     else if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON)
@@ -109,6 +117,8 @@ CPlayerState* CPlayer_HandAttackState::Update(_float fTimeDelta)
 
         m_IsOnCollider = false;
         m_eAnimState = ANIM_STATE::BACK_KICK;
+        m_pGameInstance->PlaySoundOnce(TEXT("HandAttack_Voice4.wav"), CHANNELID::EFFECT2, 0.6f);
+        m_pGameInstance->PlaySoundOnce(TEXT("HandAttack2.wav"), CHANNELID::EFFECT3, 0.2f);
     }
 
     else if (m_pGameInstance->Mouse_Down(MOUSEKEYSTATE::LBUTTON)
@@ -121,6 +131,8 @@ CPlayerState* CPlayer_HandAttackState::Update(_float fTimeDelta)
 
         m_IsOnCollider = false;
         m_eAnimState = ANIM_STATE::LEFT_PUNCH;
+        m_pGameInstance->PlaySoundOnce(TEXT("HandAttack_Voice1.wav"), CHANNELID::EFFECT2, 0.6f);
+        m_pGameInstance->PlaySoundOnce(TEXT("HandAttack1.wav"), CHANNELID::EFFECT3, 0.2f);
     }
 
     else if (true == IsAnimFinished)
