@@ -111,6 +111,11 @@ void CFireBall::Update(_float fTimeDelta)
 
     m_pColliderCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
     m_pEffectMain->Set_ParentMatrix(XMMatrixScaling(0.5f, 0.5f, 0.5f) *  XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
+
+    m_fTimeAcc += fTimeDelta;
+
+    if (m_fTimeAcc >= m_fLifeTime)
+        m_IsDead = true;
 }
 
 void CFireBall::Late_Update(_float fTimeDelta)

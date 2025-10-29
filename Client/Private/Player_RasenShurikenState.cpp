@@ -27,6 +27,8 @@ void CPlayer_RasenShurikenState::Start(_bool IsBlend)
 {
     m_pPlayer->Set_Invincible(true);
     m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_TrueRasenShuriken", 1.5f);
+    
+    m_pGameInstance->PlaySoundOnce(TEXT("RasenShuriken_Voice.wav"), CHANNELID::EFFECT, 0.7f);
 }
 
 CPlayerState* CPlayer_RasenShurikenState::Update(_float fTimeDelta)

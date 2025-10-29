@@ -44,6 +44,7 @@ CPlayerState* CPlayer_RunState::Update(_float fTimeDelta)
 	_bool IsRunning = { false };
 	CPlayerState* pNextState = { nullptr };
 
+	m_fSoundTimeAcc += fTimeDelta;
 	//¾Õ ÀÌµ¿
 	if (m_pGameInstance->Key_Pressing(DIK_W) || 
 		m_pGameInstance->Key_Pressing(DIK_A) ||
@@ -178,6 +179,12 @@ CPlayerState* CPlayer_RunState::Update(_float fTimeDelta)
 	{
 		pNextState = CPlayer_IdleState::Create(m_pPlayer);
 		m_IsNextAnimBlened = false;
+	}
+
+	if (m_fSoundTimeAcc >= 0.3f)
+	{
+		m_pGameInstance->PlaySoundOnce(TEXT("RunLoop.wav"), CHANNELID::EFFECT3, 0.2f);
+		m_fSoundTimeAcc = 0.f;
 	}
 
 	return pNextState;

@@ -36,8 +36,11 @@ void CPressAnyButtonUI::Update(_float fTimeDelta)
 {
     if (m_pGameInstance->Key_Down(DIK_SPACE))
     {
-        m_pGameInstance->PlaySoundOnce(TEXT("Title_UI.wav"), CHANNELID::UI, 1.0f);
+        if(false == m_IsEntered)
+            m_pGameInstance->PlaySoundOnce(TEXT("Title_UI.wav"), CHANNELID::UI, 1.0f);
+
         m_IsTriggered = true;
+        m_IsEntered = true;
     }
 
     if (m_IsTriggered)

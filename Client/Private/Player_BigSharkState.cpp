@@ -26,6 +26,8 @@ void CPlayer_BigSharkState::Start(_bool IsBlend)
 	m_pPlayer->Set_Invincible(true);
 	m_pGameManager->Change_Camera(static_cast<LEVEL>(m_pGameInstance->Get_LevelID()), TEXT("BigShark_Action_Camera"), m_pGameInstance->Get_PipeLine_InverseFloat4x4(D3DTS::VIEW));
 	m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_SuperSharkBomb", 1.5f, IsBlend, 0.1f);
+
+	m_pGameInstance->PlaySoundOnce(TEXT("BigShark_Voice.wav"), CHANNELID::EFFECT, 0.7f);
 }
 
 CPlayerState* CPlayer_BigSharkState::Update(_float fTimeDelta)

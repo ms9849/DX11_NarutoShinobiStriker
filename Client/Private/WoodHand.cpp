@@ -63,6 +63,8 @@ HRESULT CWoodHand::Initialize(void* pArg)
     if (FAILED(Ready_Childs()))
         return E_FAIL;
 
+    m_pGameInstance->PlaySoundOnce(TEXT("WoodHand.wav"), CHANNELID::EFFECT, 0.3f);
+
     return S_OK;
 }
 
@@ -89,10 +91,18 @@ void CWoodHand::Update(_float fTimeDelta)
 	else if (true == m_IsMoveFinished && false == m_IsAttackFinished)
     {
         Attack();
+
     }
     /* 공격 애니 끝나고 2초후 사라지게 */
     else if (true == m_IsMoveFinished && true == m_IsAttackFinished)
     {
+
+        if (false == m_IsSoundPlayed)
+        {
+            m_pGameInstance->PlaySoundOnce(TEXT("WoodHand_Clap.wav"), CHANNELID::EFFECT2, 0.9f);
+            m_IsSoundPlayed = true;
+        }
+
         m_fTimeAcc += fTimeDelta;
 
         if (m_fTimeAcc >= 3.f)

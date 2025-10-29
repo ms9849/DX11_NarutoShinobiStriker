@@ -44,7 +44,7 @@ private:
 	_bool 		m_IsAttackFinished = { false };
 	_float		m_fTimeAcc = { 0.f };
 	_bool		m_isAttackOn = { false };
-
+	_bool		m_IsSoundPlayed = { false };
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_Childs();

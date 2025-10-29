@@ -25,6 +25,8 @@ void CPlayer_KamuiState::Start(_bool IsBlend)
     m_pGameManager->Change_Camera(static_cast<LEVEL>(m_pGameInstance->Get_LevelID()), TEXT("Kamui_Action_Camera"));
     m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_KamuiKakashi", 1.5f, true);
     m_pPlayer->Set_Invincible(true);
+
+    m_pGameInstance->PlaySoundOnce(TEXT("Kamui_Voice.wav"), CHANNELID::EFFECT, 0.7f);
 }
 
 CPlayerState* CPlayer_KamuiState::Update(_float fTimeDelta)

@@ -41,15 +41,18 @@ void CPlayer_StepState::Start(_bool IsBlend)
 	if (ANIM_STATE::LEFT == m_eAnimState)
 	{
 		m_pPlayer->Set_AnimIndex("CustomMan_DashStep_Left", 1.4f, IsBlend);
+		m_pGameInstance->PlaySoundOnce(TEXT("Dash.wav"), CHANNELID::EFFECT, 0.4f);
 	}
 
 	else if (ANIM_STATE::RIGHT == m_eAnimState)
 	{
 		m_pPlayer->Set_AnimIndex("CustomMan_DashStep_Right", 1.4f, IsBlend);
+		m_pGameInstance->PlaySoundOnce(TEXT("Dash.wav"), CHANNELID::EFFECT, 0.4f);
 	}
 	else if (ANIM_STATE::BACK == m_eAnimState)
 	{
 		m_pPlayer->Set_AnimIndex("CustomMan_DashStep_Behind", 1.4f, IsBlend);
+		m_pGameInstance->PlaySoundOnce(TEXT("DoubleJump.wav"), CHANNELID::EFFECT, 0.3f);
 	}
 
 	else if (ANIM_STATE::FRONT == m_eAnimState)
@@ -57,6 +60,8 @@ void CPlayer_StepState::Start(_bool IsBlend)
 		m_pGameInstance->Set_RadialBlur(0.8f);
 
 		m_pPlayer->Set_AnimIndex("CustomMan_DashStep_Front", 1.4f, IsBlend);
+
+		m_pGameInstance->PlaySoundOnce(TEXT("FrontDash1.wav"), CHANNELID::EFFECT, 0.4f);
 	}
 
 	m_pPlayer->Get_Transform()->Change_Look_Force(vPlayerLook);

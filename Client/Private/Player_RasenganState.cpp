@@ -31,6 +31,8 @@ void CPlayer_RasenganState::Start(_bool IsBlend)
 	m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Rasengun_Charge_Lv2toLv3_Conect_toRun", 1.5f, true);
 	m_eAnimState = ANIM_STATE::ATTACK_START;
     m_pRasengan->Toggle_Effect();
+
+    m_pGameInstance->PlaySoundOnce(TEXT("Rasengan_Voice.wav"), CHANNELID::EFFECT, 0.7f);
 }
 
 CPlayerState* CPlayer_RasenganState::Update(_float fTimeDelta)

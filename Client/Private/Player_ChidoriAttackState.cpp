@@ -32,6 +32,7 @@ void CPlayer_ChidoriAttackState::Start(_bool IsBlend)
     m_pPlayer->Set_Invincible(true);
     m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Aerial_Chidori_Run_Loop", 2.f, IsBlend);
 
+    m_pGameInstance->PlaySoundOnce(TEXT("Chidori_Voice.wav"), CHANNELID::EFFECT, 0.7f);
     m_eAnimState = ANIM_STATE::ATTACK;
     m_fTimeAcc = 0.f;
 }

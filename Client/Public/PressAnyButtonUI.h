@@ -34,6 +34,7 @@ private:
 	_bool m_IsTriggered = { false };
 	_float m_fTimeAcc = { 0.f };
 	_float m_fMaxTimeAcc = { 0.5f };
+	_bool  m_IsEntered = { false };
 
 private:
 	HRESULT Ready_Components();

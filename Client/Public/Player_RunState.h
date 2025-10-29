@@ -26,6 +26,7 @@ public:
 	virtual _bool	End() override;
 
 private:
+	_float m_fSoundTimeAcc = { 0.f };
 	class CPlayer* m_pPlayer = { nullptr };
 	ANIM_STATE	   m_eAnimState = {};
 
