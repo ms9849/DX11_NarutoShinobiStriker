@@ -63,8 +63,16 @@ void CRope::Update(_float fTimeDelta)
 
 	_float fDist = XMVectorGetX(XMVector3Length(m_pTransformCom->Get_State(STATE::POSITION) - XMLoadFloat3(&m_vTargetPos)));
 	
-	if (fDist < 0.5f)
+	if (fDist < 1.0f)
+	{
 		m_IsArrive = true;
+		
+		if (false == m_IsSoundPlayed)
+		{
+			m_pGameInstance->PlaySoundOnce(TEXT("Rope_Arrive.wav"), CHANNELID::EFFECT3, 0.3f);
+			m_IsSoundPlayed = true;
+		}
+	}
 
 	m_pColliderCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrixPtr()));
 }

@@ -76,6 +76,8 @@ void CTriggerBox::OnCollision()
 
 	m_IsDead = true;
 	m_pIcon->Set_Dead(true);
+
+	m_pGameInstance->PlaySoundOnce(TEXT("TriggerBox_Dead.wav"), CHANNELID::EFFECT3, 0.5f);
 }
 
 HRESULT CTriggerBox::Ready_Components()

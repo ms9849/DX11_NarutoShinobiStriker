@@ -31,8 +31,9 @@ void CPlayer_RopeActionState::Start(_bool IsBlend)
     //m_vTargetDir
     XMStoreFloat3(&m_vTargetDir, XMVector3Normalize(XMLoadFloat3(&m_vTargetPos) - XMLoadFloat3(&m_vStartPos)));
 
-
     m_pPlayer->Get_Transform()->LookAt_XZ(XMLoadFloat3(&m_vTargetPos));
+
+    m_pGameInstance->PlaySoundOnce(TEXT("Rope_Throw.wav"), CHANNELID::EFFECT3, 0.9f);
 }
 
 CPlayerState* CPlayer_RopeActionState::Update(_float fTimeDelta)
@@ -64,6 +65,8 @@ CPlayerState* CPlayer_RopeActionState::Update(_float fTimeDelta)
         m_pPlayer->Set_Pickable(false);
         m_eAnimState = ANIM_STATE::ROPE;
         m_pGameInstance->Set_RadialBlur(0.8f);
+
+        m_pGameInstance->PlaySoundOnce(TEXT("Rope_Rush.wav"), CHANNELID::EFFECT3, 0.75f);
 
     }
 

@@ -34,8 +34,8 @@ HRESULT CBossCamera::Initialize(void* pArg)
 
 void CBossCamera::Priority_Update(_float fTimeDelta)
 {
-	if (m_fKamuiCamTimeAcc < m_fMaxKamuiCamTimeAcc)
-		m_pTransformCom->Go_Straight(fTimeDelta * m_fKamuiCamSpeedRatio);
+	//if (m_fKamuiCamTimeAcc < m_fMaxKamuiCamTimeAcc)
+	//	m_pTransformCom->Go_Straight(fTimeDelta * m_fKamuiCamSpeedRatio);
 
 	m_fKamuiCamTimeAcc += fTimeDelta;
 
@@ -62,7 +62,7 @@ void CBossCamera::OnChange(const _float4x4* pWorldMatrix)
 
 	Safe_AddRef(m_pBossTransform);
 
-	m_pTransformCom->Set_State(STATE::POSITION, m_pBossTransform->Get_State(STATE::POSITION) + 3.f * m_pBossTransform->Get_State(STATE::LOOK) + XMVectorSet(0.f, 0.1f, 0.f, 0.f));
+	m_pTransformCom->Set_State(STATE::POSITION, m_pBossTransform->Get_State(STATE::POSITION) + 2.5f * m_pBossTransform->Get_State(STATE::LOOK) + XMVectorSet(0.f, 0.1f, 0.f, 0.f));
 	m_pTransformCom->LookAt(m_pBossTransform->Get_State(STATE::POSITION) + XMVectorSet(0.f, 1.2f, 0.f, 0.f));
 	m_fKamuiCamTimeAcc = 0.f;
 }

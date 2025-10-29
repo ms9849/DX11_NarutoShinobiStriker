@@ -50,7 +50,7 @@ private:
 	CModel*		m_pModelCom = { nullptr };
 	_uint		m_iNumMeshes = {};
 	_float4x4   m_WorldMatrix = {};
-
+	_bool		m_IsSoundPlayed = { false };
 private:
 	HRESULT Ready_Components();
 	HRESULT Bind_ShaderResources();
