@@ -93,15 +93,15 @@ void CSound_Manager::PlayBGM(const _wstring& pSoundKey, float fVolume)
 	if (iter == m_mapSound.end())
 		return;
 
-	m_pSystem->playSound(iter->second, nullptr, FALSE, &m_pChannelArr[ENUM_CLASS(CHANNELID::SOUND_BGM)]);
-	m_pChannelArr[ENUM_CLASS(CHANNELID::SOUND_BGM)]->setMode(FMOD_LOOP_NORMAL);
-	m_pChannelArr[ENUM_CLASS(CHANNELID::SOUND_BGM)]->setVolume(fVolume);
+	m_pSystem->playSound(iter->second, nullptr, FALSE, &m_pChannelArr[ENUM_CLASS(CHANNELID::BGM)]);
+	m_pChannelArr[ENUM_CLASS(CHANNELID::BGM)]->setMode(FMOD_LOOP_NORMAL);
+	m_pChannelArr[ENUM_CLASS(CHANNELID::BGM)]->setVolume(fVolume);
 	m_pSystem->update();
 }
 
 void CSound_Manager::PauseBGM(_bool bFlag)
 {
-	m_pChannelArr[ENUM_CLASS(CHANNELID::SOUND_BGM)]->setPaused(bFlag);
+	m_pChannelArr[ENUM_CLASS(CHANNELID::BGM)]->setPaused(bFlag);
 	m_pSystem->update();
 }
 

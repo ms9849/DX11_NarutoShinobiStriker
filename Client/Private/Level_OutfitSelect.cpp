@@ -38,6 +38,8 @@ HRESULT CLevel_OutfitSelect::Initialize()
     if(FAILED(m_pGameManager->Change_Camera(LEVEL::OUTFITSELECT, TEXT("OutfitSelect_Camera"))))
         return E_FAIL;
 
+    m_pGameInstance->PlayBGM(TEXT("OutfitSelect_BG.mp3"), 0.5f);
+
     return S_OK;
 }
 

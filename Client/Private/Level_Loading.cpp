@@ -19,6 +19,8 @@ CLevel_Loading::CLevel_Loading(ID3D11Device* pDevice, ID3D11DeviceContext* pCont
 
 HRESULT CLevel_Loading::Initialize(LEVEL eNextLevelID)
 {
+	m_pGameInstance->StopSound(CHANNELID::BGM);
+
 	m_eNextLevelID = eNextLevelID;
 	m_pGameManager->Set_NextLevelID(m_eNextLevelID);
 	/* 다음 레벨에 대한 자원을 로드하여 준비해둔다. */

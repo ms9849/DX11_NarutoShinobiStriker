@@ -35,7 +35,10 @@ void CPressAnyButtonUI::Priority_Update(_float fTimeDelta)
 void CPressAnyButtonUI::Update(_float fTimeDelta)
 {
     if (m_pGameInstance->Key_Down(DIK_SPACE))
+    {
+        m_pGameInstance->PlaySoundOnce(TEXT("Title_UI.wav"), CHANNELID::UI, 1.0f);
         m_IsTriggered = true;
+    }
 
     if (m_IsTriggered)
         Play_Animation_FadeOut(fTimeDelta);

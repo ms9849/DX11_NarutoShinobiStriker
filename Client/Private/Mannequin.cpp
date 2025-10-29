@@ -74,14 +74,10 @@ HRESULT CMannequin::Initialize(void* pArg)
 
 void CMannequin::Priority_Update(_float fTimeDelta)
 {
-}
-
-void CMannequin::Update(_float fTimeDelta)
-{
-	/* 
-	원랜 super의 업데이트 & 레이트 업데이트를 호출해야 하지만...
-	활성화 된 녀석들만 골라서 쓰고 싶으므로 사용 안하게끔 작성.
-	*/
+	/*
+원랜 super의 업데이트 & 레이트 업데이트를 호출해야 하지만...
+활성화 된 녀석들만 골라서 쓰고 싶으므로 사용 안하게끔 작성.
+*/
 	for (_uint i = 1; i < ENUM_CLASS(SELECT_TYPE::END); ++i)
 	{
 		if (i == ENUM_CLASS(SELECT_TYPE::ONE_CLOTH) && (false == m_IsOneCloth))
@@ -95,6 +91,10 @@ void CMannequin::Update(_float fTimeDelta)
 
 	Play_Animation(fTimeDelta);
 	Key_Input(fTimeDelta);
+}
+
+void CMannequin::Update(_float fTimeDelta)
+{
 }
 
 void CMannequin::Late_Update(_float fTimeDelta)

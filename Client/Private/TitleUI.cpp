@@ -30,7 +30,6 @@ HRESULT CTitleUI::Initialize(void* pArg)
 
 void CTitleUI::Priority_Update(_float fTimeDelta)
 {
-	int a = 10; //test 
 }
 
 void CTitleUI::Update(_float fTimeDelta)

@@ -22,6 +22,8 @@ HRESULT CLevel_Logo::Initialize()
 	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
 		return E_FAIL;
 
+	m_pGameInstance->PlayBGM(TEXT("Title_BG.wav"), 1.0f);
+
 	return S_OK;
 }
 
