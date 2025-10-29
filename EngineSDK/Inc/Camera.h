@@ -19,6 +19,9 @@ protected:
 	virtual ~CCamera() = default;
 
 public:
+	void Shake(_float fShakeTime, _float fIntensity);
+
+public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Priority_Update(_float fTimeDelta) override;
@@ -33,6 +36,11 @@ protected:
 	_float							m_fNear = {};
 	_float							m_fFar = {};
 
+	_bool							m_IsShake = { false };
+	_float							m_fShakeTime = {};
+	_float							m_fShakeTimeAcc = { 0.f };
+	_float							m_fIntensity = {};
+	_float4							m_vOriginPos = {};
 protected:
 	HRESULT Bind_Matrices();
 

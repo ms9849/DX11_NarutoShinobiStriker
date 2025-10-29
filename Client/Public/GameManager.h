@@ -61,6 +61,7 @@ public:
 	HRESULT		Add_TargetTransform(CTransform* pTransformCom);
 	HRESULT		Add_Camera(LEVEL eLevelID, const _wstring& strCameraTag, CCamera* pCamera);
 	HRESULT		Change_Camera(LEVEL eLevelID, const _wstring& strCameraTag, const _float4x4* pWorldMatrix = nullptr);
+	void		Shake_Camera(_float fShakeTime, _float fIntensity);
 #pragma endregion
 
 #pragma region COLLISION 

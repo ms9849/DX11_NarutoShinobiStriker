@@ -64,6 +64,12 @@ HRESULT CCamera_Manager::Change_Camera(LEVEL eLevelID, const _wstring& strCamera
 	return S_OK;
 }
 
+void CCamera_Manager::Shake(_float fShakeTime, _float fIntensity)
+{
+	/* 현재 활성화된 카메라 흔들어 */
+	m_pActivatedCamera->Shake(fShakeTime, fIntensity);
+}
+
 void CCamera_Manager::Clear()
 {
 	/* 카메라 지우기 */

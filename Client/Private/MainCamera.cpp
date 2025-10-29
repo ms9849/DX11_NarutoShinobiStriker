@@ -57,6 +57,7 @@ void CMainCamera::Priority_Update(_float fTimeDelta)
 
 void CMainCamera::Update(_float fTimeDelta)
 {
+    __super::Update(fTimeDelta);
 }
 
 void CMainCamera::Late_Update(_float fTimeDelta)

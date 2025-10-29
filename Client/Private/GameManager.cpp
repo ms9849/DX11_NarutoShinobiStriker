@@ -133,6 +133,11 @@ HRESULT CGameManager::Change_Camera(LEVEL eLevelID, const _wstring& strCameraTag
 	return m_pCamera_Manager->Change_Camera(eLevelID, strCameraTag, pWorldMatrix);
 }
 
+void CGameManager::Shake_Camera(_float fShakeTime, _float fIntensity)
+{
+	m_pCamera_Manager->Shake(fShakeTime, fIntensity);
+}
+
 void CGameManager::Add_Collider_ToCollision(const _wstring& strColliderTag, COLLIDER_HANDLE_ID eHandleID, CCollider* pCollider)
 {
 	m_pCollision_Manager->Add_Collider_ToCollision(strColliderTag, eHandleID, pCollider);

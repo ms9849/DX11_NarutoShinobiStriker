@@ -24,8 +24,10 @@ public:
 	HRESULT		Change_Camera(LEVEL eLevelID, const _wstring& strCameraTag, const _float4x4* pWorldMatrix = nullptr);
 
 public:
+	void		Shake(_float fShakeTime, _float fIntensity);
+public:
 	void		Clear();
-
+	
 private:
 	/* 카메라는 동적으로 추가되는게 아니라
 	개발자의 의도에 따라 정적인 갯수만큼 추가 될 것이므로 전부 ENUM CLASS화 한다. */

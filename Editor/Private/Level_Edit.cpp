@@ -349,46 +349,60 @@ HRESULT CLevel_Edit::Ready_Prototypes()
 //#pragma endregion 
 
 
+    ///* For.Prototype_Component_Model_SkyBox */
+    //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_SkyBox"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/SkyBox/SkyBox.fbx", PreTransformMatrix))))
+    //    return E_FAIL;
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_SkyBox"));
+    ///* ¸ñµÐ ¹Ú¼ö */
+    ///* For.Prototype_Component_Model_WoodHand_L */
+    //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(270.0f)) * XMMatrixTranslation(-2.65f, 0.f, 0.f);
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_WoodHand_L"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/WoodHand/WoodHand_L.fbx", PreTransformMatrix))))
+    //    return E_FAIL;
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_WoodHand_L"));
+    ///* For.Prototype_Component_Model_WoodHand_R */
+    //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(180.0f)) * XMMatrixTranslation(2.65f, 0.f, 0.f);
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_WoodHand_R"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/WoodHand/WoodHand_R.fbx", PreTransformMatrix))))
+    //    return E_FAIL;
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_WoodHand_R"));
+
+    ///* For.Prototype_Component_Model_NPC_Kakashi*/
+    //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_NPC_Kakashi"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/NPC/NPC_Kakashi.fbx", PreTransformMatrix))))
+    //    return E_FAIL;
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_NPC_Kakashi"));
+
+    ///* For.Prototype_Component_Model_Kunai*/
+    //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(90.0f));
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Kunai"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/Kunai/Kunai.fbx", PreTransformMatrix))))
+    //    return E_FAIL;
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Kunai"));
+
+    ///* For.Prototype_Component_Model_Kunai_Diff*/
+    //PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(270.0f));
+    //if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Kunai_Diff"),
+    //    CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/Kunai/Kunai2.fbx", PreTransformMatrix))))
+    //    return E_FAIL;
+    //m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Kunai_Diff"));
+
     /* For.Prototype_Component_Model_SkyBox */
     PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_SkyBox"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/SkyBox/SkyBox.fbx", PreTransformMatrix))))
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_1000hand"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/1000hand/1000hand.fbx", PreTransformMatrix))))
         return E_FAIL;
-    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_SkyBox"));
-    /* ¸ñµÐ ¹Ú¼ö */
-    /* For.Prototype_Component_Model_WoodHand_L */
-    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(270.0f)) * XMMatrixTranslation(-2.65f, 0.f, 0.f);
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_WoodHand_L"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/WoodHand/WoodHand_L.fbx", PreTransformMatrix))))
-        return E_FAIL;
-    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_WoodHand_L"));
-    /* For.Prototype_Component_Model_WoodHand_R */
-    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(180.0f)) * XMMatrixTranslation(2.65f, 0.f, 0.f);
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_WoodHand_R"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/WoodHand/WoodHand_R.fbx", PreTransformMatrix))))
-        return E_FAIL;
-    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_WoodHand_R"));
+    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_1000hand"));
 
-    /* For.Prototype_Component_Model_NPC_Kakashi*/
-    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(180.0f));
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_NPC_Kakashi"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../../Client/Bin/Resources/Models/NPC/NPC_Kakashi.fbx", PreTransformMatrix))))
+    /* For.Prototype_Component_Model_SkyBox */
+    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_1000hand_arm"),
+        CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/1000hand/1000hand_arm.fbx", PreTransformMatrix))))
         return E_FAIL;
-    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_NPC_Kakashi"));
-
-    /* For.Prototype_Component_Model_Kunai*/
-    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(90.0f));
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Kunai"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/Kunai/Kunai.fbx", PreTransformMatrix))))
-        return E_FAIL;
-    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Kunai"));
-
-    /* For.Prototype_Component_Model_Kunai_Diff*/
-    PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(270.0f));
-    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDIT), TEXT("Prototype_Component_Model_Kunai_Diff"),
-        CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../../Client/Bin/Resources/Models/Kunai/Kunai2.fbx", PreTransformMatrix))))
-        return E_FAIL;
-    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_Kunai_Diff"));
+    m_ModelPrototypeTags.push_back(TEXT("Prototype_Component_Model_1000hand_arm"));
 #pragma region MODEL_BINARY
 
 

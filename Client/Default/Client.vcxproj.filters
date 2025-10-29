@@ -628,6 +628,15 @@
     <Filter Include="02. GameObjects\03. Effect\02. Sprite\Hit">
       <UniqueIdentifier>{672f9537-5037-4c85-8306-d61262b83f68}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\00. Character\01. Enemy\00. Boss\State\01. SKILL\1000Arm">
+      <UniqueIdentifier>{a66be069-f48a-49f6-a963-449dd0476925}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\00. Character\01. Enemy\00. Boss\State\01. SKILL\1000Arm\Object">
+      <UniqueIdentifier>{5c7b8a17-28e7-4053-a5d6-7cb42a7bb86a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\00. Character\01. Enemy\00. Boss\State\01. SKILL\1000Arm\Object\WoodArm">
+      <UniqueIdentifier>{377dfaba-b2cb-4ef8-83b1-c4c54f7a17d8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1212,6 +1221,15 @@
     <ClInclude Include="..\Public\Effect_HitSprite.h">
       <Filter>02. GameObjects\03. Effect\02. Sprite\Hit</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Boss_ThousandArmState.h">
+      <Filter>02. GameObjects\00. Character\01. Enemy\00. Boss\State\01. SKILL\1000Arm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ThousandArm.h">
+      <Filter>02. GameObjects\00. Character\01. Enemy\00. Boss\State\01. SKILL\1000Arm\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\WoodArm.h">
+      <Filter>02. GameObjects\00. Character\01. Enemy\00. Boss\State\01. SKILL\1000Arm\Object\WoodArm</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1793,6 +1811,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\Effect_HitSprite.cpp">
       <Filter>02. GameObjects\03. Effect\02. Sprite\Hit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Boss_ThousandArmState.cpp">
+      <Filter>02. GameObjects\00. Character\01. Enemy\00. Boss\State\01. SKILL\1000Arm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ThousandArm.cpp">
+      <Filter>02. GameObjects\00. Character\01. Enemy\00. Boss\State\01. SKILL\1000Arm\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\WoodArm.cpp">
+      <Filter>02. GameObjects\00. Character\01. Enemy\00. Boss\State\01. SKILL\1000Arm\Object\WoodArm</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -164,6 +164,7 @@
     <ClInclude Include="..\Public\Boss.h" />
     <ClInclude Include="..\Public\BossHPPanel.h" />
     <ClInclude Include="..\Public\BossState.h" />
+    <ClInclude Include="..\Public\Boss_ThousandArmState.h" />
     <ClInclude Include="..\Public\Boss_BeatenBlastedState.h" />
     <ClInclude Include="..\Public\Boss_BeatenState.h" />
     <ClInclude Include="..\Public\Boss_DeadState.h" />
@@ -248,6 +249,7 @@
     <ClInclude Include="..\Public\Potion.h" />
     <ClInclude Include="..\Public\Rope.h" />
     <ClInclude Include="..\Public\SkyCube.h" />
+    <ClInclude Include="..\Public\ThousandArm.h" />
     <ClInclude Include="..\Public\Trail.h" />
     <ClInclude Include="..\Public\Trigger_Manager.h" />
     <ClInclude Include="..\Public\GameManager.h" />
@@ -342,6 +344,7 @@
     <ClInclude Include="..\Public\WhiteJetsu_RunState.h" />
     <ClInclude Include="..\Public\WhiteJetsu_WoodHandState.h" />
     <ClInclude Include="..\Public\WinPanel.h" />
+    <ClInclude Include="..\Public\WoodArm.h" />
     <ClInclude Include="..\Public\WoodHand.h" />
     <ClInclude Include="..\Public\Parts_WoodHand.h" />
     <ClInclude Include="Client.h" />
@@ -360,6 +363,7 @@
     <ClCompile Include="..\Private\Boss.cpp" />
     <ClCompile Include="..\Private\BossHPPanel.cpp" />
     <ClCompile Include="..\Private\BossState.cpp" />
+    <ClCompile Include="..\Private\Boss_ThousandArmState.cpp" />
     <ClCompile Include="..\Private\Boss_BeatenBlastedState.cpp" />
     <ClCompile Include="..\Private\Boss_BeatenState.cpp" />
     <ClCompile Include="..\Private\Boss_DeadState.cpp" />
@@ -443,6 +447,7 @@
     <ClCompile Include="..\Private\Potion.cpp" />
     <ClCompile Include="..\Private\Rope.cpp" />
     <ClCompile Include="..\Private\SkyCube.cpp" />
+    <ClCompile Include="..\Private\ThousandArm.cpp" />
     <ClCompile Include="..\Private\Trail.cpp" />
     <ClCompile Include="..\Private\Trigger_Manager.cpp" />
     <ClCompile Include="..\Private\GameManager.cpp" />
@@ -538,6 +543,7 @@
     <ClCompile Include="..\Private\WhiteJetsu_RunState.cpp" />
     <ClCompile Include="..\Private\WhiteJetsu_WoodHandState.cpp" />
     <ClCompile Include="..\Private\WinPanel.cpp" />
+    <ClCompile Include="..\Private\WoodArm.cpp" />
     <ClCompile Include="..\Private\WoodHand.cpp" />
     <ClCompile Include="..\Private\Parts_WoodHand.cpp" />
     <ClCompile Include="Client.cpp" />

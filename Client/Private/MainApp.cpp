@@ -48,6 +48,8 @@
 #include "Collider.h"
 #include "GameManager.h"
 #include "SkyMesh.h"
+#include "ThousandArm.h"
+#include "WoodArm.h"
 
 /* 테스트 브랜치용 주석 */
 CMainApp::CMainApp()	
@@ -173,6 +175,15 @@ HRESULT CMainApp::Ready_Prototypes()
 		CTriggerBox::Create(m_pDevice, m_pContext, OBJECTID::MONSTER_SPAWNER))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_ThousandArm*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ThousandArm"),
+		CThousandArm::Create(m_pDevice, m_pContext, OBJECTID::THOUSAND_ARM))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_WoodArm*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_WoodArm"),
+		CWoodArm::Create(m_pDevice, m_pContext, OBJECTID::WOODARM))))
+		return E_FAIL;
 #pragma endregion
 
 #pragma region PLAYER
@@ -344,6 +355,18 @@ HRESULT CMainApp::Ready_Prototypes()
 	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationY(XMConvertToRadians(180.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_Upper_Boss"),
 		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, TEXT("../Bin/Resources/Models/Monster/Boss/Upper_Boss.bin"), PreTransformMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_1000Arm_Arm */
+	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f));
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_1000Arm"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, TEXT("../../Client/Bin/Resources/Models/1000hand/1000hand.bin"), PreTransformMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_1000Arm_Arm */
+	PreTransformMatrix = XMMatrixScalingFromVector(XMVectorSet(0.01f, 0.01f, 0.01f, 0.f)) * XMMatrixRotationX(XMConvertToRadians(90.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Model_1000Arm_Arm"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, TEXT("../../Client/Bin/Resources/Models/1000hand/1000hand_arm.bin"), PreTransformMatrix))))
 		return E_FAIL;
 
 #pragma endregion
