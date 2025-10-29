@@ -637,6 +637,12 @@
     <Filter Include="02. GameObjects\00. Character\01. Enemy\00. Boss\State\01. SKILL\1000Arm\Object\WoodArm">
       <UniqueIdentifier>{377dfaba-b2cb-4ef8-83b1-c4c54f7a17d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\02. Camera\BossCamera">
+      <UniqueIdentifier>{2ee6189d-23d7-4aa1-9cd0-2f1be0267682}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\02. Camera\ThousandHandCamera">
+      <UniqueIdentifier>{467b00bd-2a22-4ea0-abea-ebb400dd5f80}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1140,9 +1146,6 @@
     <ClInclude Include="..\Public\Boss_FireBallState.h">
       <Filter>02. GameObjects\00. Character\01. Enemy\00. Boss\State\01. SKILL\FireBall</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Boss_LightingRushState.h">
-      <Filter>02. GameObjects\00. Character\01. Enemy\00. Boss\State\01. SKILL\LightingRush</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Boss_SharinganState.h">
       <Filter>02. GameObjects\00. Character\01. Enemy\00. Boss\State\01. SKILL\Sharingan</Filter>
     </ClInclude>
@@ -1229,6 +1232,12 @@
     </ClInclude>
     <ClInclude Include="..\Public\WoodArm.h">
       <Filter>02. GameObjects\00. Character\01. Enemy\00. Boss\State\01. SKILL\1000Arm\Object\WoodArm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\BossCamera.h">
+      <Filter>02. GameObjects\02. Camera\BossCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ThousandHandCamera.h">
+      <Filter>02. GameObjects\02. Camera\ThousandHandCamera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1731,9 +1740,6 @@
     <ClCompile Include="..\Private\Boss_FireBallState.cpp">
       <Filter>02. GameObjects\00. Character\01. Enemy\00. Boss\State\01. SKILL\FireBall</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Boss_LightingRushState.cpp">
-      <Filter>02. GameObjects\00. Character\01. Enemy\00. Boss\State\01. SKILL\LightingRush</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Boss_SharinganState.cpp">
       <Filter>02. GameObjects\00. Character\01. Enemy\00. Boss\State\01. SKILL\Sharingan</Filter>
     </ClCompile>
@@ -1820,6 +1826,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\WoodArm.cpp">
       <Filter>02. GameObjects\00. Character\01. Enemy\00. Boss\State\01. SKILL\1000Arm\Object\WoodArm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\BossCamera.cpp">
+      <Filter>02. GameObjects\02. Camera\BossCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ThousandHandCamera.cpp">
+      <Filter>02. GameObjects\02. Camera\ThousandHandCamera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

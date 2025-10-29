@@ -266,8 +266,8 @@ HRESULT CBird::Initialize(void* pArg)
     m_pState = CBird_IdleState::Create(m_pNavigationCom, this);
     m_pState->Start(true);
 
-    m_fCurrentHP = 100.f;
-    m_fMaxHP = 100.f;
+    m_fCurrentHP = 40.f;
+    m_fMaxHP = 40.f;
 
     Fade_Particle();
 

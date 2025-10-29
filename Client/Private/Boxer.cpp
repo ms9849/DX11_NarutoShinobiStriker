@@ -183,7 +183,7 @@ void CBoxer::OnCollision(COLLIDER_HANDLE_ID eHandleID)
 
 	Change_State(pNextState, false);
 
-	m_fCurrentHP -= 10.f;
+	m_fCurrentHP -= 1.f;
 }
 
 void CBoxer::Change_State(CBoxerState* pNextState, _bool bBlend)
@@ -227,8 +227,8 @@ HRESULT CBoxer::Initialize(void* pArg)
 	m_pState = CBoxer_IdleState::Create(m_pNavigationCom, this);
 	m_pState->Start(true);
 
-	m_fCurrentHP = 200.f;
-	m_fMaxHP = 200.f;
+	m_fCurrentHP = 80.f;
+	m_fMaxHP = 80.f;
 
 	Fade_Particle();
 

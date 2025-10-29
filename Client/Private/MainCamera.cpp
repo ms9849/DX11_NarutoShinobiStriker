@@ -90,7 +90,7 @@ void CMainCamera::Rotate_Point(_float fTimeDelta)
     m_fRotateY = XMScalarModAngle(m_fRotateY);
 
     // 라디안 제한 ( -90  ~ +90 + 여기에 캐릭터의 Look 벡터까지. )
-    _float fLimit = XMConvertToRadians(15.f);
+    _float fLimit = XMConvertToRadians(30.f);
 
     if (m_fRotateY > fLimit)
         m_fRotateY = fLimit;

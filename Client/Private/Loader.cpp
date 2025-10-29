@@ -48,6 +48,8 @@
 #include "SkillActionCamera.h"
 #include "NPCTalkCamera.h"
 #include "CutSceneCamera.h"
+#include "BossCamera.h"
+#include "ThousandHandCamera.h"
 
 #include "Lower_Character.h"
 #include "Upper_Character.h"
@@ -792,6 +794,16 @@ HRESULT CLoader::Loading_For_KonohaVillage()
 	/* For.Prototype_GameObject_CutSceneCamera */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_CutSceneCamera"),
 		CCutSceneCamera::Create(m_pDevice, m_pContext, OBJECTID::CUTSCENE_CAMERA))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_BossCamera */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_BossCamera"),
+		CBossCamera::Create(m_pDevice, m_pContext, OBJECTID::BOSS_CAEMRA))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_ThousandHandCamera */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_ThousandHandCamera"),
+		CThousandHandCamera::Create(m_pDevice, m_pContext, OBJECTID::THOUSANDHAND_CAMERA))))
 		return E_FAIL;
 
 #pragma endregion

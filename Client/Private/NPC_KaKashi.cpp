@@ -80,6 +80,7 @@ void CNPC_KaKashi::Update(_float fTimeDelta)
 void CNPC_KaKashi::Late_Update(_float fTimeDelta)
 {
 	m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+	m_pGameInstance->Add_RenderGroup(RENDER::SHADOW, this);
 }
 
 HRESULT CNPC_KaKashi::Render()

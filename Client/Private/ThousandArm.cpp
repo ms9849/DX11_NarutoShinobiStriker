@@ -54,7 +54,7 @@ void CThousandArm::Update(_float fTimeDelta)
 		/* 여기서 나무손 만들어서 플레이어 추적 */
 		m_fWoodArmCoolDownTimeAcc += fTimeDelta;
 
-		if (m_fWoodArmCoolDownTimeAcc >= m_fWoodArmCoolDown)
+		if (m_fWoodArmCoolDownTimeAcc >= m_fWoodArmCoolDown && true == m_IsActive)
 		{
 			CWoodArm::WOODARM_DESC Desc;
 			Desc.fSpeedPerSec = 80.f;
@@ -157,4 +157,6 @@ void CThousandArm::Free()
 {
 	__super::Free();
 
+	Safe_Release(m_pModelCom);
+	Safe_Release(m_pShaderCom);
 }

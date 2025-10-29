@@ -8,6 +8,7 @@
 #include "ActionCamera.h"
 #include "SkillActionCamera.h"
 #include "NPCTalkCamera.h"
+#include "BossCamera.h"
 
 #include "TimerPanel.h"
 #include "SkillSlotPanel.h"
@@ -310,6 +311,16 @@ HRESULT CLevel_KonohaVillage::Ready_Layer_Camera(const _wstring& strLayerTag)
 	/* 컷씬 카메라. */
 	if (FAILED(m_pGameManager->Add_Camera(LEVEL::KONOHA_VILLAGE, TEXT("CutScene_Camera"), static_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
 		PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_CutSceneCamera"), &MainCameraDesc)))))
+		return E_FAIL;
+
+	/* 보스 카메라 */
+	if (FAILED(m_pGameManager->Add_Camera(LEVEL::KONOHA_VILLAGE, TEXT("Boss_Camera"), static_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
+		PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_BossCamera"), &MainCameraDesc)))))
+		return E_FAIL;
+
+	/* 천수 카메라 */
+	if (FAILED(m_pGameManager->Add_Camera(LEVEL::KONOHA_VILLAGE, TEXT("ThousandHand_Camera"), static_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
+		PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Prototype_GameObject_ThousandHandCamera"), &MainCameraDesc)))))
 		return E_FAIL;
 
 	return S_OK;

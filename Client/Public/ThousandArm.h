@@ -22,7 +22,7 @@ private:
 
 public:
 	void Set_Visible(_bool bFlag) { m_IsVisible = bFlag; }
-
+	void Set_Active(_bool bFlag) { m_IsActive = bFlag; }
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
@@ -36,7 +36,8 @@ private:
 	_float   m_fWoodArmCoolDown = { 1.f };
 	_float	 m_fLifeTimeAcc = { 0.f };
 	_uint	 m_iNumMeshes = { 0 };
-	_bool    m_IsVisible = { true }; 
+	_bool    m_IsVisible = { false }; 
+	_bool    m_IsActive = { false };
 
 private:
 	HRESULT Ready_Components();

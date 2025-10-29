@@ -10,6 +10,7 @@
 #include "Boss_RunState.h"
 #include "Boss_WalkState.h"
 #include "Boss_LightingRushState.h"
+#include "Boss_ThousandArmState.h"
 
 #pragma endregion
 
@@ -32,9 +33,9 @@ CBossState* CBoss_IdleState::Update(_float fTimeDelta)
 
 	_float fDist = XMVectorGetX(XMVector3Length(m_pBoss->Get_Transform()->Get_State(STATE::POSITION) - m_pPlayerTransformCom->Get_State(STATE::POSITION)));
 
-	/* 돌진 패턴은 거리 20 이상일때만 발동한다. */
-	if (true == m_pBoss->Use_Skill(CBoss::BOSS_SKILL::LIGHTING_RUSH) && fDist >= 20.f)
-		pNextState = CBoss_LightingRushState::Create(m_pNavigationCom, m_pBoss);
+	//추후 체력조건 세팅
+	if (true == m_pBoss->Use_Skill(CBoss::BOSS_SKILL::THOUSAND_HAND))
+		pNextState = CBoss_ThousandArmState::Create(m_pNavigationCom, m_pBoss);
 
 	else if (fDist < 10.f)
 		pNextState = CBoss_WalkState::Create(m_pNavigationCom, m_pBoss);

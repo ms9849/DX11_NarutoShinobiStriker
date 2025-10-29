@@ -81,7 +81,7 @@ HRESULT CLoadingPanel::Bind_ShaderResources()
 HRESULT CLoadingPanel::Ready_LoadingUIs()
 {
     CUIObject::UIOBJECT_DESC Desc;
-    Desc = CUIObject::CreateDesc(m_fX + 525, m_fY + 278, m_fZ - 0.05f, 88.f, 88.f, 0, 0.f);
+    Desc = CUIObject::CreateDesc(m_fX + 525, m_fY + 278, m_fZ - 0.1f, 88.f, 88.f, 0, 0.f);
     Desc.fRotationPerSec = 1.f;
 
     CRotationIconUI* pRotationIcon = static_cast<CRotationIconUI*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC),

@@ -17,6 +17,7 @@
 #include "Boss_ElectricShockState.h"
 #include "Boss_DeadState.h"
 #include "Boss_StandState.h"
+#include "Boss_ThousandArmState.h"
 
 #include "BossHPPanel.h"
 #include "Icon.h"
@@ -259,10 +260,13 @@ HRESULT CBoss::Initialize(void* pArg)
     m_SkillCoolDowns[ENUM_CLASS(BOSS_SKILL::SHARINGAN)] = 600.f;
     m_SkillCoolDowns[ENUM_CLASS(BOSS_SKILL::SPIN_KICK)] = 5.f;
     m_SkillCoolDowns[ENUM_CLASS(BOSS_SKILL::WOODHAND)] = 10.f;
+    m_SkillCoolDowns[ENUM_CLASS(BOSS_SKILL::THOUSAND_HAND)] = 40.f;
+
 
     /* 이 둘은 바로 쓸 수 있게 세팅. */
-    m_SkillTimeAccs[ENUM_CLASS(BOSS_SKILL::SHARINGAN)] = 600.f;
-    m_SkillTimeAccs[ENUM_CLASS(BOSS_SKILL::LIGHTING_RUSH)] = 15.f;
+    m_SkillTimeAccs[ENUM_CLASS(BOSS_SKILL::THOUSAND_HAND)] = 40.f;
+    //m_SkillTimeAccs[ENUM_CLASS(BOSS_SKILL::SHARINGAN)] = 600.f;
+    //m_SkillTimeAccs[ENUM_CLASS(BOSS_SKILL::LIGHTING_RUSH)] = 15.f;
 
     m_fCurrentHP = 200.f;
     m_fMaxHP = 200.f;

@@ -32,6 +32,8 @@ public:
 private:
 	class CBoss* m_pBoss = { nullptr };
 	CNavigation* m_pNavigationCom = { nullptr };
+	_float		 m_fTimeAcc = { 0.f };
+	_bool		 m_IsButdaCamOn = { false };
 
 public:
 	static CBoss_ThousandArmState* Create(class CNavigation* pNavigation, class CBoss* pBoss);

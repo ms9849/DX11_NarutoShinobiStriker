@@ -162,6 +162,7 @@
     <ClInclude Include="..\Public\Bird_ElectricShockState.h" />
     <ClInclude Include="..\Public\Bird_WalkState.h" />
     <ClInclude Include="..\Public\Boss.h" />
+    <ClInclude Include="..\Public\BossCamera.h" />
     <ClInclude Include="..\Public\BossHPPanel.h" />
     <ClInclude Include="..\Public\BossState.h" />
     <ClInclude Include="..\Public\Boss_ThousandArmState.h" />
@@ -172,7 +173,6 @@
     <ClInclude Include="..\Public\Boss_FireBallState.h" />
     <ClInclude Include="..\Public\Boss_IdleState.h" />
     <ClInclude Include="..\Public\Boss_LandState.h" />
-    <ClInclude Include="..\Public\Boss_LightingRushState.h" />
     <ClInclude Include="..\Public\Boss_RunState.h" />
     <ClInclude Include="..\Public\Boss_SharinganState.h" />
     <ClInclude Include="..\Public\Boss_SlidingKunaiState.h" />
@@ -250,6 +250,7 @@
     <ClInclude Include="..\Public\Rope.h" />
     <ClInclude Include="..\Public\SkyCube.h" />
     <ClInclude Include="..\Public\ThousandArm.h" />
+    <ClInclude Include="..\Public\ThousandHandCamera.h" />
     <ClInclude Include="..\Public\Trail.h" />
     <ClInclude Include="..\Public\Trigger_Manager.h" />
     <ClInclude Include="..\Public\GameManager.h" />
@@ -361,6 +362,7 @@
     <ClCompile Include="..\Private\Bird_ElectricShockState.cpp" />
     <ClCompile Include="..\Private\Bird_WalkState.cpp" />
     <ClCompile Include="..\Private\Boss.cpp" />
+    <ClCompile Include="..\Private\BossCamera.cpp" />
     <ClCompile Include="..\Private\BossHPPanel.cpp" />
     <ClCompile Include="..\Private\BossState.cpp" />
     <ClCompile Include="..\Private\Boss_ThousandArmState.cpp" />
@@ -371,7 +373,6 @@
     <ClCompile Include="..\Private\Boss_FireBallState.cpp" />
     <ClCompile Include="..\Private\Boss_IdleState.cpp" />
     <ClCompile Include="..\Private\Boss_LandState.cpp" />
-    <ClCompile Include="..\Private\Boss_LightingRushState.cpp" />
     <ClCompile Include="..\Private\Boss_RunState.cpp" />
     <ClCompile Include="..\Private\Boss_SharinganState.cpp" />
     <ClCompile Include="..\Private\Boss_SlidingKunaiState.cpp" />
@@ -448,6 +449,7 @@
     <ClCompile Include="..\Private\Rope.cpp" />
     <ClCompile Include="..\Private\SkyCube.cpp" />
     <ClCompile Include="..\Private\ThousandArm.cpp" />
+    <ClCompile Include="..\Private\ThousandHandCamera.cpp" />
     <ClCompile Include="..\Private\Trail.cpp" />
     <ClCompile Include="..\Private\Trigger_Manager.cpp" />
     <ClCompile Include="..\Private\GameManager.cpp" />

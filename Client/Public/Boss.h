@@ -34,7 +34,7 @@ class CBoss final : public CEnemy
 {
 public:
 	/* 목둔 박수도 추가할까? */
-	enum class BOSS_SKILL { FIREBALL, LIGHTING_RUSH, SHARINGAN, SPIN_KICK, WOODHAND, END };
+	enum class BOSS_SKILL { FIREBALL, LIGHTING_RUSH, SHARINGAN, SPIN_KICK, WOODHAND, THOUSAND_HAND, WATER_DRAGON, END };
 
 private:
 	CBoss(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID);
