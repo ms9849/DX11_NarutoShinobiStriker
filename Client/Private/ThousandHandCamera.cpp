@@ -42,9 +42,10 @@ void CThousandHandCamera::Priority_Update(_float fTimeDelta)
         //플레이어 활성화도
         m_pGameManager->Get_PlayerPtr()->Set_Visible(true);
         static_cast<CThousandArm*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Layer_ThousandArm"), 0))->Set_Active(true);
+        m_fTimeAcc = 0.f;
     }
-
-    m_fTimeAcc += fTimeDelta;
+    else
+        m_fTimeAcc += fTimeDelta;
 
     __super::Bind_Matrices();
 }

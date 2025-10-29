@@ -124,7 +124,7 @@ void CLevel_KonohaVillage::Update(_float fTimeDelta)
 	}
 
 	if (TRIGGER_TYPE::KONOHA_VILLAGE_BOSS_CUTSCENE_END == m_pGameManager->Get_CurrentTrigger()
-		&& 0 == m_pGameInstance->Get_LayerSize(ENUM_CLASS(LEVEL::TUTORIAL), TEXT("Layer_Monster")))
+		&& 0 == m_pGameInstance->Get_LayerSize(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Layer_Boss")))
 	{
 		m_pGameManager->WinPanel_Start_FadeIn();
 		m_fTimeAcc += fTimeDelta;
