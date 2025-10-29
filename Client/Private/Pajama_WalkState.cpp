@@ -40,7 +40,7 @@ CPajamaState* CPajama_WalkState::Update(_float fTimeDelta)
     {
         pNextState = CPajama_FireballState::Create(m_pNavigationCom, m_pPajama);
     }
-    else if (fDist > 6.f)
+    else if (fDist > 16.f)
     {
         pNextState = CPajama_RunState::Create(m_pNavigationCom, m_pPajama);
     }

@@ -49,7 +49,11 @@ void CThousandArm::Update(_float fTimeDelta)
 		/* 수명 로직 */
 		m_fLifeTimeAcc += fTimeDelta;
 		if (m_fLifeTimeAcc >= 30.f)
-			m_IsDead = true;
+		{
+			m_fLifeTimeAcc = 0.f;
+			m_IsActive = false;
+			m_IsVisible = false;
+		}
 
 		/* 여기서 나무손 만들어서 플레이어 추적 */
 		m_fWoodArmCoolDownTimeAcc += fTimeDelta;

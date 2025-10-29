@@ -2,6 +2,7 @@
 
 #include "GameInstance.h"
 #include "GameManager.h"
+#include "ParticleObject.h"
 
 CWoodArm::CWoodArm(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)
     : CSkill{ pDevice, pContext, eObjectID }
@@ -52,6 +53,15 @@ void CWoodArm::Update(_float fTimeDelta)
     {
         if (false == m_IsShaked)
         {
+            /* 여기서 폭발 파티클 추가 */
+            CParticleObject::PARTICLE_LOAD_DESC Desc;
+            Desc.strParticlePath = TEXT("../Bin/Resources/Particle/ThousandArm_Particle.bin");
+            Desc.eType = CParticleObject::PARTICLE_TYPE::EXPLOSION;
+            XMStoreFloat3(&Desc.vPosition, m_pTransformCom->Get_State(STATE::POSITION));
+
+            m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
+                TEXT("Layer_Particle"), &Desc);
+
             CGameManager::GetInstance()->Shake_Camera(0.2f, 0.8f);
             m_IsShaked = true;
         }

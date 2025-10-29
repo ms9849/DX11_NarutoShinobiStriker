@@ -230,8 +230,8 @@ HRESULT CWhiteJetsu::Initialize(void* pArg)
     m_pState = CWhiteJetsu_IdleState::Create(m_pNavigationCom, this);
     m_pState->Start(true);
 
-    m_fCurrentHP = 60.f;
-    m_fMaxHP = 60.f;
+    m_fCurrentHP = 90.f;
+    m_fMaxHP = 90.f;
 
     Fade_Particle();
 
