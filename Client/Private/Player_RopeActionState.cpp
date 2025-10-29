@@ -67,7 +67,7 @@ CPlayerState* CPlayer_RopeActionState::Update(_float fTimeDelta)
         m_pGameInstance->Set_RadialBlur(0.8f);
 
         m_pGameInstance->PlaySoundOnce(TEXT("Rope_Rush.wav"), CHANNELID::EFFECT3, 0.75f);
-
+        m_pGameInstance->PlaySoundOnce(TEXT("Rope_Arrive_Voice.wav"), CHANNELID::EFFECT4, 0.5f);
     }
 
     /* 
