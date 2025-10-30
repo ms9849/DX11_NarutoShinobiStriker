@@ -38,6 +38,8 @@ private:
 	ANIM_STATE		m_eAnimState = {};
 	_bool			m_IsOnCollider = { false };
 	_bool			m_IsParticleCreated = { false };
+	_bool			m_IsSoundPlayed = { false };
+
 public:
 	static CBoxer_LeafHurricaneState* Create(class CNavigation* pNavigation, class CBoxer* pBoxer);
 	virtual void Free() override;

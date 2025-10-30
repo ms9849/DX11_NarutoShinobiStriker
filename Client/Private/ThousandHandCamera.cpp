@@ -66,6 +66,8 @@ HRESULT CThousandHandCamera::Render()
 void CThousandHandCamera::OnChange(const _float4x4* pWorldMatrix)
 {
     m_pTransformCom->Set_WorldMatrix(XMLoadFloat4x4(pWorldMatrix));
+
+    m_pGameInstance->PlaySoundOnce(TEXT("ThousandHand_Visible.wav"), CHANNELID::EFFECT, 0.6f);
 }
 
 CThousandHandCamera* CThousandHandCamera::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, OBJECTID eObjectID)

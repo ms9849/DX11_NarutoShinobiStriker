@@ -20,6 +20,7 @@ void CBoxer_DeadState::Start(_bool IsBlend)
 {
 	m_pGameManager->Active_KO();
 	m_pBoxer->Set_AnimIndex("CustomMan_Dying_Type01", 1.5f, true);
+	m_pGameInstance->PlaySoundOnce(TEXT("Boxer_die.wav"), CHANNELID::EFFECT, 0.4f);
 }
 
 CBoxerState* CBoxer_DeadState::Update(_float fTimeDelta)

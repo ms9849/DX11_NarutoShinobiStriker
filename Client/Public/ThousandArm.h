@@ -33,7 +33,7 @@ public:
 
 private:
 	_float   m_fWoodArmCoolDownTimeAcc = { 0.f };
-	_float   m_fWoodArmCoolDown = { 1.5f };
+	_float   m_fWoodArmCoolDown = { 1.25f };
 	_float	 m_fLifeTimeAcc = { 0.f };
 	_uint	 m_iNumMeshes = { 0 };
 	_bool    m_IsVisible = { false }; 

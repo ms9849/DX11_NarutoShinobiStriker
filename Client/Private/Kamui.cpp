@@ -222,5 +222,6 @@ void CKamui::Free()
 {
     __super::Free();
 
+    Safe_Release(m_pVIBufferCom);
     Safe_Release(m_pEffectContainer);
 }

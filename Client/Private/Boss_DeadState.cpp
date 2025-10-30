@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "Boss.h"
 
+#include "ThousandArm.h"
 /* 전이 가능한 상태들 */
 #pragma region TRANSFER_STATE
 
@@ -20,6 +21,10 @@ void CBoss_DeadState::Start(_bool IsBlend)
 {
 	m_pGameManager->Active_KO();
 	m_pBoss->Set_AnimIndex("CustomMan_Dying_Type01", 1.5f, true);
+
+	static_cast<CThousandArm*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Layer_ThousandArm"), 0))->Set_Visible(false);
+	static_cast<CThousandArm*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Layer_ThousandArm"), 0))->Set_Visible(false);
+
 }
 
 CBossState* CBoss_DeadState::Update(_float fTimeDelta)

@@ -25,6 +25,8 @@ void CPajama_FireballState::Start(_bool IsBlend)
 {
     m_pPajama->Get_Transform()->LookAt_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION));
 	m_pPajama->Set_AnimIndex("CustomMan_Ninjutsu_Fireball_Lv3", 1.4f, IsBlend, 0.1f);
+
+    m_pGameInstance->PlaySoundOnce(TEXT("Pajama_FireBall.wav"), CHANNELID::EFFECT, 0.45f);
 }
 
 CPajamaState* CPajama_FireballState::Update(_float fTimeDelta)

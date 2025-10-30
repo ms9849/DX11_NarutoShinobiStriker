@@ -29,6 +29,8 @@ void CPajama_SlidingKunaiState::Start(_bool IsBlend)
         m_pPajama->Set_AnimIndex("CustomMan_Throw_Aerial_Kunai_Right", 2.f, IsBlend, 0.1f);
 
     m_pPajama->Get_Transform()->LookAt_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION));
+
+    m_pGameInstance->PlaySoundOnce(TEXT("Pajama_Hand.wav"), CHANNELID::EFFECT, 0.45f);
 }
 
 CPajamaState* CPajama_SlidingKunaiState::Update(_float fTimeDelta)

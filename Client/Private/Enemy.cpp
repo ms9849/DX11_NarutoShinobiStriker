@@ -97,6 +97,8 @@ void CEnemy::Fade_Particle()
 
     m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
         TEXT("Layer_Particle"), &Desc);
+
+    m_pGameInstance->PlaySoundOnce(TEXT("EnemyFade.wav"), CHANNELID::EFFECT2, 0.3f);
 }
 
 HRESULT CEnemy::Initialize_Prototype()

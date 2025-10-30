@@ -48,6 +48,7 @@ CBoxerState* CBoxer_SpinKickState::Update(_float fTimeDelta)
 	if (ANIM_STATE::ATTACK_START == m_eAnimState
 		&& (fDist <= 1.2f))
 	{
+		m_pGameInstance->PlaySoundOnce(TEXT("Boxer_Spinkick.wav"), CHANNELID::EFFECT, 0.45f);
 		m_pBoxer->Set_AnimIndex("CustomMan_Ninjutsu_D54NJ3_SpinkickEnd", 2.f, false, 0.1f, true);
 		m_eAnimState = ANIM_STATE::ATTACK_END;
 	}
@@ -55,6 +56,12 @@ CBoxerState* CBoxer_SpinKickState::Update(_float fTimeDelta)
 	else if (ANIM_STATE::ATTACK_START == m_eAnimState
 		&& true == IsAnimFinished)
 	{
+		if (false == m_IsSoundPlayed)
+		{
+			m_pGameInstance->PlaySoundOnce(TEXT("Boxer_Osoi.wav"), CHANNELID::EFFECT, 0.45f);
+			m_IsSoundPlayed = true;
+		}
+
 		m_pBoxer->Set_AnimIndex("CustomMan_Ninjutsu_LeafHurricane_Start", 1.f, false, 0.1f, false);
 		m_pBoxer->Set_AnimProgress(1.0f);
 	}

@@ -180,6 +180,8 @@ void CBoxer::OnCollision(COLLIDER_HANDLE_ID eHandleID)
 	m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
 		TEXT("Layer_Particle"), &Desc);
 
+	m_pGameInstance->PlaySoundOnce(TEXT("Boxer_Hit.wav"), CHANNELID::EFFECT, 0.3f);
+
 	Play_HitSound(eHandleID);
 	Change_State(pNextState, false);
 

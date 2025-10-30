@@ -21,6 +21,8 @@ void CPajama_DeadState::Start(_bool IsBlend)
 {
     m_pGameManager->Active_KO();
     m_pPajama->Set_AnimIndex("CustomMan_Dying_Type01", 1.5f, true);
+
+    m_pGameInstance->PlaySoundOnce(TEXT("Pajama_Die.wav"), CHANNELID::EFFECT, 0.45f);
 }
 
 CPajamaState* CPajama_DeadState::Update(_float fTimeDelta)

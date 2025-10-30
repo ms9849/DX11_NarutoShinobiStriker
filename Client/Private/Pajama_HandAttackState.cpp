@@ -25,6 +25,9 @@ void CPajama_HandAttackState::Start(_bool IsBlend)
 	m_pPajama->Set_AnimIndex("CustomMan_Attack_Hand_Punch_Left", 2.f, IsBlend, 0.1f);
 	m_pPajama->Get_Transform()->LookAt_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION));
     m_pPajama->Get_Collider(TEXT("Com_Collider_HandAttack"))->Set_Active(false);
+
+    m_pGameInstance->PlaySoundOnce(TEXT("Pajama_HandAttack.wav"), CHANNELID::EFFECT, 0.45f);
+
 }
 
 CPajamaState* CPajama_HandAttackState::Update(_float fTimeDelta)

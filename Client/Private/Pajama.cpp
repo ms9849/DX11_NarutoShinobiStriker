@@ -174,6 +174,8 @@ void CPajama::OnCollision(COLLIDER_HANDLE_ID eHandleID)
         pNextState = CPajama_DeadState::Create(m_pNavigationCom, this);
     }
 
+    m_pGameInstance->PlaySoundOnce(TEXT("Pajama_Hit.wav"), CHANNELID::EFFECT, 0.3f);
+
     Play_HitSound(eHandleID);
     Change_State(pNextState, false);
 

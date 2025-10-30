@@ -24,6 +24,7 @@ void CBoxer_AttackState::Start(_bool IsBlend)
 	/* 공격 하면서 플레이어 바라보게 */
 	m_pBoxer->Set_AnimIndex("CustomMan_Attack_Hand_Punch_Left", 2.0f, true, 0.1f, false);
 	m_pBoxer->Get_Transform()->LookAt_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION));
+	m_pGameInstance->PlaySoundOnce(TEXT("Boxer_attack1.wav"), CHANNELID::EFFECT, 0.35f);
 	m_eAnimState = ANIM_STATE::ATTACK_01;
 }
 
@@ -43,6 +44,7 @@ CBoxerState* CBoxer_AttackState::Update(_float fTimeDelta)
 		m_IsOnCollider = false;
 		m_pBoxer->Set_AnimIndex("CustomMan_Attack_Hand_StraightPunch", 4.5f, false, 0.1f, false);
 		m_pBoxer->Get_Transform()->LookAt_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION));
+		m_pGameInstance->PlaySoundOnce(TEXT("Boxer_attack2.wav"), CHANNELID::EFFECT, 0.35f);
 		m_eAnimState = ANIM_STATE::ATTACK_02;
 	}
 	else if (true == IsAnimFinished && ANIM_STATE::ATTACK_02 == m_eAnimState)

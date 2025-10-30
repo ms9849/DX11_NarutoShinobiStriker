@@ -223,6 +223,8 @@ void CRasengan::Free()
 {
     __super::Free();
 
+    m_pGameInstance->StopSound(CHANNELID::EFFECT_SPECIAL2);
+
     if (nullptr != m_pEffectCharge)
         m_pEffectCharge->Set_Dead(true);
     Safe_Release(m_pEffectCharge);

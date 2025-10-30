@@ -63,7 +63,10 @@ void CWoodArm::Update(_float fTimeDelta)
             m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
                 TEXT("Layer_Particle"), &Desc);
 
-            CGameManager::GetInstance()->Shake_Camera(0.2f, 0.8f);
+            CGameManager::GetInstance()->Shake_Camera(0.2f, 0.9f);
+
+            m_pGameInstance->PlaySoundOnce(TEXT("WoodArm.wav"), CHANNELID::EFFECT3, 0.5f);
+
             m_IsShaked = true;
         }
 

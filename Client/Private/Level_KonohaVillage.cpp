@@ -125,6 +125,7 @@ void CLevel_KonohaVillage::Update(_float fTimeDelta)
 	{
 		if (false == m_IsSoundPlayed)
 		{
+			m_pGameInstance->StopAll();
 			m_pGameInstance->PlaySoundOnce(TEXT("WinPanel.wav"), CHANNELID::UI, 0.9f);
 			m_IsSoundPlayed = true;
 		}
