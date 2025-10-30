@@ -62,6 +62,7 @@ public:
 	_bool	Use_Skill(SKILLNUM eSlotNum); 
 	void	Change_Skills();
 
+	void	Play_HitSound(COLLIDER_HANDLE_ID eHandleID);
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;

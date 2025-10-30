@@ -344,6 +344,7 @@ void CPlayer::OnCollision(COLLIDER_HANDLE_ID eHandleID, _float3 vColliderPos)
 	for (auto& iter : m_PartObjects)
 		static_cast<CParts_Character*>(iter.second)->Set_HitEffect(0.3f, 1.f);
 
+	Play_HitSound(eHandleID);
 	Change_State(pNextState, false);
 }
 
@@ -462,6 +463,38 @@ void CPlayer::Change_Skills()
 		m_pGameManager->Change_Skill(i, m_ActivatedSkills[i]);
 
 	m_pGameManager->Change_AttackType(m_eCurAttackType);
+}
+
+void CPlayer::Play_HitSound(COLLIDER_HANDLE_ID eHandleID)
+{
+	if (COLLIDER_HANDLE_ID::ENEMY_JETSU_ATTACK == eHandleID)
+	{
+		m_pGameInstance->PlaySoundOnce(TEXT("Hand_Final_Hit.wav"), CHANNELID::EFFECT, 0.25f);
+		m_pGameInstance->PlaySoundOnce(TEXT("Player_HitSmall.wav"), CHANNELID::EFFECT, 0.2f);
+	}
+	if (COLLIDER_HANDLE_ID::ENEMY_THROW == eHandleID)
+	{
+		m_pGameInstance->PlaySoundOnce(TEXT("SwordKunaiHit.wav"), CHANNELID::EFFECT, 0.25f);
+		m_pGameInstance->PlaySoundOnce(TEXT("Player_HitSmall.wav"), CHANNELID::EFFECT, 0.2f);
+	}
+	if (COLLIDER_HANDLE_ID::ENEMY_JETSU_WOODHAND == eHandleID)
+	{
+		// ÇÃ·¹ÀÌ¾î À¸¾Æ¾Ç ¼Ò¸®
+		m_pGameInstance->PlaySoundOnce(TEXT("Player_HitBig.wav"), CHANNELID::EFFECT, 0.2f);
+	}
+	if (COLLIDER_HANDLE_ID::ENEMY_BOXER_LEAFHURRICANE == eHandleID)
+	{
+		// ºý ¼Ò¸®¶û À¸¾Æ¾Ç
+		m_pGameInstance->PlaySoundOnce(TEXT("LeafAttack_Hit.wav"), CHANNELID::EFFECT, 0.3f);
+		m_pGameInstance->PlaySoundOnce(TEXT("Player_HitBig.wav"), CHANNELID::EFFECT, 0.2f);
+	}
+	if (COLLIDER_HANDLE_ID::ENEMY_BOXER_SPINKICK == eHandleID)
+	{
+		//ºý ¼Ò¸®¶û À¸¾Æ¾Ç
+		// ºý ¼Ò¸®¶û À¸¾Æ¾Ç
+		m_pGameInstance->PlaySoundOnce(TEXT("SpinKick_Hit.wav"), CHANNELID::EFFECT, 0.3f);
+		m_pGameInstance->PlaySoundOnce(TEXT("Player_HitBig.wav"), CHANNELID::EFFECT, 0.2f);
+	}
 }
 
 void CPlayer::Set_Gravity(_bool bFlag, _float fDist)

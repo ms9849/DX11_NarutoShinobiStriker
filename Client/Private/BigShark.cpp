@@ -64,7 +64,7 @@ HRESULT CBigShark::Initialize(void* pArg)
 	Safe_AddRef(m_pParticleSub);
 	m_pGameInstance->Add_Clone_ToLayer(m_pParticleSub, m_pGameInstance->Get_LevelID(), TEXT("Layer_Particle"));
 
-	m_pGameInstance->PlaySoundOnce(TEXT("BigShark_Start.wav"), CHANNELID::EFFECT, 0.35f);
+	m_pGameInstance->PlaySoundOnce(TEXT("BigShark_Start.wav"), CHANNELID::EFFECT, 0.45f);
 
 	return S_OK;
 }
