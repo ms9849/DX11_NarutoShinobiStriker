@@ -480,20 +480,20 @@ void CPlayer::Play_HitSound(COLLIDER_HANDLE_ID eHandleID)
 	if (COLLIDER_HANDLE_ID::ENEMY_JETSU_WOODHAND == eHandleID)
 	{
 		// ÇÃ·¹ÀÌ¾î À¸¾Æ¾Ç ¼Ò¸®
-		m_pGameInstance->PlaySoundOnce(TEXT("Player_HitBig.wav"), CHANNELID::EFFECT, 0.2f);
+		m_pGameInstance->PlaySoundOnce(TEXT("Player_HitBig.wav"), CHANNELID::EFFECT, 0.35f);
 	}
 	if (COLLIDER_HANDLE_ID::ENEMY_BOXER_LEAFHURRICANE == eHandleID)
 	{
 		// ºý ¼Ò¸®¶û À¸¾Æ¾Ç
 		m_pGameInstance->PlaySoundOnce(TEXT("LeafAttack_Hit.wav"), CHANNELID::EFFECT, 0.3f);
-		m_pGameInstance->PlaySoundOnce(TEXT("Player_HitBig.wav"), CHANNELID::EFFECT, 0.2f);
+		m_pGameInstance->PlaySoundOnce(TEXT("Player_HitBig.wav"), CHANNELID::EFFECT, 0.35f);
 	}
 	if (COLLIDER_HANDLE_ID::ENEMY_BOXER_SPINKICK == eHandleID)
 	{
 		//ºý ¼Ò¸®¶û À¸¾Æ¾Ç
 		// ºý ¼Ò¸®¶û À¸¾Æ¾Ç
 		m_pGameInstance->PlaySoundOnce(TEXT("SpinKick_Hit.wav"), CHANNELID::EFFECT, 0.3f);
-		m_pGameInstance->PlaySoundOnce(TEXT("Player_HitBig.wav"), CHANNELID::EFFECT, 0.2f);
+		m_pGameInstance->PlaySoundOnce(TEXT("Player_HitBig.wav"), CHANNELID::EFFECT, 0.35f);
 	}
 }
 

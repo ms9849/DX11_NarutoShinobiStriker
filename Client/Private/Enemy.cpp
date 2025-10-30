@@ -174,6 +174,18 @@ void CEnemy::Play_HitSound(COLLIDER_HANDLE_ID eHandleID)
     {
         m_pGameInstance->PlaySoundOnce(TEXT("BigShark_Enemy_Hit.wav"), CHANNELID::EFFECT, 0.2f);
     }
+
+    if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENSHURIKEN_EXPLODE == eHandleID || COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_KAMUI== eHandleID)
+    {
+        //KamuiRasenSHurikenHit_Small2.wav
+        m_pGameInstance->PlaySoundOnce(TEXT("KamuiRasenSHurikenHit_Small2.wav"), CHANNELID::EFFECT, 0.2f);
+    }
+    if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_RASENSHURIKEN_END == eHandleID || COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_KAMUI_END == eHandleID)
+    {
+        //KamuiRasenShurikenHit
+        m_pGameInstance->PlaySoundOnce(TEXT("KamuiRasenShurikenHit.wav"), CHANNELID::EFFECT, 0.3f);
+    }
+
 }
 
 HRESULT CEnemy::Ready_HPBar()

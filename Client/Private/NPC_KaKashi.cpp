@@ -232,7 +232,7 @@ void CNPC_KaKashi::Talk()
 		m_pGameManager->Set_Dialog_Visible(true);
 		m_pGameManager->Set_Dialog_Text(m_DialogTexts[m_iCurrentDialog]);
 
-		m_pGameInstance->PlaySoundOnce(TEXT("NPC_Talk_UI.wav"), CHANNELID::UI, 0.3f);
+		m_pGameInstance->PlaySoundOnce(TEXT("NPC_Talk_UI.wav"), CHANNELID::UI, 0.2f);
 	}
 
 	/* 이미 대화중이라면 */
