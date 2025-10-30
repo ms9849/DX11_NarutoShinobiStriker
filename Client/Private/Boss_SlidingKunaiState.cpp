@@ -27,6 +27,8 @@ void CBoss_SlidingKunaiState::Start(_bool IsBlend)
         m_pBoss->Set_AnimIndex("CustomMan_Throw_Aerial_Kunai_Right", 2.f, IsBlend, 0.1f);
 
     m_pBoss->Get_Transform()->LookAt_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION));
+
+    m_pGameInstance->PlaySoundOnce(TEXT("Boss_ThrowKunai.wav"), CHANNELID::EFFECT2, 0.49f);
 }
 
 CBossState* CBoss_SlidingKunaiState::Update(_float fTimeDelta)

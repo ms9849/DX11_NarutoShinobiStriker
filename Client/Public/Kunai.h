@@ -38,12 +38,13 @@ public:
 private:
 	KUNAI_TYPE  m_eType = {};
 
+	CCollider* m_pColliderCom = { nullptr };
+	CModel* m_pModelCom = { nullptr };
+	CShader* m_pShaderCom = { nullptr };
 	class CTrail* m_pTrail = { nullptr };
 	class CGameManager* m_pGameManager = { nullptr };
+
 	_float		m_fTimeAcc = {};
-	CCollider*	m_pColliderCom = { nullptr };
-	CModel*		m_pModelCom = { nullptr };
-	CShader*	m_pShaderCom = { nullptr };
 	_uint		m_iNumMeshes = {};
 	_float3		m_vDirection = {};
 	_float		m_fTrailTimeAcc = { 0.f };

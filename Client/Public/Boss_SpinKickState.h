@@ -38,6 +38,7 @@ private:
 	ANIM_STATE		m_eAnimState = {};
 	_bool			m_IsOnCollider = { false };
 	_bool			m_IsParticleCreated = { false };
+	_bool			m_IsSoundPlayed = { false };
 public:
 	static CBoss_SpinKickState* Create(class CNavigation* pNavigation, class CBoss* pBoss);
 	virtual void Free() override;

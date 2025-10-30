@@ -312,7 +312,18 @@ void CPlayer::OnCollision(COLLIDER_HANDLE_ID eHandleID, _float3 vColliderPos)
 	CPlayerState* pNextState = { nullptr };
 
 	_vector vDirection = XMVectorSetW(XMVectorSetY(XMVector3Normalize(m_pTransformCom->Get_State(STATE::POSITION) - XMLoadFloat3(&vColliderPos)), 0.f), 0.f);
-	m_pTransformCom->LookAt_XZ(XMLoadFloat3(&vColliderPos));
+	
+	if (XMVectorGetX(vDirection) == 0 && XMVectorGetY(vDirection) == 0 && XMVectorGetZ(vDirection) == 0)
+	{
+		_vector vNewColliderPos = {};
+		vDirection = XMVectorSetW((m_pTransformCom->Get_State(STATE::LOOK)), 1.f) * -1.f;
+		vNewColliderPos = XMLoadFloat3(&vColliderPos) + m_pTransformCom->Get_State(STATE::LOOK);
+		m_pTransformCom->LookAt_XZ(vNewColliderPos);
+	}
+	else
+		m_pTransformCom->LookAt_XZ(XMLoadFloat3(&vColliderPos));
+
+
 
 	if (COLLIDER_HANDLE_ID::ENEMY_THROW == eHandleID ||
 		COLLIDER_HANDLE_ID::ENEMY_JETSU_ATTACK == eHandleID)

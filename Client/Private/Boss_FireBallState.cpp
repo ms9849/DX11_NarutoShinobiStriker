@@ -26,6 +26,8 @@ void CBoss_FireBallState::Start(_bool IsBlend)
 {
 	m_pBoss->Get_Transform()->LookAt_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION));
 	m_pBoss->Set_AnimIndex("CustomMan_Ninjutsu_Fireball_Lv3", 1.4f, IsBlend, 0.1f);
+
+    m_pGameInstance->PlaySoundOnce(TEXT("Boss_Fireball.wav"), CHANNELID::EFFECT2, 0.49f);
 }
 
 CBossState* CBoss_FireBallState::Update(_float fTimeDelta)

@@ -160,7 +160,4 @@ CGameObject* CThousandArm::Clone(void* pArg)
 void CThousandArm::Free()
 {
 	__super::Free();
-
-	Safe_Release(m_pModelCom);
-	Safe_Release(m_pShaderCom);
 }

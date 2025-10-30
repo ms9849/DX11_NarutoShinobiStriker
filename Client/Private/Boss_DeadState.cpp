@@ -25,6 +25,7 @@ void CBoss_DeadState::Start(_bool IsBlend)
 	static_cast<CThousandArm*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Layer_ThousandArm"), 0))->Set_Visible(false);
 	static_cast<CThousandArm*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::KONOHA_VILLAGE), TEXT("Layer_ThousandArm"), 0))->Set_Visible(false);
 
+	m_pGameInstance->PlaySoundOnce(TEXT("Boss_Die.wav"), CHANNELID::EFFECT2, 0.49f);
 }
 
 CBossState* CBoss_DeadState::Update(_float fTimeDelta)

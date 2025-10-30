@@ -27,6 +27,7 @@ void CBoss_SpinKickState::Start(_bool IsBlend)
 {
 	m_pBoss->Set_AnimIndex("CustomMan_Ninjutsu_LeafHurricane_Start", 1.5f, IsBlend, 0.1f, false);
 	m_eAnimState = ANIM_STATE::ATTACK_START;
+
 }
 
 CBossState* CBoss_SpinKickState::Update(_float fTimeDelta)
@@ -58,6 +59,12 @@ CBossState* CBoss_SpinKickState::Update(_float fTimeDelta)
 	{
 		m_pBoss->Set_AnimIndex("CustomMan_Ninjutsu_LeafHurricane_Start", 1.f, false, 0.1f, false);
 		m_pBoss->Set_AnimProgress(1.0f);
+		//조건문 추가
+		if (false == m_IsSoundPlayed)
+		{
+			m_pGameInstance->PlaySoundOnce(TEXT("Boss_Osoi.wav"), CHANNELID::EFFECT2, 0.49f);
+			m_IsSoundPlayed = true;
+		}
 	}
 	else if (ANIM_STATE::ATTACK_END == m_eAnimState
 		&& true == IsAnimFinished)
@@ -68,6 +75,7 @@ CBossState* CBoss_SpinKickState::Update(_float fTimeDelta)
 	// 콜라이더 On 기능 됐는데 꺼져있고, 파티클 만들어진적 없으면
 	if (true == m_IsOnCollider && false == m_pBoss->Get_Collider(TEXT("Com_Collider_SpinKick"))->Get_Active() && false == m_IsParticleCreated)
 	{
+		m_pGameInstance->PlaySoundOnce(TEXT("Boss_Spinkick.wav"), CHANNELID::EFFECT2, 0.49f);
 		/* 여기서 파티클 추가 */
 		CParticleObject::PARTICLE_LOAD_DESC Desc;
 		Desc.strParticlePath = TEXT("../Bin/Resources/Particle/BossSkill_Particle.bin");

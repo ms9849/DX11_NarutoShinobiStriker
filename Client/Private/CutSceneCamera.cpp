@@ -191,6 +191,8 @@ void CCutSceneCamera::Boss_CutScene(_float fTimeDelta)
         m_pGameManager->Set_CutScene_Visible(false);
         m_pGameManager->Set_AttackType_Visible(true);
         m_pGameManager->OnTrigger(TRIGGER_TYPE::KONOHA_VILLAGE_BOSS_CUTSCENE_END);
+        m_pGameInstance->StopAll();
+        m_pGameInstance->PlayBGM(TEXT("BossFight_BackGround.wav"), 0.27f);
         m_pGameManager->Change_Camera(LEVEL::KONOHA_VILLAGE, TEXT("Main_Camera"), nullptr);
     }
 
