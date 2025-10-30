@@ -48,6 +48,7 @@ HRESULT CFireBall::Initialize(void* pArg)
     
     m_pEffectMain->Set_Blur(true);
     m_pGameInstance->Add_Clone_ToLayer(m_pEffectMain, m_pGameInstance->Get_LevelID(), TEXT("Layer_Effect"));
+    m_pGameInstance->PlaySoundOnce(TEXT("Fireball_Loop.wav"), CHANNELID::EFFECT9, 0.5f);
 
     return S_OK;
 }

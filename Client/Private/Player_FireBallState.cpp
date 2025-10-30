@@ -30,7 +30,6 @@ void CPlayer_FireBallState::Start(_bool IsBlend)
     m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Fireball_Lv3", 1.75f, true);
 
     m_pGameInstance->PlaySoundOnce(TEXT("Fireball_Voice.wav"), CHANNELID::EFFECT, 0.7f);
-    m_pGameInstance->PlaySoundOnce(TEXT("Fireball_Loop.wav"), CHANNELID::EFFECT9, 0.5f);
 }
 
 CPlayerState* CPlayer_FireBallState::Update(_float fTimeDelta)

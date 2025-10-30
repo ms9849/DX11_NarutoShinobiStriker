@@ -130,7 +130,7 @@ void CCutSceneCamera::Tutorial_CutScene(_float fTimeDelta)
             m_pGameManager->Set_CutScene_Visible(false);
             m_pGameManager->Set_AttackType_Visible(true);
 
-            m_pGameInstance->PlayBGM(TEXT("TutorialMap_BackGround.wav"), 0.3f);
+            m_pGameInstance->PlayBGM(TEXT("TutorialMap_BackGround.wav"), 0.27f);
             m_pGameManager->Change_Camera(LEVEL::TUTORIAL, TEXT("Main_Camera"), nullptr);
             m_pGameInstance->StopSound(CHANNELID::EFFECT_SPECIAL2);
         }
@@ -164,6 +164,7 @@ void CCutSceneCamera::KonohaVillage_CustScene(_float fTimeDelta)
             m_pGameManager->Get_PlayerPtr()->Set_Visible(true);
             m_pGameManager->Set_CutScene_Visible(false);
             m_pGameManager->Set_AttackType_Visible(true);
+            m_pGameInstance->PlayBGM(TEXT("KonohaVillage_Background.wav"), 0.27f);
             m_pGameManager->Change_Camera(LEVEL::KONOHA_VILLAGE, TEXT("Main_Camera"), nullptr);
             m_pGameInstance->StopSound(CHANNELID::EFFECT_SPECIAL2);
         }

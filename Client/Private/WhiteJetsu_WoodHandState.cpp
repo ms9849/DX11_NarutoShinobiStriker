@@ -33,6 +33,8 @@ void CWhiteJetsu_WoodHandState::Start(_bool IsBlend)
 	m_pPlayerTransformCom = CGameManager::GetInstance()->Get_PlayerPtr()->Get_Transform();
 
 	m_pJetsu->Get_Transform()->LookAt_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION));
+
+	m_pGameInstance->PlaySoundOnce(TEXT("Jetsu_UseSkill.wav"), CHANNELID::EFFECT, 0.5f);
 	Safe_AddRef(m_pPlayerTransformCom);
 }
 

@@ -186,6 +186,9 @@ void CBird::OnCollision(COLLIDER_HANDLE_ID eHandleID)
     Play_HitSound(eHandleID);
     Set_HitEffect(fHitTime, 1.f);
 
+
+    m_pGameInstance->PlaySoundOnce(TEXT("Bird_Hit.wav"), CHANNELID::EFFECT, 0.3f);
+
     Change_State(pNextState, false);
 }
 

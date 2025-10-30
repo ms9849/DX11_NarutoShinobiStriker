@@ -28,6 +28,8 @@ void CBird_AttackState::Start(_bool IsBlend)
     m_pPlayerTransformCom = CGameManager::GetInstance()->Get_PlayerPtr()->Get_Transform();
 
     m_pBird->Get_Transform()->LookAt_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION));
+    m_pGameInstance->PlaySoundOnce(TEXT("Bird_Attack.wav"), CHANNELID::EFFECT, 0.10f);
+
     Safe_AddRef(m_pPlayerTransformCom);
 }
 
@@ -38,7 +40,7 @@ CBirdState* CBird_AttackState::Update(_float fTimeDelta)
     _float fAnimProgress = m_pBird->Get_AnimProgress();
 
 
-    if (0.6 <= fAnimProgress && false == m_isThrow)
+    if (0.5 <= fAnimProgress && false == m_isThrow)
     {
         CKunai::KUNAI_DESC Desc;
 

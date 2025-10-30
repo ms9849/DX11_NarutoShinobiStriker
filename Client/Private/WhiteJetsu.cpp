@@ -183,6 +183,9 @@ void CWhiteJetsu::OnCollision(COLLIDER_HANDLE_ID eHandleID)
     m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
         TEXT("Layer_Particle"), &Desc);
 
+
+    m_pGameInstance->PlaySoundOnce(TEXT("Jetsu_Hit.wav"), CHANNELID::EFFECT, 0.25f);
+
     Play_HitSound(eHandleID);
     Set_HitEffect(fHitTime, 1.f);
 
