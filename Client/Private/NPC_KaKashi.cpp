@@ -199,6 +199,8 @@ void CNPC_KaKashi::End_Dialog()
 	m_pGameManager->Set_SkillSlot_Visible(true);
 	m_IsActiveDeath = true;
 
+	m_pGameInstance->PlaySoundOnce(TEXT("kakash_greet_Konohavillage.wav"), CHANNELID::EFFECT10, 0.5f);
+
 	if (TRIGGER_TYPE::TUTORIAL_CLEAR == m_pGameManager->Get_CurrentTrigger())
 		m_pGameManager->OnTrigger(TRIGGER_TYPE::KONOHA_VILLAGE_KAKASHI_TALK_1);
 }
@@ -220,7 +222,9 @@ void CNPC_KaKashi::Talk()
 {
 	/* F를 눌러서 대화 */
 	if(m_pGameInstance->Key_Down(DIK_F) && false == m_IsTalking && true == m_IsTalkable)
-	{ 
+	{
+		m_pGameInstance->PlaySoundOnce(TEXT("kakashi_greet_tutorial.wav"), CHANNELID::EFFECT10, 0.5f);
+
 		m_IsTalking = true;
 		m_iCurrentDialog = 0;
 

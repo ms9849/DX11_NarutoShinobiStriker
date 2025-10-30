@@ -53,6 +53,8 @@ HRESULT CKamui::Initialize(void* pArg)
 
     m_pGameInstance->Set_Distortion(m_fLifeTime);
 
+    m_pGameInstance->PlaySoundOnce(TEXT("Kamui_Create.wav"), CHANNELID::EFFFECT_SPECIAL, 0.4f);
+
     return S_OK;
 }
 
@@ -82,6 +84,9 @@ void CKamui::Update(_float fTimeDelta)
 
     if (true == m_isFinal)
     {
+        m_pGameInstance->StopSound(CHANNELID::EFFFECT_SPECIAL);
+        m_pGameInstance->PlaySoundOnce(TEXT("Kamui_Explosion.wav"), CHANNELID::EFFECT10, 0.5f);
+
         m_IsDead = true;
 
         CParticleObject::PARTICLE_LOAD_DESC ParticleDesc;

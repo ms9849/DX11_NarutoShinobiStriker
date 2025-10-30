@@ -35,6 +35,7 @@ void CPlayer_FrontJumpState::Start(_bool IsBlend)
 	{
 		m_pPlayer->Set_AnimIndex("CustomMan_Jump_Front", 1.f, IsBlend);
 		m_pGameInstance->PlaySoundOnce(TEXT("Jump.wav"), CHANNELID::EFFECT, 0.4f);
+		m_pGameInstance->PlaySoundOnce(TEXT("Jump_Voice.wav"), CHANNELID::EFFECT, 0.4f);
 	}
 
 
@@ -47,6 +48,7 @@ void CPlayer_FrontJumpState::Start(_bool IsBlend)
 		//보간 ratio 추가
 		m_pPlayer->Set_AnimIndex("CustomMan_DoubleJump", 2.5f, false);
 		m_pGameInstance->PlaySoundOnce(TEXT("DoubleJump.wav"), CHANNELID::EFFECT, 0.3f);
+		m_pGameInstance->PlaySoundOnce(TEXT("DoubleJump_Voice.wav"), CHANNELID::EFFECT, 0.4f);
 		m_eAnimState = ANIM_STATE::DOUBLE_JUMP;
 		m_fTimeAcc = 0.f;
 		m_bCanDoubleJump = false;
@@ -143,6 +145,7 @@ CPlayerState* CPlayer_FrontJumpState::Update(_float fTimeDelta)
 
 		m_pGameInstance->Add_Clone_ToLayer(pCloneEffect, m_pGameInstance->Get_LevelID(), TEXT("Layer_Effect"));
 		m_pGameInstance->PlaySoundOnce(TEXT("DoubleJump.wav"), CHANNELID::EFFECT, 0.3f);
+		m_pGameInstance->PlaySoundOnce(TEXT("DoubleJump_Voice.wav"), CHANNELID::EFFECT, 0.3f);
 	}
 
 	// 낙하

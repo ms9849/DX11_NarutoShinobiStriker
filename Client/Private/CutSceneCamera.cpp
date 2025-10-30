@@ -80,6 +80,7 @@ void CCutSceneCamera::OnChange(const _float4x4* pWorldMatrix)
     {
     case TRIGGER_TYPE::TUTORIAL_CLEAR:
         /* ³ª¹µÀÙ ¸¶À» ÀÔÀå ÄÆ¾À ¼¼ÆÃ */
+        m_pGameInstance->PlaySoundOnce(TEXT("Start_CutScene.wav"), CHANNELID::EFFECT_SPECIAL2, 0.5f);
         m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(83.806f, 87.830f, -51.401f, 1.f));
         m_pGameManager->Set_AttackType_Visible(false);
         break;
@@ -93,10 +94,13 @@ void CCutSceneCamera::OnChange(const _float4x4* pWorldMatrix)
 
     default:
         /* Æ©Åä¸®¾ó ÀÔÀå ÄÆ¾À ¼¼ÆÃ */
+        m_pGameInstance->PlaySoundOnce(TEXT("Start_CutScene.wav"), CHANNELID::EFFECT_SPECIAL2, 0.5f);
         m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(71.447f, 76.337f, -60.446f, 1.f));
         m_pGameManager->Set_AttackType_Visible(false);
         break;
     }
+
+
 }
 
 void CCutSceneCamera::Tutorial_CutScene(_float fTimeDelta)
@@ -128,6 +132,7 @@ void CCutSceneCamera::Tutorial_CutScene(_float fTimeDelta)
 
             m_pGameInstance->PlayBGM(TEXT("TutorialMap_BackGround.wav"), 0.5f);
             m_pGameManager->Change_Camera(LEVEL::TUTORIAL, TEXT("Main_Camera"), nullptr);
+            m_pGameInstance->StopSound(CHANNELID::EFFECT_SPECIAL2);
         }
     }
     m_pTransformCom->LookAt(vLookPos);
@@ -160,6 +165,7 @@ void CCutSceneCamera::KonohaVillage_CustScene(_float fTimeDelta)
             m_pGameManager->Set_CutScene_Visible(false);
             m_pGameManager->Set_AttackType_Visible(true);
             m_pGameManager->Change_Camera(LEVEL::KONOHA_VILLAGE, TEXT("Main_Camera"), nullptr);
+            m_pGameInstance->StopSound(CHANNELID::EFFECT_SPECIAL2);
         }
     }
     m_pTransformCom->LookAt(vLookPos);

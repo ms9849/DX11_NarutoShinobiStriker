@@ -36,6 +36,7 @@ void CPlayer_JumpState::Start(_bool IsBlend)
 		m_pPlayer->Set_AnimIndex("CustomMan_Jump_Vertical", 1.f, IsBlend);
 		m_bCanDoubleJump = true;
 		m_pGameInstance->PlaySoundOnce(TEXT("Jump.wav"), CHANNELID::EFFECT, 0.4f);
+		m_pGameInstance->PlaySoundOnce(TEXT("Jump_Voice.wav"), CHANNELID::EFFECT, 0.4f);
 	}
 	else if (m_eAnimState == ANIM_STATE::FALL)
 	{
@@ -122,6 +123,7 @@ CPlayerState* CPlayer_JumpState::Update(_float fTimeDelta)
 
 		m_pGameInstance->Add_Clone_ToLayer(pCloneEffect, m_pGameInstance->Get_LevelID(), TEXT("Layer_Effect"));
 		m_pGameInstance->PlaySoundOnce(TEXT("DoubleJump.wav"), CHANNELID::EFFECT, 0.3f);
+		m_pGameInstance->PlaySoundOnce(TEXT("DoubleJump_Voice.wav"), CHANNELID::EFFECT, 0.4f);
 	}
 
 	// ³«ÇÏ

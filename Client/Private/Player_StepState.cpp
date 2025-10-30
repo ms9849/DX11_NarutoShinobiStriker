@@ -53,6 +53,8 @@ void CPlayer_StepState::Start(_bool IsBlend)
 	{
 		m_pPlayer->Set_AnimIndex("CustomMan_DashStep_Behind", 1.4f, IsBlend);
 		m_pGameInstance->PlaySoundOnce(TEXT("DoubleJump.wav"), CHANNELID::EFFECT, 0.3f);
+		m_pGameInstance->PlaySoundOnce(TEXT("Jump_Voice.wav"), CHANNELID::EFFECT, 0.3f);
+
 	}
 
 	else if (ANIM_STATE::FRONT == m_eAnimState)
