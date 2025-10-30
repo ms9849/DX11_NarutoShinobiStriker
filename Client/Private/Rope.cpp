@@ -34,8 +34,7 @@ HRESULT CRope::Initialize(void* pArg)
 	m_iNumMeshes = m_pModelCom->Get_NumMeshes();
 
 	ROPE_DESC* pDesc = static_cast<ROPE_DESC*>(pArg);
-	pDesc->fSpeedPerSec = 40.f;
-
+	pDesc->fSpeedPerSec = 30.f;
 
 	/* 손 본의 컴바인드 매트릭스를 가져오게 하자.*/
 	/* 그리고 start pos로 세팅, end pos는 현재 로프의 월드 위치로 세팅.*/
@@ -63,7 +62,7 @@ void CRope::Update(_float fTimeDelta)
 
 	_float fDist = XMVectorGetX(XMVector3Length(m_pTransformCom->Get_State(STATE::POSITION) - XMLoadFloat3(&m_vTargetPos)));
 	
-	if (fDist < 1.0f)
+	if (fDist < 0.75f)
 	{
 		m_IsArrive = true;
 		
