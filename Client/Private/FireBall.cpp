@@ -81,6 +81,8 @@ void CFireBall::Update(_float fTimeDelta)
     if (false == m_pColliderCom->Get_Active())
     {
         m_IsDead = true;
+        m_pGameInstance->StopSound(CHANNELID::EFFECT9);
+        m_pGameInstance->PlaySoundOnce(TEXT("Fireball_Hit.wav"), CHANNELID::EFFECT9, 0.4f);
 
         CParticleObject::PARTICLE_LOAD_DESC ParticleDesc;
         ParticleDesc.eType = CParticleObject::PARTICLE_TYPE::EXPLOSION;

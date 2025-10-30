@@ -33,6 +33,8 @@ void CPlayer_RasenganReadyState::Start(_bool IsBlend)
 
     m_pGameInstance->Add_Clone_ToLayer(m_pRasengan, m_pGameInstance->Get_LevelID(), TEXT("Layer_Skill"));
     Safe_AddRef(m_pRasengan);
+
+    m_pGameInstance->PlaySoundOnce(TEXT("Rasengan_Create.wav"), CHANNELID::EFFECT_SPECIAL2, 0.2f);
 }
 
 CPlayerState* CPlayer_RasenganReadyState::Update(_float fTimeDelta)

@@ -82,6 +82,13 @@ CPlayerState* CPlayer_RasenganState::Update(_float fTimeDelta)
     // 나선환 RMx 애니메이션 전환. 나중에 맞았는지 체크해야함. 
     else if  (ANIM_STATE::ATTACK == m_eAnimState && (false == m_pRasengan->IsColliderActive() || m_fTimeAcc >= 1.2f))
     {
+        //맞은거니까 맞는 사운드
+        if(false == m_pRasengan->IsColliderActive())
+        {
+            m_pGameInstance->PlaySoundOnce(TEXT("Rasengan_hit.wav"), CHANNELID::EFFECT, 0.5f);
+            m_pGameInstance->StopSound(CHANNELID::EFFECT_SPECIAL2);
+        }
+
         m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Rasengun_Attack_Lv1_End", 1.f, false);
         m_eAnimState = ANIM_STATE::ATTACK_END;
 

@@ -64,6 +64,7 @@ void CPlayer_StepState::Start(_bool IsBlend)
 		m_pPlayer->Set_AnimIndex("CustomMan_DashStep_Front", 1.4f, IsBlend);
 
 		m_pGameInstance->PlaySoundOnce(TEXT("FrontDash1.wav"), CHANNELID::EFFECT, 0.4f);
+		m_pGameInstance->PlaySoundOnce(TEXT("Jump_Voice.wav"), CHANNELID::EFFECT, 0.3f);
 	}
 
 	m_pPlayer->Get_Transform()->Change_Look_Force(vPlayerLook);
