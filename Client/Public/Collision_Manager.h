@@ -13,6 +13,7 @@
 NS_BEGIN(Engine)
 class CCollider;
 class CGameObject;
+class CGameInstance;
 NS_END
 
 NS_BEGIN(Client)
@@ -42,7 +43,7 @@ private:
 	map<_wstring, vector<pair<CGameObject*, CCollider*>>>		m_CollisionObjects = {};
 
 	class CGameManager* m_pGameManager = { nullptr };
-
+	class CGameInstance* m_pGameInstance = { nullptr };
 public:
 	static CCollision_Manager* Create();
 	virtual void Free() override;

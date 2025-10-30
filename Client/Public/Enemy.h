@@ -38,7 +38,7 @@ public:
 
 public:
 	virtual void OnCollision(COLLIDER_HANDLE_ID eHandleID);
-
+	void Play_HitSound(COLLIDER_HANDLE_ID eHandleID);
 protected:
 	HRESULT Ready_HPBar();
 	HRESULT Update_FootTrail(_float fTimeDelta);

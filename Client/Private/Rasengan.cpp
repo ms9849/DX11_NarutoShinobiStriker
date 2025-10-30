@@ -91,6 +91,7 @@ void CRasengan::Update(_float fTimeDelta)
     if (m_fTimeAcc >= 5.f)
     {
         m_IsDead = true;
+        m_pEffectCharge->Set_Dead(true);
         m_pEffectRun->Set_Dead(true);
     }
 
@@ -144,6 +145,13 @@ HRESULT CRasengan::Render()
     //}
 
     return S_OK;
+}
+
+void CRasengan::Set_Visible(_bool bFlag)
+{
+    m_pEffectCharge->Set_Visible(bFlag);
+    m_pEffectRun->Set_Visible(bFlag);
+    m_pParticleMain->Set_Visible(bFlag);
 }
 
 HRESULT CRasengan::Ready_Components()

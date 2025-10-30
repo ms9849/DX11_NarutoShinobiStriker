@@ -152,6 +152,30 @@ void CEnemy::OnCollision(COLLIDER_HANDLE_ID eHandleID)
 {
 }
 
+void CEnemy::Play_HitSound(COLLIDER_HANDLE_ID eHandleID)
+{
+    if (COLLIDER_HANDLE_ID::PLAYER_HAND_ATTACK == eHandleID)
+    {
+        m_pGameInstance->PlaySoundOnce(TEXT("Hand_Hit.wav"), CHANNELID::EFFECT, 0.25f);
+    }
+    if (COLLIDER_HANDLE_ID::PLAYER_HAND_ATTACK_FINAL == eHandleID)
+    {
+        m_pGameInstance->PlaySoundOnce(TEXT("Hand_Final_Hit.wav"), CHANNELID::EFFECT, 0.25f);
+    }
+    if (COLLIDER_HANDLE_ID::PLAYER_SWORD_ATTACK == eHandleID)
+    {
+        m_pGameInstance->PlaySoundOnce(TEXT("SwordKunaiHit.wav"), CHANNELID::EFFECT, 0.2f);
+    }
+    if (COLLIDER_HANDLE_ID::PLAYER_SWORD_ATTACK_FINAL == eHandleID)
+    {
+        m_pGameInstance->PlaySoundOnce(TEXT("SwordKunaiHit.wav"), CHANNELID::EFFECT, 0.2f);
+    }
+    if (COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_BIGSHARK == eHandleID)
+    {
+        m_pGameInstance->PlaySoundOnce(TEXT("BigShark_Enemy_Hit.wav"), CHANNELID::EFFECT, 0.2f);
+    }
+}
+
 HRESULT CEnemy::Ready_HPBar()
 {
     m_pHPBar = CEnemy_HPBar::Create(m_pDevice, m_pContext, OBJECTID::ENEMY_HPBAR);

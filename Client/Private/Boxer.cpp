@@ -180,7 +180,7 @@ void CBoxer::OnCollision(COLLIDER_HANDLE_ID eHandleID)
 	m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
 		TEXT("Layer_Particle"), &Desc);
 
-
+	Play_HitSound(eHandleID);
 	Change_State(pNextState, false);
 
 	m_fCurrentHP -= 1.f;

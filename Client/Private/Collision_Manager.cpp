@@ -7,11 +7,14 @@
 #include "Player.h"
 #include "TriggerBox.h"
 
+#include "GameInstance.h"
 #include "GameManager.h"
 
 CCollision_Manager::CCollision_Manager()
     : m_pGameManager { CGameManager::GetInstance() }
+    , m_pGameInstance { CGameInstance::GetInstance()}
 {
+    Safe_AddRef(m_pGameInstance);
     Safe_AddRef(m_pGameManager);
 }
 
@@ -96,6 +99,11 @@ void CCollision_Manager::Check_Collision(const _wstring strColliderTag, const _w
                     pCollider.second->Set_Active(false);
 
 
+                if (pCollider.first == COLLIDER_HANDLE_ID::PLAYER_NINJUTSU_CHIDORI)
+                {
+                     m_pGameInstance->PlaySoundOnce(TEXT("Chidori_Hit.wav"), CHANNELID::EFFECT, 0.5f);
+                }
+
                 /* 미리 Client_Defines에 선언해둔 태그에 따라 알맞는 콜리전 선언. */
                 if (COLLISION_TYPE::MONSTER == eColType)
                     static_cast<CEnemy*>(pCollisionObject.first)->OnCollision(pCollider.first);
@@ -169,4 +177,5 @@ void CCollision_Manager::Free()
     m_CollisionObjects.clear();
 
     Safe_Release(m_pGameManager);
+    Safe_Release(m_pGameInstance);
 }
