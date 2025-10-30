@@ -28,6 +28,8 @@ void CBoss_WoodHandState::Start(_bool IsBlend)
 {
 	m_pBoss->Set_AnimIndex("CustomMan_Ninjutsu_LaughingMonk", 1.5f, true);
 	m_pBoss->Get_Transform()->LookAt_XZ(m_pPlayerTransformCom->Get_State(STATE::POSITION));
+
+	m_pGameInstance->PlaySoundOnce(TEXT("Boss_WoodHand.wav"), CHANNELID::EFFECT2, 0.49f);
 }
 
 CBossState* CBoss_WoodHandState::Update(_float fTimeDelta)
