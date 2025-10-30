@@ -88,7 +88,7 @@ void CRasengan::Update(_float fTimeDelta)
 {
     m_fTimeAcc += fTimeDelta;
 
-    if (m_fTimeAcc >= 5.f || false == m_pColliderCom->Get_Active())
+    if (m_fTimeAcc >= 5.f)
     {
         m_IsDead = true;
         m_pEffectRun->Set_Dead(true);

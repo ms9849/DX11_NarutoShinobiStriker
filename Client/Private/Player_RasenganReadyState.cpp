@@ -31,6 +31,8 @@ void CPlayer_RasenganReadyState::Start(_bool IsBlend)
     m_pRasengan = static_cast<CRasengan*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::STATIC),
         TEXT("Prototype_GameObject_Rasengan"), &Desc));
 
+    static_cast<CCollider*>(m_pRasengan->Find_Component(TEXT("Com_Collider_OBB")))->Set_Active(false);
+
     m_pGameInstance->Add_Clone_ToLayer(m_pRasengan, m_pGameInstance->Get_LevelID(), TEXT("Layer_Skill"));
     Safe_AddRef(m_pRasengan);
 

@@ -22,6 +22,9 @@ void CPlayer_ChidoriReadyState::Start(_bool IsBlend)
 	m_pPlayer->Set_Invincible(true);
 	m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Chidori_Charge_Lv1", 0.5f, true);
 	m_eAnimState = ANIM_STATE::CHARGE_1;
+
+	m_pGameInstance->PlaySoundOnce(TEXT("Chidori_Charge_Voice.wav"), CHANNELID::EFFECT4, 0.5f);
+	m_pGameInstance->PlaySoundOnce(TEXT("Chidori_Loop.wav"), CHANNELID::EFFECT5, 0.2f);
 }
 
 CPlayerState* CPlayer_ChidoriReadyState::Update(_float fTimeDelta)
@@ -43,6 +46,8 @@ CPlayerState* CPlayer_ChidoriReadyState::Update(_float fTimeDelta)
 		Safe_AddRef(m_pChidori);
 
 		m_IsChidoriCreated = true;
+
+		static_cast<CCollider*>(m_pChidori->Find_Component(TEXT("Com_Collider_AABB")))->Set_Active(false);
 	}
 
 	// 차지 1단계 애니메이션 재생이 끝났다면

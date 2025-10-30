@@ -35,6 +35,8 @@ void CPlayer_ChidoriAttackState::Start(_bool IsBlend)
     m_pGameInstance->PlaySoundOnce(TEXT("Chidori_Voice.wav"), CHANNELID::EFFECT, 0.7f);
     m_eAnimState = ANIM_STATE::ATTACK;
     m_fTimeAcc = 0.f;
+
+    static_cast<CCollider*>(m_pChidori->Find_Component(TEXT("Com_Collider_AABB")))->Set_Active(true);
 }
 
 CPlayerState* CPlayer_ChidoriAttackState::Update(_float fTimeDelta)
@@ -59,7 +61,7 @@ CPlayerState* CPlayer_ChidoriAttackState::Update(_float fTimeDelta)
     if (nullptr != pTargetTransform && ANIM_STATE::ATTACK_END != m_eAnimState)
     {
         _vector vTargetPosition = pTargetTransform->Get_State(STATE::POSITION);
-        m_pPlayer->Get_Transform()->LookAt_Lerp(vTargetPosition);
+        m_pPlayer->Get_Transform()->LookAt_Lerp(vTargetPosition, 0.4f);
     }
     else if ((m_pGameInstance->Key_Pressing(DIK_A) ||
         m_pGameInstance->Key_Pressing(DIK_D))
@@ -80,6 +82,11 @@ CPlayerState* CPlayer_ChidoriAttackState::Update(_float fTimeDelta)
     // 치도리 끝내는 동작 (ATTACK_END로 전환) 
     if (ANIM_STATE::ATTACK == m_eAnimState && (false == m_pChidori->IsColliderActive() || m_fTimeAcc >= 1.0f))
     {
+        if (false == m_pChidori->IsColliderActive())
+        {
+            m_pGameInstance->PlaySoundOnce(TEXT("Chidori_Hit.wav"), CHANNELID::EFFECT, 0.5f);
+
+        }
         m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Chidori_Attack_Lv3_End", 1.f, true);
         m_eAnimState = ANIM_STATE::ATTACK_END;
     }
@@ -103,6 +110,7 @@ _bool CPlayer_ChidoriAttackState::End()
 {
     m_pPlayer->Set_Invincible(false);
     m_pChidori->Set_Dead(true); 
+    m_pGameInstance->StopSound(CHANNELID::EFFECT5);
 
     return true;
 }

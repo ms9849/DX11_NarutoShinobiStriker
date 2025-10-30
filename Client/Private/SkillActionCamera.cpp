@@ -69,6 +69,7 @@ void CSkillActionCamera::Priority_Update(_float fTimeDelta)
         {
             m_fChidoriCamTimeAcc = 0.f;
             m_pGameManager->Change_Camera(static_cast<LEVEL>(m_pGameInstance->Get_LevelID()), TEXT("Main_Camera"), m_pGameInstance->Get_PipeLine_InverseFloat4x4(D3DTS::VIEW));
+            m_pGameInstance->StopSound(CHANNELID::EFFECT5);
         }
     }
     __super::Bind_Matrices();

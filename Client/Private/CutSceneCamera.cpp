@@ -130,7 +130,7 @@ void CCutSceneCamera::Tutorial_CutScene(_float fTimeDelta)
             m_pGameManager->Set_CutScene_Visible(false);
             m_pGameManager->Set_AttackType_Visible(true);
 
-            m_pGameInstance->PlayBGM(TEXT("TutorialMap_BackGround.wav"), 0.5f);
+            m_pGameInstance->PlayBGM(TEXT("TutorialMap_BackGround.wav"), 0.3f);
             m_pGameManager->Change_Camera(LEVEL::TUTORIAL, TEXT("Main_Camera"), nullptr);
             m_pGameInstance->StopSound(CHANNELID::EFFECT_SPECIAL2);
         }
