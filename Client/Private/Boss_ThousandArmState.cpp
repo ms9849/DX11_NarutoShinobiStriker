@@ -29,7 +29,7 @@ void CBoss_ThousandArmState::Start(_bool IsBlend)
 	CGameManager::GetInstance()->Change_Camera(LEVEL::KONOHA_VILLAGE, TEXT("Boss_Camera"), nullptr);
 	CGameManager::GetInstance()->Get_PlayerPtr()->Set_Visible(false);
 
-	m_pGameInstance->PlaySoundOnce(TEXT("Boss_ThousandHand.wav"), CHANNELID::EFFECT2, 0.55f);
+	m_pGameInstance->PlaySoundOnce(TEXT("Boss_ThousandHand.wav"), CHANNELID::BOSS, 0.65f);
 }
 
 CBossState* CBoss_ThousandArmState::Update(_float fTimeDelta)

@@ -62,7 +62,7 @@ CBossState* CBoss_SpinKickState::Update(_float fTimeDelta)
 		//조건문 추가
 		if (false == m_IsSoundPlayed)
 		{
-			m_pGameInstance->PlaySoundOnce(TEXT("Boss_Osoi.wav"), CHANNELID::EFFECT2, 0.49f);
+			m_pGameInstance->PlaySoundOnce(TEXT("Boss_Osoi.wav"), CHANNELID::EFFECT2, 0.6f);
 			m_IsSoundPlayed = true;
 		}
 	}
