@@ -118,6 +118,9 @@ void CRasenShuriken::Update(_float fTimeDelta)
 
         m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_ParticleObject"), m_pGameInstance->Get_LevelID(),
             TEXT("Layer_Particle"), &Desc); 
+
+        m_pGameInstance->StopSound(CHANNELID::EFFECT6);
+        m_pGameInstance->PlaySoundOnce(TEXT("RasenShuriken_Final.wav"), CHANNELID::EFFECT6, 0.4f);
     }
 
     if (false == m_pColliderCom->Get_Active() && true == m_isThrowing)
@@ -153,6 +156,8 @@ void CRasenShuriken::Update(_float fTimeDelta)
     /* 나선 수리검이 폭발하는 조건 2개 */
     if (true == m_IsHit && true == m_isThrowing)
     {
+        m_pGameInstance->StopSound(CHANNELID::EFFECT6);
+        m_pGameInstance->PlaySoundOnce(TEXT("RasenShuriken_Explosioning.wav"), CHANNELID::EFFECT6, 0.3f);
         _vector vPosition = m_pTransformCom->Get_State(STATE::POSITION);
         _vector vAdjustPosition = XMVectorSetY(vPosition, XMVectorGetY(CGameManager::GetInstance()->Get_PlayerPtr()->Get_Transform()->Get_State(STATE::POSITION)));
         m_pTransformCom->Set_State(STATE::POSITION, vAdjustPosition);

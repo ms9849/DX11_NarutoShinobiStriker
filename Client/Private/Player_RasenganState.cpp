@@ -93,8 +93,9 @@ CPlayerState* CPlayer_RasenganState::Update(_float fTimeDelta)
 
         m_pPlayer->Set_AnimIndex("CustomMan_Ninjutsu_Rasengun_Attack_Lv1_End", 1.f, false);
         m_eAnimState = ANIM_STATE::ATTACK_END;
+        Safe_Release(m_pRasengan);
         m_pRasengan->Set_Dead(true);
-        
+
         CParticleObject::PARTICLE_LOAD_DESC Desc;
         Desc.strParticlePath = TEXT("../Bin/Resources/Particle/RasenganHit_Particle.bin");
         Desc.eType = CParticleObject::PARTICLE_TYPE::EXPLOSION_NON_UV;
@@ -152,6 +153,7 @@ void CPlayer_RasenganState::Free()
 	__super::Free();
 
 	Safe_Release(m_pPlayer);
-    Safe_Release(m_pRasengan);
+    if(nullptr != m_pRasengan)
+        Safe_Release(m_pRasengan);
     Safe_Release(m_pGameManager);
 }
