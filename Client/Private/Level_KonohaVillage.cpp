@@ -72,9 +72,6 @@ HRESULT CLevel_KonohaVillage::Initialize()
 
 void CLevel_KonohaVillage::Update(_float fTimeDelta)
 {
-	/* 디버깅 용 코드*/
-	//m_pGameManager->OnTrigger(TRIGGER_TYPE::KONOHA_VILLAGE_SPAWNER_02_CLEAR);
-	///**/
 #ifdef _DEBUG
 	if (m_pGameInstance->Key_Down(DIK_0))
 	{
@@ -155,17 +152,6 @@ HRESULT CLevel_KonohaVillage::Render()
 
 HRESULT CLevel_KonohaVillage::Ready_Lights()
 {
-/*	LIGHT_DESC		LightDesc{};
-
-	LightDesc.eType = LIGHT::DIRECTIONAL;
-	LightDesc.vDiffuse = _float4(0.6f, 0.6f, 0.6f, 1.f);
-	LightDesc.vAmbient = _float4(0.2f, 0.2f, 0.2f, 1.f);
-	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 0.f);
-	LightDesc.vDirection = _float4(1.f, -1.f, 1.f, 0.f);
-
-	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
-		return E_FAIL*/
-
 	LIGHT_DESC			LightDesc{};
 
 	LightDesc.eType = LIGHT::DIRECTIONAL;
@@ -178,8 +164,11 @@ HRESULT CLevel_KonohaVillage::Ready_Lights()
 		return E_FAIL;
 
 	SHADOW_LIGHT_DESC		ShadowDesc{};
-	ShadowDesc.vEye = _float4(-126.5f, 139.215, -79.592, 1.f);
-	ShadowDesc.vAt = _float4(0.f, 15.f, 0.f, 1.f);
+
+	//원본 ShadowDesc.vEye = _float4(-126.5f, 139.215, -79.592, 1.f);
+
+	ShadowDesc.vEye = _float4(-40.211f, 161.975f, -130.787f, 1.f);
+	ShadowDesc.vAt = _float4(0.f, -20.f, 0.f, 1.f);
 	ShadowDesc.fFovy = XMConvertToRadians(90.0f);
 	ShadowDesc.fAspect = static_cast<_float>(g_iWinSizeX) / g_iWinSizeY;
 	ShadowDesc.fNear = 0.1f;

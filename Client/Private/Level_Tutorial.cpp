@@ -179,7 +179,7 @@ HRESULT CLevel_Tutorial::Ready_Lights()
 	ShadowDesc.fFovy = XMConvertToRadians(65.0f);
 	ShadowDesc.fAspect = static_cast<_float>(g_iWinSizeX) / g_iWinSizeY;
 	ShadowDesc.fNear = 0.1f;
-	ShadowDesc.fFar = 50000.f;
+	ShadowDesc.fFar = ShadowDesc.fFar = 50000.f;
 
 	if (FAILED(m_pGameInstance->Ready_Shadow_Light(ShadowDesc)))
 		return E_FAIL;

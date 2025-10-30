@@ -68,13 +68,13 @@ void CEffect_Icon::Late_Update(_float fTimeDelta)
     if (true == m_IsDead)
         return;
 
-    m_pTransformCom->Set_State(STATE::POSITION, m_pTargetTransform->Get_State(STATE::POSITION));
-
     m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
 }
 
 HRESULT CEffect_Icon::Render()
 {
+    m_pTransformCom->Set_State(STATE::POSITION, m_pTargetTransform->Get_State(STATE::POSITION));
+
     if (FAILED(Bind_ShaderResources()))
         return E_FAIL;
 
