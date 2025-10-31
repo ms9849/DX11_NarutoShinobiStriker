@@ -622,9 +622,6 @@
     <Filter Include="02. GameObjects\14. Rope">
       <UniqueIdentifier>{ce0a2b40-3da2-4527-b86f-303e528871a6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Levels\04. KonohaVillage\Temp">
-      <UniqueIdentifier>{7e67094c-31c8-4d47-b071-80c0a72fd5f9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects\03. Effect\02. Sprite\Hit">
       <UniqueIdentifier>{672f9537-5037-4c85-8306-d61262b83f68}</UniqueIdentifier>
     </Filter>
@@ -1218,9 +1215,6 @@
     <ClInclude Include="..\Public\SkyMesh.h">
       <Filter>02. GameObjects\01. BackGround\00. Sky\SkyMesh</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Light_GUI.h">
-      <Filter>01. Levels\04. KonohaVillage\Temp</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Effect_HitSprite.h">
       <Filter>02. GameObjects\03. Effect\02. Sprite\Hit</Filter>
     </ClInclude>
@@ -1811,9 +1805,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\SkyMesh.cpp">
       <Filter>02. GameObjects\01. BackGround\00. Sky\SkyMesh</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Light_GUI.cpp">
-      <Filter>01. Levels\04. KonohaVillage\Temp</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Effect_HitSprite.cpp">
       <Filter>02. GameObjects\03. Effect\02. Sprite\Hit</Filter>
